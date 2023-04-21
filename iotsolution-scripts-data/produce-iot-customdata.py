@@ -184,7 +184,7 @@ while True:
         #break
        file1.seek(0)
     producetokafka(line.strip(), "", "",producerid,maintopic,"")
-    time.sleep(0.2)
+    time.sleep(0.7)
   except Exception as e:
      pass  
   
