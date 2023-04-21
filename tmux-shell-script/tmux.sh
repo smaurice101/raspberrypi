@@ -16,7 +16,6 @@
 
  tmux new -d -s zookeeper
  tmux send-keys -t zookeeper 'cd /home/pi/Kafka/kafka_2.13-3.0.0/bin' ENTER
- tmux send-keys -t zookeeper 'sudo mount -o remount,rw /partition/identifier /mnt/usb' ENTER
  tmux send-keys -t zookeeper './zookeeper-server-start.sh /home/pi/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
 
 
@@ -24,7 +23,6 @@
 
  tmux new -d -s kafka 
  tmux send-keys -t kafka 'cd /home/pi/Kafka/kafka_2.13-3.0.0/bin' ENTER
- tmux send-keys -t kafka 'sudo mount -o remount,rw /partition/identifier /mnt/usb' ENTER
  tmux send-keys -t kafka './kafka-server-start.sh /home/pi/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
 
 sleep 45
