@@ -7,6 +7,7 @@
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
  
+# sudo mount -o remount,rw /partition/identifier $userbasedir
 
  sudo kill -9 $(sudo lsof -i:9092 -t) 2> /dev/null
  sudo kill -9 $(sudo lsof -i:2181 -t) 2> /dev/null
@@ -14,13 +15,17 @@
  sleep 5
 
  tmux new -d -s zookeeper
- tmux send-keys -t zookeeper 'sudo /home/pi/Kafka/kafka_2.13-3.0.0/bin/zookeeper-server-start.sh /home/pi/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
+ tmux send-keys -t zookeeper 'cd /home/pi/Kafka/kafka_2.13-3.0.0/bin' ENTER
+ tmux send-keys -t zookeeper 'sudo mount -o remount,rw /partition/identifier /mnt/usb' ENTER
+ tmux send-keys -t zookeeper './zookeeper-server-start.sh /home/pi/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
 
 
- sleep 15
+ sleep 20
 
  tmux new -d -s kafka 
- tmux send-keys -t kafka 'sudo /home/pi/Kafka/kafka_2.13-3.0.0/bin/kafka-server-start.sh /home/pi/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
+ tmux send-keys -t kafka 'cd /home/pi/Kafka/kafka_2.13-3.0.0/bin' ENTER
+ tmux send-keys -t kafka 'sudo mount -o remount,rw /partition/identifier /mnt/usb' ENTER
+ tmux send-keys -t kafka './kafka-server-start.sh /home/pi/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
 
 sleep 45
  ########################## SETUP VIPER/HPDE/VIPERVIZ Binaries For Transactional Machine Learning 
@@ -32,7 +37,7 @@ sleep 45
  tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/viper' ENTER
  tmux send-keys -t produce-iot-data-viper-8000 'sudo $userbasedir/viper/viper-linux-arm64 127.0.0.1 8000' ENTER
 
- sleep 15
+ sleep 25
 # STEP 1b: RUN PYTHON Script 
  tmux new -d -s produce-iot-data-python-8000 
  tmux send-keys -t produce-iot-data-python-8000 'cd $userbasedir/IotSolution' ENTER
@@ -48,7 +53,7 @@ sleep 45
  tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/viper' ENTER 
  tmux send-keys -t preprocess2-data-viper-8002 'sudo $userbasedir/viper/viper-linux-arm64 127.0.0.1 8002' ENTER
  
-sleep 15
+sleep 25
 
 # STEP 2b: RUN PYTHON Script  
  tmux new -d -s preprocess-data-python-8001
