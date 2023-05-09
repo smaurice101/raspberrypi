@@ -169,6 +169,9 @@ cd ~
 
 sudo rm -rf raspberrypi
 
+echo "Installing Java"
+sudo apt install default-jdk
+
 ######################################################
 
 #exit 1
@@ -203,9 +206,6 @@ sudo pip install asyncio
 
 echo "Confirming Python install"
 python –version
-
-echo "Installing Java"
-sudo apt install default-jdk
 
 echo "Installing Python 3.9"
 sudo apt install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev tar wget vim
