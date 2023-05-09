@@ -23,7 +23,7 @@
  sleep 20
 
  tmux new -d -s kafka 
- tmux send-keys -t kafka 'cd /home/pi/Kafka/kafka_2.13-3.0.0/bin' ENTER
+ tmux send-keys -t kafka 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
  tmux send-keys -t kafka './kafka-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
 
 sleep 45
