@@ -3,7 +3,7 @@
 
 ########################### START ZOOKEEPER and KAFKA
  export KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"
- export  userbasedir='/mnt/usb'
+ export  userbasedir='/home/pi'
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
  CHIP = "arm"
