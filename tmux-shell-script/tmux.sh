@@ -6,7 +6,7 @@
  export  userbasedir='/home/pi'
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
- CHIP="arm"
+ export CHIP="arm"
  
 # sudo mount -o remount,rw /partition/identifier $userbasedir
 
