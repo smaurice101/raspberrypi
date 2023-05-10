@@ -14,3 +14,6 @@ If you have MySQL issues try this:
 3. ps -A|grep mysqld
 4. sudo pkill mysqld
 5. service mysql restart
+
+in sudo nano /etc/mysql/my.cnf:
+port = 3306
