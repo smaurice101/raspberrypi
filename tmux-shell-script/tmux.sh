@@ -17,14 +17,14 @@
 
  tmux new -d -s zookeeper
  tmux send-keys -t zookeeper 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
- tmux send-keys -t zookeeper './zookeeper-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
+ tmux send-keys -t zookeeper 'sudo ./zookeeper-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
 
 
  sleep 20
 
  tmux new -d -s kafka 
  tmux send-keys -t kafka 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
- tmux send-keys -t kafka './kafka-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
+ tmux send-keys -t kafka 'sudo ./kafka-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
 
 sleep 45
  ########################## SETUP VIPER/HPDE/VIPERVIZ Binaries For Transactional Machine Learning 
