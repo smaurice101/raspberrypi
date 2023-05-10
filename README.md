@@ -7,3 +7,10 @@ sudo apt install --reinstall default-jre default-jdk default-jre-headless defaul
 Note you may need to run: 
 1. sudo rm /var/lib/dpkg/info/* 
 2. sudo dpkg --configure -a
+
+If you have MySQL issues try this:
+ps -A|grep mysql
+sudo pkill mysql
+ps -A|grep mysqld
+sudo pkill mysqld
+service mysql restart
