@@ -9,8 +9,8 @@ Note you may need to run:
 2. sudo dpkg --configure -a
 
 If you have MySQL issues try this:
-ps -A|grep mysql
-sudo pkill mysql
-ps -A|grep mysqld
-sudo pkill mysqld
-service mysql restart
+1. ps -A|grep mysql
+2. sudo pkill mysql
+3. ps -A|grep mysqld
+4. sudo pkill mysqld
+5. service mysql restart
