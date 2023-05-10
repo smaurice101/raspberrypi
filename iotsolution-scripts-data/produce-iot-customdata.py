@@ -38,7 +38,7 @@ VIPERPORT=8000
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
 basedir = os.environ['userbasedir']
-viperconfigfile=basedir + "/viper/viper.env"
+viperconfigfile=basedir + "/Viper/viper.env"
 
 
 #############################################################################################################
@@ -47,7 +47,7 @@ viperconfigfile=basedir + "/viper/viper.env"
 # to your location of admin.tok
 def getparams():
         
-     with open(basedir + "/viper/admin.tok", "r") as f:
+     with open(basedir + "/Viper/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
   
      return VIPERTOKEN
