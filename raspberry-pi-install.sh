@@ -169,12 +169,13 @@ cd ~
 
 sudo rm -rf raspberrypi
 
+
 echo "Installing Java"
-sudo apt install default-jdk
+yes Y | sudo apt install default-jdk
 
 ######################################################
 
-#exit 1
+exit 1
 
 #####################################################
 
@@ -185,9 +186,10 @@ sudo chmod -R +x Python
 cd Python
 
 
-sudo apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev tar wget vim
+yes Y | sudo apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev tar wget vim
 
-sudo wget https://www.python.org/ftp/python/3.9.15/Python-3.9.15.tgz
+yes Y | sudo wget -O Python-3.9.15.tgz https://www.python.org/ftp/python/3.9.15/Python-3.9.15.tgz
+sudo chmod -R +x Python-3.9.15.tgz
 sudo tar -zxvf Python-3.9.15.tgz
 sudo chmod -R +x Python-3.9.15
 
@@ -206,7 +208,4 @@ sudo pip install asyncio
 
 echo "Confirming Python install"
 python –version
-
-echo "Installing Python 3.9"
-sudo apt install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev tar wget vim
 
