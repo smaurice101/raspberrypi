@@ -21,7 +21,6 @@ import os
 nest_asyncio.apply()
 
 basedir = os.environ['userbasedir'] 
-#basedir = "c:/maads/golang/go/bin"
 
 # Set Global Host/Port for VIPER - You may change this to fit your configuration
 VIPERHOST="https://127.0.0.1"
@@ -33,7 +32,7 @@ VIPERPORT=8002
 # to your location of admin.tok
 def getparams():
         
-     with open(basedir + "/viper/admin.tok", "r") as f:
+     with open(basedir + "/Viper/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
   
      return VIPERTOKEN
