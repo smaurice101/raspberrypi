@@ -35,7 +35,7 @@ VIPERPORT=8001
 # to your location of admin.tok
 def getparams():
         
-     with open(basedir + "/viper/admin.tok", "r") as f:
+     with open(basedir + "/Viper/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
   
      return VIPERTOKEN
