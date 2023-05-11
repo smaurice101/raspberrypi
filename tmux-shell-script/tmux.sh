@@ -10,8 +10,8 @@
  
 # sudo mount -o remount,rw /partition/identifier $userbasedir
 
- sudo kill -9 $(sudo lsof -i:9092 -t) 2> /dev/null
- sudo kill -9 $(sudo lsof -i:2181 -t) 2> /dev/null
+ kill -9 $(lsof -i:9092 -t) 2> /dev/null
+ kill -9 $(lsof -i:2181 -t) 2> /dev/null
  
  sleep 5
 
