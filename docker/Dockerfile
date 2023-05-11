@@ -27,7 +27,7 @@ RUN echo "Downloading and Installing TML technologies "
 RUN echo "Downloading and Installing VIPER"
 RUN mkdir Viper
 RUN chmod -R +x Viper
-RUN cd Viper
+WORKDIR Viper
 
 RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 RUN echo "*******************Viper for $CHIP**********************"
@@ -47,7 +47,7 @@ elif [ "$CHIP" = "AMD64" ] ; \
 fi
 
 RUN rm -rf transactionalmachinelearning
-RUN cd ..
+WORKDIR /
 RUN chmod -R +x Viper
 
 RUN echo "*********************Downloading and Installing VIPERviz Visualization****************"
@@ -56,7 +56,7 @@ RUN mkdir Viperviz/viperviz
 RUN mkdir Viperviz/viperviz/views
 RUN chmod -R +x Viperviz
 
-RUN cd Viperviz
+WORKDIR Viperviz
 
 RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 
@@ -85,14 +85,13 @@ elif [ "$CHIP" = "AMD64" ] ; \
 fi
 
 RUN rm -rf transactionalmachinelearning
-RUN cd ..
+WORKDIR /
 RUN chmod -R +x Viperviz
-
 
 RUN echo "*********************Downloading and Installing HPDE AutoML********************"
 RUN mkdir Hpde
 RUN chmod -R +x Hpde
-RUN cd Hpde
+WORKDIR Hpde
 
 RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 
@@ -121,13 +120,14 @@ fi
 RUN rm -rf transactionalmachinelearning
 
 RUN echo "Downloading and Installing KAFKA"
-RUN cd ..
+WORKDIR /
 RUN chmod -R +x Hpde
 
 RUN mkdir Kafka
 RUN chmod -R +x Kafka
 
-RUN cd Kafka
+WORKDIR Kafka
+
 RUN wget -O kafka_2.13-3.0.0.tgz https://archive.apache.org/dist/kafka/3.0.0/kafka_2.13-3.0.0.tgz
 RUN chmod +x kafka_2.13-3.0.0.tgz
 
@@ -135,10 +135,12 @@ RUN tar xzf kafka_2.13-3.0.0.tgz
 
 RUN export KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"
 RUN export PWD=`pwd`
+RUN export CHIP="$CHIP"
+
 RUN export PATH="$PATH:$PWD/Kafka/kafka_2.13-3.0.0/bin"
 
 RUN rm -rf kafka_2.13-3.0.0.tgz
-RUN cd ..
+WORKDIR /
 RUN chmod -R +x Kafka
 
 RUN echo "Install TMUX"
@@ -167,7 +169,8 @@ RUN mkdir IotSolution
 RUN cp -rf raspberrypi/iotsolution-scripts-data/* IotSolution/
 
 ################# IOT DATA
-RUN cd IotSolution
+WORKDIR IotSolution
+
 RUN wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1yRgDYrWnHu74NYX9GMAVDjR10ZyfoZvh' -O IoTData.zip
 RUN chmod +x IoTData.zip
 RUN unzip IoTData.zip
@@ -175,18 +178,20 @@ RUN unzip IoTData.zip
 RUN wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1_RICecxEZUjuCfm_MxPGwrOXxQ5w179O' -O dsntmlidmain.csv
 RUN chmod +x dsntmlidmain.csv
 RUN rm -rf IoTData.zip
-RUN cd ..
 
-RUN cp -rf raspberrypi/tmux-shell-script/tmux.sh tmux/tmux.sh
+WORKDIR /
+
+RUN cp -rf raspberrypi/tmux-shell-script/tmux-docker.sh tmux/tmux-docker.sh
 
 RUN cp -rf raspberrypi/iot-dashboard-html/viperviz.zip Viperviz/viperviz.zip
 RUN chmod -R +x IotSolution
 RUN chmod -R +x Viperviz
 RUN chmod -R +x tmux
 
-RUN cd Viperviz
+WORKDIR Viperviz
 RUN unzip Viperviz/viperviz.zip || true
-RUN cd ~
+
+WORKDIR /
 
 RUN rm -rf raspberrypi
 
@@ -200,4 +205,4 @@ RUN pip install nest_asyncio
 RUN pip install joblib
 RUN pip install asyncio
 
-ENTRYPOINT ["/bin/bash","-c","while true; do sleep 1; done | ./tmux/tmux.sh"]
+ENTRYPOINT ["/bin/bash","-c","while true; do sleep 1; done | ./tmux/tmux-docker.sh"]
