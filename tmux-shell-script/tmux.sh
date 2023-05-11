@@ -11,6 +11,8 @@
 
  if [ "$chip" = "arm32" ]; then 
     export chip="arm"
+ else
+    export chip
  fi
  
 # sudo mount -o remount,rw /partition/identifier $userbasedir
