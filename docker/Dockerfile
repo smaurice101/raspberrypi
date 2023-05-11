@@ -15,7 +15,7 @@ ENV CHIP=${CHIP}
 #CHIP="AMD64"
 
 #echo "Updating package index files"
-RUN apt update
+RUN apt update || true
 RUN apt install -y wget
 RUN apt-get -y install git
 RUN apt-get -y install unzip
