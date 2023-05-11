@@ -9,7 +9,7 @@
  CHIP=${CHIP}
  chip=$(echo "$CHIP" | tr '[:upper:]' '[:lower:]')
 
- if [ "$chip" = "arm32" ] then 
+ if [ "$chip" = "arm32" ]; then 
     export chip="arm"
  fi
  
