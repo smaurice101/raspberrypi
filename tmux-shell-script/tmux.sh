@@ -6,7 +6,11 @@
  export  userbasedir=`pwd`
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
- export CHIP=${CHIP}
+ CHIP=${CHIP,,}
+ 
+ if [ "$CHIP" = "arm32" ] then 
+    export CHIP="arm"
+ fi
  
 # sudo mount -o remount,rw /partition/identifier $userbasedir
 
