@@ -6,13 +6,13 @@
  export  userbasedir=`pwd`
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
- CHIP=${CHIP}
- chip=$(echo "$CHIP" | tr '[:upper:]' '[:lower:]')
+ CHIP2=${CHIP}
+ chip=$(echo "$CHIP2" | tr '[:upper:]' '[:lower:]')
 
  if [ "$chip" = "arm32" ]; then 
     export chip="arm"
  fi
- 
+
 # sudo mount -o remount,rw /partition/identifier $userbasedir
 
  kill -9 $(lsof -i:9092 -t) 2> /dev/null
