@@ -6,10 +6,11 @@
  export  userbasedir=`pwd`
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
- CHIP=${CHIP,,}
- 
- if [ "$CHIP" = "arm32" ] then 
-    export CHIP="arm"
+ CHIP=${CHIP}
+ chip=$(echo "$CHIP" | tr '[:upper:]' '[:lower:]')
+
+ if [ "$chip" = "arm32" ] then 
+    export chip="arm"
  fi
  
 # sudo mount -o remount,rw /partition/identifier $userbasedir
@@ -38,7 +39,7 @@ sleep 45
   
  tmux new -d -s produce-iot-data-viper-8000 
  tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper' ENTER
- tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper/viper-linux-$CHIP 127.0.0.1 8000' ENTER
+ tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper/viper-linux-$chip 127.0.0.1 8000' ENTER
 
  sleep 25
 # STEP 1b: RUN PYTHON Script 
@@ -50,11 +51,11 @@ sleep 45
 # STEP 2a: RUN VIPER Binary
  tmux new -d -s preprocess-data-viper-8001
  tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper' ENTER
- tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper/viper-linux-$CHIP 127.0.0.1 8001' ENTER
+ tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper/viper-linux-$chip 127.0.0.1 8001' ENTER
 
  tmux new -d -s preprocess2-data-viper-8002
  tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/Viper' ENTER 
- tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper/viper-linux-$CHIP 127.0.0.1 8002' ENTER
+ tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper/viper-linux-$chip 127.0.0.1 8002' ENTER
  
 sleep 25
 
@@ -72,5 +73,5 @@ sleep 25
 # STEP 5: START Visualization Viperviz 
  tmux new -d -s visualization-viperviz-9005 
  tmux send-keys -t visualization-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
- tmux send-keys -t visualization-viperviz-9005 '$userbasedir/Viperviz/viperviz-linux-$CHIP $MYIP 9005' ENTER
+ tmux send-keys -t visualization-viperviz-9005 '$userbasedir/Viperviz/viperviz-linux-$chip $MYIP 9005' ENTER
  
