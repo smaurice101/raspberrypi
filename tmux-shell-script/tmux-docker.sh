@@ -6,9 +6,9 @@
  export  userbasedir=`pwd`
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
- chip=${CHIP,,}
+ CHIP=${CHIP,,}
  
- if [ ${CHIP} = "arm32" ] then 
+ if [ "$CHIP" = "arm32" ] then 
     export CHIP="arm"
  fi
  
