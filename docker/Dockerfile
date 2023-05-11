@@ -179,7 +179,7 @@ RUN cd ..
 
 RUN cp -rf raspberrypi/tmux-shell-script/tmux.sh tmux/tmux.sh
 
-RUN cp -rf raspberrypi/iot-dashboard-html/viperviz.zip Viperviz/
+RUN cp -rf raspberrypi/iot-dashboard-html/viperviz.zip Viperviz/viperviz.zip
 RUN chmod -R +x IotSolution
 RUN chmod -R +x Viperviz
 RUN chmod -R +x tmux
