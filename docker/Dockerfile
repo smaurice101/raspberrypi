@@ -146,7 +146,7 @@ RUN apt -y install tmux
 RUN mkdir tmux
 
 RUN echo "Install Mariadb"
-RUN apt install mariadb-server
+RUN apt -y install mariadb-server || true
 # sudo mysql_secure_installation
 # RUN: sudo mysql -u root
 # Execute: SET PASSWORD FOR 'root'@'localhost' = PASSWORD('raspberry'); 
@@ -161,7 +161,7 @@ RUN chmod -R +x raspberrypi
 RUN cp -rf raspberrypi/viper-env-file/viper.env Viper/viper.env
 RUN cp -rf raspberrypi/viper-env-file/viper.env Viperviz/viper.env
 
-RUN "Copy the IotSolution Scripts"
+RUN echo "Copy the IotSolution Scripts"
 
 RUN mkdir IotSolution
 RUN cp -rf raspberrypi/iotsolution-scripts-data/* IotSolution/
@@ -185,13 +185,13 @@ RUN chmod -R +x Viperviz
 RUN chmod -R +x tmux
 
 RUN cd Viperviz
-RUN unzip viperviz.zip
+RUN unzip Viperviz/viperviz.zip || true
 RUN cd ~
 
 RUN rm -rf raspberrypi
 
 RUN echo "Installing Java"
-RUN apt install default-jdk
+RUN apt -y install default-jdk || true
 
 RUN echo "PIP Install TML core packages"
 RUN pip install maadstml
