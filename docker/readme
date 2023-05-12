@@ -3,7 +3,7 @@ replace: <container name> with name of your container
 replace: <chip arch> with: ARM32, or ARM64, or AMD64
 
 Docker Tag: docker tag <container id>
-Docker Run: docker run -it --network=host <container id>
+Docker Run: docker run -p 9005:9005 <container name>
 Replace <container id> with container id or name
 
 docker pull maadsdocker/seneca-iot-tml-kafka-amd64
