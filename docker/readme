@@ -6,4 +6,6 @@ Docker Tag: docker tag <container id>
 Docker Run: docker run -p 9005:9005 <container name>
 Replace <container id> with container id or name
 
+Visualization Access: http://localhost:9005/iot-failure-seneca.html?topic=iot-preprocess2,iot-preprocess&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1
+
 docker pull maadsdocker/seneca-iot-tml-kafka-amd64
