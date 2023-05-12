@@ -150,8 +150,8 @@ RUN mkdir tmux
 RUN echo "Install Mariadb"
 RUN apt -y install mariadb-server
 RUN service mariadb restart
-RUN mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('');"
-RUN mysql -u root -e "GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY '';"
+RUN mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('raspberry');"
+RUN mysql -u root -e "GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY 'raspberry';"
 RUN mysql -u root -e "FLUSH PRIVILEGES;"
 
 # sudo mysql_secure_installation
