@@ -189,7 +189,7 @@ RUN chmod -R +x Viperviz
 RUN chmod -R +x tmux
 
 WORKDIR Viperviz
-RUN unzip Viperviz/viperviz.zip || true
+RUN unzip viperviz.zip
 
 WORKDIR /
 
