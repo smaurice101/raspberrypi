@@ -15,6 +15,11 @@
     export chip 
  fi
 
+service mariadb restart
+mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('raspberry');"
+mysql -u root -e "GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY 'raspberry';"
+mysql -u root -e "FLUSH PRIVILEGES;"
+
 # sudo mount -o remount,rw /partition/identifier $userbasedir
 
  kill -9 $(lsof -i:9092 -t) 2> /dev/null
