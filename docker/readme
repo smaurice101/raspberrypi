@@ -3,5 +3,5 @@ replace: <container name> with name of your container
 replace: <chip arch> with: ARM32, or ARM64, or AMD64
 
 Docker Tag: docker tag <container id>
-Docker Run: docker run <container id>
+Docker Run: docker run -it --network=host <container id>
 Replace <container id> with container id or name
