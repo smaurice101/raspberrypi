@@ -75,5 +75,5 @@ sleep 25
 # STEP 5: START Visualization Viperviz 
  tmux new -d -s visualization-viperviz-9005 
  tmux send-keys -t visualization-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
- tmux send-keys -t visualization-viperviz-9005 '$userbasedir/Viperviz/viperviz-linux-$chip $MYIP 9005' ENTER
+ tmux send-keys -t visualization-viperviz-9005 '$userbasedir/Viperviz/viperviz-linux-$chip 0.0.0.0 9005' ENTER
  
