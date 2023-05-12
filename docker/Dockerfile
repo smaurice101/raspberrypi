@@ -148,7 +148,9 @@ RUN apt -y install tmux
 RUN mkdir tmux
 
 RUN echo "Install Mariadb"
-RUN apt -y install mariadb-server || true
+RUN apt -y install mariadb-server
+RUN service mariadb restart
+
 # sudo mysql_secure_installation
 # RUN: sudo mysql -u root
 # Execute: SET PASSWORD FOR 'root'@'localhost' = PASSWORD('raspberry'); 
