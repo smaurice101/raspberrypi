@@ -3,7 +3,10 @@
 
 ########################### START ZOOKEEPER and KAFKA
  export KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"
+ cd ..
  export  userbasedir=`pwd`
+ export CHIP="ARM32"
+
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
  CHIP2=${CHIP}
