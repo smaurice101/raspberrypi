@@ -24,10 +24,10 @@
  sudo kill -9 $(sudo lsof -i:2181 -t) 2> /dev/null
  
  sleep 5
- service mariadb restart
- mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('raspberry');"
- mysql -u root -e "GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY 'raspberry';"
- mysql -u root -e "FLUSH PRIVILEGES;"
+ service mariadb restart 2>/dev/null
+ mysql -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('raspberry');" 2>/dev/null
+ mysql -u root -e "GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY 'raspberry';" 2>/dev/null
+ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
 
  tmux new -d -s zookeeper
  tmux send-keys -t zookeeper 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
