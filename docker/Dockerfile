@@ -25,9 +25,17 @@ RUN apt-get -y install nano
 
 RUN echo "Downloading and Installing TML technologies "
 RUN echo "Downloading and Installing VIPER"
-RUN mkdir Viper
-RUN chmod -R +x Viper
-WORKDIR Viper
+RUN mkdir Viper-produce
+RUN chmod -R +x Viper-produce
+
+RUN mkdir Viper-preprocess
+RUN chmod -R +x Viper-preprocess
+
+RUN mkdir Viper-preprocess2
+RUN chmod -R +x Viper-preprocess2
+
+######################################### Viper Producer directory
+WORKDIR Viper-produce
 
 RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 RUN echo "*******************Viper for $CHIP**********************"
@@ -48,7 +56,55 @@ fi
 
 RUN rm -rf transactionalmachinelearning
 WORKDIR /
-RUN chmod -R +x Viper
+RUN chmod -R +x Viper-produce
+
+######################################### Viper Preprocess directory
+WORKDIR Viper-preprocess
+
+RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
+RUN echo "*******************Viper for $CHIP**********************"
+
+RUN if [ "$CHIP" = "ARM32" ] ; \
+  then \
+  unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPER\ *\ Linux\ ARM.zip && \
+  chmod 755 viper-linux-arm ; \
+elif [ "$CHIP" =  "ARM64" ] ; \
+  then \
+  unzip transactionalmachinelearning/ARM64-Chipset/MAADS-VIPER\ *\ Linux\ ARM64.zip && \
+  chmod 755 viper-linux-arm64 ; \
+elif [ "$CHIP" = "AMD64" ] ; \
+  then \
+  unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
+  chmod 755 viper-linux-amd64 ; \ 
+fi
+
+RUN rm -rf transactionalmachinelearning
+WORKDIR /
+RUN chmod -R +x Viper-preprocess
+
+######################################### Viper Preprocess2 directory
+WORKDIR Viper-preprocess2
+
+RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
+RUN echo "*******************Viper for $CHIP**********************"
+
+RUN if [ "$CHIP" = "ARM32" ] ; \
+  then \
+  unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPER\ *\ Linux\ ARM.zip && \
+  chmod 755 viper-linux-arm ; \
+elif [ "$CHIP" =  "ARM64" ] ; \
+  then \
+  unzip transactionalmachinelearning/ARM64-Chipset/MAADS-VIPER\ *\ Linux\ ARM64.zip && \
+  chmod 755 viper-linux-arm64 ; \
+elif [ "$CHIP" = "AMD64" ] ; \
+  then \
+  unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
+  chmod 755 viper-linux-amd64 ; \ 
+fi
+
+RUN rm -rf transactionalmachinelearning
+WORKDIR /
+RUN chmod -R +x Viper-preprocess2
 
 RUN echo "*********************Downloading and Installing VIPERviz Visualization****************"
 RUN mkdir Viperviz
