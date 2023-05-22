@@ -10,7 +10,7 @@ Replace <container id> with container id or name. Replace <viperviz port> with p
 3. run: tmux a -t viperviz-visualization-9005
 4. Note: the port in step 3 - this is the <viperviz port>.
 5. exit TMUX: ctlr + B + D 
-6. Exec: docker run -d --net=host <container name>
+6. Exec: docker run -d --net=host <container name> (for linux)
 
 Visualization Access: http://localhost:9005/iot-failure-seneca.html?topic=iot-preprocess2,iot-preprocess&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1
 
