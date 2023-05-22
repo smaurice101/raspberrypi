@@ -23,21 +23,31 @@ nest_asyncio.apply()
 basedir = os.environ['userbasedir'] 
 
 # Set Global Host/Port for VIPER - You may change this to fit your configuration
-VIPERHOST="https://127.0.0.1"
-VIPERPORT=8002
+VIPERHOST=''
+VIPERPORT=''
+HTTPADDR='https://'
+
 
 #############################################################################################################
 #                                      STORE VIPER TOKEN
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-        
-     with open(basedir + "/Viper/admin.tok", "r") as f:
+     global VIPERHOST, VIPERPORT, HTTPADDR
+     with open("/Viper/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
-  
+
+     if VIPERHOST=="":
+        with open('/Viper/viper.txt', 'r') as f:
+          output = f.read()
+          VIPERHOST = HTTPADDR + output.split(",")[0]
+          VIPERPORT = output.split(",")[1]
+          
      return VIPERTOKEN
 
 VIPERTOKEN=getparams()
+if VIPERHOST=="":
+    print("ERROR: Cannot read viper.txt: VIPERHOST is empty or HPDEHOST is empty")
 
 #############################################################################################################
 #                                     CREATE TOPICS IN KAFKA
