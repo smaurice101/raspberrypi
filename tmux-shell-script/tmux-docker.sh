@@ -1,6 +1,7 @@
  #!/bin/bash
  
-
+# Developed by: Sebastian Maurice
+# Date: 2023-05-22
 ########################### START ZOOKEEPER and KAFKA
  export KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"
  export  userbasedir=`pwd`
@@ -45,8 +46,8 @@ sleep 45
 # STEP 1a: RUN VIPER Binary
   
  tmux new -d -s produce-iot-data-viper-8000 
- tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper' ENTER
- tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper/viper-linux-$chip 127.0.0.1 8000' ENTER
+ tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
+ tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper-produce/viper-linux-$chip' ENTER
 
  sleep 25
 # STEP 1b: RUN PYTHON Script 
@@ -57,12 +58,12 @@ sleep 45
 # STEP 2: Preprocess Data from Kafka
 # STEP 2a: RUN VIPER Binary
  tmux new -d -s preprocess-data-viper-8001
- tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper' ENTER
- tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper/viper-linux-$chip 127.0.0.1 8001' ENTER
+ tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
+ tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper-preprocess/viper-linux-$chip' ENTER
 
  tmux new -d -s preprocess2-data-viper-8002
- tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/Viper' ENTER 
- tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper/viper-linux-$chip 127.0.0.1 8002' ENTER
+ tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/Viper-preprocess2' ENTER 
+ tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper-preprocess2/viper-linux-$chip' ENTER
  
 sleep 25
 
