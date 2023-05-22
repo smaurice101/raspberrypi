@@ -3,8 +3,14 @@ replace: <container name> with name of your container
 replace: <chip arch> with: ARM32, or ARM64, or AMD64
 
 Docker Tag: docker tag <container id>
-Docker Run: docker run -p 9005:9005 <container name>
-Replace <container id> with container id or name
+Docker Run: docker run -p 9005:<viperviz port> <container name>
+Replace <container id> with container id or name. Replace <viperviz port> with port viperviz is listening; do the following:
+1. go into the container: docker exec -it <mycontainer> bash
+2. run: tmux ls
+3. run: tmux a -t viperviz-visualization-9005
+4. Note: the port in step 3 - this is the <viperviz port>.
+5. exit TMUX: ctlr + B + D 
+6. Exec: docker run -p 9005:<viperviz port> <container name>
 
 Visualization Access: http://localhost:9005/iot-failure-seneca.html?topic=iot-preprocess2,iot-preprocess&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1
 
