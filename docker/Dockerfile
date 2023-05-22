@@ -38,7 +38,7 @@ RUN chmod -R +x Viper-preprocess2
 WORKDIR Viper-produce
 
 RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
-RUN echo "*******************Viper for $CHIP**********************"
+RUN echo "*******************Viper for $CHIP PRODUCER**********************"
 
 RUN if [ "$CHIP" = "ARM32" ] ; \
   then \
@@ -62,7 +62,7 @@ RUN chmod -R +x Viper-produce
 WORKDIR Viper-preprocess
 
 RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
-RUN echo "*******************Viper for $CHIP**********************"
+RUN echo "*******************Viper for $CHIP PREPROCESS**********************"
 
 RUN if [ "$CHIP" = "ARM32" ] ; \
   then \
@@ -86,7 +86,7 @@ RUN chmod -R +x Viper-preprocess
 WORKDIR Viper-preprocess2
 
 RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
-RUN echo "*******************Viper for $CHIP**********************"
+RUN echo "*******************Viper for $CHIP PREPROCESS2**********************"
 
 RUN if [ "$CHIP" = "ARM32" ] ; \
   then \
