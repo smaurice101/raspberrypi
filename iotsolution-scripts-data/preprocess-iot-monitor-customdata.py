@@ -1,5 +1,5 @@
 # Developed by: Sebastian Maurice, PhD
-# Date: 2021-01-18 
+# Date: 2023-05-18 
 # Toronto, Ontario Canada
 
 # TML python library
@@ -36,11 +36,11 @@ HTTPADDR='https://'
 # to your location of admin.tok
 def getparams():
      global VIPERHOST, VIPERPORT, HTTPADDR
-     with open("/Viper/admin.tok", "r") as f:
+     with open("/Viper-preprocess/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
      if VIPERHOST=="":
-        with open('/Viper/viper.txt', 'r') as f:
+        with open('/Viper-preprocess/viper.txt', 'r') as f:
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
