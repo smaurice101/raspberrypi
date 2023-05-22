@@ -32,4 +32,4 @@ c. minikube start
 d. minikube status
 
 timeout when pulling containers > 2GB (kubernetes defaults to 2m)
-1. pull image manually: minikube ssh docker pull 
+1. pull image manually: minikube ssh docker pull <container name>
