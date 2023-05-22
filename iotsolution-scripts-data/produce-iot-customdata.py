@@ -38,7 +38,7 @@ import time
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
 basedir = os.environ['userbasedir']
-viperconfigfile=basedir + "/Viper/viper.env"
+viperconfigfile=basedir + "/Viper-produce/viper.env"
 
 
 # Set Global Host/Port for VIPER - You may change this to fit your configuration
@@ -53,11 +53,11 @@ HTTPADDR='https://'
 # to your location of admin.tok
 def getparams():
      global VIPERHOST, VIPERPORT, HTTPADDR
-     with open("/Viper/admin.tok", "r") as f:
+     with open("/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
      if VIPERHOST=="":
-        with open('/Viper/viper.txt', 'r') as f:
+        with open('/Viper-produce/viper.txt', 'r') as f:
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
