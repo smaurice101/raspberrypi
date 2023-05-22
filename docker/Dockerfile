@@ -217,7 +217,10 @@ RUN git clone --depth 1 https://github.com/smaurice101/raspberrypi.git
 
 RUN chmod -R +x raspberrypi
 
-RUN cp -rf raspberrypi/viper-env-file/viper.env Viper/viper.env
+RUN cp -rf raspberrypi/viper-env-file/viper.env Viper-produce/viper.env
+RUN cp -rf raspberrypi/viper-env-file/viper.env Viper-preprocess/viper.env
+RUN cp -rf raspberrypi/viper-env-file/viper.env Viper-preprocess2/viper.env
+
 RUN cp -rf raspberrypi/viper-env-file/viper.env Viperviz/viper.env
 
 RUN echo "Copy the IotSolution Scripts"
