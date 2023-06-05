@@ -1,4 +1,4 @@
-PLEASE NOTE: RENAME THIS "YAML" --> senecaiot.yml, THEN RUN  "kubectl apply -f senecaiot.yml" (no quotes)
+PLEASE NOTE: RENAME THIS "yaml" --> senecaiot.yml, THEN RUN  "kubectl apply -f senecaiot.yml" (no quotes)
 
 
 1. Download minikube
