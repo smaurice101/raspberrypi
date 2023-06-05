@@ -1,3 +1,6 @@
+PLEASE NOTE: RENAME THIS YAML --> senecaiot.yml, THEN RUN  "kubectl apply -f senecaiot.yml" (no quotes)
+
+
 1. Download minikube
 wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 
