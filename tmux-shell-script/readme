@@ -1,1 +1,4 @@
 use this TMUX script to run the ENTIRE IoT solution
+pkill -f tmux
+tmux a -t <window>
+tmux ls
