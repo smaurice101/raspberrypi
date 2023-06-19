@@ -30,3 +30,10 @@ If you run into issues try:
   stop docker
   sudo rm -rf /var/lib/docker
   restart docker and pull
+
+IF you get "Deadline exceeded" or 
+"failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to authorize: rpc error: code = Unknown desc = failed to fetch oauth token:" 
+then TRY in Linux:
+export DOCKER_BUILDKIT=0
+export COMPOSE_DOCKER_CLI_BUILD=0
+
