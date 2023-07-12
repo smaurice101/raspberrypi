@@ -8,7 +8,7 @@ Docker build command: docker build -t <container name> --build-arg CHIP=<chip ar
 replace: <container name> with name of your container
 replace: <chip arch> with: ARM32, or ARM64, or AMD64
 
-TO SPEED UP DOCKER BUILDS YDO THIS:
+TO SPEED UP DOCKER BUILDS DO THIS:
 1. In your docker file add in a location where you want to start re-build.  EVERYTHING following this command will be rebuilt, everything above this command will force Docker to used the cached layers: 
 # Custom cache invalidation
 ARG CACHEBUST=1
