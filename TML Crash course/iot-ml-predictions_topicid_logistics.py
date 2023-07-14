@@ -61,7 +61,6 @@ viperconfigfile="c:/maads/golang/go/bin/viper.env"
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-        
      with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
   
@@ -197,9 +196,6 @@ Voltage_preprocessed_Avg,Current_preprocessed_Avg,Power_preprocessed_Avg"
 ##########################################################################
 #############################################################################################################
 #                                     SETUP THE TOPIC DATA STREAMS EXAMPLE
-# Change this to any number
-#numpredictions=10000
-#iotdevices=1
 maintopic="iot-preprocess"
 
 predictiontopic="iot-ml-prediction-results-output"
@@ -207,17 +203,11 @@ predictiontopic="iot-ml-prediction-results-output"
 producerid=datasetup(maintopic,predictiontopic)
 print(maintopic,producerid)
 
-
-
 def spawnvipers():
 
       while True:
           performPrediction(maintopic,producerid,VIPERPORT,-1,predictiontopic)
           time.sleep(.1)
-          
-#         startviper(begend)  
-  
-
 
 spawnvipers()           
 
