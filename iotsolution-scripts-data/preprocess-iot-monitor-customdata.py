@@ -1,5 +1,5 @@
 # Developed by: Sebastian Maurice, PhD
-# Date: 2023-05-18 
+# Date: 2021-01-18 
 # Toronto, Ontario Canada
 
 # TML python library
@@ -21,13 +21,11 @@ import asyncio
 nest_asyncio.apply()
 import datetime
 import time
-import os
 
-basedir = os.environ['userbasedir']
 # Set Global Host/Port for VIPER - You may change this to fit your configuration
-VIPERHOST=''
-VIPERPORT=''
-HTTPADDR='https://'
+VIPERHOST="https://127.0.0.1"
+VIPERPORT=8000
+
 
 
 #############################################################################################################
@@ -35,21 +33,14 @@ HTTPADDR='https://'
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-     global VIPERHOST, VIPERPORT, HTTPADDR
-     with open("/Viper-preprocess/admin.tok", "r") as f:
+        
+     with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
-
-     if VIPERHOST=="":
-        with open('/Viper-preprocess/viper.txt', 'r') as f:
-          output = f.read()
-          VIPERHOST = HTTPADDR + output.split(",")[0]
-          VIPERPORT = output.split(",")[1]
-          
+  
      return VIPERTOKEN
 
 VIPERTOKEN=getparams()
-if VIPERHOST=="":
-    print("ERROR: Cannot read viper.txt: VIPERHOST is empty or HPDEHOST is empty")
+
 
 #############################################################################################################
 #                                     CREATE TOPICS IN KAFKA
@@ -62,9 +53,9 @@ def datasetup(maintopic,preprocesstopic):
      mylocation="Toronto"
 
      # Replication factor for Kafka redundancy
-     replication=1
+     replication=3
      # Number of partitions for joined topic
-     numpartitions=1
+     numpartitions=3
      # Enable SSL/TLS communication with Kafka
      enabletls=1
      # If brokerhost is empty then this function will use the brokerhost address in your
@@ -119,7 +110,7 @@ def sendtransactiondata(maintopic,mainproducerid,VIPERPORT,index,preprocesstopic
 
       # Roll back each data stream by 10 percent - change this to a larger number if you want more data
       # For supervised machine learning you need a minimum of 30 data points in each stream
-     maxrows=2000
+     maxrows=3000
       # Go to the last offset of each stream: If lastoffset=500, then this function will rollback the 
       # streams to offset=500-50=450
      offset=-1
@@ -200,7 +191,13 @@ latlong=lat:long'
  
      identifier = "IoT device performance and failures"
 
-     preprocesslogic='anomprob,trend,avg'
+     # if dataage - use:dataage_utcoffset_timetype
+#     preprocesslogic='anomprob,trend,avg,dataage_1_minute'
+     preprocesslogic='dataage_-4_day,trend,min,max' # millisecond,second,minute,hour,day
+     #preprocesslogic='dataage_-4_hour' # millisecond,second,minute,hour,day
+#     preprocesslogic='dataage_1_minute' # millisecond,second,minute,hour,day
+#     preprocesslogic='dataage_1_second' # millisecond,second,minute,hour,day
+#     preprocesslogic='dataage_1_millisecond' # millisecond,second,minute,hour,day
 
      
 #     pathtotmlattrs='oem=id,lat=subject.reference,long=component.0.code.coding.0.display,location=component.1.valueQuantity.value'     
