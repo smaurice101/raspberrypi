@@ -22,10 +22,12 @@ nest_asyncio.apply()
 import datetime
 import time
 
-# Set Global Host/Port for VIPER - You may change this to fit your configuration
-VIPERHOST="https://127.0.0.1"
-VIPERPORT=8000
+basedir = os.environ['userbasedir'] 
 
+# Set Global Host/Port for VIPER - You may change this to fit your configuration
+VIPERHOST=''
+VIPERPORT=''
+HTTPADDR='https://'
 
 
 #############################################################################################################
@@ -33,14 +35,21 @@ VIPERPORT=8000
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-        
-     with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
+     global VIPERHOST, VIPERPORT, HTTPADDR
+     with open("/Viper-preprocess2/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
-  
+
+     if VIPERHOST=="":
+        with open('/Viper-preprocess2/viper.txt', 'r') as f:
+          output = f.read()
+          VIPERHOST = HTTPADDR + output.split(",")[0]
+          VIPERPORT = output.split(",")[1]
+          
      return VIPERTOKEN
 
 VIPERTOKEN=getparams()
-
+if VIPERHOST=="":
+    print("ERROR: Cannot read viper.txt: VIPERHOST is empty or HPDEHOST is empty")
 
 #############################################################################################################
 #                                     CREATE TOPICS IN KAFKA
