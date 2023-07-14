@@ -50,7 +50,6 @@ hpdehost="http://127.0.0.1"
 hpdeport=30001
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
-#viperconfigfile="c:/maads/companies/firstgenesis/viper.env"
 viperconfigfile="c:/maads/golang/go/bin/viper.env"
 
 #############################################################################################################
