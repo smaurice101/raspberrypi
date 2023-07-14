@@ -58,21 +58,11 @@ viperconfigfile="c:/maads/golang/go/bin/viper.env"
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-        
      with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
-  
      return VIPERTOKEN
 
 VIPERTOKEN=getparams()
-
-def deleteTopics(topic):
-
-     enabletls=1
-
-     result=maadstml.viperdeletetopics(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,enabletls,'',9092,'')
-     print(result)
-
 
 def performSupervisedMachineLearning(maintopic,topicid):
 
@@ -178,28 +168,11 @@ Current_preprocessed_Avg=0:Power_preprocessed_Avg=0'
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
       
-##      result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
-##                                      companyname,consumeridtrainingdata2,producerid, hpdehost,
-##                                      viperconfigfile,enabletls,partition_training,
-##                                      deploy,modelruns,modelsearchtuner,hpdeport,offset,islogistic,
-##                                      brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
-##                                      independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,
-##                                      processlogic,identifier,array,transformtype,sendcoefto,coeftoprocess,coefsubtopicnames)    
       print("Training Result=",result)
 ##########################################################################
 
-# Change this to any number
-numpredictions=10000
-iotdevices=3
 maintopic="iot-preprocess"
 
-# create separate and custom micro-ML models for each account, location, IoT device, etc.
-
-#element_run = Parallel(n_jobs=1)(delayed(performSupervisedMachineLearning)(maintopic,j) for j in range(iotdevices))
-
-#deleteTopics("fhir-ml-prediction-results-output")
-
-#for j in range(iotdevices):
 while True:
   try:
      # Re-train every 10 seconds- change to whatever number you wish
