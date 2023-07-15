@@ -171,8 +171,7 @@ def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
 
       description="Topic containing joined streams for Machine Learning training dataset"
 
-      streamstojoin="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb,Power_preprocessed_Trend,\
-Voltage_preprocessed_Avg,Current_preprocessed_Avg,Power_preprocessed_Avg"
+      streamstojoin="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb"
 
 
       #############################################################################################################
