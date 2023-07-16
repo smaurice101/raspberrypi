@@ -1,4 +1,5 @@
-DIVE IS USED TO INSPECT THE DOCKER CONTAINER IN AN EFFORT TO REDUCE ITS SIZE
+DIVE IS USED TO INSPECT THE DOCKER CONTAINER IN AN EFFORT TO REDUCE ITS SIZE 
+(https://github.com/wagoodman/dive)
 
 #Execute the following command to get the latest version tag of dive release. Assign version tag to variable.
 
