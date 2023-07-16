@@ -11,3 +11,7 @@ curl -Lo dive.deb "https://github.com/wagoodman/dive/releases/latest/download/di
 sudo apt install -y ./dive.deb
 
 dive --version
+
+RUN DIVE:
+dive <container name>
+For examle: dive maadsdocker/seneca-iot-tml-kafka-amd64:latest
