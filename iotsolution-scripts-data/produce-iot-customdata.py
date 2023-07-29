@@ -145,6 +145,12 @@ def getlatlong(reader,search,key):
   
   return value_at_index['lat'],value_at_index['long'],value_at_index['identifier']
 
+def getlatlong2(reader):
+
+  #print("arr=",reader)
+  random_lines=random.choice(list(reader))
+
+  return random_lines[1],random_lines[2],random_lines[0]
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream):
      
@@ -191,6 +197,8 @@ while True:
   #line = line[:-2]
   jsonline = json.loads(line)
   try:
+    # YOU CAN REPLACE THIS FUNCTION WITH  getlatlong2(reader) 
+    # fOR EXAMPLE: lat,long,ident=getlatlong2(reader)   
     lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
     line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
     if not line:
