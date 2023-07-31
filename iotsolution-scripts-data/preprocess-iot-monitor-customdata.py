@@ -63,7 +63,7 @@ def datasetup(maintopic,preprocesstopic):
      mylocation="Toronto"
 
      # Replication factor for Kafka redundancy
-     replication=3
+     replication=1
      # Number of partitions for joined topic
      numpartitions=3
      # Enable SSL/TLS communication with Kafka
