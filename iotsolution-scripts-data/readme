@@ -1,2 +1,6 @@
 Download all data from: https://drive.google.com/drive/folders/1wJEufLVtOzu8R-yYh6ybMASAaKkvMaTw?usp=share_link
 Copy ALL data to VIPER folder on USB stick
+
+Insert your file ID into this URL (https://drive.google.com/uc?export=download&id=), then surround the URL with quotes so that Bash doesn't misinterpret the &, like so:
+
+wget "https://drive.google.com/uc?export=download&id=0Bz7KyqmuGsilT0J5dmRCM0ROVHc"
