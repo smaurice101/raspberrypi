@@ -290,6 +290,7 @@ RUN chmod -R +x Viperviz
 RUN chmod -R +x tmux
 
 WORKDIR Viperviz
+##########add delete here
 RUN unzip viperviz.zip
 
 WORKDIR /
