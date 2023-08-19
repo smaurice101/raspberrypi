@@ -290,7 +290,9 @@ RUN chmod -R +x Viperviz
 RUN chmod -R +x tmux
 
 WORKDIR Viperviz
-##########add delete here
+##########add delete here - to delete viperviz folder from main zip for viperviz binary
+RUN rm -rf viperviz
+
 RUN unzip viperviz.zip
 
 WORKDIR /
