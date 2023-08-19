@@ -193,11 +193,11 @@ while True:
   line = file1.readline()
   line = line.replace(";", " ")
   # add lat/long/identifier
+  if not line or line == "":
+     file1.seek(0)
+     pass 
 
   try:
-    if not line or line == "":
-       file1.seek(0)
-       pass 
     jsonline = json.loads(line)   
     # YOU CAN REPLACE THIS FUNCTION: getlatlong(reader,jsonline['metadata']['dsn'],'dsn') -----> WITH  getlatlong2(reader) 
     # fOR EXAMPLE: lat,long,ident=getlatlong2(reader)   
