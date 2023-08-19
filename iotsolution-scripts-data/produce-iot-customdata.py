@@ -201,11 +201,11 @@ while True:
     # fOR EXAMPLE: lat,long,ident=getlatlong2(reader)   
     lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
     line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
-    if not line:
+    if not line or line == "":
         #break
        file1.seek(0)
     producetokafka(line.strip(), "", "",producerid,maintopic,"")
-    time.sleep(0.2)
+    time.sleep(0.1)
   except Exception as e:
      pass  
   
