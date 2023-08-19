@@ -194,16 +194,15 @@ while True:
   line = line.replace(";", " ")
   # add lat/long/identifier
 
-  #line = line[:-2]
   try:
+    if not line or line == "":
+       file1.seek(0)
+       pass 
     jsonline = json.loads(line)   
     # YOU CAN REPLACE THIS FUNCTION: getlatlong(reader,jsonline['metadata']['dsn'],'dsn') -----> WITH  getlatlong2(reader) 
     # fOR EXAMPLE: lat,long,ident=getlatlong2(reader)   
     lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
     line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
-    if not line or line == "":
-        #break
-       file1.seek(0)
     producetokafka(line.strip(), "", "",producerid,maintopic,"")
     time.sleep(0.1)
   except Exception as e:
