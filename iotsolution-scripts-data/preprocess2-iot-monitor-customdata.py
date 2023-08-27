@@ -170,7 +170,7 @@ print(maintopic,producerid)
 
 async def startviper():
 
-        print("Start Request:",datetime.datetime.now())
+        print("Start Preprocess2-iot-monitor-customdata Request:",datetime.datetime.now())
         while True:
           try:   
             sendtransactiondata(maintopic,producerid,VIPERPORT,-1,preprocesstopic)            
