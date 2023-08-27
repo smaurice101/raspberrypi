@@ -33,13 +33,13 @@ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
  tmux send-keys -t zookeeper './zookeeper-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
 
 
- sleep 20
+ sleep 5
 
  tmux new -d -s kafka 
  tmux send-keys -t kafka 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
  tmux send-keys -t kafka './kafka-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
 
-sleep 45
+sleep 5
  ########################## SETUP VIPER/HPDE/VIPERVIZ Binaries For Transactional Machine Learning 
  
 # STEP 1: Produce Data to Kafka
@@ -49,7 +49,7 @@ sleep 45
  tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
  tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper-produce/viper-linux-$chip' ENTER
 
- sleep 25
+ sleep 5
 # STEP 1b: RUN PYTHON Script 
  tmux new -d -s produce-iot-data-python-8000 
  tmux send-keys -t produce-iot-data-python-8000 'cd $userbasedir/IotSolution' ENTER
@@ -65,7 +65,7 @@ sleep 45
  tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/Viper-preprocess2' ENTER 
  tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper-preprocess2/viper-linux-$chip' ENTER
  
-sleep 25
+sleep 5
 
 # STEP 2b: RUN PYTHON Script  
  tmux new -d -s preprocess-data-python-8001
