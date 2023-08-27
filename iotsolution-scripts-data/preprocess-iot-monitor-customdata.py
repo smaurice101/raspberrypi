@@ -221,7 +221,7 @@ latlong=lat:long'
         print(result)
         return result
      except Exception as e:
-        print("ERROR:",e)
+        print(e)
         return e
      
 
