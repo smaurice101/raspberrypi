@@ -189,23 +189,35 @@ reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
 k=0
 file1 = open(inputfile, 'r')
 
+k=0
+file1 = open(inputfile, 'r')
+print("Read Start:",datetime.datetime.now())
+
 while True:
   line = file1.readline()
   line = line.replace(";", " ")
   # add lat/long/identifier
-  if not line or line == "":
-     file1.seek(0)
-     pass 
-
+  k = k + 1
+  print("Reading line=", k)
+  #line = line[:-2]
   try:
-    jsonline = json.loads(line)   
-    # YOU CAN REPLACE THIS FUNCTION: getlatlong(reader,jsonline['metadata']['dsn'],'dsn') -----> WITH  getlatlong2(reader) 
-    # fOR EXAMPLE: lat,long,ident=getlatlong2(reader)   
+    if not line or line == "":
+        #break
+       file1.seek(0)
+       k=0
+       print("Reached End of File - Restarting")
+       print("Read End:",datetime.datetime.now())
+       continue
+
+    jsonline = json.loads(line)
     lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
     line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
+
     producetokafka(line.strip(), "", "",producerid,maintopic,"")
-    time.sleep(0.1)
+    #time.sleep(0.1)
   except Exception as e:
+     print(e)  
      pass  
   
 file1.close()
+
