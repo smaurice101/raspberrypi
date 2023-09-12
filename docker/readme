@@ -34,7 +34,8 @@ docker pull maadsdocker/seneca-iot-tml-kafka-amd64
 If you run into issues try:
 1. sudo dockerd (start docker daemon)
 2. if you have registry.io connection refused try: echo "nameserver 8.8.8.8">/etc/resolv.conf
-2a. If permission denied: sudo chmod 666 /var/run/docker.sock
+2a. If permission denied then do: sudo chmod 666 /var/run/docker.sock
+2b. If get docker: open /var/lib/docker/tmp/GetImageBlob549217035: no such file or directory then do: systemctl restart docker
 3. if you have mount overlay2 issues try: rm -rf ~/Library/Containers/com.docker.docker
 4. if you have "too many symbolink" error: 
   stop docker
