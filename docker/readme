@@ -18,7 +18,7 @@ ARG CACHEBUST=1
 docker build -t <container name> --build-arg CHIP=<chip arch> --build-arg CACHEBUST=$(date +%s) --network=host .
 
 Docker Tag: docker tag <container id>
-Docker Run: docker run -p 9005:<viperviz port> <container name>
+Docker Run: docker run -p 9005:9005 <container name>
 Replace <container id> with container id or name. Replace <viperviz port> with port viperviz is listening; do the following:
 1. go into the container: docker exec -it <mycontainer> bash
 2. run: tmux ls
