@@ -1,4 +1,5 @@
 Install DOCKER: 
+0. sudo apt-get update
 1. sudo apt install docker.io docker.compose
 2. sudo docker --version
 3. sudo docker run hello-world
