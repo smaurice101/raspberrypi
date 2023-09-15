@@ -39,7 +39,7 @@ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
  tmux send-keys -t kafka 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
  tmux send-keys -t kafka './kafka-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
 
-sleep 4
+sleep 10
  ########################## SETUP VIPER/HPDE/VIPERVIZ Binaries For Transactional Machine Learning 
  
 # STEP 1: Produce Data to Kafka
@@ -48,12 +48,6 @@ sleep 4
  tmux new -d -s produce-iot-data-viper-8000 
  tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
  tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper-produce/viper-linux-$chip' ENTER
-
- sleep 4
-# STEP 1b: RUN PYTHON Script 
- tmux new -d -s produce-iot-data-python-8000 
- tmux send-keys -t produce-iot-data-python-8000 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t produce-iot-data-python-8000 'python $userbasedir/IotSolution/produce-iot-customdata.py' ENTER
  
 # STEP 2: Preprocess Data from Kafka
 # STEP 2a: RUN VIPER Binary
@@ -65,9 +59,13 @@ sleep 4
  tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/Viper-preprocess2' ENTER 
  tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper-preprocess2/viper-linux-$chip' ENTER
  
-sleep 4
+sleep 7
 
 # STEP 2b: RUN PYTHON Script  
+ tmux new -d -s produce-iot-data-python-8000 
+ tmux send-keys -t produce-iot-data-python-8000 'cd $userbasedir/IotSolution' ENTER
+ tmux send-keys -t produce-iot-data-python-8000 'python $userbasedir/IotSolution/produce-iot-customdata.py' ENTER
+
  tmux new -d -s preprocess-data-python-8001
  tmux send-keys -t preprocess-data-python-8001 'cd $userbasedir/IotSolution' ENTER 
  tmux send-keys -t preprocess-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
