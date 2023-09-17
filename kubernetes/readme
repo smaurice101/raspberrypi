@@ -9,6 +9,7 @@ b. sudo install minikube-linux-amd64 minikube
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
 
 3. chmod +x kubectl
+a. sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 4. turn off swap: sudo swapoff -a  
 
