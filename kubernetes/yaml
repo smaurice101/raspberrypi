@@ -19,4 +19,4 @@ spec:
         ports:
            - containerPort: 9005
              hostPort: 9005
-      type: NodePort     
+      
