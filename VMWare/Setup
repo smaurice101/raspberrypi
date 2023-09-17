@@ -23,3 +23,10 @@ IF your VM gets stuck on Boot it may be you ran out of disk space:
 3. clean up disk to free up space: sudo apt-get autoclean or sudo apt-get clean
 4. Or you may need to re-create VM with larger disk like 100GB
 5. Note you should run this disk from a USB with lots of space
+
+If you get an error:
+ERROR: could not get lock /var/lib/dpkg/lock-frontend
+Check processes running apt
+RUN: ps aux | grep -i apt
+Try: sudo killall apt apt-get or sudo kill -9 <process_id>
+OR: Ubuntu is likely downloading daily updates - you can disbale this
