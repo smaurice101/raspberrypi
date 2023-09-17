@@ -1,0 +1,8 @@
+VMWare Setup Sugestions:
+1. Download Linux Ubunto ISO desktop: https://ubuntu.com/download/desktop
+2. Start Latest VMWare and Create a new VM
+3. Choose Disk 50GB and 4GB memory or higher
+4. Choose Split disk and do a typical install
+
+Common ISSUES with VMWare:
+1. No network access - if you 
