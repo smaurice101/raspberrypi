@@ -11,7 +11,7 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s http
 3. chmod +x kubectl
 a. sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-4. turn off swap: sudo swapoff -a  
+(4. turn off swap: sudo swapoff -a  - MAY BE NEEDED IN SOME CASES)
 
 5. start minikube: minikube start --driver=docker
 b. make sure docker engine is installed . If not run: sudo apt-get install docker.io
