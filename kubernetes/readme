@@ -1,5 +1,5 @@
 PLEASE NOTE: RENAME THIS "yaml" --> senecaiot.yml, THEN RUN  "kubectl apply -f senecaiot.yml" (no quotes)
-
+then: sudo chmod +x senecaiot.yml
 
 1. Download minikube
 wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
