@@ -13,6 +13,7 @@ ENV CHIP=${CHIP}
 #ARG CHIP="ARM32"
 #CHIP="ARM64"
 #CHIP="AMD64"
+#CHIP="MAC"
 
 #echo "Updating package index files"
 RUN apt update || true
@@ -119,6 +120,10 @@ elif [ "$CHIP" = "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
   chmod 755 viper-linux-amd64 ; \ 
+elif [ "$CHIP" = "MAC" ] ; \
+  then \
+  unzip transactionalmachinelearning/MAADS-VIPER\ *\ Mac\ AMD64.zip && \
+  chmod 755 viper-darwin-amd64 ; \ 
 fi
 
 RUN rm -rf transactionalmachinelearning
@@ -146,6 +151,10 @@ elif [ "$CHIP" = "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
   chmod 755 viper-linux-amd64 ; \ 
+elif [ "$CHIP" = "MAC" ] ; \
+  then \
+  unzip transactionalmachinelearning/MAADS-VIPER\ *\ Mac\ AMD64.zip && \
+  chmod 755 viper-darwin-amd64 ; \ 
 fi
 
 RUN rm -rf transactionalmachinelearning
@@ -173,6 +182,10 @@ elif [ "$CHIP" = "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
   chmod 755 viper-linux-amd64 ; \ 
+elif [ "$CHIP" = "MAC" ] ; \
+  then \
+  unzip transactionalmachinelearning/MAADS-VIPER\ *\ Mac\ AMD64.zip && \
+  chmod 755 viper-darwin-amd64 ; \ 
 fi
 
 RUN rm -rf transactionalmachinelearning
@@ -201,6 +214,9 @@ elif [ "$CHIP" = "ARM64" ] ; \
 elif [ "$CHIP" = "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPERviz\ *\ Linux\ AMD64.zip || true ; \ 
+elif [ "$CHIP" = "MAC" ] ; \
+  then \
+  unzip transactionalmachinelearning/MAADS-VIPERviz\ *\ Mac\ AMD64.zip || true ; \ 
 fi
 
 
@@ -213,6 +229,9 @@ elif [ "$CHIP" = "ARM64" ] ; \
 elif [ "$CHIP" = "AMD64" ] ; \
   then \
   chmod 755 viperviz-linux-amd64 ; \ 
+elif [ "$CHIP" = "MAC" ] ; \
+  then \
+  chmod 755 viperviz-darwin-amd64 ; \ 
 fi
 
 RUN rm -rf transactionalmachinelearning
@@ -239,6 +258,9 @@ elif [ "$CHIP" = "ARM64" ] ; \
 elif [ "$CHIP" = "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-HPDE\ *\ Linux\ AMD64.zip || true ; \
+elif [ "$CHIP" = "MAC" ] ; \
+  then \
+  unzip transactionalmachinelearning/MAADS-HPDE\ *\ Mac\ AMD64.zip || true ; \
 fi
 
 RUN if [ "$CHIP" = "ARM32" ] ; \
@@ -250,6 +272,9 @@ elif [ "$CHIP" = "ARM64" ] ; \
 elif [ "$CHIP" = "AMD64" ] ; \
   then \
   chmod 755 hpde-linux-amd64 ; \ 
+elif [ "$CHIP" = "MAC" ] ; \
+  then \
+  chmod 755 hpde-darwin-amd64 ; \ 
 fi
 
 RUN rm -rf transactionalmachinelearning
