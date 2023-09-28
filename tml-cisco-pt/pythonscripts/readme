@@ -1,0 +1,6 @@
+These are the poducing and preprocessing scripts:
+The main script is: pt-preprocess.py
+To generate use the pt-produce-localfile.py
+
+NOTE: For student solutions all you need is the pt-preprocess.py
+
