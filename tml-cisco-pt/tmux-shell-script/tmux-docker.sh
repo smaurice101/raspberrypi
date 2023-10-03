@@ -66,6 +66,7 @@ sleep 7
    tmux send-keys -t produce-cisco-data-python-8000 'python $userbasedir/Viper-produce/pt-produce-localfile-external.py' ENTER
  fi
 
+# -1 instructor needs to have cisco packet tracer running
 if [[ "$runtype" == "0" || "$runtype" == "-1" ]]; then  
   # STEP 1: Produce Data to Kafka
   # STEP 1a: RUN VIPER Binary
