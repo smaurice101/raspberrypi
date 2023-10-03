@@ -10,6 +10,8 @@ FROM python:3.9-slim
 ARG CHIP
 ENV CHIP=${CHIP}
 ################################# DEFINE RUNTYPE: 0=Production using Kafka Cloud, 1=Development using local data file: cisco_network_data.txt
+#####  pass in docker build and run (--env RUNTYPE=0 to override)
+
 ENV RUNTYPE=1
 RUN export RUNTYPE=1
 
