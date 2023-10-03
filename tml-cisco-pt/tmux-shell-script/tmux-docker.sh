@@ -11,7 +11,14 @@
  runtype=${RUNTYPE}
  brokerhostport=${BROKERHOSTPORT}
  mainkafkatopic=${KAFKAPRODUCETOPIC}
- export maintopic=mainkafkatopic
+ 
+ cloudusername=${CLOUDUSERNAME}
+ cloudpassword=${CLOUDPASSWORD}
+ export cloudusername
+ export cloudpassword
+ export brokerhostport
+ export runtype
+ export mainkafkatopic
  
  chip=$(echo "$CHIP2" | tr '[:upper:]' '[:lower:]')
  mainos="linux"
@@ -73,7 +80,9 @@ if [[ "$runtype" == "0" || "$runtype" == "-1" ]]; then
 
    tmux new -d -s produce-cisco-data-viper-8000 
    tmux send-keys -t produce-cisco-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
-   tmux send-keys -t produce-cisco-data-viper-8000 sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-produce/viper.env' ENTER
+   tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-produce/viper.env" ENTER   
+   tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-produce/viper.env" ENTER      
+   tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-produce/viper.env" ENTER      
    tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
 sleep 7
 
@@ -89,7 +98,10 @@ if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then
   # STEP 2a: RUN VIPER Binary
    tmux new -d -s preprocess-cisco-data-viper-8001
    tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
-   tmux send-keys -t preprocess-cisco-data-viper-8001 sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess/viper.env' ENTER   
+   tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess/viper.env" ENTER   
+   tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-preprocess/viper.env" ENTER      
+   tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-preprocess/viper.env" ENTER      
+
    tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
 
  sleep 7
@@ -103,7 +115,9 @@ fi
 if [ "$runtype" == "-2"]; then   
    tmux new -d -s preprocess-cisco-data-viper-8001
    tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
-   tmux send-keys -t preprocess-cisco-data-viper-8001 sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess/viper.env' ENTER   
+   tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess/viper.env" ENTER   
+   tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-preprocess/viper.env" ENTER      
+   tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-preprocess/viper.env" ENTER      
    tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
 
    tmux new -d -s preprocess-cisco-data-python-8001
@@ -114,5 +128,12 @@ if [ "$runtype" == "-2"]; then
 # STEP 5: START Visualization Viperviz 
  tmux new -d -s visualization-cisco-viperviz-9000 
  tmux send-keys -t visualization-cisco-viperviz-9000 'cd $userbasedir/Viperviz' ENTER
+ 
+if [ "$runtype" != "1"]; then   
+   tmux send-keys -t visualization-cisco-viperviz-9000 "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viperviz/viper.env" ENTER   
+   tmux send-keys -t visualization-cisco-viperviz-9000 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viperviz/viper.env" ENTER      
+   tmux send-keys -t visualization-cisco-viperviz-9000 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viperviz/viper.env" ENTER      
+fi
+ 
  tmux send-keys -t visualization-cisco-viperviz-9000 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9000' ENTER
  
