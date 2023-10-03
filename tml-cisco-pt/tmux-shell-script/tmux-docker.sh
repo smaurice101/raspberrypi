@@ -51,39 +51,30 @@ sleep 10
 # STEP 1: Produce Data to Kafka
 # STEP 1a: RUN VIPER Binary
   
- tmux new -d -s produce-iot-data-viper-8000 
- tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
- tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
+ tmux new -d -s produce-cisco-data-viper-8000 
+ tmux send-keys -t produce-cisco-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
+ tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
  
 # STEP 2: Preprocess Data from Kafka
 # STEP 2a: RUN VIPER Binary
- tmux new -d -s preprocess-data-viper-8001
- tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
- tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
-
- tmux new -d -s preprocess2-data-viper-8002
- tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/Viper-preprocess2' ENTER 
- tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper-preprocess2/viper-$mainos-$chip' ENTER
+ tmux new -d -s preprocess-cisco-data-viper-8001
+ tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
+ tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
  
 sleep 7
 
 # STEP 2b: RUN PYTHON Script  
- tmux new -d -s produce-iot-data-python-8000 
- tmux send-keys -t produce-iot-data-python-8000 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t produce-iot-data-python-8000 'python $userbasedir/IotSolution/produce-iot-customdata.py' ENTER
+ tmux new -d -s produce-cisco-data-python-8000 
+ tmux send-keys -t produce-cisco-data-python-8000 'cd $userbasedir/IotSolution' ENTER
+ tmux send-keys -t produce-cisco-data-python-8000 'python $userbasedir/IotSolution/produce-iot-customdata.py' ENTER
 
- tmux new -d -s preprocess-data-python-8001
- tmux send-keys -t preprocess-data-python-8001 'cd $userbasedir/IotSolution' ENTER 
- tmux send-keys -t preprocess-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
+ tmux new -d -s preprocess-cisco-data-python-8001
+ tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/IotSolution' ENTER 
+ tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
   
 
- tmux new -d -s preprocess2-data-python-8002
- tmux send-keys -t preprocess2-data-python-8002 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t preprocess2-data-python-8002 'python $userbasedir/IotSolution/preprocess2-iot-monitor-customdata.py' ENTER
-
-
 # STEP 5: START Visualization Viperviz 
- tmux new -d -s visualization-viperviz-9005 
- tmux send-keys -t visualization-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
- tmux send-keys -t visualization-viperviz-9005 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9005' ENTER
+ tmux new -d -s visualization-cisco-viperviz-9005 
+ tmux send-keys -t visualization-cisco-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
+ tmux send-keys -t visualization-cisco-viperviz-9005 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9000' ENTER
  
