@@ -9,6 +9,19 @@ FROM python:3.9-slim
 # install java
 ARG CHIP
 ENV CHIP=${CHIP}
+################################# DEFINE RUNTYPE: 0=Production using Kafka Cloud, 1=Development using local data file: cisco_network_data.txt
+ENV RUNTYPE=1
+RUN export RUNTYPE=1
+
+ENV BROKERHOST=127.0.0.1
+RUN export BROKERHOST=127.0.0.1
+ENV BROKERPORT=9092
+RUN export BROKERPORT=9092
+
+ENV CLOUDUSERNAME=""
+RUN export CLOUDUSERNAME=""
+ENV CLOUDPASSWORD=""
+RUN export CLOUDPASSWORD=""
 
 #ARG CHIP="ARM32"
 #CHIP="ARM64"
