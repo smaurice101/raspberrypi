@@ -8,6 +8,9 @@
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
  CHIP2=${CHIP}
+ runtype=${RUNTYPE}
+ brokerhostport=${BROKERHOSTPORT}
+ 
  chip=$(echo "$CHIP2" | tr '[:upper:]' '[:lower:]')
  mainos="linux"
 
@@ -38,7 +41,6 @@ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
  tmux send-keys -t zookeeper 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
  tmux send-keys -t zookeeper './zookeeper-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
 
-
  sleep 4
 
  tmux new -d -s kafka 
@@ -47,31 +49,49 @@ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
 
 sleep 10
  ########################## SETUP VIPER/HPDE/VIPERVIZ Binaries For Transactional Machine Learning 
- 
-# STEP 1: Produce Data to Kafka
-# STEP 1a: RUN VIPER Binary
-  
- tmux new -d -s produce-cisco-data-viper-8000 
- tmux send-keys -t produce-cisco-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
- tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
- 
-# STEP 2: Preprocess Data from Kafka
-# STEP 2a: RUN VIPER Binary
- tmux new -d -s preprocess-cisco-data-viper-8001
- tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
- tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
- 
+
+if [ "$runtype" == "1" ]; then  
+  # STEP 1: Produce Data to Kafka
+  # STEP 1a: RUN VIPER Binary
+   tmux new -d -s produce-cisco-data-viper-8000 
+   tmux send-keys -t produce-cisco-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
+   tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
 sleep 7
 
-# STEP 2b: RUN PYTHON Script  
- tmux new -d -s produce-cisco-data-python-8000 
- tmux send-keys -t produce-cisco-data-python-8000 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t produce-cisco-data-python-8000 'python $userbasedir/IotSolution/produce-iot-customdata.py' ENTER
+ # STEP 2b: RUN PYTHON Script  
+   tmux new -d -s produce-cisco-data-python-8000 
+   tmux send-keys -t produce-cisco-data-python-8000 'cd $userbasedir/Viper-produce' ENTER
+   tmux send-keys -t produce-cisco-data-python-8000 'python $userbasedir/Viper-produce/pt-produce-localfile-external.py' ENTER
+ fi
 
- tmux new -d -s preprocess-cisco-data-python-8001
- tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/IotSolution' ENTER 
- tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
-  
+if [[ "$runtype" == "0" || "$runtype" == "-1" ]]; then  
+  # STEP 1: Produce Data to Kafka
+  # STEP 1a: RUN VIPER Binary
+   tmux new -d -s produce-cisco-data-viper-8000 
+   tmux send-keys -t produce-cisco-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
+   tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
+sleep 7
+
+ # STEP 2b: RUN PYTHON Script  
+   tmux new -d -s produce-cisco-data-python-8000 
+   tmux send-keys -t produce-cisco-data-python-8000 'cd $userbasedir/Viper-produce' ENTER
+   tmux send-keys -t produce-cisco-data-python-8000 'python $userbasedir/Viper-produce/pt-produce-external.py' ENTER
+ fi
+
+# runtype=-1 then this is instructor so does not need to preprocess
+if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then   
+  # STEP 2: Preprocess Data from Kafka
+  # STEP 2a: RUN VIPER Binary
+   tmux new -d -s preprocess-cisco-data-viper-8001
+   tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
+   tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
+
+ sleep 7
+
+   tmux new -d -s preprocess-cisco-data-python-8001
+   tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/Viper-preprocess' ENTER 
+   tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/Viper-preprocess/pt-preprocess-external.py' ENTER
+ fi 
 
 # STEP 5: START Visualization Viperviz 
  tmux new -d -s visualization-cisco-viperviz-9005 
