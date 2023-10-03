@@ -103,7 +103,7 @@ if [ "$runtype" == "-2"]; then
  fi 
 
 # STEP 5: START Visualization Viperviz 
- tmux new -d -s visualization-cisco-viperviz-9005 
- tmux send-keys -t visualization-cisco-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
- tmux send-keys -t visualization-cisco-viperviz-9005 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9000' ENTER
+ tmux new -d -s visualization-cisco-viperviz-9000 
+ tmux send-keys -t visualization-cisco-viperviz-9000 'cd $userbasedir/Viperviz' ENTER
+ tmux send-keys -t visualization-cisco-viperviz-9000 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9000' ENTER
  
