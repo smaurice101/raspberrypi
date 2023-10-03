@@ -12,6 +12,7 @@ import random
 # Set Global variables for VIPER and HPDE - You can change IP and Port for your setup of 
 # VIPER and HPDE
 basedir = os.environ['userbasedir'] 
+hackedhosts = os.environ['HACKEDHOSTS'] 
 
 # Set Global Host/Port for VIPER - You may change this to fit your configuration
 VIPERHOST=''
@@ -197,7 +198,11 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream):
 # global variable:
 # 1. hackedips (subnet-[i or d],hostid): 5.11,6.12,5.21, i=increase,d=decrease
 # 2. dynamically turn off ports on machine - students should detect which machine cannot be pinged - meaning it is down
-hackedid="5.11-i,6.12-i,5.21-d"
+if hackedhosts == "":
+  hackedid="5.11-i,6.12-i,5.21-d"
+else:     
+  hackedid=hackedhosts
+
 lastinboundpacketi=0
 lastoutboundpacketi=0
 
