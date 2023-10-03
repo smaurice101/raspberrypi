@@ -10,6 +10,8 @@
  CHIP2=${CHIP}
  runtype=${RUNTYPE}
  brokerhostport=${BROKERHOSTPORT}
+ mainkafkatopic=${KAFKAPRODUCETOPIC}
+ export maintopic=mainkafkatopic
  
  chip=$(echo "$CHIP2" | tr '[:upper:]' '[:lower:]')
  mainos="linux"
