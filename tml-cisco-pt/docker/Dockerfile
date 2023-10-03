@@ -26,8 +26,8 @@ RUN export CLOUDPASSWORD=""
 ENV HACKEDHOSTS="5.11-i,5.16-i,6.17-i"
 RUN export HACKEDHOSTS="5.11-i,5.16-i,6.17-i"
 
-ENV KAFKAPRODUCETOPIC="iot-mainstream"
-RUN export KAFKAPRODUCETOPIC="iot-mainstream"
+ENV KAFKAPRODUCETOPIC="cisco-network-mainstream"
+RUN export KAFKAPRODUCETOPIC="cisco-network-mainstream"
 
 #ARG CHIP="ARM32"
 #CHIP="ARM64"
