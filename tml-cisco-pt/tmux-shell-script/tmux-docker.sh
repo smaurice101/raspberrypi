@@ -70,8 +70,10 @@ sleep 7
 if [[ "$runtype" == "0" || "$runtype" == "-1" ]]; then  
   # STEP 1: Produce Data to Kafka
   # STEP 1a: RUN VIPER Binary
+
    tmux new -d -s produce-cisco-data-viper-8000 
    tmux send-keys -t produce-cisco-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
+   tmux send-keys -t produce-cisco-data-viper-8000 sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-produce/viper.env' ENTER
    tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
 sleep 7
 
@@ -87,6 +89,7 @@ if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then
   # STEP 2a: RUN VIPER Binary
    tmux new -d -s preprocess-cisco-data-viper-8001
    tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
+   tmux send-keys -t preprocess-cisco-data-viper-8001 sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess/viper.env' ENTER   
    tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
 
  sleep 7
@@ -98,8 +101,13 @@ if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then
 
 # runtype=-2 then this is student preprocess for presentation
 if [ "$runtype" == "-2"]; then   
+   tmux new -d -s preprocess-cisco-data-viper-8001
+   tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
+   tmux send-keys -t preprocess-cisco-data-viper-8001 sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess/viper.env' ENTER   
+   tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
+
    tmux new -d -s preprocess-cisco-data-python-8001
-   tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/Viper-preprocess' ENTER 
+   tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/Viper-preprocess' ENTER    
    tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/Viper-preprocess/pt-preprocess-external.py' ENTER
  fi 
 
