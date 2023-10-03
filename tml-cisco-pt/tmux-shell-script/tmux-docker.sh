@@ -95,6 +95,13 @@ if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then
    tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/Viper-preprocess/pt-preprocess-external.py' ENTER
  fi 
 
+# runtype=-2 then this is student preprocess for presentation
+if [ "$runtype" == "-2"]; then   
+   tmux new -d -s preprocess-cisco-data-python-8001
+   tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/Viper-preprocess' ENTER 
+   tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/Viper-preprocess/pt-preprocess-external.py' ENTER
+ fi 
+
 # STEP 5: START Visualization Viperviz 
  tmux new -d -s visualization-cisco-viperviz-9005 
  tmux send-keys -t visualization-cisco-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
