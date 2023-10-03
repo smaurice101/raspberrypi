@@ -22,6 +22,8 @@ nest_asyncio.apply()
 import datetime
 import time
 
+mainkafkatopic = os.environ['KAFKAPRODUCETOPIC'] 
+
 ###################################################### START TML TOPIC PROCESS #######################################
 # Set Global variables for VIPER and HPDE - You can change IP and Port for your setup of 
 # VIPER and HPDE
@@ -286,7 +288,11 @@ latlong='
 #############################################################################################################
 #                                     SETUP THE TOPIC DATA STREAMS
 
-maintopic='cisco-network-mainstream'
+if mainkafkatopic == "":
+  maintopic='cisco-network-mainstream'
+else:
+  maintopic=mainkafkatopic
+     
 preprocesstopic='cisco-network-preprocess'
 
 
