@@ -32,9 +32,6 @@ RUN chmod -R +x Viper-produce
 RUN mkdir Viper-preprocess
 RUN chmod -R +x Viper-preprocess
 
-RUN mkdir Viper-preprocess2
-RUN chmod -R +x Viper-preprocess2
-
 RUN mkdir Kafka
 RUN chmod -R +x Kafka
 
@@ -70,18 +67,6 @@ RUN apt -y install mariadb-server
 # GRANT ALL PRIVILEGES on *.* to 'root'@'localhost' IDENTIFIED BY 'raspberry'; 
 # FLUSH PRIVILEGES;
 
-
-################# IOT DATA
-WORKDIR IotSolution
-
-RUN wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1yRgDYrWnHu74NYX9GMAVDjR10ZyfoZvh' -O IoTData.zip
-RUN chmod +x IoTData.zip
-RUN unzip IoTData.zip
-
-RUN wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1_RICecxEZUjuCfm_MxPGwrOXxQ5w179O' -O dsntmlidmain.csv
-RUN chmod +x dsntmlidmain.csv
-RUN rm -rf IoTData.zip
-
 WORKDIR /
 
 RUN echo "Installing Java"
@@ -93,10 +78,9 @@ RUN pip install nest_asyncio
 RUN pip install joblib
 RUN pip install asyncio
 
-############################################################### Clone the Raspberrypi repo and Install TML Binaries
+############################################################### FASTER BUILD COMMAND
 
 ARG CACHEBUST=1
-
 
 ######################################### Viper Producer directory
 
@@ -160,37 +144,6 @@ fi
 RUN rm -rf transactionalmachinelearning
 WORKDIR /
 RUN chmod -R +x Viper-preprocess
-
-######################################### Viper Preprocess2 directory
-
-RUN cp -R transactionalmachinelearning Viper-preprocess2/transactionalmachinelearning
-
-WORKDIR Viper-preprocess2
-
-#RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
-RUN echo "*******************Viper for $CHIP PREPROCESS2**********************"
-
-RUN if [ "$CHIP" = "ARM32" ] ; \
-  then \
-  unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPER\ *\ Linux\ ARM.zip && \
-  chmod 755 viper-linux-arm ; \
-elif [ "$CHIP" =  "ARM64" ] ; \
-  then \
-  unzip transactionalmachinelearning/ARM64-Chipset/MAADS-VIPER\ *\ Linux\ ARM64.zip && \
-  chmod 755 viper-linux-arm64 ; \
-elif [ "$CHIP" = "AMD64" ] ; \
-  then \
-  unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
-  chmod 755 viper-linux-amd64 ; \ 
-elif [ "$CHIP" = "MAC" ] ; \
-  then \
-  unzip transactionalmachinelearning/MAADS-VIPER\ *\ Mac\ AMD64.zip && \
-  chmod 755 viper-darwin-amd64 ; \ 
-fi
-
-RUN rm -rf transactionalmachinelearning
-WORKDIR /
-RUN chmod -R +x Viper-preprocess2
 
 RUN echo "*********************Downloading and Installing VIPERviz Visualization****************"
 RUN mkdir Viperviz
@@ -285,32 +238,45 @@ RUN rm -rf transactionalmachinelearning
 
 RUN chmod -R +x Hpde
 
-##########################################################################################################
+##################################################CLONE RASPBERRY PI REPO #######################
 
-
-RUN echo "Replace VIPER.ENV"
 RUN git clone --depth 1 https://github.com/smaurice101/raspberrypi.git
 
 RUN chmod -R +x raspberrypi
 
+RUN echo "Replace VIPER.ENV"
+
+# ---------------------------------------------Update Viper.env ------------------------
 RUN cp -rf raspberrypi/viper-env-file/viper.env Viper-produce/viper.env
 RUN cp -rf raspberrypi/viper-env-file/viper.env Viper-preprocess/viper.env
-RUN cp -rf raspberrypi/viper-env-file/viper.env Viper-preprocess2/viper.env
 
 RUN cp -rf raspberrypi/viper-env-file/viper.env Viperviz/viper.env
 
-RUN echo "Copy the IotSolution Scripts"
+# ---------------------------------------------Download demo data ------------------------
+RUN echo "Copy the TML-CISCO Solution Data"
 
-#RUN mkdir IotSolution
-RUN cp -rf raspberrypi/iotsolution-scripts-data/* IotSolution/
+RUN cp -rf raspberrypi/tml-cisco-pt/data/* Viper-produce/
+WORKDIR Viper-produce
+RUN chmod +x cisco_network_data.zip
+RUN unzip cisco_network_data.zip
+
+WORKDIR /
+# ---------------------------------------------Download solution scripts ------------------------
+RUN echo "Copy the TML-CISCO Solution Script"
+RUN cp -rf raspberrypi/tml-cisco-pt/pythonscripts/pt-produce* Viper-produce/
+RUN chmod -R +x Viper-produce
+
+RUN cp -rf raspberrypi/tml-cisco-pt/pythonscripts/pt-preprocess* Viper-preprocess/
+RUN chmod -R +x Viper-preprocess
 
 RUN echo "PIP Install TML core packages"
 RUN pip install maadstml
 
-RUN cp -rf raspberrypi/tmux-shell-script/tmux-docker.sh tmux/tmux-docker.sh
+WORKDIR /
 
-RUN cp -rf raspberrypi/iot-dashboard-html/viperviz.zip Viperviz/viperviz.zip
-RUN chmod -R +x IotSolution
+RUN cp -rf raspberrypi/tml-cisco-pt/tmux-shell-script/tmux-docker.sh tmux/tmux-docker.sh
+
+RUN cp -rf raspberrypi/tml-cisco-pt/dashboard/viperviz.zip Viperviz/viperviz.zip
 RUN chmod -R +x Viperviz
 RUN chmod -R +x tmux
 
