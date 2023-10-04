@@ -26,7 +26,7 @@ HTTPADDR='https://'
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-     global VIPERHOST, VIPERPORT, HTTPADDR
+     global VIPERHOST, VIPERPORT, HTTPADDR, basedir
      with open(basedir + "/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
