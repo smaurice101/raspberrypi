@@ -27,11 +27,11 @@ HTTPADDR='https://'
 # to your location of admin.tok
 def getparams():
      global VIPERHOST, VIPERPORT, HTTPADDR, basedir
-     with open("admin.tok", "r") as f:
+     with open("./admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
      if VIPERHOST=="":
-        with open("viper.txt", 'r') as f:
+        with open("./viper.txt", 'r') as f:
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
