@@ -18,14 +18,14 @@ VIPERPORT=8000
 #VIPERPORT=62049
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
-viperconfigfile="c:/maads/golang/go/bin/viper.env"
+viperconfigfile="viper.env"
 
 #                                      STORE VIPER TOKEN
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
         
-     with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
+     with open("admin.tok", "r") as f:
         VIPERTOKEN=f.read()
   
      return VIPERTOKEN
