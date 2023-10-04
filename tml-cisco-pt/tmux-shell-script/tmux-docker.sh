@@ -127,7 +127,7 @@ if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then
 fi 
 
 # runtype=-2 then this is student preprocess for presentation
-if [ "$runtype" == "-2" || "$runtype" == "2" ]; then   
+if [[ "$runtype" == "-2" || "$runtype" == "2" ]]; then   
    tmux new -d -s preprocess-cisco-data-viper-8001
    tmux send-keys -t preprocess-cisco-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
    tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess/viper.env" ENTER   
