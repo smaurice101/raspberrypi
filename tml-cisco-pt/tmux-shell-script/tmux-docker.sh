@@ -73,6 +73,21 @@ sleep 7
    tmux send-keys -t produce-cisco-data-python-8000 'python $userbasedir/Viper-produce/pt-produce-localfile-external.py' ENTER
  fi
 
+if [ "$runtype" == "2" ]; then  
+   tmux new -d -s produce-cisco-data-viper-8000 
+   tmux send-keys -t produce-cisco-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
+   tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-produce/viper.env" ENTER   
+   tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-produce/viper.env" ENTER      
+   tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-produce/viper.env" ENTER      
+   tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
+sleep 7
+
+ # STEP 2b: RUN PYTHON Script  
+   tmux new -d -s produce-cisco-data-python-8000 
+   tmux send-keys -t produce-cisco-data-python-8000 'cd $userbasedir/Viper-produce' ENTER
+   tmux send-keys -t produce-cisco-data-python-8000 'python $userbasedir/Viper-produce/pt-produce-localfile-external.py' ENTER
+ fi
+
 # -1 instructor needs to have cisco packet tracer running
 if [[ "$runtype" == "0" || "$runtype" == "-1" ]]; then  
   # STEP 1: Produce Data to Kafka
