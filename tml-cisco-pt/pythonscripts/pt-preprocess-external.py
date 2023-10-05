@@ -270,7 +270,7 @@ latlong='
  
      identifier = "Detect potential cyber attacks and monitor network"
 
-     preprocesslogic='min,max,trend,anomprob,variance' # millisecond,second,minute,hour,day
+     preprocesslogic='min,max,trend,anomprob,variance,avg' # millisecond,second,minute,hour,day
 
      pathtotmlattrs='oem=n/a,lat=n/a,long=n/a,location=n/a,identifier=n/a'     
      
