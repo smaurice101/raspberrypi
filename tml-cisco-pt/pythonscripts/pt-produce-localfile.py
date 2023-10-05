@@ -216,11 +216,15 @@ def formatdataandstream(mainjson,producerid,maintopic):
             lastoutboundpacketi=lastoutboundpacketi + valo                  
             jbuf["inboundpackets"]=lastinboundpacketi
             jbuf["outboundpackets"]=lastoutboundpacketi
+            if lastinboundpacketi > 1000000000:
+                lastinboundpacketi=0 
+            if lastoutboundpacketi > 1000000000:
+                lastoutboundpacketi=0 
          else:
             vali=random.randint(10,1000)
             valo=random.randint(10,1000)
-            lastinboundpacketd=lastinboundpacketd + vali
-            lastoutboundpacketd=lastoutboundpacketd + valo
+            lastinboundpacketd=lastinboundpacketd - vali
+            lastoutboundpacketd=lastoutboundpacketd - valo
             if lastinboundpacketd <= 0:
                   lastinboundpacketd=1000000
             if lastoutboundpacketd <= 0:
