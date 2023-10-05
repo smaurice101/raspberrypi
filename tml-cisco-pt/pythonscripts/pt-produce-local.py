@@ -18,14 +18,14 @@ VIPERPORT=8000
 #VIPERPORT=62049
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
-viperconfigfile="viper.env"
+viperconfigfile="c:/maads/golang/go/bin/viper.env"
 
 #                                      STORE VIPER TOKEN
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
         
-     with open("admin.tok", "r") as f:
+     with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
   
      return VIPERTOKEN
@@ -182,7 +182,7 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream):
 # global variable:
 # 1. hackedips (subnet-[i or d],hostid): 5.11,6.12,5.21, i=increase,d=decrease
 # 2. dynamically turn off ports on machine - students should detect which machine cannot be pinged - meaning it is down
-hackedid="5.11-i,6.12-i,5.21-d"
+hackedid="6.17-i,5.11-i,5.16-i"
 lastinboundpacketi=0
 lastoutboundpacketi=0
 
@@ -214,8 +214,8 @@ def formatdataandstream(mainjson,producerid,maintopic):
               else:
                  vali=random.randint(10,1000)
                  valo=random.randint(10,1000)
-                 lastinboundpacketd=lastinboundpacketd + vali
-                 lastoutboundpacketd=lastoutboundpacketd + valo
+                 lastinboundpacketd=lastinboundpacketd - vali
+                 lastoutboundpacketd=lastoutboundpacketd - valo
                  if lastinboundpacketd <= 0:
                        lastinboundpacketd=1000000
                  if lastoutboundpacketd <= 0:

@@ -12,8 +12,6 @@ import random
 # Set Global variables for VIPER and HPDE - You can change IP and Port for your setup of 
 # VIPER and HPDE
 basedir = os.environ['userbasedir'] 
-hackedhosts = os.environ['HACKEDHOSTS'] 
-mainkafkatopic = os.environ['KAFKAPRODUCETOPIC'] 
 
 # Set Global Host/Port for VIPER - You may change this to fit your configuration
 VIPERHOST=''
@@ -26,12 +24,12 @@ HTTPADDR='https://'
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-     global VIPERHOST, VIPERPORT, HTTPADDR, basedir
+     global VIPERHOST, VIPERPORT, HTTPADDR
      with open(basedir + "/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
      if VIPERHOST=="":
-        with open(basedir + "/Viper-produce/viper.txt", 'r') as f:
+        with open(basedir + '/Viper-produce/viper.txt', 'r') as f:
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
@@ -199,11 +197,7 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream):
 # global variable:
 # 1. hackedips (subnet-[i or d],hostid): 5.11,6.12,5.21, i=increase,d=decrease
 # 2. dynamically turn off ports on machine - students should detect which machine cannot be pinged - meaning it is down
-if hackedhosts == "":
-  hackedid="5.11-i,6.12-i,5.21-d"
-else:     
-  hackedid=hackedhosts
-
+hackedid="5.11-i,6.12-i,5.21-d"
 lastinboundpacketi=0
 lastoutboundpacketi=0
 
@@ -235,8 +229,8 @@ def formatdataandstream(mainjson,producerid,maintopic):
               else:
                  vali=random.randint(10,1000)
                  valo=random.randint(10,1000)
-                 lastinboundpacketd=lastinboundpacketd + vali
-                 lastoutboundpacketd=lastoutboundpacketd + valo
+                 lastinboundpacketd=lastinboundpacketd - vali
+                 lastoutboundpacketd=lastoutboundpacketd - valo
                  if lastinboundpacketd <= 0:
                        lastinboundpacketd=1000000
                  if lastoutboundpacketd <= 0:
@@ -272,11 +266,7 @@ def writedata(resp):
 
 ###################################################### START MAIN PROCESS #######################################
 
-if mainkafkatopic == "":
-  maintopic='cisco-network-mainstream'
-else:
-  maintopic=mainkafkatopic   
-
+maintopic='cisco-network-mainstream'
 producerid=''
 try:
   topic,producerid=setupkafkatopic(maintopic)
