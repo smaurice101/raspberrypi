@@ -19,14 +19,14 @@ VIPERPORT=8000
 #VIPERPORT=62049
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
-viperconfigfile="viper.env"
+viperconfigfile="c:/maads/golang/go/bin/viper.env"
 
 #                                      STORE VIPER TOKEN
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
         
-     with open("admin.tok", "r") as f:
+     with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
   
      return VIPERTOKEN
@@ -190,51 +190,60 @@ lastoutboundpacketi=0
 lastinboundpacketd=1000000
 lastoutboundpacketd=1000000
 
-def formatdataandstream(mainjson,producerid,maintopic):
-       global hackedid,lastinboundpacketi,lastoutboundpacketi,lastinboundpacketd,lastoutboundpacketd
-       harr = hackedid.split(",")
-       #print(harr)
-       #print(mainjson)
-       for i in mainjson['response']:
-          jbuf = str(i)
-          jbuf='"'.join(jbuf.split("'"))
-          
-          inside=0
-          for h in harr:
-            hidarr = h.split("-")            
-            if i['hostName'] == hidarr[0]: # hacked machines
-              inside=1    
-              vali=random.randint(5096,10000)
-              valo=random.randint(5096,10000)
-              if i['pingStatus'] == "FAILURE":
-                 jbuf=jbuf[:-1] + ',"inboundpackets": 0,"outboundpackets": 0}'                                                     
-              elif hidarr[0]=="i":
-                 lastinboundpacketi=lastinboundpacketi + vali
-                 lastoutboundpacketi=lastoutboundpacketi + valo                  
-                 jbuf=jbuf[:-1] + ',"inboundpackets": ' + str(lastinboundpacketi) + "," + '"outboundpackets": ' + str(lastoutboundpacketi) + "}"
-              else:
-                 vali=random.randint(10,1000)
-                 valo=random.randint(10,1000)
-                 lastinboundpacketd=lastinboundpacketd + vali
-                 lastoutboundpacketd=lastoutboundpacketd + valo
-                 if lastinboundpacketd <= 0:
-                       lastinboundpacketd=1000000
-                 if lastoutboundpacketd <= 0:
-                       lastoutboundpacketd=1000000
-                       
-                 jbuf=jbuf[:-1] + ',"inboundpackets": ' + str(lastinboundpacketd) + "," + '"outboundpackets": ' + str(lastoutboundpacketd) + "}"                                  
-          if inside==0: # normal machines  
-              vali=random.randint(64,524)
-              valo=random.randint(64,524)
-              if i['pingStatus'] == "FAILURE":
-                 jbuf=jbuf[:-1] + ',"inboundpackets": 0,"outboundpackets": 0}'                                                     
-              else:
-                 jbuf=jbuf[:-1] + ',"inboundpackets": ' + str(vali) + "," + '"outboundpackets": ' + str(valo) + "}"
+#{"connectedAPMacAddress": "", "connectedAPName": "", "connectedInterfaceName": "FastEthernet0/7",
+# "connectedNetworkDeviceIpAddress": "", "connectedNetworkDeviceName": "S2", "hostIp": "192.168.6.16",
+# "hostMac": "000A.412C.5B1E", "hostName": "6.16", "hostType": "Pc", "id": "PTT0810393J-uuid",
+# "lastUpdated": "2023-09-24 18:00:31", "pingStatus": "SUCCESS", "vlanId": "1","inboundpackets": 321,"outboundpackets": 88}
 
-    #      print(jbuf)
-    #      writedata(jbuf)
-          ############################### Stream to Kafka
-          senddata(jbuf,producerid,maintopic)
+def formatdataandstream(mainjson,producerid,maintopic):
+     global hackedid,lastinboundpacketi,lastoutboundpacketi,lastinboundpacketd,lastoutboundpacketd
+     harr = hackedid.split(",")
+
+     jbuf = json.loads(mainjson)
+     
+     inside=0
+     for h in harr:
+       hidarr = h.split("-")
+       if jbuf["hostName"] == hidarr[0]: # hacked machines
+         inside=1    
+         vali=random.randint(5096,10000)
+         valo=random.randint(5096,10000)
+         if jbuf["pingStatus"] == "FAILURE":              
+            jbuf["inboundpackets"]=0
+            jbuf["outboundpackets"]=0
+         elif hidarr[0]=="i":
+            lastinboundpacketi=lastinboundpacketi + vali
+            lastoutboundpacketi=lastoutboundpacketi + valo                  
+            jbuf["inboundpackets"]=lastinboundpacketi
+            jbuf["outboundpackets"]=lastoutboundpacketi
+         else:
+            vali=random.randint(10,1000)
+            valo=random.randint(10,1000)
+            lastinboundpacketd=lastinboundpacketd + vali
+            lastoutboundpacketd=lastoutboundpacketd + valo
+            if lastinboundpacketd <= 0:
+                  lastinboundpacketd=1000000
+            if lastoutboundpacketd <= 0:
+                  lastoutboundpacketd=1000000
+
+            jbuf["inboundpackets"]=lastinboundpacketd
+            jbuf["outboundpackets"]=lastoutboundpacketd
+                  
+     if inside==0: # normal machines  
+         vali=random.randint(64,524)
+         valo=random.randint(64,524)
+         if jbuf["pingStatus"] == "FAILURE":
+            jbuf["inboundpackets"]=0
+            jbuf["outboundpackets"]=0
+         else:
+            jbuf["inboundpackets"]=vali
+            jbuf["outboundpackets"]=valo
+
+     jbuf = json.dumps(jbuf)              
+     jbuf='"'.join(jbuf.split("'"))
+#      writedata(jbuf)
+     ############################### Stream to Kafka
+     senddata(jbuf,producerid,maintopic)
 
 def senddata(json,producerid,maintopic):
 
@@ -273,7 +282,8 @@ while True:
        print("Reached End of File - Restarting")
        print("Read End:",datetime.datetime.now())
        continue
-    senddata(line,producerid,maintopic)
+#    senddata(line,producerid,maintopic)
+    formatdataandstream(line,producerid,maintopic)
  
    except Exception as e:
       print("Warn:",e)
