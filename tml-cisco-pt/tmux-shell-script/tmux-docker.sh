@@ -80,7 +80,7 @@ if [ "$runtype" == "2" ]; then
    tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-produce/viper.env" ENTER      
    tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-produce/viper.env" ENTER      
    tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
-sleep 14
+sleep 20
 
  # STEP 2b: RUN PYTHON Script  
    tmux new -d -s produce-cisco-data-python-8000 
@@ -99,7 +99,7 @@ if [[ "$runtype" == "0" || "$runtype" == "-1" ]]; then
    tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-produce/viper.env" ENTER      
    tmux send-keys -t produce-cisco-data-viper-8000 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-produce/viper.env" ENTER      
    tmux send-keys -t produce-cisco-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
-sleep 14
+sleep 20
 
  # STEP 2b: RUN PYTHON Script  
    tmux new -d -s produce-cisco-data-python-8000 
@@ -119,7 +119,7 @@ if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then
 
    tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
 
- sleep 14
+ sleep 20
 
    tmux new -d -s preprocess-cisco-data-python-8001
    tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/Viper-preprocess' ENTER 
@@ -134,7 +134,7 @@ if [[ "$runtype" == "-2" || "$runtype" == "2" ]]; then
    tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-preprocess/viper.env" ENTER      
    tmux send-keys -t preprocess-cisco-data-viper-8001 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-preprocess/viper.env" ENTER      
    tmux send-keys -t preprocess-cisco-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
-sleep 14
+sleep 20
    tmux new -d -s preprocess-cisco-data-python-8001
    tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/Viper-preprocess' ENTER    
    tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/Viper-preprocess/pt-preprocess-external.py' ENTER
