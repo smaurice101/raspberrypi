@@ -249,8 +249,6 @@ elif [ "$CHIP" = "MAC" ] ; \
   chmod 755 hpde-darwin-amd64 ; \ 
 fi
 
-RUN rm -rf transactionalmachinelearning
-
 WORKDIR /
 
 RUN rm -rf transactionalmachinelearning
