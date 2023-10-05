@@ -207,7 +207,7 @@ def formatdataandstream(mainjson,producerid,maintopic):
               valo=random.randint(5096,10000)
               if i['pingStatus'] == "FAILURE":
                  jbuf=jbuf[:-1] + ',"inboundpackets": 0,"outboundpackets": 0}'                                                     
-              elif hidarr[0]=="i":
+              elif hidarr[1]=="i":
                  lastinboundpacketi=lastinboundpacketi + vali
                  lastoutboundpacketi=lastoutboundpacketi + valo                  
                  jbuf=jbuf[:-1] + ',"inboundpackets": ' + str(lastinboundpacketi) + "," + '"outboundpackets": ' + str(lastoutboundpacketi) + "}"

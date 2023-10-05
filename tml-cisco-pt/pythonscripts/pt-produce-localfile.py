@@ -211,7 +211,7 @@ def formatdataandstream(mainjson,producerid,maintopic):
          if jbuf["pingStatus"] == "FAILURE":              
             jbuf["inboundpackets"]=0
             jbuf["outboundpackets"]=0
-         elif hidarr[0]=="i":
+         elif hidarr[1]=="i":
             lastinboundpacketi=lastinboundpacketi + vali
             lastoutboundpacketi=lastoutboundpacketi + valo                  
             jbuf["inboundpackets"]=lastinboundpacketi
