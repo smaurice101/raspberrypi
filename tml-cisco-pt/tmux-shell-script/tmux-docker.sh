@@ -11,7 +11,10 @@
  runtype=${RUNTYPE}
  brokerhostport=${BROKERHOSTPORT}
  mainkafkatopic=${KAFKAPRODUCETOPIC}
- 
+
+ vipervizport=${VIPERVIZPORT}
+ export vipervizport
+
  cloudusername=${CLOUDUSERNAME}
  cloudpassword=${CLOUDPASSWORD}
  export cloudusername
@@ -141,14 +144,13 @@ sleep 20
  fi 
 
 # STEP 5: START Visualization Viperviz 
- tmux new -d -s visualization-cisco-viperviz-9000 
- tmux send-keys -t visualization-cisco-viperviz-9000 'cd $userbasedir/Viperviz' ENTER
+ tmux new -d -s visualization-cisco-viperviz-$vipervizport 
+ tmux send-keys -t visualization-cisco-viperviz-$vipervizport 'cd $userbasedir/Viperviz' ENTER
  
 if [ "$runtype" != "1" ]; then   
-   tmux send-keys -t visualization-cisco-viperviz-9000 "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viperviz/viper.env" ENTER   
-   tmux send-keys -t visualization-cisco-viperviz-9000 "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viperviz/viper.env" ENTER      
-   tmux send-keys -t visualization-cisco-viperviz-9000 "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viperviz/viper.env" ENTER      
+   tmux send-keys -t visualization-cisco-viperviz-$vipervizport "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viperviz/viper.env" ENTER   
+   tmux send-keys -t visualization-cisco-viperviz-$vipervizport "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viperviz/viper.env" ENTER      
+   tmux send-keys -t visualization-cisco-viperviz-$vipervizport "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viperviz/viper.env" ENTER      
 fi
- 
- tmux send-keys -t visualization-cisco-viperviz-9000 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9000' ENTER
+ tmux send-keys -t visualization-cisco-viperviz-$vipervizport '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 $vipervizport' ENTER
  
