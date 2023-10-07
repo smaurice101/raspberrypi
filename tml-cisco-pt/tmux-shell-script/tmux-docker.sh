@@ -144,13 +144,14 @@ sleep 20
  fi 
 
 # STEP 5: START Visualization Viperviz 
- tmux new -d -s visualization-cisco-viperviz-$vipervizport 
- tmux send-keys -t visualization-cisco-viperviz-$vipervizport 'cd $userbasedir/Viperviz' ENTER
  
-if [ "$runtype" != "1" ]; then   
+if [ "$runtype" != "-1" ]; then   
+   tmux new -d -s visualization-cisco-viperviz-$vipervizport 
+   tmux send-keys -t visualization-cisco-viperviz-$vipervizport 'cd $userbasedir/Viperviz' ENTER
+
    tmux send-keys -t visualization-cisco-viperviz-$vipervizport "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viperviz/viper.env" ENTER   
    tmux send-keys -t visualization-cisco-viperviz-$vipervizport "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viperviz/viper.env" ENTER      
    tmux send-keys -t visualization-cisco-viperviz-$vipervizport "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viperviz/viper.env" ENTER      
+   tmux send-keys -t visualization-cisco-viperviz-$vipervizport '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 $vipervizport' ENTER
 fi
- tmux send-keys -t visualization-cisco-viperviz-$vipervizport '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 $vipervizport' ENTER
  
