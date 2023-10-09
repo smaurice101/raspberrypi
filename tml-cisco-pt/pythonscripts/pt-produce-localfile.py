@@ -15,6 +15,8 @@ import random
 VIPERHOST="https://127.0.0.1"
 VIPERPORT=8000
 
+hackedid = os.environ['HACKEDHOSTS']
+
 #VIPERHOST="https://10.0.0.144"
 #VIPERPORT=62049
 
@@ -183,7 +185,8 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream):
 # global variable:
 # 1. hackedips (subnet-[i or d],hostid): 5.11,6.12,5.21, i=increase,d=decrease
 # 2. dynamically turn off ports on machine - students should detect which machine cannot be pinged - meaning it is down
-hackedid="5.11-i,6.12-i,5.21-d"
+if hackedid == "":
+  hackedid="5.11-i,6.12-i,5.21-d"
 lastinboundpacketi=0
 lastoutboundpacketi=0
 
