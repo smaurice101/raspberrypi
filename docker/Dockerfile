@@ -108,19 +108,19 @@ WORKDIR Viper-produce
 
 RUN echo "*******************Viper for $CHIP PRODUCER**********************"
 
-RUN if [ "$CHIP" = "ARM32" ] ; \
+RUN if [ "$CHIP" == "ARM32" ] ; \
   then \
   unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPER\ *\ Linux\ ARM.zip && \
   chmod 755 viper-linux-arm ; \
-elif [ "$CHIP" =  "ARM64" ] ; \
+elif [ "$CHIP" ==  "ARM64" ] ; \
   then \
   unzip transactionalmachinelearning/ARM64-Chipset/MAADS-VIPER\ *\ Linux\ ARM64.zip && \
   chmod 755 viper-linux-arm64 ; \
-elif [ "$CHIP" = "AMD64" ] ; \
+elif [ "$CHIP" == "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
   chmod 755 viper-linux-amd64 ; \ 
-elif [ "$CHIP" = "MAC" ] ; \
+elif [ "$CHIP" == "MAC" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Mac\ AMD64.zip && \
   chmod 755 viper-darwin-amd64 ; \ 
@@ -139,19 +139,19 @@ WORKDIR Viper-preprocess
 #RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 RUN echo "*******************Viper for $CHIP PREPROCESS**********************"
 
-RUN if [ "$CHIP" = "ARM32" ] ; \
+RUN if [ "$CHIP" == "ARM32" ] ; \
   then \
   unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPER\ *\ Linux\ ARM.zip && \
   chmod 755 viper-linux-arm ; \
-elif [ "$CHIP" =  "ARM64" ] ; \
+elif [ "$CHIP" ==  "ARM64" ] ; \
   then \
   unzip transactionalmachinelearning/ARM64-Chipset/MAADS-VIPER\ *\ Linux\ ARM64.zip && \
   chmod 755 viper-linux-arm64 ; \
-elif [ "$CHIP" = "AMD64" ] ; \
+elif [ "$CHIP" == "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
   chmod 755 viper-linux-amd64 ; \ 
-elif [ "$CHIP" = "MAC" ] ; \
+elif [ "$CHIP" == "MAC" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Mac\ AMD64.zip && \
   chmod 755 viper-darwin-amd64 ; \ 
@@ -170,19 +170,19 @@ WORKDIR Viper-preprocess2
 #RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 RUN echo "*******************Viper for $CHIP PREPROCESS2**********************"
 
-RUN if [ "$CHIP" = "ARM32" ] ; \
+RUN if [ "$CHIP" == "ARM32" ] ; \
   then \
   unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPER\ *\ Linux\ ARM.zip && \
   chmod 755 viper-linux-arm ; \
-elif [ "$CHIP" =  "ARM64" ] ; \
+elif [ "$CHIP" ==  "ARM64" ] ; \
   then \
   unzip transactionalmachinelearning/ARM64-Chipset/MAADS-VIPER\ *\ Linux\ ARM64.zip && \
   chmod 755 viper-linux-arm64 ; \
-elif [ "$CHIP" = "AMD64" ] ; \
+elif [ "$CHIP" == "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Linux\ AMD64.zip && \
   chmod 755 viper-linux-amd64 ; \ 
-elif [ "$CHIP" = "MAC" ] ; \
+elif [ "$CHIP" == "MAC" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPER\ *\ Mac\ AMD64.zip && \
   chmod 755 viper-darwin-amd64 ; \ 
@@ -205,31 +205,31 @@ WORKDIR Viperviz
 #RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 
 #RUN unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPERviz\ *\ Linux\ ARM.zip || true
-RUN if [ "$CHIP" = "ARM32" ] ; \
+RUN if [ "$CHIP" == "ARM32" ] ; \
   then \
   unzip transactionalmachinelearning/ARM-Chipset/MAADS-VIPERviz\ *\ Linux\ ARM.zip || true ; \
-elif [ "$CHIP" = "ARM64" ] ; \
+elif [ "$CHIP" == "ARM64" ] ; \
   then \
   unzip transactionalmachinelearning/ARM64-Chipset/MAADS-VIPERviz\ *\ Linux\ ARM64.zip || true ; \
-elif [ "$CHIP" = "AMD64" ] ; \
+elif [ "$CHIP" == "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPERviz\ *\ Linux\ AMD64.zip || true ; \ 
-elif [ "$CHIP" = "MAC" ] ; \
+elif [ "$CHIP" == "MAC" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-VIPERviz\ *\ Mac\ AMD64.zip || true ; \ 
 fi
 
 
-RUN if [ "$CHIP" = "ARM32" ] ; \
+RUN if [ "$CHIP" == "ARM32" ] ; \
   then \
   chmod 755 viperviz-linux-arm ; \
-elif [ "$CHIP" = "ARM64" ] ; \
+elif [ "$CHIP" == "ARM64" ] ; \
   then \
   chmod 755 viperviz-linux-arm64 ; \
-elif [ "$CHIP" = "AMD64" ] ; \
+elif [ "$CHIP" == "AMD64" ] ; \
   then \
   chmod 755 viperviz-linux-amd64 ; \ 
-elif [ "$CHIP" = "MAC" ] ; \
+elif [ "$CHIP" == "MAC" ] ; \
   then \
   chmod 755 viperviz-darwin-amd64 ; \ 
 fi
@@ -249,30 +249,30 @@ WORKDIR Hpde
 
 #RUN git clone --depth 1 https://github.com/smaurice101/transactionalmachinelearning.git
 
-RUN if [ "$CHIP" = "ARM32" ] ; \
+RUN if [ "$CHIP" == "ARM32" ] ; \
   then \
   unzip transactionalmachinelearning/ARM-Chipset/MAADS-HPDE\ *\ Linux\ ARM.zip || true ; \
-elif [ "$CHIP" = "ARM64" ] ; \
+elif [ "$CHIP" == "ARM64" ] ; \
   then \
   unzip transactionalmachinelearning/ARM64-Chipset/MAADS-HPDE\ *\ Linux\ ARM64.zip || true ; \
-elif [ "$CHIP" = "AMD64" ] ; \
+elif [ "$CHIP" == "AMD64" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-HPDE\ *\ Linux\ AMD64.zip || true ; \
-elif [ "$CHIP" = "MAC" ] ; \
+elif [ "$CHIP" == "MAC" ] ; \
   then \
   unzip transactionalmachinelearning/MAADS-HPDE\ *\ Mac\ AMD64.zip || true ; \
 fi
 
-RUN if [ "$CHIP" = "ARM32" ] ; \
+RUN if [ "$CHIP" == "ARM32" ] ; \
   then \
   chmod 755 hpde-linux-arm ; \
-elif [ "$CHIP" = "ARM64" ] ; \
+elif [ "$CHIP" == "ARM64" ] ; \
   then \
   chmod 755 hpde-linux-arm64 ; \
-elif [ "$CHIP" = "AMD64" ] ; \
+elif [ "$CHIP" == "AMD64" ] ; \
   then \
   chmod 755 hpde-linux-amd64 ; \ 
-elif [ "$CHIP" = "MAC" ] ; \
+elif [ "$CHIP" == "MAC" ] ; \
   then \
   chmod 755 hpde-darwin-amd64 ; \ 
 fi
