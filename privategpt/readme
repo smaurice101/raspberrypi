@@ -1,4 +1,6 @@
 Docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
+Docker pull (with GPU): docker pull maadsdocker/tml-privategpt-with-gpu-amd64
+
 Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
 open chrome or browser: localhost:8001
 
