@@ -3,6 +3,11 @@ import os
 import requests
 import json
 
+# NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
+# 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
+# 2. Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
+
+############### GRADIO Client
 def chat(port):
   client = Client("http://localhost:" + port + "/")
   result = client.predict(
@@ -14,6 +19,8 @@ def chat(port):
   print(result)
 
   #client.view_api(return_format="dict")
+
+############### REST API Client
 
 def getingested(docname,port):
   url="http://127.0.0.1:" + port + "/v1/ingest/list"
