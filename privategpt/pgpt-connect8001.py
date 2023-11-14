@@ -1,4 +1,4 @@
-# Develeoper: Sebastian Maurice, PhD
+# Developer: Sebastian Maurice, PhD
 # Nov 14, 2023
 from gradio_client import Client
 import os
