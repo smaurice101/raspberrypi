@@ -8,6 +8,7 @@ import json
 # NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
 # 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
 # 2. Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
+# You can choose any valid port.
 
 ############### GRADIO Client
 def chat(port):
