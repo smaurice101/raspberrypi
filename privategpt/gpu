@@ -1,5 +1,7 @@
 If running GPU machines then you should use the GPU container:
 
+Docker pull (with GPU): docker pull maadsdocker/tml-privategpt-with-gpu-amd64
+
 
 Pre-requiste:
 1. Install the NVidia Cuda toolkit: apt-get install -y nvidia-container-toolkit 
