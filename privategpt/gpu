@@ -1,4 +1,4 @@
-If running GPU machines then you should use the GPU container:
+If running NVIDIA GPU machines then you should use the GPU container:
 
 Docker pull (with GPU): docker pull maadsdocker/tml-privategpt-with-gpu-amd64
 Docker Run: docker run -d -p 8001:8001 --gpus all --env CUDA_VISIBLE_DEVICES=0,2 --env PORT=8001 maadsdocker/tml-privategpt-with-gpu-amd64
