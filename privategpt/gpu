@@ -6,6 +6,7 @@ open chrome or browser: localhost:8001
 
 Pre-requiste:
 1. Install the NVidia Cuda toolkit: apt-get install -y nvidia-cuda-toolkit 
+2. Check Nvidia install: nvcc --version
 
 Details of LLM:
 llm_load_print_meta: format           = GGUF V2
