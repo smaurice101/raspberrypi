@@ -22,8 +22,8 @@ def chat(port):
 
 ############### REST API Client
 
-def getingested(docname,port):
-  url="http://127.0.0.1:" + port + "/v1/ingest/list"
+def getingested(docname,port,ip):
+  url=ip + ":" + port + "/v1/ingest/list"
   docids = []
   docidsstr = []
 
@@ -42,31 +42,31 @@ def getingested(docname,port):
   
   return docids,docstr,docidsstr
 
-def deleteingested(docids, port):
-  url="http://127.0.0.1:" + port + "/v1/ingest/"
+def deleteingested(docids, port,ip):
+  url=ip + ":" + port + "/v1/ingest/"
 
   for j in docids:
      obj=requests.delete(url+j)
      print(obj.text) 
 
 
-def gradiorestget(port):
+def gradiorestget(port,ip):
   #url="http://127.0.0.1:8001/run/predict"
-  url="http://127.0.0.1:" + port + "/health"
+  url=ip + ":" + port + "/health"
 
   obj=requests.get(url)
 
   print(obj.text) 
 
-def gradiorestpostchat(prompt,context,docfilter,port):
+def gradiorestpostchat(prompt,context,docfilter,port,includesources,ip):
   #url="http://127.0.0.1:8001/run/predict"
-  url="http://127.0.0.1:" + port + "/v1/completions"
+  url=ip + ":" + port + "/v1/completions"
 
     
   headers = {"content-type": "application/json"}
   if docfilter != "":
     payload = {
-          "include_sources": False,
+          "include_sources": includesources,
           "prompt": prompt,
           "stream": False,
           "use_context": context,
@@ -75,7 +75,7 @@ def gradiorestpostchat(prompt,context,docfilter,port):
    # print(payload)  
   else:
     payload = {
-          "include_sources": False,
+          "include_sources": includesources,
           "prompt": prompt,
           "stream": False,
           "use_context": context
@@ -87,8 +87,9 @@ def gradiorestpostchat(prompt,context,docfilter,port):
 
   print(obj.text) 
 
-def ingestfile(mainfile, port):
-  url="http://127.0.0.1:" + port + "/v1/ingest"
+# Ingest or load this file into privateGPT
+def ingestfile(mainfile, port,ip):
+  url=ip + ":" + port + "/v1/ingest"
 
   files = {
     'file': (mainfile, open(mainfile, 'rb')),
@@ -100,27 +101,30 @@ def ingestfile(mainfile, port):
 
   print(obj.text) 
   
-def getcontext(docname,mainport):
-  ingestfile(docname,mainport)
+def getcontext(docname,mainport,mainip):
+  ingestfile(docname,mainport,mainip)
 
   # Generate embeddings  
-  docids,docstr,docidsstr=getingested(docname,mainport)
+  docids,docstr,docidsstr=getingested(docname,mainport,mainip)
   return docids,docstr,docidsstr
 ############################################# CONTEXT
 # Ingest file for context
 docname="ar2022-eng.pdf"
 mainport = "8001"
+mainip = "http://127.0.0.1"
 
 # Get context for privateGPT
-docids,docstr,docidsstr=getcontext(docname,mainport)
+docids,docstr,docidsstr=getcontext(docname,mainport,mainip)
 
+#gradiorestpostchat("Where is Seneca Polytechnic located?",False,"",mainport,False,mainip)
+#gradiorestpostchat("Who is prime minister of Canada?",False,"",mainport,False,mainip)
 
-#gradiorestpostchat("if a fire extinguher is not charged, and it is not in a critical area, is this high, medium, or low priority? Choose one priority.",False,"",mainport)
-#gradiorestpostchat("What is Fintrac's main conclusions?",True,"",mainport)
-#gradiorestpostchat("What is Sara's message?",True,"",mainport)
-#gradiorestpostchat("What are the main challenges that Fintrac faces? And, how is it addressing these challenges?",True,"",mainport)
-#gradiorestpostchat("What is Fintrac's goals? How much money are speding to acheive the goals?",True,"",mainport)
-gradiorestpostchat("Can you give a full summary of this document?",True,docidsstr,mainport)
+#gradiorestpostchat("if a fire extinguher is not charged, and it is not in a critical area, is this high, medium, or low priority? Choose one priority.",False,"",mainport,False,mainip)
+#gradiorestpostchat("What is Fintrac's main conclusions?",True,"",mainport,False,mainip)
+#gradiorestpostchat("What is Sara's message?",True,"",mainport,False,mainip)
+#gradiorestpostchat("What are the main challenges that Fintrac faces? And, how is it addressing these challenges?",True,"",mainport,False,mainip)
+#gradiorestpostchat("What is Fintrac's goals? How much money are speding to acheive the goals?",True,"",mainport,False,mainip)
+gradiorestpostchat("Can you give a full summary of this document?",True,docidsstr,mainport,False,mainip)
 
 ##########################################################
 
