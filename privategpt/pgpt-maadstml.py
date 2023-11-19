@@ -8,25 +8,6 @@ import maadstml
 # 2. Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
 
 
-# Set Global Host/Port for VIPER - You may change this to fit your configuration
-VIPERHOST="https://127.0.0.1"
-VIPERPORT=9001
-
-
-#############################################################################################################
-#                                      STORE VIPER TOKEN
-# Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
-# to your location of admin.tok
-def getparams():
-        
-     with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
-        VIPERTOKEN=f.read()
-  
-     return VIPERTOKEN
-
-VIPERTOKEN=getparams()
-
-
 ############### REST API Client
 
 def getingested(docname,ip,port,endpoint):
