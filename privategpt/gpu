@@ -7,7 +7,7 @@ Docker Run: docker run -d -p 8001:8001 --gpus all --env CUDA_VISIBLE_DEVICES=0,2
 open chrome or browser: localhost:8001
 
 Pre-requiste:
-1. Install the NVidia Cuda toolkit: apt-get install -y nvidia-cuda-toolkit 
+1. Install the NVidia Cuda toolkit on HOST Machine: apt-get install -y nvidia-cuda-toolkit 
 2. Check Nvidia install: nvcc --version
 
 Details of LLM:
