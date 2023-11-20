@@ -20,8 +20,6 @@ def pgptdeleteembeddings(docids, ip, port, endpoint):
   maadstml.pgptdeleteembeddings(docids, ip,port,endpoint)   
 
 def pgpthealth(ip, port, endpoint):
-  #url="http://127.0.0.1:8001/run/predict"
-
    response=maadstml.pgpthealth(ip,port,endpoint)
    print(response)
 
