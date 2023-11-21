@@ -17,6 +17,13 @@
 
  cloudusername=${CLOUDUSERNAME}
  cloudpassword=${CLOUDPASSWORD}
+
+export cloudusername
+export cloudpassword
+
+cloudusername=$(sed 's:/:\\/:g'  <<<"$cloudusername")
+cloudpassword=$(sed 's:/:\\/:g'  <<<"$cloudpassword")
+
  export cloudusername
  export cloudpassword
  export brokerhostport
