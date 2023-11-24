@@ -8,7 +8,7 @@ CUDA Environment variable description for CUDA_VISIBLE_DEVICES is found here: ht
 
 open chrome or browser: localhost:8001
 
-Pre-requiste:
+Pre-requisite:
 1. Install the NVidia Cuda toolkit on HOST Machine: apt-get install -y nvidia-cuda-toolkit 
 1.2 You should install the Nvidia container toolkit: curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
