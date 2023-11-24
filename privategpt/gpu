@@ -12,6 +12,7 @@ Pre-requiste:
 1. Install the NVidia Cuda toolkit on HOST Machine: apt-get install -y nvidia-cuda-toolkit 
 2. Check Nvidia install: nvcc --version and with nvidia-smi
 3. Configure the container runtime: sudo nvidia-ctk runtime configure --runtime=docker
+4. Restart docker daemon: sudo dockerd
 
 
 Details of LLM:
