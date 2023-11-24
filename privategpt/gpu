@@ -11,6 +11,8 @@ open chrome or browser: localhost:8001
 Pre-requiste:
 1. Install the NVidia Cuda toolkit on HOST Machine: apt-get install -y nvidia-cuda-toolkit 
 2. Check Nvidia install: nvcc --version
+3. Configure the container runtime: sudo nvidia-ctk runtime configure --runtime=docker
+
 
 Details of LLM:
 llm_load_print_meta: format           = GGUF V2
