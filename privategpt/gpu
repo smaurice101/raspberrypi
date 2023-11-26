@@ -1,7 +1,7 @@
 If running NVIDIA GPU machines then you should use the GPU container:
 
 Docker pull (with GPU): docker pull maadsdocker/tml-privategpt-with-gpu-amd64
-Docker Run: docker run -d -p 8001:8001 --gpus all --env CUDA_VISIBLE_DEVICES=0,2 --env PORT=8001 maadsdocker/tml-privategpt-with-gpu-amd64
+Docker Run: docker run -d -p 8001:8001 --gpus all --env CUDA_VISIBLE_DEVICES=0,2 --env PORT=8001 --env GPU=1 maadsdocker/tml-privategpt-with-gpu-amd64
 (NOTE: IF YOU WANT PRIVATEGPT TO RUN IN MULTIPROCESSING MODE USE: --env WEB_CONCURRENCY=<# OF THREADS>, i.e. WEB_CONCURRENCY=5, means PrivateGPT will start 5 threads to process 5 requests at the same time) 
 
 CUDA Environment variable description for CUDA_VISIBLE_DEVICES is found here: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#env-vars
