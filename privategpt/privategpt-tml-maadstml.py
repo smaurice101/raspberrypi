@@ -219,14 +219,17 @@ setupkafkatopic(pgpttopic)
 
 # Rollback Kafka stream - you can increase these offsets
 rollback=2
-# Get preprocessed data from Kafka
-result = consumetopicdata(maintopic,rollback)
 
-# Format the preprocessed data for PrivateGPT
-maindata = gatherdataforprivategpt(result)
+# This While loop continuously processes kafka real-time data
+while True:
+ # Get preprocessed data from Kafka
+ result = consumetopicdata(maintopic,rollback)
 
-# Send the data to PrivateGPT and produce to Kafka
-sendtoprivategpt(maindata,pgpttopic)
+ # Format the preprocessed data for PrivateGPT
+ maindata = gatherdataforprivategpt(result)
+
+ # Send the data to PrivateGPT and produce to Kafka
+ sendtoprivategpt(maindata,pgpttopic)
 
 
 
