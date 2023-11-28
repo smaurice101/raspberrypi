@@ -6,29 +6,53 @@ import maadstml
 # NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
 # 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
 # 2. Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
-
+mainpreprocesstopic = os.environ['KAFKAPREPROCESSTOPIC'] 
+pgptrollback = os.environ['ROLLBACK'] 
+if pgptrollback == "":
+     pgptrollback=3
+        
+if mainpreprocesstopic == "":
+      mainpreprocesstopic = 'cisco-network-preprocess'
+        
+pgptip = os.environ['PGPTIP'] 
+pgptport = os.environ['PGPTPORT'] 
+if pgptip == "":
+     pgptip="http://127.0.0.1"
+if pgptport == "":
+     pgptport=8001
 
 ###################################################### START TML TOPIC PROCESS #######################################
 # Set Global variables for VIPER and HPDE - You can change IP and Port for your setup of 
 # VIPER and HPDE
-VIPERHOST="https://127.0.0.1"
-VIPERPORT=8000
+basedir = os.environ['userbasedir'] 
 
-#VIPERHOST="https://10.0.0.144"
-#VIPERPORT=62049
+# Set Global Host/Port for VIPER - You may change this to fit your configuration
+VIPERHOST=''
+VIPERPORT=''
+HTTPADDR='https://'
 
-################################################################################
+
+#############################################################################################################
 #                                      STORE VIPER TOKEN
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-        
-     with open("c:/maads/golang/go/bin/admin.tok", "r") as f:
+     global VIPERHOST, VIPERPORT, HTTPADDR, basedir
+     with open(basedir + "/Viper-preprocess-pgpt/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
-  
+
+     if VIPERHOST=="":
+        with open(basedir + "/Viper-preprocess-pgpt/viper.txt", 'r') as f:
+          output = f.read()
+          VIPERHOST = HTTPADDR + output.split(",")[0]
+          VIPERPORT = output.split(",")[1]
+          
      return VIPERTOKEN
 
 VIPERTOKEN=getparams()
+
+if VIPERHOST=="":
+    print("ERROR: Cannot read viper.txt: VIPERHOST is empty or HPDEHOST is empty")
 
 def setupkafkatopic(topicname):
           # Set personal data
@@ -208,17 +232,16 @@ def sendtoprivategpt(maindata,maintopic):
 
 
 # Private GPT Container IP and Port
-mainport = "8001"
-mainip = "http://127.0.0.1"
+mainport = pgptport
+mainip = pgptip
 
-#maintopic='cisco-network-mainstream'
-maintopic='cisco-network-preprocess'
+maintopic=mainpreprocesstopic
 setupkafkatopic(maintopic)
 pgpttopic='cisco-network-privategpt'
 setupkafkatopic(pgpttopic)
 
 # Rollback Kafka stream - you can increase these offsets
-rollback=2
+rollback=pgptrollback
 
 # This While loop continuously processes kafka real-time data
 while True:
@@ -231,12 +254,10 @@ while True:
  # Send the data to PrivateGPT and produce to Kafka
  sendtoprivategpt(maindata,pgpttopic)
 
-
-
 ############################################# CONTEXT
 # Ingest file for context
 # Choose file to ingest to set context: PDF, CSV, etc.. 
-docname="c:/maads/privategpt/ar2022-eng.pdf"
+#docname="c:/maads/privategpt/ar2022-eng.pdf"
 
 # Doctype can be: binary, text
 doctype = 'binary'
