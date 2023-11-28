@@ -14,6 +14,7 @@ import random
 # VIPER and HPDE
 basedir = os.environ['userbasedir'] 
 hackedhosts = os.environ['HACKEDHOSTS'] 
+mainkafkatopic = os.environ['KAFKAPRODUCETOPIC'] 
 
 # Set Global Host/Port for VIPER - You may change this to fit your configuration
 VIPERHOST=''
