@@ -274,7 +274,12 @@ def writedata(resp):
 
 ###################################################### START MAIN PROCESS #######################################
 
-maintopic='cisco-network-mainstream'
+if len(mainkafkatopic)==0:
+  maintopic='cisco-network-mainstream'
+else:
+  maintopic=mainkafkatopic
+
+
 inputfile='cisco_network_data.txt'
 
 producerid=''
