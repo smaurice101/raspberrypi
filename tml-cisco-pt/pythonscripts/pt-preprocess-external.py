@@ -289,7 +289,7 @@ latlong='
 #############################################################################################################
 #                                     SETUP THE TOPIC DATA STREAMS
 
-if mainkafkatopic == "":
+if len(mainkafkatopic)==0:
   maintopic='cisco-network-mainstream'
 else:
   maintopic=mainkafkatopic
