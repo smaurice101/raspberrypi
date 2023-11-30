@@ -121,7 +121,7 @@ def pgpthealth(ip, port, endpoint):
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
   
-  response=maadstml.pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint)
+  response=maadstml.pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint)     
   return response
   
 # Ingest or load this file into privateGPT
@@ -222,13 +222,13 @@ def sendtoprivategpt(maindata,maintopic):
    pgptendpoint="/v1/completions"
 
    for m in maindata:
-        print(m)
+        #print(m)
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
-          print("response=",response)
+        print("response=",response)
 
 
 # Private GPT Container IP and Port
