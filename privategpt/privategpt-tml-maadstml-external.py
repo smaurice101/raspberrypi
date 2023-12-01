@@ -247,13 +247,17 @@ rollback=pgptrollback
 while True:
  # Get preprocessed data from Kafka
  result = consumetopicdata(maintopic,rollback)
-
+ #print("result=",result)
+# check if any data
+ rs = json.loads(result)
+ if len(rs['StreamTopicDetails']['TopicReads'])==0:
+   print("No data found=[]")
  # Format the preprocessed data for PrivateGPT
- maindata = gatherdataforprivategpt(result)
-
+ else:
+   maindata = gatherdataforprivategpt(result)
  # Send the data to PrivateGPT and produce to Kafka
- sendtoprivategpt(maindata,pgpttopic)
-
+   sendtoprivategpt(maindata,pgpttopic)
+      
 ############################################# CONTEXT
 # Ingest file for context
 # Choose file to ingest to set context: PDF, CSV, etc.. 
