@@ -136,6 +136,14 @@ if [[ "$runtype" == "1" || "$runtype" == "0" ]]; then
    tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/Viper-preprocess/pt-preprocess-external.py' ENTER
 
    tmux new -d -s preprocess-cisco-data-python-pgpt
+   tmux send-keys -t preprocess-cisco-data-python-pgpt 'cd $userbasedir/Viper-preprocess-pgpt' ENTER
+   tmux send-keys -t preprocess-cisco-data-python-pgpt "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess-pgpt/viper.env" ENTER   
+   tmux send-keys -t preprocess-cisco-data-python-pgpt "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-preprocess-pgpt/viper.env" ENTER      
+   tmux send-keys -t preprocess-cisco-data-python-pgpt "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-preprocess-pgpt/viper.env" ENTER      
+   tmux send-keys -t preprocess-cisco-data-python-pgpt '$userbasedir/Viper-preprocess-pgpt/viper-$mainos-$chip' ENTER
+sleep 20
+   
+   tmux new -d -s preprocess-cisco-data-python-pgpt
    tmux send-keys -t preprocess-cisco-data-python-pgpt 'cd $userbasedir/Viper-preprocess-pgpt' ENTER 
    tmux send-keys -t preprocess-cisco-data-python-pgpt 'python $userbasedir/Viper-preprocess-pgpt/privategpt-tml-maadstml-external.py' ENTER
    
@@ -153,6 +161,14 @@ sleep 20
    tmux new -d -s preprocess-cisco-data-python-8001
    tmux send-keys -t preprocess-cisco-data-python-8001 'cd $userbasedir/Viper-preprocess' ENTER    
    tmux send-keys -t preprocess-cisco-data-python-8001 'python $userbasedir/Viper-preprocess/pt-preprocess-external.py' ENTER
+
+   tmux new -d -s preprocess-cisco-data-python-pgpt
+   tmux send-keys -t preprocess-cisco-data-python-pgpt 'cd $userbasedir/Viper-preprocess-pgpt' ENTER
+   tmux send-keys -t preprocess-cisco-data-python-pgpt "sed -i 's/127.0.0.1:9092/$brokerhostport/g' $userbasedir/Viper-preprocess-pgpt/viper.env" ENTER   
+   tmux send-keys -t preprocess-cisco-data-python-pgpt "sed -i 's/CLOUD_USERNAME=/CLOUD_USERNAME=$cloudusername/g' $userbasedir/Viper-preprocess-pgpt/viper.env" ENTER      
+   tmux send-keys -t preprocess-cisco-data-python-pgpt "sed -i 's/CLOUD_PASSWORD=/CLOUD_PASSWORD=$cloudpassword/g' $userbasedir/Viper-preprocess-pgpt/viper.env" ENTER      
+   tmux send-keys -t preprocess-cisco-data-python-pgpt '$userbasedir/Viper-preprocess-pgpt/viper-$mainos-$chip' ENTER
+sleep 20
    
    tmux new -d -s preprocess-cisco-data-python-pgpt
    tmux send-keys -t preprocess-cisco-data-python-pgpt 'cd $userbasedir/Viper-preprocess-pgpt' ENTER 
