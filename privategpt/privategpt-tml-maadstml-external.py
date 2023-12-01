@@ -155,6 +155,7 @@ def gatherdataforprivategpt(result):
 
    for r in res['StreamTopicDetails']['TopicReads']:
         identarr=r['Identifier'].split("~")
+        message = ""
         if 'outboundpackets' in r['Identifier']:
              message = 'Answer the following question about the outbound network traffic data using the context.<br><br>Context: Normally, \
 outbound network traffic data size should not exceed ' + thresholdoutbound + ' bytes.<br><br>Outbound network traffic data size:<br>'
@@ -170,8 +171,8 @@ inbound network traffic data size should not exceed ' + thresholdinbound + ' byt
                message = message  + str(d) + '<br>'
              message = message + "<br>Question: Does any value or size in the inbound network traffic data size, from host machine " + identarr[0] + ", exceed " + thresholdinbound + \
 " bytes or show unusual patterns?  Should this machine be investigated? Keep your answer short and to the point."
-
-        privategptmessage.append(message)
+        if message != "":
+          privategptmessage.append(message)
                  
 
    #print("message=",privategptmessage)
