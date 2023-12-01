@@ -150,27 +150,27 @@ def gatherdataforprivategpt(result):
    rawdatainbound = []
    privategptmessage = []
 
-   thresholdoutbound='1000000'
-   thresholdinbound='1000000'
+   thresholdoutbound='1 MegaByte'
+   thresholdinbound='1 MegaByte'
 
    for r in res['StreamTopicDetails']['TopicReads']:
         identarr=r['Identifier'].split("~")
         message = ""
         if 'outboundpackets' in r['Identifier']:
              message = 'Answer the following question about the outbound network traffic data using the context.<br><br>Context: Normally, \
-outbound network traffic data size should not exceed ' + thresholdoutbound + ' bytes.<br><br>Outbound network traffic data size:<br>'
+outbound network traffic data size should not exceed ' + thresholdoutbound + '<br><br>Outbound network traffic data size:<br>'
              for d in r['RawData']:
                message = message  + str(d) + '<br>'
              message = message + "<br>Question: Does any value or size in the outbound network traffic data size, from host machine " + identarr[0] + ", exceed " + thresholdoutbound + \
-" bytes or show unusual patterns?  Should this machine be investigated? Keep your answer short and to the point."
+" or show unusual patterns?  Should this machine be investigated? Keep your answer short and to the point."
              
         if 'inboundpackets' in r['Identifier']:
              message = 'Answer the following question about the inbound network traffic data using the context.<br><br>Context: Normally, \
-inbound network traffic data size should not exceed ' + thresholdinbound + ' bytes.<br><br>Inbound network traffic data size:<br>'
+inbound network traffic data size should not exceed ' + thresholdinbound + '<br><br>Inbound network traffic data size:<br>'
              for d in r['RawData']:
                message = message  + str(d) + '<br>'
              message = message + "<br>Question: Does any value or size in the inbound network traffic data size, from host machine " + identarr[0] + ", exceed " + thresholdinbound + \
-" bytes or show unusual patterns?  Should this machine be investigated? Keep your answer short and to the point."
+" or show unusual patterns?  Should this machine be investigated? Keep your answer short and to the point."
         if message != "":
           privategptmessage.append(message)
                  
