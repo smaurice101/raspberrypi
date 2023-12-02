@@ -157,45 +157,25 @@ def gatherdataforprivategpt(result):
         identarr=r['Identifier'].split("~")
         message = ""
         if 'outboundpackets' in r['Identifier']:
-             message = 'Answer the following question about the outbound network traffic data using the context.<br><br>Context: Normally, \
-outbound network traffic data size should not exceed ' + thresholdoutbound + '<br><br>Outbound network traffic data size:<br>'
+             message = 'Content: [ '
              for d in r['RawData']:
-               message = message  + str(d) + '<br>'
-             message = message + "<br>Question: Does any value or size in the outbound network traffic data size, from host machine " + identarr[0] + ", exceed " + thresholdoutbound + \
-" or show unusual patterns?  Should this machine be investigated? Keep your answer short and to the point."
+               message = message  + str(d) + ','
+             message = message[:-1]     
+             message = ' ], are outbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
+Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
              
         if 'inboundpackets' in r['Identifier']:
-             message = 'Answer the following question about the inbound network traffic data using the context.<br><br>Context: Normally, \
-inbound network traffic data size should not exceed ' + thresholdinbound + '<br><br>Inbound network traffic data size:<br>'
+             message = 'Content: [ '
              for d in r['RawData']:
-               message = message  + str(d) + '<br>'
-             message = message + "<br>Question: Does any value or size in the inbound network traffic data size, from host machine " + identarr[0] + ", exceed " + thresholdinbound + \
-" or show unusual patterns?  Should this machine be investigated? Keep your answer short and to the point."
+               message = message  + str(d) + ','
+             message = ' ], are inbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
+Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
         if message != "":
           privategptmessage.append(message)
                  
 
    #print("message=",privategptmessage)
    return privategptmessage
-
-#def sendtoprivategpt():
-##Here are the outbound packets for host machine 5.30 in bytes, are any bytes greater than 1000000 bytes?
-##384 bytes
-##92 bytes
-##259 bytes
-##404 bytes
-##291 bytes
-##385 bytes
-##458 bytes
-##160 bytes
-##153 bytes
-##318 bytes
-##275 bytes
-##487 bytes
-##185 bytes
-##129 bytes
-##
-##If so, the host machine should be investigated. Should this machine be investigated based on the individual packets?
 
       
 def producegpttokafka(value,maintopic):
