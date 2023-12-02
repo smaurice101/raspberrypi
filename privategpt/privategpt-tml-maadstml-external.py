@@ -156,6 +156,7 @@ def gatherdataforprivategpt(result):
    for r in res['StreamTopicDetails']['TopicReads']:
         identarr=r['Identifier'].split("~")
         message = ""
+        messagedetails = ""
         if 'outboundpackets' in r['Identifier']:
              message = 'Content: [ '
              for d in r['RawData']:
@@ -163,7 +164,7 @@ def gatherdataforprivategpt(result):
              message = message[:-1]     
              message = message  + ' ], are outbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
 Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
-             
+             messagedetails = "Outbound packets - Host: " + identarr[0]
         if 'inboundpackets' in r['Identifier']:
              message = 'Content: [ '
              for d in r['RawData']:
@@ -171,8 +172,9 @@ Question: Are there any drastic changes in the values of these data?  Should thi
              message = message[:-1]                       
              message = message + ' ], are inbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
 Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
+             messagedetails = "Inbound packets - Host: " + identarr[0]             
         if message != "":
-          privategptmessage.append(message)
+          privategptmessage.append([message,messagedetails])
                  
 
    #print("message=",privategptmessage)
@@ -205,9 +207,9 @@ def sendtoprivategpt(maindata,maintopic):
 
    for m in maindata:
         #print(m)
-        response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
+        response=pgptchat(m[0],False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
-        response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
+        response = response[:-1] + "," + "\"prompt\":\"" + m[0] + "\",\"responsedetails\":\"" + m[1] + "\"}"
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
         print("response=",response)
