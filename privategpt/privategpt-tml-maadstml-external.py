@@ -161,14 +161,15 @@ def gatherdataforprivategpt(result):
              for d in r['RawData']:
                message = message  + str(d) + ','
              message = message[:-1]     
-             message = ' ], are outbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
+             message = message  + ' ], are outbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
 Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
              
         if 'inboundpackets' in r['Identifier']:
              message = 'Content: [ '
              for d in r['RawData']:
                message = message  + str(d) + ','
-             message = ' ], are inbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
+             message = message[:-1]                       
+             message = message + ' ], are inbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
 Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
         if message != "":
           privategptmessage.append(message)
