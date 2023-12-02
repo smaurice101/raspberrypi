@@ -161,20 +161,20 @@ def gatherdataforprivategpt(result):
         message = ""
         messagedetails = ""
         if 'outboundpackets' in r['Identifier']:
-             message = 'Content: [ '
+             message = 'Context: This machine is being monitored for a cyber attack using only the outbound packet data.  Very high outbound packets could indicate a cyberattack.<br><br>Outbound packet data: [ '
              for d in r['RawData']:
                message = message  + str(d) + ','
              message = message[:-1]     
              message = message  + ' ], are outbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
-Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
+Question: Are there any drastic changes in the values of these data?  Are the outbound packet values very high? Should this machine be investigated? Keep your response short.'             
              messagedetails = "Outbound packets - Host: " + identarr[0]
         if 'inboundpackets' in r['Identifier']:
-             message = 'Content: [ '
+             message = 'Context: This machine is being monitored for a cyber attack using only the inbound packet data.  Very high inbound packets could indicate a cyberattack.<br><br>Inbound packet data: [ '
              for d in r['RawData']:
                message = message  + str(d) + ','
              message = message[:-1]                       
              message = message + ' ], are inbound network packet sizes for host  ' + identarr[0] + '.<br><br>\
-Question: Are there any drastic changes in the values of these data?  Should this machine be investigated?  Keep your response short.'             
+Question: Are there any drastic changes in the values of these data?  Are the inbound packet values very high? Should this machine be investigated? Keep your response short.'             
              messagedetails = "Inbound packets - Host: " + identarr[0]             
         if message != "":
           privategptmessage.append([message,messagedetails])
