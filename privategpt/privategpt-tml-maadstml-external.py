@@ -168,7 +168,7 @@ def gatherdataforprivategpt(result):
              message = message  + ' <br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
-<br>Question 2: Should this machine be investigated? \
+<br>Question 2: Should this machine be investigated based on the maximum value and increasing packet sizes of this list of numbers?  \
 <br>Keep your response short.'
              messagedetails = "Outbound packets - Host: " + identarr[0]
         if 'inboundpackets' in r['Identifier']:
@@ -179,7 +179,7 @@ Answer these questions:<br>\
              message = message + ' <br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
-<br>Question 2: Should this machine be investigated? \
+<br>Question 2: Should this machine be investigated based on the maximum value and increasing packet sizes of this list of numbers? \
 <br>Keep your response short.'
              messagedetails = "Inbound packets - Host: " + identarr[0]             
         if message != "":
