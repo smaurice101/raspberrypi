@@ -2,7 +2,7 @@ import os
 import requests
 import json
 import maadstml
-import html
+#import html
 
 # NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
 # 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
@@ -123,7 +123,7 @@ def pgpthealth(ip, port, endpoint):
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
   
   response=maadstml.pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint)     
-  response = html.escape(response)
+ # response = html.escape(response)
    
   return response
   
