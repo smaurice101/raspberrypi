@@ -199,7 +199,13 @@ def producegpttokafka(value,maintopic):
      identifier = "This is analysing TML output with privategpt"
      substream=""
 
-     print("value=",value)
+     try:
+          check=json.loads(value) 
+          print("value=",value)
+     except Exception as e:
+          print("Not a valid JSON=",value)
+          return
+     
        
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
      delay=7000
