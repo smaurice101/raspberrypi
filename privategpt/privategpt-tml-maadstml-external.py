@@ -104,7 +104,16 @@ def setupkafkatopic(topicname):
       return tn,pid
 
 
-
+def Average(ni,th): 
+    r=round(sum(ni) / len(ni),0) 
+    m='' 
+    if r >= th:
+        m='The average value is ' + str(r) + ', and it is outside normal limits because it exceeds: ' + str(th)
+    else:     
+        m='The average value is ' + str(r) + ', and it is within normal limits because it does not exceed: ' + str(th)
+ 
+    return m
+     
 ############### REST API Client
 
 def getingested(docname,ip,port,endpoint):
@@ -165,10 +174,10 @@ def gatherdataforprivategpt(result):
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
              #message = message[:-1]     
-             message = message  + ' <br>\
+             message = message  + ' <br> ' + Average(r['RawData'],thresholdoutbound) + <br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
-<br>Question 2: Should this machine be investigated based on the maximum value and increasing packet sizes of this list of numbers?  \
+<br>Question 2: Based on your knowledge of network security should this machine be investigated?   \
 <br>Keep your response short.'
              messagedetails = "Outbound packets - Host: " + identarr[0]
         if 'inboundpackets' in r['Identifier']:
@@ -176,10 +185,10 @@ Answer these questions:<br>\
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
              #message = message[:-1]                       
-             message = message + ' <br>\
+             message = message  + ' <br> ' + Average(r['RawData'],thresholdinbound) + <br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
-<br>Question 2: Should this machine be investigated based on the maximum value and increasing packet sizes of this list of numbers? \
+<br>Question 2: Based on your knowledge of network security should this machine be investigated?  \
 <br>Keep your response short.'
              messagedetails = "Inbound packets - Host: " + identarr[0]             
         if message != "":
