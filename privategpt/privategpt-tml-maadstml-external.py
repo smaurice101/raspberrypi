@@ -174,7 +174,7 @@ def gatherdataforprivategpt(result):
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
              #message = message[:-1]     
-             message = message  + ' <br> ' + Average(r['RawData'],thresholdoutbound) + <br>\
+             message = message  + ' <br> ' + Average(r['RawData'],thresholdoutbound) + '<br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
 <br>Question 2: Based on your knowledge of network security should this machine be investigated?   \
@@ -185,7 +185,7 @@ Answer these questions:<br>\
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
              #message = message[:-1]                       
-             message = message  + ' <br> ' + Average(r['RawData'],thresholdinbound) + <br>\
+             message = message  + ' <br> ' + Average(r['RawData'],thresholdinbound) + '<br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
 <br>Question 2: Based on your knowledge of network security should this machine be investigated?  \
