@@ -11,5 +11,8 @@ Docker Run: docker run -d -p 8080:8080 --net=host --env VIPERVIZPORT=8080 --env 
 --env KAFKAPRODUCETOPIC=cisco-network-mainstream --env HACKEDHOSTS=5.100-i,6.18-i,5.18-i --env CLOUDUSERNAME=WMAGMDURPHZDCCRR 
 --env CLOUDPASSWORD=aPLpDkkTnIxkj2vZ59ySV3jgjCEjkl2u0gK3m0FlrQQaqqK/xpQtj1r22pdlJsGk maadsdocker/tml-cisco-network-cyberthreats-privategpt-amd64
 
+MAKE SURE PRIVATE GPT Container is Running:
+docker run -d -p 8001:8001 --env PORT=8001 --env GPU=0 --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-no-gpu-amd64
+
 Viper Logs:
 http://localhost:9000/viperlogs.html?topic=viperlogs&append=0
