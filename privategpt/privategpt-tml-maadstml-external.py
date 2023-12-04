@@ -153,15 +153,15 @@ def gatherdataforprivategpt(result):
    rawdatainbound = []
    privategptmessage = []
 
-   thresholdoutbound='1 MegaByte'
-   thresholdinbound='1 MegaByte'
+   thresholdoutbound=1000000
+   thresholdinbound=1000000
 
    for r in res['StreamTopicDetails']['TopicReads']:
         identarr=r['Identifier'].split("~")
         message = ""
         messagedetails = ""
         if 'outboundpackets' in r['Identifier']:
-             message = 'Context: This machine is being monitored for a cyber attack using only the outbound packet data.  Very high outbound packets could indicate a cyberattack. Very high values are normally greater than 1000000.<br><br>Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br> '
+             message = 'Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br> '
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
              #message = message[:-1]     
@@ -172,7 +172,7 @@ Answer these questions:<br>\
 <br>Keep your response short.'
              messagedetails = "Outbound packets - Host: " + identarr[0]
         if 'inboundpackets' in r['Identifier']:
-             message = 'Context: This machine is being monitored for a cyber attack using only the inbound packet data.  Very high inbound packets could indicate a cyberattack. Very high values are normally greater than 1000000.<br><br>Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br>'
+             message = 'Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br>'
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
              #message = message[:-1]                       
