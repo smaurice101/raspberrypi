@@ -20,6 +20,10 @@ Pre-requisite:
 2. Check Nvidia install: nvcc --version and with nvidia-smi
 3. Configure the container runtime: sudo nvidia-ctk runtime configure --runtime=docker
 4. Restart docker daemon: sudo dockerd
+----------------------------------------------------
+IF USING INTEL GPU: Install https://dgpu-docs.intel.com/driver/client/overview.html (Section 2.1.2, 2.1.3) in your VM:
+
+docker run -d -p 8001:8001 --env PORT=8001 --device /dev/dri --env GPU=0 --env WEB_CONCURRENCY=1 maadsdocker/tml-privategpt-no-gpu-amd64:latest
 
 
 Details of LLM:
