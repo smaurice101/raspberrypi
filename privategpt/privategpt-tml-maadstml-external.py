@@ -3,6 +3,8 @@ import requests
 import json
 import maadstml
 import datetime
+import glob
+import mimetypes
 
 # NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
 # 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
