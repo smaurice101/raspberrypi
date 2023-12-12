@@ -9,6 +9,14 @@ import datetime
 # 2. Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
 mainpreprocesstopic = os.environ['KAFKAPREPROCESSTOPIC'] 
 pgptrollback = os.environ['PGPTROLLBACK'] 
+createkafkaembeddings = os.environ['KAFKAEMBEDDINGS']
+keepfiles = os.environ['KEEPKAFKAFILES']
+
+if createkafkaembeddings == "":
+     createkafkaembeddings=0
+if keepfiles == "":
+     keepfiles=0
+
 if pgptrollback == "":
      pgptrollback=3
         
@@ -295,6 +303,9 @@ rollback=pgptrollback
 while True:
  # Get preprocessed data from Kafka
  result = consumetopicdata(maintopic,rollback)
+ if createkafkaembeddings == 1:
+      createkafkaembeddings(result,mainip,mainport,keepfiles)
+      
  #print("result=",result)
 # check if any data
  rs = json.loads(result)
