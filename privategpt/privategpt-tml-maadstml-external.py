@@ -9,21 +9,13 @@ import mimetypes
 # NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
 # 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
 # 2. Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
-mainpreprocesstopic = os.environ['KAFKAPREPROCESSTOPIC'] 
-pgptrollback = os.environ['PGPTROLLBACK'] 
-createkafkaembeddings = os.environ['KAFKAEMBEDDINGS']
-keepfiles = os.environ['KEEPKAFKAFILES']
-loaddocs = os.environ['LOADDOCS']
-docfolder = os.environ['DOCFOLDER']
-
-if docfolder == "":
-     docfolder = "" # i.e. /subfolder/path_to_files
-if createkafkaembeddings == "":
-     createkafkaembeddings=0
-if keepfiles == "":
-     keepfiles=0
-if loaddocs == "":
-     loaddocs=0
+mainpreprocesstopic = os.environ['KAFKAPREPROCESSTOPIC']  # preprocess topic to consumer from 
+pgptrollback = os.environ['PGPTROLLBACK']  # Rollback data stream
+createkafkaembeddings = os.environ['KAFKAEMBEDDINGS'] # Create embeddings from Kafka data
+kafkaembeddingsfolder = os.environ['KAFKAEMBEDDINGSFOLDER']  # Kafka embeddings folder
+docfolder = os.environ['DOCFOLDER'] # Folder containing PDF, csv, etc..
+useembeddings = os.environ['USEEMBEDDINGS'] # Whether PGPT should use embeddings
+deletekafkaembeddinghours = os.environ['DELETEKAFKAEMBEDDINGSHOURS'] # deletes files in the kafkaembeddingsfolder
 
 if pgptrollback == "":
      pgptrollback=3
