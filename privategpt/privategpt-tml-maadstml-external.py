@@ -5,6 +5,8 @@ import maadstml
 import datetime
 import glob
 import mimetypes
+import time
+import stat
 
 # NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
 # 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
@@ -138,15 +140,13 @@ def pgpthealth(ip, port, endpoint):
    print(response)
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
-  
   response=maadstml.pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint)     
  # response = html.escape(response)
-   
   return response
   
 # Ingest or load this file into privateGPT
 def ingestfile(docname,doctype,pgptip,pgptport,pgptendpoint):
-  
+  pgptendpoint="/v1/ingest"
   maadstml.pgptingestdocs(docname,doctype,pgptip,pgptport,pgptendpoint)
   
 ############################ Get data from Kafka Topic
@@ -233,8 +233,72 @@ def producegpttokafka(value,maintopic):
      except Exception as e:
         print("ERROR:",e)
 
-def randomfile():
-     basename = "TML-privategpt"
+def filemoddate(filename):
+    t = os.path.getmtime(filename)
+    ts = str(datetime.datetime.fromtimestamp(t))[0:19]
+    print(ts)
+    return ts  # returns date in this format: 2009-10-06 10:50:01
+
+def loaddocs(folder,pgptip,pgptport,pgptendpoint=''):
+  files = glob.glob(folder + "/*")
+
+  mainfiles = []
+  try:
+    with open(folder + "/pgptfiles.txt") as ff:
+      mainfiles = [line.rstrip('\n') for line in ff]                                       
+  except Exception as e:
+      pass
+        
+  fbuf = folder + "/pgptfiles.txt"
+  try:
+    ff = open(fbuf, "w")
+  except Exception as e:
+    print("ERROR: Cannot write to file: " + fbuf)
+    return
+  
+  for f in files:
+     head, tail = os.path.split(f)  
+     if tail != 'pgptfiles.txt':
+       found=0
+       for fmain in mainfiles:
+            fmainr = fmain.split(",")
+            
+            if f == fmainr[0]:
+              found = 1
+              fmod=filemoddate(f)
+              if fmod != fmainr[1]:  # file changed
+#                mainfiles.remove(ind)     
+ #               mainfiles.append([f,fmod])
+                txt = "{},{}\n".format(f,fmod)                
+                ff.write(txt)
+                print("Processing: " + f)   
+
+                if mimetypes.guess_type(f)[0] == 'text/plain':
+                 ingestfile(f,'text',pgptip,pgptport,pgptendpoint)
+                else:
+                 ingestfile(f,'binary',pgptip,pgptport,pgptendpoint)                
+            else:
+              txt = "{}\n".format(fmain)                
+              ff.write(txt)
+
+       if found == 0:
+              fmod=filemoddate(f)
+#              mainfiles.append([f,fmod])
+              txt = "{},{}\n".format(f,fmod)                
+              ff.write(txt)
+              print("Processing: " + f)   
+              
+              # ingest the file
+              if mimetypes.guess_type(f)[0] == 'text/plain':
+                 ingestfile(f,'text',pgptip,pgptport,pgptendpoint)
+              else:
+                 ingestfile(f,'binary',pgptip,pgptport,pgptendpoint)
+  
+  ff.close()
+
+def randomfile(embeddingsfolder,maintopic):
+     basename = embeddingsfolder + "/TML-" + maintopic
+     
      suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
      filename = "_".join([basename, suffix]) # e.g. 'mylogfile_120508_171442'
      filename = filename + ".txt"
@@ -259,8 +323,25 @@ def gatherdataforembeddings(result):
                
    return mainmessage
 
-def createkafkaembeddings(result,pgptip,pgptport,keepfile=0):
-   filename = randomfile()
+def file_age_in_seconds(pathname):
+    return time.time() - os.stat(pathname)[stat.ST_MTIME]
+
+def deleteembeddings(embeddingsfolder,hours):
+  files = glob.glob(embeddingsfolder + "/*")
+
+  for f in files:
+    age=file_age_in_seconds(f)
+    if (age/3600) > hours:
+      os.remove(f)
+
+def createkafkaembeddings(result,pgptip,pgptport,maintopic,embeddingsfolder,hours):
+   if not os.path.exists(embeddingsfolder):
+     os.makedirs(embeddingsfolder)
+
+   if hours > 0:
+     deleteembeddings(embeddingsfolder,hours)
+   
+   filename = randomfile(embeddingsfolder,maintopic) 
 
    maintext=gatherdataforembeddings(result)
    if maintext != "":  
@@ -270,21 +351,24 @@ def createkafkaembeddings(result,pgptip,pgptport,keepfile=0):
 
    # create the embedding in privateGPT 
      ingestfile(filename,'text',pgptip,pgptport,"")
-     if keepfile == 0:
-        os.remove(filename)
 
-def sendtoprivategpt(maindata,maintopic):
+def sendtoprivategpt(maindata,maintopic,useembed):
 
    pgptendpoint="/v1/completions"
 
+   if useembed == 1:
+        useembeddings=True
+   else:
+        useembeddings=False
+        
    for m in maindata:
-        #print(m)
-        response=pgptchat(m[0],False,"",mainport,False,mainip,pgptendpoint)
+        print(m)
+        response=pgptchat(m,useembeddings,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
-        response = response[:-1] + "," + "\"prompt\":\"" + m[0] + "\",\"responsedetails\":\"" + m[1] + "\"}"
+        response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
-        print("response=",response)
+          print("response=",response)
 
 
 # Private GPT Container IP and Port
@@ -304,9 +388,11 @@ while True:
  # Get preprocessed data from Kafka
  result = consumetopicdata(maintopic,rollback)
  if createkafkaembeddings == 1:
-      createkafkaembeddings(result,mainip,mainport,keepfiles)
-      
- #print("result=",result)
+      createkafkaembeddings(result,mainip,mainport,maintopic,kafkaembeddingsfolder,deletekafkaembeddinghours)
+ if docfolder != "":
+     loaddocs(docfolder,mainip,mainport)
+
+#print("result=",result)
 # check if any data
  rs = json.loads(result)
  if len(rs['StreamTopicDetails']['TopicReads'])==0:
@@ -315,7 +401,7 @@ while True:
  else:
    maindata = gatherdataforprivategpt(result)
  # Send the data to PrivateGPT and produce to Kafka
-   sendtoprivategpt(maindata,pgpttopic)
+   sendtoprivategpt(maindata,pgpttopic,useembeddings)
       
 ############################################# CONTEXT
 # Ingest file for context
