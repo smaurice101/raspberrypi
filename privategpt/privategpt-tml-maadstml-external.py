@@ -313,12 +313,12 @@ def gatherdataforembeddings(result):
         if 'outboundpackets' in r['Identifier']:
              message = 'Here are the outbound network traffic data for host machine ' + identarr[0] + '.\n\nOutbound network traffic data size:\n'
              for d in r['RawData']:
-               message = message  + str(d) + '\n'
+               message = message  + str(d) + ','
              mainmessage = mainmessage + message + "\n\n"  
         if 'inboundpackets' in r['Identifier']:
              message = 'Here are the inbound network traffic data for host machine ' + identarr[0] + '.\n\nInbound network traffic data size:\n'
              for d in r['RawData']:
-               message = message  + str(d) + '\n'
+               message = message  + str(d) + ','
              mainmessage = mainmessage + message + "\n\n"  
                
    return mainmessage
