@@ -15,7 +15,7 @@ loaddocs = os.environ['LOADDOCS']
 docfolder = os.environ['DOCFOLDER']
 
 if docfolder == "":
-     docfolder = ""
+     docfolder = "" # i.e. /subfolder/path_to_files
 if createkafkaembeddings == "":
      createkafkaembeddings=0
 if keepfiles == "":
