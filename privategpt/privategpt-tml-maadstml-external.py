@@ -2,7 +2,7 @@ import os
 import requests
 import json
 import maadstml
-#import html
+import datetime
 
 # NOTE: You need the Docker container maadsdocker/privategpt running for this API to work:
 # 1. docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
@@ -224,6 +224,46 @@ def producegpttokafka(value,maintopic):
         print(result)
      except Exception as e:
         print("ERROR:",e)
+
+def randomfile():
+     basename = "TML-privategpt"
+     suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+     filename = "_".join([basename, suffix]) # e.g. 'mylogfile_120508_171442'
+     filename = filename + ".txt"
+     return filename
+
+def gatherdataforembeddings(result):
+   res=json.loads(result,strict='False')
+   mainmessage = ''
+   
+   for r in res['StreamTopicDetails']['TopicReads']:
+        identarr=r['Identifier'].split("~")
+        if 'outboundpackets' in r['Identifier']:
+             message = 'Here are the outbound network traffic data for host machine ' + identarr[0] + '.\n\nOutbound network traffic data size:\n'
+             for d in r['RawData']:
+               message = message  + str(d) + '\n'
+             mainmessage = mainmessage + message + "\n\n"  
+        if 'inboundpackets' in r['Identifier']:
+             message = 'Here are the inbound network traffic data for host machine ' + identarr[0] + '.\n\nInbound network traffic data size:\n'
+             for d in r['RawData']:
+               message = message  + str(d) + '\n'
+             mainmessage = mainmessage + message + "\n\n"  
+               
+   return mainmessage
+
+def createkafkaembeddings(result,pgptip,pgptport,keepfile=0):
+   filename = randomfile()
+
+   maintext=gatherdataforembeddings(result)
+   if maintext != "":  
+     f = open(filename, "w")
+     f.write(maintext)
+     f.close()
+
+   # create the embedding in privateGPT 
+     ingestfile(filename,'text',pgptip,pgptport,"")
+     if keepfile == 0:
+        os.remove(filename)
 
 def sendtoprivategpt(maindata,maintopic):
 
