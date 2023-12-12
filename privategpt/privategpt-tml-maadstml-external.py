@@ -11,11 +11,17 @@ mainpreprocesstopic = os.environ['KAFKAPREPROCESSTOPIC']
 pgptrollback = os.environ['PGPTROLLBACK'] 
 createkafkaembeddings = os.environ['KAFKAEMBEDDINGS']
 keepfiles = os.environ['KEEPKAFKAFILES']
+loaddocs = os.environ['LOADDOCS']
+docfolder = os.environ['DOCFOLDER']
 
+if docfolder == "":
+     docfolder = ""
 if createkafkaembeddings == "":
      createkafkaembeddings=0
 if keepfiles == "":
      keepfiles=0
+if loaddocs == "":
+     loaddocs=0
 
 if pgptrollback == "":
      pgptrollback=3
