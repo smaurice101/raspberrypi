@@ -15,8 +15,8 @@ mainpreprocesstopic = os.environ['KAFKAPREPROCESSTOPIC']  # preprocess topic to 
 pgptrollback = os.environ['PGPTROLLBACK']  # Rollback data stream
 kafkaembeddingsfolder = os.environ['KAFKAEMBEDDINGSFOLDER']  # Kafka embeddings foldername, i.e. folder
 docfolder = os.environ['DOCFOLDER'] # Folder containing PDF, csv, etc.. i.e. /home/folder
-useembeddings = os.environ['USEEMBEDDINGS'] # Whether PGPT should use embeddings, i.e. 1 or 0
-deletekafkaembeddinghours = os.environ['DELETEKAFKAEMBEDDINGSHOURS'] # deletes files in the kafkaembeddingsfolder, i.e. 5 or any hours
+useembeddings = int(os.environ['USEEMBEDDINGS']) # Whether PGPT should use embeddings, i.e. 1 or 0
+deletekafkaembeddinghours = int(os.environ['DELETEKAFKAEMBEDDINGSHOURS']) # deletes files in the kafkaembeddingsfolder, i.e. 5 or any hours
 
 if pgptrollback == "":
      pgptrollback=3
