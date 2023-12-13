@@ -342,6 +342,8 @@ def deleteembeddings(embeddingsfolder,hours):
       os.remove(f)
 
 def createkafkaembeddings(result,pgptip,pgptport,maintopic,embeddingsfolder,hours):
+   embeddingsfolder = os.getcwd() + "/" + embeddingsfolder
+
    if not os.path.exists(embeddingsfolder):
        os.makedirs(embeddingsfolder)
 
