@@ -346,11 +346,11 @@ def createkafkaembeddings(result,pgptip,pgptport,maintopic,embeddingsfolder,hour
    if maintext != "":  
      f = open(filename, "w")
      try:   
-        f.write(maintext)
-        f.close()  
+       f.write(maintext)
+       f.close()  
      # create the embedding in privateGPT 
        ingestfile(filename,'text',pgptip,pgptport,"")          
-     except Exception as e    
+     except Exception as e:    
        print("ERROR: Cannot create file: " + filename)
 
 def sendtoprivategpt(maindata,maintopic,useembed):
