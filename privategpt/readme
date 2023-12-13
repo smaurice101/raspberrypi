@@ -1,7 +1,7 @@
 Docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
 Docker pull (with GPU): docker pull maadsdocker/tml-privategpt-with-gpu-amd64
 
-Docker Run: docker run -d -p 8001:8001 --env PORT=8001 --GPU=0 --env WEB_CONCURRENCY=1 maadsdocker/tml-privategpt-no-gpu-amd64:latest
+Docker Run: docker run -d -p 8001:8001 --env PORT=8001 --env GPU=0 --env WEB_CONCURRENCY=1 maadsdocker/tml-privategpt-no-gpu-amd64:latest
 (NOTE: IF YOU WANT PRIVATEGPT TO RUN IN MULTIPROCESSING MODE USE: --env WEB_CONCURRENCY=<# OF THREADS>, i.e. WEB_CONCURRENCY=5, means PrivateGPT will start 5 threads to process 5 requests at the same time) 
 open chrome or browser: localhost:8001
 
