@@ -357,7 +357,7 @@ def createkafkaembeddings(result,pgptip,pgptport,maintopic,embeddingsfolder,hour
      except Exception as e:    
        print("ERROR: Cannot create file: " + filename)
 
-def sendtoprivategpt(maindata,maintopic,useembed):
+def sendtoprivategpt(maindata,maintopic,useembed=0):
 
    pgptendpoint="/v1/completions"
 
