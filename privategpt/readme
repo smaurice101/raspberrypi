@@ -15,6 +15,8 @@ Docker Run: docker run -d -p 8080:8080 --net=host --env VIPERVIZPORT=8080 --env 
 --env KAFKAPRODUCETOPIC=cisco-network-mainstream --env HACKEDHOSTS=5.100-i,6.18-i,5.18-i --env CLOUDUSERNAME= 
 --env CLOUDPASSWORD= maadsdocker/tml-cisco-network-cyberthreats-privategpt-amd64
 
+NOTE: If max depth exceeded error run: docker image prune -a
+
 MAKE SURE PRIVATE GPT Container is Running:
 docker run -d -p 8001:8001 --env PORT=8001 --env GPU=0 --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-no-gpu-amd64
 
