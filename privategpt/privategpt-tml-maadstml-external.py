@@ -326,7 +326,11 @@ def file_age_in_seconds(pathname):
     return time.time() - os.stat(pathname)[stat.ST_MTIME]
 
 def deleteembeddings(embeddingsfolder,hours):
-  files = glob.glob(embeddingsfolder + "/*")
+  try:   
+    files = glob.glob(embeddingsfolder + "/*")
+  except Exception as e:
+    print("ERROR: Cannot read foloder:" +  embeddingsfolder)
+    return
 
   for f in files:
     age=file_age_in_seconds(f)
