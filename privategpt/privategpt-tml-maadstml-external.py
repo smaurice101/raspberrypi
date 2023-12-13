@@ -13,7 +13,6 @@ import stat
 # 2. Docker Run: docker run -d -p 8001:8001 --env PORT=8001 maadsdocker/tml-privategpt-no-gpu-amd64:latest
 mainpreprocesstopic = os.environ['KAFKAPREPROCESSTOPIC']  # preprocess topic to consumer from 
 pgptrollback = os.environ['PGPTROLLBACK']  # Rollback data stream
-createkafkaembeddings = os.environ['KAFKAEMBEDDINGS'] # Create embeddings from Kafka data, i.e. 1=yes or 0=no
 kafkaembeddingsfolder = os.environ['KAFKAEMBEDDINGSFOLDER']  # Kafka embeddings folder, i.e. c:/folder
 docfolder = os.environ['DOCFOLDER'] # Folder containing PDF, csv, etc.. i.e. c:/folder
 useembeddings = os.environ['USEEMBEDDINGS'] # Whether PGPT should use embeddings, i.e. 1 or 0
@@ -387,7 +386,7 @@ rollback=pgptrollback
 while True:
  # Get preprocessed data from Kafka
  result = consumetopicdata(maintopic,rollback)
- if createkafkaembeddings == 1:
+ if kafkaembeddingsfolder != "":
       createkafkaembeddings(result,mainip,mainport,maintopic,kafkaembeddingsfolder,deletekafkaembeddinghours)
  if docfolder != "":
      loaddocs(docfolder,mainip,mainport)
