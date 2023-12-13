@@ -15,6 +15,8 @@ Docker Run: docker run -d -p 8080:8080 --net=host --env VIPERVIZPORT=8080 --env 
 --env CLOUDPASSWORD= maadsdocker/tml-cisco-network-cyberthreats-privategpt-amd64
 
 NOTE: If max depth exceeded error run: docker image prune -a
+NOTE: To map host folder to container folder you need to map the host folder name to container folder with docker run -v /path/on/host:/path/inside/container <image_name>
+      THEN DOCFOLDER=/path/inside/container
 
 MAKE SURE PRIVATE GPT Container is Running:
 docker run -d -p 8001:8001 --env PORT=8001 --env GPU=0 --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-no-gpu-amd64
