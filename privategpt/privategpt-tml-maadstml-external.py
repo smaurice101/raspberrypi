@@ -335,7 +335,7 @@ def deleteembeddings(embeddingsfolder,hours):
 
 def createkafkaembeddings(result,pgptip,pgptport,maintopic,embeddingsfolder,hours):
    if not os.path.exists(embeddingsfolder):
-     os.makedirs(embeddingsfolder)
+       os.makedirs(embeddingsfolder)
 
    if hours > 0:
      deleteembeddings(embeddingsfolder,hours)
@@ -345,11 +345,13 @@ def createkafkaembeddings(result,pgptip,pgptport,maintopic,embeddingsfolder,hour
    maintext=gatherdataforembeddings(result)
    if maintext != "":  
      f = open(filename, "w")
-     f.write(maintext)
-     f.close()
-
-   # create the embedding in privateGPT 
-     ingestfile(filename,'text',pgptip,pgptport,"")
+     try:   
+        f.write(maintext)
+        f.close()  
+     # create the embedding in privateGPT 
+       ingestfile(filename,'text',pgptip,pgptport,"")          
+     except Exception as e    
+       print("ERROR: Cannot create file: " + filename)
 
 def sendtoprivategpt(maindata,maintopic,useembed):
 
