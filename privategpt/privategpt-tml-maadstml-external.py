@@ -239,7 +239,11 @@ def filemoddate(filename):
     return ts  # returns date in this format: 2009-10-06 10:50:01
 
 def loaddocs(folder,pgptip,pgptport,pgptendpoint=''):
-  files = glob.glob(folder + "/*")
+  try:   
+    files = glob.glob(folder + "/*")
+  except Exception as e:
+    print("ERROR: Cannot read folder: " + folder)
+    return
 
   mainfiles = []
   try:
