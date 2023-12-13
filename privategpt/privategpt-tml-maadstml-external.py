@@ -307,22 +307,33 @@ def randomfile(embeddingsfolder,maintopic):
      filename = filename + ".txt"
      return filename
 
+def getvalues(data):
+  import pandas as pd 
+  #somelist = [1,12,2,53,23,6,17]
+  somelist_df = pd.Series(data)
+  v=somelist_df.describe()
+  return v['count'],round(v['mean'],2),round(v['std'],2),v['min'],v['max']
+  
+
 def gatherdataforembeddings(result):
    res=json.loads(result,strict='False')
+   values = []
    mainmessage = ''
    
    for r in res['StreamTopicDetails']['TopicReads']:
         identarr=r['Identifier'].split("~")
         if 'outboundpackets' in r['Identifier']:
-             message = 'Here are the outbound network traffic data for host machine ' + identarr[0] + '.\n\nOutbound network traffic data size:\n'
+             message = 'Here are the outbound network traffic data for host machine ' + identarr[0] + '.\n\nOutbound network traffic data statistics: \n'
              for d in r['RawData']:
-               message = message  + str(d) + ','
-             mainmessage = mainmessage + message + "\n\n"  
+               values.append(d)   
+             count,mean,std,min,max=getvalues(values)  
+             mainmessage = mainmessage + "The count for host " + identarr[0] + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value is " + str(max) + ".\n\n"  
         if 'inboundpackets' in r['Identifier']:
-             message = 'Here are the inbound network traffic data for host machine ' + identarr[0] + '.\n\nInbound network traffic data size:\n'
+             message = 'Here are the inbound network traffic data for host machine ' + identarr[0] + '.\n\nInbound network traffic data statistics: \n'
              for d in r['RawData']:
-               message = message  + str(d) + ','
-             mainmessage = mainmessage + message + "\n\n"  
+               values.append(d)   
+             count,mean,std,min,max=getvalues(values)  
+             mainmessage = mainmessage + "The count for host " + identarr[0]  + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value is " + str(max) + ".\n\n"  
                
    return mainmessage
 
