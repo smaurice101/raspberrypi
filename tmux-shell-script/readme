@@ -4,4 +4,4 @@ tmux a -t <window>
 tmux ls
 
 TO SCROLL UP OR DOWN IN A TMUX WINDOW DO THIS: Ctlr+b, [
-You will see line numbers in top right of TMUX window - now you can scroll up and down.  To stop scrolling press Ctlr+b, [ again.
+You will see line numbers in top right of TMUX window - now you can scroll up and down.  To detach from TMUX window press Ctlr+b, d 
