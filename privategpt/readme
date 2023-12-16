@@ -5,6 +5,9 @@ Docker Run: docker run -d -p 8001:8001 --env PORT=8001 --env GPU=0 --env WEB_CON
 (NOTE: IF YOU WANT PRIVATEGPT TO RUN IN MULTIPROCESSING MODE USE: --env WEB_CONCURRENCY=<# OF THREADS>, i.e. WEB_CONCURRENCY=5, means PrivateGPT will start 5 threads to process 5 requests at the same time) 
 open chrome or browser: localhost:8001
 
+NOTE: If you set WEB_CONCURRENCY > 1 - then you MUST run the qdrant vector DB container: docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+You can view the Qdrant Vector DB in your browser by entering the URL: http://127.0.0.1:6333/dashboard#/console
+
 ************************************************************************************************************
 IF USING TML-CISCO-PRIVATE Container Use (change 8001 port to your chosen port):
 http://localhost:8080/tml-cisco-network-privategpt-monitor.html?topic=cisco-network-preprocess,cisco-network-privategpt&offset=-1&groupid=&rollbackoffset=150&topictype=prediction&append=0&secure=1
