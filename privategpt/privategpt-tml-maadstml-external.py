@@ -191,7 +191,7 @@ Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
 <br>Question 2: Based on your knowledge of network security should this machine be investigated?   \
 <br>Keep your response short.'
-             messagedetails = "Outbound packets - Host: " + identarr[0]
+               messagedetails = "Outbound packets - Host: " + identarr[0]
         if 'inboundpackets' in r['Identifier']:
              message = 'Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br>'
              for d in r['RawData']:
@@ -205,7 +205,7 @@ Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
 <br>Question 2: Based on your knowledge of network security should this machine be investigated?  \
 <br>Keep your response short.'
-             messagedetails = "Inbound packets - Host: " + identarr[0]
+                messagedetails = "Inbound packets - Host: " + identarr[0]
         if message != "":
           privategptmessage.append([message,messagedetails])
 
