@@ -163,12 +163,10 @@ def consumetopicdata(maintopic,rollback):
       return result
 
 def gatherdataforprivategpt(result):
-
    res=json.loads(result,strict='False')
    rawdataoutbound = []
    rawdatainbound = []
    privategptmessage = []
-
    thresholdoutbound=1000000
    thresholdinbound=1000000
    meanin = 0
@@ -178,6 +176,7 @@ def gatherdataforprivategpt(result):
         identarr=r['Identifier'].split("~")
         message = ""
         messagedetails = ""
+        inside = 0
         if 'outboundpackets' in r['Identifier']:
              message = 'Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br> '
              for d in r['RawData']:
@@ -185,6 +184,7 @@ def gatherdataforprivategpt(result):
              #message = message[:-1]
              mm,rr = Average(r['RawData'],thresholdoutbound)
              if rr > meanout:
+               inside = 1
                meanout = rr
                message = message  + ' <br> ' + mm + '<br>\
 Answer these questions:<br>\
@@ -199,6 +199,7 @@ Answer these questions:<br>\
              #message = message[:-1]
              mm,rr = Average(r['RawData'],thresholdinbound)
              if rr > meanin:
+                inside = 1
                 meanin = rr
                 message = message  + ' <br> ' + mm + '<br>\
 Answer these questions:<br>\
@@ -206,13 +207,11 @@ Answer these questions:<br>\
 <br>Question 2: Based on your knowledge of network security should this machine be investigated?  \
 <br>Keep your response short.'
                 messagedetails = "Inbound packets - Host: " + identarr[0]
-        if message != "":
+        if message != "" and inside == 1 :
           privategptmessage.append([message,messagedetails])
 
-
-   #print("message=",privategptmessage)
    return privategptmessage
-      
+     
 def producegpttokafka(value,maintopic):
      inputbuf=value     
      topicid=-999
