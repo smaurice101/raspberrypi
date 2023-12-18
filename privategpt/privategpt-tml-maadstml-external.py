@@ -319,24 +319,31 @@ def gatherdataforembeddings(result):
    res=json.loads(result,strict='False')
    values = []
    mainmessage = ''
-   
+   meanvalueout = 0
+   meanvaluein = 0
+
    for r in res['StreamTopicDetails']['TopicReads']:
         identarr=r['Identifier'].split("~")
+        values = []
+        #meanvalue = 0
         if 'outboundpackets' in r['Identifier']:
-             message = 'Here are the outbound network traffic data for host machine ' + identarr[0] + '.\n\nOutbound network traffic data statistics: \n'
+#             mainmessage = 'Here are the outbound network traffic data for host machine ' + identarr[0] + '.\n\nOutbound network traffic data statistics: \n'
              for d in r['RawData']:
-               values.append(d)   
-             count,mean,std,min,max=getvalues(values)  
-             mainmessage = mainmessage + "The count for host " + identarr[0] + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value is " + str(max) + ".\n\n"  
+               values.append(d)
+             count,mean,std,min,max=getvalues(values)
+             if mean > meanvalueout:
+               mainmessage = mainmessage + "The outbound count for host " + identarr[0] + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value >
+               meanvalueout = mean
         if 'inboundpackets' in r['Identifier']:
-             message = 'Here are the inbound network traffic data for host machine ' + identarr[0] + '.\n\nInbound network traffic data statistics: \n'
+ #            mainmessage = 'Here are the inbound network traffic data for host machine ' + identarr[0] + '.\n\nInbound network traffic data statistics: \n'
              for d in r['RawData']:
-               values.append(d)   
-             count,mean,std,min,max=getvalues(values)  
-             mainmessage = mainmessage + "The count for host " + identarr[0]  + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value is " + str(max) + ".\n\n"  
-               
+               values.append(d)
+             count,mean,std,min,max=getvalues(values)
+             if mean > meanvaluein:
+                mainmessage = mainmessage + "The inbound count for host " + identarr[0]  + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value>
+                meanvaluein = mean
    return mainmessage
-
+     
 def file_age_in_seconds(pathname):
     return time.time() - os.stat(pathname)[stat.ST_MTIME]
 
