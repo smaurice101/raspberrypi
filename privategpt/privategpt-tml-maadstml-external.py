@@ -332,7 +332,7 @@ def gatherdataforembeddings(result):
                values.append(d)
              count,mean,std,min,max=getvalues(values)
              if mean > meanvalueout:
-               mainmessage = mainmessage + "The outbound count for host " + identarr[0] + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value is " + str(max) + "."
+               mainmessage = mainmessage + "The outbound count for host " + identarr[0] + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min) + ", maximum value is " + str(max) + ".\n"
                meanvalueout = mean
         if 'inboundpackets' in r['Identifier']:
  #            mainmessage = 'Here are the inbound network traffic data for host machine ' + identarr[0] + '.\n\nInbound network traffic data statistics: \n'
@@ -340,7 +340,7 @@ def gatherdataforembeddings(result):
                values.append(d)
              count,mean,std,min,max=getvalues(values)
              if mean > meanvaluein:
-                mainmessage = mainmessage + "The inbound count for host " + identarr[0]  + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min)  + ", maximum value is " + str(max) + "."
+                mainmessage = mainmessage + "The inbound count for host " + identarr[0]  + " is " + str(count) + ", mean value is " + str(mean) + ", standard deviation is " + str(std)+ ", minimum value is " + str(min)  + ", maximum value is " + str(max) + ".\n"
                 meanvaluein = mean
    return mainmessage
      
