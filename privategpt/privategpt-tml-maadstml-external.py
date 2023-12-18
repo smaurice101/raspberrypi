@@ -121,7 +121,7 @@ def Average(ni,th):
     else:     
         m='The average value is ' + str(r) + ', and it is within normal limits because it does not exceed: ' + str(th)
  
-    return m
+    return m,r
      
 ############### REST API Client
 
@@ -163,7 +163,7 @@ def consumetopicdata(maintopic,rollback):
       return result
 
 def gatherdataforprivategpt(result):
-     
+
    res=json.loads(result,strict='False')
    rawdataoutbound = []
    rawdatainbound = []
@@ -171,6 +171,8 @@ def gatherdataforprivategpt(result):
 
    thresholdoutbound=1000000
    thresholdinbound=1000000
+   meanin = 0
+   meanout = 0
 
    for r in res['StreamTopicDetails']['TopicReads']:
         identarr=r['Identifier'].split("~")
@@ -180,8 +182,11 @@ def gatherdataforprivategpt(result):
              message = 'Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br> '
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
-             #message = message[:-1]     
-             message = message  + ' <br> ' + Average(r['RawData'],thresholdoutbound) + '<br>\
+             #message = message[:-1]
+             mm,rr = Average(r['RawData'],thresholdoutbound)
+             if rr > meanout:
+               meanout = rr
+               message = message  + ' <br> ' + mm + '<br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
 <br>Question 2: Based on your knowledge of network security should this machine be investigated?   \
@@ -191,20 +196,22 @@ Answer these questions:<br>\
              message = 'Here is a list of numbers separated by a comma, each number represents bytes it is not one number, they are separate numbers: <br>'
              for d in r['RawData']:
                message = message  + str(d) + ',<br>'
-             #message = message[:-1]                       
-             message = message  + ' <br> ' + Average(r['RawData'],thresholdinbound) + '<br>\
+             #message = message[:-1]
+             mm,rr = Average(r['RawData'],thresholdinbound)
+             if rr > meanin:
+                meanin = rr
+                message = message  + ' <br> ' + mm + '<br>\
 Answer these questions:<br>\
 <br>Question 1: Are there any drastic changes in the values of these data? \
 <br>Question 2: Based on your knowledge of network security should this machine be investigated?  \
 <br>Keep your response short.'
-             messagedetails = "Inbound packets - Host: " + identarr[0]             
+             messagedetails = "Inbound packets - Host: " + identarr[0]
         if message != "":
           privategptmessage.append([message,messagedetails])
-                 
+
 
    #print("message=",privategptmessage)
    return privategptmessage
-
       
 def producegpttokafka(value,maintopic):
      inputbuf=value     
