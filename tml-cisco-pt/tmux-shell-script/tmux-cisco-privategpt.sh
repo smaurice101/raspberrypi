@@ -39,6 +39,9 @@
  elif [ "$chip" = "mac" ]; then 
     export chip="amd64"
     export mainos="darwin"   
+ elif [ "$chip" = "macarm64" ]; then 
+    export chip="arm64"
+    export mainos="darwin"       
  else
     export chip 
     export mainos
