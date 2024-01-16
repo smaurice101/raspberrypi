@@ -82,7 +82,7 @@ sleep 7
 
  tmux new -d -s tml-data-python
  tmux send-keys -t tml-data-python 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t tml-data-python 'python $userbasedir/IotSolution/preprocess2-iot-monitor-customdata.py' ENTER
+ tmux send-keys -t tml-data-python 'python $userbasedir/IotSolution/iot-ml-training_topicid_logistics.py' ENTER
 
 tmux new -d -s predict-data-python
  tmux send-keys -t predict-data-python 'cd $userbasedir/IotSolution' ENTER
