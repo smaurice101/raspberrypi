@@ -68,6 +68,10 @@ sleep 10
  tmux send-keys -t predict-data-viper 'cd $userbasedir/Viper-predict' ENTER 
  tmux send-keys -t predict-data-viper '$userbasedir/Viper-predict/viper-$mainos-$chip' ENTER
 
+ tmux new -d -s ml-predict-data-hpde
+ tmux send-keys -t ml-predict-data-hpde 'cd $userbasedir/Hpde' ENTER 
+ tmux send-keys -t ml-predict-data-hpde '$userbasedir/Hpde/hpde-$mainos-$chip' ENTER
+
 sleep 7
 
 # STEP 2b: RUN PYTHON Script  
@@ -86,7 +90,7 @@ sleep 7
 
 tmux new -d -s predict-data-python
  tmux send-keys -t predict-data-python 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t predict-data-python 'python $userbasedir/IotSolution/preprocess2-iot-monitor-customdata.py' ENTER
+ tmux send-keys -t predict-data-python 'python $userbasedir/IotSolution/iot-ml-predictions_topicid_logistics.py' ENTER
 
 
 # STEP 5: START Visualization Viperviz 
