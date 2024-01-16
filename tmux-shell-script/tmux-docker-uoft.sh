@@ -38,7 +38,6 @@ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
  tmux send-keys -t zookeeper 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
  tmux send-keys -t zookeeper './zookeeper-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
 
-
  sleep 4
 
  tmux new -d -s kafka 
@@ -61,10 +60,14 @@ sleep 10
  tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
  tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
 
- tmux new -d -s preprocess2-data-viper-8002
- tmux send-keys -t preprocess2-data-viper-8002 'cd $userbasedir/Viper-preprocess2' ENTER 
- tmux send-keys -t preprocess2-data-viper-8002 '$userbasedir/Viper-preprocess2/viper-$mainos-$chip' ENTER
- 
+ tmux new -d -s tml-data-viper
+ tmux send-keys -t tml-data-viper 'cd $userbasedir/Viper-tml' ENTER 
+ tmux send-keys -t tml-data-viper '$userbasedir/Viper-tml/viper-$mainos-$chip' ENTER
+
+ tmux new -d -s predict-data-viper
+ tmux send-keys -t predict-data-viper 'cd $userbasedir/Viper-predict' ENTER 
+ tmux send-keys -t predict-data-viper '$userbasedir/Viper-predict/viper-$mainos-$chip' ENTER
+
 sleep 7
 
 # STEP 2b: RUN PYTHON Script  
@@ -77,9 +80,13 @@ sleep 7
  tmux send-keys -t preprocess-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
   
 
- tmux new -d -s preprocess2-data-python-8002
- tmux send-keys -t preprocess2-data-python-8002 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t preprocess2-data-python-8002 'python $userbasedir/IotSolution/preprocess2-iot-monitor-customdata.py' ENTER
+ tmux new -d -s tml-data-python
+ tmux send-keys -t tml-data-python 'cd $userbasedir/IotSolution' ENTER
+ tmux send-keys -t tml-data-python 'python $userbasedir/IotSolution/preprocess2-iot-monitor-customdata.py' ENTER
+
+tmux new -d -s predict-data-python
+ tmux send-keys -t predict-data-python 'cd $userbasedir/IotSolution' ENTER
+ tmux send-keys -t predict-data-python 'python $userbasedir/IotSolution/preprocess2-iot-monitor-customdata.py' ENTER
 
 
 # STEP 5: START Visualization Viperviz 
