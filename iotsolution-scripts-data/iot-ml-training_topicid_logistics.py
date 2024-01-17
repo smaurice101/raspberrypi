@@ -63,7 +63,7 @@ viperconfigfile="/Viper-tml/viper.env"
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-     global VIPERHOST, VIPERPORT, HTTPADDR
+     global VIPERHOST, VIPERPORT, HTTPADDR, HPDEHOST, HPDEPORT
      with open("/Viper-tml/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
@@ -190,14 +190,14 @@ def performSupervisedMachineLearning(maintopic,topicid):
       identifier="IoT Failure Probability Model"
 
       result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
-                                      companyname,consumeridtrainingdata2,producerid, hpdehost,
+                                      companyname,consumeridtrainingdata2,producerid, HPDEHOST,
                                       viperconfigfile,enabletls,partition_training,
                                       deploy,modelruns,modelsearchtuner,hpdeport,offset,islogistic,
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
       
 ##      result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
-##                                      companyname,consumeridtrainingdata2,producerid, hpdehost,
+##                                      companyname,consumeridtrainingdata2,producerid, HPDEHOST,
 ##                                      viperconfigfile,enabletls,partition_training,
 ##                                      deploy,modelruns,modelsearchtuner,hpdeport,offset,islogistic,
 ##                                      brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
