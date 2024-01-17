@@ -60,17 +60,17 @@ sleep 10
  tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
  tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
 
- tmux new -d -s tml-data-viper
- tmux send-keys -t tml-data-viper 'cd $userbasedir/Viper-tml' ENTER 
- tmux send-keys -t tml-data-viper '$userbasedir/Viper-tml/viper-$mainos-$chip' ENTER
+ #tmux new -d -s tml-data-viper
+ #tmux send-keys -t tml-data-viper 'cd $userbasedir/Viper-tml' ENTER 
+ #tmux send-keys -t tml-data-viper '$userbasedir/Viper-tml/viper-$mainos-$chip' ENTER
 
- tmux new -d -s predict-data-viper
- tmux send-keys -t predict-data-viper 'cd $userbasedir/Viper-predict' ENTER 
- tmux send-keys -t predict-data-viper '$userbasedir/Viper-predict/viper-$mainos-$chip' ENTER
+ #tmux new -d -s predict-data-viper
+ #tmux send-keys -t predict-data-viper 'cd $userbasedir/Viper-predict' ENTER 
+ #tmux send-keys -t predict-data-viper '$userbasedir/Viper-predict/viper-$mainos-$chip' ENTER
 
- tmux new -d -s ml-predict-data-hpde
- tmux send-keys -t ml-predict-data-hpde 'cd $userbasedir/Hpde' ENTER 
- tmux send-keys -t ml-predict-data-hpde '$userbasedir/Hpde/hpde-$mainos-$chip' ENTER
+ #tmux new -d -s ml-predict-data-hpde
+ #tmux send-keys -t ml-predict-data-hpde 'cd $userbasedir/Hpde' ENTER 
+ #tmux send-keys -t ml-predict-data-hpde '$userbasedir/Hpde/hpde-$mainos-$chip' ENTER
 
 sleep 7
 
