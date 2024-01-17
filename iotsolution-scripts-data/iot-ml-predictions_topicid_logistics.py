@@ -67,7 +67,7 @@ viperconfigfile="/Viper-predict/viper.env"
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-     global VIPERHOST, VIPERPORT, HTTPADDR
+     global VIPERHOST, VIPERPORT, HTTPADDR, HPDEHOST, HPDEPORT
      with open("/Viper-predict/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
@@ -206,7 +206,7 @@ def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
       
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
                                      companyname,consumeridtraininedparams,
-                                     produceridhyperprediction, hpdehost,inputdata,maxrows,mainalgokey,
+                                     produceridhyperprediction, HPDEHOST,inputdata,maxrows,mainalgokey,
                                      -1,offset,enabletls,delay,hpdeport,
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,topicid,maintopic,streamstojoin,array,pathtoalgos)
 
