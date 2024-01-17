@@ -29,22 +29,22 @@ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
 
 # sudo mount -o remount,rw /partition/identifier $userbasedir
 
- kill -9 $(lsof -i:9092 -t) 2> /dev/null
- kill -9 $(lsof -i:2181 -t) 2> /dev/null
+ #kill -9 $(lsof -i:9092 -t) 2> /dev/null
+ #kill -9 $(lsof -i:2181 -t) 2> /dev/null
  
- sleep 2
+ #sleep 2
 
- tmux new -d -s zookeeper
- tmux send-keys -t zookeeper 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
- tmux send-keys -t zookeeper './zookeeper-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
+ #tmux new -d -s zookeeper
+ #tmux send-keys -t zookeeper 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
+ #tmux send-keys -t zookeeper './zookeeper-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/zookeeper.properties' ENTER
 
- sleep 4
+ #sleep 4
 
- tmux new -d -s kafka 
- tmux send-keys -t kafka 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
- tmux send-keys -t kafka './kafka-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
+ #tmux new -d -s kafka 
+ #tmux send-keys -t kafka 'cd $userbasedir/Kafka/kafka_2.13-3.0.0/bin' ENTER
+ #tmux send-keys -t kafka './kafka-server-start.sh $userbasedir/Kafka/kafka_2.13-3.0.0/config/server.properties' ENTER
 
-sleep 10
+#sleep 10
  ########################## SETUP VIPER/HPDE/VIPERVIZ Binaries For Transactional Machine Learning 
  
 # STEP 1: Produce Data to Kafka
