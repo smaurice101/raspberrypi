@@ -50,15 +50,15 @@ sleep 10
 # STEP 1: Produce Data to Kafka
 # STEP 1a: RUN VIPER Binary
   
- tmux new -d -s produce-iot-data-viper-8000 
- tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
- tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
+ #tmux new -d -s produce-iot-data-viper-8000 
+ #tmux send-keys -t produce-iot-data-viper-8000 'cd $userbasedir/Viper-produce' ENTER
+ #tmux send-keys -t produce-iot-data-viper-8000 '$userbasedir/Viper-produce/viper-$mainos-$chip' ENTER
  
 # STEP 2: Preprocess Data from Kafka
 # STEP 2a: RUN VIPER Binary
- tmux new -d -s preprocess-data-viper-8001
- tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
- tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
+ #tmux new -d -s preprocess-data-viper-8001
+ #tmux send-keys -t preprocess-data-viper-8001 'cd $userbasedir/Viper-preprocess' ENTER
+ #tmux send-keys -t preprocess-data-viper-8001 '$userbasedir/Viper-preprocess/viper-$mainos-$chip' ENTER
 
  #tmux new -d -s tml-data-viper
  #tmux send-keys -t tml-data-viper 'cd $userbasedir/Viper-tml' ENTER 
