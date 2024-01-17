@@ -192,14 +192,14 @@ def performSupervisedMachineLearning(maintopic,topicid):
       result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
                                       companyname,consumeridtrainingdata2,producerid, HPDEHOST,
                                       viperconfigfile,enabletls,partition_training,
-                                      deploy,modelruns,modelsearchtuner,hpdeport,offset,islogistic,
+                                      deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
       
 ##      result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
 ##                                      companyname,consumeridtrainingdata2,producerid, HPDEHOST,
 ##                                      viperconfigfile,enabletls,partition_training,
-##                                      deploy,modelruns,modelsearchtuner,hpdeport,offset,islogistic,
+##                                      deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
 ##                                      brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
 ##                                      independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,
 ##                                      processlogic,identifier,array,transformtype,sendcoefto,coeftoprocess,coefsubtopicnames)    
