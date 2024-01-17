@@ -84,13 +84,13 @@ sleep 7
  tmux send-keys -t preprocess-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
   
 
- tmux new -d -s tml-data-python
- tmux send-keys -t tml-data-python 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t tml-data-python 'python $userbasedir/IotSolution/iot-ml-training_topicid_logistics.py' ENTER
+ #tmux new -d -s tml-data-python
+ #tmux send-keys -t tml-data-python 'cd $userbasedir/IotSolution' ENTER
+ #tmux send-keys -t tml-data-python 'python $userbasedir/IotSolution/iot-ml-training_topicid_logistics.py' ENTER
 
-tmux new -d -s predict-data-python
- tmux send-keys -t predict-data-python 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t predict-data-python 'python $userbasedir/IotSolution/iot-ml-predictions_topicid_logistics.py' ENTER
+#tmux new -d -s predict-data-python
+# tmux send-keys -t predict-data-python 'cd $userbasedir/IotSolution' ENTER
+# tmux send-keys -t predict-data-python 'python $userbasedir/IotSolution/iot-ml-predictions_topicid_logistics.py' ENTER
 
 
 # STEP 5: START Visualization Viperviz 
