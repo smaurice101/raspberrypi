@@ -76,7 +76,7 @@ def getparams():
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
-        with open('/Viper-predict/hpde.txt', 'r') as f:
+        with open('/Hpde/hpde.txt', 'r') as f:
           output = f.read()
           HPDEHOST = HTTPADDR + output.split(",")[0]
           HPDEPORT = output.split(",")[1]
