@@ -75,13 +75,13 @@ sleep 10
 sleep 7
 
 # STEP 2b: RUN PYTHON Script  
- tmux new -d -s produce-iot-data-python-8000 
- tmux send-keys -t produce-iot-data-python-8000 'cd $userbasedir/IotSolution' ENTER
- tmux send-keys -t produce-iot-data-python-8000 'python $userbasedir/IotSolution/produce-iot-customdata.py' ENTER
+ #tmux new -d -s produce-iot-data-python-8000 
+ #tmux send-keys -t produce-iot-data-python-8000 'cd $userbasedir/IotSolution' ENTER
+ #tmux send-keys -t produce-iot-data-python-8000 'python $userbasedir/IotSolution/produce-iot-customdata.py' ENTER
 
- tmux new -d -s preprocess-data-python-8001
- tmux send-keys -t preprocess-data-python-8001 'cd $userbasedir/IotSolution' ENTER 
- tmux send-keys -t preprocess-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
+ #tmux new -d -s preprocess-data-python-8001
+ #tmux send-keys -t preprocess-data-python-8001 'cd $userbasedir/IotSolution' ENTER 
+ #tmux send-keys -t preprocess-data-python-8001 'python $userbasedir/IotSolution/preprocess-iot-monitor-customdata.py' ENTER
   
 
  #tmux new -d -s tml-data-python
@@ -94,7 +94,7 @@ sleep 7
 
 
 # STEP 5: START Visualization Viperviz 
- tmux new -d -s visualization-viperviz-9005 
- tmux send-keys -t visualization-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
- tmux send-keys -t visualization-viperviz-9005 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9005' ENTER
+ #tmux new -d -s visualization-viperviz-9005 
+ #tmux send-keys -t visualization-viperviz-9005 'cd $userbasedir/Viperviz' ENTER
+ #tmux send-keys -t visualization-viperviz-9005 '$userbasedir/Viperviz/viperviz-$mainos-$chip 0.0.0.0 9005' ENTER
  
