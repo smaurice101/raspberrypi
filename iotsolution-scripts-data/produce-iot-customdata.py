@@ -215,7 +215,7 @@ while True:
     line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
 
     producetokafka(line.strip(), "", "",producerid,maintopic,"")
-    time.sleep(0.1)
+    time.sleep(0.05)
   except Exception as e:
      print(e)  
      pass  
