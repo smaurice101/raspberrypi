@@ -170,7 +170,7 @@ def performSupervisedMachineLearning(maintopic,topicid):
       
     #  fullpathtotrainingdata='c:/maads/golang/go/bin/viperlogs/models3/'
 
-      fullpathtotrainingdata='c:/maads/golang/go/bin/viperlogs/iotlogistic'
+      fullpathtotrainingdata='/Viper-tml/viperlogs/iotlogistic'
 
       #logisticlogic: classification_name=failureprob;arcturus-temperature=12,22;arcturus-humidity=-n,4;
       processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=70,n:Current_preprocessed_AnomProb=70,n'
