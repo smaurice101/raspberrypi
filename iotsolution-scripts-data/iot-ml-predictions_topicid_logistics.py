@@ -201,7 +201,7 @@ def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
       consumeridtraininedparams=''
       groupid=''
       topicid=-1 #127 # -1 to predict for current topicids in the stream
-      pathtoalgos='C:/MAADS/Golang/go/bin/viperlogs/iotlogistic'
+      pathtoalgos='/Viper-tml/viperlogs/iotlogistic'
       array=0
       
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
