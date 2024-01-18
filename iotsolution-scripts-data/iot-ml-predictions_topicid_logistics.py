@@ -154,7 +154,7 @@ def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
       mylocation="Toronto"
 
       # Replication factor for Kafka redundancy
-      replication=3
+      replication=1
       # Number of partitions for joined topic
       numpartitions=1
       # Enable SSL/TLS communication with Kafka
