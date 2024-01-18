@@ -3,7 +3,7 @@
 # Developed by: Sebastian Maurice
 # Date: 2023-05-22
 ########################### START ZOOKEEPER and KAFKA
- export KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"
+ export KAFKA_HEAP_OPTS="-Xmx2048M -Xms2048M"
  export  userbasedir=`pwd`
  MYIP=$(ip route get 8.8.8.8 | awk '{ print $7; exit }')
  export MYIP
