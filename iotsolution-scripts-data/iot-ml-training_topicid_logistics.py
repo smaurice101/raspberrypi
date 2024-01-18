@@ -172,8 +172,8 @@ def performSupervisedMachineLearning(maintopic,topicid):
 
       fullpathtotrainingdata='/Viper-tml/viperlogs/iotlogistic'
 
-      #logisticlogic: classification_name=failureprob;arcturus-temperature=12,22;arcturus-humidity=-n,4;
-      processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=70,n:Current_preprocessed_AnomProb=70,n'
+           processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
+#      processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=70,n:Current_preprocessed_AnomProb=70,n'
 #      processlogic='classification_name=medicationfraud_prob:OUTPHARM_preprocessed_Geodiff=10,n:OUTPHARM_preprocessed_Uniquestrcount=1,n\
 #:MedicationDispense_preprocessed_Avgtimediff=-n,592000'
 
@@ -206,16 +206,8 @@ def performSupervisedMachineLearning(maintopic,topicid):
       print("Training Result=",result)
 ##########################################################################
 
-# Change this to any number
-numpredictions=10000
-iotdevices=3
-maintopic="iot-preprocess"
 
 # create separate and custom micro-ML models for each account, location, IoT device, etc.
-
-#element_run = Parallel(n_jobs=1)(delayed(performSupervisedMachineLearning)(maintopic,j) for j in range(iotdevices))
-
-#deleteTopics("fhir-ml-prediction-results-output")
 
 #for j in range(iotdevices):
 while True:
