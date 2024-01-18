@@ -206,6 +206,7 @@ def performSupervisedMachineLearning(maintopic,topicid):
       print("Training Result=",result)
 ##########################################################################
 
+maintopic="iot-preprocess"
 
 # create separate and custom micro-ML models for each account, location, IoT device, etc.
 
