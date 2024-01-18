@@ -51,6 +51,7 @@ import time
 VIPERHOST=''
 VIPERPORT=''
 HTTPADDR='https://'
+HTTPADDR2='http://'
 HPDEHOST=''
 HPDEPORT=''
 
@@ -67,7 +68,7 @@ viperconfigfile="/Viper-predict/viper.env"
 # Get the VIPERTOKEN from the file admin.tok - change folder location to admin.tok
 # to your location of admin.tok
 def getparams():
-     global VIPERHOST, VIPERPORT, HTTPADDR, HPDEHOST, HPDEPORT
+     global VIPERHOST, VIPERPORT, HTTPADDR, HTTPADDR2,HPDEHOST, HPDEPORT
      with open("/Viper-predict/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
@@ -78,7 +79,7 @@ def getparams():
           VIPERPORT = output.split(",")[1]
         with open('/Hpde/hpde.txt', 'r') as f:
           output = f.read()
-          HPDEHOST = HTTPADDR + output.split(",")[0]
+          HPDEHOST = HTTPADDR2 + output.split(",")[0]
           HPDEPORT = output.split(",")[1]
           
      return VIPERTOKEN
