@@ -172,7 +172,7 @@ def performSupervisedMachineLearning(maintopic,topicid):
 
       fullpathtotrainingdata='/Viper-tml/viperlogs/iotlogistic'
 
-           processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
+      processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
 #      processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=70,n:Current_preprocessed_AnomProb=70,n'
 #      processlogic='classification_name=medicationfraud_prob:OUTPHARM_preprocessed_Geodiff=10,n:OUTPHARM_preprocessed_Uniquestrcount=1,n\
 #:MedicationDispense_preprocessed_Avgtimediff=-n,592000'
