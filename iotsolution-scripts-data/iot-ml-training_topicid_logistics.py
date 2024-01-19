@@ -51,11 +51,6 @@ HTTPADDR2='http://'
 HPDEHOST=''
 HPDEPORT=''
 
-#VIPERHOST="https://127.0.0.1"
-#VIPERPORT=21003
-#hpdehost="http://127.0.0.1"
-#hpdeport=30001
-
 # Set Global variable for Viper confifuration file - change the folder path for your computer
 viperconfigfile="/Viper-tml/viper.env"
 
@@ -88,15 +83,12 @@ if HPDEHOST=="":
     print("ERROR: Cannot read viper.txt: HPDEHOST is empty")
 
 def deleteTopics(topic):
-
      enabletls=1
-
      result=maadstml.viperdeletetopics(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,enabletls,'',9092,'')
      print(result)
 
 
 def performSupervisedMachineLearning(maintopic,topicid):
-
 #############################################################################################################
 #                                     JOIN DATA STREAMS 
 
@@ -158,9 +150,7 @@ def performSupervisedMachineLearning(maintopic,topicid):
       #this is the dependent variable
       dependentvariable="failure"
       # Assign the independentvariable streams
-      #independentvariables="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb,Voltage_preprocessed_Avg,Current_preprocessed_Avg"
       independentvariables="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb"
-      #independentvariables="Voltage_preprocessed_Trend"
             
       rollbackoffsets=500
       consumeridtrainingdata2=''
@@ -168,29 +158,22 @@ def performSupervisedMachineLearning(maintopic,topicid):
       producerid=''
       consumefrom=''
 
-      topicid=-1 # pickup any topicid
-      
-    #  fullpathtotrainingdata='c:/maads/golang/go/bin/viperlogs/models3/'
-
+      topicid=-1 # pickup any topicid      
       fullpathtotrainingdata='/Viper-tml/viperlogs/iotlogistic'
 
-     # processlogic determines the 1 or 0 dependent variable
-     # processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
-      #processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
+     # These are the conditions that sets the dependent variable to a 1 - if condition not met it will be 0
       processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n'
       
       identifier="IOT Performance Monitor and Failure Probability Model"
-#      transformtype='log-log' #log-lin,lin-log,log-log
-#      sendcoefto='iot-preprocess'
- #     coeftoprocess='0,1,2'
-  #    coefsubtopicnames='constant,elasticity,elasticity2'
+
       array=0
-      transformtype='' #log-lin,lin-log,log-log
-      sendcoefto=''
-      coeftoprocess=''
-      coefsubtopicnames=''
+      transformtype='' # Sets the model to: log-lin,lin-log,log-log
+      sendcoefto=''  # you can send coefficients to another topic for further processing
+      coeftoprocess=''  # indicate the index of the coefficients to process i.e. 0,1,2
+      coefsubtopicnames=''  # Give the coefficients a name: constant,elasticity,elasticity2
       identifier="IoT Failure Probability Model"
 
+     # Call HPDE to train the model
       result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
                                       companyname,consumeridtrainingdata2,producerid, HPDEHOST,
                                       viperconfigfile,enabletls,partition_training,
@@ -198,26 +181,17 @@ def performSupervisedMachineLearning(maintopic,topicid):
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
       
-##      result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
-##                                      companyname,consumeridtrainingdata2,producerid, HPDEHOST,
-##                                      viperconfigfile,enabletls,partition_training,
-##                                      deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
-##                                      brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
-##                                      independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,
-##                                      processlogic,identifier,array,transformtype,sendcoefto,coeftoprocess,coefsubtopicnames)    
-      print("Training Result=",result)
 ##########################################################################
 
+# Main topic to retreive preprocessed data for machine learning
 maintopic="iot-preprocess"
 
 # create separate and custom micro-ML models for each account, location, IoT device, etc.
+print("Started machine learning on preprocessed data")
 
-#for j in range(iotdevices):
 while True:
   try:
-     # Re-train every 10 seconds- change to whatever number you wish
      performSupervisedMachineLearning(maintopic,0)
-   #  time.sleep(10)  
   except Exception as e:
     print(e)   
     continue   
