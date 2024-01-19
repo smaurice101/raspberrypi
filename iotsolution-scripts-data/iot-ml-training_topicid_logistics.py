@@ -159,8 +159,8 @@ def performSupervisedMachineLearning(maintopic,topicid):
       dependentvariable="failure"
       # Assign the independentvariable streams
       #independentvariables="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb,Voltage_preprocessed_Avg,Current_preprocessed_Avg"
-#      independentvariables="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb"
-      independentvariables="Voltage_preprocessed_Trend"
+      independentvariables="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb"
+      #independentvariables="Voltage_preprocessed_Trend"
             
       rollbackoffsets=500
       consumeridtrainingdata2=''
@@ -176,8 +176,9 @@ def performSupervisedMachineLearning(maintopic,topicid):
 
      # processlogic determines the 1 or 0 dependent variable
      # processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
-      processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
-
+      #processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
+      processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n'
+      
       identifier="IOT Performance Monitor and Failure Probability Model"
 #      transformtype='log-log' #log-lin,lin-log,log-log
 #      sendcoefto='iot-preprocess'
