@@ -71,7 +71,7 @@ if VIPERHOST=="":
 
 
 def setupkafkatopic(topicname):
-          # Set personal data
+     # Set personal data
       companyname="OTICS"
       myname="Sebastian"
       myemail="Sebastian.Maurice"
@@ -118,9 +118,8 @@ def setupkafkatopic(topicname):
          
       return tn,pid
 
-
+# This sets the lat/longs for the IoT devices so it can be map
 def csvlatlong(filename):
- #dsntmlidmain.csv
   csvfile = open(filename, 'r')
 
   fieldnames = ("dsn","oem","identifier","index","lat","long")
@@ -132,35 +131,22 @@ def csvlatlong(filename):
                     row['long'].lower(),row['identifier'])] = row
 
   return lookup_dict
-  #i=0
-  #for row in reader:
-   # if i > 0:   
-#     json.dump(row, jsonfile)
- #    jsonfile.write('\n')
-    #i = i +1 
+
 def getlatlong(reader,search,key):
   i=0
   locations = [i for i, t in enumerate(reader) if t[0]==search]
   value_at_index = list(reader.values())[locations[0]]
-#  print(value_at_index['lat'],value_at_index['long'],value_at_index['identifier'])
   
   return value_at_index['lat'],value_at_index['long'],value_at_index['identifier']
 
 def getlatlong2(reader):
-
-  #print("arr=",reader)
   random_lines=random.choice(list(reader))
-
   return random_lines[1],random_lines[2],random_lines[0]
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream):
-     
-     
      inputbuf=value     
      topicid=-999
-
-    # print("value=",value)
-       
+  
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
      delay=7000
      enabletls=1
@@ -168,14 +154,13 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream):
      try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
                                             topicid,identifier)
-        print(result)
      except Exception as e:
         print("ERROR:",e)
-
-      
+ 
 
 inputfile=basedir + '/IotSolution/IoTData.txt'
 
+# MAin Kafka topic to store the real-time data
 maintopic='iot-mainstream'
 
 # Setup Kafka topic
@@ -190,17 +175,14 @@ reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
 k=0
 file1 = open(inputfile, 'r')
 
-k=0
 file1 = open(inputfile, 'r')
-print("Read Start:",datetime.datetime.now())
+print("Data Producing to Kafka Started:",datetime.datetime.now())
 
 while True:
   line = file1.readline()
   line = line.replace(";", " ")
   # add lat/long/identifier
   k = k + 1
-  print("Reading line=", k)
-  #line = line[:-2]
   try:
     if not line or line == "":
         #break
@@ -215,6 +197,7 @@ while True:
     line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
 
     producetokafka(line.strip(), "", "",producerid,maintopic,"")
+    # change time to speed up or slow down data   
     time.sleep(0.15)
   except Exception as e:
      print(e)  
