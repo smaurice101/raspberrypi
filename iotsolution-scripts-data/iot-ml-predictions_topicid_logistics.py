@@ -55,11 +55,6 @@ HTTPADDR2='http://'
 HPDEHOST=''
 HPDEPORT=''
 
-#VIPERHOST="https://127.0.0.1"
-#VIPERPORT=21003
-#hpdehost="http://127.0.0.1"
-#hpdeport=30001
-
 # Set Global variable for Viper confifuration file - change the folder path for your computer
 viperconfigfile="/Viper-predict/viper.env"
 
@@ -120,7 +115,6 @@ def datasetup(maintopic,preprocesstopic):
      # rather than creating 10,000 streams you create ONE main stream to hold 10000 streams, this will drastically reduce Kafka partition
      # costs
 
-
      description="TML Use Case"
 
      # Create the 4 topics in Kafka concurrently - it will return a JSON array
@@ -144,7 +138,6 @@ def datasetup(maintopic,preprocesstopic):
      return pid
 
 def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
-
 #############################################################################################################
 #                                     JOIN DATA STREAMS 
 
@@ -171,16 +164,14 @@ def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
       microserviceid=''
 
       description="Topic containing joined streams for Machine Learning training dataset"
-
+      
+      # Note these are the same streams or independent variables that are in the machine learning python file
       streamstojoin="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb"
-      #streamstojoin="Voltage_preprocessed_Trend"
-
 
       #############################################################################################################
       #                                     START HYPER-PREDICTIONS FROM ESTIMATED PARAMETERS
       # Use the topic created from function viperproducetotopicstream for new data for 
       # independent variables
-      #inputdata="60.94,3,24170.70"
       inputdata=""
 
       # Consume from holds the algorithms
@@ -202,7 +193,9 @@ def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
       produceridhyperprediction=''
       consumeridtraininedparams=''
       groupid=''
-      topicid=-1 #127 # -1 to predict for current topicids in the stream
+      topicid=-1  # -1 to predict for current topicids in the stream
+
+      # Path where the trained algorithms are stored in the machine learning python file
       pathtoalgos='/Viper-tml/viperlogs/iotlogistic'
       array=0
       
@@ -212,34 +205,25 @@ def performPrediction(maintopic,producerid,VIPERPORT,topicid,producetotopic):
                                      -1,offset,enabletls,delay,HPDEPORT,
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,topicid,maintopic,streamstojoin,array,pathtoalgos)
 
-      print("resut6=",result6)      
-      
-     
 
 ##########################################################################
 #############################################################################################################
 #                                     SETUP THE TOPIC DATA STREAMS EXAMPLE
-# Change this to any number
-#numpredictions=10000
-#iotdevices=1
+
+# Topic to retreieve the new preprocessed data for predictions
 maintopic="iot-preprocess"
 
+# Topic to store the predictions
 predictiontopic="iot-ml-prediction-results-output"
 
 producerid=datasetup(maintopic,predictiontopic)
-print(maintopic,producerid)
 
-
+print("Started the predictions: ", maintopic,producerid)
 
 def spawnvipers():
-
       while True:
           performPrediction(maintopic,producerid,VIPERPORT,-1,predictiontopic)
           time.sleep(.1)
           
-#         startviper(begend)  
-  
-
-
 spawnvipers()           
 
