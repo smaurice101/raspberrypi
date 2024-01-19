@@ -176,7 +176,7 @@ def performSupervisedMachineLearning(maintopic,topicid):
 
      # processlogic determines the 1 or 0 dependent variable
      # processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
-      processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n'
+      processlogic='classification_name=failure_prob:Current_preprocessed_AnomProb=55,n'
 
       identifier="IOT Performance Monitor and Failure Probability Model"
 #      transformtype='log-log' #log-lin,lin-log,log-log
