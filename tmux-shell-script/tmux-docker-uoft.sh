@@ -71,7 +71,7 @@ sleep 10
  tmux send-keys -t ml-predict-data-hpde 'cd $userbasedir/Hpde' ENTER 
  tmux send-keys -t ml-predict-data-hpde '$userbasedir/Hpde/hpde-$mainos-$chip' ENTER
 
-sleep 7
+sleep 12
 
 # STEP 2b: RUN PYTHON Script  
  tmux new -d -s produce-iot-data-python-8000 
