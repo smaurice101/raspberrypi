@@ -15,7 +15,7 @@ spec:
       hostNetwork: true
       containers:
       - name: iot
-        image: maadsdocker/seneca-iot-tml-kafka-amd64
+        image: midjas/seneca-iot-tml-kafka-amd64
         ports:
            - containerPort: 9005
              hostPort: 9005
