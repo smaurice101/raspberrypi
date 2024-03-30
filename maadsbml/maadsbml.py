@@ -55,35 +55,36 @@ def abort(host):
    print(res)
 
 
-# ############Function Commands
+#################################################Function Commands (uncomment to run)
 # Algoinfo
 pk='admin_aesopowerdemand_csv'
 #algoinfo(pk)
-pk='admin_aesopowerdemandlogistic_csv'
+
+#pk='admin_aesopowerdemandlogistic_csv'
 #algoinfo(pk)
 
 # ############Abort
 #abort(host)
 
 # ############Rundemo
-#rundemo(0)
+#rundemo(1)
 
  ############Hypertraining
-#filename='aesopowerdemandlogistic.csv'
-#dependentvariable='AESO_Power_Demand_Label'
+filename='aesopowerdemandlogistic.csv'
+dependentvariable='AESO_Power_Demand_Label'
 
-filename='aesopowerdemand.csv'
-dependentvariable='AESO_Power_Demand'
+#filename='aesopowerdemand.csv'
+#dependentvariable='AESO_Power_Demand'
 
 removeoutliers=1
-hasseasonality=1
+hasseasonality=0
 
-hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
+#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
 
 
 # ############Hyperpredictions
-pkey='admin_aesopowerdemand_csv'
 port=5495
+pkey='admin_aesopowerdemand_csv'
 inputdata='5/10/2010,-14.3,-32.0,-12.0'
 #hyperprediction(pkey,host,port,inputdata,'admin')
 
