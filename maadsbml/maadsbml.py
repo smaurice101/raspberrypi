@@ -83,6 +83,7 @@ hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality
 
 # ############Hyperpredictions
 pkey='admin_aesopowerdemand_csv'
+port=5495
 inputdata='5/10/2010,-14.3,-32.0,-12.0'
 #hyperprediction(pkey,host,port,inputdata,'admin')
 
