@@ -56,6 +56,10 @@ def abort(host):
 
 
 #################################################Function Commands (uncomment to run)
+# FIRST RUN THE DEMO
+rundemo(1)  # Change input from 1 or 0
+
+
 # Algoinfo
 pk='admin_aesopowerdemand_csv'
 #algoinfo(pk)
@@ -66,8 +70,6 @@ pk='admin_aesopowerdemand_csv'
 # ############Abort
 #abort(host)
 
-# ############Rundemo
-#rundemo(1)
 
  ############Hypertraining
 filename='aesopowerdemandlogistic.csv'
