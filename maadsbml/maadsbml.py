@@ -66,25 +66,27 @@ pk='admin_aesopowerdemandlogistic_csv'
 #abort(host)
 
 # ############Rundemo
-rundemo(1)
+#rundemo(0)
 
  ############Hypertraining
-filename='aesopowerdemandlogistic.csv'
-dependentvariable='AESO_Power_Demand_Label'
+#filename='aesopowerdemandlogistic.csv'
+#dependentvariable='AESO_Power_Demand_Label'
 
-#filename='aesopowerdemand.csv'
-#dependentvariable='AESO_Power_Demand'
+filename='aesopowerdemand.csv'
+dependentvariable='AESO_Power_Demand'
 
 removeoutliers=1
-hasseasonality=0
+hasseasonality=1
 
-#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
+hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
 
 
 # ############Hyperpredictions
 pkey='admin_aesopowerdemand_csv'
-#pkey='admin_aesopowerdemandlogistic_csv'
+inputdata='5/10/2010,-14.3,-32.0,-12.0'
+#hyperprediction(pkey,host,port,inputdata,'admin')
 
+pkey='admin_aesopowerdemandlogistic_csv'
 inputdata='5/10/2010,-14.3,-32.0,-12.0'
 #hyperprediction(pkey,host,port,inputdata,'admin')
 
