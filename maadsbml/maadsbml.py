@@ -1,8 +1,4 @@
 import maadsbml
-# Uncomment IF using jupyter notebook
-#import nest_asyncio
-# Uncomment IF using jupyter notebook
-#nest_asyncio.apply()
 
 host='http://localhost'
 port=5595
@@ -32,14 +28,22 @@ def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasona
   #usereverseproxy=0, - leave as is
   #microserviceid='', leave as is
   #maadstoken='123' leave as is
-
-  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
+  summer='6,7,8'
+  winter='11,12,1,2'
+  shoulder='3,4,5,9,10'
+  trainingpercentage=70
+  shuffle=1
+  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,summer,winter,shoulder,70,1)
   print(res)
 
 
 def hyperprediction(pkey,host,port,inputdata,username):
   
   res=maadsbml.hyperpredictions(pkey,inputdata,host,port,username)
+  print(res)
+
+def hyperpredictioncustom(pkey,host,port,inputdata,username,algoname,season):
+  res=maadsbml.hyperpredictions(pkey,inputdata,host,port,username,algoname,season)
   print(res)
   
 def algoinfo(pk):
@@ -59,11 +63,7 @@ def abort(host):
    print(res)
 
 
-#################################################Function Commands (uncomment to run)
-# FIRST RUN THE DEMO
-rundemo(1)  # Change input from 1 or 0
-
-
+# ############Function Commands
 # Algoinfo
 pk='admin_aesopowerdemand_csv'
 #algoinfo(pk)
@@ -74,27 +74,33 @@ pk='admin_aesopowerdemand_csv'
 # ############Abort
 #abort(host)
 
+# ############Rundemo
+#rundemo(1)
 
  ############Hypertraining
 filename='aesopowerdemandlogistic.csv'
 dependentvariable='AESO_Power_Demand_Label'
 
-#filename='aesopowerdemand.csv'
-#dependentvariable='AESO_Power_Demand'
-
+filename='aesopowerdemand.csv'
+dependentvariable='AESO_Power_Demand'
 removeoutliers=1
 hasseasonality=0
-
-#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
+hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
 
 
 # ############Hyperpredictions
 port=5495
 pkey='admin_aesopowerdemand_csv'
 inputdata='5/10/2010,-14.3,-32.0,-12.0'
-#hyperprediction(pkey,host,port,inputdata,'admin')
+hyperprediction(pkey,host,port,inputdata,'admin')
+
+#hyperpredictioncustom(pkey,host,port,inputdata,'admin','LogisticRegression','winter')
 
 pkey='admin_aesopowerdemandlogistic_csv'
 inputdata='5/10/2010,-14.3,-32.0,-12.0'
-#hyperprediction(pkey,host,port,inputdata,'admin')
+hyperprediction(pkey,host,port,inputdata,'admin')
+
+algo='VotingClassifier_knclassifier'
+season='summer'
+#hyperpredictioncustom(pkey,host,port,inputdata,'admin',algo,season)
 
