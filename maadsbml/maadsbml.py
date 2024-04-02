@@ -61,10 +61,8 @@ def rundemo(demotype):
    res=maadsbml.rundemo(host,port,demotype)
    print(res)
 
-def abort(host):
-    # if demotype=1 then Regression will be run
-    # if demotype=0 then Classification will be run
-   res=maadsbml.abort(host)
+def abort(host,port=10000):
+   res=maadsbml.abort(host,port)
    print(res)
 
 
