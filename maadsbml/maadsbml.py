@@ -31,9 +31,10 @@ def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasona
   summer='6,7,8'
   winter='11,12,1,2'
   shoulder='3,4,5,9,10'
+  #shoulder='-1'
   trainingpercentage=70
-  shuffle=1
-  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,summer,winter,shoulder,70,1)
+  shuffle=0
+  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,summer,winter,shoulder,trainingpercentage,shuffle)
   print(res)
 
 
@@ -82,6 +83,7 @@ filename='aesopowerdemandlogistic.csv'
 dependentvariable='AESO_Power_Demand_Label'
 
 filename='aesopowerdemand.csv'
+#filename='aesopowerdemandsm.csv'
 dependentvariable='AESO_Power_Demand'
 removeoutliers=1
 hasseasonality=0
@@ -92,15 +94,16 @@ hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality
 port=5495
 pkey='admin_aesopowerdemand_csv'
 inputdata='5/10/2010,-14.3,-32.0,-12.0'
-hyperprediction(pkey,host,port,inputdata,'admin')
+#hyperprediction(pkey,host,port,inputdata,'admin')
 
 #hyperpredictioncustom(pkey,host,port,inputdata,'admin','LogisticRegression','winter')
 
-pkey='admin_aesopowerdemandlogistic_csv'
+pkey='admin_aesopowerdemand_csv'
 inputdata='5/10/2010,-14.3,-32.0,-12.0'
-hyperprediction(pkey,host,port,inputdata,'admin')
+#hyperprediction(pkey,host,port,inputdata,'admin')
 
-algo='VotingClassifier_knclassifier'
+algo='BayesianRidge'
+algo='simpleregression_reg'
 season='summer'
 #hyperpredictioncustom(pkey,host,port,inputdata,'admin',algo,season)
 
