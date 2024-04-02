@@ -1,4 +1,8 @@
 import maadsbml
+# Uncomment IF using jupyter notebook
+import nest_asyncio
+# Uncomment IF using jupyter notebook
+nest_asyncio.apply()
 
 host='http://localhost'
 port=5595
