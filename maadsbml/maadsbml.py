@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[41]:
+# In[1]:
 
 
 import maadsbml
@@ -14,7 +14,7 @@ import nest_asyncio
 nest_asyncio.apply()
 
 
-# In[74]:
+# In[2]:
 
 
 host='http://127.0.0.1'
@@ -115,7 +115,7 @@ def abort(host,port):
 
 
 
-# In[78]:
+# In[3]:
 
 
 # ############Function Commands
@@ -150,11 +150,11 @@ deepanalysis=0
 #hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
-# In[79]:
+# In[85]:
 
 
 # ############Hyperpredictions
-port=5595
+port=5495
 pkey='admin_aesopowerdemandlogistic_csv'
 inputdata='6/10/2010,-14.3,-32.0,-12.0'
 hyperprediction(pkey,host,port,inputdata,'admin')
