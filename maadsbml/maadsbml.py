@@ -115,7 +115,7 @@ def abort(host,port):
 
 
 
-# In[3]:
+# In[8]:
 
 
 # ############Function Commands
@@ -130,7 +130,7 @@ pk='admin_aesopowerdemand_csv'
 #abort(host,10000)
 
 # ############Rundemo
-rundemo(1)
+rundemo(0)
 
 
 # In[76]:
@@ -150,24 +150,24 @@ deepanalysis=0
 #hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
-# In[85]:
+# In[ ]:
 
 
 # ############Hyperpredictions
-port=5495
+predictionport=5495
 pkey='admin_aesopowerdemandlogistic_csv'
 inputdata='6/10/2010,-14.3,-32.0,-12.0'
-hyperprediction(pkey,host,port,inputdata,'admin')
+hyperprediction(pkey,host,predictionport,inputdata,'admin')
 
-#hyperpredictioncustom(pkey,host,port,inputdata,'admin','LogisticRegression','allseason')
+#hyperpredictioncustom(pkey,host,predictionport,inputdata,'admin','LogisticRegression','allseason')
 
 pkey='admin_aesopowerdemand_csv'
 inputdata='6/10/2010,-14.3,-52.0,-12.0'
-hyperprediction(pkey,host,port,inputdata,'admin')
+hyperprediction(pkey,host,predictionport,inputdata,'admin')
 
 algo='simpleregression_reg'
 season='summer'
-#hyperpredictioncustom(pkey,host,port,inputdata,'admin',algo,season)
+#hyperpredictioncustom(pkey,host,predictionport,inputdata,'admin',algo,season)
 
 
 # In[ ]:
