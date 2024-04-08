@@ -17,7 +17,7 @@ nest_asyncio.apply()
 # In[74]:
 
 
-host='http://localhost'
+host='http://127.0.0.1'
 port=5595
 
 def readifbrokenpipe(jres,hasseasonality):
