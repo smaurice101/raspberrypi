@@ -1,14 +1,58 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[41]:
+
+
 import maadsbml
+import json
+import os
+import time
 # Uncomment IF using jupyter notebook
 import nest_asyncio
 # Uncomment IF using jupyter notebook
 nest_asyncio.apply()
 
+
+# In[74]:
+
+
 host='http://localhost'
 port=5595
 
-def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality):
-  #def hypertraining(host,port,filename,dependentvariable,removeoutliers=0,hasseasonality=0,summer='6,7,8',winter='11,12,1,2',shoulder='3,4,5,9,10',trainingpercentage=70,shuffle=0,deepanalysis=0,username='admin',timeout=1200,company='otics',password='123',email='support@otics.ca',usereverseproxy=0,microserviceid='',maadstoken='123',mode=0):
+def readifbrokenpipe(jres,hasseasonality):
+      # this function is called if there is a broken pipe network issue
+      pkey=""
+      algofile=""        
+      jsonalgostr = ""
+    
+      pkey= jres.get('AlgoKey')
+      localstagingfolder = "c:/maads/agentfilesdocker/dist" # change this folder to your local mapped staging folder
+      localexceptionfolder = "c:/maads/agentfilesdocker/dist/maadsweb/exception" # change this folder to your local mapped exception folder
+    
+      maadsbmlfile="%s/%s.txt.working" % (localstagingfolder,pkey)
+      if hasseasonality == "1":
+        algojsonfile="%s/%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
+      else:
+        algojsonfile="%s/%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
+
+      while True:
+          time.sleep(1)            
+          if os.path.isfile(maadsbmlfile): 
+               continue
+          else:
+                # Read the json            
+              with open(algojsonfile) as f:
+                  jsonalgostr = json.load(f)
+              break # maadsbml finished
+      return jsonalgostr
+
+def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis):
+  #def hypertraining(host,port,filename,dependentvariable,removeoutliers=0,hasseasonality=0,
+    #summer='6,7,8',winter='11,12,1,2',shoulder='3,4,5,9,10',trainingpercentage=70,shuffle=0,
+    #deepanalysis=0,username='admin',timeout=1200,company='otics',password='123',email='support@otics.ca',
+    #usereverseproxy=0,microserviceid='',maadstoken='123',mode=0):
+
 
   #host,port,
   #filename= raw data file in csv format - Note this file is stored on your host machine the DOCKER container needs to be mapped to this volume using -v
@@ -16,7 +60,6 @@ def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasona
   # the file should have a Date column in the format Month/Day/Year
   #username= you can specify a username
   #mode=0
-  #abort=0 set to 1 to abort the whole process, otherwise set to 0.  If Aborting, you should change port to 10000 to FORCE ABORT OF ANY RUNNING PROCESSES  
   #timeout=180 - you can modify this in seconds if your data file is large
   #company= change this to the name of your company
   #removeoutliers= specify 1 or 0, 1=remove outliers, 0 do not remove outliers,
@@ -36,9 +79,14 @@ def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasona
   winter='11,12,1,2'
   shoulder='3,4,5,9,10'
   #shoulder='-1'
-  trainingpercentage=70
-  shuffle=0
-  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,summer,winter,shoulder,trainingpercentage,shuffle)
+  trainingpercentage=75
+  shuffle=1
+  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,summer,winter,shoulder,trainingpercentage,shuffle,deepanalysis)
+  jres = json.loads(res)
+
+  if jres.get('BrokenPipe') != None: # check if the hypertraining function experienced a brokenpipe - if so wait 
+      res=readifbrokenpipe(jres,hasseasonality)
+           
   print(res)
 
 
@@ -61,9 +109,13 @@ def rundemo(demotype):
    res=maadsbml.rundemo(host,port,demotype)
    print(res)
 
-def abort(host,port=10000):
+def abort(host,port):
    res=maadsbml.abort(host,port)
    print(res)
+
+
+
+# In[78]:
 
 
 # ############Function Commands
@@ -75,37 +127,51 @@ pk='admin_aesopowerdemand_csv'
 #algoinfo(pk)
 
 # ############Abort
-#abort(host)
+#abort(host,10000)
 
 # ############Rundemo
-#rundemo(1)
+rundemo(1)
 
- ############Hypertraining
-filename='aesopowerdemandlogistic.csv'
-dependentvariable='AESO_Power_Demand_Label'
+
+# In[76]:
+
+
+############ Hypertraining
+#filename='aesopowerdemandlogistic.csv'
+#dependentvariable='AESO_Power_Demand_Label'
 
 filename='aesopowerdemand.csv'
 #filename='aesopowerdemandsm.csv'
 dependentvariable='AESO_Power_Demand'
 removeoutliers=1
 hasseasonality=0
-hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality)
+deepanalysis=0
+
+#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
+
+
+# In[79]:
 
 
 # ############Hyperpredictions
-port=5495
+port=5595
+pkey='admin_aesopowerdemandlogistic_csv'
+inputdata='6/10/2010,-14.3,-32.0,-12.0'
+hyperprediction(pkey,host,port,inputdata,'admin')
+
+#hyperpredictioncustom(pkey,host,port,inputdata,'admin','LogisticRegression','allseason')
+
 pkey='admin_aesopowerdemand_csv'
-inputdata='5/10/2010,-14.3,-32.0,-12.0'
-#hyperprediction(pkey,host,port,inputdata,'admin')
+inputdata='6/10/2010,-14.3,-52.0,-12.0'
+hyperprediction(pkey,host,port,inputdata,'admin')
 
-#hyperpredictioncustom(pkey,host,port,inputdata,'admin','LogisticRegression','winter')
-
-pkey='admin_aesopowerdemand_csv'
-inputdata='5/10/2010,-14.3,-32.0,-12.0'
-#hyperprediction(pkey,host,port,inputdata,'admin')
-
-algo='BayesianRidge'
 algo='simpleregression_reg'
 season='summer'
 #hyperpredictioncustom(pkey,host,port,inputdata,'admin',algo,season)
+
+
+# In[ ]:
+
+
+
 
