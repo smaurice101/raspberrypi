@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[37]:
 
 
 import maadsbml
@@ -14,11 +14,15 @@ import nest_asyncio
 nest_asyncio.apply()
 
 
-# In[2]:
+# In[38]:
 
 
 host='http://127.0.0.1'
 port=5595
+######################### Change these two folder to your local paths that you used for the volume mappings in Docker
+localstagingfolder = "c:\\maads\\agentfilesdocker\\dist" # change this folder to your local mapped staging folder
+localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+#########################################################
 
 def readifbrokenpipe(jres,hasseasonality):
       # this function is called if there is a broken pipe network issue
@@ -27,20 +31,18 @@ def readifbrokenpipe(jres,hasseasonality):
       jsonalgostr = ""
     
       pkey= jres.get('AlgoKey')
-      localstagingfolder = "c:/maads/agentfilesdocker/dist" # change this folder to your local mapped staging folder
-      localexceptionfolder = "c:/maads/agentfilesdocker/dist/maadsweb/exception" # change this folder to your local mapped exception folder
     
-      maadsbmlfile="%s/%s.txt.working" % (localstagingfolder,pkey)
-      if hasseasonality == "1":
-        algojsonfile="%s/%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
+      maadsbmlfile="%s\\%s.txt.working" % (localstagingfolder,pkey)
+      if hasseasonality == 1:
+        algojsonfile="%s\\%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
       else:
-        algojsonfile="%s/%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
-
+        algojsonfile="%s\\%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
+      
       while True:
-          time.sleep(1)            
+          time.sleep(5)            
           if os.path.isfile(maadsbmlfile): 
                continue
-          else:
+          elif os.path.isfile(algojsonfile):
                 # Read the json            
               with open(algojsonfile) as f:
                   jsonalgostr = json.load(f)
@@ -85,7 +87,10 @@ def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasona
   jres = json.loads(res)
 
   if jres.get('BrokenPipe') != None: # check if the hypertraining function experienced a brokenpipe - if so wait 
-      res=readifbrokenpipe(jres,hasseasonality)
+        try:
+          res=readifbrokenpipe(jres,hasseasonality)
+        except Exception as e:
+          print(e)  
            
   print(res)
 
@@ -115,7 +120,7 @@ def abort(host,port):
 
 
 
-# In[8]:
+# In[43]:
 
 
 # ############Function Commands
@@ -130,10 +135,10 @@ pk='admin_aesopowerdemand_csv'
 #abort(host,10000)
 
 # ############Rundemo
-rundemo(0)
+#rundemo(1)
 
 
-# In[76]:
+# In[45]:
 
 
 ############ Hypertraining
@@ -144,17 +149,17 @@ filename='aesopowerdemand.csv'
 #filename='aesopowerdemandsm.csv'
 dependentvariable='AESO_Power_Demand'
 removeoutliers=1
-hasseasonality=0
-deepanalysis=0
+hasseasonality=1
+deepanalysis=1
 
 #hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
-# In[ ]:
+# In[42]:
 
 
 # ############Hyperpredictions
-predictionport=5495
+predictionport=5595
 pkey='admin_aesopowerdemandlogistic_csv'
 inputdata='6/10/2010,-14.3,-32.0,-12.0'
 hyperprediction(pkey,host,predictionport,inputdata,'admin')
@@ -168,6 +173,12 @@ hyperprediction(pkey,host,predictionport,inputdata,'admin')
 algo='simpleregression_reg'
 season='summer'
 #hyperpredictioncustom(pkey,host,predictionport,inputdata,'admin',algo,season)
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
