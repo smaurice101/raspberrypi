@@ -149,8 +149,8 @@ filename='aesopowerdemand.csv'
 #filename='aesopowerdemandsm.csv'
 dependentvariable='AESO_Power_Demand'
 removeoutliers=1
-hasseasonality=1
-deepanalysis=1
+hasseasonality=0
+deepanalysis=0
 
 #hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
