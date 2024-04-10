@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[8]:
+# In[25]:
 
 
 #########################################################
@@ -18,19 +18,22 @@ import nest_asyncio
 nest_asyncio.apply()
 
 
-# In[9]:
+# In[26]:
 
 
 host='http://127.0.0.1'
 port=5595
 ######################### Change these two folder to your local paths that you used for the volume mappings in Docker
 ########### Local Paths on Linux/Mac
-localstagingfolder = "/Users/admin/maads/staging" # change this folder to your local mapped staging folder
-localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
+#localstagingfolder = "/Users/admin/maads/staging" # change this folder to your local mapped staging folder
+#localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
 
-########### Local Paths on Windows
-#localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
-#localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+########### Local Paths on Windows - Change to your local paths
+#localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
+#localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
+
+localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
+localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
 
 #########################################################
 
@@ -42,14 +45,24 @@ def readifbrokenpipe(jres,hasseasonality):
     
       pkey= jres.get('AlgoKey')
     
-      maadsbmlfile="%s/%s.txt.working" % (localstagingfolder,pkey)
+      ############################### IF ON WINDOWS USE THIS
+      maadsbmlfile="%s\\%s.txt.working" % (localstagingfolder,pkey)
       if hasseasonality == 1:
-        algojsonfile="%s/%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
+        algojsonfile="%s\\%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
       else:
-        algojsonfile="%s/%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
-      
+        algojsonfile="%s\\%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
+
+      ############################### IF ON LINUX OR MAC USE THIS       
+      #maadsbmlfile="%s/%s.txt.working" % (localstagingfolder,pkey)
+      #if hasseasonality == 1:
+      #  algojsonfile="%s/%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
+      #else:
+      #  algojsonfile="%s/%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
+        
+      i=0
       while True:
           time.sleep(5)            
+          i = i + 1
           if os.path.isfile(maadsbmlfile): 
                continue
           elif os.path.isfile(algojsonfile):
@@ -57,6 +70,9 @@ def readifbrokenpipe(jres,hasseasonality):
               with open(algojsonfile) as f:
                   jsonalgostr = json.load(f)
               break # maadsbml finished
+          elif i > 400:
+             print("ERROR: Could not find the JSON file - CHECK IF YOUR FILE PATHS ARE CORRECT!")
+             break   
       return jsonalgostr
 
 def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis):
@@ -132,13 +148,13 @@ def abort(host,port):
 
 
 
-# In[10]:
+# In[27]:
 
 
 # ############Function Commands
 # Algoinfo
 pk='admin_aesopowerdemand_csv'
-algoinfo(pk)
+#algoinfo(pk)
 
 #pk='admin_aesopowerdemandlogistic_csv'
 #algoinfo(pk)
@@ -147,27 +163,27 @@ algoinfo(pk)
 #abort(host,10000)
 
 # ############Rundemo
-rundemo(1)
+#rundemo(0)
 
 
-# In[45]:
+# In[31]:
 
 
 ############ Hypertraining
-#filename='aesopowerdemandlogistic.csv'
-#dependentvariable='AESO_Power_Demand_Label'
+filename='aesopowerdemandlogistic.csv'
+dependentvariable='AESO_Power_Demand_Label'
 
-filename='aesopowerdemand.csv'
+#filename='aesopowerdemand.csv'
 #filename='aesopowerdemandsm.csv'
-dependentvariable='AESO_Power_Demand'
+#dependentvariable='AESO_Power_Demand'
 removeoutliers=1
-hasseasonality=1
+hasseasonality=0
 deepanalysis=0
 
-#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
+hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
-# In[71]:
+# In[29]:
 
 
 # ############Hyperpredictions
