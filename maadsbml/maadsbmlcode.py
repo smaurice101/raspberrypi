@@ -2,7 +2,9 @@
 # coding: utf-8
 
 # In[37]:
-
+######################################
+# Developed By: Sebastian Maurice, PhD
+######################################
 
 import maadsbml
 import json
