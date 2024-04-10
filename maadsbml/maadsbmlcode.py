@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[37]:
-######################################
+# In[8]:
+
+
+#########################################################
 # Developed By: Sebastian Maurice, PhD
-######################################
+########################################################
 
 import maadsbml
 import json
@@ -16,14 +18,20 @@ import nest_asyncio
 nest_asyncio.apply()
 
 
-# In[38]:
+# In[9]:
 
 
 host='http://127.0.0.1'
 port=5595
 ######################### Change these two folder to your local paths that you used for the volume mappings in Docker
-localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
-localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+########### Local Paths on Linux/Mac
+localstagingfolder = "/Users/admin/maads/staging" # change this folder to your local mapped staging folder
+localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
+
+########### Local Paths on Windows
+#localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
+#localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+
 #########################################################
 
 def readifbrokenpipe(jres,hasseasonality):
@@ -34,11 +42,11 @@ def readifbrokenpipe(jres,hasseasonality):
     
       pkey= jres.get('AlgoKey')
     
-      maadsbmlfile="%s\\%s.txt.working" % (localstagingfolder,pkey)
+      maadsbmlfile="%s/%s.txt.working" % (localstagingfolder,pkey)
       if hasseasonality == 1:
-        algojsonfile="%s\\%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
+        algojsonfile="%s/%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
       else:
-        algojsonfile="%s\\%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
+        algojsonfile="%s/%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
       
       while True:
           time.sleep(5)            
@@ -111,6 +119,8 @@ def algoinfo(pk):
    print(res)
 
 def rundemo(demotype):
+   global host
+   global port
     # if demotype=1 then Regression will be run
     # if demotype=0 then Classification will be run
    res=maadsbml.rundemo(host,port,demotype)
@@ -122,13 +132,13 @@ def abort(host,port):
 
 
 
-# In[43]:
+# In[10]:
 
 
 # ############Function Commands
 # Algoinfo
 pk='admin_aesopowerdemand_csv'
-#algoinfo(pk)
+algoinfo(pk)
 
 #pk='admin_aesopowerdemandlogistic_csv'
 #algoinfo(pk)
@@ -137,7 +147,7 @@ pk='admin_aesopowerdemand_csv'
 #abort(host,10000)
 
 # ############Rundemo
-#rundemo(1)
+rundemo(1)
 
 
 # In[45]:
@@ -151,13 +161,13 @@ filename='aesopowerdemand.csv'
 #filename='aesopowerdemandsm.csv'
 dependentvariable='AESO_Power_Demand'
 removeoutliers=1
-hasseasonality=0
+hasseasonality=1
 deepanalysis=0
 
 #hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
-# In[42]:
+# In[71]:
 
 
 # ############Hyperpredictions
