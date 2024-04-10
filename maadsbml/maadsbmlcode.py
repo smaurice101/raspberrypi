@@ -171,7 +171,7 @@ deepanalysis=0
 
 
 # ############Hyperpredictions
-predictionport=5595
+predictionport=5495
 pkey='admin_aesopowerdemandlogistic_csv'
 inputdata='6/10/2010,-14.3,-32.0,-12.0'
 hyperprediction(pkey,host,predictionport,inputdata,'admin')
