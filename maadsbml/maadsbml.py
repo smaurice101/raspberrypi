@@ -20,7 +20,7 @@ nest_asyncio.apply()
 host='http://127.0.0.1'
 port=5595
 ######################### Change these two folder to your local paths that you used for the volume mappings in Docker
-localstagingfolder = "c:\\maads\\agentfilesdocker\\dist" # change this folder to your local mapped staging folder
+localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
 localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
 #########################################################
 
