@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[25]:
+# In[1]:
 
 
 #########################################################
@@ -18,7 +18,7 @@ import nest_asyncio
 nest_asyncio.apply()
 
 
-# In[26]:
+# In[41]:
 
 
 host='http://127.0.0.1'
@@ -68,7 +68,7 @@ def readifbrokenpipe(jres,hasseasonality):
           elif os.path.isfile(algojsonfile):
                 # Read the json            
               with open(algojsonfile) as f:
-                  jsonalgostr = json.load(f)
+                  jsonalgostr = f.read() 
               break # maadsbml finished
           elif i > 400:
              print("ERROR: Could not find the JSON file - CHECK IF YOUR FILE PATHS ARE CORRECT!")
@@ -148,7 +148,7 @@ def abort(host,port):
 
 
 
-# In[27]:
+# In[42]:
 
 
 # ############Function Commands
@@ -163,10 +163,10 @@ pk='admin_aesopowerdemand_csv'
 #abort(host,10000)
 
 # ############Rundemo
-#rundemo(0)
+#rundemo(1)
 
 
-# In[31]:
+# In[40]:
 
 
 ############ Hypertraining
@@ -180,7 +180,7 @@ removeoutliers=1
 hasseasonality=0
 deepanalysis=0
 
-hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
+#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
 # In[29]:
