@@ -17,10 +17,6 @@ import nest_asyncio
 # Uncomment IF using jupyter notebook
 nest_asyncio.apply()
 
-
-# In[41]:
-
-
 host='http://127.0.0.1'
 port=5595
 ######################### Change these two folder to your local paths that you used for the volume mappings in Docker
@@ -29,11 +25,15 @@ port=5595
 #localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
 
 ########### Local Paths on Windows - Change to your local paths
-#localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
-#localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
+localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
+localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
 
-localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
-localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+#localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
+#localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+
+
+# In[2]:
+
 
 #########################################################
 
@@ -45,19 +45,11 @@ def readifbrokenpipe(jres,hasseasonality):
     
       pkey= jres.get('AlgoKey')
     
-      ############################### IF ON WINDOWS USE THIS
-      maadsbmlfile="%s\\%s.txt.working" % (localstagingfolder,pkey)
+      maadsbmlfile="%s/%s.txt.working" % (localstagingfolder,pkey)
       if hasseasonality == 1:
-        algojsonfile="%s\\%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
+        algojsonfile="%s/%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
       else:
-        algojsonfile="%s\\%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
-
-      ############################### IF ON LINUX OR MAC USE THIS       
-      #maadsbmlfile="%s/%s.txt.working" % (localstagingfolder,pkey)
-      #if hasseasonality == 1:
-      #  algojsonfile="%s/%s_trained_algo_seasons.json" % (localexceptionfolder,pkey)
-      #else:
-      #  algojsonfile="%s/%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
+        algojsonfile="%s/%s_trained_algo_no_seasons.json" % (localexceptionfolder,pkey)
         
       i=0
       while True:
@@ -148,7 +140,7 @@ def abort(host,port):
 
 
 
-# In[42]:
+# In[3]:
 
 
 # ############Function Commands
@@ -166,21 +158,21 @@ pk='admin_aesopowerdemand_csv'
 #rundemo(1)
 
 
-# In[40]:
+# In[4]:
 
 
 ############ Hypertraining
-filename='aesopowerdemandlogistic.csv'
-dependentvariable='AESO_Power_Demand_Label'
+#filename='aesopowerdemandlogistic.csv'
+#dependentvariable='AESO_Power_Demand_Label'
 
-#filename='aesopowerdemand.csv'
+filename='aesopowerdemand.csv'
 #filename='aesopowerdemandsm.csv'
-#dependentvariable='AESO_Power_Demand'
+dependentvariable='AESO_Power_Demand'
 removeoutliers=1
-hasseasonality=0
+hasseasonality=1
 deepanalysis=0
 
-#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
+hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
 # In[29]:
