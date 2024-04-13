@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 #########################################################
@@ -17,7 +17,7 @@ import nest_asyncio
 # Uncomment IF using jupyter notebook
 nest_asyncio.apply()
 
-host='http://127.0.0.1'
+host='http://localhost'
 port=5595
 ######################### Change these two folder to your local paths that you used for the volume mappings in Docker
 ########### Local Paths on Linux/Mac
@@ -32,7 +32,7 @@ localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to 
 #localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
 
 
-# In[2]:
+# In[3]:
 
 
 #########################################################
@@ -127,12 +127,19 @@ def algoinfo(pk):
    print(res)
 
 def rundemo(demotype):
-   global host
-   global port
     # if demotype=1 then Regression will be run
     # if demotype=0 then Classification will be run
    res=maadsbml.rundemo(host,port,demotype)
+   jres = json.loads(res)
+
+   if jres.get('BrokenPipe') != None: # check if the hypertraining function experienced a brokenpipe - if so wait 
+        try:
+          res=readifbrokenpipe(jres,hasseasonality)
+        except Exception as e:
+          print(e)  
+           
    print(res)
+
 
 def abort(host,port):
    res=maadsbml.abort(host,port)
@@ -140,7 +147,7 @@ def abort(host,port):
 
 
 
-# In[3]:
+# In[ ]:
 
 
 # ############Function Commands
@@ -155,27 +162,30 @@ pk='admin_aesopowerdemand_csv'
 #abort(host,10000)
 
 # ############Rundemo
-#rundemo(1)
+rundemo(1)
 
 
-# In[4]:
+# In[18]:
 
 
 ############ Hypertraining
 #filename='aesopowerdemandlogistic.csv'
 #dependentvariable='AESO_Power_Demand_Label'
 
-filename='aesopowerdemand.csv'
+filename='studentportNUMERIC.csv'
+dependentvariable='G3'
+
+#filename='aesopowerdemand.csv'
 #filename='aesopowerdemandsm.csv'
-dependentvariable='AESO_Power_Demand'
-removeoutliers=1
-hasseasonality=1
+#dependentvariable='AESO_Power_Demand'
+removeoutliers=0
+hasseasonality=0
 deepanalysis=0
 
-hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
+#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
-# In[29]:
+# In[16]:
 
 
 # ############Hyperpredictions
