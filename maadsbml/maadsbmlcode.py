@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[14]:
 
 
 #########################################################
@@ -17,22 +17,22 @@ import nest_asyncio
 # Uncomment IF using jupyter notebook
 nest_asyncio.apply()
 
-host='http://localhost'
+host='http://127.0.0.1'
 port=5595
 ######################### Change these two folder to your local paths that you used for the volume mappings in Docker
 ########### Local Paths on Linux/Mac
-#localstagingfolder = "/Users/admin/maads/staging" # change this folder to your local mapped staging folder
-#localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
+localstagingfolder = "/Users/admin/maads/staging" # change this folder to your local mapped staging folder
+localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
 
 ########### Local Paths on Windows - Change to your local paths
-localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
-localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
+#localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
+#localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
 
 #localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
 #localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
 
 
-# In[3]:
+# In[15]:
 
 
 #########################################################
@@ -134,7 +134,7 @@ def rundemo(demotype):
 
    if jres.get('BrokenPipe') != None: # check if the hypertraining function experienced a brokenpipe - if so wait 
         try:
-          res=readifbrokenpipe(jres,hasseasonality)
+          res=readifbrokenpipe(jres,0)
         except Exception as e:
           print(e)  
            
