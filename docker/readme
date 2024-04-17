@@ -5,6 +5,10 @@ Install DOCKER:
 3. sudo docker run hello-world
 4. sudo docker ps
 
+########### install buildx
+sudo apt install -y qemu-user-static binfmt-support
+sudo apt install docker-buildx
+################################################
 Docker build command: docker build -t <container name> --build-arg CHIP=<chip arch> --no-cache --network=host .
 replace: <container name> with name of your container
 replace: <chip arch> with: ARM32, or ARM64, or AMD64
