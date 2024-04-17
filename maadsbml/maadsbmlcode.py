@@ -62,9 +62,9 @@ def readifbrokenpipe(jres,hasseasonality):
               with open(algojsonfile) as f:
                   jsonalgostr = f.read() 
               break # maadsbml finished
-          elif i > 400:
-             print("ERROR: Could not find the JSON file - CHECK IF YOUR FILE PATHS ARE CORRECT!")
-             break   
+       #   elif i > 400:
+       #      print("ERROR: Could not find the JSON file - CHECK IF YOUR FILE PATHS ARE CORRECT!")
+       #      break   
       return jsonalgostr
 
 def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis):
