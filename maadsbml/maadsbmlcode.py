@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[14]:
+# In[1]:
 
 
 #########################################################
@@ -21,18 +21,18 @@ host='http://127.0.0.1'
 port=5595
 ######################### Change these two folder to your local paths that you used for the volume mappings in Docker
 ########### Local Paths on Linux/Mac
-localstagingfolder = "/Users/admin/maads/staging" # change this folder to your local mapped staging folder
-localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
+#localstagingfolder = "/Users/admin/maads/staging" # change this folder to your local mapped staging folder
+#localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
 
 ########### Local Paths on Windows - Change to your local paths
 #localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
 #localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
 
-#localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
-#localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
+localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
 
 
-# In[15]:
+# In[2]:
 
 
 #########################################################
@@ -62,9 +62,9 @@ def readifbrokenpipe(jres,hasseasonality):
               with open(algojsonfile) as f:
                   jsonalgostr = f.read() 
               break # maadsbml finished
-       #   elif i > 400:
-       #      print("ERROR: Could not find the JSON file - CHECK IF YOUR FILE PATHS ARE CORRECT!")
-       #      break   
+          #elif i > 400:
+          #   print("ERROR: Could not find the JSON file - CHECK IF YOUR FILE PATHS ARE CORRECT!")
+          #   break   
       return jsonalgostr
 
 def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis):
@@ -147,7 +147,7 @@ def abort(host,port):
 
 
 
-# In[ ]:
+# In[24]:
 
 
 # ############Function Commands
@@ -162,30 +162,30 @@ pk='admin_aesopowerdemand_csv'
 #abort(host,10000)
 
 # ############Rundemo
-rundemo(1)
+#rundemo(1)
 
 
-# In[18]:
+# In[35]:
 
 
 ############ Hypertraining
-#filename='aesopowerdemandlogistic.csv'
-#dependentvariable='AESO_Power_Demand_Label'
+filename='aesopowerdemandlogistic.csv'
+dependentvariable='AESO_Power_Demand_Label'
 
-filename='studentportNUMERIC.csv'
-dependentvariable='G3'
+#filename='studentportNUMERIC.csv'
+#dependentvariable='G3'
 
 #filename='aesopowerdemand.csv'
-#filename='aesopowerdemandsm.csv'
 #dependentvariable='AESO_Power_Demand'
+
 removeoutliers=0
-hasseasonality=0
+hasseasonality=1
 deepanalysis=0
 
-#hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
+hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
 
-# In[16]:
+# In[31]:
 
 
 # ############Hyperpredictions
