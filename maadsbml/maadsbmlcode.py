@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 #########################################################
@@ -25,14 +25,14 @@ port=5595
 #localexceptionfolder = "/Users/admin/maads/exception" # change this folder to your local mapped exception folder
 
 ########### Local Paths on Windows - Change to your local paths
-#localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
-#localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
+localstagingfolder = "c:\\maads\\maadsbml\\staging" # change this folder to your local mapped staging folder
+localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to your local mapped exception folder
 
-localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
-localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
+#localstagingfolder = "c:\\maads\\agentfilesdocker\\dist\\staging" # change this folder to your local mapped staging folder
+#localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
 
 
-# In[2]:
+# In[18]:
 
 
 #########################################################
@@ -67,12 +67,15 @@ def readifbrokenpipe(jres,hasseasonality):
           #   break   
       return jsonalgostr
 
-def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis):
-  #def hypertraining(host,port,filename,dependentvariable,removeoutliers=0,hasseasonality=0,
-    #summer='6,7,8',winter='11,12,1,2',shoulder='3,4,5,9,10',trainingpercentage=70,shuffle=0,
-    #deepanalysis=0,username='admin',timeout=1200,company='otics',password='123',email='support@otics.ca',
-    #usereverseproxy=0,microserviceid='',maadstoken='123',mode=0):
+def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis,company):
+#  maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers=0,hasseasonality=0,summer='6,7,8',
+    #winter='11,12,1,2',shoulder='3,4,5,9,10', trainingpercentage=70,shuffle=0,deepanalysis=0,username='admin',
+    #timeout=1200,company='otics',password='123',email='support@otics.ca',usereverseproxy=0, microserviceid='',
+    #maadstoken='123',mode=0)
 
+#      res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,
+ #                                summer,winter,shoulder,trainingpercentage,shuffle,deepanalysis,'admin',
+  #                               1200,company)
 
   #host,port,
   #filename= raw data file in csv format - Note this file is stored on your host machine the DOCKER container needs to be mapped to this volume using -v
@@ -101,7 +104,7 @@ def hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasona
   #shoulder='-1'
   trainingpercentage=75
   shuffle=1
-  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,summer,winter,shoulder,trainingpercentage,shuffle,deepanalysis)
+  res=maadsbml.hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,summer,winter,shoulder,trainingpercentage,shuffle,deepanalysis,'admin',1200,company)
   jres = json.loads(res)
 
   if jres.get('BrokenPipe') != None: # check if the hypertraining function experienced a brokenpipe - if so wait 
@@ -147,7 +150,7 @@ def abort(host,port):
 
 
 
-# In[24]:
+# In[19]:
 
 
 # ############Function Commands
@@ -165,40 +168,54 @@ pk='admin_aesopowerdemand_csv'
 #rundemo(1)
 
 
-# In[35]:
+# In[ ]:
 
 
 ############ Hypertraining
-filename='aesopowerdemandlogistic.csv'
-dependentvariable='AESO_Power_Demand_Label'
+#filename='aesopowerdemandlogistic.csv'
+#dependentvariable='AESO_Power_Demand_Label'
 
 #filename='studentportNUMERIC.csv'
 #dependentvariable='G3'
 
-#filename='aesopowerdemand.csv'
-#dependentvariable='AESO_Power_Demand'
+filename='aesopowerdemand.csv'
+dependentvariable='AESO_Power_Demand'
+############################################################
+#filename='stockdata.csv'
+#dependentvariable='close'
+
+filename='creditcarddefaults2.csv'
+dependentvariable='Defaultscore'
 
 removeoutliers=0
-hasseasonality=1
+hasseasonality=0
 deepanalysis=0
+company='Fiera Capital'
+hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis,company)
 
-hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis)
 
-
-# In[31]:
+# In[ ]:
 
 
 # ############Hyperpredictions
+#predictionport=5495
+#pkey='admin_aesopowerdemandlogistic_csv'
+#inputdata='6/10/2010,-14.3,-32.0,-12.0'
+#hyperprediction(pkey,host,predictionport,inputdata,'admin')
+
+############## Stock Data Prediction #########################################################
 predictionport=5495
-pkey='admin_aesopowerdemandlogistic_csv'
-inputdata='6/10/2010,-14.3,-32.0,-12.0'
+pkey='admin_stockdata_csv'
+inputdata='5/21/2013,52.650002,83.330002,2.120003,2674600'
 hyperprediction(pkey,host,predictionport,inputdata,'admin')
+
+
 
 #hyperpredictioncustom(pkey,host,predictionport,inputdata,'admin','LogisticRegression','allseason')
 
 pkey='admin_aesopowerdemand_csv'
 inputdata='6/10/2010,-14.3,-52.0,-12.0'
-hyperprediction(pkey,host,predictionport,inputdata,'admin')
+#hyperprediction(pkey,host,predictionport,inputdata,'admin')
 
 algo='simpleregression_reg'
 season='summer'
