@@ -184,7 +184,7 @@ dependentvariable='AESO_Power_Demand'
 #filename='stockdata.csv'
 #dependentvariable='close'
 
-filename='creditcarddefaults2.csv'
+filename='creditcarddefaults.csv'
 dependentvariable='Defaultscore'
 
 removeoutliers=0
