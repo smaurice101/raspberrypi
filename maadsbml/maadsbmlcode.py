@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[78]:
 
 
 #########################################################
@@ -32,7 +32,7 @@ localexceptionfolder = "c:\\maads\\maadsbml\\exception" # change this folder to 
 #localexceptionfolder = "c:\\maads\\agentfilesdocker\\dist\\maadsweb\\exception" # change this folder to your local mapped exception folder
 
 
-# In[18]:
+# In[79]:
 
 
 #########################################################
@@ -150,7 +150,7 @@ def abort(host,port):
 
 
 
-# In[19]:
+# In[81]:
 
 
 # ############Function Commands
@@ -180,12 +180,13 @@ pk='admin_aesopowerdemand_csv'
 
 filename='aesopowerdemand.csv'
 dependentvariable='AESO_Power_Demand'
-############################################################
-#filename='stockdata.csv'
-#dependentvariable='close'
 
-filename='creditcarddefaults.csv'
-dependentvariable='Defaultscore'
+############################################################
+filename='stockdata.csv'
+dependentvariable='close'
+
+#filename='creditcarddefaults.csv'
+#dependentvariable='Defaultscore'
 
 removeoutliers=0
 hasseasonality=0
@@ -194,7 +195,7 @@ company='Fiera Capital'
 hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis,company)
 
 
-# In[ ]:
+# In[85]:
 
 
 # ############Hyperpredictions
@@ -209,13 +210,11 @@ pkey='admin_stockdata_csv'
 inputdata='5/21/2013,52.650002,83.330002,2.120003,2674600'
 hyperprediction(pkey,host,predictionport,inputdata,'admin')
 
+############## Credit Card defaults Prediction #########################################################
 
-
-#hyperpredictioncustom(pkey,host,predictionport,inputdata,'admin','LogisticRegression','allseason')
-
-pkey='admin_aesopowerdemand_csv'
-inputdata='6/10/2010,-14.3,-52.0,-12.0'
-#hyperprediction(pkey,host,predictionport,inputdata,'admin')
+pkey='admin_creditcarddefaults_csv'
+inputdata='11/24/2013,120000.0,2.0,2.0,2.0,39.0,0.0'
+hyperprediction(pkey,host,predictionport,inputdata,'admin')
 
 algo='simpleregression_reg'
 season='summer'
