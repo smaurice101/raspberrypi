@@ -168,7 +168,7 @@ pk='admin_aesopowerdemand_csv'
 #rundemo(1)
 
 
-# In[ ]:
+# In[86]:
 
 
 ############ Hypertraining
@@ -195,7 +195,7 @@ company='Fiera Capital'
 hypertraining(host,port,filename,dependentvariable,removeoutliers,hasseasonality,deepanalysis,company)
 
 
-# In[85]:
+# In[87]:
 
 
 # ############Hyperpredictions
