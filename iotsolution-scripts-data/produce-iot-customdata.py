@@ -173,7 +173,6 @@ except Exception as e:
 reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
 
 k=0
-file1 = open(inputfile, 'r')
 
 file1 = open(inputfile, 'r')
 print("Data Producing to Kafka Started:",datetime.datetime.now())
