@@ -16,7 +16,7 @@ dag = DAG ('tml_iot_solution_dag6', default_args=default_args, schedule=None)
 
 # Define tasks
 def task1():
- print ("Executing Task 11118")
+ print ("Executing Task 11117")
 
 def task2():
  print ("Executing Task 2")
