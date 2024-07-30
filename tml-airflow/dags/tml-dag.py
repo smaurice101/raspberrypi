@@ -7,7 +7,7 @@ from datetime import datetime
 #Define default arguments
 default_args = {
  'owner': 'Otics Advanced Analytics',
- 'start_date': datetime (2023, 9, 29),
+ 'start_date': datetime (2024, 6, 29),
  'retries': 1,
 }
 
