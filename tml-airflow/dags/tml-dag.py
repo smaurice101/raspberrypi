@@ -6,13 +6,13 @@ from datetime import datetime
 
 #Define default arguments
 default_args = {
- 'owner': 'Otics Advanced Analytics',
+ 'owner': 'Sebastian Maurice',
  'start_date': datetime (2024, 6, 29),
  'retries': 1,
 }
 
 # Instantiate your DAG
-dag = DAG (dag_id="tml_iot_solution_DB-dag5449", default_args=default_args, schedule=None)
+dag = DAG (dag_id="tml_iot_solution_dag", default_args=default_args, schedule=None)
 
 # Define tasks
 def task1():
