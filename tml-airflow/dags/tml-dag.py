@@ -12,7 +12,7 @@ default_args = {
 }
 
 # Instantiate your DAG
-dag = DAG (dag_id="tml_iot_solution_dag", default_args=default_args, schedule=None)
+dag = DAG (dag_id="tml_iot_solution_dag_main", default_args=default_args, schedule=None)
 
 # Define tasks
 def task1():
