@@ -7,6 +7,7 @@ from airflow.decorators import dag, task
 
 #Define default arguments
 default_args = {
+ 'owner' : 'Sebastian Maurice',    
  'companyname': 'Otics',
   'myname' : 'Sebastian',
   'myemail' : 'Sebastian.Maurice',
