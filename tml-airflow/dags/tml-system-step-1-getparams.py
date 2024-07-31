@@ -16,7 +16,13 @@ dag = DAG (dag_id="tml_system_step_1_getparams_dag", default_args=default_args, 
 
 # Define tasks
 def getparams():
+<<<<<<< HEAD
      global VIPERHOST, VIPERPORT, HTTPADDR
+=======
+     VIPERHOST=""
+     VIPERPORT=""
+     HTTPADDR=""
+>>>>>>> 676a85c (system step 1)
      with open(basedir + "/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
@@ -29,7 +35,11 @@ def getparams():
      return VIPERTOKEN
 
     
+<<<<<<< HEAD
 VIPERTOKEN = PythonOperator(
+=======
+VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR = PythonOperator(
+>>>>>>> 676a85c (system step 1)
  task_id='tml_system_step_1_getparams',
  python_callable=getparams,
  dag=dag,
