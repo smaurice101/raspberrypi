@@ -5,7 +5,7 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime
 from airflow.decorators import dag, task
 
-#Define default arguments
+######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
  'owner' : 'Sebastian Maurice',    
  'companyname': 'Otics',
@@ -24,6 +24,10 @@ default_args = {
   'retries': 1,
     
 }
+
+######################################## USER CHOOSEN PARAMETERS ########################################
+
+######################################## START DAG AND TASK #############################################
 
 # Instantiate your DAG
 @dag(dag_id="tml_system_step_2_kafka_createtopic_dag", default_args=default_args, tags=["tml-system-step-2-kafka-createtopic"], schedule=None,catchup=False)

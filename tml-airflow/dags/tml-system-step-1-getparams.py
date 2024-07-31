@@ -1,9 +1,9 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-
 from datetime import datetime
 from airflow.decorators import dag, task
+import os 
 
 #Define default arguments
 default_args = {
@@ -17,6 +17,9 @@ default_args = {
 @dag(dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None,  catchup=False)
 def tmlparams():
     # Define tasks
+  basedir = os.environ['userbasedir']
+  viperconfigfile=basedir + "/Viper-produce/viper.env"
+
   @task(task_id="getparams")
   def getparams():
      VIPERHOST=""
