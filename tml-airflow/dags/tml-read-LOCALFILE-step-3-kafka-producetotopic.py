@@ -13,7 +13,7 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'inputfile' : '/rawdata/?'  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
@@ -65,8 +65,6 @@ def startproducingtotopic():
       maintopic = args['topics']
       producerid = args['producerid']
     
-      reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
- 
       k=0
 
       file1 = open(inputfile, 'r')
@@ -86,13 +84,9 @@ def startproducingtotopic():
             print("Read End:",datetime.datetime.now())
             continue
 
-          jsonline = json.loads(line)
-          lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
-          line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
-
           producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
           # change time to speed up or slow down data   
-          time.sleep(0.15)
+          #time.sleep(0.15)
         except Exception as e:
           print(e)  
           pass  
