@@ -69,7 +69,6 @@ def startkafkasetup():
                                      myname,myemail,mylocation,description,enabletls,
                                      brokerhost,brokerport,numpartitions,replication,
                                      microserviceid='')
-        # Load the JSON array in variable y
         print("Result=",result)
 
       setupkafkatopic(default_args)
