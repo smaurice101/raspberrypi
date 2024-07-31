@@ -9,6 +9,8 @@ import os
 default_args = {
  'owner': 'Sebastian Maurice',
  'start_date': datetime (2024, 6, 29),
+ 'brokerhost' : '127.0.0.1',  # <<<<***************** THIS WILL ACCESS LOCAL KAFKA - YOU CAN CHANGE TO CLOUD KAFKA HOST
+ 'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
  'retries': 1,
 }
 
@@ -21,7 +23,7 @@ def tmlparams():
   viperconfigfile=basedir + "/Viper-produce/viper.env"
 
   @task(task_id="getparams")
-  def getparams():
+  def getparams(args):
      VIPERHOST=""
      VIPERPORT=""
      HTTPADDR=""
@@ -38,10 +40,15 @@ def tmlparams():
      ti.xcom_push(key='VIPERHOST',value=VIPERHOST)
      ti.xcom_push(key='VIPERPORT',value=VIPERPORT)
      ti.xcom_push(key='HTTPADDR',value=HTTPADDR)
-    
+     
+     BROKERHOST = args['brokerhost']
+     ti.xcom_push(key='BROKERHOST',value=BROKERHOST)
+     BROKERPORT = args['brokerport']
+     ti.xcom_push(key='BROKERPORT',value=BROKERPORT)
+        
      return [VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR]
      
-     tmlsystemparams=getparams()
+     tmlsystemparams=getparams(default_args)
      if tmlsystemparams[1]=="":
         print("ERROR: No host specified")
     
