@@ -28,10 +28,10 @@ def getparams():
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
           
-     return VIPERTOKEN
+     return [VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR]
 
     
-VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR = PythonOperator(
+VIPERMAINPARAMS = PythonOperator(
  task_id='tml_system_step_1_getparams',
  python_callable=getparams,
  dag=dag,
