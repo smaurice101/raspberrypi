@@ -11,6 +11,8 @@ default_args = {
  'start_date': datetime (2024, 6, 29),
  'brokerhost' : '127.0.0.1',  # <<<<***************** THIS WILL ACCESS LOCAL KAFKA - YOU CAN CHANGE TO CLOUD KAFKA HOST
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
+ 'cloudusername' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API KEY  - OTHERWISE LEAVE BLANK
+ 'cloudpassword' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API SECRET - OTHERWISE LEAVE BLANK   
  'retries': 1,
 }
 
@@ -21,6 +23,26 @@ def tmlparams():
     # Define tasks
   basedir = "/"
   viperconfigfile=basedir + "/Viper-produce/viper.env"
+
+  def updateviperenv():
+  # update ALL
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viperviz/viper.env']
+    for mainfile in filepaths:
+        with open(mainfile, 'r', encoding='utf-8') as file: 
+          data = file.readlines() 
+        r=0 
+        for d in data:
+           if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
+             data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}".format(default_args['brokerhost'],default_args['brokerhost'])
+           if 'CLOUD_USERNAME' in d: 
+             data[r] = "CLOUD_USERNAME={}".format(default_args['cloudusername'])
+           if 'CLOUD_PASSWORD' in d: 
+             data[r] = "CLOUD_PASSWORD={}".format(default_args['cloudpassword'])
+                
+           r += 1
+        with open(mainfile, 'w', encoding='utf-8') as file: 
+          file.writelines(data)
+
 
   @task(task_id="getparams")
   def getparams(args):
@@ -40,12 +62,9 @@ def tmlparams():
      ti.xcom_push(key='VIPERHOST',value=VIPERHOST)
      ti.xcom_push(key='VIPERPORT',value=VIPERPORT)
      ti.xcom_push(key='HTTPADDR',value=HTTPADDR)
-     
-     BROKERHOST = args['brokerhost']
-     ti.xcom_push(key='BROKERHOST',value=BROKERHOST)
-     BROKERPORT = args['brokerport']
-     ti.xcom_push(key='BROKERPORT',value=BROKERPORT)
-        
+             
+     updateviperenv()
+    
      return [VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR]
      
      tmlsystemparams=getparams(default_args)
