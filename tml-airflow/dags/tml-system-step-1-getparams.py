@@ -3,6 +3,7 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
 from datetime import datetime
+from airflow.decorators import dag, task
 
 #Define default arguments
 default_args = {
@@ -12,10 +13,12 @@ default_args = {
 }
 
 # Instantiate your DAG
-dag = DAG (dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None,  catchup=False)
 
-# Define tasks
-def getparams():
+@dag(dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None,  catchup=False)
+def tmlparams():
+    # Define tasks
+  @task(task_id="getparams")
+  def getparams():
      VIPERHOST=""
      VIPERPORT=""
      HTTPADDR=""
@@ -29,13 +32,9 @@ def getparams():
           VIPERPORT = output.split(",")[1]
           
      return [VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR]
-
+     
+     tmlsystemparams=getparams()
+     if tmlsystemparams[1]=="":
+        print("ERROR: No host specified")
     
-VIPERMAINPARAMS = PythonOperator(
- task_id='tml_system_step_1_getparams',
- python_callable=getparams,
- dag=dag,
-)
-
-if VIPERMAINPARAMS[1]=="":
-    print("ERROR: Cannot read viper.txt: VIPERHOST is empty or HPDEHOST is empty")
+dag = tmlparams()
