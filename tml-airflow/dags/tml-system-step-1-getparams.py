@@ -5,15 +5,15 @@ from datetime import datetime
 from airflow.decorators import dag, task
 import os 
 
-#Define default arguments
+######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'owner': 'Sebastian Maurice',
  'start_date': datetime (2024, 6, 29),
  'retries': 1,
 }
 
+############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-
 @dag(dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None,  catchup=False)
 def tmlparams():
     # Define tasks

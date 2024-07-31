@@ -4,7 +4,6 @@ from airflow.operators.bash import BashOperator
 
 from datetime import datetime
 from airflow.decorators import dag, task
-import maadstml 
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
