@@ -12,7 +12,7 @@ default_args = {
 }
 
 # Instantiate your DAG
-dag = DAG (dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None)
+dag = DAG (dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None,  catchup=False)
 
 # Define tasks
 def getparams():
