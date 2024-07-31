@@ -6,9 +6,20 @@ from datetime import datetime
 
 #Define default arguments
 default_args = {
- 'owner': 'Sebastian Maurice',
- 'start_date': datetime (2024, 6, 29),
- 'retries': 1,
+ 'companyname': 'Otics',
+  'myname' : 'Sebastian',
+  'myemail' : 'Sebastian.Maurice',
+  'mylocation' : 'Toronto',
+  'replication' : 1,
+  'numpartitions': 1,
+  'enabletls': 1,
+  'brokerhost' : '',
+  'brokerport' : -999,
+  'microserviceid' : '',
+  'topics' : 'iot-raw-data,iot-preprocess-data,iot-preprocess2-data', # Separate multiple topics with comma
+  'start_date': datetime (2024, 6, 29),
+  'retries': 1,
+    
 }
 
 # Instantiate your DAG
