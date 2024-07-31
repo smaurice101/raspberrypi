@@ -30,7 +30,12 @@ def tmlparams():
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
-          
+
+     ti.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
+     ti.xcom_push(key='VIPERHOST',value=VIPERHOST)
+     ti.xcom_push(key='VIPERPORT',value=VIPERPORT)
+     ti.xcom_push(key='HTTPADDR',value=HTTPADDR)
+    
      return [VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR]
      
      tmlsystemparams=getparams()
