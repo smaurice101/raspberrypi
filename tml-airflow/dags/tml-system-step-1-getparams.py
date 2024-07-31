@@ -37,5 +37,5 @@ VIPERMAINPARAMS = PythonOperator(
  dag=dag,
 )
 
-if VIPERHOST=="":
+if VIPERMAINPARAMS[1]=="":
     print("ERROR: Cannot read viper.txt: VIPERHOST is empty or HPDEHOST is empty")
