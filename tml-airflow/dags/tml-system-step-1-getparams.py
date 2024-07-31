@@ -7,7 +7,7 @@ import os
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
- 'owner': 'Sebastian Maurice',
+ 'owner': 'Sebastian Maurice',  # <<< ******** change as needed 
  'start_date': datetime (2024, 6, 29),
  'brokerhost' : '127.0.0.1',  # <<<<***************** THIS WILL ACCESS LOCAL KAFKA - YOU CAN CHANGE TO CLOUD KAFKA HOST
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
@@ -15,6 +15,12 @@ default_args = {
  'cloudpassword' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API SECRET - OTHERWISE LEAVE BLANK   
  'retries': 1,
 }
+
+
+######################################################USER CHOSEN PARAMETERS ###########################################################
+
+
+
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
@@ -33,7 +39,7 @@ def tmlparams():
         r=0 
         for d in data:
            if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
-             data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}".format(default_args['brokerhost'],default_args['brokerhost'])
+             data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}".format(default_args['brokerhost'],default_args['brokerport'])
            if 'CLOUD_USERNAME' in d: 
              data[r] = "CLOUD_USERNAME={}".format(default_args['cloudusername'])
            if 'CLOUD_PASSWORD' in d: 
