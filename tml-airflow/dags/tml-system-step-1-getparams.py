@@ -17,7 +17,7 @@ default_args = {
 @dag(dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None,  catchup=False)
 def tmlparams():
     # Define tasks
-  basedir = os.environ['userbasedir']
+  basedir = "/"
   viperconfigfile=basedir + "/Viper-produce/viper.env"
 
   @task(task_id="getparams")
