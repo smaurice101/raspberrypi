@@ -5,6 +5,12 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime
 from airflow.decorators import dag, task
 
+##################################################  gRPC SERVER #####################################
+# This is a gRPCserver that will handle connections from a client
+# There are two endpoints you can use to stream data to this server:
+# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
+# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
+
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice',    
@@ -20,6 +26,16 @@ default_args = {
 }
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
+
+syntax = "proto3";
+
+message Jsondata {
+    string value = "";
+}
+
+service ProcessJson {
+    rpc SquareRoot(Number) returns (Number) {}
+}
 
 ######################################## START DAG AND TASK #############################################
 
