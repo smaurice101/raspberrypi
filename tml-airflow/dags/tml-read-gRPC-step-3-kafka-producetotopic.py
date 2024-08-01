@@ -1,11 +1,17 @@
+import maadstml
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
 from datetime import datetime
 from airflow.decorators import dag, task
+import grpc
+from concurrent import futures
+import time
+import tml_grpc_pb2_grpc as pb2_grpc
+import tml_grpc_pb2 as pb2
 
-##################################################  gRPC SERVER #####################################
+##################################################  gRPC SERVER ###############################################
 # This is a gRPCserver that will handle connections from a client
 # There are two endpoints you can use to stream data to this server:
 # 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
@@ -19,7 +25,9 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'inputfile' : '/rawdata/?'  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'gRPC_Port' : 9001,  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
+  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : -999, # <<< ********* do not modify          
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
@@ -27,16 +35,7 @@ default_args = {
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 
-syntax = "proto3";
-
-message Jsondata {
-    string value = "";
-}
-
-service ProcessJson {
-    rpc SquareRoot(Number) returns (Number) {}
-}
-
+    
 ######################################## START DAG AND TASK #############################################
 
 # Instantiate your DAG
@@ -46,14 +45,36 @@ def startproducingtotopic():
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
+
+  class TmlprotoService(pb2_grpc.TmlprotoServicer):
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def GetServerResponse(self, request, context):
+
+        # get the string from the incoming request
+        message = request.message
+        readata(message)
+        #result = f'Hello I am up and running received "{message}" message from you'
+        #result = {'message': result, 'received': True}
+
+        #return pb2.MessageResponse(**result)
     
-  
+  @task(task_id="serve")  
+  def serve():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    pb2_grpc.add_UnaryServicer_to_server(UnaryService(), server)
+    server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
+    server.start()
+    server.wait_for_termination()
+    
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
-     topicid=-999
+     topicid=args['topicid']
   
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=7000
+     delay=args['delay']
      enabletls = args['enabletls']
      identifier = args['identifier']
 
@@ -71,51 +92,23 @@ def startproducingtotopic():
     
     return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
-  @task(task_id="readdata")        
-  def readdata(params):
-      args = default_args    
-      basedir = '/'  
-      inputfile=basedir + args['inputfile']
-
+          
+  def readdata(valuedata):
+      args = default_args
       # MAin Kafka topic to store the real-time data
       maintopic = args['topics']
       producerid = args['producerid']
     
-      reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
- 
-      k=0
-
-      file1 = open(inputfile, 'r')
-      print("Data Producing to Kafka Started:",datetime.datetime.now())
-
-      while True:
-        line = file1.readline()
-        line = line.replace(";", " ")
-        # add lat/long/identifier
-        k = k + 1
-        try:
-          if not line or line == "":
-            #break
-            file1.seek(0)
-            k=0
-            print("Reached End of File - Restarting")
-            print("Read End:",datetime.datetime.now())
-            continue
-
-          jsonline = json.loads(line)
-          lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
-          line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
-
-          producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
+      try:
+          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
           # change time to speed up or slow down data   
           time.sleep(0.15)
-        except Exception as e:
+      except Exception as e:
           print(e)  
           pass  
   
-      file1.close()
     
-  readdata(gettmlsystemsparams())
+  serve()
     
 
 dag = startproducingtotopic()
