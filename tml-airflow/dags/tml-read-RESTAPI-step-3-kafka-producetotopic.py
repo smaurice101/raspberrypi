@@ -4,6 +4,8 @@ from airflow.operators.bash import BashOperator
 import json
 from datetime import datetime
 from airflow.decorators import dag, task
+from flask import Flask
+
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
@@ -13,7 +15,7 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'inputfile' : '/rawdata/?'  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'rest_port' : 9000,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
@@ -31,7 +33,11 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
     
-  
+  app = Flask(__name__)
+
+  app.run(port=default_args['rest_port'])
+
+
   @app.route('/jsondataline', methods=['POST'])
   def storejsondataline():
     jdata = request.get_json()
