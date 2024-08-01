@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-
+import json
 from datetime import datetime
 from airflow.decorators import dag, task
 
@@ -32,6 +32,18 @@ def startproducingtotopic():
   VIPERPORT=""
     
   
+  @app.route('/jsondataline', methods=['POST'])
+  def storejsondataline():
+    jdata = request.get_json()
+    readdata(jdata)
+
+  @app.route('/jsondataarray', methods=['POST'])
+  def storejsondataarray():    
+    jdata = request.get_json()
+    json_array = json.load(jdata)
+    for item in json_array: 
+      readdata(item)
+
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
      topicid=-999
@@ -56,48 +68,20 @@ def startproducingtotopic():
     return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
   @task(task_id="readdata")        
-  def readdata(params):
+  def readdata(valuedata):
       args = default_args    
-      basedir = '/'  
-      inputfile=basedir + args['inputfile']
 
       # MAin Kafka topic to store the real-time data
       maintopic = args['topics']
       producerid = args['producerid']
-    
-      reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
- 
-      k=0
-
-      file1 = open(inputfile, 'r')
-      print("Data Producing to Kafka Started:",datetime.datetime.now())
-
-      while True:
-        line = file1.readline()
-        line = line.replace(";", " ")
-        # add lat/long/identifier
-        k = k + 1
-        try:
-          if not line or line == "":
-            #break
-            file1.seek(0)
-            k=0
-            print("Reached End of File - Restarting")
-            print("Read End:",datetime.datetime.now())
-            continue
-
-          jsonline = json.loads(line)
-          lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
-          line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
-
-          producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
+      try:
+          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
           # change time to speed up or slow down data   
-          time.sleep(0.15)
-        except Exception as e:
+          #time.sleep(0.15)
+      except Exception as e:
           print(e)  
           pass  
   
-      file1.close()
     
   readdata(gettmlsystemsparams())
     
