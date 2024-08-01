@@ -14,8 +14,8 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'mqtt_broker' : '', # <<<--------Enter MQTT broker i.e. test.mosquitto.org
-  'mqtt_port' : '', # <<<--------Enter MQTT port i.e. 1883    
+  'mqtt_broker' : '', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
+  'mqtt_port' : '', # <<<******** Enter MQTT port i.e. 1883    
   'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#  
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
