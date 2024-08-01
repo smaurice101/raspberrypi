@@ -6,6 +6,12 @@ from datetime import datetime
 from airflow.decorators import dag, task
 from flask import Flask
 
+##################################################  REST API SERVER #####################################
+# This is a REST API server that will handle connections from a client
+# There are two endpoints you can use to stream data to this server:
+# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
+# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
+
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
@@ -15,7 +21,7 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'rest_port' : 9000,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
+  'rest_port' : 9001,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
