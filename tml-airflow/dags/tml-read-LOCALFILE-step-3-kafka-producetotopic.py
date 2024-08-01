@@ -14,6 +14,8 @@ default_args = {
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
   'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : -999, # <<< ********* do not modify  
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
@@ -34,10 +36,10 @@ def startproducingtotopic():
   
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
-     topicid=-999
+     topicid=args['topicid']
   
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=7000
+     delay = args['delay']
      enabletls = args['enabletls']
      identifier = args['identifier']
 

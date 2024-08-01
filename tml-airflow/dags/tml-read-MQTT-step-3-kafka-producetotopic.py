@@ -45,12 +45,13 @@ def startproducingtotopic():
     global data
     data=json.loads(msg.payload.decode("utf-8"))
     print(msg.payload.decode("utf-8"))
+    readdata()
     
   @task(task_id="mqttserverconnect")
-  def mqttserverconnect(args):
+  def mqttserverconnect():
      client = paho.Client(paho.CallbackAPIVersion.VERSION2)
-     mqttBroker = args['mqtt_broker'] 
-     mqttport = args['mqtt_port']
+     mqttBroker = default_args['mqtt_broker'] 
+     mqttport = default_args['mqtt_port']
      client.connect(mqttBroker,mqttport)
     
      if client:
@@ -77,58 +78,27 @@ def startproducingtotopic():
         print("ERROR:",e)
 
   @task(task_id="gettmlsystemsparams")         
-  def gettmlsystemsparams():
+  def gettmlsystemsparams(rc):
     VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
     VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
     VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
     
     return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
-  @task(task_id="readdata")        
-  def readdata(params):
-      args = default_args    
-      basedir = '/'  
-      inputfile=basedir + args['inputfile']
-
+  def readdata():
+      global data
       # MAin Kafka topic to store the real-time data
-      maintopic = args['topics']
-      producerid = args['producerid']
-    
-      reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
- 
-      k=0
-
-      file1 = open(inputfile, 'r')
-      print("Data Producing to Kafka Started:",datetime.datetime.now())
-
-      while True:
-        line = file1.readline()
-        line = line.replace(";", " ")
-        # add lat/long/identifier
-        k = k + 1
-        try:
-          if not line or line == "":
-            #break
-            file1.seek(0)
-            k=0
-            print("Reached End of File - Restarting")
-            print("Read End:",datetime.datetime.now())
-            continue
-
-          jsonline = json.loads(line)
-          lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
-          line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
-
-          producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
+      maintopic = default_args['topics']
+      producerid = default_args['producerid']
+      try:
+          producetokafka(data.strip(), "", "",producerid,maintopic,"",default_args)
           # change time to speed up or slow down data   
-          time.sleep(0.15)
-        except Exception as e:
+          #time.sleep(0.15)
+      except Exception as e:
           print(e)  
           pass  
-  
-      file1.close()
-    
-  readdata(gettmlsystemsparams())
+      
+  gettmlsystemsparams(mqttserverconnect())
     
 
 dag = startproducingtotopic()
