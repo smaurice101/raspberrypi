@@ -17,6 +17,8 @@ default_args = {
   'mqtt_broker' : '', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
   'mqtt_port' : '', # <<<******** Enter MQTT port i.e. 1883    
   'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#  
+  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : -999, # <<< ********* do not modify      
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
@@ -45,7 +47,7 @@ def startproducingtotopic():
     global data
     data=json.loads(msg.payload.decode("utf-8"))
     print(msg.payload.decode("utf-8"))
-    readdata()
+    readdata(data)
     
   @task(task_id="mqttserverconnect")
   def mqttserverconnect():
@@ -64,10 +66,10 @@ def startproducingtotopic():
     
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
-     topicid=-999
+     topicid=args['topicid']
   
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=7000
+     delay=args['delay']
      enabletls = args['enabletls']
      identifier = args['identifier']
 
@@ -85,13 +87,12 @@ def startproducingtotopic():
     
     return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
-  def readdata():
-      global data
+  def readdata(valuedata):
       # MAin Kafka topic to store the real-time data
       maintopic = default_args['topics']
       producerid = default_args['producerid']
       try:
-          producetokafka(data.strip(), "", "",producerid,maintopic,"",default_args)
+          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",default_args)
           # change time to speed up or slow down data   
           #time.sleep(0.15)
       except Exception as e:
