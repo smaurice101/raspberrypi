@@ -41,6 +41,7 @@ def startproducingtotopic():
   # setting callbacks for different events to see if it works, print the message etc.
   def on_connect(client, userdata, flags, rc, properties=None):
     print("CONNACK received with code %s." % rc)
+    client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)            
 
   # print which topic was subscribed to
   def on_subscribe(client, userdata, mid, granted_qos, properties=None):
@@ -48,10 +49,11 @@ def startproducingtotopic():
 
   data = ''
   def on_message(client, userdata, msg):
-    global data
-    data=json.loads(msg.payload.decode("utf-8"))
-    print(msg.payload.decode("utf-8"))
-    readdata(data)
+    maintopic=default_args['mqtt_subscribe_topic']    
+    if msg.topic == maintopic:
+        #print(msg.topic+" "+str(msg.payload))
+        data=json.loads(msg.payload.decode("utf-8"))
+        readdata(data)
     
   @task(task_id="mqttserverconnect")
   def mqttserverconnect():
@@ -63,7 +65,6 @@ def startproducingtotopic():
      if client:
        client.on_subscribe = on_subscribe
        client.on_message = on_message
-       client.subscribe(args['mqtt_subscribe_topic'], qos=1)            
        client.on_connect = on_connect
     
        client.loop_start()

@@ -38,6 +38,9 @@ class TmlgrpcClient(object):
 
 
 if __name__ == '__main__':
-    client = TmlgrpcClient()
-    result = client.get_url(message="SEND YOUR DATA HERE")
-    print(f'{result}')
+    try:
+      client = TmlgrpcClient()
+      result = client.get_url(message="SEND YOUR DATA HERE")
+      print(f'{result}')
+    except Exception as e:
+      print("ERROR: ",e)

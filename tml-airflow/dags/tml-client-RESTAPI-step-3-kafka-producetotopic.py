@@ -1,104 +1,27 @@
-import maadstml
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
-import json
-from datetime import datetime
-from airflow.decorators import dag, task
-from flask import Flask
-
-##################################################  REST API SERVER #####################################
-# This is a REST API server that will handle connections from a client
-# There are two endpoints you can use to stream data to this server:
-# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
-# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
-
-
-######################################## USER CHOOSEN PARAMETERS ########################################
-default_args = {
-  'owner' : 'Sebastian Maurice',    
-  'enabletls': 1,
-  'microserviceid' : '',
-  'producerid' : 'iotsolution',  
-  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
-  'identifier' : 'TML solution',  
-  'rest_port' : 9001,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
-  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : -999, # <<< ********* do not modify          
-  'start_date': datetime (2024, 6, 29),
-  'retries': 1,
+import requests
+ 
+# defining the api-endpoint
+rest_port = "9001"  # <<< ***** Change Port to match the Server Rest_PORT
+API_ENDPOINT = "http://localhost:{}/api/api_post.php".format(rest_port)
+ 
+def send_tml_data(data): 
+  # data to be sent to api
+ 
+  # sending post request and saving response as response object
+  r = requests.post(url=API_ENDPOINT, data=data)
+ 
+  # extracting response text
+  return r.text
     
-}
 
-######################################## USER CHOOSEN PARAMETERS ########################################
-
-######################################## START DAG AND TASK #############################################
-
-# Instantiate your DAG
-@dag(dag_id="tml_iotsolution_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml-iotsolution-step-3-kafka-producetotopic"], schedule=None,catchup=False)
-def startproducingtotopic():
-  # This sets the lat/longs for the IoT devices so it can be map
-  VIPERTOKEN=""
-  VIPERHOST=""
-  VIPERPORT=""
-    
-  app = Flask(__name__)
-
-  app.run(port=default_args['rest_port'])
-
-
-  @app.route('/jsondataline', methods=['POST'])
-  def storejsondataline():
-    jdata = request.get_json()
-    readdata(jdata)
-
-  @app.route('/jsondataarray', methods=['POST'])
-  def storejsondataarray():    
-    jdata = request.get_json()
-    json_array = json.load(jdata)
-    for item in json_array: 
-      readdata(item)
-
-  def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
-     inputbuf=value     
-     topicid=args['topicid']
-  
-     # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=args['delay']
-     enabletls = args['enabletls']
-     identifier = args['identifier']
-
-     try:
-        result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
-                                            topicid,identifier)
-     except Exception as e:
-        print("ERROR:",e)
-
-  @task(task_id="gettmlsystemsparams")         
-  def gettmlsystemsparams():
-    VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-    VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-    VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
-    
-    return [VIPERTOKEN,VIPERHOST,VIPERPORT]
-        
-  @task(task_id="readdata")        
-  def readdata(valuedata):
-      args = default_args    
-
-      # MAin Kafka topic to store the real-time data
-      maintopic = args['topics']
-      producerid = args['producerid']
-      try:
-          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
-          # change time to speed up or slow down data   
-          #time.sleep(0.15)
+def start():
+      ######### Modify datajson as you need ##############  
+      try:  
+        datajson = {"Type": "data1 data 2", "Value": "value 1"}      
+        ret = send_tml_data(datajson)
+        print(ret)  
       except Exception as e:
-          print(e)  
-          pass  
-  
-    
-  readdata(gettmlsystemsparams())
-    
-
-dag = startproducingtotopic()
+        print("ERROR: ",e) 
+        
+if __name__ == '__main__':
+    start()
