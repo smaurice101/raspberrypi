@@ -1,9 +1,10 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-
 from datetime import datetime
 from airflow.decorators import dag, task
+import paho.mqtt.client as paho
+from paho import mqtt
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
@@ -13,25 +14,53 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'inputfile' : '/rawdata/?'  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'mqtt_broker' : '', # <<<--------Enter MQTT broker i.e. test.mosquitto.org
+  'mqtt_port' : '', # <<<--------Enter MQTT port i.e. 1883    
+  'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#  
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
 }
 
-######################################## USER CHOOSEN PARAMETERS ########################################
-
 ######################################## START DAG AND TASK #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_iotsolution_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml-iotsolution-step-3-kafka-producetotopic"], schedule=None,catchup=False)
+@dag(dag_id="tml_mqtt_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml-mqtt-step-3-kafka-producetotopic"], schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
     
-  
+  # setting callbacks for different events to see if it works, print the message etc.
+  def on_connect(client, userdata, flags, rc, properties=None):
+    print("CONNACK received with code %s." % rc)
+
+  # print which topic was subscribed to
+  def on_subscribe(client, userdata, mid, granted_qos, properties=None):
+    print("Subscribed: " + str(mid) + " " + str(granted_qos))
+
+  data = ''
+  def on_message(client, userdata, msg):
+    global data
+    data=json.loads(msg.payload.decode("utf-8"))
+    print(msg.payload.decode("utf-8"))
+    
+  @task(task_id="mqttserverconnect")
+  def mqttserverconnect(args):
+     client = paho.Client(paho.CallbackAPIVersion.VERSION2)
+     mqttBroker = args['mqtt_broker'] 
+     mqttport = args['mqtt_port']
+     client.connect(mqttBroker,mqttport)
+    
+     if client:
+       client.on_subscribe = on_subscribe
+       client.on_message = on_message
+       client.subscribe(args['mqtt_subscribe_topic'], qos=1)            
+       client.on_connect = on_connect
+    
+       client.loop_start()
+    
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
      topicid=-999
