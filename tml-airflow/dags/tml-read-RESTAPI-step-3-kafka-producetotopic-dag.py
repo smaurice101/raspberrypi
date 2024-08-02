@@ -35,7 +35,7 @@ default_args = {
 ######################################## START DAG AND TASK #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_iotsolution_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml-iotsolution-step-3-kafka-producetotopic"], schedule=None,catchup=False)
+@dag(dag_id="tml-read-RESTAPI-step-3-kafka-producetotopic-dag", default_args=default_args, tags=["tml-read-RESTAPI-step-3-kafka-producetotopic-dag"], schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""
