@@ -101,4 +101,4 @@ def startproducingtotopic():
   readdata(gettmlsystemsparams())
     
 
-dag = startproducingtotopic()
+#dag = startproducingtotopic()

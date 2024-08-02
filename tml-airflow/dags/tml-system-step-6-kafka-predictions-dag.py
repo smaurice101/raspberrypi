@@ -13,7 +13,7 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'inputfile' : '/rawdata/?'  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
