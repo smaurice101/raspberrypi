@@ -1,0 +1,745 @@
+<html>
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+
+  <head>
+    <meta charset="UTF-8" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+    <title>VIPERviz Optimization Streaming</title>
+    <style>
+        #chart_div {
+            width: 100%;
+        }
+     
+        body {
+            
+            justify-content: center;
+            align-items: center;
+        }
+svg g text{
+    font-size:18px,
+	font-color: #FF0000
+ }
+ 
+    </style>
+ </head>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <body>
+<div class="row justify-content-md-center">
+    <div class="col-8" style="padding-top: 20px">
+        <h4><label id="maintitle"><b>VIPERviz Optimization Results For Data Stream:</b></label></h4>
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <div class="col-8">
+
+        <div id="selectSymbol">
+            <form id="idForm">
+			 <b> Last Kafka Access Time:</b></b> <label id="accesstime"></label><br><br>
+				<button id="start" name="submit">Start Streaming</button> <br><a id="Export" href="#">Download as CSV</a> | <a id="Export2" href="#">Download JSON</a>   <br>
+				<font size=2><b>Status:</b></font> <input type=text id="statustext" value="" style="font-size:10px;" size=100><p>
+				<p><label id="avgobjvalue"><b>Average Objective Function Value:</b></label>
+				<br><label id="optimizationlabel"><b>Number of Optimization Variables:</b></label>
+				<br><label id="optid"><b>Average Optimal Values Are Realized When:</b></label>
+				<div id="chart_div"></div>
+				  <div id="table_div"></div>
+				   <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea>
+            </form>
+        </div>
+        <div id="display"></div>
+    </div>
+</div>
+  
+  </body>
+   <!-- CONTAINER FOR CHART -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+    google.charts.load('current', {'packages':['table']});
+      google.charts.setOnLoadCallback(drawTable);
+     
+        var START=0;
+	  var ws;
+	  var topic="";
+	  var offset=-1;
+	  var append=1;
+	  var groupid="";
+	  var rollbackoffset=0;
+	  var topictype="";
+	  var vipertoken="";
+	  var consumerid="";
+	  var secure=0;
+	  var data;
+	  var datatbl;
+	  var chart;
+	  var dataintable=[];
+	  var datainchart=[];
+	  var kafkakeyarr=[];
+	  var totalpredictions=0;
+	  var jsonhist="";
+	  var objectivestr="";
+	  var dependentvar="";
+	  
+
+	   function saveDynamicDataToFile(topic) {
+
+            var userInput = document.getElementById("txtData").value;	
+            const textToBLOB = new Blob([userInput], { type: "text/plain;charset=utf-8" });
+           const sFileName = topic+"-Optimization-JSON.json";	   // The file to save the data.
+
+           let newLink = document.createElement("a");
+           newLink.download = sFileName;
+
+           if (window.webkitURL != null) {
+              newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+           }
+           else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+           }
+
+        newLink.click(); 
+		
+        }
+
+      var gaugeView;
+     function drawGauge(index) { 
+         gaugeView = new google.visualization.DataView(gaugeData);
+         gaugeView.setColumns([index]);
+         gauge = new google.visualization.Gauge();
+		 
+		 document.getElementById("chart_div").appendChild(gauge);
+		 
+        if (index > 0) {
+              gaugeOptions.max = gaugeOptions.max + 20;
+        }
+        gauge.draw(gaugeView, gaugeOptions);
+      }
+
+      function createdivs(dn){
+	    			//Create Divs for Guages
+			   var iDiv = document.createElement('div');
+	    	   iDiv.id = 'chart_div';
+		       iDiv.className = 'chart_div';	
+			   
+			   for (i = 0; i < dn; i++) {
+			     var innerDiv = document.createElement('div');
+			        innerDiv.id = "chart_div_"+i;	
+					let idv="chart_div_"+i;
+					var divOpen = '<div style="display:inline-grid;" id="'+idv+'">';
+					var divClose = '</div>';
+                    
+					$('#chart_div').append(divOpen +  divClose);
+              }				   
+	
+	  }
+	  
+      function drawChart(variables,sums, counts,mins,maxs) {
+        
+		var dataarr=[['Label', 'Value']];
+		var valarr=[];
+		var minv=0.0;
+        var maxv=0.0;
+		var data2;
+		 
+		
+		 
+		if (!variables){
+          var data2 = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Optimal Value 1', 0],
+            ['Optimal Value 2', 0]
+           ]);
+		}else{  
+		  createdivs(variables.length);
+		  
+		   let userbuf="<b>Optimal Objective Is Acheived When: </b>";
+		   let num=0;
+            let gaugeData = new google.visualization.DataTable();
+			gaugeData.addColumn( ['Label', 'Value']);
+				
+	      for (n in variables){
+		    num++;
+		    var v1=[""+num+"",parseFloat((sums[variables[n]]/counts[variables[n]]).toFixed(1))]
+		    valarr.push(parseFloat((sums[variables[n]]/counts[variables[n]]).toFixed(1)));
+		     dataarr.push(v1);
+			 if (num<=variables.length){
+			   if (num==variables.length){
+			     userbuf=userbuf + variables[n] +" is <font color=red size=5><b>" + parseFloat((sums[variables[n]]/counts[variables[n]]).toFixed(1)).toString() + "</b></font> ";
+			   }else{
+			     userbuf=userbuf + variables[n] +" is <font color=red size=5><b>" + parseFloat((sums[variables[n]]/counts[variables[n]]).toFixed(1)).toString() + "</b></font> <b><i>and</i></b> ";
+			   }
+			 }
+			 let cb="" + num
+			  gaugeData.addColumn('number', cb);
+			  if (num==1){
+			    gaugeData.addRows(1);
+			  }
+			   gaugeData.setCell(0, num-1);
+		   }
+		 
+		   
+		   document.getElementById('optid').innerHTML = userbuf.substring(0, userbuf.length-1);
+			
+			
+		   var vs=valarr.sort();
+           let ri=0;
+           let mi=mins;
+           let ma=maxs; 		   
+		   let minv=Object.values(mi);
+		   let maxv=Object.values(ma);
+						
+		   for (n in variables){
+		    		   
+ 	        let minvlow=parseFloat(minv[ri])-parseFloat(minv[ri])*.1; 
+		    let minvs=minvlow.toFixed(0);
+			
+            let maxvhigh=parseFloat(maxv[ri])+parseFloat(maxv[ri])*.1;		
+		    let maxvs=maxvhigh.toFixed(0);
+	    	
+		
+			gaugeView = new google.visualization.DataView(gaugeData);
+          gaugeView.setColumns([1]);
+		  let perguage=[['Label', 'Value']];
+		  ri++;
+		  perguage.push(dataarr[ri]);
+		       		  		  
+		  data2 = google.visualization.arrayToDataTable(perguage);
+           var options = {
+             width: 300, height: 180, min:minvs, max:maxvs,
+			 minorTicks:5,
+			 animation: {
+				duration: 400,
+				startup: true,
+				easing: 'inAndOut',
+				},
+				
+           };
+		    let cd=ri-1;
+		    let innerDiv = "chart_div_"+cd;	
+			
+			
+		    let gd=document.getElementById(innerDiv);
+		    var chart = new google.visualization.Gauge(gd);
+       //      console.log(data2);
+             chart.draw(data2, options);
+			 //chart.draw(gaugeView, options);
+			 
+			
+		   }
+         }
+	     		 
+      }
+
+       function getaveragevalues2(jsondata){
+	       var j=0;
+	       var avgobjvalue=0;
+		   var totind=0;
+		   
+		   let buf=document.getElementById("txtData").value;
+		   jsondata=JSON.parse(buf);
+		   
+	       if (jsondata){
+		       for (j in jsondata){
+    	        var v=jsondata[j].OptimizedValues.ObjectiveFunctionValue;
+				avgobjvalue = avgobjvalue + v;
+				totind++;
+			 }
+		   }
+	         avgobjvalue=avgobjvalue/totind;
+			 return avgobjvalue.toFixed(2)
+			
+	   }
+
+       function getminmax(sorted,uniquevars){
+	      
+		  let varminmax=[];
+		   var minvalue = {};
+		   var maxvalue = {};
+		   
+	      for (u in uniquevars){
+				  let n=0;
+			      sorted.forEach(function(item) {
+				  if (item[0]==uniquevars[u]){
+				    if(n==0) {
+						minvalue[item[0]] = item[1];
+					}else {
+					    
+						if (minvalue[item[0]] > item[1]){
+						  minvalue[item[0]]=item[1];
+						}
+					}
+					
+					n++;
+					}
+				  });
+				  
+				  n=0;
+				  
+				  
+			      sorted.forEach(function(item) {
+				  if (item[0]==uniquevars[u]){
+				   if(n==0) {
+						maxvalue[item[0]] = item[1];
+					}else {
+					    
+						if (maxvalue[item[0]] < item[1]){
+						  maxvalue[item[0]]=item[1];
+						}
+					}
+					
+					n++; 
+				    }
+				  });
+			
+			}
+			//console.log(maxvalue,minvalue);
+			 return [minvalue,maxvalue];
+	   }
+
+	   function getaveragevaluesforvariables(jsondata){
+	       var j=0;
+		   var k=0;
+	       var avgobjvalue=0;
+		   var totind=0;
+		   var mainarr=[];
+		   var uniquevars=[];
+		   var sorted;
+	
+        	let bufjson=document.getElementById("txtData").value;
+		   jsondata=JSON.parse(bufjson);
+	
+	       if (jsondata){
+		     for (j in jsondata){
+		       for (k in jsondata[j].OptimizedValues.OptimalValues){
+          //get the fields 
+		          var buf=JSON.stringify(jsondata[j].OptimizedValues.OptimalValues[k]);
+				  var res = buf.split(":");
+				 // res = buf.substring(2, buf.length-2);
+				  var varname=res[0].substring(2, res[0].length-1);
+				  var varvalue=res[1].substring(0, res[1].length-1);
+				  var iarr=[varname,parseFloat(varvalue)];
+				  mainarr.push(iarr);
+			   }
+			 }
+		   }
+		   if (mainarr.length>0){
+		       sorted = mainarr.sort(function(a,b) { 
+				if(a[0] < b[0]) {
+					return -1;
+				} else {
+					return 1;
+				}
+				return 0; 
+			  
+			  });
+			  
+			//  console.log(sorted);
+			  
+			  
+			  var sum = {};
+			      sorted.forEach(function(item) {
+				  if(sum[item[0]] === undefined) {
+						sum[item[0]] = 0;
+					}
+
+					sum[item[0]] += item[1];  
+				  });
+				  
+				// Count variables
+				 var countsum = {};
+			      sorted.forEach(function(item) {
+				  if(countsum[item[0]] === undefined) {
+						countsum[item[0]] = 0;
+					}
+
+					countsum[item[0]] += 1;  
+				  });
+				  
+	            var keys = Object.keys(countsum);
+			    // alert(keys);
+	
+			     for (k in keys){
+				   uniquevars.push(keys[k]);
+			     }
+		   }
+		  	// console.log(uniquevars,sum,countsum);
+			minmax=getminmax(sorted,uniquevars);
+			// var values = Object.values(minmax[0]);
+			
+			 return [uniquevars,sum,countsum,minmax[0],minmax[1]];
+			
+	   }
+	   
+	   function getvariables(jsondata){
+	     var keybuf="";
+		 var keybufvalues="";
+		 var k=0;
+		 var total=0;
+		  		   
+			 if (jsondata){
+		      var keys = Object.keys(jsondata);
+			  for (k in keys){
+			       total++;
+				   var buf=JSON.stringify(Object.keys(jsondata[k]));
+				    res = buf.substring(2, buf.length-2);
+				   
+				   keybuf=keybuf + res + ";";
+				   keybufvalues=keybufvalues+JSON.stringify(jsondata[k]) +";";
+			  }
+			 }
+			 
+	      return [keybuf,keybufvalues,total];
+	   }
+	   
+	    function getconstraints(jsondata){
+	     var keybuf="";
+		 var keybufvalues="";
+		 var j=0; 
+			 if (jsondata){
+			   for (j in jsondata){
+				   keybuf=keybuf + "{'Variable':'"+jsondata[j].Variable + "', 'Min':"+ jsondata[j].Min + ", 'Max':"+ jsondata[j].Max + "};"; 
+			  }
+			 }
+	      return keybuf
+	   }
+	   
+       function drawChart2(jsondata,topic) {
+
+            var r=0;
+			var j=0;
+			var avgobjvalue=0;
+			curTime = new Date();
+	    	
+         if (jsondata){
+		   uv=getaveragevaluesforvariables(jsondata);
+		   
+		    avgobjvalue=getaveragevalues2(jsondata);
+			drawChart(uv[0],uv[1],uv[2],uv[3],uv[4]);
+		   
+			document.getElementById('avgobjvalue').innerHTML = "<b>Average Objective Function Value: </b>"+"<font size=5 color=red><b>"+avgobjvalue+"</b> (" + objectivestr + ")</font>";
+			document.getElementById('accesstime').innerHTML = curTime;
+		  //ADD previous data
+	  	   if  (dataintable.length>0 || append==0){
+		      if (datatbl){
+			      datatbl = new google.visualization.DataTable(); //clear the table
+				  datatbl.addColumn('string', 'Date/Time');
+		          datatbl.addColumn('number', 'Unixtime');
+			      datatbl.addColumn('string', 'Objective');
+		          datatbl.addColumn('number', 'ObjectiveFcnValue');
+			      datatbl.addColumn('string', 'Variables');
+		   
+		         datatbl.addColumn('string', 'Optimal Value');
+		         datatbl.addColumn('string', 'Constraint_Min_Max');
+		    
+		         datatbl.addColumn('string', 'Kafkakey');
+		         datatbl.addColumn('number', 'Offset');
+		         datatbl.addColumn('number', 'Partition');
+		   
+		         datatbl.addColumn('string', 'ConsumeFrom');
+		         datatbl.addColumn('number', 'Usedeploy');
+			
+			  
+		      for (r in dataintable){
+		            drawTable(dataintable[r][0],dataintable[r][1],dataintable[r][2],dataintable[r][3],dataintable[r][4],dataintable[r][5],dataintable[r][6],dataintable[r][7],dataintable[r][8],dataintable[r][9],dataintable[r][10], dataintable[r][11]);
+			   }
+			  }
+		  }
+		  var i=0;
+		  
+		  var partitionarr=[];
+		  do {
+             var text = "LastOffset_partition_"+i;
+			 var val=jsondata[text];
+			 if (val){
+			   partitionarr.push(val);
+			 }
+			 i++;
+            } while(val)
+			
+		  ///////////////////////////////////START mainloop
+		  i=0;
+			  
+		  for (j in jsondata.TopicReads){
+          //get the fields 
+		     var kafkakey=jsondata.TopicReads[j].AdditionDetails.kafkakey;
+  		 
+		     if (kafkakey && !kafkakeyarr.includes(kafkakey) && kafkakey.length>0){		    
+		        kafkakeyarr.push(kafkakey);
+
+				jsonhist=jsonhist+JSON.stringify(jsondata.TopicReads[j]) +",";
+
+				var createdon=jsondata.TopicReads[j].UserDetails.CreatedOn;	
+				var unixtime=jsondata.TopicReads[j].UserDetails.Unixtime;
+				var objective=jsondata.TopicReads[j].OptimizedValues.Objective;
+				var objectivevalue=jsondata.TopicReads[j].OptimizedValues.ObjectiveFunctionValue;
+				 objectivestr=objective;
+				 dependentvar=jsondata.TopicReads[j].OptimizedValues.DependentVariable;
+				var constraints=getconstraints(jsondata.TopicReads[j].Constraints);
+				var allvariables=getvariables(jsondata.TopicReads[j].OptimizedValues.OptimalValues);
+				var variables=allvariables[0];
+				var res = variables.split(";");
+				let varbuf="";
+				i=0;
+				for (p in res){
+			     i++;
+				 if (i<res.length){
+				 varbuf=varbuf +  "<b><font size=5 color=red>"+i +"</font></b>" + ". " + res[p]+", ";
+				 }
+				}
+				varbuf=varbuf.substring(0,varbuf.length-2);
+				
+				var optvariables=allvariables[1];
+				var totvar=allvariables[2];
+				
+				document.getElementById('optimizationlabel').innerHTML = "<b>" + totvar + " Optimization Variables: </b>"+ varbuf;
+				
+							
+				var offset=jsondata.TopicReads[j].Offset;
+				var partition=jsondata.TopicReads[j].Partition;			
+				var consumefrom=jsondata.TopicReads[j].AdditionDetails.Consumefrom;
+		
+				var usedeploy=jsondata.TopicReads[j].UserDetails.Usedeploy;
+				
+				var arr=[createdon,unixtime,objective,objectivevalue,variables,optvariables,constraints,kafkakey,offset,partition,consumefrom,usedeploy];
+				dataintable.push(arr);
+				drawTable(createdon,unixtime,objective,objectivevalue,variables,optvariables,constraints,kafkakey,offset,partition,consumefrom,usedeploy);
+		
+			}
+			}
+		  
+		  }		
+      }
+
+		function drawTable(createdon,unixtime,objective,objectivevalue,variables,optvariables,constraints,kafkakey,offset,partition,consumefrom,usedeploy){
+		     
+          	 var arr=[createdon,unixtime,objective,objectivevalue,variables,optvariables,constraints,kafkakey,offset,partition,consumefrom,usedeploy];
+			 if (!datatbl){
+			 datatbl = new google.visualization.DataTable(); //clear the table
+	    	 datatbl.addColumn('string', 'Date/Time');
+		    datatbl.addColumn('number', 'Unixtime');
+			 datatbl.addColumn('string', 'Objective');
+		     datatbl.addColumn('number', 'ObjectiveFcnValue');
+			  datatbl.addColumn('string', 'Variables');
+		   
+		   datatbl.addColumn('string', 'Optimal Value');
+		   
+		   
+		   datatbl.addColumn('string', 'Constraint_Min_Max');
+		   
+		   datatbl.addColumn('string', 'Kafkakey');
+		   datatbl.addColumn('number', 'Offset');
+		   datatbl.addColumn('number', 'Partition');
+		   
+		   datatbl.addColumn('string', 'ConsumeFrom');
+		    datatbl.addColumn('number', 'Usedeploy');
+		
+		     }
+			 
+			 if (kafkakey){
+			  datatbl.addRows([arr]);
+			 }
+		    
+			  var formatter = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:0});
+      	     formatter.format(datatbl, 1);
+		
+		    var table = new google.visualization.Table(document.getElementById('table_div'));
+           datatbl.sort({column: 1, desc: true});
+ 		     table.draw(datatbl, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',allowHtml: true});
+		    document.getElementById("txtData").value="["+jsonhist.slice(0,-1) + "]";
+		}
+
+		
+	   function streamLiveKafkaData(){
+
+        if ("WebSocket" in window) {
+
+            // Let us open a web socket
+			
+            var url = window.location.host;
+            console.log(url);
+		    var urlParams = new URLSearchParams(window.location.search);
+			var keys = urlParams.keys();
+			var entries = urlParams.entries();
+			for(pair of entries) { 			
+			    if (pair[0]=="topic"){
+				  topic=pair[1];
+				   document.getElementById('maintitle').innerHTML = "<b>VIPERviz Optimization Results For Data Stream: <font color=red><i>"+ topic + "</i></font></b>";	
+				}
+				
+				if (pair[0]=="topictype"){
+				  topictype=pair[1];
+				} 
+				if (pair[0]=="secure"){
+				  secure=pair[1];
+				}
+				if (pair[0]=="vipertoken"){
+				  vipertoken=pair[1];
+				}				
+				
+				if (pair[0]=="consumerid"){
+				  consumerid=pair[1];
+				}	
+
+               if (pair[0]=="offset"){
+				  offset=pair[1];
+				}	
+				
+				if (pair[0]=="rollbackoffset"){
+				  rollbackoffset=pair[1];
+				}	
+
+				if (pair[0]=="groupid"){
+				  groupid=pair[1];
+				}	
+				if (pair[0]=="append"){
+				  append=pair[1];
+				}	
+
+				
+			}
+			if (secure==0){
+             ws = new WebSocket("ws://"+url+"/ws");
+            }else{
+			    ws = new WebSocket("wss://"+url+"/ws");
+			}
+            ws.onmessage = function(event) {
+                curTime = new Date();
+				var eventdata=`${event.data}`;
+			
+				var maindata=eventdata.replace(/\\"/g,'"');
+			   maindata=maindata.substr(1, maindata.length-3);
+			   
+			 // console.log(maindata);
+				
+				var obj = JSON.parse(maindata);
+				 if (obj.ERROR){
+				   $("#statustext").val("Websocket ERROR.."+obj.ERROR);
+				   ws.close(1000);
+				   alert(obj.ERROR);
+				   ws=null;
+				    $("#start").attr("disabled", false);
+					     $("#start").html("Start Streaming");
+						 return
+				   }
+				   
+                if (START==0){
+				  if (ws){
+					ws.close(1000);
+					}
+				   ws=null;
+				   return;
+				}
+				
+				if (append==0){
+					dataintable=[];
+					datainchart=[];
+					kafkakeyarr=[];
+					jsonhist="";
+					datatbl=null;
+				}
+				drawChart2(obj,topic);
+				
+            };
+
+            ws.onclose = function(event) {
+                if (event.wasClean) {
+                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                } else {
+                    console.log('[close] Connection died');
+					 
+                }
+				if (ws){
+					ws.close(1000);
+					}
+				ws=null;
+				 $("#start").attr("disabled", false);
+					   $("#statustext").val("Websocket closed");
+					     $("#start").html("Start Streaming");
+            };
+            ws.onopen = function(error) {
+			   
+			    var sendbuffer="{\"Topic\":\""+topic +"\",\"Topictype\":\""+topictype + "\",\"Secure\":"+secure +",\"Vipertoken\":\""+vipertoken+"\",\"Consumerid\":\""+consumerid + "\",\"Offset\":\""+offset + "\",\"RollbackOffset\":\""+rollbackoffset+"\",\"Groupid\":\""+groupid+"\"}";
+                 ws.send(sendbuffer);
+				 
+				 
+				
+            };
+			
+            ws.onerror = function(error) {
+		    	if (ws){
+					ws.close(1000);
+					}
+                console.log(`[error] ${error.message}`);
+				$("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
+            };
+			
+			
+
+        } else {
+
+            // The browser doesn't support WebSocket
+            console.log("WebSocket NOT supported by your Browser!");
+        }
+    }
+	
+      $('#Export2').click( function(e) {
+	     e.preventDefault(); /*your_code_here;*/ 
+		 saveDynamicDataToFile(topic);
+		 
+		 return false; 
+	} );
+ 	
+		$('#Export').click(function () {
+	  if (topic.length>0){
+	     var headerRow = "";
+         var number_of_columns = datatbl.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += datatbl.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(datatbl);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = topic + "-Optimization-data.csv";
+        this.target = '_blank';
+	  }else{
+	      alert("Start streaming first");
+       }	  
+    });
+	
+		$("#idForm").submit(function(e) {
+	  if (ws && START==1){
+	   ws.close(1000);
+	   ws = null;
+	   e.preventDefault(); // avoid to execute the actual submit of the form.
+	   START=0;
+	   $("#start").html("Start Streaming");
+	   $("#start").attr("disabled", true);
+	    $("#statustext").val("WEBSOCKET CLOSING...");
+	   
+	  }else{
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+		START=1;
+        $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka messages from VIPERviz (RUNNING...)");
+
+		 $("#start").html("Stop Streaming");
+		 streamLiveKafkaData();
+		
+		}
+       
+    });
+    </script>
+ 
+</html>

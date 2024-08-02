@@ -1,0 +1,3480 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+<head>
+    <meta charset="UTF-8" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+    <title>NFT Real-Time Price Predictions Dashboard</title>
+    <style>
+		.clear { clear:both; }
+
+	.loader {
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid blue;
+  border-bottom: 7px solid blue;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+h1 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: 100; line-height: 10.4px; } h4 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 1px; font-style: bold; font-variant: normal; font-weight: 400; line-height: .4px; } p { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
+
+.a {
+    background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+}
+.b {
+         background: linear-gradient(to top left, #ffffff 0%, #ccffff 100%);
+
+
+}
+ 
+      #gauge_avgrisk {
+        width:370px; height:380px;
+		
+      }
+        #gauge_currrisk {
+        width:260px; height:150px;
+        display: inline-block;
+        margin: 1em;
+      }
+
+        #chart_div {
+              float: left;
+        }
+        
+        body {
+            
+            justify-content: center;
+            align-items: center;
+        }
+.orange-background {
+   background-color: orange;
+  }
+
+ .orchid-background {
+  background-color: orchid;
+ }
+
+.beige-background {
+ background-color: beige;
+  }		
+ .columnTitle {
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-size: 14px; 
+          color:white;
+          background-color: #607A75
+      } 
+.grid {
+  display: grid;
+  grid-gap: var(--card-padding);
+  margin: 0 auto;
+  max-width: 60em;
+  padding: 0;
+ 
+  @media (min-width: 42em) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+th, td {
+  padding: 5px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: var(--card-radius);
+  position: relative;
+  
+  &:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.plan-type {
+  color: var(--color-green);
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1em;
+}
+ .btnsave{
+       width: 50px;
+	   height: 25px;
+	   background: linear-gradient(to bottom right, #609931, #87bc27);
+	   color: white;
+	   align: top;
+    }
+	
+.padding
+{
+padding: 4px 5px 2px 2px;
+}	  
+    </style>
+<script type="text/javascript" src="/js/attention.js"></script>   
+
+<script type="text/javascript" src="/js/r.min.js"></script>   
+
+<script type="text/javascript" src="/js/justgage.js"></script>   
+<script type="text/javascript" src="/js/justgage.min.js"></script>   
+
+    <script>
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+        )
+    </script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+
+function image(thetype,mess) {
+        
+		var titletext="";
+		var helptext="";
+		
+		if (thetype=="gauge"){
+		   titletext="Crypto Market Risk Meter";
+		    helptext="The Crypto Risk Meter shows the average liquidity risk percentage across time windows. The percentage is computed by averaging the risk across all major crypto exhanges by looking at many factors such as bid-ask spreads, volume size, and other factors."; 
+		}else if (thetype=="block"){
+           titletext="XENESE Block Chain Chart";
+		    helptext="Every TML NFT Price prediction is written to the block chain by XENESE in a Distributed Crypto Market Risk Ledger.  The predictions are processed by the XENESE workflow and can be integrated with downstream organizational and business systems."; 
+		
+		}else if (thetype=="barchart"){
+           titletext="Crypto Risk Monitoring Bar Chart";
+		    helptext="The Crypto Risk Monitoring Bar Chart shows the count of Total Asks and Bids in the data stream (GREY Bar), against the Bids that are above the upper bound (BLUE Bar)."; 
+		
+		}else if (thetype=="intensity"){
+           titletext="Failure Intensity Curve With Annotations";
+		    helptext="The Failure Intensity Curve With Annotations shows the intensity of the symptoms' values. The Intensity curve is computed by first determining which symptoms are out of bound (or higher than normal), if symptoms are higher than normal, then a delta value is computed by subtracting the computed value from the mean value of the symptom.  The absolute values of the deltas are then summed up and plotted on the intensity curve.  For example, if monitoring body temperature (BT) and heart rate (HR), and the computed value of BT=100, and HR=120, and the upper bound for BT is 98, and upper bound for HR is 80, both BT and HR are out of bounds.  If the mean value of BT is 97, and mean value for HR is 70, then ONE point on the intensity curve is the absolute value of: |100-97| + |120-70| = 53.  The unit of measurements is similar to a basis point to see how much this value differs from 0.  The larger this value differs from 0, the more intense the symptoms in the population and higher the Failure risk for a particular Disease emerging.  Each point on the intensity curve has its own ANNOTATION with all the details associated with the point."; 
+		
+		}else if (thetype=="table"){
+		  titletext="Table Data";
+		    helptext="The data in the table shows the preprocessed values for every device used in the ML model.  These preprocessed values are the independent variables and are used to create the dependent variable for the logistic regression.  KAFKAKEY is a unique hash key for the Kafka message.   OFFSET/PARTITION show the actual location of the PROCESSED message in Kafka.  By PROCESSED we mean the MAX and AVG value process.  Time Window Start and End are the start and end of the Time Sliding Window in the data stream that is processed to compute MAX and AVG for 20 devices.  Date/Time is when this processing took place by VIPER."; 
+		
+		}else if (thetype=="healthrisk"){
+		  titletext="Real-Time Market Risk";
+		    helptext="The Risk graph plots the real-time liquidity Risk percentage over time to show how the risk is trending."; 
+		
+		}else if (thetype=="ml"){
+		  titletext="Transactional Machine Learning Models";
+		    helptext="These are the average ETH prices for the NFTs from their individual ML models."; 
+		
+		}else if (thetype=="mlprob"){
+		  titletext="Transactional Machine Learning Models";
+		    helptext="These are the average probabilities of ETH price direction movements for the NFTs. "; 
+		
+		}
+		
+		
+		
+          new Attention.Prompt({
+                    title: titletext,
+                    content: helptext,
+                });
+			}
+</script>	
+<link rel="stylesheet" href="/leaflet/leaflet.css" />
+
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+<link href="/css/tilescrypto.css" rel="stylesheet">
+<link href="/css/attention.css" rel="stylesheet">
+<link href="/css/button.css" rel="stylesheet">
+<link href="/css/textbox.css" rel="stylesheet">
+<link href="/css/table3d.css" rel="stylesheet">
+<link href="/css/dropdown.css" rel="stylesheet">
+<link href="/css/component-custom-switch.css" rel="stylesheet">
+
+<style>
+
+ #map {
+        position: relative;
+        width: 100%;
+        height: 500px;
+      }
+</style>
+<body>
+<center><img src='./OTICS-New-Logo-Black.png' width=150 height=70></center>
+<table style="width: 2250px;height: 80px;    background: linear-gradient(135deg,  rgba(51, 0, 0,1) 0%,rgba(0, 128, 255,1) 50%,rgba(0, 128, 255,1) 51%,rgba(51, 0, 0,1) 100%);">
+<tr>
+<td>
+<div class="row justify-content-md-center">
+	<center>
+    <div class="col-12" style="padding-top: 1px">
+        <label id="maintitle"><b><h1><i><font color='white'><b>NFT Real-Time (Ethereum) Price Predictions Dashboard</b></h1><h3><i>Integrated with Blockchain Using KAFKA/TML/XENESE</font></i></h3></b></label>
+    </div>
+   </center>
+</div>
+
+<div class="row justify-content-md-center">
+    <div class="col-12">
+
+        <div id="selectSymbol">
+            <form id="idForm">
+							
+
+		<h6>
+			 <b><font color='white'>Last Kafka Access Time:</font></b></b> <label id="accesstime"></label><br>
+			 <b><font color='white'>Kafka Cluster:</font></b> <label id="kafkacluster"></label><br>			
+			</h6>
+		 
+				<div class="loader" id="loaderdiv" style="display:none;float: left"></div>
+             
+				<button id="start" class="btn btn1" name="submit">Start Streaming</button>  
+        
+		<label id="statustext"></label>
+	<div style="float: right;display:block;" class="custom-switch custom-switch-label-io">
+  <input class="custom-switch-input" id="example_1" type="checkbox" onchange="toggleDiv();">
+  <label class="custom-switch-btn" for="example_1"></label>
+</div>	
+		
+				</td>
+				</tr>
+			</table>				
+				
+			
+		
+		<table border=0 style='width: 500px;height: 400px; vertical-align: top;'>
+				<tr>		
+				
+				<td style="text-align: left; vertical-align: top;">
+				<table valign='top'  id="machinelearning" style="width: 100%; height: 100%;display:none; border-spacing: 10px;">
+				<tr>
+			<!-- ML models -->	
+				<td valign='top' >
+			   <div class="tile wide quote">
+               <div class="header">
+               <div id="totsymptoms" class="count">0</div>
+               <div class="title">Machine Learning Models Auto-Created</div>
+			   <br>
+			   <img src='./help.png' width=30 height=27  class="padding"  onclick="image('ml','')">	
+    			<center>							
+               </div>
+				</div>
+								   <div class="clear"></div>
+				   				<center>
+				 <div id="downloadpatientdataurl"></div>
+				 </center>
+				   <div class="clear"></div><br>
+
+                 <div id="barchart_div" style="text-align: top; vertical-align: top;width:100%;height: 370px" ></div>				 
+				
+<!--               <table >				
+				 <tr>
+				 <td>
+				 	<img src='./help.png' width=30 height=27  style="float: top;" onclick="image('barchart','')">	
+				 <div id="barchart_div" style="text-align: left; vertical-align: middle;width:300px;height: 450px" ></div>				 
+				 </td>
+				 <td>
+		        <div id="barchartlabel_div" style="text-align: left; vertical-align: left;width:100px;overflow-y:scroll;" ></div>				 
+				 
+				 </td>
+				 </table>
+	-->			 
+				
+		       </td>
+			   <!--       END                        -->
+	<td valign='top' >
+			   <div class="tile wide quote">
+               <div class="header">
+               <div id="totsymptomslog" class="count">0</div>
+               <div class="title">ML Probability Models Auto-Created</div>
+			   <br>
+			   <img src='./help.png' width=30 height=27  class="padding"  onclick="image('mlprob','')">	
+    			<center>							
+               </div>
+				</div>
+				
+								   <div class="clear"></div>
+				   				<center>
+				 <div id="downloadpatientdataurllog"></div>
+				 </center>
+				   <div class="clear"></div><br>
+                 <div id="barchartlog_div" style="text-align: top; vertical-align: top;width:300px;height: 370px" ></div>				 
+				
+<!--               <table >				
+				 <tr>
+				 <td>
+				 	<img src='./help.png' width=30 height=27  style="float: top;" onclick="image('barchart','')">	
+				 <div id="barchart_div" style="text-align: left; vertical-align: middle;width:300px;height: 450px" ></div>				 
+				 </td>
+				 <td>
+		        <div id="barchartlabel_div" style="text-align: left; vertical-align: left;width:100px;overflow-y:scroll;" ></div>				 
+				 
+				 </td>
+				 </table>
+	-->			 
+				
+		       </td>			   
+			   <!--       END                        -->
+			   
+			   
+			   </tr>
+			   </table>
+			   
+			   </td>
+			   
+			   
+			   <!--------------------------------------- -->
+			   <td  valign='top' style="width: 420px; height: 100%" >				
+				<table id="xenese" valign='top' style="width: 450px; height: 100%;display:none">
+				<tr>
+				<td valign='top' width=450>
+				 <center>
+			<div class="tile wide block" style="width: 400px; height: 100%">
+    <div class="header" >
+      <div id="blockcount" class="count"  >TBD</div>
+      <div class="title" >NFT Price Prediction Blocks Created in XENESE</div>
+	  <br>
+<img src='./help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('block','')">				
+	 <center><a id="Exportblockchain" href="#"> Download Blockchain Data </a> </center>
+
+    </div>
+  </div><br>
+				  <div id="blockchain" style="text-align: right; width:100%;height: 500;overflow-y:auto;  padding-left: 15px;  padding-top: 25px;"></div>
+				  
+				
+                   </center>				 
+				</td>
+			   </tr>
+			   </table>
+			   </td>
+			   
+			<!-- ================================================================= -->   
+				<td  valign='top' >				
+				<table valign='top' style="width: 300px; height: 100%; display:none">
+				<tr>
+				<td valign='top' >
+				 <center>
+			<div class="tile wide resource" >
+    <div class="header" >
+      <div id="avgrisk" class="count" >TBD</div>
+      <div class="title" >Avg. Market Risk</div>
+    </div>
+  </div>
+				 
+<img src='./help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('gauge','')">				
+
+				  <div id="gauge_avgrisk" ></div><br><br><br>
+						  <label id="currentfraud"><font size=2><b>Liquidity Risk</b></font></label><br>
+				  <div id="gauge_currrisk"></div>
+				  
+				
+                   </center>				 
+				 <div id="gaugehealthrisk2_div" ></div>				 				 
+				</td>
+			   </tr>
+			   </table>
+			   </td>
+			
+				<td  >	
+				<table>
+				<tr>
+				<td>
+				<table id="maptable" border=0 style="width: 2210px;height: 100%; vertical-align: top;float: left">
+
+				 <tr>
+				
+				<td valign='top' >	
+				
+	
+				<center> 
+
+<div class="selectdiv" > 
+  <label>Save Price Data For:
+        <select id="riskhours" valign="center" onchange="getSavehours(this.value,'hours');">
+          <option selected> Select Hours </option>
+          <option value=1>1 hour</option>
+          <option value=2>2 hours</option>
+          <option value=3>3 hours</option>
+          <option value=4>4 hours</option>
+          <option value=5>5 hours</option>
+          <option value=6>6 hours</option>
+          <option value=7>7 hours</option>
+          <option value=8>8 hours</option>
+          <option value=9>9 hours</option>
+          <option value=10>10 hours</option>
+          <option value=11>11 hours</option>
+          <option value=12>12 hours</option>
+          <option value=13>13 hours</option>
+          <option value=14>14 hours</option>
+          <option value=15>15 hours</option>
+          <option value=16>16 hours</option>
+          <option value=17>17 hours</option>
+          <option value=18>18 hours</option>
+          <option value=19>19 hours</option>
+          <option value=20>20 hours</option>
+          <option value=21>21 hours</option>
+          <option value=22>22 hours</option>
+          <option value=23>23 hours</option>
+          <option value=24>24 hours</option>
+		  
+      </select> </label>
+<label>&nbsp;&nbsp;<input type="input" class="form__field" width=70 placeholder="Then Enter Emails to Send Data File (Separate with Comma)"
+	  name="Email" id='riskemails'  /> | <input type="input" class="form__field" width=50 placeholder="Enter Kafka Topic To Save Results" name="Kafka" id='kafkatopic'  />
+	  <input type='button' id="emailsave"  class="btnsave" value="Save" name="Save" onclick="saveEmails(riskemails.value);">&nbsp;&nbsp;<input type='checkbox' id='backcheck' onchange="saveCheckbox(this,'background');"> Background
+</label>
+</div>
+	 <!--  <div id="downloadpatientdataurl"></div>  -->
+
+			</center>				
+			<!--	 <div id="riskchart_div" style="height: 170px;display: inline-block; text-align: top;vertical-align: top;"></div>	-->
+				  
+				 </td>
+				 				 
+				 </tr>  
+				
+				<tr>				
+				<center>
+			<div class="tile wide job" style="width: 320px; height: 400">
+    <div class="header" style="width: 320px; height: 100%" >
+      <div id="totrecs" class="count">0</div>
+      <div class="title">Total Kafka Messages Processed</div>
+    </div>
+  </div>
+			<div class="tile wide job" style="width: 320px; height: 400">
+    <div class="header" style="width: 320px; height: 100%" >
+      <div id="totissues" class="count">0</div>
+      <div class="title">Percent Prices Trending Upward</div>
+    </div>
+  </div>
+			<div class="tile wide job" style="width: 320px; height: 400">
+    <div class="header" style="width: 320px; height: 100%" >
+      <div id="tottime" class="counttimewindow"><br><br></div>
+      <div class="title">Kafka Time Window Analysed</div>
+    </div>
+  </div>
+    </center>
+				<td  valign='top' style="height:500px">	
+				<!-- <div id="chart_div" style='width: 1250px; height: 170px;vertical-align: top;'></div>	-->
+			
+				
+                 <div id="heatmaptablechart" ></div>
+				 
+								
+				 </td>
+				
+				</tr>
+				 				 
+				 </table>
+				 </td>
+				 </tr>
+				 </table>
+				 </td>
+				 
+                 </tr>
+				 <tr>				 
+				 <td colspan=4>
+				 <table style="width: 100%;">
+                 
+				 
+				 <tr>
+				 <td>
+				 <img src='./help.png' width=30 height=27 class="padding" style="float: top;" onclick="image('table','')">	
+				 <center><a id="Export" href="#"> Download as CSV </a> </center>
+ 				  <div id="table_div"></div>
+				  </td>
+				  </tr>
+				  </table>
+                 </td>
+				 
+				 </tr>
+                 </table>				 
+				 <!--  <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea> -->
+            </form>
+        </div>
+        <div id="display"></div>
+    </div>
+	
+	<i><b>Powered by:</b> Transactional Machine Learning, Kafka, Viper, Viperviz<br><b>Developed by:</b> OTICS Advanced Analytics, Inc.</i>
+		<br><b>Enter Dashboard Password:</b> <input type=password id="dashpass"><br><br>
+
+
+</div>
+
+    <!-- CONTAINER FOR CHART -->
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+
+        // load current chart package
+        google.charts.load("current", {
+            packages: ["corechart", "line"]
+        });
+
+        google.charts.setOnLoadCallback(drawChart);
+		google.charts.load('current', {'packages':['table','annotatedtimeline','gauge','bar','sankey']});
+
+		google.charts.setOnLoadCallback(drawTable2);
+  
+		google.charts.setOnLoadCallback(drawJustgage);
+	       google.charts.setOnLoadCallback(drawDiffChart);
+		   		//google.charts.setOnLoadCallback(heatmaptable);
+
+	  /*
+		var banner = document.createElement("div");
+		banner.className = "b";
+		banner.style = "display: flex; justify-content: flex-end;";
+
+		banner.innerHTML = "<i><font color='#808080'>"+new Date() + "</font></i>";
+
+		document.body.insertBefore(banner,document.body.childNodes[0]);
+*/
+     ////////// Load save hours
+
+//var x = document.getElementById("riskemails");
+//x.addEventListener("focus", saveEmails, true);
+
+
+ // console.log(localStorage.key(0));
+        var START=0;
+	  var ws;
+	  var topic="";
+	  var mainusertopic="";
+	  var offset=-1;
+	  var groupid="";
+	  var append=0;
+	  var rollbackoffset=0;
+	  var topictype="";
+	  var vipertoken="";
+	  var consumerid="";
+	  var secure=0;
+	  var mainport="";
+	  //////////////////////////
+	 // var data;
+	  var datatbl;
+	  var blockchaintbl;
+	 // var datatbl2;
+	   var maintable;
+	//  var chart=null;
+	  var dataintable=[];
+	//   var dataintable2=[];
+	  //var datainchart=[];
+	  var kafkakeyarr=[];
+	  var totalpredictions=0;
+	  var predictioncount=0;
+	 // var jsonhist="";
+	  var kafkacluster="";
+	  var issues="";
+	  var issuecount=0;                     
+	  var idkeyarr;
+	  var maingaugepercentage=0;
+	   var maingaugepercentageavg=0;
+	   var kafkatopictowrite="";
+	   
+	  var timestart="";
+	  var timeend="";
+	   var icvals = [];
+	   var mainmonitoring="";
+	   var healthriskarray= [];
+	   var maintimestamp="";
+	   var riskdatanum=0;
+	   var patientdatanum=0;
+	   var patientdatanumcurrent;
+	   var totalriskdata=150;
+	    var totalriskdatatosave=3000; // 3000 = ~4h of data 
+	//   var riskdatatosave = [];
+	//   var riskdataarray;
+	//   var oldData;
+	  // var newData;
+	   var symptommap;
+	   var identifiermap;
+	//   var superidentifiermap;
+	   var riskthreshold=70;
+	   var mainpatientbuf="";
+	   var mainemails="";
+	   var symptomcount=0;
+	   var chartrisk=null;
+	   var barChartDiff=null;
+	   var backcheck=false;
+       var chartguage=null;
+	   var chartguagesm=null;
+       var foundissues=[];  // these are the preprocessed values 
+       var previouspatientdatasaved = [];
+	   var mainriskhourstosave=0;
+	   var dobackground=0;
+	   var mainkafkatopic="";
+	   var didRisk=0;
+	   var barchart;
+	   var barchartlogistic;
+	   var maintotalmessages=0;
+	   	   var mainfoundrisk=0;
+		   var mainissuesfound=0;
+		   var mainhighriskavg=0;
+		   var mainlatlonmapsize=0;
+		   //var highriskavg=0;
+
+        var heatchart=null;
+		var vipervizerror="";
+		var averageprices = new Map();
+		var averageprob = new Map();
+
+		getSavehours(-1,"hours");
+//		getSavehours(-1,"perc");
+		getSavehours(-1,"emails");
+		getSavehours(-1,"backcheck");
+	   getSavehours(-1,"filenumber");
+	   getSavehours(-1,"kafkatopic");
+	   
+	         // create options object with titles, colors, etc.
+	var cssClassNames = {
+		'headerRow': 'columnTitle',
+		'tableRow': '',
+		'oddTableRow': 'beige-background',
+		'selectedTableRow': 'orange-background large-font',
+		'hoverTableRow': '',
+		'headerCell': 'gold-border',
+		'tableCell': '',
+		'rowNumberCell': 'underline-blue-font'};
+     		 
+      var options = {
+           title: "Failure Monitoring Values For " + topic,
+            hAxis: {
+                title: "Interval",
+				format: '0'
+             },
+            vAxis: {
+                 title: "Value"
+				 
+             },
+			 tooltip: {
+				isHtml: true
+			},
+			 explorer: {
+				actions: ['dragToZoom', 'rightClickToReset'],
+				axis: 'horizontal',
+				keepInBounds: true
+				},
+			 displayAnnotations: true,
+			 displayRangeSelector: false, 
+			 allowHtml: true,
+			 scaleType:'maximized',
+			 thickness: 3,
+		   chartArea:{top:10,width:"100%",height:"100"}
+        };
+
+      var g1 = new JustGage({
+          id: "gauge_avgrisk",
+          value: 0,
+          min: 0,
+          max: 100,       
+          label: "Market Risk"
+        });
+
+      var g2 = new JustGage({
+          id: "gauge_currrisk",
+          value: 0,
+          min: 0,
+          max: 100,
+          label: "Liquidity Risk"
+		 
+        });
+      
+	  function circleWithText(latLng, txt, circleOptions,popupmess) {
+	/*	var icon = L.divIcon({
+		html: '<div class="txt">' + txt + '</div>',
+		className: 'circle-with-txt',
+		iconSize: [40, 40]
+		});*/
+		var circle = L.circleMarker(latLng, circleOptions);
+		var marker = L.marker(latLng, {
+		
+		});
+		    
+		var group = L.layerGroup([circle, marker]);
+		return(group);
+	}
+	
+	function guidGenerator() {
+       var S4 = function() {
+          return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+       };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4());    
+    }
+
+    function toggleDiv(){
+
+    var status = document.getElementById("machinelearning").style.display;
+	
+	//toggleDiv('machinelearning');toggleDiv('xenese')
+      //document.getElementById(divid).style.display="none";
+	
+
+    if (status == 'block' || status=='') {
+      document.getElementById("machinelearning").style.display="none";
+      document.getElementById("xenese").style.display="none";
+
+	  document.getElementById("maptable").style.width="2210px";
+	  //	  document.getElementById("maptable").style.height="440px";
+
+
+	//  document.getElementById("map").style.width="100%";
+	  
+     } else {
+      document.getElementById("machinelearning").style.display="block";
+      document.getElementById("xenese").style.display="block";
+	  document.getElementById("maptable").style.width="990px";
+	//  document.getElementById("maptable").style.height="440px";
+	  //document.getElementById("map").style.width="100%";
+	  
+     }
+
+
+	// map.invalidateSize(true);
+
+   }
+  
+   
+   //riskGauge();
+   
+    function doBlockchain(jsondata,bardata){
+	  //if (mainkafkatopic=="fhir-ml-xenese-confirmation"){
+	   //if (blockchaintbl==null){
+	    blockchaintbl = new google.visualization.DataTable();
+	   //}
+        blockchaintbl.addColumn('string', 'DeviceID');
+        blockchaintbl.addColumn('string', 'BlockID');
+        blockchaintbl.addColumn('number', 'Weight');
+		for (var i=0;i<bardata.getNumberOfRows();i++){
+		//console.log("v=",bardata.getValue(i,2));
+		 let prob=bardata.getValue(i,1);
+		 let patient=bardata.getValue(i,0);
+		 
+		   let blockid = guidGenerator();		 		  
+		      blockchaintbl.addRows([[patient + " (" + prob + ")",blockid,1]]);			
+		}
+	  
+	 // console.log("data=",blockchaintbl);
+	  
+	      // Set chart options
+       var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
+                  '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];		  
+         var options = {
+		  title: 'Test',
+          width: 395,
+		  height: 555,
+		   sankey: {
+        node: {
+          colors: colors,
+		  interactivity: true,
+		  nodePadding: 10, 
+        },
+        link: {
+          colorMode: 'gradient',
+          colors: colors
+        }
+      }
+        };
+
+    // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.Sankey(document.getElementById('blockchain'));
+        chart.draw(blockchaintbl, options);
+	  
+	    document.getElementById('blockcount').innerHTML=bardata.getNumberOfRows();
+	  
+	  //}
+	}
+	
+    function doBlockchainMain(jsondata,maintopic){
+	  //if (mainkafkatopic=="fhir-ml-xenese-confirmation"){
+	   //if (blockchaintbl==null){
+	  var patient="";
+	  
+	//  console.log("mainkafkatopic=",mainkafkatopic);
+	  
+	  if (maintopic=="nft-ml-xenese-confirmation"){
+	    blockchaintbl = new google.visualization.DataTable();
+	   //}
+
+ // console.log("doBlockchainMain=",mainkafkatopic);
+	var patientmap = new Map();
+	
+	if(jsondata){
+        blockchaintbl.addColumn('string', 'DeviceID');
+        blockchaintbl.addColumn('string', 'BlockID');
+        blockchaintbl.addColumn('number', 'Weight');
+
+        for (j in jsondata.TopicReads){	
+            if (jsondata.TopicReads[j].predictionDetail){		 
+		     let blockid=jsondata.TopicReads[j].id;			 
+			 let ident=jsondata.TopicReads[j].predictionDetail.Identifier;
+			 let idarr = ident.split("~");
+			 for (k in idarr){
+			    if (idarr[k].includes("Msgsjoined=")){
+				    let a=idarr[k].split("=")[1];
+					patient = a.split(",")[0];	
+					
+                   break;					
+				}
+			  }
+			 
+			 let prob=jsondata.TopicReads[j].predictionDetail.Hyperprediction;	    
+		     patientmap.set(patient,[blockid,prob]);
+		   			
+		  }	
+		}		 
+			 
+	  for (const [keym, valuem] of patientmap) {		 
+            if (Number(valuem[1])<.5){		    
+		      blockchaintbl.addRows([[keym + " (" + valuem[1] + ")",valuem[0],1]]);
+			}else if (Number(valuem[1])>=.5 && valuem[1]<.8){
+		      blockchaintbl.addRows([[keym + " (" + valuem[1] + ")",valuem[0],3]]);			
+     		}else if (Number(valuem[1])>=.8){
+			  blockchaintbl.addRows([[keym + " (" + valuem[1] + ")",valuem[0],5]]);			     		
+			}
+       }
+			
+		  // Set chart options
+       var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
+                  '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];		  
+         var options = {
+		  title: 'Test',
+          width: 395,
+		  height: 555,
+		   sankey: {
+        node: {
+          colors: colors,
+		  interactivity: true,
+		  nodePadding: 10, 
+		  width: 2,
+		  height: 10,
+        },
+        link: {
+          colorMode: 'gradient',
+          colors: colors
+        }
+      }
+        };
+
+    //console.log("here----");
+
+    // Instantiate and draw our chart, passing in some options.
+        
+		var chart = new google.visualization.Sankey(document.getElementById('blockchain'));
+        chart.draw(blockchaintbl, options);	    
+	    document.getElementById('blockcount').innerHTML=blockchaintbl.getNumberOfRows();
+	     
+	    }
+	   
+	  }
+	}
+	
+    function getZi(totrecs){
+              if (totrecs > 100){                  			   
+                    zi = 150;
+				  }else if (totrecs > 95 && totrecs <= 100){
+                   zi = 135;
+                   }else if (totrecs > 90 && totrecs <= 95){
+                   zi = 105;
+                   }else if (totrecs > 85 && totrecs <=90){
+                   zi = 95;
+                   }else if (totrecs >80 && totrecs <=85){
+                   zi = 90;
+                   }else if (totrecs >75 && totrecs <=80){
+                   zi = 85;
+                   }else if (totrecs >70 && totrecs <=75){
+                   zi = 80;
+                   }else if (totrecs >65 && totrecs <=70){
+                   zi = 75;
+                   }else if (totrecs >60 && totrecs <=65){
+                   zi = 69;
+                   }else if (totrecs >55 && totrecs <=60){
+                   zi = 65;
+                   }else if (totrecs >50 && totrecs <=55){
+                   zi = 60;
+                   }else if (totrecs >45 && totrecs <=50){
+                   zi = 56;
+                   }else if (totrecs >40 && totrecs <=45){
+                   zi = 55;
+                   }else if (totrecs >35 && totrecs <=40){
+                   zi = 51;
+                   }else if (totrecs >30 && totrecs <=35){
+                   zi = 47;
+                   }else if (totrecs >25 && totrecs <=30){
+                   zi = 46;
+                   }else if (totrecs >20 && totrecs <=25){
+                   zi = 40;
+                   }else if (totrecs >15 && totrecs <=20){
+                   zi = 38;
+                   }else if (totrecs >10 && totrecs <=15){
+                   zi = 37;
+                   }else if (totrecs >5 && totrecs <=10){
+                   zi = 35;
+                   }else if (totrecs >0 && totrecs <=5){
+                   zi = 32;
+                   }				  
+    	
+		return zi;
+	}
+	
+	
+   function addHeatdata(jsondata){
+   		
+	//	console.log(jsondata);
+				
+		var heatdata = [];						  
+		var vlen;
+        var keybuf;
+		var sns;	
+		var risk;
+		var buf;
+		var pid;
+		var valbufnum;
+        var val1;
+	    var lat='na';
+    	var lon='na';		
+		var pmess;
+		var tr;
+		var latlonbuf="";
+		
+		var latlonmap = new Map();
+		var barchartmap = new Map();
+        var mainlat;
+   	    var mainlon;			
+        var varr = [];			   
+		var totrecs = 0;
+		var mainrisk;
+		var det;
+        var zi;
+		var a;
+			   
+	   issuecount=0;
+	//   mainissuesfound=0;
+	  // mainhighriskavg=0;
+	   		
+      //console.log(superidentifiermap);
+	  	//for (const [key, value] of superidentifiermap) {
+    	 risk = maingaugepercentageavg;
+		 if (jsondata==null || mainkafkatopic!="nft-ml-prediction-results-output"){
+		    return;
+		 }
+
+/*				 
+"MedicationDispense~30~fhir-Failure-monitor~uid:entry.0.resource.id,subtopic:entry.5.resource.resourceType 
+(MedicationDispense),value:entry.5.resource.whenHandedOver,identifier:entry.4.resource.dispenseRequest.expectedSupplyDuration.value,
+datetime:timestamp,:allrecords,Joinedidentifiers:~oem:n/a~lat:42.58942256332994~long:-71.3827654850569~location:Westford,Massachusetts
+~identifier:n/a,Number_of_Prescribers 2 GreaterThan,Pharmacy_Distance 41 GreaterThan,Refill_Overlap 30 GreaterThan
+~Msgsjoined=d667bfac-fdc8-4e16-baea-ca11513bf2da,Fentanyl,K Pharmacy~latuid=42.58942,longuid=-71.38277,latmerch=42.63510,longmerch=-71.32579"
+	*/			 
+	     for (j in jsondata.TopicReads){
+		     var patientlocation="na";
+			 var riskidentifier="";
+			 var patient="";
+			 var generated="";
+			 
+			 
+		     jbuf=jsondata.TopicReads[j].Identifier;
+			 
+			 //console.log("jbuf===",jbuf);
+			 
+			  patientrisk=jsondata.TopicReads[j].Hyperprediction;			   
+			  prob0=jsondata.TopicReads[j].Probability0;
+			  prob1=jsondata.TopicReads[j].Probability1;
+			  
+			  generated=jsondata.TopicReads[j].Generated;
+			  			  
+		      idkeyarr = jbuf.split("~");	
+			  let type = idkeyarr[0];
+			  let typename = idkeyarr[1];
+			  //console.log("type=",type, " typename=",typename);
+			  
+			  for (id in idkeyarr){
+			     vbuf = idkeyarr[id];
+			//	 console.log("vbuf===",vbuf);
+				 
+			     if (vbuf.includes("mainuid=")){
+				     patient = vbuf.split("=")[1];	
+					 patient = patient.substring(0,patient.length);
+				 }
+			    }	
+				 if (patient!="undefined" && patient!=""){
+				  latlonbuf=patientrisk + "=" + lat + "=" + lon + "=" + patient;
+				  
+				  retbuf = type + "=" +  typename + "=" + patientlocation + "=" + generated + "=" + prob0 + "=" + prob1;
+				   latlonmap.set(latlonbuf, retbuf);
+				   }
+				 
+		       }	
+				 
+	//////////////// Start mapping 
+	     //console.log("latlonmap=",latlonmap);
+		  
+		    //   mainlatlonmapsize=Number(latlonmap.size);
+               for (const [keym, valuem] of latlonmap) {
+			        mainrisk = Number(keym.split("=")[0])*100;
+//					mainlat = keym.split("=")[1];
+	//		        mainlon = keym.split("=")[2];
+					patient = keym.split("=")[3];
+				    varr = valuem.split("=");
+                   pmess="";
+
+				 barchartmap.set(patient,[varr[4],varr[5]]);
+
+				   healthriskarray.push([varr[3], mainrisk]);
+				   //console.log(healthriskarray);
+				   
+				   pmess = "<b><font color='red' size=4>Device Failure Predicted RiskLevel: " + mainrisk.toFixed(1) + "%</b></font><br>";
+				   pmess += "<font size=4><b>DeviceID:</b> " + patient + "<ul><li><b>Device Properties Being Monitored:</b> Power, Current, Voltage" + "</li><li><b>Latitude:</b> " +mainlat + "</li><li><b>Longitude:</b> " + mainlon + "</li></ul></font>";
+                     
+                    	
+                //zi = getZi(mainrisk);
+				//if (mainrisk>=riskthreshold){
+				   //console.log("ADD HEAT DATA====== riskthreshold=",riskthreshold, " mainrisk=",mainrisk);
+				  // mainissuesfound = mainissuesfound + 1;
+				  // mainhighriskavg = mainhighriskavg + mainrisk;
+				//}
+	
+				  var mainmess = pmess;
+                  //console.log("zi===",zi);
+				  //green=#59c918
+				  //orange=#f7be02
+				  //red=#c93441
+				  //dark green=#45855a			
+   				  
+				}   
+       		//	document.getElementById('totsymptoms').innerHTML= latlonmap.size;
+				
+                //document.getElementById('totissues').innerHTML=mainissuesfound;	
+				//mainissuesfound=issuecount;
+  
+                  if (mainissuesfound!=0){
+				     mainhighriskavg = mainhighriskavg/mainissuesfound;
+					 mainhighriskavg = mainhighriskavg.toFixed(1);
+				  }else{
+				    mainhighriskavg=0;
+				  }
+				  
+              drawBarchart(barchartmap,mainhighriskavg);
+  
+  
+               storepatientdata(latlonmap,"");
+             	  
+
+   		   heatdata = null;						  
+		   vlen= null;
+          keybuf= null;
+		  sns= null;	
+		  risk= null;
+	 	 buf= null;
+		 pid= null;
+		 valbufnum= null;
+         val1= null;
+	     lat= null;
+    	 lon= null;		
+		 pmess= null;
+		 tr=null;
+		 latlonmap=null;
+ 
+   }
+
+
+		function getCookie(cname) {
+			let name = cname + "=";
+			let decodedCookie = decodeURIComponent(document.cookie);
+			let ca = decodedCookie.split(';');
+			for(let i = 0; i <ca.length; i++) {
+				let c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+		return "";
+		}
+        
+		function saveCheckbox(checkbox, type){
+			const d = new Date();
+			d.setTime(d.getTime() + (30*24*60*60*1000));
+			let expires = "expires="+ d.toUTCString();
+            			
+		   if (checkbox.checked){
+			document.cookie = type + "=true;"  + expires + ";path=/";			 		   
+		   }else{
+		   document.cookie = type + "=false;"  + expires + ";path=/";	
+		   }
+		}
+
+        function deleteCookie(name){
+           document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+       };
+
+		function savePatientdatanum(filenumber){
+			const d = new Date();
+			d.setTime(d.getTime() + (30*24*60*60*1000));
+			let expires = "expires="+ d.toUTCString();
+            			
+			document.cookie = "filenumber=" + filenumber + ";"  + expires + ";path=/";			 		   
+		}
+		
+		
+		function saveEmails(emails){
+	//	 if (emails.length>0){
+		 
+			const d = new Date();
+			d.setTime(d.getTime() + (30*24*60*60*1000));
+			let expires = "expires="+ d.toUTCString();
+		    mainemails = emails; 
+			document.cookie = "riskemails" + "=" + emails + ";" + expires + ";path=/";			 
+		//	}
+			
+			let kafkainput = document.getElementById("kafkatopic");
+			
+			
+		// if (kafkainput.value!=""){		 
+		   //console.log(kafkainput.value);
+		   
+		//	const d2 = new Date();
+			d.setTime(d.getTime() + (30*24*60*60*1000));
+			//let expires2 = "expires="+ d2.toUTCString();
+		    kafkatopictowrite = kafkainput.value; 
+			document.cookie = "kafkatopic" + "=" + kafkainput.value + ";" + expires + ";path=/";			 
+			//}
+			
+			
+		}
+		
+		function getSavehours(value,type){	
+         // var valueperc=0;
+		   
+			const d = new Date();
+			d.setTime(d.getTime() + (30*24*60*60*1000));
+			let expires = "expires="+ d.toUTCString();
+						
+		  if (type=="hours"){
+		    if (value==-1){
+		     value = getCookie("riskhours");
+			 }
+		     let element = document.getElementById("riskhours");
+			 if (value){
+              element.value = value;
+			  }else{
+                value=4;
+				 element.value = value;
+			  }
+			 mainriskhourstosave=value;
+			 totalriskdatatosave = 12*60*Number(value);
+			document.cookie = "riskhours" + "=" + value + ";" + expires + ";path=/";			 
+			
+           }			 
+        
+ 		if (type=="emails"){
+		    if (value==-1){
+		     value = getCookie("riskemails");			 
+			 }
+		     let element = document.getElementById("riskemails");
+			 if (value.length>0){
+              element.value = value;
+			  }else{
+                value="";
+				 element.value = value;
+			  }
+			mainemails=value;
+			  //console.log(mainemails);
+
+			document.cookie = "riskemails" + "=" + value + ";" + expires + ";path=/";			 
+			
+           }	
+           
+		  
+		  if (type=="backcheck"){
+		      value = getCookie("background");		
+			  
+			  let element = document.getElementById("backcheck");
+			  if (value=="false"){
+			    element.checked=false;
+				dobackground=0;
+			  }else{
+			      element.checked=true;
+				  dobackground=1;
+			  }
+		  }
+		  
+		  //patientdatanum
+		    if (type=="filenumber"){
+			   //deleteCookie("filenumber");
+		      patientdatanum = getCookie("filenumber");			
+              patientdatanum = Number(patientdatanum);			  
+		     }
+
+		    if (type=="kafkatopic"){
+			   //deleteCookie("filenumber");
+		      kafkatopictowrite = getCookie("kafkatopic");		
+              let element = document.getElementById("kafkatopic");
+			  element.value=kafkatopictowrite;
+			  
+		     }
+			 
+		 }
+		 
+        ////////////////////////////////////STORE RISK Data
+	/*	 function isArrayInArray(arr, item){
+           var item_as_string = JSON.stringify(item);
+           var contains = arr.some(function(ele){
+            return JSON.stringify(ele) === item_as_string;
+           });
+          return contains;
+         }
+		*/ 
+       function isArrayInArray(arr, subarr){
+         for(var i = 0; i<arr.length; i++){
+         let checker = false
+           for(var j = 0; j<arr[i].length; j++){
+             if(arr[i][j] === subarr[j]){			    
+                checker = true
+             } else {
+                checker = false
+				
+                break;
+             }
+          }
+           if (checker){
+              return true
+           }		   
+        }
+		// console.log("FFFFFFFFFFFFFF=",arr, subarr);
+         return false
+       }
+		 
+          function storepatientdata(maindetailsmap,topic){
+
+     	        var currtimestamp = new Date();
+             var datestring = currtimestamp.getFullYear() + "-" + ("0"+(currtimestamp.getMonth()+1)).slice(-2) +"-"+("0" + currtimestamp.getDate()).slice(-2) + " " +
+				currtimestamp.getHours() + ":" +  ("0"+currtimestamp.getMinutes()).slice(-2);
+
+
+		    if (patientdatanum>=totalriskdatatosave){
+			  patientdatanum=0;
+			}
+		  //maindetailsmap.set(keybuf,uniqueArray);
+		    var r=0;
+           var buf ="\"Date,Device,RiskValue,Property,Name,Location,Latitude,Longitude\",";
+			var keybuf;
+			var symname;
+			var valbuf;
+			var valbuf2;
+			var mainvalue;
+			var lat="n/a";
+			var lon="n/a";
+			var coord="";
+			var found=false;
+			var hasrecord=0;
+			
+			for (const [key, value] of maindetailsmap) {
+			  keybuf=`${key}`;
+        	  valuebuf=`${value}`;
+              
+              varr = valuebuf.split("=");			  
+              parr = keybuf.split("=");
+			  patientrisk = parr[0];
+			  lat = parr[1];
+			  lon = parr[2]
+			  patientid = parr[3];
+
+			  drug = varr[0];
+			  pharmacy = varr[1];
+			  mainlocation = varr[2];
+			  datastring = varr[3];
+			  
+
+			   hasrecord=0;
+					if (previouspatientdatasaved.length ==0){
+					    previouspatientdatasaved.push([datestring,patientid,patientrisk]);
+					}else{
+					   var check=[datestring,patientid,patientrisk];
+				//	   console.log("previouspatientdatasaved=",previouspatientdatasaved);
+					//   console.log("check=",check);					   
+				       found=isArrayInArray(previouspatientdatasaved,check);
+					   
+					   //console.log("---found=",found);
+					   
+					   if (found==false){
+					       previouspatientdatasaved.push([datestring,patientid,patientrisk]);
+					   }
+					}
+
+               if (found==false){
+			      buf += "\"" + datestring + "," + patientid + "," + patientrisk + "," + drug + "," + pharmacy + "," + mainlocation + "," + lat + "," + lon + ","  + "\","; 
+				  hasrecord=1;
+			    }								
+			  }		  
+			  
+			if (buf.length > 0 ){
+			   buf=buf.slice(0, -1);
+			}
+				
+			//console.log(maingaugepercentage,riskthreshold,mainpatientbuf);
+			
+			if ((maingaugepercentageavg >= riskthreshold || (mainhighriskavg >=riskthreshold))&& (buf.length > 0) && (hasrecord==1)){
+			//console.log("---------------Inside");
+			   hasrecord=0;
+               kafkatopictowrite = kafkatopictowrite.replaceAll(" ","");
+			//   mainemails = mainemails.replaceAll(" ","");
+				//var sendbuffer="{\"hyperprediction\":" + maingaugepercentage + ",\"Topic\":\""+topic +"\",\"Action\":\"Save\",\"Data\":[" + buf + "],\"Filenumber\":" + patientdatanum + ",\"Emails\":\"" + mainemails + "\"}";
+               	   var mainfoundrisk=1;
+
+		      var sendbuffer="{\"Hyperprediction\":" + Math.ceil(maingaugepercentageavg) + ",\"Action\":\"Save\",\"Data\":[" + buf + "],\"Maxfilenumber\":"+totalriskdatatosave + ",\"Filenumber\":" + patientdatanum + ",\"Emails\":\"" + mainemails + "\",\"Mainriskhours\":" + mainriskhourstosave + ",\"Background\":" + dobackground + ",\"Kafkatopic\":\"" + kafkatopictowrite + "\"}";
+			  var pnum=patientdatanum;
+			 
+		//	 console.log("--------sendbuffer=",sendbuffer);
+			 
+			 patientdatanumcurrent=patientdatanum;
+             			 
+			 if (ws!=null){
+               ws.send(sendbuffer);           
+     		   
+			   patientdatanum = patientdatanum + 1;
+			   savePatientdatanum(patientdatanum);
+			  }
+			  
+			}
+		  mainpatientbuf=buf;
+		  if (mainfoundrisk==1){
+
+		   document.getElementById('downloadpatientdataurl').innerHTML = "<a href='/data/" + mainusertopic + "_" + mainport  + ".csv'>Download Data</a>";
+         }
+
+	       r=null;
+           buf = null;
+		   keybuf=null;
+			symname=null;
+			valbuf=null;
+			valbuf2=null;
+			mainvalue=null;  
+        }
+
+		
+       function storeriskdata(riskdatatosave){
+	      
+		    if (riskdatanum>=totalriskdatatosave){
+			  riskdatanum=0;
+			  riskdatatosave = [];
+			}
+			
+			//var header="DateTime,Symptomname,Code,Value,Ubound,Mean,Timewindow1,Timewindow2\n";
+             var buf="";			 
+ 		    var rowvalue=null;				
+		    var twindow = null;
+			var sp = null;
+			var sp2 = null;
+			var e;
+		   
+			for (r in riskdatatosave){
+			  
+			     rowvalue=riskdatatosave[r];				
+			     twindow = rowvalue[5];
+				 sp = rowvalue[1][1];
+				 sp2 = sp.split("_");
+				
+			    for (d in rowvalue[2]){					
+				    buf += rowvalue[0] +"," + rowvalue[1][0] +","  + sp2[0] + "," + rowvalue[2][d] +"," + rowvalue[3] +"," + rowvalue[4] + "\n"; 
+	    			
+				}		
+				//console.log("riskobj" + riskdatanum + "_" + r);
+				
+				const riskobj = {
+          			  linedata: buf
+			        }
+				try{	
+			       window.localStorage.setItem("riskobj" + riskdatanum + "_" + r,JSON.stringify(riskobj));		
+				   
+		       }catch(err) {
+					//document.getElementById("demo").innerHTML = err.message;
+			//		console.log(err.message);
+					 e=err.message;
+                  }   
+			  buf="";
+
+			}			
+            riskdatanum +=1;
+			riskdatatosave = [];
+			
+             buf=null;			 
+ 		     rowvalue=null;				
+		     twindow = null;
+			 sp = null;
+			 sp2 = null;
+			 e= null;
+			
+       }
+	   
+	    function loadpatientriskdata(){
+	      var num=0;
+		  var totaldata="";
+
+		  var riskdataarray = new google.visualization.DataTable();
+
+              //buf += currtimestamp + symname[1] + ",[" + symname[0] + "]," + d + "," + maingaugepercentage + "\n"; 
+	    			
+		   riskdataarray.addColumn('string','DateTime');
+		   riskdataarray.addColumn('string','Symptomname');
+		   riskdataarray.addColumn('string','Code');
+		   riskdataarray.addColumn('number','Patient');
+		   riskdataarray.addColumn('number','RiskValue');
+		   
+		   var inside=0;
+		   var s2;
+		   var ss;
+		   var sbuf;
+		   var sbufarr;
+		    let rw;
+		   
+		  for (rd=0;rd < totalriskdatatosave; rd++){
+         	   inside=0;
+				
+		       while(true){
+			     //console.log("riskobj" + rd + "_" + num)
+				 
+		           s2 = window.localStorage.getItem("patientobj" + rd + "_" + num);
+					if (s2){
+	                  const obj2 = JSON.parse(s2);		
+                    //  totaldata += obj2.linedata;			
+                       ss=obj2.linedata.split("\n");
+					//  console.log("ss=",ss);
+					  
+					  for (t in ss){ // row
+					     sbuf = ss[t];
+						if (sbuf.length > 0){
+						   sbufarr = sbuf.split(",");
+						   if (sbufarr.length>0 && isNaN(sbufarr[3])==false){
+						  
+						  //console.log("sbufarr=",sbufarr);
+						
+					    //let rw = [ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7]];
+						    rw = [sbufarr[0], sbufarr[1], sbufarr[2],sbufarr[3],Number(sbufarr[4])];
+						
+						//  console.log("rw=",rw);
+						  
+					      riskdataarray.addRows([rw]);
+						  inside=1;
+						}
+                       // riskdataarray.push([ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7] ]);
+					    }
+					  }
+					  
+					}else{
+                       break;
+					 }					
+					  num += 1;
+				}
+								
+		  }
+	         //console.log("riskdataarray=",riskdataarray);
+		    inside=null;
+		    s2=null;
+		    ss=null;
+		    sbuf=null;
+		    sbufarr=null;
+		    rw=null;
+			 
+			 return riskdataarray;
+	   }
+
+	           ////////////////////////////////////LOAD RISK Data
+       function loadriskdata(){
+	      var num=0;
+		  var totaldata="";
+
+		  var riskdataarray = new google.visualization.DataTable();
+
+		//   riskdataarray.addColumn('string','DateTime');
+		   riskdataarray.addColumn('string','Symptomname');
+		   riskdataarray.addColumn('string','Code');
+		   riskdataarray.addColumn('number','Value');
+		   riskdataarray.addColumn('number','Ubound');
+		   riskdataarray.addColumn('number','Mean');
+		 //  riskdataarray.addColumn('string','Timewindow1');
+		  // riskdataarray.addColumn('string','Timewindow2');
+
+       		var inside=0;
+			var s2;
+			var ss;
+			var sbuf;
+			var sbufarr;
+			var rw;
+		   
+		  for (rd=0;rd < totalriskdatatosave; rd++){
+         	   inside=0;
+				
+		       while(true){
+			     //console.log("riskobj" + rd + "_" + num)
+				 
+		        	 s2 = window.localStorage.getItem("riskobj" + rd + "_" + num);
+					if (s2){
+	                  const obj2 = JSON.parse(s2);		
+                    //  totaldata += obj2.linedata;			
+                       ss=obj2.linedata.split("\n");
+					//  console.log("ss=",ss);
+					  
+					  for (t in ss){ // row
+					     sbuf = ss[t];
+						if (sbuf.length > 0){
+						   sbufarr = sbuf.split(",");
+						   if (sbufarr.length>0 && isNaN(sbufarr[3])==false){
+						  
+						  //console.log("sbufarr=",sbufarr);
+						
+					    //let rw = [ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7]];
+						    rw = [sbufarr[1], "["+sbufarr[2]+"]",Number(sbufarr[3]),Number(sbufarr[4]),Number(sbufarr[5])];
+						
+						//  console.log("rw=",rw);
+						  
+					      riskdataarray.addRows([rw]);
+						  inside=1;
+						}
+                       // riskdataarray.push([ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7] ]);
+					    }
+					  }
+					  
+					}else{
+                       break;
+					 }					
+					  num += 1;
+				}
+				
+			//	if (inside==0){
+				//  break
+				//}
+				
+		  }
+	         //console.log("riskdataarray=",riskdataarray);
+       		 inside=null;
+			 s2=null;
+			 ss=null;
+			 sbuf=null;
+			 sbufarr=null;
+			 rw=null;
+             num=null;
+		    totaldata=null;
+		  
+			 return riskdataarray;
+	   }
+
+	   
+       function storehealthrisk(){
+	   //console.log("healthriskarray=",healthriskarray);
+	     if (mainkafkatopic!="nft-ml-prediction-results-output"){
+	       return;
+	      }
+
+        // console.log("healthriskarray=",healthriskarray);
+		 
+	     try{
+	        var currtimestamp = new Date();
+	        if (healthriskarray.length<=totalriskdata){
+			  healthriskarray.push([currtimestamp,maingaugepercentage]);			  
+			}else{
+			   healthriskarray.shift();
+			     healthriskarray.push([currtimestamp,maingaugepercentage]);	
+			}
+						
+		 }catch(err){
+		     console.log(err.message);
+             var e=err.message;
+           }		 
+	   }
+       
+	   
+	   function loadhealthrisk(){
+			var s = window.localStorage.getItem('riskobj');
+			const obj = JSON.parse(s);
+           maintimestamp = new Date(obj.date);
+		   maingaugepercentageavg = Number(obj.riskvalue);
+		     maingaugepercentage = Number(obj.riskvalue);
+		   //storehealthrisk();
+		    healthriskarray.push([maintimestamp,maingaugepercentage]);	
+			
+			var s2 = window.localStorage.getItem('riskobjtosave');
+	       const obj2 = JSON.parse(s2);		
+           riskdatanum = Number(obj2.totalnum);
+          
+       }	   
+	   
+       function monitoringpopup(){
+          new Attention.Prompt({
+                    title: "Patient Records Currently Being Monitored",
+                    content: mainmonitoring,
+                });
+         
+	   }
+    
+	   function deleteKeysfromidentifiermap(){
+	         var keydel = [];
+			 
+             //delete keys from identifiermap
+	//		 console.log("foundissues=",foundissues);
+			 
+            for (const [key, value] of identifiermap) {
+			 keybuf=`${key}`;
+			 valbuf=`${value}`;
+			 var found=0;
+             for (fi in foundissues){
+                  var ki = foundissues[fi][0];
+				  if (ki==keybuf ){
+				    found=1;
+					break;
+				  }
+               }			
+                if (found==0){
+                      keydel.push(keybuf);
+				 }				
+            }
+			for (d in keydel){		
+              if (keydel[d].includes("_ubound")==false){
+			   identifiermap.delete(keydel[d]);
+			  }
+			}
+	   }
+ 	   
+	   	   
+	   function saveDynamicDataToFile(topic) {
+
+     //       var userInput = document.getElementById("txtData").value;	
+            const textToBLOB = new Blob([userInput], { type: "text/plain;charset=utf-8" });
+           const sFileName = topic+"-nft-JSON.json";	   // The file to save the data.
+
+           let newLink = document.createElement("a");
+           newLink.download = sFileName;
+
+           if (window.webkitURL != null) {
+              newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+           }
+           else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+           }
+
+        newLink.click(); 
+		
+        }
+		
+		
+      function drawBarchartLogistic(){
+	   
+	   var data = new google.visualization.DataTable();
+	   	data.addColumn('string','NFT');
+		data.addColumn('number','Avg. Probability of Price Increase');
+        data.addColumn('number','Avg. Probability of Price Decrease');
+        
+		var mcount=0;
+		var highriskavg=0;
+		var highriskcnt=0;
+		var totrisk=0;				
+		
+		//averageprices
+		for (const [key, value] of averageprob) {		
+		  // console.log(key,value);
+		   data.addRows([[key,Number(value),1-Number(value)]]);	
+		}
+		
+		
+        var options = {
+           legend: { position: 'none' },
+		   height: 570,
+          hAxis: {
+            minValue: 0,
+            ticks: [0, 30, 60, 90, 100]
+          },
+		   
+          bars: 'horizontal' // Required for Material Bar Charts.
+        };
+
+        if (barchartlogistic==null){
+            barchartlogistic = new google.charts.Bar(document.getElementById('barchartlog_div'));
+         }
+        barchartlogistic.draw(data, google.charts.Bar.convertOptions(options));
+          
+		document.getElementById('totsymptomslog').innerHTML=data.getNumberOfRows();
+       		    
+		  doBlockchain("",data);
+		  //currentfraud
+
+	   }
+
+		
+       function drawBarchart(barmap,mainhighriskavg){
+	   
+	   var data = new google.visualization.DataTable();
+	   	data.addColumn('string','NFT');
+		data.addColumn('number','Avg. Predicted ETH Price');
+        //data.addColumn('number','Risk Probability');
+		
+		var mcount=0;
+		var highriskavg=0;
+		var highriskcnt=0;
+		var totrisk=0;				
+		
+		//averageprices
+		for (const [key, value] of averageprices) {		
+		  // console.log(key,value);
+		   data.addRows([[key,Number(value)]]);	
+		}
+		
+		//console.log("data=",data);
+		
+        var options = {
+           legend: { position: 'none' },
+		   height: 570,
+          hAxis: {
+            minValue: 0,
+            ticks: [0, 30, 60, 90, 100]
+          },
+		   
+          bars: 'horizontal' // Required for Material Bar Charts.
+        };
+
+        if (barchart==null){
+            barchart = new google.charts.Bar(document.getElementById('barchart_div'));
+         }
+        barchart.draw(data, google.charts.Bar.convertOptions(options));
+          
+		document.getElementById('totsymptoms').innerHTML=data.getNumberOfRows();
+       		    
+		  doBlockchain("",data);
+		  //currentfraud
+
+	   }
+		
+		function drawDiffChart(identifiermap,topic,symptomtotal, patientrecs){
+		//testchart();
+		//return;
+		var oldData=null;
+		var newData=null;
+		
+	     if (identifiermap==null){
+		  oldData = google.visualization.arrayToDataTable([
+			['Symptom', 'Count of Symptom'],
+			['TBD', 0],
+			]);
+
+			newData = google.visualization.arrayToDataTable([
+			['Symptom', 'Count of Symptom'],
+			['TBD', 0],
+			]);
+		
+		 mainmonitoring="";
+		 
+		 if (idkeyarr){
+		   var keybuf;
+		   var varr;
+		   for (k in idkeyarr){
+	     	  keybuf = idkeyarr[k];
+			  varr = keybuf.split(" ");		
+             if (varr[0]!="n/a"){			  
+			  mainmonitoring += "[" + varr[3] + "(" + varr[1] + ", " + varr[2] + ", " + varr[0] + ")] ";
+			  }
+		   }
+		 }  
+	    }else{			
+		
+		    oldData = new google.visualization.DataTable();
+		    newData = new google.visualization.DataTable();
+		    
+			
+			oldData.addColumn('string','Symptom');
+		    oldData.addColumn('number','Count of Symptom');
+            //oldData.addColumn({type:'string',role:'tooltip'});
+			
+		    newData.addColumn('string','Symptom');
+		    newData.addColumn('number','Count of Symptom');
+            //newData.addColumn({type:'string',role:'tooltip'});
+			
+			var keybuf;
+			var valbuf;
+			var ka;
+			
+			
+			//console.log("identifiermap map=",identifiermap);
+			//console.log("symptomtotal =",symptomtotal);
+			
+			
+            for (const [key, value] of identifiermap) {
+
+			  keybuf=`${key}`;
+			 
+		//	 console.log("main=",symptomtotal.get(key));
+			 
+			// console.log("valbuf=",valbuf);
+                ka = keybuf.split("_");  	
+			// console.log("keybuf=",keybuf, " length=",value.length, " total=",symptomtotal.get(key), " keybuf=",keybuf);
+             
+//			 console.log("ka=",ka);
+               //	console.log("valbuf=",valbuf);
+			  // console.log(ka[0],Number(valbuf));
+			   
+				if (ka[0]!="n/a"){
+                  newData.addRows([[ka[0],value.length]]);					  
+                  oldData.addRows([[ka[0],symptomtotal.get(key)]]);				  
+			     }
+			
+            }
+	   
+		 //  console.log("olddata=",oldData);
+		  // console.log("newdata=",newData);
+		   if(barChartDiff==null){
+			barChartDiff = new google.visualization.BarChart(document.getElementById('barchart_div'));
+            }else{
+			   barChartDiff.clearChart();
+			}
+			
+			var diffData = barChartDiff.computeDiff(oldData, newData);						
+ 
+			var options = {height:280, hAxis: {title: 'Count of Symptom Records'},fontSize:18,chartArea:{height:'350'},legend: { position: 'top' } };
+
+			barChartDiff.draw(diffData, options);
+
+		  // document.getElementById('barchartlabel_div').innerHTML="Population Symptoms Currently Being Monitored: <img src='./help.png' width=30 height=27  style='float: bottom;' //onclick='monitoringpopup()'>";	
+          var diffbuf="<b>Total Devices Being Monitored: </b><ul>";
+		  symptomcount=0;
+		  var buf;
+		  var buf2;
+		  var buf3;
+		  var diffcnt="";
+		  var rcnt=0;
+		  var foundissuestot=0;
+		  var issueareas="";
+		  
+		  for (kv in idkeyarr){
+		      buf=idkeyarr[kv];
+			  buf2=buf.split(" ");
+			  buf3 = buf2[0].split("_");
+			  
+			  var found = identifiermap.get(buf2[0]);
+			  var foundtot = symptomtotal.get(buf2[0]);
+			  
+			  
+			 if (buf3[0]!="n/a"){
+			  if(found){
+			      diffcnt += "<li><b>" + buf3[0] + "</b>: " + buf2[3] + " <font color='red'>(" + found.length + "/" + foundtot + ")</font></li>";
+				  rcnt += 1;
+				  foundissuestot = foundissuestot + found.length;
+				  issueareas = issueareas + buf2[3]  + " ,";
+				}else{
+				  diffcnt += "<li>" + buf3[0] + ": " + buf2[3] + " (na/na)</li>";
+				
+				}
+				
+				symptomcount +=1;
+			 }
+		  }
+		  diffbuf="<b>Total Symptoms Being Monitored: <font size=4 color='red'>" + symptomcount + "</font> and <i><font color='red'>" + patientrecs + "</font></i> Kafka Messages Processed</b><ul>";
+          document.getElementById('barchartlabel_div').innerHTML=diffbuf + diffcnt + "</ul>";             
+          document.getElementById('totsymptoms').innerHTML=rcnt;             
+    
+//	      document.getElementById('totissues').innerHTML=foundissuestot;			 
+          
+	   //   document.getElementById('totrecs').innerHTML=patientrecs;			
+
+          document.getElementById('issues').innerHTML="<font color='red' size=3> "+issueareas.slice(0, -1) + "</font>";
+		  
+		  //issueareas.slice(0, -1)
+          
+		  issueareas=null;
+		  foundissuestot=null;
+		  rcnt = null;
+           diffcnt=null;
+           diffData=null;
+		   diffbuf=null;
+		   buf=null;
+		   buf2=null;
+		   buf3=null;
+		   options=null;
+		   oldData=null;
+		   newData=null;
+		 }  
+		}
+
+		
+		function drawHealthriskchart(topic){
+		    
+            if (mainkafkatopic!="nft-ml-prediction-results-output"){
+			   return;
+			}
+			
+			var data = new google.visualization.DataTable();
+             	curTime = new Date();
+		    data.addColumn('date', "Date");
+			 data.addColumn('number', "Value");
+			 
+			 data.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+             data.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+						
+			
+			//var maindetailmap=parseIdentifier(); //updates superidentifiermap
+			//var superidentifiermap = maindetailmap[1];
+			
+			//storepatientdata(maindetailmap[0],topic);
+			
+		//	return;
+			
+			//return
+			var hv=null;
+			var dvalue=null;
+			var selectedData=null;
+			var mainriskvalue=null;
+			var r=null;		
+			var localmap=null;
+			var keybuf=null;
+			var sns=null;
+			var num=null;
+			var prevselect=-1;
+			
+			//console.log("healtharray=",healthriskarray);
+			
+			  for (h in healthriskarray){
+			      hv = healthriskarray[h];
+				
+				  ///dvalue=hv[0];
+				  dvalue=new Date(hv[0]);
+				  selectedData = hv[1];
+				  risknum = Number(selectedData);
+				  risknum = risknum.toFixed(1);
+				  if (Number(selectedData)!=0){
+				 deptext = "<font size=3><b>Risk Value: " + risknum + "</b></font>";
+				 indeptext = "<br><font size=3>At time: " + dvalue + "</font>";
+				  // r=0;
+				  //main risk value
+				   mainriskvalue=Number(selectedData);
+				//   localmap=superidentifiermap.get(selectedData);
+				   data.addRow([ 	dvalue, mainriskvalue,deptext,indeptext]);
+				   }
+				} 
+				 //  g2.refresh(mainriskvalue);
+				 //console.log("data=",data);
+				 
+				 //return;
+				
+/*				
+				if (localmap && (selectedData > riskthreshold) && (prevselect!=selectedData)){				  
+				 indeptext += "<br><font size=3><b>Patients: </b></font><br>";
+					 
+					for (const [key, value] of localmap) {
+						 keybuf=`${key}`;
+					//	console.log("key=",key, " value= ", value);
+						//var valbuf=`${value}`;
+						
+						   sns=getSymptomname(keybuf);		    
+				          indeptext += "<font size=3 color=red><b>" + sns[1] + " (" + sns[0] + ")</b></font><br>";  		
+				         //   var varr = value.split(",");
+						     num=1;
+							 //   console.log("value len=",value.length);
+								
+                            for (vv in value){ 							
+						    indeptext += "<font size=2><b>" + num + ".</b>" + value[vv] + "</font><br>";
+							num +=1;
+						   }
+						
+		            }
+                   			
+				  }
+				  
+				
+				prevselect=selectedData;
+				
+				//  indeptext="";
+			     data.addRow([ 	dvalue, mainriskvalue,deptext,indeptext]);
+				 localmap=null;
+                 hv=null;
+			     dvalue=null;
+			     selectedData=null;
+			     mainriskvalue=null;
+			     r=null;
+			     keybuf=null;
+			     sns=null;
+			     num=null;
+							 
+			  }
+  */             
+			   if (chartrisk==null){
+     	     	 chartrisk = new google.visualization.AnnotatedTimeLine(document.getElementById('riskchart_div'));	
+				}
+				 
+				 //console.log("Risk data=",data);
+
+				  chartrisk.draw(data, {  annotationsWidth: 27,  max: 100, min: 0, width: '1250',height: '90%', displayAnnotations: true,displayAnnotationsFilter: true,fill: 10,thickness: 3,scaleType:'maximized',allowHtml: true,displayRangeSelector: true, displayZoomButtons: true, allowRedraw: true})                  					                 
+				 		
+		    chartrisk=null;
+			  maindetailmap=null;
+			  data=null;
+		     superidentifiermap=null;
+		}
+	
+	
+	
+	function drawJustgage(jsondata,topic){
+	    //if (mainkafkatopic=="iot-ml-prediction-results-output"){
+           getAvgRisk(jsondata);
+           
+//		    document.getElementById('tottime').innerHTML="<font size=3><ul><li><b>TimeWindowStart:</b> " + timestart + "</li><li><b>TimeWindowEnd:</b> " + timeend + "</li></ul></font>"
+           //maingaugepercentageavg=79;
+
+           maingaugepercentag=0;
+
+		   document.getElementById('avgrisk').innerHTML=maingaugepercentageavg + "%";	 
+
+           g1.refresh(0);
+		      g2.refresh(0);
+		  
+	  //}
+	  //g2.refresh(riskcurr);
+	  
+	}
+		
+		function drawChartGauge(jsondata,topic) {
+		   var tcount=0;
+		   var data;
+		   var tval = 0;
+		   var data2;
+		   var t;
+		   
+		
+		   if (healthriskarray.length>0){
+		      for (h in healthriskarray){
+			     t = healthriskarray[h];
+				tval += Number(t[1]);
+			  }
+			  maingaugepercentageavg = Number(tval/healthriskarray.length);
+			  maingaugepercentageavg =maingaugepercentageavg.toFixed(1);
+		   }else{
+		     maingaugepercentageavg=Number(maingaugepercentage);
+		   }
+		   
+		   if (jsondata){
+			   tcount = jsondata.TopicReads.length;				
+                    data = google.visualization.arrayToDataTable([
+                     ['Label', 'Value'],
+                     ['Avg. Risk', Number(maingaugepercentageavg)]
+                    ]);			  			
+				
+                    data2 = google.visualization.arrayToDataTable([
+                     ['Label', 'Value'],
+                     ['Curr. Risk', Number(maingaugepercentage)]
+                    ]);			  			
+			   
+		   }else{		   
+            data = google.visualization.arrayToDataTable([
+             ['Label', 'Value'],
+             ['Avg. Risk', 0]
+           ]);
+            data2 = google.visualization.arrayToDataTable([
+             ['Label', 'Value'],
+             ['Curr. Risk', 0]
+           ]);
+		   
+          }
+           var options = {
+             width: 690, height: 290,
+             redFrom: 90, redTo: 100,
+             yellowFrom:75, yellowTo: 90,
+             minorTicks: 5,
+			 fontSize: 10,
+			 displayZoomButtons: false
+           };
+
+           var options2 = {
+             width: 350, height: 190,
+             redFrom: 90, redTo: 100,
+             yellowFrom:75, yellowTo: 90,
+             minorTicks: 5,
+			 fontSize: 10
+           };
+		   
+			
+			if (chartguage==null){
+              chartguage = new google.visualization.Gauge(document.getElementById('gaugehealthrisk_div'));
+		   }else{
+		     chartguage.clearChart();
+		   }
+           chartguage.draw(data, options);
+
+          	if (chartguagesm==null){
+           chartguagesm = new google.visualization.Gauge(document.getElementById('gaugehealthrisksm_div'));
+		   }else{
+		     chartguagesm.clearChart();
+		   }
+		   
+          chartguagesm.draw(data2, options2);
+
+		   if (tcount){
+             var buf="<font >Found " + issuecount + " Possible Issues</font>";
+
+			 if (issuecount>0){
+			    buf="<font color=red>Found " + issuecount + " Possible Issues<br></font><font color=red size=3>In this Time Window: <b><ul><li>" + timestart + "</li><li>" + timeend + "</li></ul></b></font>";
+			 }
+			 
+/*			 document.getElementById('gaugehealthrisk2_div').innerHTML="<div class='grid'>" + 
+			" <label class='card'> " +
+			" <span class='plan-type'>" +
+			" Processed: " + tcount + " Messages " + " - " + buf + "</span>" + 
+			" </label> " +
+			"</div>"
+    */	
+	}
+			
+		   tcount=null;
+		    data=null;
+		    tval = null;
+		    data2=null;
+		    t=null;
+			
+        
+		}
+		
+		function getAvgRisk(jsondata){		
+			var count=0;
+			maingaugepercentageavg=0;
+			//issuecount=0;
+			
+		//	console.log("riskthreshold=",riskthreshold);
+			
+			
+			if (jsondata){
+			for (j in jsondata.TopicReads){
+			   if (jsondata.TopicReads[j].Probability0 && jsondata.TopicReads[j].Produceto=="iot-ml-prediction-results-output"){
+				   jbuf=jsondata.TopicReads[j].Hyperprediction;
+				   maingaugepercentageavg = maingaugepercentageavg + Number(jbuf);
+				   count = count + 1;
+				   
+				 //  console.log("here=",(Number(jbuf)*100));
+				   
+				 //  if ((Number(jbuf)*100)>=riskthreshold){
+				//      issuecount=issuecount+1;					 		 
+				   //}
+				 }
+			}
+			if (count!=0){
+			   maingaugepercentageavg=maingaugepercentageavg/count;
+			   maingaugepercentageavg=maingaugepercentageavg.toFixed(1) * 100;
+			   didRisk=1;
+			  
+
+         		storehealthrisk();
+			   
+			   addHeatdata(jsondata);
+ 
+            //   doBlockchain(jsondata);
+		//	   drawHealthriskchart("");
+		
+			  // maingaugepercentageavg=0;
+			}
+		  }	
+	       //console.log("uniq=",uniqueArray);
+		   return;
+		
+		}
+		
+		function generateheatdata(jsondata){
+		     var data = [
+//					 'BINANCE','COINBASE','KRAKEN','BITFINEX','GEMINI','COINCHECK','BITSTAMP',
+  // 'BYBIT','BINANCEOPTV','HUOBI','KORBIT','DIGIFINEX','OKCOINUSD','COINCHECK',
+   //'BTCEXCHANGE','COINSBIT','BITSO','CITEX','UPBIT','TIDEX','BITFOREX',
+   //'DCOIN','CRYPTOCOM','BIBOX','BKEX','BIONE','KUCOIN','BITMART','BTSE'
+
+					{
+					  name: 'BINANCE',
+					  data: [22,44,62,33,92,44,-32,33],
+					  colors: ['#000000','#ffffff']
+					},
+					{
+					  name: 'COINBASE',
+					  data: [12,84,32,3,22,4,32,33]
+					},
+					{
+					  name: 'KRAKEN',
+					  data: [22,44,32,73,22,64,32,93]
+					},
+					{
+					  name: 'COINCHECK',
+					  data: [22,74,32,3,82,64,92,93]
+					},
+					{
+					  name: 'KUCOIN',
+					  data: [22,14,52,33,92,44,32,33]
+					},
+					{
+					  name: 'BYBIT',
+					  data: [92,14,62,93,22,44,52,33]
+					},					
+					{
+					  name: 'BINANCEOPTV',
+					  data: [92,44,62,33,92,44,62,33],
+					  colors: ['#000000','#ffffff']
+					},
+					{
+					  name: 'HUOBI',
+					  data: [12,84,32,33,22,44,32,33]
+					},
+					{
+					  name: 'KORBIT',
+					  data: [22,44,32,33,22,64,32,93]
+					},
+					{
+					  name: 'DIGIFINEX',
+					  data: [22,14,32,33,22,64,32,93]
+					},
+					{
+					  name: 'OKCOINUSD',
+					  data: [22,14,22,83,22,44,32,33]
+					},
+					{
+					  name: 'CRYPTOCOM',
+					  data: [92,14,12,93,22,44,32,33]
+					},
+					{
+					  name: 'BTCEXCHANGE',
+					  data: [22,44,62,33,92,44,-32,33],
+					  colors: ['#000000','#ffffff']
+					},
+					{
+					  name: 'COINSBIT',
+					  data: [12,84,32,33,22,44,32,33]
+					},
+					{
+					  name: 'BITSO',
+					  data: [22,44,32,33,22,64,32,93]
+					},
+					{
+					  name: 'CITEX',
+					  data: [22,14,32,33,22,64,32,93]
+					},
+					{
+					  name: 'UPBIT',
+					  data: [22,14,22,83,22,44,32,33]
+					},
+					{
+					  name: 'TIDEX',
+					  data: [92,14,12,93,22,44,32,33]
+					},
+					{
+					  name: 'BITFOREX',
+					  data: [22,44,62,33,92,44,-32,33],
+					  colors: ['#000000','#ffffff']
+					},
+					{
+					  name: 'DCOIN',
+					  data: [12,84,32,33,22,44,32,33]
+					},
+					{
+					  name: 'BIONE',
+					  data: [22,44,32,33,22,64,32,93]
+					},
+					{
+					  name: 'BKEX',
+					  data: [22,14,32,33,22,64,32,93]
+					},
+					{
+					  name: 'BTSE',
+					  data: [22,14,22,83,22,44,32,33]
+					},
+					{
+					  name: 'BIBOX',
+					  data: [92,14,12,93,22,44,32,33]
+					},
+					
+					
+					
+					
+				]
+			return data;	
+		}
+		
+		var previousvalue;
+		
+        function heatcolors(value,dataPointIndex,w,seriesIndex){
+		   var colors = [
+				"#FF0000", //red
+				"#00FF00", // green
+				"#FFBF00", // orange
+			  ];
+             
+			 console.log("previous=",previousvalue, " value=",value, "w=",w, "seriesindex=",seriesIndex, " dataPointIndex=",dataPointIndex);
+			 if (dataPointIndex==0){
+			  previousvalue=value;
+			   return colors[1];
+			 }else{			 
+			   if (value < previousvalue){
+			     previousvalue=value;
+			     return colors[0];
+			   }else if (value == previousvalue){
+			     previousvalue=value;			     
+				 return colors[2];
+			   }else{			   
+			     previousvalue=value;			   
+			     return colors[1];
+			  }
+			 } 
+		}
+		
+		function heatmaptable2(data,htime,datatime,changedataarr){
+            //data=generateheatdata(jsondata);
+			
+		//	console.log("data=",data);
+			var prevvalue=-999;
+			
+            var colors = ["linear-gradient(to bottom right, #ff0040, #330000)", "#F27036", "#663F59", "#6A6E94", "#4E88B4", "#00A7C6", "#18D8D8", '#A9D794','#46AF78', '#A93F55', '#8C5E58', '#2176FF', '#33A1FD', '#7A918D', '#BAFF29']
+			
+			var options = {
+			  series: data,
+			  chart: {
+			  height: 450,
+			  type: 'heatmap',
+			},
+			dataLabels: {
+			  enabled: true
+			},			
+			 plotOptions: {
+			  heatmap: {
+				shadeIntensity: .1,
+				radius: 20,
+				useFillColorAsStroke: false,								
+			  }//heatmap
+			},
+			colors: [function({ value, seriesIndex, dataPointIndex,w }) {
+					  return heatcolors(value,dataPointIndex,w,seriesIndex);
+				}],
+			xaxis: {
+			  type: 'category',
+			  categories: datatime //['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '01:00', '01:30']
+			},
+			grid: {
+			  padding: {
+				right: 20
+			  }
+			}
+			};
+
+           if (heatchart){
+				heatchart.destroy();
+
+		   }
+			 heatchart = new ApexCharts(document.querySelector("#heatmaptablechart"), options);
+			 //heatchart = new ApexCharts(document.getElementById('heatmaptablechart'), options);
+			 heatchart.render();			 			
+			
+//			delete heatchart;
+			
+	     	//heatchart=null;
+		}
+
+		function heatmaptable(data,htime,datatime){
+            //data=generateheatdata(jsondata);
+			
+		//	console.log("data=",data);
+			
+            var colors = ["linear-gradient(to bottom right, #ff0040, #330000)", "#F27036", "#663F59", "#6A6E94", "#4E88B4", "#00A7C6", "#18D8D8", '#A9D794','#46AF78', '#A93F55', '#8C5E58', '#2176FF', '#33A1FD', '#7A918D', '#BAFF29']
+			
+			var options = {
+			  series: data,
+			  chart: {
+			  height: 450,
+			  type: 'heatmap',
+			},
+			dataLabels: {
+			  enabled: true,
+			  style: {
+                fontSize: "13px",
+//				fontColor: "#000000",
+                fontFamily: "Helvetica, Arial, sans-serif",
+                fontWeight: "bold"
+              }
+			},			
+			 plotOptions: {
+			  heatmap: {
+				shadeIntensity: .1,
+				radius: 20,
+				useFillColorAsStroke: false,				
+				colorScale: {
+				  ranges: [{
+					  from: 0,
+					  to: 3,
+					  color: '#00A100'
+					},
+					{
+					  from: 4,
+					  to: 10,
+					  color: '#128FD9'
+					},
+					{
+					  from: 11,
+					  to: 30,
+					  color: '#FFB200'
+					},
+					{
+					  from: 31,
+					  to: 100,
+					  color: '#FF0000'
+					}
+				  ]
+				}
+			  }//heatmap
+			},
+			//colors: colors,
+			xaxis: {
+			  type: 'category',
+			  categories: datatime, //['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '01:00', '01:30']
+			  labels: {
+               style: {
+                fontSize: '15px'
+               }
+              }
+			},
+			yaxis: {
+			 labels: {
+               style: {
+                fontSize: '15px'
+               }
+              }
+			},
+			grid: {
+			  padding: {
+				right: 20
+			  }
+			}
+			};
+
+           if (heatchart){
+				heatchart.destroy();
+
+		   }
+			 heatchart = new ApexCharts(document.querySelector("#heatmaptablechart"), options);
+			 //heatchart = new ApexCharts(document.getElementById('heatmaptablechart'), options);
+			 heatchart.render();			 			
+			
+//			delete heatchart;
+			
+	     	//heatchart=null;
+		}
+		
+		
+		function genheatmaindata(mainexch,maindetailsmap,datatime){
+		   var maindata = [];
+		   var mainhdata = new Map();
+		   var hdatatime = [];
+			var countpricesup=0;
+			var changehdata = [];
+			averageprices.clear();
+		   		   		   
+		   for (d in mainexch){
+		    var hdata = [];
+			hdatatime = [];
+			var idx = 0;			
+			
+		     for (const [key, value] of maindetailsmap) {
+			  keybuf=`${key}`;
+        	  valuebuf=`${value}`;
+			  var dn = mainexch[d] + "-";
+			  if (keybuf.includes(dn)){
+			    let a = keybuf.split("-");
+				let abuf = a[a.length-1];
+			    hdata.push(valuebuf);				
+				hdatatime.push(abuf);
+				if (idx > 0){
+				   if (Number(hdata[idx-1]) > Number(hdata[idx])){
+                        changehdata.push(-1);
+				   }else if (Number(hdata[idx-1]) < Number(hdata[idx])){
+                        changehdata.push(1);
+						countpricesup = countpricesup + 1;
+					}else{
+                       changehdata.push(0);
+                    }					
+				}else{
+				  changehdata.push(0);
+				}
+				
+				idx = idx + 1;
+			  }
+			  
+             }			 
+			 
+			 mainhdata.set(mainexch[d],[hdata,hdatatime,changehdata]);
+		   }
+		   
+		   if (changehdata.length > 0){
+		     avgpricetrend = (countpricesup/changehdata.length)*100;
+		   }else{
+		     avgpricetrend=0;
+		   }
+		   document.getElementById('totissues').innerHTML=avgpricetrend.toFixed(0) + "%";	
+		   
+		   const sortedmainhdata = new Map([...mainhdata].sort());
+	       //console.log("sortedmainhdata=",sortedmainhdata);
+	
+		   var fullmap = new Map();
+		   
+		   //generate hkeydata
+		   var hkeydata = [];
+		   var changedata = [];
+		   
+		   for (const [key, value] of sortedmainhdata) {
+		      keybuf=`${key}`;
+			  
+			  var dataarr = [];
+			  var changedataarr = [];
+			   var prices = 0;
+			   var numprices=0;
+			   
+		       for (dt in datatime){		     		
+             	
+			       var ind = value[1].indexOf(datatime[dt]);
+				   if (ind != -1){
+				     dataarr.push(value[0][ind]);
+					 prices = prices + Number(value[0][ind]);
+					 numprices = numprices + 1;
+					 changedataarr.push(value[2][ind])
+			         //hkeydata.push({'name': keybuf, 'data': value[0]});
+				  }else{
+				      dataarr.push(null);
+					  changedataarr.push(null);
+				  }				 
+			 }
+			 
+			 let avgprices = prices / numprices;
+			 dataarr = [avgprices.toFixed(2)].concat(dataarr);
+			 averageprices.set(keybuf,avgprices.toFixed(2));
+			 
+			 hkeydata.push({'name': keybuf, 'data': dataarr});
+			  changedata.push({'name': keybuf, 'data': changedataarr});
+
+		   }	
+		   hdatatime = ['Avg. Eth Prices'].concat(hdatatime);
+		   datatime = ['Avg. Eth Prices'].concat(datatime);
+		   heatmaptable(hkeydata,hdatatime,datatime,changedata);		   		  
+		   
+		}
+		
+		function heattabledata(jsondata,topic){
+          //liquidity
+          //market
+        	var predictionmap = new Map();
+			var liquidityrisk=0;
+			var marketrisk=0;
+			var lqcnt=0;
+			var marcnt=0;
+			//var marketmap = new Map()
+		    var mainliquidityrisk=0;
+			var mainmarketrisk=0;
+			var xtime = [];
+			var mainexch = [];
+			var mainissues=0;
+			var issuetime = [];
+			
+			//console.log("jsondata=",jsondata);
+			
+		   if (jsondata && mainkafkatopic=="nft-ml-prediction-results-output"){
+		     for (j in jsondata.TopicReads){
+          //get the fields 
+		     kafkakey=jsondata.TopicReads[j].kafkakey;
+			 identifier=jsondata.TopicReads[j].Identifier;
+			 idarr = identifier.split("~");
+			 
+			 let indm=idarr.findIndex(element => element.includes(",liquidity"))
+              if (indm!=-1){
+			     liquidityrisk = liquidityrisk + Number(  jsondata.TopicReads[j].Hyperprediction)
+				 lqcnt = lqcnt + 1;
+     			 let indm2=idarr.findIndex(element => element.includes("mainuid="))
+                  let exch=idarr[indm2].split("=")[1]
+                  var er =  Number(jsondata.TopicReads[j].Hyperprediction);
+				  
+				  let created=jsondata.TopicReads[j].Created;
+	  			  let ct= created.split("T")[1];
+				  var timeb=ct.substring(0,5);
+				  
+				  predictionmap.set(exch + "-" + timeb,(er).toFixed(2));
+				  mainexch.push(exch);
+				  xtime.push(timeb);
+				  
+				 // if ( er >.75){
+				    mainissues = mainissues  + 1;
+					issuetime.push(timeb);
+				  //}
+				 
+              }else{
+			     marketrisk = marketrisk + Number(  jsondata.TopicReads[j].Hyperprediction)
+				 marcnt = marcnt + 1;			  
+     			 let indm2=idarr.findIndex(element => element.includes("mainuid="))
+                  let exch=idarr[indm2].split("=")[1]
+				  let created=jsondata.TopicReads[j].Created;
+	  			  let ct= created.split("T")[1];
+				  var timeb =ct.substring(0,5);
+				  xtime.push(timeb);
+				  //console.log("timeb=",timeb);
+				  
+                  var er =  Number(jsondata.TopicReads[j].Hyperprediction);
+				  
+				  predictionmap.set(exch + "-" + timeb,(er).toFixed(2));
+				  mainexch.push(exch);
+ 		    	  }			  
+				 // if (er > .75){
+				    mainissues = mainissues  + 1;
+					issuetime.push(timeb);
+				  //}
+		   
+		      }
+			  //Generate the main market risk and liquidity percentages
+			  mainliquidityrisk = ((liquidityrisk/lqcnt)*100).toFixed(0);
+  			  mainmarketrisk = ((marketrisk/marcnt)*100).toFixed(0);
+             
+			 // Sort time 
+			  xtime = Array.from(new Set(xtime));
+			  var xtimejson = [];
+			  for (x in xtime){
+			     xtimejson.push({'time': xtime[x]});
+			  }
+			  xtimejson.sort(function (a, b) {
+                return a.time.localeCompare(b.time);
+              });
+			  
+			  // put sorted time back in array
+			  xtime = [];
+			  for (x in xtimejson){
+			    xtime.push(xtimejson[x].time);
+			  }
+			   // console.log("xtimejson=",xtimejson);
+ 			    //console.log("xtime=",xtime);
+             //document.getElementById('totissues').innerHTML=issuetime.length;	
+			 //mainissuesfound = issuetime.length;	
+			 //mainlatlonmapsize = xtime.length;
+			 
+			  issuetime = Array.from(new Set(issuetime));
+			  
+			  mainexch = Array.from(new Set(mainexch));
+			  			  
+              /*g1.refresh(mainmarketrisk);
+			  if (isNaN(mainliquidityrisk)==false){
+			  g2.refresh(mainliquidityrisk);
+			  }else{
+			   g2.refresh(0);
+			  }*/
+             
+			 //let overallrisk=(mainmarketrisk + mainliquidityrisk)/2;
+			 //let a1=mainmarketrisk+mainliquidityrisk;
+			 //let a2=a1 / 2;
+             //document.getElementById('avgrisk').innerHTML=mainmarketrisk + "%";	 
+			 			 
+			// console.log("xtime=",xtime);
+			 
+			  genheatmaindata(mainexch,predictionmap,xtime);
+		   }
+		}
+		
+
+		function probabilitydata(jsondata,topic){
+          //liquidity
+          //market
+        	var predictionmap = new Map();
+        	var predictionmapprob = new Map();
+
+			var liquidityrisk=0;
+			var marketrisk=0;
+			var lqcnt=0;
+			var marcnt=0;
+			//var marketmap = new Map()
+		    var mainliquidityrisk=0;
+			var mainmarketrisk=0;
+			var xtime = [];
+			var mainexch = [];
+			var mainissues=0;
+			var issuetime = [];
+			
+			//console.log("jsondata=",jsondata);
+			
+		   if (jsondata && mainkafkatopic=="nft-ml-prediction-results-output-logistic"){
+		     for (j in jsondata.TopicReads){
+          //get the fields 
+		     kafkakey=jsondata.TopicReads[j].kafkakey;
+			 identifier=jsondata.TopicReads[j].Identifier;
+			 idarr = identifier.split("~");
+			 
+			 let indm=idarr.findIndex(element => element.includes(",liquidity"))
+              if (indm!=-1){
+			     liquidityrisk = liquidityrisk + Number(  jsondata.TopicReads[j].Hyperprediction)
+				 lqcnt = lqcnt + 1;
+     			 let indm2=idarr.findIndex(element => element.includes("mainuid="))
+                  let exch=idarr[indm2].split("=")[1]
+                  var er =  Number(jsondata.TopicReads[j].Hyperprediction);
+				  
+				  let created=jsondata.TopicReads[j].Created;
+	  			  let ct= created.split("T")[1];
+				  var timeb=ct.substring(0,5);
+				  
+				  predictionmap.set(exch + "-" + timeb,(er).toFixed(2));
+				  mainexch.push(exch);
+				  xtime.push(timeb);
+				  
+				 // if ( er >.75){
+				    mainissues = mainissues  + 1;
+					issuetime.push(timeb);
+				  //}
+				 
+              }else{
+			     marketrisk = marketrisk + Number(  jsondata.TopicReads[j].Hyperprediction)
+				 marcnt = marcnt + 1;			  
+     			 let indm2=idarr.findIndex(element => element.includes("mainuid="))
+                  let exch=idarr[indm2].split("=")[1]
+				  let created=jsondata.TopicReads[j].Created;
+	  			  let ct= created.split("T")[1];
+				  var timeb =ct.substring(0,5);
+				  xtime.push(timeb);
+				  //console.log("timeb=",timeb);
+				  
+                  var er =  Number(jsondata.TopicReads[j].Hyperprediction);
+				  var pv = predictionmapprob.get(exch);
+				  //console.log("er=",er, " pv=",pv, " exch=",exch);
+				  
+				  if (isNaN(pv)==false){
+				      var mainprob = (parseFloat(pv) + parseFloat(er))/2;
+					  //console.log("Inside mainprob=",mainprob, " pv=",pv, " er=",er);
+					  
+				      predictionmap.set(exch + "-" + timeb,(er).toFixed(2));
+					  predictionmapprob.set(exch,mainprob.toFixed(2));					  
+				  }else{
+					  predictionmapprob.set(exch,(er).toFixed(2));				  
+				  }
+				  mainexch.push(exch);
+ 		    	  
+				  }			  
+				 // if (er > .75){
+				    mainissues = mainissues  + 1;
+					issuetime.push(timeb);
+				  //}
+		   
+		      }
+			  //Generate the main market risk and liquidity percentages
+			  mainliquidityrisk = ((liquidityrisk/lqcnt)*100).toFixed(0);
+  			  mainmarketrisk = ((marketrisk/marcnt)*100).toFixed(0);
+             
+			 // Sort time 
+			  xtime = Array.from(new Set(xtime));
+			  var xtimejson = [];
+			  for (x in xtime){
+			     xtimejson.push({'time': xtime[x]});
+			  }
+			  xtimejson.sort(function (a, b) {
+                return a.time.localeCompare(b.time);
+              });
+			  
+			  // put sorted time back in array
+			  xtime = [];
+			  for (x in xtimejson){
+			    xtime.push(xtimejson[x].time);
+			  }
+			   // console.log("xtimejson=",xtimejson);
+ 			    //console.log("xtime=",xtime);
+             //document.getElementById('totissues').innerHTML=issuetime.length;	
+			 //mainissuesfound = issuetime.length;	
+			 //mainlatlonmapsize = xtime.length;
+			 
+			  issuetime = Array.from(new Set(issuetime));			  
+			  mainexch = Array.from(new Set(mainexch));
+			  			  
+        	 //console.log("predictionmapprob=",predictionmapprob);
+			 // get average probabilitydata
+			 averageprob.clear();
+			 for (const [key, value] of predictionmapprob) {
+		      keybuf=`${key}`;
+                averageprob.set(keybuf,value);
+              }
+              drawBarchartLogistic();
+			 
+			  //console.log("averageprob=",averageprob);
+			  //genheatmaindata(mainexch,predictionmap,xtime);
+		   }
+		}
+		
+		
+        function drawChart(jsondata,topic) {
+            
+		//	curTime = new Date();
+     		  issues="";
+			  issuecount=0;
+			  				
+							
+         //if (jsondata && mainkafkatopic!="fhir-ml-xenese-confirmation"){
+		 if (jsondata){
+		  
+		  //get partition/offset
+	//	  var i=0;
+		  var text;
+		  var val;		 
+		//  var partitionarr=[];
+        	var createdon;	
+			var winstart;
+			var winend;
+		
+			var symptom;
+			var processtype;
+				
+			var identifier;
+			var idarr;
+			var symptomcode;
+			//var topic;
+			var processbuf;
+			var normalvalue;
+			var processvariable="";
+			var ubound;
+			var predictionvalue;
+			var totalmessages;
+			var kafkakey;
+			var offset;
+			var partition;		
+		   var arr;
+		   var st;
+		   var ed;
+			var et;
+          var vbuf;					   
+		   var buf;
+		   var vbuf2;
+		    var varr;
+			var msgiddatastr="";
+			var Maintopic;
+				/*			
+		  do {
+             text = "LastOffset_partition_"+i;
+			  val=jsondata[text];
+			 if (val){
+			   partitionarr.push(val);
+			 }
+			 i++;
+            } while(val)
+			*/
+		  ///////////////////////////////////START mainloop
+		 
+		  let rownum=0;
+		  
+		  
+		  for (j in jsondata.TopicReads){
+          //get the fields 
+		     kafkakey=jsondata.TopicReads[j].kafkakey;
+             //try {			 
+		     if ( kafkakey !=null && !kafkakeyarr.includes(kafkakey) && kafkakey.length>0){
+		        kafkakeyarr.push(kafkakey);
+			      
+				//  jsonhist=jsonhist+JSON.stringify(jsondata.TopicReads[j]) +",";
+				  
+			//	i++;	 
+				
+			//	console.log(jsondata);
+				
+				 createdon=jsondata.TopicReads[j].TimeStamp;	
+				maintimestamp = createdon;
+				 winstart=jsondata.TopicReads[j].WindowStartTime;
+				timestart=winstart;
+				 winend=jsondata.TopicReads[j].WindowEndTime;
+				timeend=winend;
+
+				/* msgiddata=jsondata.TopicReads[j].MsgIdData;
+				 if (msgiddata){
+				 msgiddatastr = msgiddata.join();
+				 }*/
+				 
+				// if (jsondata.TopicReads[j].PreprocessIdentifier){
+				try{
+				 processvariable=jsondata.TopicReads[j].PreprocessIdentifier;
+				 processvariable=processvariable.split("~")[0];
+				 }catch(e){
+				   continue;
+				 }
+				 //}
+				 
+				 processtype=jsondata.TopicReads[j].Preprocesstype;
+				
+				 identifier=jsondata.TopicReads[j].Identifier;
+				 idarr = identifier.split("~");
+				 processvariable = idarr[0];
+
+				 let indm=idarr.findIndex(element => element.includes("mainuid="))
+                  msgiddatastr=idarr[indm].split("=")[1]
+				 
+				 topic = jsondata.TopicReads[j].Topic;
+				 Maintopic = jsondata.TopicReads[j].Maintopic;
+			//	 mainkafkatopic=Maintopic;
+				// if (jsondata.TopicReads[j].Produceto){
+				  // mainkafkatopic=jsondata.TopicReads[j].Produceto; 				 
+				 //}
+				 processbuf = "_preprocessed_" + processtype;
+				 //normalvalue=-1;
+				 //ubound=-1;
+				
+				/*
+				for (v in idarr){		
+			      vbuf = idarr[v];
+		           
+				   if (vbuf.includes("identifier:")){				   
+				       buf = vbuf.substring(11);
+                       idkeyarr = buf.split(",");			
+         				for (v2 in idkeyarr){						 
+						    vbuf2 = idkeyarr[v2];
+						    varr = vbuf2.split(" ");							  
+						//	if (varr[0]==symptomcode){
+						     if (topic.includes(varr[0]) && topic.includes(processbuf) ){
+							   ubound = Number(varr[1]);
+							   normalvalue = Number(varr[2]);
+							   break;
+							}
+						
+						}
+                       					  
+				   }
+				}*/
+				
+				predictionvalue=jsondata.TopicReads[j].hyperprediction;
+				totalmessages=jsondata.TopicReads[j].Numberofmessages;
+				kafkakey=jsondata.TopicReads[j].kafkakey;
+				offset=jsondata.TopicReads[j].Offset;
+				 partition=jsondata.TopicReads[j].Partition;		
+		
+				  predictionvalue = Number(predictionvalue);
+				//  datainchart.push(predictionvalue)
+
+				 arr=[createdon,winstart,winend,msgiddatastr,processvariable,processtype,predictionvalue,totalmessages,kafkakey,offset,partition];
+				 if (mainkafkatopic=="nft-preprocess"){
+		     	  dataintable.push(arr)		          
+				  }
+				  rownum++;
+				
+				
+				//data.addRow([ 	rownum, predictionvalue]);
+				
+		  /////////////////////   UNCOMMENT 
+		     // console.log("-----------------CALLING Draw table 1");
+				//drawTable(createdon,winstart,winend,symptom,symptomcode,processtype,predictionvalue,normalvalue,ubound,totalmessages,kafkakey,offset,partition,rownum);
+		    
+				predictioncount = predictioncount + 1;
+            //   document.getElementById('predictionlabel').innerHTML = "<b>"+ predictioncount + "</b>";	
+		 		 
+              }
+			  }
+	         	
+			                  maintotalmessages = maintotalmessages + rownum;
+		        document.getElementById('totrecs').innerHTML=maintotalmessages;	
+
+			      if (rownum>0 && mainkafkatopic=="nft-preprocess"){
+
+		 		    document.getElementById('tottime').innerHTML="<font size=3><b>Start:</b> " + timestart + "<b><br>End:</b> " + timeend + "</font>"
+
+				     drawTable2();
+					// gettabledata(null);
+					
+				//  }
+		    
+		   }		   
+		  }
+            
+		         
+		//   i=null;
+		   text=null;
+		   val=null;		 
+		  // partitionarr=null;
+		   kafkakey=null;
+        	 createdon=null;	
+			 winstart=null;
+			 winend=null;
+		
+			 symptom=null;
+			 processtype=null;
+				
+			 identifier=null;
+			 idarr=null;
+			 symptomcode=null;
+			// topic=null;
+			 processbuf=null;
+			 normalvalue=null;
+			 ubound=null;
+			 predictionvalue=null;
+			 totalmessages=null;
+			 rownum=null;
+		
+			 offset=null;
+			 partition=null;		
+		    arr=null;
+		    st=null;
+		    ed=null;
+			 et=null;
+          vbuf=null;					   
+		  buf=null;
+		  vbuf2=null;
+		  varr=null;
+				
+				
+
+        }
+		
+		function drawTable2(){
+	//		var cvalue = Number(currentvalue);			 
+//			let arr=[createdon,winstart,winend,symptom,symptomcode,processtype,currentvalue,normalvalue,ubound,totalmessages,kafkakey,offset,partition];
+
+            if (maintable==null){
+		      maintable = new google.visualization.Table(document.getElementById('table_div'));
+			}
+			
+			var formatter = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:0});
+			var formatter2 = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:3});
+			
+			
+			 if (datatbl==null){
+				datatbl = new google.visualization.DataTable();
+				
+				datatbl.addColumn('string', 'Date/Time');
+				datatbl.addColumn('string', 'Time Window Start');
+				datatbl.addColumn('string', 'Time Window End');
+				datatbl.addColumn('string', 'Subject Information');
+			//	datatbl.addColumn('string', 'Symptomcode');
+			    
+				datatbl.addColumn('string', 'ProcessVariable');
+			
+				datatbl.addColumn('string', 'Processtype');
+				
+				datatbl.addColumn('number', 'Current Value');				
+				//datatbl.addColumn('number', 'Normal Mean Value');
+				//datatbl.addColumn('number', 'Upper Bound Value');
+				datatbl.addColumn('number', 'Total Messages');				
+				datatbl.addColumn('string', 'Kafkakey');
+				datatbl.addColumn('number', 'Offset');
+				datatbl.addColumn('number', 'Partition');
+		   
+			   datatbl.sort({column: 1, desc: true});
+							
+			   maintable.clearChart();
+			   
+				maintable.draw(datatbl, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',pageSize: 30, allowHtml: true});
+				if (append==0){
+			   datatbl.removeRows(0, datatbl.getNumberOfRows()-1);
+			   }
+		     }else{		
+			 
+			 //console.log("datatbl=",datatbl);
+			 
+
+			   formatter.format(datatbl, 1);	
+			   formatter2.format(datatbl, 2);	
+			   datatbl.sort({column: 1, desc: true});
+			   if (datatbl.getNumberOfRows()>0 && append==0){
+			     datatbl.removeRows(0, datatbl.getNumberOfRows()-1);
+			   }
+			  
+			   
+		       datatbl.addRows(dataintable);
+			   maintable.clearChart();			 
+			  maintable.draw(datatbl, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',pageSize: 30, allowHtml: true, 'cssClassNames': cssClassNames});
+  
+               
+  
+			 formatter = null;
+			 formatter2 = null;
+			  //datatbl=null;
+			   
+	        }
+			
+			dataintable = [];
+			
+			//  document.getElementById('totrecs').innerHTML=datatbl.getNumberOfRows();		
+			
+		 //  document.getElementById('predictionlabel').innerHTML = "<b>"+ predictioncount + "</b>";	
+		  /* if (jsonhist.length>0){
+		      document.getElementById("txtData").value="["+jsonhist.slice(0,-1) + "]";
+		   }*/		   		   					
+		
+		}
+		
+		function autoStart(){
+           //    e.preventDefault(); // avoid to execute the actual submit of the form.
+		         START=1;
+           //     $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka Msgs...");
+               document.getElementById('statustext').innerHTML="<font color='white'>WEBSOCKET OPEN..Receiving Kafka Msgs...</font>";
+
+		        $("#start").html("Stop Streaming");
+		        streamLiveKafkaData();
+		 		
+		}
+		
+		//autoStart();
+		
+		// sleep time expects milliseconds
+			function sleep (time) {
+			  return new Promise((resolve) => setTimeout(resolve, time));
+			}
+
+
+		function streamLiveKafkaData(){
+
+          if ("WebSocket" in window) {
+            var url = window.location.host;
+            console.log(url);
+			 mainport=url.split(":")[1];
+			//console.log(mainport);
+			
+		    var urlParams = new URLSearchParams(window.location.search);
+			var keys = urlParams.keys();
+			var entries = urlParams.entries();
+			for(pair of entries) { 			
+			    if (pair[0]=="topic"){
+				  topic=pair[1];
+				 //  document.getElementById('downloadpatientdataurl').innerHTML = "<a href='/data/" + topic + "_" + mainport + ".csv'>Download Risk Data</a>";	
+				
+                //if (patientdatanumcurrent){
+			      //var pnum=patientdatanumcurrent;
+		         //document.getElementById('downloadpatientdataurl').innerHTML = "<a href='/data/" + topic + "_" + mainport + "_" + pnum + ".csv'>Download Risk Data</a>";
+                //}else{
+                      document.getElementById('downloadpatientdataurl').innerHTML = "Avg. ETH Predictions For NFT";			
+                   document.getElementById('downloadpatientdataurllog').innerHTML = "Avg. ETH Price Direction Probability";								  
+				//}
+			}			   
+				
+				
+				if (pair[0]=="topictype"){
+				  topictype=pair[1];
+				} 
+				if (pair[0]=="secure"){
+				  secure=pair[1];
+				}
+				if (pair[0]=="vipertoken"){
+				  vipertoken=pair[1];
+				}				
+				
+				if (pair[0]=="consumerid"){
+				  consumerid=pair[1];
+				}	
+
+               if (pair[0]=="offset"){
+				  offset=pair[1];
+				}	
+				
+				if (pair[0]=="rollbackoffset"){
+				  rollbackoffset=pair[1];
+				}	
+				if (pair[0]=="groupid"){
+				  groupid=pair[1];
+				}	
+				if (pair[0]=="append"){
+				  append=pair[1];
+				}	
+			}
+			
+			
+		  if (window.location.href.indexOf("http://")!=-1){
+             ws = new WebSocket("ws://"+url+"/ws");
+            }else{
+			    ws = new WebSocket("wss://"+url+"/ws");
+			}
+            ws.onmessage = function(event) {
+                curTime = new Date();
+				var eventdata=`${event.data}`;
+			   //console.log("-------------maindata=",eventdata);
+			
+				var maindata=eventdata.replace(/\\"/g,'"');
+			   maindata=maindata.substr(1, maindata.length-3);
+
+			    //console.log("-------------maindata=",maindata);
+
+
+			   
+			   var obj;
+			   try{
+				obj = JSON.parse(maindata);
+				}catch(e){
+				   console.log("Json parse issue=",e.message);
+				   return;
+				}
+				
+				 if (obj.ERROR){
+//				   $("#statustext").val("Websocket ERROR.."+obj.ERROR);
+				     document.getElementById('statustext').innerHTML="<font color='white'>Websocket ERROR.."+obj.ERROR + "</font>";
+					 
+				   ws.close(1000);
+				   alert(obj.ERROR);
+				   ws=null;
+				    $("#start").attr("disabled", false);
+					     $("#start").html("Start Streaming");
+						 return
+				   }
+				   
+                if (START==0){
+				  if (ws){
+					ws.close(1000);
+					}
+				   ws=null;
+				   return;
+				}
+ 		      if (append==0){
+				   dataintable.splice(0, dataintable.length)
+
+              //     datainchart.splice(0, datainchart.length)				   
+				  predictioncount=0;
+				  jsonhist=null;
+				    kafkakeyarr.splice(0, kafkakeyarr.length)	
+                }
+		
+		vipervizerror="";
+		//console.log("obj.VIPERVIZERROR=",obj.VIPERVIZERROR);
+		
+		   if (obj.VIPERVIZERROR){
+			    document.getElementById('statustext').innerHTML="<font color='white'>TOO MANY PEOPLE CONNECTED</font>";
+				vipervizerror="<font color='white'>TOO MANY PEOPLE CONNECTED</font>";
+//			  alert(obj.VIPERVIZERROR);
+			  return
+		   }
+		   
+            kafkacluster= obj.Webkafkacluster
+                mainkafkatopic=obj.Webtopic
+
+		    document.getElementById('accesstime').innerHTML = "<font color='white'>" + curTime + "</font>";
+			document.getElementById('kafkacluster').innerHTML ="<font color='white'>"+ kafkacluster + ", Kafka Topic: " + obj.Webtopic + "</font>";
+			mainusertopic=topic;
+						   
+			   
+				//doBlockchainMain(obj,mainkafkatopic);
+					
+				drawChart(obj,mainkafkatopic);
+				
+			//	console.log("mainkafkatopic=", mainkafkatopic);
+
+                if (mainkafkatopic=="nft-ml-prediction-results-output"){
+				   //console.log("-------------maindata=",obj);
+
+                  addHeatdata(obj);
+                   heattabledata(obj,mainkafkatopic);
+                }
+
+             if (mainkafkatopic=="nft-ml-prediction-results-output-logistic"){
+                 probabilitydata(obj,mainkafkatopic);
+			  }	 
+				 				
+								
+			    //console.log(`drawDiffChart done ${performance.memory.usedJSHeapSize / Math.pow(1000, 2)} MB`);
+					
+				obj=null;
+				maindata=null;
+				eventdata=null;
+				superidentifiermap=null;
+
+				// Usage!
+				//sleep(5000).then(() => {
+					// Do something after the sleep!
+					//console.log("Sleep");
+				//});
+				
+				//console.log(`${performance.memory.usedJSHeapSize / Math.pow(1000, 2)} MB`);
+
+			//	console.log("-------------END")
+			   
+			//	console.log("---------------NEW MESSAGE SHOULD BE AFTER EVERYTHING DONE--------------------");
+            };
+
+            ws.onclose = function(event) {
+			  //console.log("event=",event);
+			  
+                if (event.wasClean) {
+                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                } else {
+                    console.log('[close] Connection died');
+					 
+                }
+				if (ws){
+					ws.close(1000);
+					}
+				ws=null;
+			   var el=document.getElementById('loaderdiv');
+				   el.style.display = "none";
+
+
+				 $("#start").attr("disabled", false);
+					   //$("#statustext").val("Websocket closed");
+					   if (vipervizerror!=""){
+				         document.getElementById('statustext').innerHTML=vipervizerror;
+					   }else{
+					        document.getElementById('statustext').innerHTML="<font color='white'>WEBSOCKET Closed</font>";
+					   }
+
+					     $("#start").html("Start Streaming");
+            };
+            ws.onopen = function(error) {
+   			 var  password=document.getElementById("dashpass").value;
+
+			    var sendbuffer="{\"Topic\":\""+topic +"\",\"Topictype\":\""+topictype + "\",\"Secure\":"+secure +",\"Vipertoken\":\""+vipertoken+"\",\"Consumerid\":\""+consumerid + "\",\"Offset\":\""+offset + "\",\"RollbackOffset\":\""+rollbackoffset+"\",\"Groupid\":\""+groupid+"\"}";
+
+                 ws.send(sendbuffer);
+				 
+				   var el=document.getElementById('loaderdiv');
+				   el.style.display = "block";               
+				
+            };
+			
+            ws.onerror = function(error) {
+			  if (ws){
+					ws.close(1000);
+					}
+                console.log(`[error] ${error.message}`);
+			//	$("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
+				      document.getElementById('statustext').innerHTML="<font color='white'>WEBSOCKET ERROR.."+`[error] ${error.message}` + "</font>";
+				
+            };
+			
+			
+
+        } else {
+
+            // The browser doesn't support WebSocket
+            console.log("WebSocket NOT supported by your Browser!");
+        }
+    }
+
+
+	$('#Export4').click( function(e) {
+	
+	  riskdataarray=loadpatientriskdata();
+	
+      if (riskdataarray){        
+		//console.log("riskdataarray=",riskdataarray);
+		
+	     var headerRow = "";
+         var number_of_columns = riskdataarray.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += riskdataarray.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }		
+		
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(riskdataarray);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = "nft-priceprediction-data.csv";
+        this.target = '_blank';
+		
+	   }else{
+	      alert("Start streaming first");
+       }	
+	   
+	} );
+	
+	$('#Export3').click( function(e) {
+	
+	  riskdataarray=loadriskdata();
+	
+      if (riskdataarray){        
+		//console.log("riskdataarray=",riskdataarray);
+		
+	     var headerRow = "";
+         var number_of_columns = riskdataarray.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += riskdataarray.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }		
+		
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(riskdataarray);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = "nft-priceprediction-data.csv";
+        this.target = '_blank';
+		
+	   }else{
+	      alert("Start streaming first");
+       }	
+	   
+	} );
+		
+	$('#Export2').click( function(e) {
+	
+	     e.preventDefault(); /*your_code_here;*/ 
+		 saveDynamicDataToFile(topic);
+		 
+		 
+		 return false; 
+	} );
+	
+		$('#Export').click(function () {
+	  if (topic.length>0){
+	     var headerRow = "";
+         var number_of_columns = datatbl.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += datatbl.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(datatbl);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = topic + "-nft-data.csv";
+        this.target = '_blank';
+	  }else{
+	      alert("Start streaming first");
+       }	  
+    });
+
+		$('#Exportblockchain').click(function () {
+	  if (topic.length>0){
+	     var headerRow = "";
+         var number_of_columns = blockchaintbl.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += blockchaintbl.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(blockchaintbl);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = topic + "-nft-blockchaindata.csv";
+        this.target = '_blank';
+	  }else{
+	      alert("Start streaming first");
+       }	  
+    });
+	
+		$("#idForm").submit(function(e) {
+	  if (ws && START==1){
+	   ws.close(1000);
+	   ws = null;
+	   e.preventDefault(); // avoid to execute the actual submit of the form.
+	   START=0;
+	   $("#start").html("Start Streaming");
+	   $("#start").attr("disabled", true);
+//	    $("#statustext").val("WEBSOCKET CLOSING...");
+	       document.getElementById('statustext').innerHTML="<font color='white'>WEBSOCKET CLOSING...</font>";
+	   
+	  }else{
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+		START=1;
+     //   $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka Msgs...");
+               document.getElementById('statustext').innerHTML="<font color='white'>WEBSOCKET OPEN..Receiving Kafka Msgs...</font>";
+
+		 $("#start").html("Stop Streaming");
+		 streamLiveKafkaData();
+		
+		}
+       
+    });
+    </script>
+
+</body>
+
+</html>

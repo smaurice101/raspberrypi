@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+   <head>
+   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Algorithms and Insights Management System Dashboard</title>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  rel="stylesheet">
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"  rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	    <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+      <link href="./css/easyTable.css"  rel="stylesheet">
+	  <style>
+
+	  
+	
+td {
+ word-wrap:break-word;
+}	
+table th,tr,td {
+    border: 1.5px solid grey;
+  width:1700px;
+    border-collapse: collapse;
+
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+thead th { position: sticky; top: 0;  background-color: #c9c8c5;}
+
+
+.myButton {
+	box-shadow: 0px 10px 14px -7px #3e7327;
+	background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+	background-color:#89C597;
+	border-radius:2px;
+	border:1px solid #4b8f29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	font-weight:bold;
+	padding:2px 5px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #5b8a3c;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+	background-color:#72b352;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+
+</style>
+	<link rel="stylesheet" type="text/css" href="css/inputtext.css">
+	
+<!--===============================================================================================-->
+
+	   </head>
+   <body style="width:1700px">
+  
+<center><font size=5><b>Algorithms and Insights Management System (AiMS) Dashboard</b></font>
+
+<p>
+ 
+</center>
+<center>
+<table id="serverdetails" border=1 style="font-size:15px;width:1700px;">
+</table>
+
+ 
+<table  style="width:1700px" >
+<tr >
+ 
+<td valign=top>
+  <div class="panel-heading" style="width:1700px;background-color: #89C597;">
+               <h1 class="panel-title"><center><b>Kafka Consumers</b></center></h1>
+            </div>
+         
+			<b><font color=red>Notifications/Alerts:</font></b><br>
+            <input type=checkbox id="con_sendemail"value="test">
+			<label for="con_sendemaildays" class="inp">Send email when consumer(s) do not read a topic for&nbsp;<input type=text id="con_sendemaildays" size=4  placeholder="&nbsp;"> days (Enter email(s), separate multiple emails by comma: <input type="text" id="con_emails" size=60> <input class="myButton" type=button onclick="javascript:consendemailviper();" id=testcon value="Run">
+			</label>
+	     <br>
+         <input type=checkbox id="con_ingress"value="test">
+			<label for="con_ingress" class="inp">Send email every &nbsp;<input type=text id="con_ingressdays" size=4  placeholder="&nbsp;"> days at Email(s): <input type="text" id="con_ingressemails" size=60>&nbsp;when consumer(s) exceeds  <input type=text id="con_ingressmb" size=4  placeholder="&nbsp;"> MB in reads from Kafka (Egress)&nbsp; <input class="myButton" type=button onclick="javascript:conviperegresssend();" id=testcon value="Run">
+			</label>
+		
+			
+			<br>
+			   <input type=checkbox id="con_autodisable"value="test">
+			<label for="con_autodisablesendemail" class="inp">Auto de-activate consumer(s) if they do not read a topic for&nbsp;<input type=text id="con_autodeactivatedays" size=4> days and send me an email at: <input type=text id="con_emails2" size=60> <input  class="myButton" type=button id=testcon2 onclick="javascript:conautodisableviper();" value="Run">
+			</label>
+          <br>
+			   <input type=checkbox id="con_servicenow"value="test">
+			<label for="con_servicenow" class="inp">Auto create a ticket in ServiceNow when consumers do not read a topic for&nbsp;<input type=text id="con_servicenowticket" size=4> days (Enter ServiceNow URL to POST to: <input type="text" id="con_posturl" size=60> <input   class="myButton" type=button  onclick="javascript:conservicenowviper();" id=testcon3 value="Run">
+			</label>
+			<br>
+			
+			   <input type=checkbox id="con_genpdfcheck"value="test">
+			<label for="con_genpdfcheck" class="inp">Auto Generate Excel Every&nbsp;<input type=text id="con_pdfdays" size=4> Days and Email Report To: <input type="text" id="con_pdfemails" size=60> <input   class="myButton" type=button  onclick="javascript:genpdfrun();" id=testgenpdf value="Run">
+			</label>
+			<br>
+			
+			<b><font color=red>Viper Status Message:</font></b> <input type=text id="con_msg" size=150><br>
+            <br>  <input  class="myButton"  type=button name=submitalerts" value="Save Alerts" id="saveconalerts" onclick="javascript:savealerts('consumer',1);"><input  class="myButton"  type=button  value="Subscribe Consumer" id="subconsumer" onclick="javascript:addconsumer();"><input  class="myButton" type=button  value="Modify Consumer Detais" id="updateconsumer" onclick="javascript:modifyconsumer();"><input  class="myButton" type=button  value="Batch Consumer Activate" id="activateconsumer" onclick="javascript:showconsumerbatchactivate();">
+			<input class="myButton" type=button id=conbutallon value="Activate" onclick="javascript:activateall('consumer');"> <input class="myButton" type=button id=conbutalloff value="Deactivate" onclick="javascript:deactivateall('consumer');"> 
+			
+			<div id='addconsumerdetails'  style="display:none"><br>
+			Choose Topic/Group: <select id='topiclist'></select>   Company Name: <input type=text name=company" id="company" autocomplete=on>  Contact Name: <input type=text name=contactname" id="contactname" autocomplete=on> Contact Email: <input type=text name=contactemail" id="contactemail" autocomplete=on> Description: <input type=text name=description" id="description" autocomplete=on> Location: <input type=text name=location" id="location" autocomplete=on><br><br><input  class="myButton" type=button  value="Subscribe" id="dosubscribe" onclick="javascript:addconsumersend();">
+			</div>
+			
+			<div id='modconsumerdetails'  style="display:none"><br>
+			Choose Consumer Id: <select id='consumerlist'></select>  Consumer Id: <input type=text name=mcid" id="mcid" readonly> Topic: <input type=text name=mtopic" id="mtopic" readonly>  Company Name: <input type=text name=mcompany" id="mcompany" autocomplete=on>  Contact Name: <input type=text name=mcontactname" id="mcontactname" autocomplete=on> Contact Email: <input type=text name=mcontactemail" id="mcontactemail" autocomplete=on> Description: <input type=text name=mdescription" id="mdescription" autocomplete=on> Location: <input type=text name=mlocation" id="mlocation" autocomplete=on><br><br><input  class="myButton" type=button  value="Update Consumer" id="updateconsumer" onclick="javascript:modconsumersend();">
+			</div>
+			
+			<div id='modconsumerdetailsactivate'  style="display:none"><br>
+			Enter/Paste Consumer Id(s): <input type=text name=mconactivate" id="mconactivate" size=150><br><br><input  class="myButton" type=button  value="Activate Consumer(s)" id="activateconsumers" onclick="javascript:modconsumeractivatesend();">
+			</div>	
+			
+			
+			<div class="panel-body" id="contable" style="overflow-y: scroll;width:1700px;height:500px;">
+			
+               <table id="tableconsumers"   style="width:1700px" >	
+                  <thead style="background-color:#F0F8FF	;">
+				  <th>Check All: <input type=checkbox id=concheckall onclick="conallcheck(1)"></th>
+				  <th  >Activate/Deactivate</th> 
+                  <th  >Topic / Algorithm</th>
+				   <th >LastReadofTopic</th>
+				   <th >BytesRead(kb)</th>
+				   <th >ActiveReadDays</th>
+				   
+				    <th >Consumerid</th>
+                 <th >Producerid</th>
+				 <th >Groupid</th>
+                  <th >Company name</th>
+                  <th >Contact name</th>
+                 <th  >Contact email</th>
+                 <th  >Location</th>
+                 <th >Description</th>
+                 <th >Last Offset</th>
+                
+                 <th >Isactive</th>
+                 <th >Createdon</th>
+                
+				 
+                 <th >Updated</th>
+               
+				 
+                  </thead>
+                  <tbody>
+                  </tbody>
+               </table>
+
+            </div>
+		
+</td>
+</tr>
+<tr>
+<td valign=top>
+
+         
+		 <div class="panel-heading" style="width:1700px;background-color: #89C597;">
+               <h1 class="panel-title"><center><b>Kafka Producer Topics/Algorithms</b></center></h1>
+            </div>
+					<b><font color=red>Notifications/Alerts:</font></b><br>
+            <input type=checkbox id="pro_sendemail"value="test">
+			<label for="pro_sendemail" class="inp">Send email when producer(s) do not write to a topic for&nbsp;<input type=text id="pro_sendemaildays" size=4> days (Enter email(s), separate multiple emails by comma: <input type="text" id="pro_emails" size=60> <input  class="myButton" type=button id=testpro onclick="javascript:prosendemailviper();" value="Run">
+			</label>
+				     <br>
+         <input type=checkbox id="pro_ingress"value="test">
+			<label for="pro_ingress" class="inp">Send email every &nbsp;<input type=text id="pro_ingressdays" size=4  placeholder="&nbsp;"> days at Email(s): <input type="text" id="pro_ingressemails" size=60>&nbsp;when producer(s) exceeds  <input type=text id="pro_ingressmb" size=4  placeholder="&nbsp;"> MB in writes to Kafka (Ingress)&nbsp; <input class="myButton" type=button onclick="javascript:proviperingresssend();" id=testcon value="Run">
+			</label>
+
+			<br>
+			   <input type=checkbox id="pro_autodisable"value="test">
+			<label for="pro_autodisablesendemail" class="inp">Auto de-activate topic(s) when NO consumer(s) are reading from it for &nbsp;<input type=text id="pro_autodeactivatedays" size=4> days and send me an email at:  <input type="text" id="pro_emails2" size=60> <input  class="myButton" type=button id=testpro2 onclick="javascript:proautodisableviper();" value="Run">
+			</label>
+          <br>
+			   <input type=checkbox id="pro_servicenow"value="test">
+			<label for="pro_servicenow" class="inp">Auto create ticket(s) in ServiceNow when producers do not write to a topic for&nbsp;<input type=text id="pro_servicenowticket" size=4> days (Enter ServiceNow URL to POST to: <input type="text" id="pro_posturl"  size=60> <input  class="myButton" type=button id=testpro3 onclick="javascript:proservicenowviper();" value="Run">
+			</label>
+            
+			<br>
+			   <input type=checkbox id="pro_ssl"value="test">
+			<label for="pro_ssl">SSL/TLS Is ENABLED In This Kafka Broker?</label>
+			<br>
+			<b><font color=red>Viper Status Message:</font></b> <input type=text id="pro_msg" size=150><br>
+			
+			<br>  <input  class="myButton" type=button name=submitalerts2" value="Save Alerts"  id="saveproalerts" onclick="javascript:savealerts('producer',1)"><input  class="myButton" type=button  value="Create Topic" onclick="javascript:addtopic();">
+			<input  class="myButton" type=button  value="Modify Topic Detais" id="modtopic" onclick="javascript:modifytopics();"><input  class="myButton" type=button  value="Batch Topics Activate" id="activateproducer" onclick="javascript:showproducerbatchactivate();">
+			<input class="myButton" type=button id=probutallon value="Activate" onclick="javascript:activateall('producer');"><input class="myButton" type=button id=probutalloff value="Deactivate" onclick="javascript:deactivateall('producer');">
+			
+			<div id='addtopicdetails'  style="display:none"><br>
+			Topic Name: <input type=text name=topicname" id="topicname" autocomplete=on> MAADS Algorithm Keys: <select id='algolist'></select>  MAADS Token: <input type=text id=maadstoken readonly>  Company Name: <input type=text name=tcompany" id="tcompany" autocomplete=on>  Contact Name: <input type=text name=tcontactname" id="tcontactname" autocomplete=on> Contact Email: <input type=text name=tcontactemail" id="tcontactemail" autocomplete=on> Description: <input type=text name=tdescription" id="tdescription" autocomplete=on> Location: <input type=text name=tlocation" id="tlocation" autocomplete=on> Replication Factor: <input type=text name=replication" id="replication" autocomplete=on> Number of Partitions: <input type=text name=partitions" id="partitions" autocomplete=on>
+			<br><br><input  class="myButton" type=button  value="Create" id="createmaintopic" onclick="javascript:addtopicsend();">
+			</div>
+	
+		<div id='modtopicdetails'  style="display:none"><br>
+			Topic List: <select id='modtopiclist'></select>  Producer Id: <input type=text name=mtpid" id="mtpid" readonly> Topic Name: <input type=text name=mttopic" id="mttopic" readonly>   Company Name: <input type=text name=mtcompany" id="mtcompany" autocomplete=on>  Contact Name: <input type=text name=mtcontactname" id="mtcontactname" autocomplete=on> Contact Email: <input type=text name=mtcontactemail" id="mtcontactemail" autocomplete=on> Description: <input type=text name=mtdescription" id="mtdescription" autocomplete=on> Location: <input type=text name=mtlocation" id="mtlocation" autocomplete=on>Partition: <input type=text name=mtpartition" id="mtpartition" autocomplete=on><br><br> <input  class="myButton" type=button  value="Update Topic" id="updatetopic" onclick="javascript:modtopicsend();">
+			</div>
+	
+		<div id='modproducerdetailsactivate'  style="display:none"><br>
+			Enter/Paste Topics: <input type=text name=mproactivate" id="mproactivate" size=150><br><br><input  class="myButton" type=button  value="Activate Topics" id="activateproducers" onclick="javascript:modproduceractivatesend();">
+			</div>	
+		
+		
+            <div class="panel-body" id="protable" style="overflow-y: scroll;width:1700px;height:500px;">
+               <table id="tableproducers"style="width:1700px;" >
+		            <thead style="background-color:#F0F8FF	;">
+					<th>Check All: <input type=checkbox id=procheckall  onclick="proallcheck(2)"></th> 
+						  <th  >Activate/Deactivate</th> 
+                  <th>Topic / Algorithm</th>	  
+				   <th>LastWriteToTopic</th>
+				  <th>BytesWritten(Kb)</th>
+				   <th >ActiveWriteDays</th>
+				  
+				      <th>Producerid</th>
+                  <th>Companyname</th>
+                  <th>Contactname</th>
+                 <th>Contactemail</th>
+                 <th>Location</th>
+                 <th>Description</th>
+                 <th>Replicationfactor</th>
+                
+                 <th>Isactive</th>
+                 <th>Createdon</th>
+                 <th>Partitions</th>
+                 <th>Dependentvariable</th>
+                 <th>Independentvariables</th>
+             
+                 <th>MAADSALGOSERVER</th>
+	             <th>MAADSPORT</th>
+	             <th>MAADSMICROSERVICE</th>
+				  <th>MAADS Algorithm Keys</th>
+			
+				 <th>MAADSTOKEN</th>
+	             <th>Updated</th>
+	            
+	             <th>JoinedTopics</th>
+			  
+                  </thead>
+                  <tbody>
+                  </tbody>
+               </table>
+
+            </div>
+		
+</td>
+</tr>
+<tr>
+<td valign=top>
+         	
+		 <div class="panel-heading" style="width:1700px;background-color: #89C597;">
+               <h1 class="panel-title"><center><b>Kafka Groups</b></center></h1>		       
+	   </div>
+	   <br><input  class="myButton" type=button  value="Create Group" id="showgroupbut" onclick="javascript:showgroup();">  <input  class="myButton" type=button  value="Modify Group Details" id="showgroupmodbut" onclick="javascript:showmodgroup();"><input class="myButton" type=button id=grobutallon value="Activate"  onclick="javascript:activateall('group');"><input class="myButton" type=button id=grobutalloff value="Deactivate" onclick="javascript:deactivateall('group');">
+	   <div id='addgroup'  style="display:none"><br>
+			Group Name: <input type=text name=groupname" id="groupname" autocomplete=on> Topic: <select id='grouptopiclist'></select>  Company Name: <input type=text name=gcompany" id="gcompany" autocomplete=on>  Contact Name: <input type=text name=gcontactname" id="gcontactname" autocomplete=on> Contact Email: <input type=text name=gcontactemail" id="gcontactemail" autocomplete=on> Description: <input type=text name=gdescription" id="gdescription" autocomplete=on> Location: <input type=text name=glocation" id="glocation" autocomplete=on>
+		
+	<br>
+	   <input type=checkbox id="gro_ssl"value="test">
+			<label for="gro_ssl">SSL/TLS Is ENABLED In This Kafka Broker?</label>
+			
+				<br><input  class="myButton" type=button  value="Create" id="creategroup" onclick="javascript:addgroupsend();"><br>
+			
+</div>
+	
+   <div id='modaddgroup'  style="display:none"><br><br>
+			Group Name: <select id='modgrouptopiclist'></select> Groupid: <input type=text name=gmgroupid" id="gmgroupid" readonly>  Company Name: <input type=text name=gmcompany" id="gmcompany" autocomplete=on>  Contact Name: <input type=text name=gmcontactname" id="gmcontactname" autocomplete=on> Contact Email: <input type=text name=gmcontactemail" id="gmcontactemail" autocomplete=on> Description: <input type=text name=gmdescription" id="gmdescription" autocomplete=on> Location: <input type=text name=gmlocation" id="gmlocation" autocomplete=on>
+			
+	  <br>
+	   <input type=checkbox id="gro_ssl"value="test">
+			<label for="gro_ssl">SSL/TLS Is ENABLED In This Kafka Broker?</label>
+			<br><input  class="myButton" type=button  value="Update" id="modifygroup" onclick="javascript:modgroupsend();">
+</div>
+		<b><font color=red>Viper Status Message:</font></b> <input type=text id="gro_msg" size=140>	
+          
+	             <div class="panel-body" id="grotable" style="overflow-y: scroll;width:1700px;height:500px;">
+		 <table id="tablegroups" style="width:1700px;">
+		            <thead style="background-color:#F0F8FF	;">
+					<th>Check All: <input type=checkbox id=grocheckall  onclick="groallcheck(3)"></th>
+						  <th>Activate/Deactivate</th> 
+                 
+				    <th>Groupname</th>
+                 <th>Number of Consumers</th>
+				 <th>Topic / Algorithm</th>
+				    <th>Groupid</th>
+                  <th>Companyname</th>
+                  <th>Contactname</th>
+                 <th>Contactemail</th>
+                 <th>Location</th>
+                 <th>Description</th>
+                 <th>Isactive</th>
+                 <th>Createdon</th>
+              
+               
+       		  
+                  </thead>
+                  <tbody>
+                  </tbody>
+               </table>
+
+            </div>
+			
+</td>
+</tr>
+</table>
+ </center>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      <script src="./css/easyTable.js"></script>
+<script src="./css/resizable.js"></script>
+
+      <script>
+	  
+    var tableconsumersearch;
+	var tableproducersearch;
+	var tablegroupsearch;
+	var viperhost="";
+	var viperport="";
+    var vipertoken="";
+    var maadsalgoserver="";
+	var maadsport="";
+	var maadsmicroservice="";
+	var maadstoken="";
+	var vipermicroservice="";
+	
+	 localStorage.topper = document.body.scrollTop;	
+	  
+	  var returnedata;
+	  var maadsdata="";
+	  
+	 	$(window).on('load', function() {
+			setTimeout(() => {
+				setsearch();
+			}, 500)
+		})
+
+	    var reloadmainpage = function(type,maindiv){
+	  
+	    var element = document.getElementById(type);
+			window.location.reload(true);
+     	}
+	
+	
+	function genpdfrun(){
+	  actionbutton("genpdfrun","","","",vipertoken,viperhost,viperport,"","");	
+	}
+	
+	
+	function conallcheck(tbl){
+		tableconsumersearch.filtercheckbox(tbl);
+	}
+	function proallcheck(tbl){
+		tableproducersearch.filtercheckbox(tbl);
+	}
+	function groallcheck(tbl){
+		tablegroupsearch.filtercheckbox(tbl);
+	}
+	
+	function activateall(type){
+		if (type=="consumer"){
+			sels=tableconsumersearch.getSelectedcheckbox();
+			for (var i = 0; i < sels.length; i++) {
+			  actionbutton("consumer2",sels[i].substring(2),"","",vipertoken,viperhost,viperport,"","");
+			}
+		}else if (type=="producer"){
+			sels=tableproducersearch.getSelectedcheckbox();
+			for (var i = 0; i < sels.length; i++) {
+			 actionbutton("producer2","","","",vipertoken,viperhost,viperport,sels[i].substring(2),"");
+			}
+		}else if (type=="group"){
+			sels=tablegroupsearch.getSelectedcheckbox();
+			for (var i = 0; i < sels.length; i++) {
+			  actionbutton("group2","","",sels[i].substring(2),vipertoken,viperhost,viperport,"","");
+			}
+		}
+	}
+	function deactivateall(type){
+		if (type=="consumer"){
+			sels=tableconsumersearch.getSelectedcheckbox();
+			for (var i = 0; i < sels.length; i++) {
+			  actionbutton("consumer1",sels[i].substring(2),"","",vipertoken,viperhost,viperport,"","");
+			}
+		}else if (type=="producer"){
+			sels=tableproducersearch.getSelectedcheckbox();
+			for (var i = 0; i < sels.length; i++) {
+			  actionbutton("producer1","","","",vipertoken,viperhost,viperport,sels[i].substring(2),"");
+			}
+		}else if (type=="group"){
+			sels=tablegroupsearch.getSelectedcheckbox();
+			for (var i = 0; i < sels.length; i++) {
+			 actionbutton("group1","","",sels[i].substring(2),vipertoken,viperhost,viperport,"","");
+			}
+		}
+	}
+	
+	
+	function getviperurl(){
+		 if (vipermicroservice.length>0){
+		    buf=viperhost+":"+viperport+"/"+vipermicroservice;
+		 }else{
+		   buf=viperhost+":"+viperport;
+		 }
+		 return buf;
+	}
+	
+	function setsearch(){
+		 
+		  var sn1 = sessionStorage.getItem("search1");
+	  var sn2 = sessionStorage.getItem("search2");
+	  var sn3 = sessionStorage.getItem("search3");
+		if (sn1){
+	tableconsumersearch.setSearchbox("search1",sn1);
+		}
+			if (sn2){
+	  tableconsumersearch.setSearchbox("search2",sn2);
+			}
+			if (sn3){
+	   tableconsumersearch.setSearchbox("search3",sn3);
+			}
+	}
+	
+	 function consendemailviper(){
+
+			   var checkBox = document.getElementById("con_sendemail");
+				var word = document.getElementById("con_sendemaildays").value;//by id
+				var wordemails = document.getElementById("con_emails").value;//by id
+				
+				var wordemails2 = document.getElementById("con_emails2").value;//by id
+            
+                    if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("con_sendemaildays").focus();
+					   return false;
+				   }else if (wordemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("con_emails").focus();
+					   return false;
+				   }
+				   
+				   
+			  
+			 vbuf=getviperurl(); 
+			 buf=vbuf+"/consendemail?";
+		     buf +="vipertoken="+vipertoken;
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","consendemail");
+	 }
+	  function conviperegresssend(){
+			 	 
+				var word = document.getElementById("con_ingressdays").value;//by id
+				var wordemails = document.getElementById("con_ingressemails").value;//by id
+					var wordmb = document.getElementById("con_ingressmb").value;//by id
+			
+                    if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("con_ingressdays").focus();
+					   return false;
+				   }else if (wordemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("con_ingressemails").focus();
+					   return false;
+				   }else if (wordmb==""){
+					       alert("Please enter MB");
+					   document.getElementById("con_ingressmb").focus();
+					   return false;
+				   }
+				   
+				   
+			  
+			 vbuf=getviperurl(); 
+			 buf=vbuf+"/conegress?";
+		     buf +="vipertoken="+vipertoken;
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","consendemail");
+	 }
+	 
+	  function proviperingresssend(){
+
+				var word = document.getElementById("pro_ingressdays").value;//by id
+				var wordemails = document.getElementById("pro_ingressemails").value;//by id
+					var wordmb = document.getElementById("pro_ingressmb").value;//by id
+			
+                    if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("pro_ingressdays").focus();
+					   return false;
+				   }else if (wordemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("pro_ingressemails").focus();
+					   return false;
+				   }else if (wordmb==""){
+					       alert("Please enter MB");
+					   document.getElementById("pro_ingressmb").focus();
+					   return false;
+				   }
+				   
+				   
+			  
+			 vbuf=getviperurl(); 
+			 buf=vbuf+"/proingress?";
+		     buf +="vipertoken="+vipertoken;
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","consendemail");
+	 }
+	 
+	 function conautodisableviper(){
+
+			    checkBox = document.getElementById("con_autodisable");
+				 word = document.getElementById("con_autodeactivatedays").value;//by id
+				  wordemails = document.getElementById("con_emails2").value;//by id
+             
+                   if (wordemails==""){
+					   alert("Please enter emails");
+					    return false;
+				   }else if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("con_autodeactivatedays").focus();
+					   return false;
+				   }
+			   
+			    vbuf=getviperurl(); 
+			 buf=vbuf +"/conautodisable?";
+		     buf +="vipertoken="+vipertoken;
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","consendemail");
+		 	  
+	 }
+	 function conservicenowviper(){
+
+			 checkBox = document.getElementById("con_servicenow");
+				 word = document.getElementById("con_servicenowticket").value;//by id
+				 var surl = document.getElementById("con_posturl").value;//by id
+    
+               
+                   if (word==""){
+					   alert("Please enter days");
+					    document.getElementById("con_servicenowticket").focus();
+					   return false;
+				   }
+				   
+				   if (surl==""){
+					    alert("Please enter the POST URL");
+					    document.getElementById("con_posturl").focus();
+					   return false;
+					   
+				   }
+				   
+			  vbuf=getviperurl();
+			 buf=vbuf+"/conservicenow?";
+		     buf +="vipertoken="+vipertoken;
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","conservicenow");
+		 	  
+	 }
+	
+	 function prosendemailviper(){
+
+			 word = document.getElementById("pro_sendemaildays").value;//by id
+			  wordemails = document.getElementById("pro_emails").value;//by id
+                   if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("pro_sendemaildays").focus();
+					   return false;
+				   }else if (wordemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("pro_emails").focus();
+					   return false;
+				   }
+			    
+				vbuf=getviperurl();
+			 buf=vbuf+"/prosendemail?";
+		     buf +="vipertoken="+vipertoken;
+
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","prosendemail");
+		 	  
+	 }
+	 function proautodisableviper(){
+
+			 checkBox = document.getElementById("pro_autodisable");
+				 word = document.getElementById("pro_autodeactivatedays").value;//by id
+				  wordemail = document.getElementById("pro_emails2").value;//by id
+              
+                   if (word==""){
+					   alert("Please enter days");
+					    document.getElementById("pro_autodeactivatedays").focus();
+					   return false;
+				   }else if (wordemail==""){
+					   alert("Please enter email");
+					    document.getElementById("pro_emails2").focus();
+					   return false;
+				   }
+			    
+			  vbuf=getviperurl();
+			 buf=vbuf+"/proautodisable?";
+		     buf +="vipertoken="+vipertoken;
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","prosendemail");
+		 	  
+	 }
+	 function proservicenowviper(){
+
+			 checkBox = document.getElementById("pro_servicenow");
+				 word = document.getElementById("pro_servicenowticket").value;//by id
+				 var surl = document.getElementById("pro_posturl").value;//by id
+    
+                   if (word==""){
+					   alert("Please enter days");
+					    document.getElementById("pro_servicenowticket").focus();
+					   return false;
+				   }
+				   
+				   if (surl==""){
+					    alert("Please enter the POST URL");
+					    document.getElementById("pro_posturl").focus();
+					   return false;
+					   
+				   }
+				   
+			  vbuf=getviperurl();
+			 buf=vbuf+"/proservicenow?";
+		     buf +="vipertoken="+vipertoken;
+
+			   doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","proservicenow");
+		 	  
+	 }
+	
+	
+	 function loadmaadsalgos(algobuf){
+		 var algolist = document.getElementById("algolist");
+			algolist.outerHTML="<select id='algolist'  onchange='showmaadstoken()'>"+algobuf+"</select>";
+	 }
+	 
+	 function loadtopics(topicbuf){
+		    var topiclist = document.getElementById("topiclist");
+			topiclist.outerHTML="<select id='topiclist'>"+topicbuf+"</select>";
+		
+         var modtopiclist = document.getElementById("modtopiclist");
+			modtopiclist.outerHTML="<select id='modtopiclist' onChange='showtopicdetails()';>"+topicbuf+"</select>";
+				
+				  var grouptopiclist = document.getElementById("grouptopiclist");
+			grouptopiclist.outerHTML="<select id='grouptopiclist'>"+topicbuf+"</select>";
+			
+	
+	 }
+	  function loadgrouptopics(topicbuf){
+		    	
+				  var grouptopiclist = document.getElementById("modgrouptopiclist");
+			grouptopiclist.outerHTML="<select id='modgrouptopiclist' onChange='showgroupdetails()'><option>Select</option>"+topicbuf+"</select>";
+	 }
+	 
+	 function showtopicdetails(){
+		 d = document.getElementById('modtopiclist').value;
+		 
+		 if (d=="Select"){
+			  document.getElementById("mtpid").value="";
+			    document.getElementById("mttopic").value="";
+		 	   document.getElementById("mtcompany").value="";
+			   document.getElementById("mtcontactname").value="";
+			   document.getElementById("mtcontactemail").value="";
+			   document.getElementById("mtlocation").value="";
+			    document.getElementById("mtdescription").value="";
+				  document.getElementById("mtpartition").value="";
+				
+				return;
+		 }
+		 for (i in returnedata.ProducerDetails) {
+		  if (returnedata.ProducerDetails[i]["AlgoTopic"] ==d){
+			    document.getElementById("mtpid").value=returnedata.ProducerDetails[i]["Producerid"];
+			    document.getElementById("mttopic").value=returnedata.ProducerDetails[i]["AlgoTopic"];
+			   document.getElementById("mtcompany").value=returnedata.ProducerDetails[i]["Companyname"];
+			   document.getElementById("mtcontactname").value=returnedata.ProducerDetails[i]["Contactname"];
+			   document.getElementById("mtcontactemail").value=returnedata.ProducerDetails[i]["Contactemail"];
+			   document.getElementById("mtlocation").value=returnedata.ProducerDetails[i]["Location"];
+			    document.getElementById("mtdescription").value=returnedata.ProducerDetails[i]["Description"];
+				document.getElementById("mtpartition").value=returnedata.ProducerDetails[i]["Partitions"];
+		  }
+       }
+	 	 
+	 }
+	 
+	 
+	 
+	 function showgroupdetails(){
+		 d = document.getElementById('modgrouptopiclist').value;
+		 
+		 if (d=="Select"){
+		 	   document.getElementById("gmcompany").value="";
+			   document.getElementById("gmcontactname").value="";
+			   document.getElementById("gmcontactemail").value="";
+			   document.getElementById("gmlocation").value="";
+			    document.getElementById("gmdescription").value="";
+				return;
+		 }
+		 for (i in returnedata.GroupDetails) {
+		  if (returnedata.GroupDetails[i]["Groupname"] ==d){
+			   document.getElementById("gmcompany").value=returnedata.GroupDetails[i]["Companyname"];
+			   document.getElementById("gmcontactname").value=returnedata.GroupDetails[i]["Contactname"];
+			   document.getElementById("gmcontactemail").value=returnedata.GroupDetails[i]["Contactemail"];
+			   document.getElementById("gmlocation").value=returnedata.GroupDetails[i]["Location"];
+			    document.getElementById("gmdescription").value=returnedata.GroupDetails[i]["Description"];
+				 document.getElementById("gmgroupid").value=returnedata.GroupDetails[i]["Groupid"];
+		  }
+       }
+	 	 
+	 }
+	 function loadconsumers(consumerlistbuf){
+		 var consumerlist = document.getElementById("consumerlist");
+			consumerlist.outerHTML="<select id='consumerlist' onChange='showcondetails()';>"+consumerlistbuf+"</select>";
+	 }
+	 
+	 function showcondetails(){
+		
+		 d = document.getElementById('consumerlist').value;
+		 if (d=="Select"){
+			   document.getElementById("mcid").value="";
+			    document.getElementById("mtopic").value="";
+		 	   document.getElementById("mcompany").value="";
+			   document.getElementById("mcontactname").value="";
+			   document.getElementById("mcontactemail").value="";
+			   document.getElementById("mlocation").value="";
+			    document.getElementById("mdescription").value="";
+				return;
+		 }
+		 for (i in returnedata.ConsumerDetails) {
+		  if (returnedata.ConsumerDetails[i]["Consumerid"] ==d){
+			   document.getElementById("mcid").value=d;
+			    document.getElementById("mtopic").value=returnedata.ConsumerDetails[i]["AlgoTopic"];
+			   document.getElementById("mcompany").value=returnedata.ConsumerDetails[i]["Companyname"];
+			   document.getElementById("mcontactname").value=returnedata.ConsumerDetails[i]["Contactname"];
+			   document.getElementById("mcontactemail").value=returnedata.ConsumerDetails[i]["Contactemail"];
+			   document.getElementById("mlocation").value=returnedata.ConsumerDetails[i]["Location"];
+			    document.getElementById("mdescription").value=returnedata.ConsumerDetails[i]["Description"];
+		  }
+       }
+	  
+	 }
+	 function showmaadstoken(){
+		
+		 d = document.getElementById('algolist').value;
+		 if (d=="Select"){
+			 document.getElementById('maadstoken').value="";
+				return;
+		 }
+		 for (i in maadsdata) {
+		  if (maadsdata[i]["Name"] ==d){
+			   document.getElementById("maadstoken").value=maadsdata[i]["MAADSToken"];
+			    break;
+		  }
+       }
+	  
+	 }
+	 
+	 function modconsumersend(){
+
+			 vbuf=getviperurl();
+			buf=vbuf+"/modifyconsumerdetails?topic=";
+		     buf +=document.getElementById("mtopic").value;
+		     buf +="&companyname=" + document.getElementById("mcompany").value;
+		     buf +="&contactname=" + document.getElementById("mcontactname").value;
+		     buf +="&contactemail=" + document.getElementById("mcontactemail").value;
+		     buf +="&location=" + document.getElementById("mlocation").value;
+		     buf +="&description=" + document.getElementById("mdescription").value;
+		     buf +="&consumerid=" + document.getElementById('consumerlist').value;
+			 buf +="&vipertoken="+vipertoken;
+			 if (confirm("OK to update consumer?")){
+	           doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","consumer");
+		  }
+		 	  
+	 }
+	 
+	 function modconsumeractivatesend(){
+
+			 if (document.getElementById("mconactivate").value.length>0){
+		    	vbuf=getviperurl();
+			buf=vbuf+"/batchconsumeractivate?topic=";
+		     buf +="batchactivateconsumers";
+		     buf +="&cids=" + document.getElementById("mconactivate").value;
+			 buf +="&vipertoken="+vipertoken;
+			 if (confirm("OK to update consumer(s)?")){
+	           doallactions("activate",buf,reloadmainpage,"","updateconsumer","modconsumerdetails","consumer");
+		  }
+			 }else{
+				 alert("Enter consumer ids");
+			 }
+		 	  
+	 }
+	 
+	  function modproduceractivatesend(){
+
+			 if (document.getElementById("mproactivate").value.length>0){
+				 vbuf=getviperurl();
+			buf=vbuf+"/batchproduceractivate?topic=";
+		     buf +="batchactivateproducers";
+		     buf +="&cids=" + document.getElementById("mproactivate").value;
+			 buf +="&vipertoken="+vipertoken;
+			 if (confirm("OK to update topic(s)?")){
+	           doallactions("activate",buf,reloadmainpage,"","updateproducer","modproducerdetails","producer");
+		  }
+			 }else{
+				 alert("Enter topics");
+			 }
+		 	  
+	 }
+	 
+	 function modtopicsend(){
+         var sslcheck = document.getElementById("pro_ssl");
+		 
+             vbuf=getviperurl();	
+			buf=vbuf+"/modifytopicdetails?topic=";
+		     buf += document.getElementById('modtopiclist').value;
+		     buf +="&companyname=" + document.getElementById("mtcompany").value;
+		     buf +="&contactname=" + document.getElementById("mtcontactname").value;
+		     buf +="&contactemail=" + document.getElementById("mtcontactemail").value;
+		     buf +="&location=" + document.getElementById("mtlocation").value;
+		     buf +="&description=" + document.getElementById("mtdescription").value;
+			      buf +="&partition=" + document.getElementById("mtpartition").value;
+			   buf +="&isgroup=0";
+		 
+			 buf +="&vipertoken="+vipertoken;
+		 	if (sslcheck.checked==true){
+		    	buf +="&enabletls=1";
+		    }else{
+			   buf +="&enabletls=0";
+		     }
+			 
+			 if (confirm("OK to update topic?")){
+	           doallactions("activate",buf,reloadmainpage,"","updatetopic","modtopicdetails","producer");
+		  }
+		 
+	 }
+	 
+	 
+	 function modgroupsend(){
+  
+	        vbuf=getviperurl();
+			buf=vbuf+"/modifytopicdetails?topic=";
+		     buf += document.getElementById('gmgroupid').value;
+		     buf +="&companyname=" + document.getElementById("gmcompany").value;
+		     buf +="&contactname=" + document.getElementById("gmcontactname").value;
+		     buf +="&contactemail=" + document.getElementById("gmcontactemail").value;
+		     buf +="&location=" + document.getElementById("gmlocation").value;
+		     buf +="&description=" + document.getElementById("gmdescription").value;
+			   buf +="&isgroup=1";
+		 
+			 buf +="&vipertoken="+vipertoken;
+			 if (confirm("OK to update group?")){
+	           doallactions("activate",buf,reloadmainpage,"","updatetopic","modtopicdetails","producer");
+		  }
+		 
+	 }
+	 
+	  function addconsumer(){
+		  if (document.getElementById('addconsumerdetails').style.display === "none") {
+		     document.getElementById('addconsumerdetails').style.display = 'block';
+		  }else{
+			 document.getElementById('addconsumerdetails').style.display = 'none';  
+		  }
+	  }
+
+	  
+	  function showconsumerbatchactivate(){
+		  if (document.getElementById('modconsumerdetailsactivate').style.display === "none") {
+		     document.getElementById('modconsumerdetailsactivate').style.display = 'block';
+		  }else{
+			 document.getElementById('modconsumerdetailsactivate').style.display = 'none';  
+		  }
+		  
+	  }
+
+	  function showproducerbatchactivate(){
+		  if (document.getElementById('modproducerdetailsactivate').style.display === "none") {
+		     document.getElementById('modproducerdetailsactivate').style.display = 'block';
+		  }else{
+			 document.getElementById('modproducerdetailsactivate').style.display = 'none';  
+		  }
+	  }
+  
+	  
+	  
+	  function showgroup(){
+		  if (document.getElementById('addgroup').style.display === "none") {
+		     document.getElementById('addgroup').style.display = 'block';
+		  }else{
+			 document.getElementById('addgroup').style.display = 'none';  
+		  }
+	  }
+	  
+	  
+	  function showmodgroup(){
+		  if (document.getElementById('modaddgroup').style.display === "none") {
+		     document.getElementById('modaddgroup').style.display = 'block';
+		  }else{
+			 document.getElementById('modaddgroup').style.display = 'none';  
+		  }
+	  }
+	  
+	function modifytopics(){
+	  if (document.getElementById('modtopicdetails').style.display === "none") {
+		     document.getElementById('modtopicdetails').style.display = 'block';
+		  }else{
+			 document.getElementById('modtopicdetails').style.display = 'none';  
+		  }
+	       
+	  
+	}
+	
+	  function modifyconsumer(){
+		  if (document.getElementById('modconsumerdetails').style.display === "none") {
+		     document.getElementById('modconsumerdetails').style.display = 'block';
+		  }else{
+			 document.getElementById('modconsumerdetails').style.display = 'none';  
+		  }
+	  }
+	  
+	function addconsumersend(){
+		vbuf=getviperurl();
+		buf=vbuf+"/subscribeconsumer?topic=";
+		
+		if (document.getElementById('topiclist')!='Select'){
+			buf +=document.getElementById('topiclist').value;
+		}else{
+			alert("Choose a topic");
+			return;
+		}
+			
+		if (document.getElementById('company')!=''){
+			buf +="&companyname="+document.getElementById('company').value;
+		}else{
+			alert("Enter company name of user");
+			return;
+		}
+		if (document.getElementById('contactname')!=''){
+				buf +="&contactname="+document.getElementById('contactname').value;
+		}else{
+			alert("Enter contact name of user");
+			return;
+		}
+		if (document.getElementById('contactemail')!=''){
+			buf +="&contactemail="+document.getElementById('contactemail').value;
+		}else{
+			alert("Enter contact email of user");
+			return;
+		}
+		if (document.getElementById('description')!=''){
+			buf +="&description="+document.getElementById('description').value;
+		}else{
+			alert("Enter description indicating reason for consuming topic");
+			return;
+		}
+		if (document.getElementById('location')!=''){
+			buf +="&location="+document.getElementById('location').value;
+		}else{
+			alert("Enter location of user");
+			return;
+		}
+		
+		//add vipertoken
+		buf +="&vipertoken="+vipertoken;
+	    if (confirm("OK to subscribe consumer?")){
+	        doallactions("activate",buf,reloadmainpage,"","dosubscribe","addconsumerdetails","consumer");
+		}
+		
+	}
+	
+	  function addtopic(){
+		  if (document.getElementById('addtopicdetails').style.display === "none") {
+		     document.getElementById('addtopicdetails').style.display = 'block';
+		  }else{
+			 document.getElementById('addtopicdetails').style.display = 'none';  
+		  }
+		  
+	  }
+	  
+	  function addgroupsend(){
+		  var buf="";
+		  
+		   var sslcheck = document.getElementById("gro_ssl");
+		   vbuf=getviperurl();
+		buf=vbuf+"/createconsumergroup?topic=";
+		
+		if (document.getElementById('grouptopiclist')!='Select'){
+			buf +=document.getElementById('grouptopiclist').value;
+		}else{
+			alert("Please choose a topic");
+			return;
+		}
+		
+		if (document.getElementById('groupname')!=''){
+			buf +="&groupname="+document.getElementById('groupname').value;
+		}else{
+			alert("Enter group name");
+			return;
+		}
+		
+		if (document.getElementById('gcompany')!=''){
+			buf +="&companyname="+document.getElementById('gcompany').value;
+		}else{
+			alert("Enter company name of user");
+			return;
+		}
+		if (document.getElementById('gcontactname')!=''){
+				buf +="&contactname="+document.getElementById('gcontactname').value;
+		}else{
+			alert("Enter contact name of user");
+			return;
+		}
+		if (document.getElementById('gcontactemail')!=''){
+			buf +="&contactemail="+document.getElementById('gcontactemail').value;
+		}else{
+			alert("Enter contact email of user");
+			return;
+		}
+		if (document.getElementById('gdescription')!=''){
+			buf +="&description="+document.getElementById('gdescription').value;
+		}else{
+			alert("Enter description indicating reason for creating topic");
+			return;
+		}
+		if (document.getElementById('glocation')!=''){
+			buf +="&location="+document.getElementById('glocation').value;
+		}else{
+			alert("Enter location of user");
+			return;
+		}
+		
+		if (sslcheck.checked==true){
+			buf +="&enabletls=1";
+		}else{
+			buf +="&enabletls=0";
+		}
+
+			buf +="&vipertoken="+vipertoken;
+		
+		if (confirm("OK to create group?")){
+	        doallactions("activate",buf,reloadmainpage,"","createmaintopic","addtopicdetails","group");
+		}
+		return false;
+	  }
+	
+	  function addtopicsend(){
+		
+		 var sslcheck = document.getElementById("pro_ssl");
+		 vbuf=getviperurl();
+			buf=vbuf+"/createtopics?topic=";
+			
+      	if (document.getElementById('topicname')!=''){
+			buf +=document.getElementById('topicname').value;
+			st=document.getElementById('topicname').value;
+			if (st.indexOf(' ') > -1) {
+				alert("Do not include spaces");
+			    return;
+			}
+		}else{
+			alert("Enter a topic");
+			return;
+		}
+			
+		if (document.getElementById('algolist')!='Select'){
+			buf +="&maadsalgokey="+document.getElementById('algolist').value;
+		}else{
+			buf +="n/a";
+		}
+		
+		if (document.getElementById('maadstoken')!='' && document.getElementById('maadstoken')!='undefined'){
+			buf +="&maadstoken="+document.getElementById('maadstoken').value;
+		}else{
+			buf +="n/a";
+		}
+		
+		if (document.getElementById('replication')!=''){
+			buf +="&replicationfactor="+document.getElementById('replication').value;
+		}else{
+			alert("Enter replication factor");
+			return;
+		}
+	
+		if (document.getElementById('partitions')!=''){
+			buf +="&numpartitions="+document.getElementById('partitions').value;
+		}else{
+			alert("Enter number of partitions");
+			return;
+		}		
+			
+		if (document.getElementById('tcompany')!=''){
+			buf +="&companyname="+document.getElementById('tcompany').value;
+		}else{
+			alert("Enter company name of user");
+			return;
+		}
+		if (document.getElementById('tcontactname')!=''){
+				buf +="&contactname="+document.getElementById('tcontactname').value;
+		}else{
+			alert("Enter contact name of user");
+			return;
+		}
+		if (document.getElementById('tcontactemail')!=''){
+			buf +="&contactemail="+document.getElementById('tcontactemail').value;
+		}else{
+			alert("Enter contact email of user");
+			return;
+		}
+		if (document.getElementById('tdescription')!=''){
+			buf +="&description="+document.getElementById('tdescription').value;
+		}else{
+			alert("Enter description indicating reason for creating topic");
+			return;
+		}
+		if (document.getElementById('tlocation')!=''){
+			buf +="&location="+document.getElementById('tlocation').value;
+		}else{
+			alert("Enter location of user");
+			return;
+		}
+		
+		if (sslcheck.checked==true){
+			buf +="&enabletls=1";
+		}else{
+			buf +="&enabletls=0";
+		}
+		//add vipertoken
+		buf +="&vipertoken="+vipertoken;
+		  if (confirm("OK to create topic?")){
+	        doallactions("activate",buf,reloadmainpage,"","createmaintopic","addtopicdetails","producer");
+		}
+		  
+	  }
+	
+	  function savealerts(type,oksend){
+		 
+		  var buf="";
+		  var buf1="";
+		  var buf2="";
+		  var buf3="";
+		  var buf4="";
+		  var buf5="";
+		  var buf6="";
+		  
+		  dashurl =location.href;
+		  
+		  if (type=="consumer"){
+			//  var conssl = document.getElementById("con_ssl");
+			 var checkBoxingress = document.getElementById("con_ingress");
+			 var checkBoxpdf = document.getElementById("con_genpdfcheck");
+			    var checkBox = document.getElementById("con_sendemail");
+				var word = document.getElementById("con_sendemaildays").value;//by id
+				var wordpdfdays = document.getElementById("con_pdfdays").value;//by id
+					var wordpdfemails = document.getElementById("con_pdfemails").value;//by id
+				var wordemails = document.getElementById("con_emails").value;//by id
+				var wordemails2 = document.getElementById("con_emails2").value;//by id
+            // If the checkbox is checked, display the output text
+			
+			
+			 if (checkBoxingress.checked == true){
+				    var ingressdays=document.getElementById("con_ingressdays").value;//by id
+					var ingressemails=document.getElementById("con_ingressemails").value;//by id
+					var ingressmb=document.getElementById("con_ingressmb").value;//by id
+					
+				    if (ingressdays!="" && ingressemails!="" && ingressmb!=""){
+					   buf6 ='{"Type":"Consumer","Action":"Egress","Days":'+ingressdays +',"Email":"'+ingressemails +'","MB":'+ingressmb+'}';
+					   
+				   }else if (ingressdays==""){
+					   alert("Please enter days");
+					   document.getElementById("con_ingressdays").focus();
+					   return false;
+				   }else if (ingressemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("con_ingressemails").focus();
+					   return false;
+				   }else if (ingressmb==""){
+					   alert("Please enter MB");
+					   document.getElementById("con_ingressmb").focus();
+					   return false;
+				   }
+				
+			 }
+			 
+			 if (checkBoxpdf.checked == true){
+                   if (wordpdfdays!="" && wordpdfemails!=""){
+					   buf5 ='{"Type":"Consumer","Action":"Generate Excel","Days":'+wordpdfdays +',"Email":"'+wordpdfemails +'"}';
+					   
+				   }else if (wordpdfdays==""){
+					   alert("Please enter days");
+					   document.getElementById("con_pdfdays").focus();
+					   return false;
+				   }else if (wordpdfemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("con_pdfemails").focus();
+					   return false;
+				   }
+				   
+				   
+			  } 
+              if (checkBox.checked == true){
+                   if (word!="" && wordemails!=""){
+					   buf1 ='{"Type":"Consumer","Action":"Send email","Days":'+word +',"Email":"'+wordemails +'"}';
+					   
+				   }else if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("con_sendemaildays").focus();
+					   return false;
+				   }else if (wordemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("con_emails").focus();
+					   return false;
+				   }
+				   
+				   
+			  }   				   
+						  
+			     checkBox = document.getElementById("con_autodisable");
+				 word = document.getElementById("con_autodeactivatedays").value;//by id
+				  wordemails = document.getElementById("con_emails").value;//by id
+            // If the checkbox is checked, display the output text
+              if (checkBox.checked == true){
+                   if (word!=""){
+					   buf2 ='{"Type":"Consumer","Action":"Auto disable","Days":'+word+',"Email":"' + wordemails2 +'"}';
+					   
+				   }else if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("con_autodeactivatedays").focus();
+					   return false;
+				   }
+			  }  
+			    checkBox = document.getElementById("con_ssl");
+	  		     checkBox = document.getElementById("con_servicenow");
+				 word = document.getElementById("con_servicenowticket").value;//by id
+				 var surl = document.getElementById("con_posturl").value;//by id
+    
+                if (checkBox.checked == true){
+                   if (word!=""){
+					   buf3 ='{"Type":"Consumer","Action":"Servicenow Post","Days":'+word +',"Url":"'+surl+'"}';
+					   
+				   }else{
+					   alert("Please enter days");
+					    document.getElementById("con_servicenowticket").focus();
+					   return false;
+				   }
+				   
+				   if (surl==""){
+					    alert("Please enter the POST URL");
+					    document.getElementById("con_posturl").focus();
+					   return false;
+					   
+				   }
+				   
+			  }  			  
+			   var mainbuf="{\"Token\":\""+vipertoken+"\",\"Dashurl\":\""+dashurl+"\",\"ConsumerAlerts\":[";
+                   
+				   if (buf1!=""){
+				     mainbuf +=buf1+",";
+				   }
+				   if (buf2!=""){
+				     mainbuf +=buf2+",";
+				   }
+				   if (buf3!=""){
+				     mainbuf +=buf3+",";
+				   }
+				   if (buf5!=""){
+				     mainbuf +=buf5+",";
+				   }
+				   if (buf6!=""){
+				     mainbuf +=buf6+",";
+				   }
+				   
+				   if (buf5!="" || buf1!="" || buf2!="" || buf3!=""|| buf6!=""){
+					   mainbuf = mainbuf.slice(0, -1); 
+				   }
+				   
+					
+                  if (buf1!="" || buf2!="" || buf3!="" || buf5!="" || buf6!=""){ 						  
+                    if (confirm("OK to submit alerts? (Make sure POLLING_ALERTS is not empty in VIPER.ENV - otherwise Polling will be off)")){
+						  mainbuf +="]}";
+						   console.log(mainbuf);
+						  vbuf=getviperurl();
+					    buf=vbuf+"/viperalerts";
+					    if (type=="consumer"){
+						    doallactions("alerts",buf,reloadmainpage,mainbuf,"saveconalerts","contable","consumer");
+						  }else if (type=="producer"){
+							  doallactions("alerts",buf,reloadmainpage,mainbuf,"saveproalerts","protable","producer");
+						  }
+				   }	
+				}else{
+					alert("Choose your notifications");
+				}
+                 				   
+	      	  }else if (type=="producer"){
+			    var checkBox = document.getElementById("pro_sendemail");
+				var word = document.getElementById("pro_sendemaildays").value;//by id
+					var wordemails = document.getElementById("pro_emails").value;//by id
+					var wordemails2 = document.getElementById("pro_emails2").value;//by id
+					  var checkBoxingress = document.getElementById("pro_ingress");
+			     buf6="";
+				 
+				 if (checkBoxingress.checked == true){
+				    var ingressdays=document.getElementById("pro_ingressdays").value;//by id
+					var ingressemails=document.getElementById("pro_ingressemails").value;//by id
+					var ingressmb=document.getElementById("pro_ingressmb").value;//by id
+					
+				    if (ingressdays!="" && ingressemails!="" && ingressmb!=""){
+					   buf6 ='{"Type":"Producer","Action":"Ingress","Days":'+ingressdays +',"Email":"'+ingressemails +'","MB":'+ingressmb+'}';
+					   
+				   }else if (ingressdays==""){
+					   alert("Please enter days");
+					   document.getElementById("pro_ingressdays").focus();
+					   return false;
+				   }else if (ingressemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("pro_ingressemails").focus();
+					   return false;
+				   }else if (ingressmb==""){
+					   alert("Please enter MB");
+					   document.getElementById("pro_ingressmb").focus();
+					   return false;
+				   }
+				
+			 }
+
+              if (checkBox.checked == true){
+                   if (word!="" && wordemails!=""){
+					   buf1 ='{"Type":"Producer","Action":"Send email","Days":'+word +',"Email":"'+wordemails +'"}';
+					   
+				   }else if (word==""){
+					   alert("Please enter days");
+					   document.getElementById("pro_sendemaildays").focus();
+					   return false;
+				   }else if (wordemails==""){
+					   alert("Please enter email(s)");
+					   document.getElementById("pro_emails").focus();
+					   return false;
+				   }
+			  }   				   
+						  
+			     checkBox = document.getElementById("pro_autodisable");
+				 word = document.getElementById("pro_autodeactivatedays").value;//by id
+            // If the checkbox is checked, display the output text
+              if (checkBox.checked == true){
+                   if (word!=""){
+					   buf2 ='{"Type":"Producer","Action":"Auto disable","Days":'+word+',"Email":"' + wordemails2 +'"}';
+					   
+				   }else{
+					   alert("Please enter days");
+					    document.getElementById("pro_autodeactivatedays").focus();
+					   return false;
+				   }
+			  }  
+			  
+			  
+			     checkBox = document.getElementById("pro_ssl");
+            // If the checkbox is checked, display the output text
+              if (checkBox.checked == true){
+					   buf4 ='{"Type":"SSL","Action":1}';					   
+			  }else{
+					   buf4 ='{"Type":"SSL","Action":0}';
+
+			  }			  
+
+	  		     checkBox = document.getElementById("pro_servicenow");
+				 word = document.getElementById("pro_servicenowticket").value;//by id
+				 var surl = document.getElementById("pro_posturl").value;//by id
+    
+                if (checkBox.checked == true){
+                   if (word!=""){
+					   buf3 ='{"Type":"Producer","Action":"Servicenow Post","Days":'+word +',"Url":"'+surl+'"}';
+					   
+				   }else{
+					   alert("Please enter days");
+					    document.getElementById("pro_servicenowticket").focus();
+					   return false;
+				   }
+				   
+				   if (surl==""){
+					    alert("Please enter the POST URL");
+					    document.getElementById("pro_posturl").focus();
+					   return false;
+					   
+				   }
+				   
+			  }  			  
+			  if (oksend==0){
+				    return false
+			  }
+			
+			    var mainbuf="{\"Token\":\""+vipertoken+"\",\"Dashurl\":\""+dashurl+"\",\"ProducerAlerts\":[";
+              
+			  	   if (buf1!=""){
+				     mainbuf +=buf1+",";
+				   }
+				   if (buf2!=""){
+				     mainbuf +=buf2+",";
+				   }
+				   if (buf3!=""){
+				     mainbuf +=buf3+",";
+				   }
+				   if (buf4!=""){
+				     mainbuf +=buf4+",";
+				   }
+				   if (buf6!=""){
+				     mainbuf +=buf6+",";
+				   }
+				   
+				   if (buf4!="" || buf1!="" || buf2!="" || buf3!=""|| buf6!=""){
+					   mainbuf = mainbuf.slice(0, -1); 
+				   }
+					
+                    if (buf1!="" || buf2!="" || buf3!="" || buf4!=""|| buf6!=""){ 				 
+                    if (confirm("OK to submit alerts? (Make sure POLLING_ALERTS is not empty in VIPER.ENV - otherwise Polling will be off)")){
+						  mainbuf +="]}";	
+			 
+			         vbuf=getviperurl();
+					buf=vbuf+"/viperalerts";
+						  if (type=="consumer"){
+						    doallactions("alerts",buf,reloadmainpage,mainbuf,"saveconalerts","contable","consumer");
+						  }else if (type=="producer"){
+							  doallactions("alerts",buf,reloadmainpage,mainbuf,"saveproalerts","protable","producer");
+						  }
+					  
+			  	   }	
+				}else{
+					 alert("Choose your notifications first");
+				}
+             
+		      }
+		  
+	  }
+
+		
+		
+	  function actionbutton(type,consumerid,producerid,groupid,vipertoken,host,port,topic,groupname){
+		  var buf="";
+		  var maindiv="";
+		  var entity="";
+        
+		vbuf=getviperurl();
+	
+          if (type=="consumer1"){
+			  maindiv="contable";
+			  entity="consumer";
+			 buf=vbuf + "/unsubscribeconsumer?consumerid="+consumerid + "&reinstate=0&vipertoken="+vipertoken;
+		  }else  if (type=="consumer2"){
+			  entity="consumer";
+			   maindiv="contable";
+			   buf=vbuf + "/unsubscribeconsumer?consumerid="+consumerid + "&reinstate=1&vipertoken="+vipertoken;
+			   
+		  }else  if (type=="producer1"){
+			  entity="producer";
+			   maindiv="protable";
+		        buf=vbuf + "/deactivatetopic?topic="+topic + "&vipertoken="+vipertoken;
+		  }else  if (type=="producer2"){
+			  entity="producer";
+			   maindiv="protable";
+			  buf=vbuf + "/activatetopic?topic="+topic + "&vipertoken="+vipertoken;
+			  
+		  }else  if (type=="group1"){
+			  entity="group";
+			   maindiv="grotable";
+				buf=vbuf+ "/deactivategroup?groupname="+groupname + "&vipertoken="+vipertoken +"&groupid="+groupid;
+				
+		  }else  if (type=="group2"){
+			   maindiv="grotable";
+			   entity="group";
+
+			   buf=vbuf + "/activategroup?groupname="+groupname + "&vipertoken="+vipertoken +"&groupid="+groupid;
+		  }else if(type=="genpdfrun"){
+			   maindiv="contable";
+			  entity="consumer";
+			   buf=vbuf + "/vipergenpdf?vipertoken="+vipertoken;
+		  }
+		  
+		  doallactions("activate",buf,reloadmainpage,"",type,entity);
+		  
+	  }
+        
+	   function doallactions(type,mainurl,callback,buffer,elementid,maindiv,entity){
+		   var url="";
+		  var value;
+		
+         var sn1 = tableconsumersearch.getSearchbox("search1");
+		var sn2 = tableconsumersearch.getSearchbox("search2");
+	     var sn3 = tableconsumersearch.getSearchbox("search3");
+			
+		  sessionStorage.setItem("search1", sn1);
+		  sessionStorage.setItem("search2", sn2);
+		  sessionStorage.setItem("search3", sn3);
+		  
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			var response = xhttp.responseText;
+		if (this.readyState == 4 && this.status == 200) {
+		
+		if (entity=="consumer"){
+		   localStorage.setItem("conmsg", response);
+		}else if (entity=="producer"){
+	      localStorage.setItem("promsg", response);
+	    }else if (entity=="group"){
+			 localStorage.setItem("gromsg", response);
+		}else if (entity=="consendemail"){
+			 localStorage.setItem("conmsg", "VIPER RESPONDED SUCCESSFULLY: Check your inbox for emails.  If you did not recieve an email ensure SMTP settings are correct and check VIPER logs or there are no alerts.");
+		}else if (entity=="conservicenow"){
+			 localStorage.setItem("conmsg", "VIPER RESPONDED SUCCESSFULLY: Check ServiceNow for incidents.  If no incidents check VIPER logs or there are no alerts.");
+		}else if (entity=="prosendemail"){
+			 localStorage.setItem("promsg", "VIPER RESPONDED SUCCESSFULLY: Check your inbox for emails.  If you did not recieve an email ensure SMTP settings are correct and check VIPER logs or there are no alerts.");
+		}else if (entity=="proservicenow"){
+			 localStorage.setItem("promsg", "VIPER RESPONDED SUCCESSFULLY: Check ServiceNow for incidents.  If no incidents check VIPER logs or there are no alerts.");
+		}
+        callback(elementid,maindiv);
+        
+		}else{
+				if (entity=="consumer"){
+					localStorage.setItem("conmsg", response);
+				}else if (entity=="producer"){
+					localStorage.setItem("promsg", response);
+				}else if (entity=="group"){
+			      localStorage.setItem("gromsg", response);
+		       }
+			}
+		};
+		if (type=="activate"){
+	    	xhttp.open("GET", mainurl);
+		}else if (type=="alerts"){
+		 xhttp.open("POST", mainurl);
+		   xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+          xhttp.send(buffer);
+		  return;
+		}
+
+		xhttp.send();
+		return value;
+	   }
+	   
+	   
+	  
+	  var buf="";
+	  var performMaadsAction = function(returned_data) {
+       maadsdata = returned_data;
+	   
+		var algolistbuf="<option>Select</option>";  
+	     for (i in maadsdata) {
+		   algolistbuf += "<option>"+maadsdata[i]["Name"] + "</option>";
+	      }
+		  
+		  loadmaadsalgos(algolistbuf);
+	  }
+
+     var performSomeAction = function(returned_data) {
+       returnedata = returned_data;
+	   //console.log(returnedata);
+	   
+	        var coningresscheck=document.getElementById('con_ingress');
+	     var coningressdays=document.getElementById('con_ingressdays');
+		 var coningressemails =document.getElementById('con_ingressemails');
+		  var coningressmb =document.getElementById('con_ingressmb');
+	
+	        var proingresscheck=document.getElementById('pro_ingress');
+	     var proingressdays=document.getElementById('pro_ingressdays');
+		 var proingressemails =document.getElementById('pro_ingressemails');
+		  var proingressmb =document.getElementById('pro_ingressmb');
+	
+	     var consendemailcheck=document.getElementById('con_sendemail');
+	     var consendemaildays=document.getElementById('con_sendemaildays');
+		 var conemails =document.getElementById('con_emails');
+		  var conemails2 =document.getElementById('con_emails2');
+		  
+		    var consendemailcheckpdf=document.getElementById('con_genpdfcheck');
+	     var consendemaildayspdf=document.getElementById('con_pdfdays');
+		 var conemailspdf =document.getElementById('con_pdfemails');
+	
+		 
+         var conautodisable=document.getElementById('con_autodisable');
+	     var conautodeactivatedays=document.getElementById('con_autodeactivatedays');
+		 		 
+		 var conservicenow=document.getElementById('con_servicenow');
+	     var conservicenowticket=document.getElementById('con_servicenowticket');
+		 var conposturl =document.getElementById('con_posturl');
+		   
+		  var prosendemailcheck=document.getElementById('pro_sendemail');
+	     var prosendemaildays=document.getElementById('pro_sendemaildays');
+		 var proemails =document.getElementById('pro_emails');
+		 var proemails2 =document.getElementById('pro_emails2');
+		 
+         var proautodisable=document.getElementById('pro_autodisable');
+	     var proautodeactivatedays=document.getElementById('pro_autodeactivatedays');
+		 		 
+		 var proservicenow=document.getElementById('pro_servicenow');
+	     var proservicenowticket=document.getElementById('pro_servicenowticket');
+		 var proposturl =document.getElementById('pro_posturl');
+		  var prossl =document.getElementById('pro_ssl');
+		   
+		 if (returned_data.ServerDetails.Alerts){
+			 if (returned_data.ServerDetails.Alerts['Consumer']){
+				 for (i in returned_data.ServerDetails.Alerts['Consumer']){
+		
+		       if ( returned_data.ServerDetails.Alerts['Consumer'][i]["Action"]=="Egress" ){
+			         coningresscheck.checked = true;
+			         coningressdays.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Days"];
+			         coningressemails.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Email"];
+					 coningressmb.value=returned_data.ServerDetails.Alerts['Consumer'][i]["MB"];
+				  }
+				
+				 if ( returned_data.ServerDetails.Alerts['Consumer'][i]["Action"]=="Generate Excel" ){
+			         consendemailcheckpdf.checked = true;
+			         consendemaildayspdf.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Days"];
+			         conemailspdf.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Email"];
+				  }
+				  
+				  if ( returned_data.ServerDetails.Alerts['Consumer'][i]["Action"]=="Send email" ){
+			         consendemailcheck.checked = true;
+			         consendemaildays.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Days"];
+			         conemails.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Email"];
+				  }
+				   if ( returned_data.ServerDetails.Alerts['Consumer'][i]["Action"]=="Auto disable" ){
+			         conautodisable.checked = true;
+			         conautodeactivatedays.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Days"];
+					 if (returned_data.ServerDetails.Alerts['Consumer'][i]["Email"]){
+						 conemails2.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Email"];
+					 }else{
+						 conemails2.value="";
+					 }
+			       
+				  }
+				  
+			     if ( returned_data.ServerDetails.Alerts['Consumer'][i]["Action"]=="Servicenow Post" ){
+			         conservicenow.checked = true;
+			         conservicenowticket.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Days"];
+			         conposturl.value=returned_data.ServerDetails.Alerts['Consumer'][i]["Url"];
+				  }
+				  
+				  
+				  
+				  
+				 }
+			 }
+			  if (returned_data.ServerDetails.Alerts['Producer']){
+				 for (j in returned_data.ServerDetails.Alerts['Producer']){
+					if ( returned_data.ServerDetails.Alerts['Producer'][j]["Action"]=="Ingress" ){ 
+					 proingresscheck.checked = true;
+			         proingressdays.value=returned_data.ServerDetails.Alerts['Producer'][j]["Days"];
+			         proingressemails.value=returned_data.ServerDetails.Alerts['Producer'][j]["Email"];
+					 proingressmb.value=returned_data.ServerDetails.Alerts['Producer'][j]["MB"];
+					}
+					 
+				  if ( returned_data.ServerDetails.Alerts['Producer'][j]["Action"]=="Send email" ){
+			         prosendemailcheck.checked = true;
+			         prosendemaildays.value=returned_data.ServerDetails.Alerts['Producer'][j]["Days"];
+			         proemails.value=returned_data.ServerDetails.Alerts['Producer'][j]["Email"];
+				  }
+				   if ( returned_data.ServerDetails.Alerts['Producer'][j]["Action"]=="Auto disable" ){
+			         proautodisable.checked = true;
+			         proautodeactivatedays.value=returned_data.ServerDetails.Alerts['Producer'][j]["Days"];
+					 if (returned_data.ServerDetails.Alerts['Producer'][j]["Email"]){
+					     proemails2.value=returned_data.ServerDetails.Alerts['Producer'][j]["Email"];
+					 }else{
+						 proemails2.value="";
+					 }
+			       
+				  }
+				   if ( returned_data.ServerDetails.Alerts['Producer'][j]["Action"]==1 ){
+			         prossl.checked = true;
+			       
+				  }
+				  
+				     if ( returned_data.ServerDetails.Alerts['Producer'][j]["Action"]=="Servicenow Post" ){
+			         proservicenow.checked = true;
+			         proservicenowticket.value=returned_data.ServerDetails.Alerts['Producer'][j]["Days"];
+			         proposturl.value=returned_data.ServerDetails.Alerts['Producer'][j]["Url"];
+				  }
+				  
+				 }
+			 }
+		 }
+	   
+	   
+	   var results=document.getElementById('serverdetails');
+	     results.innerHTML="<tbody><tr>";
+		 let zookeeper="";
+		 if (returned_data.ProducerDetails.hasOwnProperty("Zookeeper")){
+		  zookeeper=returned_data.ProducerDetails[0]["Zookeeper"];
+		 }
+	   results.innerHTML="<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>Zookeeper:</b> <br>"+zookeeper+"</td>"+
+	   "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>Kafka Broker Host:</b> <br>"+returned_data.ServerDetails["kafkabrokerhost"]+"</td>"+ 
+	     "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>Kafka Port: </b><br>"+returned_data.ServerDetails["kafkabrokerport"]+"</td>" +
+	     "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>kafka Log FolderSize(MB): </b><br>"+returned_data.ServerDetails["kafkaLogFolderSize(MB)"]+"</td>" +
+	     "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>kafka Active Groups: </b><br>"+returned_data.ServerDetails["NumberofActiveGroups"]+"</td>" +
+	     "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>kafka Active Consumers: </b><br>"+returned_data.ServerDetails["NumberofActiveConsumers"]+"</td>" +
+	     "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>kafka Active Topics: </b><br>"+returned_data.ServerDetails["NumberofActiveTopics"]+"</td>" +
+	     "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>kafka Total Bytes Read by Consumers(Kb): </b><br>"+returned_data.ServerDetails["TotalConsumerBytesRead(Kb)"]+"</td>" +
+	    "<td style='text-align:center;  background-color: #7FFF00	;' width=100 height=100 border=1><b>kafka Total Bytes Written by Producers(Kb): </b><br>"+returned_data.ServerDetails["TotalProducerBytesWritten(Kb)"]+"</td>";
+	    
+	   results.innerHTML+="</tr></tbody>";
+	   //Get consumers
+	 var consumerlistbuf="<option>Select</option>";  
+	   for (i in returned_data.ConsumerDetails) {
+		  buf+="<tr>"; 
+		  buf+="<td><input type=checkbox id=c-" + returned_data.ConsumerDetails[i]["Consumerid"] + " ></td>" ;
+		   if (returned_data.ConsumerDetails[i]["Isactive"]!=undefined){
+		    if (returned_data.ConsumerDetails[i]["Isactive"] =="1"){
+			    consumerlistbuf += "<option>"+returned_data.ConsumerDetails[i]["Consumerid"] + "</option>";	  
+	       	 buf +="<td><a href='javascript:actionbutton(\"consumer1\",\"" + returned_data.ConsumerDetails[i]["Consumerid"] + "\",\"\",\"\",\""+vipertoken+"\",\""+viperhost+"\",\""+viperport+"\",\""+returned_data.ConsumerDetails[i]["AlgoTopic"] +"\",\"\"  )'>De-activate</a></td>"; 
+		   }else{
+		 	 buf +="<td><a href='javascript:actionbutton(\"consumer2\",\"" + returned_data.ConsumerDetails[i]["Consumerid"] + "\",\"\",\"\",\""+vipertoken+"\",\""+viperhost+"\",\""+viperport+"\",\""+returned_data.ConsumerDetails[i]["AlgoTopic"] +"\",\"\"  )'>[Activate]</a></td>"; 
+	      }
+		 }else{
+		      consumerlistbuf += "<option>"+returned_data.ConsumerDetails[i]["Consumerid"] + "</option>";	  
+	       	 buf +="<td><a href='javascript:actionbutton(\"consumer1\",\"" + returned_data.ConsumerDetails[i]["Consumerid"] + "\",\"\",\"\",\""+vipertoken+"\",\""+viperhost+"\",\""+viperport+"\",\""+returned_data.ConsumerDetails[i]["AlgoTopic"] +"\",\"\"  )'>De-activate</a></td>"; 
+        } 
+		 
+		   if(returned_data.ConsumerDetails[i]["AlgoTopic"]!=undefined){
+            buf +="<td>"+returned_data.ConsumerDetails[i]["AlgoTopic"] + "</td>";
+		 }else{
+		       buf1 +="<td>Value Not Found</td>";
+		 }
+		 
+		   if (returned_data.ConsumerDetails[i]["LastReadofTopic"]!=undefined){ 
+		     buf +="<td>"+returned_data.ConsumerDetails[i]["LastReadofTopic"] + "</td>";
+		   }else{
+		       buf1 +="<td>Value Not Found</td>";
+		   }
+		   
+		   if (returned_data.ConsumerDetails[i]["BytesRead(kb)"]!=undefined){
+		     buf +="<td>"+returned_data.ConsumerDetails[i]["BytesRead(kb)"] + "</td>";
+		  }else{
+		     buf1 +="<td>Value Not Found</td>";
+		  }
+		  
+		   if (returned_data.ConsumerDetails[i]["ActiveReadDays"]!=undefined){
+		   }else{
+		      buf1 +="<td>Value Not Found</td>";
+		   }
+		   
+		   if (returned_data.ConsumerDetails[i]["ActiveReadDays"]!=undefined){
+		   buf +="<td>"+returned_data.ConsumerDetails[i]["ActiveReadDays"] + "</td>";
+		   }else{
+		      buf1 +="<td>Value Not Found</td>";
+		   }
+		   
+		   if (returned_data.ConsumerDetails[i]["Consumerid"]!=undefined){
+		   buf +="<td>"+returned_data.ConsumerDetails[i]["Consumerid"] + "</td>";
+		   }else{
+		       buf1 +="<td>Value Not Found</td>";
+		   }
+		   
+		   if (returned_data.ConsumerDetails[i]["Producerid"]!=undefined){
+	         buf +="<td>"+returned_data.ConsumerDetails[i]["Producerid"] + "</td>";
+		   }else{
+		      buf1 +="<td>Value Not Found</td>";
+		   }
+		   if(returned_data.ConsumerDetails[i]["Groupid"]!=undefined){
+		    buf +="<td>"+returned_data.ConsumerDetails[i]["Groupid"] + "</td>";
+			}else{
+			   buf1 +="<td>Value Not Found</td>";
+			}
+			
+          if (returned_data.ConsumerDetails[i]["Companyname"]!=undefined){
+		   buf +="<td>"+returned_data.ConsumerDetails[i]["Companyname"] + "</td>";
+		  }else{
+		      buf1 +="<td>Value Not Found</td>";
+		  }
+		  if (returned_data.ConsumerDetails[i]["Contactname"]!=undefined){
+            buf +="<td>"+returned_data.ConsumerDetails[i]["Contactname"] + "</td>";
+		  }else{
+		        buf1 +="<td>Value Not Found</td>";
+		  }
+		  if (returned_data.ConsumerDetails[i]["Contactemail"]!=undefined){
+	       buf +="<td>"+returned_data.ConsumerDetails[i]["Contactemail"] + "</td>";
+		 }else{
+		     buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ConsumerDetails[i]["Location"]!=undefined){
+           buf +="<td>"+returned_data.ConsumerDetails[i]["Location"] + "</td>";
+		}else{
+		    buf1 +="<td>Value Not Found</td>";
+		}
+		if(returned_data.ConsumerDetails[i]["Description"]!=undefined){
+          buf +="<td>"+returned_data.ConsumerDetails[i]["Description"] + "</td>";
+		}else{
+		    buf1 +="<td>Value Not Found</td>";
+		}
+		if(returned_data.ConsumerDetails[i]["LastOffsetReadofTopic"]!=undefined){
+          buf +="<td>"+returned_data.ConsumerDetails[i]["LastOffsetReadofTopic"] + "</td>";
+		}else{
+		    buf1 +="<td>Value Not Found</td>";
+		}
+      
+	    if(returned_data.ConsumerDetails[i]["Isactive"]!=undefined){
+	       buf +="<td>"+returned_data.ConsumerDetails[i]["Isactive"] + "</td>";
+		 }else{
+		     buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ConsumerDetails[i]["Createdon"]!=undefined){
+	        buf +="<td>"+returned_data.ConsumerDetails[i]["Createdon"] + "</td>";
+		 }else{
+		      buf1 +="<td>Value Not Found</td>";
+		 }
+	      if(returned_data.ConsumerDetails[i]["Updated"]!=undefined){
+	       buf +="<td>"+returned_data.ConsumerDetails[i]["Updated"] + "</td>";
+		 }else{
+		   buf1 +="<td>Value Not Found</td>";
+		 }
+	   
+		 buf +="</tr>";
+		
+       }
+	  
+	       $("#tableconsumers").find('tbody').append(buf);
+         var table1 = $("#tableconsumers").easyTable();
+		 tableconsumersearch=$("#tableconsumers").easyTable({
+             hover:'btn-primary',
+             buttons: {active: true, type: 1, label: 'Consumers'},
+             select:false,
+              sortable:true,
+             scroll: {active: true, height: '200px'}
+         });
+		 
+		   $("#getSelectedconsumers").click(function () {
+            console.log(table1.getSelected(0));
+         });
+	
+	loadconsumers(consumerlistbuf);
+	 //Get Producers
+	 buf1="";
+	 var groupnamelist="";
+	 var topiclistbuf="<option>Select</option>";
+	   for (i in returned_data.ProducerDetails) {
+		  buf1+="<tr>"; 
+		    buf1 +="<td><input type=checkbox id=p-" + returned_data.ProducerDetails[i]["AlgoTopic"] + " ></td>" ;
+			 if(returned_data.ProducerDetails[i]["Isactive"]!=undefined){
+		  	  if (returned_data.ProducerDetails[i]["Isactive"] =="1"){
+				   topiclistbuf += "<option>"+returned_data.ProducerDetails[i]["AlgoTopic"] + "</option>";
+		          buf1 +="<td><a href='javascript:actionbutton(\"producer1\",\"\",\"" + returned_data.ProducerDetails[i]["Producerid"] + "\",\"\",\""+vipertoken+"\",\""+viperhost+"\",\""+viperport+"\",\""+returned_data.ProducerDetails[i]["AlgoTopic"]+"\",\"\"   )'>De-activate</a></td>"; 
+		      }else{
+		 	 buf1 +="<td><a href='javascript:actionbutton(\"producer2\",\"\",\"" + returned_data.ProducerDetails[i]["Producerid"] + "\",\"\",\""+vipertoken+"\",\""+viperhost+"\",\""+viperport+"\",\""+returned_data.ProducerDetails[i]["AlgoTopic"]+"\",\"\"  )'>[Activate]</a></td>"; 
+	       }
+		  }else{
+   				   topiclistbuf += "<option>"+returned_data.ProducerDetails[i]["AlgoTopic"] + "</option>";
+		          buf1 +="<td><a href='javascript:actionbutton(\"producer1\",\"\",\"" + returned_data.ProducerDetails[i]["Producerid"] + "\",\"\",\""+vipertoken+"\",\""+viperhost+"\",\""+viperport+"\",\""+returned_data.ProducerDetails[i]["AlgoTopic"]+"\",\"\"   )'>De-activate</a></td>"; 
+          }	 
+	
+	    if (returned_data.ProducerDetails[i]["AlgoTopic"]!=undefined){
+           buf1 +="<td>"+returned_data.ProducerDetails[i]["AlgoTopic"] + "</td>";
+		 }else{
+		   buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ProducerDetails[i]["LastWriteToTopic"]!=undefined){
+		   buf1 +="<td>"+returned_data.ProducerDetails[i]["LastWriteToTopic"] + "</td>";
+		   }else{
+		      buf1 +="<td>Value Not Found</td>";
+		   }
+		   if(returned_data.ProducerDetails[i]["BytesWritten(Kb)"]!=undefined){
+		 buf1 +="<td>"+returned_data.ProducerDetails[i]["BytesWritten(Kb)"] + "</td>";
+		 }else{
+		     buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ProducerDetails[i]["ActiveWriteDays"]!=undefined){
+		  buf1 +="<td>"+returned_data.ProducerDetails[i]["ActiveWriteDays"] + "</td>";
+		 }else{
+		      buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ProducerDetails[i]["Producerid"]!=undefined){
+		  buf1 +="<td>"+returned_data.ProducerDetails[i]["Producerid"] + "</td>";
+		  }else{
+		     buf1 +="<td>Value Not Found</td>";
+		  }
+		  if(returned_data.ProducerDetails[i]["Companyname"]!=undefined){
+            buf1 +="<td>"+returned_data.ProducerDetails[i]["Companyname"] + "</td>";
+		}else{
+		     buf1 +="<td>Value Not Found</td>";
+		}
+		
+		if(returned_data.ProducerDetails[i]["Contactname"]!=undefined){
+          buf1 +="<td>"+returned_data.ProducerDetails[i]["Contactname"] + "</td>";
+		}else{
+		  buf1 +="<td>Value Not Found</td>";
+		}
+		 if(returned_data.ProducerDetails[i]["Contactemail"]!=undefined){
+		    buf1 +="<td>"+returned_data.ProducerDetails[i]["Contactemail"] + "</td>";
+		}else{
+		   buf1 +="<td>Value Not Found</td>";
+		}
+		if(returned_data.ProducerDetails[i]["Location"] !=undefined){
+          buf1 +="<td>"+returned_data.ProducerDetails[i]["Location"] + "</td>";
+		}else{
+		    buf1 +="<td>Value Not Found</td>";
+		}
+		if(returned_data.ProducerDetails[i]["Description"]!=undefined){
+          buf1 +="<td>"+returned_data.ProducerDetails[i]["Description"] + "</td>";
+		}else{
+		     buf1 +="<td>Value Not Found</td>";
+		}
+		
+		if(returned_data.ProducerDetails[i]["Replicationfactor"]!=undefined){
+          buf1 +="<td>"+returned_data.ProducerDetails[i]["Replicationfactor"] + "</td>";
+		}else{
+		    buf1 +="<td>Value Not Found</td>";
+		}
+           if(returned_data.ProducerDetails[i]["Isactive"]!=undefined){
+	     buf1 +="<td>"+returned_data.ProducerDetails[i]["Isactive"] + "</td>";
+		  }else{
+		       buf1 +="<td>Value Not Found</td>";
+		  }
+		  
+		  if(returned_data.ProducerDetails[i]["Createdon"]!=undefined){
+	       buf1 +="<td>"+returned_data.ProducerDetails[i]["Createdon"] + "</td>";
+		 }else{
+		      buf1 +="<td>Value Not Found</td>";
+		 }
+		  
+		  if(returned_data.ProducerDetails[i]["Partitions"]!=undefined){
+		    buf1 +="<td>"+returned_data.ProducerDetails[i]["Partitions"] + "</td>";
+		 }else{
+		     buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ProducerDetails[i]["Dependentvariable"]!=undefined){
+	    	 buf1 +="<td>"+returned_data.ProducerDetails[i]["Dependentvariable"] + "</td>";
+		 }else{
+		     buf1 +="<td>Value Not Found</td>";
+		 }
+		 
+		 if(returned_data.ProducerDetails[i]["Independentvariables"]!=undefined){
+		   buf1 +="<td>"+returned_data.ProducerDetails[i]["Independentvariables"] + "</td>";
+		 }else{
+		      buf1 +="<td>Value Not Found</td>";
+		 }
+		if(returned_data.ProducerDetails[i]["MAADSALGOSERVER"]!=undefined){
+	    	 buf1 +="<td>"+returned_data.ProducerDetails[i]["MAADSALGOSERVER"] + "</td>";
+		 }else{
+		     buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ProducerDetails[i]["MAADSPORT"]!=undefined){
+		    buf1 +="<td>"+returned_data.ProducerDetails[i]["MAADSPORT"] + "</td>";
+		 }else{
+             buf1 +="<td>Value Not Found</td>";
+		 }		 
+		 
+		 if(returned_data.ProducerDetails[i]["MAADSMICROSERVICE"]!=undefined){
+		   buf1 +="<td>"+returned_data.ProducerDetails[i]["MAADSMICROSERVICE"] + "</td>";
+		 }else{
+            buf1 +="<td>Value Not Found</td>";
+		 }		 
+		 if(returned_data.ProducerDetails[i]["MAADSALGOKEY"]!=undefined){
+		 	 buf1 +="<td>"+returned_data.ProducerDetails[i]["MAADSALGOKEY"] + "</td>";
+	   }else{
+            buf1 +="<td>Value Not Found</td>";
+	   }	   
+	      if(returned_data.ProducerDetails[i]["MAADSTOKEN"] !=undefined){
+			 	 buf1 +="<td>"+returned_data.ProducerDetails[i]["MAADSTOKEN"] + "</td>";
+		  }else{
+            buf1 +="<td>Value Not Found</td>";
+		 }		  
+		 
+		 if(returned_data.ProducerDetails[i]["Updated"]!=undefined){
+		   buf1 +="<td>"+returned_data.ProducerDetails[i]["Updated"] + "</td>";
+		 }else{
+		    buf1 +="<td>Value Not Found</td>";
+		 }
+		 if(returned_data.ProducerDetails[i]["JoinedTopics"]!=undefined){
+		    buf1 +="<td>"+returned_data.ProducerDetails[i]["JoinedTopics"] + "</td>";
+		  }else{
+		      buf1 +="<td>Value Not Found</td>";
+		 }
+	     buf1 +="</tr>";
+		
+       }
+	
+	  
+	  
+		 
+		 //Get groups
+		 //GroupDetails
+	buf="";
+	
+	   for (i in returned_data.GroupDetails) {
+		  buf+="<tr>"; 
+		    buf+="<td><input type=checkbox id=g-" + returned_data.GroupDetails[i]["Groupid"] + " ></td>" ;
+		  	  if (returned_data.GroupDetails[i]["Isactive"] =="1"){
+				   topiclistbuf += "<option>"+returned_data.GroupDetails[i]["Groupname"] + "</option>";
+				   		   groupnamelist += "<option>"+returned_data.GroupDetails[i]["Groupname"] + "</option>";
+
+	 buf +="<td><a href='javascript:actionbutton(\"group1\",\"\",\"\",\"" + returned_data.GroupDetails[i]["Groupid"] + "\",\""+vipertoken+"\",\""+viperhost+"\",\"";
+	 buf +=viperport+"\",\"\",\"" + returned_data.GroupDetails[i]["Groupname"] + "\"   )'>De-activate</a></td>"; 
+		  }
+	   else{
+		 	 buf +="<td><a href='javascript:actionbutton(\"group2\",\"\",\"\",\"" + returned_data.GroupDetails[i]["Groupid"] + "\",\""+vipertoken+"\",\""+viperhost+"\",\"";
+			buf +=viperport+"\",\"\",\""+returned_data.GroupDetails[i]["Groupname"]+"\"  )'>[Activate]</a></td>"; 
+	   }
+		   
+		    buf +="<td>"+returned_data.GroupDetails[i]["Groupname"] + "</td>";
+		 buf +="<td>"+returned_data.GroupDetails[i].GroupDetails["NumberofConsumers"] + "</td>";
+         buf +="<td>"+returned_data.GroupDetails[i]["Topic"] + "</td>";
+		  buf +="<td>"+returned_data.GroupDetails[i]["Groupid"] + "</td>";
+        buf +="<td>"+returned_data.GroupDetails[i]["Companyname"] + "</td>";
+        buf +="<td>"+returned_data.GroupDetails[i]["Contactname"] + "</td>";
+		    buf +="<td>"+returned_data.GroupDetails[i]["Contactemail"] + "</td>";
+        buf +="<td>"+returned_data.GroupDetails[i]["Location"] + "</td>";
+        buf +="<td>"+returned_data.GroupDetails[i]["Description"] + "</td>";
+	     buf +="<td>"+returned_data.GroupDetails[i]["Isactive"] + "</td>";
+	     buf +="<td>"+returned_data.GroupDetails[i]["Createdon"] + "</td>";
+		
+		 
+		
+	     buf +="</tr>";
+		
+       }
+	   
+	       $("#tableproducers").find('tbody').append(buf1);
+         var table2 = $("#tableproducers").easyTable();
+		  tableproducersearch=$("#tableproducers").easyTable({
+             hover:'btn-primary',
+             buttons:{active: true, type: 2, label: 'Producers'},
+             select:false,
+              sortable:true,
+             scroll: {active: true, height: '500px'}
+         });
+         $("#getSelectedproducers").click(function () {
+            console.log(table2.getSelected(0));
+         });
+	  
+	      $("#tablegroups").find('tbody').append(buf);
+         var table3 = $("#tablegroups").easyTable();
+		  tablegroupsearch=$("#tablegroups").easyTable({
+             hover:'btn-primary',
+             buttons:{active: true, type: 3, label: 'Groups'},
+             select:false,
+              sortable:true,
+             scroll: {active: true, height: '500px'}
+         });
+         $("#getSelectedgroups").click(function () {
+            console.log(table3.getSelected(0));
+         });
+		 
+		 
+		   loadtopics(topiclistbuf);
+		   loadgrouptopics(groupnamelist);
+	 }
+
+	  function getstats(host,port,apikey,callback,microservice){
+		  var url="";
+		  var value;
+		  
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+				var response = xhttp.responseText;
+				console.log(response);
+				var myObj = JSON.parse(response);
+		
+				callback(myObj);
+	
+        
+			}
+		};
+		
+		if (microservice.length>0){
+		url=host +":"+port+"/"+microservice+"/viperstats?vipertoken="+apikey;
+		}else{
+		url=host +":"+port+"/viperstats?vipertoken="+apikey;
+		}
+		console.log(url);
+		
+		xhttp.open("GET", url);
+
+		xhttp.send();
+		return value;
+	  }
+	  
+	  function getmaadsalgos(host,port,apikey,algoserver,algoport,algomicroservice,maadstoken,callback,vipermicroservice){
+		  var url="";
+		  var value;
+		  
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+        var response = xhttp.responseText;
+		
+		var myObj = JSON.parse(response);
+        callback(myObj);
+	        
+			}
+		};
+		
+ 		if (vipermicroservice.length>0){
+          url="/"+vipermicroservice+"/getmaadsalgos?vipertoken="+apikey + "&maadsalgoserver="+algoserver +"&maadsport="+algoport + "&maadsmicroservice="+algomicroservice +"&maadstoken="+maadstoken;	
+	    }else{
+		url="/getmaadsalgos?vipertoken="+apikey + "&maadsalgoserver="+algoserver +"&maadsport="+algoport + "&maadsmicroservice="+algomicroservice +"&maadstoken="+maadstoken;
+		}
+		
+		xhttp.open("GET", url);
+		
+		xhttp.send();
+		return value;
+	  }
+	  
+	   function parsejson(keytoget){
+		 if (keytoget=="foldersize"){
+		
+		}
+	   }
+	   
+	  
+     	 
+		 var name = localStorage.getItem("conmsg");
+		 if (name !== null){
+			 if (name=="null")
+				 document.getElementById('con_msg').value="Active";
+			  else{	 
+			   document.getElementById('con_msg').value=name;
+			    localStorage.setItem("conmsg", "Active");
+			  }
+		 }
+		 
+		  var name1 = localStorage.getItem("promsg");
+		 if (name1 !== null){
+			 if (name1=="null")
+				 document.getElementById('pro_msg').value="Active";
+			  else{	 
+			   document.getElementById('pro_msg').value=name1;
+			    localStorage.setItem("promsg", "Active");
+			  }
+		 }
+		 
+		  var name2 = localStorage.getItem("gromsg");
+		 if (name2 !== null){
+			 if (name1=="null")
+				 document.getElementById('gro_msg').value="Active";
+			  else{	 
+			   document.getElementById('gro_msg').value=name2;
+			    localStorage.setItem("gromsg", "Active");
+			  }
+		 }
+		
+	function getparams(){
+           var urlParams = new URLSearchParams(window.location.search);
+		     var url = window.location.host;
+			 urlarr=url.split(":");
+			 viperport=urlarr[1];
+			 
+			var keys = urlParams.keys();
+			var entries = urlParams.entries();
+			for(pair of entries) { 			
+				if (pair[0]=="secure"){
+				  secure=pair[1];
+				  if (secure==1){
+				    viperhost="https://"+urlarr[0];
+				  }else{
+				    viperhost="http://"+urlarr[0]; 
+				  }
+				}
+				if (pair[0]=="vipertoken"){
+				  vipertoken=pair[1];
+				}				
+				
+	           if (pair[0]=="maadsalgoserver"){
+				  maadsalgoserver=pair[1];
+				}	
+			    if (pair[0]=="maadsport"){
+				  maadsport=pair[1];
+				}	
+			    if (pair[0]=="maadsmicroservice"){
+				  maadsmicroservice=pair[1];
+				}		
+			    if (pair[0]=="maadstoken"){
+				  maadstoken=pair[1];
+				}		
+			    if (pair[0]=="vipermicroservice"){
+				  vipermicroservice=pair[1];
+				}		
+				
+			}
+     }	
+	   
+	    getparams();
+	   getmaadsalgos(viperhost,viperport,vipertoken,maadsalgoserver,maadsport,maadsmicroservice,maadstoken,performMaadsAction,vipermicroservice);
+	
+    	getstats(viperhost,viperport,vipertoken,performSomeAction,vipermicroservice);
+	
+	 
+      </script>
+   </body>
+</html>
