@@ -42,22 +42,6 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
     
-  app = Flask(__name__)
-
-  app.run(port=default_args['rest_port'])
-
-
-  @app.route('/jsondataline', methods=['POST'])
-  def storejsondataline():
-    jdata = request.get_json()
-    readdata(jdata)
-
-  @app.route('/jsondataarray', methods=['POST'])
-  def storejsondataarray():    
-    jdata = request.get_json()
-    json_array = json.load(jdata)
-    for item in json_array: 
-      readdata(item)
 
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
@@ -79,10 +63,26 @@ def startproducingtotopic():
     VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
     VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
     VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
-    
-    return [VIPERTOKEN,VIPERHOST,VIPERPORT]
+
+    if VIPERHOST != "":
+        app = Flask(__name__)
+        app.run(port=default_args['rest_port'])
+
+        @app.route('/jsondataline', methods=['POST'])
+        def storejsondataline():
+          jdata = request.get_json()
+          readdata(jdata)
+
+        @app.route('/jsondataarray', methods=['POST'])
+        def storejsondataarray():    
+          jdata = request.get_json()
+          json_array = json.load(jdata)
+          for item in json_array: 
+             readdata(item)
         
-  @task(task_id="readdata")        
+
+     #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
+        
   def readdata(valuedata):
       args = default_args    
 
@@ -98,7 +98,6 @@ def startproducingtotopic():
           pass  
   
     
-  readdata(gettmlsystemsparams())
-    
+  gettmlsystemsparams()   
 
-#dag = startproducingtotopic()
+dag = startproducingtotopic()
