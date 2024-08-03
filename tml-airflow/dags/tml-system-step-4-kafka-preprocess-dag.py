@@ -108,14 +108,6 @@ def startprocessing():
 
      jsoncriteria = default_args['jsoncriteria']
         
-     jsoncriteria='uid=metadata.dsn,filter:allrecords~\
-subtopics=metadata.property_name~\
-values=datapoint.value~\
-identifiers=metadata.display_name~\
-datetime=datapoint.updated_at~\
-msgid=datapoint.id~\
-latlong=lat:long'     
-
      tmlfilepath=default_args['tmlfilepath']
      usemysql=default_args['usemysql']
 
