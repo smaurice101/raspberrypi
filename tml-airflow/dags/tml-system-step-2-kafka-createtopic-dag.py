@@ -11,17 +11,17 @@ sys.dont_write_bytecode = True
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
- 'owner' : 'Sebastian Maurice',    
- 'companyname': 'Otics',
-  'myname' : 'Sebastian',
-  'myemail' : 'Sebastian.Maurice',
-  'mylocation' : 'Toronto',
-  'replication' : 1,
-  'numpartitions': 1,
-  'enabletls': 1,
-  'brokerhost' : '',
-  'brokerport' : -999,
-  'microserviceid' : '',
+ 'owner' : 'Sebastian Maurice', # <<< ********** You change as needed
+ 'companyname': 'Otics',  # <<< ********** You change as needed
+  'myname' : 'Sebastian',  # <<< ********** You change as needed
+  'myemail' : 'Sebastian.Maurice',  # <<< ********** You change as needed
+  'mylocation' : 'Toronto',  # <<< ********** You change as needed
+  'replication' : 1,  # <<< ********** You change as needed
+  'numpartitions': 1,  # <<< ********** You change as needed
+  'enabletls': 1,  # <<< ********** You change as needed
+  'brokerhost' : '',  # <<< ********** You change as needed
+  'brokerport' : -999,  # <<< ********** You change as needed
+  'microserviceid' : '',  # <<< ********** You change as needed
   'raw_data_topic' : 'iot-raw-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'preprocess_data_topic' : 'iot-preprocess-data,iot-preprocess2-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'ml_data_topic' : 'ml-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
@@ -70,17 +70,20 @@ def startkafkasetup():
       #############################################################################################################
       #                         CREATE TOPIC TO STORE TRAINED PARAMS FROM ALGORITHM  
       
-      producetotopic=args['topics']
-      description=args['description']
+      topickeys = ['raw_data_topic','preprocess_data_topic','ml_data_topic','prediction_data_topic'] 
     
-      topicsarr = producetotopic.split(",")
+      for k in topickeys:
+        producetotopic=args[k]
+        description=args['description']
+    
+        topicsarr = producetotopic.split(",")
       
-      for topic in topicsarr:  
-        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,producetotopic,companyname,
+        for topic in topicsarr:  
+          result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,producetotopic,companyname,
                                      myname,myemail,mylocation,description,enabletls,
                                      brokerhost,brokerport,numpartitions,replication,
                                      microserviceid='')
-        print("Result=",result)
+          print("Result=",result)
 
       setupkafkatopic(default_args)
       
