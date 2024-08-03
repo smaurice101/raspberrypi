@@ -5,7 +5,9 @@ from datetime import datetime
 from airflow.decorators import dag, task
 import paho.mqtt.client as paho
 from paho import mqtt
+import sys
 
+sys.dont_write_bytecode = True
 ##################################################  MQTT SERVER #####################################
 # This is a MQTT server that will handle connections from a client.  It will handle connections
 # from an MQTT client for on_message, on_connect, and on_subscribe

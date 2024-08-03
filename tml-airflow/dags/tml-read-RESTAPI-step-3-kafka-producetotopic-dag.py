@@ -6,7 +6,9 @@ import json
 from datetime import datetime
 from airflow.decorators import dag, task
 from flask import Flask
+import sys
 
+sys.dont_write_bytecode = True
 ##################################################  REST API SERVER #####################################
 # This is a REST API server that will handle connections from a client
 # There are two endpoints you can use to stream data to this server:

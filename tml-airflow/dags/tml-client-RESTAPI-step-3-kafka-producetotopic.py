@@ -1,4 +1,7 @@
 import requests
+import sys
+
+sys.dont_write_bytecode = True
  
 # defining the api-endpoint
 rest_port = "9001"  # <<< ***** Change Port to match the Server Rest_PORT

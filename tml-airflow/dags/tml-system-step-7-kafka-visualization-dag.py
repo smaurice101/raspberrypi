@@ -4,7 +4,9 @@ from airflow.operators.bash import BashOperator
 
 from datetime import datetime
 from airflow.decorators import dag, task
+import sys
 
+sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice',    

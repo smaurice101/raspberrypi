@@ -11,6 +11,9 @@ import time
 import tml_grpc_pb2_grpc as pb2_grpc
 import tml_grpc_pb2 as pb2
 
+import sys
+
+sys.dont_write_bytecode = True
 ##################################################  gRPC SERVER ###############################################
 # This is a gRPCserver that will handle connections from a client
 # There are two endpoints you can use to stream data to this server:
