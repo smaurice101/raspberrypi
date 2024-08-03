@@ -15,6 +15,27 @@ default_args = {
   'producerid' : 'iotsolution',  
   'raw_data_topic' : 'iot-raw-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'preprocess_data_topic' : 'iot-preprocess-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
+  'maxrows' : 500, # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
+  'offset' : -1, # <<< Rollback from the end of the data streams  
+  'brokerhost' : '',
+  'brokerport' : -999,
+  'microserviceid' : '',    
+  'preprocessconditions' : '', ## <<< Leave blank      
+  'delay' : 70, # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
+  'enabletls' : 1, # USE TLS encryption when sending to Kafka Cloud (GCP/AWS/Azure)
+  'array' : 0, # do not modify
+  'saveasarray' : 1, # do not modify
+  'topicid' : -999, # do not modify
+  'rawdataoutput' : 1, # <<< 1 to output raw data used in the preprocessing, 0 do not output
+  'asynctimeout' : 120, # <<< 120 seconds for connection timeout 
+  'timedelay' : 0, # <<< connection delay
+  'tmlfilepath' : '', # leave blank
+  'usemysql' : 1, # do not modify
+  'streamstojoin' : '', # leave blank
+  'identifier' : 'IoT device performance and failures', # <<< ** Change as needed
+  'preprocesstypes' : 'anomprob,trend,avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
+  'pathtotmlattrs' : '', # Leave blank         
+  'jsoncriteria' : '', # <<< **** Specify your json criteria  refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'identifier' : 'TML solution',  
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
@@ -49,41 +70,44 @@ def startprocessing():
 
       # Roll back each data stream by 10 percent - change this to a larger number if you want more data
       # For supervised machine learning you need a minimum of 30 data points in each stream
-     maxrows=500
+     maxrows=default_args['maxrows']
+        
       # Go to the last offset of each stream: If lastoffset=500, then this function will rollback the 
       # streams to offset=500-50=450
-     offset=-1
+     offset=default_args['offset']
       # Max wait time for Kafka to response on milliseconds - you can increase this number if
       #maintopic to produce the preprocess data to
      topic=maintopic
       # producerid of the topic
      producerid=mainproducerid
       # use the host in Viper.env file
-     brokerhost=''
+     brokerhost=default_args['brokerhost']
       # use the port in Viper.env file
-     brokerport=-999
+     brokerport=default_args['brokerport']
       #if load balancing enter the microsericeid to route the HTTP to a specific machine
-     microserviceid=''
+     microserviceid=default_args['microserviceid']
 
   
       # You can preprocess with the following functions: MAX, MIN, SUM, AVG, COUNT, DIFF,OUTLIERS
       # here we will take max values of the arcturus-humidity, we will Diff arcturus-temperature, and average arcturus-Light_Intensity
       # NOTE: The number of process logic functions MUST match the streams - the operations will be applied in the same order
 #
-     preprocessconditions=''
+     preprocessconditions=default_args['preprocessconditions']
          
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=70
+     delay=default_args['delay']
      # USE TLS encryption when sending to Kafka Cloud (GCP/AWS/Azure)
-     enabletls=1
-     array=0
-     saveasarray=1
-     topicid=-999
+     enabletls=default_args['enabletls']
+     array=default_args['array']
+     saveasarray=default_args['saveasarray']
+     topicid=default_args['topicid']
     
-     rawdataoutput=1
-     asynctimeout=120
-     timedelay=0
+     rawdataoutput=default_args['rawdataoutput']
+     asynctimeout=default_args['asynctimeout']
+     timedelay=default_args['timedelay']
 
+     jsoncriteria = default_args['jsoncriteria']
+        
      jsoncriteria='uid=metadata.dsn,filter:allrecords~\
 subtopics=metadata.property_name~\
 values=datapoint.value~\
@@ -92,19 +116,19 @@ datetime=datapoint.updated_at~\
 msgid=datapoint.id~\
 latlong=lat:long'     
 
-     tmlfilepath=''
-     usemysql=1
+     tmlfilepath=default_args['tmlfilepath']
+     usemysql=default_args['usemysql']
 
-     streamstojoin="" 
-     identifier = "IoT device performance and failures"
+     streamstojoin=default_args['streamstojoin']
+     identifier = default_args['identifier']
 
      # if dataage - use:dataage_utcoffset_timetype
-     preprocesslogic='anomprob,trend,avg'
+     preprocesstypes=default_args['preprocesstypes']
 
-     pathtotmlattrs='oem=n/a,lat=n/a,long=n/a,location=n/a,identifier=n/a'          
+     pathtotmlattrs=default_args['pathtotmlattrs']       
      try:
         result=maadstml.viperpreprocesscustomjson(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,jsoncriteria,rawdataoutput,maxrows,enabletls,delay,brokerhost,
-                                          brokerport,microserviceid,topicid,streamstojoin,preprocesslogic,preprocessconditions,identifier,
+                                          brokerport,microserviceid,topicid,streamstojoin,preprocesstypes,preprocessconditions,identifier,
                                           preprocesstopic,array,saveasarray,timedelay,asynctimeout,usemysql,tmlfilepath,pathtotmlattrs)
         #print(result)
         return result
