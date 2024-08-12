@@ -71,6 +71,9 @@ mysql -u root -e "FLUSH PRIVILEGES;" 2>/dev/null
 
 sleep 10
  ########################## SETUP VIPER/HPDE/VIPERVIZ Binaries For Transactional Machine Learning 
+if [ "$brokerhostport" != "127.0.0.1:9092" ]; then
+   sed -i 's/LOGSTREAMTOPICREPLICATIONFACTOR=1/LOGSTREAMTOPICREPLICATIONFACTOR=3/g' $userbasedir/Viper-produce/viper.env
+fi
 
 if [ "$runtype" == "1" ]; then  
   # STEP 1: Produce Data to Kafka
