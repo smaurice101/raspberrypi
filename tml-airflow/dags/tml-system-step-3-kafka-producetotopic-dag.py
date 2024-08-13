@@ -17,8 +17,7 @@ default_args = {
   'identifier' : 'TML solution',  
   'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
   'start_date': datetime (2024, 6, 29),
-  'retries': 1,
-    
+  'retries': 1,    
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
