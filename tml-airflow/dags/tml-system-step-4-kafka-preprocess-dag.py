@@ -9,20 +9,18 @@ import sys
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
-  'owner' : 'Sebastian Maurice',    
-  'enabletls': 1,
-  'microserviceid' : '',
-  'producerid' : 'iotsolution',  
+  'owner' : 'Sebastian Maurice',  # <<< *** Change as needed      
+  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'microserviceid' : '',  # <<< *** leave blank
+  'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'raw_data_topic' : 'iot-raw-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'preprocess_data_topic' : 'iot-preprocess-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'maxrows' : 500, # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
   'offset' : -1, # <<< Rollback from the end of the data streams  
-  'brokerhost' : '',
-  'brokerport' : -999,
-  'microserviceid' : '',    
+  'brokerhost' : '',   # <<< *** Change as needed   
+  'brokerport' : -999,  # <<< *** Change as needed   
   'preprocessconditions' : '', ## <<< Leave blank      
   'delay' : 70, # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
-  'enabletls' : 1, # USE TLS encryption when sending to Kafka Cloud (GCP/AWS/Azure)
   'array' : 0, # do not modify
   'saveasarray' : 1, # do not modify
   'topicid' : -999, # do not modify
@@ -36,9 +34,9 @@ default_args = {
   'preprocesstypes' : 'anomprob,trend,avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'pathtotmlattrs' : '', # Leave blank         
   'jsoncriteria' : '', # <<< **** Specify your json criteria  refer to https://tml-readthedocs.readthedocs.io/en/latest/
-  'identifier' : 'TML solution',  
-  'start_date': datetime (2024, 6, 29),
-  'retries': 1,
+  'identifier' : 'TML solution',   # <<< *** Change as needed   
+  'start_date': datetime (2024, 6, 29),  # <<< *** Change as needed   
+  'retries': 1,  # <<< *** Change as needed   
     
 }
 

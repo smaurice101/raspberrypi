@@ -22,17 +22,17 @@ sys.dont_write_bytecode = True
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
-  'owner' : 'Sebastian Maurice',    
-  'enabletls': 1,
-  'microserviceid' : '',
-  'producerid' : 'iotsolution',  
+  'owner' : 'Sebastian Maurice', # <<< *** Change as needed
+  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'microserviceid' : '', # <<< ***** leave blank
+  'producerid' : 'iotsolution',  # <<< *** Change as needed
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
-  'identifier' : 'TML solution',  
+  'identifier' : 'TML solution',  # <<< *** Change as needed
   'gRPC_Port' : 9001,  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
   'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : -999, # <<< ********* do not modify          
-  'start_date': datetime (2024, 6, 29),
-  'retries': 1,
+  'start_date': datetime (2024, 6, 29),  # <<< *** Change as needed   
+  'retries': 1,  # <<< *** Change as needed   
     
 }
     

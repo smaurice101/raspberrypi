@@ -11,9 +11,9 @@ sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
- 'owner': 'Sebastian Maurice',
- 'start_date': datetime (2024, 6, 29),
- 'retries': 1,
+ 'owner': 'Sebastian Maurice',   # <<< *** Change as needed   
+ 'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
+ 'retries': 1,   # <<< *** Change as needed   
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
