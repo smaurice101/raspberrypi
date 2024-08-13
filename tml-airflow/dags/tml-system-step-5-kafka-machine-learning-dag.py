@@ -21,9 +21,7 @@ default_args = {
     
 }
 
-######################################## USER CHOOSEN PARAMETERS ########################################
-
-######################################## START DAG AND TASK #############################################
+######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
 @dag(dag_id="tml-system-step-5-kafka-machine-learning-dag", default_args=default_args, tags=["tml-system-step-5-kafka-machine-learning-dag"], schedule=None,catchup=False)
@@ -35,8 +33,6 @@ def startmachinelearning():
 
   @task(task_id="performSupervisedMachineLearning")  
   def performSupervisedMachineLearning(maintopic,topicid):
-#############################################################################################################
-#                                     JOIN DATA STREAMS 
 
       # Set personal data
       companyname="OTICS Advanced Analytics"

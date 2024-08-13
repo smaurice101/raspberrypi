@@ -21,9 +21,7 @@ default_args = {
     
 }
 
-######################################## USER CHOOSEN PARAMETERS ########################################
-
-######################################## START DAG AND TASK #############################################
+######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
 @dag(dag_id="tml-system-step-3-kafka-producetotopic-dag", default_args=default_args, tags=["tml-system-step-3-kafka-producetotopic-dag"], schedule=None,catchup=False)

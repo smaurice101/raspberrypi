@@ -35,11 +35,8 @@ default_args = {
   'retries': 1,
     
 }
-
-######################################## USER CHOOSEN PARAMETERS ########################################
-
     
-######################################## START DAG AND TASK #############################################
+######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
 @dag(dag_id="tml-read-gRPC-step-3-kafka-producetotopic-dag", default_args=default_args, tags=["tml-read-gRPC-step-3-kafka-producetotopic-dag"], schedule=None,catchup=False)

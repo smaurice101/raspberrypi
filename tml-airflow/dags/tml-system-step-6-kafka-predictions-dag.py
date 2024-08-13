@@ -20,10 +20,7 @@ default_args = {
   'retries': 1,
     
 }
-
-######################################## USER CHOOSEN PARAMETERS ########################################
-
-######################################## START DAG AND TASK #############################################
+######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
 @dag(dag_id="tml-system-step-6-kafka-predictions-dag", default_args=default_args, tags=["tml-system-step-6-kafka-predictions-dag"], schedule=None,catchup=False)

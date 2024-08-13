@@ -19,11 +19,6 @@ default_args = {
 }
 
 
-######################################################USER CHOSEN PARAMETERS ###########################################################
-
-
-
-
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
 @dag(dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml-system-step-1-getparams"], schedule=None, start_date=datetime.datetime(2022, 3, 4), catchup=False)

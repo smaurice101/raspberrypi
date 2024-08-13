@@ -32,9 +32,7 @@ default_args = {
     
 }
 
-######################################## USER CHOOSEN PARAMETERS ########################################
-
-######################################## START DAG AND TASK #############################################
+######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
 @dag(dag_id="tml_system_step_2_kafka_createtopic_dag", default_args=default_args, tags=["tml-system-step-2-kafka-createtopic"], schedule=None,catchup=False)
