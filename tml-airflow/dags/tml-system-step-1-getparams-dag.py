@@ -51,7 +51,7 @@ def tmlparams():
   def getparams(args):
      VIPERHOST=""
      VIPERPORT=""
-     HTTPADDR="http://"
+     HTTPADDR2="http://"
      HPDEHOST=""
      HPDEPORT=""
     
