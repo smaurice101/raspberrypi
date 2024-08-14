@@ -9,16 +9,40 @@ import sys
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
-  'owner' : 'Sebastian Maurice',   # <<< *** Change as needed      
+  'myname' : 'Sebastian Maurice',   # <<< *** Change as needed      
   'enabletls': 1,   # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
-  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
+  'preprocess_data_topic' : 'iot-preprocess-data', # << *** topic/data to use for training datasets - You created this in STEP 2
+  'ml_data_topic' : 'ml-data', # topic to store the trained algorithms  - You created this in STEP 2
   'identifier' : 'TML solution',    # <<< *** Change as needed   
-  'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'companyname' : 'Your company', # <<< *** Change as needed      
+  'myemail' : 'Your email', # <<< *** Change as needed      
+  'mylocation' : 'Your location', # <<< *** Change as needed      
+  'brokerhost' : '', # <<< *** Change as needed      
+  'brokerport' : -999, # <<< *** Change as needed      
+  'deploy' : 1, # <<< *** do not modofy
+  'modelruns: 100, # <<< *** Change as needed      
+  'offset' : -1, # <<< *** Do not modify
+  'islogistic' : 0,  # <<< *** Change as needed, 1=logistic, 0=not logistic
+  'networktimeout' : 600, # <<< *** Change as needed      
+  'modelsearchtuner' : 90, # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
+  'dependentvariable' : '', # <<< *** Change as needed, 
+  'independentvariables': '', # <<< *** Change as needed, 
+  'rollbackoffsets' : 500, # <<< *** Change as needed, 
+  'consumeridtrainingdata2': '', # leave blank
+  'partition_training' : '',  # leave blank
+  'consumefrom' : '',  # leave blank
+  'topicid' : -1,  # leave as is
+  'fullpathtotrainingdata' : '/Viper-tml/viperlogs/<choose foldername>',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
+  'processlogic' : '',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
+  'array' : 0,  # leave as is
+  'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
+  'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
+  'coeftoprocess' : '', # indicate the index of the coefficients to process i.e. 0,1,2 For example, for a 3 estimated parameters 0=constant, 1,2 are the other estmated paramters
+  'coefsubtopicnames' : ''  # Give the coefficients a name: constant,elasticity,elasticity2    
   'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
   'retries': 1,   # <<< *** Change as needed   
-    
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -30,90 +54,90 @@ def startmachinelearning():
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
+  HTTPADDR2=''
+  HPDEHOST = ''    
+  HPDEPORT = ''
 
+  maintopic =  default_args['preprocess_data_topic']  
+  mainproducerid = default_args['producerid']     
+                
+  VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
+  VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
+  VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+
+  HPDEHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOST")
+  HPDEPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORT")
+  HTTPADDR = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HTTPADDR")
+        
+        
   @task(task_id="performSupervisedMachineLearning")  
-  def performSupervisedMachineLearning(maintopic,topicid):
+  def performSupervisedMachineLearning(maintopic):
 
       # Set personal data
-      companyname="OTICS Advanced Analytics"
-      myname="Sebastian"
-      myemail="Sebastian.Maurice"
-      mylocation="Toronto"
+      companyname=default_args['companyname']
+      myname=default_args['myname']
+      myemail=default_args['myemail']
+      mylocation=default_args['mylocation']
 
-      # Replication factor for Kafka redundancy
-      replication=1
-      # Number of partitions for joined topic
-      numpartitions=3
       # Enable SSL/TLS communication with Kafka
-      enabletls=1
+      enabletls=default_args['enabletls']
       # If brokerhost is empty then this function will use the brokerhost address in your
       # VIPER.ENV in the field 'KAFKA_CONNECT_BOOTSTRAP_SERVERS'
-      brokerhost=''
+      brokerhost=default_args['brokerhost']
       # If this is -999 then this function uses the port address for Kafka in VIPER.ENV in the
       # field 'KAFKA_CONNECT_BOOTSTRAP_SERVERS'
-      brokerport=-999
+      brokerport=default_args['brokerport']
       # If you are using a reverse proxy to reach VIPER then you can put it here - otherwise if
       # empty then no reverse proxy is being used
-      microserviceid=''
-
-
-      #############################################################################################################
-      #                         CREATE TOPIC TO STORE TRAINED PARAMS FROM ALGORITHM  
-      
-      producetotopic="iot-trained-params-input"
-
-      description="Topic to store the trained machine learning parameters"
-      result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,producetotopic,companyname,
-                                     myname,myemail,mylocation,description,enabletls,
-                                     brokerhost,brokerport,numpartitions,replication,
-                                     microserviceid='')
+      microserviceid=default_args['microserviceid']
 
       #############################################################################################################
       #                         VIPER CALLS HPDE TO PERFORM REAL_TIME MACHINE LEARNING ON TRAINING DATA 
 
 
       # deploy the algorithm to ./deploy folder - otherwise it will be in ./models folder
-      deploy=1
+      deploy=default_args['deploy']
       # number of models runs to find the best algorithm
-      modelruns=100
+      modelruns=default_args['modelruns']
       # Go to the last offset of the partition in partition_training variable
-      offset=-1
+      offset=default_args['offset']
       # If 0, this is not a logistic model where dependent variable is discreet
-      islogistic=1
+      islogistic=default_args['islogistic']
       # set network timeout for communication between VIPER and HPDE in seconds
       # increase this number if you timeout
-      networktimeout=600
+      networktimeout=default_args['networktimeout']
 
       # This parameter will attempt to fine tune the model search space - a number close to 0 means you will have lots of
       # models but their quality may be low.  A number close to 100 means you will have fewer models but their predictive
       # quality will be higher.
-      modelsearchtuner=90
+      modelsearchtuner=default_args['modelsearchtuner']
 
       #this is the dependent variable
-      dependentvariable="failure"
+      dependentvariable=default_args['dependentvariable']
       # Assign the independentvariable streams
-      independentvariables="Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb"
+      independentvariables=default_args['independentvariables'] #"Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb"
             
-      rollbackoffsets=500
-      consumeridtrainingdata2=''
-      partition_training=''
-      producerid=''
-      consumefrom=''
+      rollbackoffsets=default_args['rollbackoffsets']
+      consumeridtrainingdata2=default_args['consumeridtrainingdata2']
+      partition_training=default_args['partition_training']
+      producerid=default_args['producerid']
+      consumefrom=default_args['consumefrom']
 
-      topicid=-1 # pickup any topicid      
-      fullpathtotrainingdata='/Viper-tml/viperlogs/iotlogistic'
+      topicid=default_args['mylocation']      
+      fullpathtotrainingdata=default_args['fullpathtotrainingdata']
 
      # These are the conditions that sets the dependent variable to a 1 - if condition not met it will be 0
-      processlogic='classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n'
+      processlogic=default_args['processlogic'] #'classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n'
       
-      identifier="IOT Performance Monitor and Failure Probability Model"
+      identifier=default_args['identifier']
 
-      array=0
-      transformtype='' # Sets the model to: log-lin,lin-log,log-log
-      sendcoefto=''  # you can send coefficients to another topic for further processing
-      coeftoprocess=''  # indicate the index of the coefficients to process i.e. 0,1,2
-      coefsubtopicnames=''  # Give the coefficients a name: constant,elasticity,elasticity2
-      identifier="IoT Failure Probability Model"
+      producetotopic = default_args['ml_data_topic']
+        
+      array=default_args['array']
+      transformtype=default_args['transformtype'] # Sets the model to: log-lin,lin-log,log-log
+      sendcoefto=default_args['sendcoefto']  # you can send coefficients to another topic for further processing
+      coeftoprocess=default_args['coeftoprocess']  # indicate the index of the coefficients to process i.e. 0,1,2
+      coefsubtopicnames=default_args['coefsubtopicnames']  # Give the coefficients a name: constant,elasticity,elasticity2
 
      # Call HPDE to train the model
       result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
@@ -122,6 +146,7 @@ def startmachinelearning():
                                       deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
-    
+  
+  performSupervisedMachineLearning(maintopic)
 
 dag = startmachinelearning()

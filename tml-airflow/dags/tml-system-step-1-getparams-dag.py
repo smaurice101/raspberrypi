@@ -51,7 +51,10 @@ def tmlparams():
   def getparams(args):
      VIPERHOST=""
      VIPERPORT=""
-     HTTPADDR=""
+     HTTPADDR="http://"
+     HPDEHOST=""
+     HPDEPORT=""
+    
      with open(basedir + "/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
@@ -60,11 +63,17 @@ def tmlparams():
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
+        with open('/Hpde/hpde.txt', 'r') as f:
+          output = f.read()
+          HPDEHOST = HTTPADDR2 + output.split(",")[0]
+          HPDEPORT = output.split(",")[1]
 
      ti.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
      ti.xcom_push(key='VIPERHOST',value=VIPERHOST)
      ti.xcom_push(key='VIPERPORT',value=VIPERPORT)
      ti.xcom_push(key='HTTPADDR',value=HTTPADDR)
+     ti.xcom_push(key='HPDEHOST',value=HPDEHOST)
+     ti.xcom_push(key='HPDEPORT',value=HPDEPORT)
              
      updateviperenv()
     
