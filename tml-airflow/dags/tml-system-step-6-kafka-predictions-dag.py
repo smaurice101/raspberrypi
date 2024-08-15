@@ -15,7 +15,7 @@ default_args = {
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
   'preprocess_data_topic' : 'iot-preprocess-data', # << *** data for the independent variables - You created this in STEP 2
-  'ml_prediction_topic' : 'ml-predictions', # topic to store the predictions - You created this in STEP 2
+  'ml_prediction_topic' : 'iot-ml-prediction-results-output', # topic to store the predictions - You created this in STEP 2
   'description' : 'TML solution',    # <<< *** Change as needed   
   'companyname' : 'Your company', # <<< *** Change as needed      
   'myemail' : 'Your email', # <<< *** Change as needed      
@@ -57,8 +57,9 @@ def startpredictions():
   # Set Global variable for Viper confifuration file - change the folder path for your computer
   viperconfigfile="/Viper-predict/viper.env"
 
-  maintopic =  default_args['ml_data_tpic']  
   mainproducerid = default_args['producerid']     
+  maintopic=default_args['preprocess_data_topic']
+  predictiontopic=default_args['ml_prediction_topic']
                 
   VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
   VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
@@ -69,8 +70,6 @@ def startpredictions():
 
   @task(task_id="performPredictions")  
   def performPrediction(maintopic):
-#############################################################################################################
-#                                     JOIN DATA STREAMS 
 
       # Set personal data
       companyname=default_args['companyname']
@@ -135,20 +134,6 @@ def startpredictions():
 
   while True:
     performPrediction(maintopic)      
-
-#############################################################################################################
-#                                     SETUP THE TOPIC DATA STREAMS EXAMPLE
-
-# Topic to retreieve the new preprocessed data for predictions
-maintopic="iot-preprocess"
-
-# Topic to store the predictions
-predictiontopic="iot-ml-prediction-results-output"
-
-      while True:
-          performPrediction(maintopic,producerid,VIPERPORT,-1,predictiontopic)
-          time.sleep(.1)
-          
 
 
 dag = startpredictions()
