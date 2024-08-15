@@ -5,6 +5,7 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime
 from airflow.decorators import dag, task
 import sys
+import maadstml
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
