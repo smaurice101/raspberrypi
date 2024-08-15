@@ -35,7 +35,7 @@ default_args = {
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
   'topicid' : -1,  # leave as is
-  'fullpathtotrainingdata' : '/Viper-tml/viperlogs/<choose foldername>',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
+  'fullpathtotrainingdata' : '/Viper-ml/viperlogs/<choose foldername>',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
   'processlogic' : '',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
   'array' : 0,  # leave as is
   'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
@@ -145,7 +145,7 @@ def startmachinelearning():
                                       deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
-  
-  performSupervisedMachineLearning(maintopic)
+  while True:
+    performSupervisedMachineLearning(maintopic)
 
 dag = startmachinelearning()

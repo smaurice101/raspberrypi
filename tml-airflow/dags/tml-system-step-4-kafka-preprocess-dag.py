@@ -125,6 +125,7 @@ def startprocessing():
         print(e)
         return e
   
-  processtransactiondata()
+  while True:
+    processtransactiondata()
     
 dag = startprocessing()
