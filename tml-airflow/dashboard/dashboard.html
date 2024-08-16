@@ -709,7 +709,7 @@ function image(thetype,mess) {
 <!-- ****************************************** ON OPEN SOCKET EVENT ****************** -->
 			  
               ws.onopen = function (error) {
-                  var password = document.getElementById("dashpass").value;
+                  var password = ""
 
                   var sendbuffer = "{\"Topic\":\"" + topic + "\",\"Topictype\":\"" + topictype + "\",\"Secure\":" + secure + ",\"Vipertoken\":\"" + vipertoken + "\",\"Consumerid\":\"" + consumerid + "\",\"Offset\":\"" + offset + "\",\"RollbackOffset\":\"" + rollbackoffset + "\",\"Groupid\":\"" + groupid + "\"}";
 
