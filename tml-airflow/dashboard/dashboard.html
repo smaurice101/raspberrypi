@@ -332,7 +332,7 @@ function image(thetype,mess) {
           issues = "";
           issuecount = 0;
 
-          if (jsondata && mainkafkatopic != "fhir-ml-xenese-confirmation") {
+          if (jsondata) {
 
               var text;
               var val;
@@ -408,9 +408,7 @@ function image(thetype,mess) {
                       //  datainchart.push(predictionvalue)
 
                       arr = [createdon, winstart, winend, msgiddatastr, processvariable, processtype, predictionvalue, totalmessages, kafkakey, offset, partition];
-                      if (mainkafkatopic == "iot-preprocess") {
-                          dataintable.push(arr)
-                      }
+                      dataintable.push(arr)
                       rownum++;
 
                       predictioncount = predictioncount + 1;
@@ -420,14 +418,10 @@ function image(thetype,mess) {
 
               maintotalmessages = maintotalmessages + rownum;
               document.getElementById('totrecs').innerHTML = maintotalmessages;
+              document.getElementById('tottime').innerHTML = "<font size=3><b>Start:</b> " + timestart + "<b><br>End:</b> " + timeend + "</font>"
 
-              if (rownum > 0 && mainkafkatopic == "iot-preprocess") {
+              drawTable2();
 
-                  document.getElementById('tottime').innerHTML = "<font size=3><b>Start:</b> " + timestart + "<b><br>End:</b> " + timeend + "</font>"
-
-                      drawTable2();
-
-              }
           }
 
           //   i=null;
