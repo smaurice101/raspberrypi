@@ -1,16 +1,6 @@
-import maadstml
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
-
-from datetime import datetime
-from airflow.decorators import dag, task
 import grpc
-from concurrent import futures
-import time
 import tml_grpc_pb2_grpc as pb2_grpc
 import tml_grpc_pb2 as pb2
-
 import sys
 
 sys.dont_write_bytecode = True
@@ -43,7 +33,7 @@ class TmlgrpcClient(object):
 if __name__ == '__main__':
     try:
       client = TmlgrpcClient()
-      result = client.get_url(message="SEND YOUR DATA HERE")
+      result = client.get_url(message="PUT YOUR DATA HERE")
       print(f'{result}')
     except Exception as e:
       print("ERROR: ",e)
