@@ -23,7 +23,7 @@ default_args = {
   'brokerhost' : '', # <<< *** Change as needed      
   'brokerport' : -999, # <<< *** Change as needed      
   'deploy' : 1, # <<< *** do not modofy
-  'modelruns: 100, # <<< *** Change as needed      
+  'modelruns': 100, # <<< *** Change as needed      
   'offset' : -1, # <<< *** Do not modify
   'islogistic' : 0,  # <<< *** Change as needed, 1=logistic, 0=not logistic
   'networktimeout' : 600, # <<< *** Change as needed      
@@ -41,7 +41,7 @@ default_args = {
   'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
   'coeftoprocess' : '', # indicate the index of the coefficients to process i.e. 0,1,2 For example, for a 3 estimated parameters 0=constant, 1,2 are the other estmated paramters
-  'coefsubtopicnames' : ''  # Give the coefficients a name: constant,elasticity,elasticity2    
+  'coefsubtopicnames' : '',  # Give the coefficients a name: constant,elasticity,elasticity2    
   'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
   'retries': 1,   # <<< *** Change as needed   
 }
