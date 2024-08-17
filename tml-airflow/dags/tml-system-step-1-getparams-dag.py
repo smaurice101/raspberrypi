@@ -29,7 +29,7 @@ def tmlparams():
 
   def updateviperenv():
   # update ALL
-    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viperviz/viper.env']
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viperviz/viper.env','/Viper-predict/viper.env']
     for mainfile in filepaths:
         with open(mainfile, 'r', encoding='utf-8') as file: 
           data = file.readlines() 
@@ -49,12 +49,13 @@ def tmlparams():
 
   @task(task_id="getparams")
   def getparams(args):
-     VIPERHOST=""
-     VIPERPORT=""
-     HTTPADDR="http://"
-     HPDEHOST=""
-     HPDEPORT=""
-     VIPERTOKEN=""
+        
+     VIPERHOST = ""
+     VIPERPORT = ""
+     HTTPADDR = "http://"
+     HPDEHOST = ""
+     HPDEPORT = ""
+     VIPERTOKEN = ""
     
      with open(basedir + "/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
@@ -77,12 +78,8 @@ def tmlparams():
      ti.xcom_push(key='HPDEPORT',value=HPDEPORT)
              
      updateviperenv()
-    
-     return [VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR]
-     
+         
   tmlsystemparams=getparams(default_args)
   
-  if tmlsystemparams[1] == "":
-      print("ERROR: No host specified")
     
 dag = tmlparams()
