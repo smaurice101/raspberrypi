@@ -1,4 +1,4 @@
-[INFO 2024-08-18_17:55:47] TML Solution Studio: Github Status: safe.directory=/raspberrypi
+[INFO 2024-08-18_17:56:43] TML Solution Studio: Github Status: safe.directory=/raspberrypi
 pull.rebase=true
 core.repositoryformatversion=0
 core.filemode=true
@@ -6,6 +6,6 @@ core.bare=false
 core.logallrefupdates=true
 remote.origin.url=https://github.com/smaurice101/raspberrypi.git
 remote.origin.fetch=+refs/heads/main:refs/remotes/origin/main
-remote.origin.pushurl=https://<hidden>@github.com/smaurice101/raspberrypi.git
+remote.origin.pushurl=https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git
 branch.main.remote=origin
 branch.main.merge=refs/heads/main
