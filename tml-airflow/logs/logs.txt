@@ -1,1 +1,10 @@
-[INFO 2024-08-18_16:26:56] Docker Login Status: Login Succeeded
+[INFO 2024-08-18_16:46:53] Docker Login Status: 
+[INFO 2024-08-18_16:48:40] Docker Login Status: 
+[INFO 2024-08-18_17:07:16] Docker Login Status: Error: Cannot perform an interactive login from a non TTY device
+[INFO 2024-08-18_17:10:29] Docker Login Status: Error: Cannot perform an interactive login from a non TTY device
+[INFO 2024-08-18_17:12:40] Docker Login Status: Error response from daemon: Get "https://registry-1.docker.io/v2/": unauthorized: incorrect username or password
+[INFO 2024-08-18_17:13:10] Docker Login Status: WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
