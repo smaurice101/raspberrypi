@@ -64,7 +64,7 @@ def startmachinelearning():
         
   @task(task_id="performSupervisedMachineLearning")  
   def performSupervisedMachineLearning(maintopic):
-
+      
       VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
       VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
       VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
@@ -145,7 +145,8 @@ def startmachinelearning():
                                       deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
-  while True:
-    performSupervisedMachineLearning(maintopic)
+  if VIPERHOST != "":
+     while True:
+       performSupervisedMachineLearning(maintopic)
 
 dag = startmachinelearning()
