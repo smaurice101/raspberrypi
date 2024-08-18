@@ -133,8 +133,9 @@ def startpredictions():
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
-  while True:
-    performPrediction(maintopic)      
+  if VIPERHOST != "":
+    while True:
+      performPrediction(maintopic)      
 
 
 dag = startpredictions()

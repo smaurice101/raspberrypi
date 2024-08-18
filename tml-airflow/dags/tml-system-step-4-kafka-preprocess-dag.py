@@ -125,7 +125,8 @@ def startprocessing():
         print(e)
         return e
   
-  while True:
-    processtransactiondata()
+  if VIPERHOST != "":
+     while True:
+       processtransactiondata()
     
 dag = startprocessing()
