@@ -5,6 +5,7 @@ import datetime
 from airflow.decorators import dag, task
 import os 
 import sys
+#import tsslogging
 
 sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
@@ -29,6 +30,7 @@ def tmlparams():
 
   def updateviperenv():
   # update ALL
+    
     filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viperviz/viper.env','/Viper-predict/viper.env']
     for mainfile in filepaths:
         with open(mainfile, 'r', encoding='utf-8') as file: 
