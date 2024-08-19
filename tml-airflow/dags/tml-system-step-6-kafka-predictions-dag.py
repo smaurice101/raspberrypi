@@ -20,8 +20,8 @@ default_args = {
   'companyname' : 'Your company', # <<< *** Change as needed      
   'myemail' : 'Your email', # <<< *** Change as needed      
   'mylocation' : 'Your location', # <<< *** Change as needed      
-  'brokerhost' : '', # <<< *** Change as needed      
-  'brokerport' : -999, # <<< *** Change as needed      
+  'brokerhost' : '', # <<< *** Leave as is 
+  'brokerport' : -999, # <<< *** Leave as is
   'streamstojoin' : 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # << ** These are the streams in the preprocess_data_topic for these independent variables
   'inputdata' : '', # << ** You can specify independent variables manually - rather than consuming from the preprocess_data_topic stream
   'consumefrom' : '', # << This is ml_data_topic in STEP 5 that contains the estimated parameters

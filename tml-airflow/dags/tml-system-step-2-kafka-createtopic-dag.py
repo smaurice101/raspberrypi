@@ -19,8 +19,8 @@ default_args = {
   'replication' : 1,  # <<< ********** You change as needed
   'numpartitions': 1,  # <<< ********** You change as needed
   'enabletls': 1,  # <<< ********** You change as needed
-  'brokerhost' : '',  # <<< ********** You change as needed
-  'brokerport' : -999,  # <<< ********** You change as needed
+  'brokerhost' : '',  # <<< ********** Leave as is
+  'brokerport' : -999,  # <<< ********** Leave as is
   'microserviceid' : '',  # <<< ********** You change as needed
   'raw_data_topic' : 'iot-raw-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'preprocess_data_topic' : 'iot-preprocess-data,iot-preprocess2-data', # Separate multiple topics with comma <<< ********** You change topic names as needed

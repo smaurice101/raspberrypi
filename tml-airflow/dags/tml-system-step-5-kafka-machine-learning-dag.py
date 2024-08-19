@@ -20,8 +20,8 @@ default_args = {
   'companyname' : 'Your company', # <<< *** Change as needed      
   'myemail' : 'Your email', # <<< *** Change as needed      
   'mylocation' : 'Your location', # <<< *** Change as needed      
-  'brokerhost' : '', # <<< *** Change as needed      
-  'brokerport' : -999, # <<< *** Change as needed      
+  'brokerhost' : '', # <<< *** Leave as is   
+  'brokerport' : -999, # <<< *** Leave as is
   'deploy' : 1, # <<< *** do not modofy
   'modelruns': 100, # <<< *** Change as needed      
   'offset' : -1, # <<< *** Do not modify
