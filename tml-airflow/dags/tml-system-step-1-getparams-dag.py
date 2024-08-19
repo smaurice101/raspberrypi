@@ -16,6 +16,8 @@ default_args = {
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
  'cloudusername' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API KEY  - OTHERWISE LEAVE BLANK
  'cloudpassword' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API SECRET - OTHERWISE LEAVE BLANK   
+ 'solutionname': 'mysolution',   # <<< *** Provide a name for your solution - No spaces or special characters in the name
+ 'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
  'retries': 1,
 }
 
@@ -72,12 +74,17 @@ def tmlparams():
           HPDEHOST = HTTPADDR + output.split(",")[0]
           HPDEPORT = output.split(",")[1]
 
+     sname=args['solutionname']    
+     desc=args['description']        
+        
      ti.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
      ti.xcom_push(key='VIPERHOST',value=VIPERHOST)
      ti.xcom_push(key='VIPERPORT',value=VIPERPORT)
      ti.xcom_push(key='HTTPADDR',value=HTTPADDR)
      ti.xcom_push(key='HPDEHOST',value=HPDEHOST)
      ti.xcom_push(key='HPDEPORT',value=HPDEPORT)
+     ti.xcom_push(key='solutionname',value=sname)
+     ti.xcom_push(key='solutiondescription',value=desc)
              
      updateviperenv()
          
