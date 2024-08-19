@@ -10,7 +10,10 @@ sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
- 'owner': 'Sebastian Maurice',   # <<< *** Change as needed   
+ 'solutionname': 'mysolution',   # <<< *** Provide a name for your solution - No spaces or special characters in the name
+ 'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
+    
+    
  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
 }
