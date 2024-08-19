@@ -75,7 +75,7 @@ def tmlparams():
   def updateviperenv():
   # update ALL
     
-    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viperviz/viper.env','/Viper-predict/viper.env']
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
         with open(mainfile, 'r', encoding='utf-8') as file: 
           data = file.readlines() 
