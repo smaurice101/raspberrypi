@@ -56,6 +56,7 @@ default_args = {
  'SSL_CLIENT_CERT_FILE' : 'client.cer.pem',
  'SSL_CLIENT_KEY_FILE' : 'client.key.pem', 
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
+ 'KUBERNETES' : 0,
  'solutionname': 'mysolution',   # <<< *** Provide a name for your solution - No spaces or special characters in the name
  'solutiontitle: 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
@@ -163,7 +164,9 @@ def tmlparams():
              data[r] = "SSL_CLIENT_KEY_FILE={}".format(default_args['SSL_CLIENT_KEY_FILE'])
            if 'SSL_SERVER_CERT_FILE' in d: 
              data[r] = "SSL_SERVER_CERT_FILE={}".format(default_args['SSL_SERVER_CERT_FILE'])                
-                
+           if 'KUBERNETES' in d: 
+             data[r] = "KUBERNETES={}".format(default_args['KUBERNETES'])                
+
            r += 1
         with open(mainfile, 'w', encoding='utf-8') as file: 
           file.writelines(data)
