@@ -182,6 +182,8 @@ def tmlparams():
      HPDEHOST = ""
      HPDEPORT = ""
      VIPERTOKEN = ""
+     HPDEHOSTPREDICT = ""
+     HPDEPORTPREDICT = ""
     
      with open(basedir + "/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
@@ -195,6 +197,10 @@ def tmlparams():
           output = f.read()
           HPDEHOST = HTTPADDR + output.split(",")[0]
           HPDEPORT = output.split(",")[1]
+        with open('/Hpde-predict/hpde.txt', 'r') as f:
+          output = f.read()
+          HPDEHOSTPREDICT = HTTPADDR + output.split(",")[0]
+          HPDEPORTPREDICT = output.split(",")[1]
 
      sname = args['solutionname']    
      desc = args['description']        
