@@ -35,6 +35,8 @@ def startdocumentation():
     brokerhost = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="brokerhost")
     brokerport = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="brokerport")
     cloudusername = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="cloudusername")
+    cloudpassword = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="cloudpassword")
+    ingestdatamethod = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="ingestdatamethod")
     
     companyname = ti.xcom_pull(dag_id='tml_system_step_2_kafka_createtopic_dag',task_ids='setupkafkatopics',key="companyname")
     myname = ti.xcom_pull(dag_id='tml_system_step_2_kafka_createtopic_dag',task_ids='setupkafkatopics',key="myname")
