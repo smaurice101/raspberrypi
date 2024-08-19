@@ -16,7 +16,7 @@ default_args = {
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
  'cloudusername' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API KEY  - OTHERWISE LEAVE BLANK
  'cloudpassword' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API SECRET - OTHERWISE LEAVE BLANK   
- 'ingestdatamethod' : 'localfile', # << CHOOSE BETWEEN: 1. localfle, mqtt, rest, grpc     
+ 'ingestdatamethod' : 'localfile', # << CHOOSE BETWEEN: 1. localfle, 2. mqtt, 3. rest, 4. grpc     
  'WRITELASTCOMMIT' : 0,   ## <<<<<<<<< ******************** FOR DETAILS ON BELOW PARAMETER SEE: https://tml.readthedocs.io/en/latest/viper.html
  'NOWINDOWOVERLAP' : 0,
  'NUMWINDOWSFORDUPLICATECHECK' : 5,
