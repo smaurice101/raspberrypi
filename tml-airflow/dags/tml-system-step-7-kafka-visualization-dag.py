@@ -28,12 +28,13 @@ default_args = {
 @dag(dag_id="tml-system-step-7-kafka-visualization-dag", default_args=default_args, tags=["tml-system-step-7-kafka-visualization-dag"], schedule=None,catchup=False)
 def startstreaming():    
     
-  chip = default_args['chip']
-  vipervizport = default_args['vipervizport']
 
   @task(task_id="startstreamingengine")  
   def startstreamingengine():
-     
+        chip = default_args['chip']
+        vipervizport = default_args['vipervizport']
+       
+        ti.xcom_push(key='VIPERVIZPORT',value=vipervizport)
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 
         subprocess.run(["tmux", "new", "-d", "-s", "visualization-viperviz"])
