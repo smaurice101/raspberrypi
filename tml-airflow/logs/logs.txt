@@ -934,3 +934,10 @@ Already up to date.
  1 file changed, 24 insertions(+)
 [INFO 2024-08-20_18:40:40] TML Solution Studio: git push Status for project myawesometmlproject: To https://github.com/smaurice101/raspberrypi.git
    f49ae41..41f52a1  main -> main
+[INFO 2024-08-20_18:42:03] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:42:03] TML Solution Studio: TML Project Creation: Copying old project : myawesometmlproject  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlproject2
+[INFO 2024-08-20_18:42:04] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-20_18:42:17] TML Solution Studio: Starting Git commit process for project: myawesometmlproject2
