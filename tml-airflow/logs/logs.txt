@@ -906,3 +906,27 @@ Applied autostash.
  * branch            main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-08-20_18:40:38] TML Solution Studio: Starting Git commit process for project: myawesometmlproject
+[INFO 2024-08-20_18:40:38] TML Solution Studio: git commit -a Status for project myawesometmlproject: [main f49ae41] new project
+ 21 files changed, 6 insertions(+), 1686 deletions(-)
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-1-getparams-dag-myawesometmlproject2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-10-documentation-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-2-kafka-createtopic-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-4-kafka-preprocess-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-5-kafka-machine-learning-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-6-kafka-predictions-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-7-kafka-visualization-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml-system-step-9-privategpt_qdrant-dag-myawesometmlproject2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject2/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject2/tsslogging.py
+[INFO 2024-08-20_18:40:39] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   6746952..f49ae41  main -> main
+[INFO 2024-08-20_18:40:39] TML Solution Studio: git add . Status: 
