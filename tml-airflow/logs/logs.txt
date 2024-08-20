@@ -289,3 +289,7 @@ After doing this, you may fix the identity used for this commit with:
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject4/tsslogging.py
 [INFO 2024-08-20_17:53:03] TML Solution Studio: git push  Status: To https://github.com/smaurice101/raspberrypi.git
    df0f275..6dfec11  main -> main
+[INFO 2024-08-20_17:59:53] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlproject5
+[INFO 2024-08-20_17:59:53] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:00:06] TML Solution Studio: Starting Git commit process for project: myawesometmlproject5
