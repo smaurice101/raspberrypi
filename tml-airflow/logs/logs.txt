@@ -161,3 +161,5 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-08-20_16:35:51] TML Solution Studio: Git committed project: solution4
 [INFO 2024-08-20_16:41:32] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myfirsttmlsolution
 [INFO 2024-08-20_16:41:45] TML Solution Studio: Git committed project: myfirsttmlsolution
+[INFO 2024-08-20_16:43:00] TML Solution Studio: TML Project Creation: Copying old project : myfirsttmlsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/tmlsolution2
+[INFO 2024-08-20_16:43:13] TML Solution Studio: Git committed project: tmlsolution2
