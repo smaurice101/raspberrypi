@@ -479,3 +479,36 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-08-20_18:18:16] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    4cba735..9ad643f  main -> main
 [INFO 2024-08-20_18:18:16] TML Solution Studio: git add . Status: 
+[INFO 2024-08-20_18:18:16] TML Solution Studio: git commit -a Status for project myawesometmlproject8: [main e4091ff] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 20 files changed, 1702 insertions(+)
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-client-gRPC-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-1-getparams-dag-myawesometmlproject8.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-10-documentation-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-2-kafka-createtopic-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-4-kafka-preprocess-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-5-kafka-machine-learning-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-6-kafka-predictions-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-7-kafka-visualization-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml-system-step-9-privategpt_qdrant-dag-myawesometmlproject8.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml_grpc.proto
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml_grpc_pb2.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject8/tml_grpc_pb2_grpc.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject8/tsslogging.py
