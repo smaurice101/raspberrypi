@@ -152,3 +152,10 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-08-20_15:53:28] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myfirstsolution
 [INFO 2024-08-20_15:55:43] TML Solution Studio: TML Project Creation: Copying old project : myfirstsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/mysecondsolution
 [INFO 2024-08-20_16:00:40] TML Solution Studio: TML Project Creation: Copying old project : myfirstsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/solution3
+[INFO 2024-08-20_16:18:54] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myfirsttmlsolution
+[INFO 2024-08-20_16:30:15] TML Solution Studio: TML Project Creation: Copying old project : myfirsttmlsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/solution2
+[INFO 2024-08-20_16:30:29] TML Solution Studio: Git committed project: solution2
+[INFO 2024-08-20_16:32:27] TML Solution Studio: TML Project Creation: Copying old project : myfirsttmlsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/solution3
+[INFO 2024-08-20_16:32:42] TML Solution Studio: Git committed project: solution3
+[INFO 2024-08-20_16:35:38] TML Solution Studio: TML Project Creation: Copying old project : myfirsttmlsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/solution4
+[INFO 2024-08-20_16:35:51] TML Solution Studio: Git committed project: solution4
