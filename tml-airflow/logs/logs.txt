@@ -1225,3 +1225,8 @@ error: please commit or stash them.
  * branch            main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-08-20_18:54:51] TML Solution Studio: Starting Git commit process for project: myawesometmlproject3
+[INFO 2024-08-20_18:54:51] TML Solution Studio: git commit -a Status for project myawesometmlproject3: [main b672790] new project
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+[INFO 2024-08-20_18:54:52] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   9508cd7..b672790  main -> main
+[INFO 2024-08-20_18:54:52] TML Solution Studio: git add . Status: 
