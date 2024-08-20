@@ -44,7 +44,7 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml-system-step-4-kafka-preprocess-dag", default_args=default_args, tags=["tml-system-step-4-kafka-preprocess-dag"], schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_4_kafka_preprocess_dag", default_args=default_args, tags=["tml_system_step_4_kafka_preprocess_dag"], schedule=None,catchup=False)
 def startprocessing():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""
