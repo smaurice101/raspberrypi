@@ -66,7 +66,7 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_1_getparams_dag_mysecondsolution", default_args=default_args, tags=["tml_system_step_1_getparams_dag_mysecondsolution"], schedule=None, start_date=datetime.datetime(2022, 3, 4), catchup=False)
+@dag(dag_id="tml_system_step_1_getparams_dag_myfirsttmlsolution", default_args=default_args, tags=["tml_system_step_1_getparams_dag_myfirsttmlsolution"], schedule=None, start_date=datetime.datetime(2022, 3, 4), catchup=False)
 def tmlparams():
     # Define tasks
   basedir = "/"

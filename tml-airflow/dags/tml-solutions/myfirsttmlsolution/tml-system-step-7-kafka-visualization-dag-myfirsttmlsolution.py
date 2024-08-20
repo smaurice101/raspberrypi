@@ -25,7 +25,7 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_7_kafka_visualization_dag_solution3", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag_solution3"], schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_7_kafka_visualization_dag_myfirsttmlsolution", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag_myfirsttmlsolution"], schedule=None,catchup=False)
 def startstreaming():    
     
 
