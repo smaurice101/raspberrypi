@@ -1,1 +1,1 @@
-myfirstsolution > mysecondsolution
+myfirstsolution > solution3
