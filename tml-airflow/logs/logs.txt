@@ -175,3 +175,20 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-08-20_17:50:25] TML Solution Studio: Starting Git commit process for project: myawesometmlproject3
 [INFO 2024-08-20_17:50:25] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
 error: please commit or stash them.
+[INFO 2024-08-20_17:50:25] TML Solution Studio: git commit -a Status: [main 6ccff0a] $error
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+[INFO 2024-08-20_17:50:26] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   170afb6..6ccff0a  main -> main
+[INFO 2024-08-20_17:50:26] TML Solution Studio: git add . Status: 
