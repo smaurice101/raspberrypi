@@ -1302,3 +1302,26 @@ Already up to date.
 [INFO 2024-08-20_21:20:19] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    0d6e5e1..41943db  main -> main
 [INFO 2024-08-20_21:20:19] TML Solution Studio: git add . Status: 
+[INFO 2024-08-20_21:20:19] TML Solution Studio: git commit -a Status for project myawesometmlproject5: [main c139699] new project
+ 20 files changed, 1690 insertions(+)
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-client-gRPC-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-1-getparams-dag-myawesometmlproject5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-10-documentation-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-2-kafka-createtopic-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-4-kafka-preprocess-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-5-kafka-machine-learning-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-6-kafka-predictions-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-7-kafka-visualization-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-9-privategpt_qdrant-dag-myawesometmlproject5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml_grpc.proto
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml_grpc_pb2.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml_grpc_pb2_grpc.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject5/tsslogging.py
+[INFO 2024-08-20_21:20:20] TML Solution Studio: git push Status for project myawesometmlproject5: To https://github.com/smaurice101/raspberrypi.git
+   41943db..c139699  main -> main
