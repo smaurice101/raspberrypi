@@ -969,3 +969,212 @@ Already up to date.
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject2/tsslogging.py
 [INFO 2024-08-20_18:42:18] TML Solution Studio: git push Status for project myawesometmlproject2: To https://github.com/smaurice101/raspberrypi.git
    fac8a94..bb75d47  main -> main
+[INFO 2024-08-20_18:42:25] TML Solution Studio: git pull --rebase origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-20_18:42:30] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:42:35] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:42:40] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:42:46] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:42:51] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:42:56] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:01] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:07] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:12] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:17] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:22] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:28] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:33] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:38] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:43] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:49] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:54] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:43:59] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:04] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:10] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:15] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:20] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:26] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:31] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:36] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:41] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:47] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:52] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:44:57] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:02] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:08] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:13] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:18] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:23] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:29] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:34] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:39] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:44] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:50] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:45:55] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:00] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:05] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:11] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:16] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:21] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:26] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:32] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:37] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:42] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:48] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:53] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:46:58] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:03] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:09] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:14] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:19] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:24] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:30] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:35] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:40] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:45] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:51] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:47:56] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:01] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:06] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:12] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:17] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:22] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:28] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:33] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:38] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:43] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:49] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:54] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:48:59] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:04] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:10] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:15] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:20] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:25] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:31] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:36] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:41] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:46] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:52] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:49:57] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:02] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:08] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:13] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:18] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:23] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:29] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:34] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:39] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:44] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:50] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:50:55] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:00] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:05] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:11] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:16] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:21] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:27] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
