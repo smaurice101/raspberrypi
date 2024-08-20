@@ -171,3 +171,7 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-08-20_17:03:57] TML Solution Studio: Git committed project: myawesometmlproject
 [INFO 2024-08-20_17:37:43] TML Solution Studio: TML Project Creation: Copying old project : myawesometmlproject  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlproject2
 [INFO 2024-08-20_17:37:56] TML Solution Studio: Git committed project: myawesometmlproject2
+[INFO 2024-08-20_17:50:12] TML Solution Studio: TML Project Creation: Copying old project : myawesometmlproject  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlproject3
+[INFO 2024-08-20_17:50:25] TML Solution Studio: Starting Git commit process for project: myawesometmlproject3
+[INFO 2024-08-20_17:50:25] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
