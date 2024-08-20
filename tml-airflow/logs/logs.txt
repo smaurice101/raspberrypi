@@ -539,3 +539,38 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-08-20_18:28:21] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    206e1f7..ee7e3f2  main -> main
 [INFO 2024-08-20_18:28:21] TML Solution Studio: git add . Status: 
+[INFO 2024-08-20_18:28:21] TML Solution Studio: git commit -a Status for project myawesometmlproject10: [main 048f60e] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 20 files changed, 1702 insertions(+)
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-client-gRPC-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-1-getparams-dag-myawesometmlproject10.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-10-documentation-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-2-kafka-createtopic-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-4-kafka-preprocess-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-5-kafka-machine-learning-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-6-kafka-predictions-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-7-kafka-visualization-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml-system-step-9-privategpt_qdrant-dag-myawesometmlproject10.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml_grpc.proto
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml_grpc_pb2.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject10/tml_grpc_pb2_grpc.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject10/tsslogging.py
+[INFO 2024-08-20_18:28:21] TML Solution Studio: git push Status for project myawesometmlproject10: To https://github.com/smaurice101/raspberrypi.git
+   ee7e3f2..048f60e  main -> main
