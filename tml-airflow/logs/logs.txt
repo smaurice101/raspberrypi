@@ -863,3 +863,13 @@ After doing this, you may fix the identity used for this commit with:
  1 file changed, 268 insertions(+)
 [INFO 2024-08-20_18:32:39] TML Solution Studio: git push Status for project myawesometmlproject: To https://github.com/smaurice101/raspberrypi.git
    1f8ee0e..d5b0fea  main -> main
+[INFO 2024-08-20_18:37:57] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlproject2
+[INFO 2024-08-20_18:37:57] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Created autostash: c5b7343
+warning: skipped previously applied commit bd52484
+hint: use --reapply-cherry-picks to include skipped commits
+hint: Disable this message with "git config advice.skippedCherryPicks false"
+Applied autostash.
+[KSuccessfully rebased and updated refs/heads/main.
+[INFO 2024-08-20_18:38:10] TML Solution Studio: Starting Git commit process for project: myawesometmlproject2
