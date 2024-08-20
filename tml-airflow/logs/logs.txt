@@ -873,3 +873,8 @@ hint: Disable this message with "git config advice.skippedCherryPicks false"
 Applied autostash.
 [KSuccessfully rebased and updated refs/heads/main.
 [INFO 2024-08-20_18:38:10] TML Solution Studio: Starting Git commit process for project: myawesometmlproject2
+[INFO 2024-08-20_18:38:10] TML Solution Studio: git commit -a Status for project myawesometmlproject2: [main 529c835] new project
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+[INFO 2024-08-20_18:38:11] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   32ac897..529c835  main -> main
+[INFO 2024-08-20_18:38:11] TML Solution Studio: git add . Status: 
