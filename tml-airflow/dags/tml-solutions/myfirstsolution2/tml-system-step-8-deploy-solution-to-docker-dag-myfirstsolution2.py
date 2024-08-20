@@ -18,7 +18,7 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_9_privategpt_qdrant_dag_myfirstsolution", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag_myfirstsolution"], schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag_myfirstsolution2", default_args=default_args, tags=["tml_system_step_8_deploy_solution_to_docker_dag_myfirstsolution2"], schedule=None,  catchup=False)
 def starttmldeploymentprocess():
     # Define tasks
   basedir = "/"

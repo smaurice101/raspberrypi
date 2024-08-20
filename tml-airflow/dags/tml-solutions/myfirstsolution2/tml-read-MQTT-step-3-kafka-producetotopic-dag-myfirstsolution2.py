@@ -1,20 +1,17 @@
-import maadstml
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-import json
 from datetime import datetime
 from airflow.decorators import dag, task
-from flask import Flask
+import paho.mqtt.client as paho
+from paho import mqtt
 import sys
+import maadstml
 
 sys.dont_write_bytecode = True
-##################################################  REST API SERVER #####################################
-# This is a REST API server that will handle connections from a client
-# There are two endpoints you can use to stream data to this server:
-# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
-# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
-
+##################################################  MQTT SERVER #####################################
+# This is a MQTT server that will handle connections from a client.  It will handle connections
+# from an MQTT client for on_message, on_connect, and on_subscribe
 
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
@@ -24,9 +21,11 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'rest_port' : 9001,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
+  'mqtt_broker' : '', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
+  'mqtt_port' : '', # <<<******** Enter MQTT port i.e. 1883    
+  'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#  
   'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : -999, # <<< ********* do not modify          
+  'topicid' : -999, # <<< ********* do not modify      
   'start_date': datetime (2024, 6, 29),
   'retries': 1,
     
@@ -35,14 +34,43 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myfirstsolution", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myfirstsolution"], schedule=None,catchup=False)
+@dag(dag_id="tml_mqtt_step_3_kafka_producetotopic_dag_myfirstsolution2", default_args=default_args, tags=["tml_mqtt_step_3_kafka_producetotopic_dag_myfirstsolution2"], schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
     
+  # setting callbacks for different events to see if it works, print the message etc.
+  def on_connect(client, userdata, flags, rc, properties=None):
+    print("CONNACK received with code %s." % rc)
 
+  # print which topic was subscribed to
+  def on_subscribe(client, userdata, mid, granted_qos, properties=None):
+    print("Subscribed: " + str(mid) + " " + str(granted_qos))
+
+  data = ''
+  def on_message(client, userdata, msg):
+    global data
+    data=json.loads(msg.payload.decode("utf-8"))
+    print(msg.payload.decode("utf-8"))
+    readdata(data)
+    
+  @task(task_id="mqttserverconnect")
+  def mqttserverconnect():
+     client = paho.Client(paho.CallbackAPIVersion.VERSION2)
+     mqttBroker = default_args['mqtt_broker'] 
+     mqttport = default_args['mqtt_port']
+     client.connect(mqttBroker,mqttport)
+    
+     if client:
+       client.on_subscribe = on_subscribe
+       client.on_message = on_message
+       client.subscribe(args['mqtt_subscribe_topic'], qos=1)            
+       client.on_connect = on_connect
+    
+       client.loop_start()
+    
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
      topicid=args['topicid']
@@ -59,45 +87,26 @@ def startproducingtotopic():
         print("ERROR:",e)
 
   @task(task_id="gettmlsystemsparams")         
-  def gettmlsystemsparams():
+  def gettmlsystemsparams(rc):
     VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
     VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
     VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
-
-    if VIPERHOST != "":
-        app = Flask(__name__)
-        app.run(port=default_args['rest_port'])
-
-        @app.route('/jsondataline', methods=['POST'])
-        def storejsondataline():
-          jdata = request.get_json()
-          readdata(jdata)
-
-        @app.route('/jsondataarray', methods=['POST'])
-        def storejsondataarray():    
-          jdata = request.get_json()
-          json_array = json.load(jdata)
-          for item in json_array: 
-             readdata(item)
-        
-
-     #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
+    
+    return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
   def readdata(valuedata):
-      args = default_args    
-
       # MAin Kafka topic to store the real-time data
-      maintopic = args['topics']
-      producerid = args['producerid']
+      maintopic = default_args['topics']
+      producerid = default_args['producerid']
       try:
-          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
+          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",default_args)
           # change time to speed up or slow down data   
           #time.sleep(0.15)
       except Exception as e:
           print(e)  
           pass  
-  
+      
+  gettmlsystemsparams(mqttserverconnect())
     
-  gettmlsystemsparams()   
 
 dag = startproducingtotopic()

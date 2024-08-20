@@ -35,7 +35,7 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_2_kafka_createtopic_dag_myfirstsolution", default_args=default_args, tags=["tml_system_step_2_kafka_createtopic_dag_myfirstsolution"], schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_2_kafka_createtopic_dag_myfirstsolution2", default_args=default_args, tags=["tml_system_step_2_kafka_createtopic_dag_myfirstsolution2"], schedule=None,catchup=False)
 def startkafkasetup():
   @task(task_id="setupkafkatopics")
   def setupkafkatopic(args):
