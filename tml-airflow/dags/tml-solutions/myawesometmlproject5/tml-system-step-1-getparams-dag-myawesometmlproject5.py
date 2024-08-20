@@ -58,7 +58,7 @@ default_args = {
  'SSL_CLIENT_KEY_FILE' : 'client.key.pem', 
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
  'KUBERNETES' : 0,
- 'solutionname': '_mysolution_',   # <<< *** Provide a name for your solution - No spaces or special characters in the name
+ 'solutionname': 'myawesometmlproject5',   # <<< *** Provide a name for your solution - No spaces or special characters in the name
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
  'retries': 1,
