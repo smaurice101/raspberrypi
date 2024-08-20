@@ -1178,3 +1178,45 @@ error: please commit or stash them.
 error: please commit or stash them.
 [INFO 2024-08-20_18:51:27] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
 error: please commit or stash them.
+[INFO 2024-08-20_18:51:32] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: Your index contains uncommitted changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:37] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:42] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:48] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:53] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:51:58] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:03] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:09] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:14] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:19] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:25] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:30] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:35] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:40] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:46] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:51] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:52:56] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:53:02] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:53:07] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:53:12] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-08-20_18:53:18] TML Solution Studio: git pull --rebase origin main Status: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
