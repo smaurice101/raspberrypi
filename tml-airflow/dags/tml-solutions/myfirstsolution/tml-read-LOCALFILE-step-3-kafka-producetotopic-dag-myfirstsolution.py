@@ -10,21 +10,24 @@ import maadstml
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
-  'owner' : 'Sebastian Maurice',    
-  'enabletls': 1,
-  'microserviceid' : '',
-  'producerid' : 'iotsolution',  
+  'owner' : 'Sebastian Maurice', # <<< *** Change as needed   
+  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'microserviceid' : '', # <<< *** leave blank
+  'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
-  'identifier' : 'TML solution',  
-  'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file to read. NOTE this data file should JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
-  'start_date': datetime (2024, 6, 29),
-  'retries': 1,    
+  'identifier' : 'TML solution',   # <<< *** Change as needed   
+  'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : -999, # <<< ********* do not modify  
+  'start_date': datetime (2024, 6, 29),  # <<< *** Change as needed   
+  'retries': 1,  # <<< *** Change as needed   
+    
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml-system-step-3-kafka-producetotopic-dag", default_args=default_args, tags=["tml-system-step-3-kafka-producetotopic-dag"], schedule=None,catchup=False)
+@dag(dag_id="tml_localfile_step_3_kafka_producetotopic_dag_myfirstsolution", default_args=default_args, tags=["tml-localfile-step-3-kafka-producetotopic-myfirstsolution"], schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""
@@ -34,10 +37,10 @@ def startproducingtotopic():
   
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
-     topicid=-999
+     topicid=args['topicid']
   
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=7000
+     delay = args['delay']
      enabletls = args['enabletls']
      identifier = args['identifier']
 
@@ -65,8 +68,6 @@ def startproducingtotopic():
       maintopic = args['topics']
       producerid = args['producerid']
     
-      reader=csvlatlong(basedir + '/IotSolution/dsntmlidmain.csv')
- 
       k=0
 
       file1 = open(inputfile, 'r')
@@ -86,13 +87,9 @@ def startproducingtotopic():
             print("Read End:",datetime.datetime.now())
             continue
 
-          jsonline = json.loads(line)
-          lat,long,ident=getlatlong(reader,jsonline['metadata']['dsn'],'dsn')
-          line = line[:-2] + "," + '"lat":' + lat + ',"long":'+long + ',"identifier":"' + ident + '"}'
-
           producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
           # change time to speed up or slow down data   
-          time.sleep(0.15)
+          #time.sleep(0.15)
         except Exception as e:
           print(e)  
           pass  
