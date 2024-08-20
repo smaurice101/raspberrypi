@@ -148,3 +148,5 @@ branch.main.remote=origin
 branch.main.merge=refs/heads/main
 [INFO 2024-08-19_23:49:03] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-08-20_15:51:07] TML Solution Studio: TML Project Creation: 
+[INFO 2024-08-20_15:53:28] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myfirstsolution
