@@ -901,3 +901,8 @@ Applied autostash.
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject2/tsslogging.py
 [INFO 2024-08-20_18:38:12] TML Solution Studio: git push Status for project myawesometmlproject2: To https://github.com/smaurice101/raspberrypi.git
    529c835..ce7b886  main -> main
+[INFO 2024-08-20_18:40:25] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlproject
+[INFO 2024-08-20_18:40:25] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-20_18:40:38] TML Solution Studio: Starting Git commit process for project: myawesometmlproject
