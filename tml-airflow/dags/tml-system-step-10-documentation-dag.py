@@ -5,6 +5,8 @@ from datetime import datetime
 from airflow.decorators import dag, task
 import os 
 import sys
+import requests
+import json
 
 sys.dont_write_bytecode = True
 
@@ -132,5 +134,31 @@ def startdocumentation():
     rollbackoffset = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="rollbackoffset")
 
     # Kick off shell script 
+    
+    URL = 'https://readthedocs.org/api/v3/projects/'
+    TOKEN = os.environ['READTHEDOCS']
+    HEADERS = {'Authorization': f'token {TOKEN}'}
+    data={
+        "name": "{}".format(sname),
+        "repository": {
+            "url": "https://github.com/{}/{}".format(os.environ['GITUSERNAME'],sname),
+            "type": "git"
+        },
+        "homepage": "http://template.readthedocs.io/",
+        "programming_language": "py",
+        "language": "es",
+        "privacy_level": "public",
+        "external_builds_privacy_level": "public",
+        "tags": [
+            "automation",
+            "sphinx"
+        ]
+    }
+    response = requests.post(
+        URL,
+        json=data,
+        headers=HEADERS,
+    )
+    print(response.json())
     
 dag = startdocumentation()
