@@ -6,6 +6,7 @@ from datetime import datetime
 from airflow.decorators import dag, task
 import sys
 import maadstml
+import tsslogging
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -50,6 +51,8 @@ def startprocessing():
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
+  tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
     
   @task(task_id="processtransactiondata")
   def processtransactiondata():
@@ -127,6 +130,12 @@ def startprocessing():
   
   if VIPERHOST != "":
      while True:
-       processtransactiondata()
+       try: 
+         processtransactiondata()
+       except Exception as e:     
+         tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+         tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+         break
+            
     
 dag = startprocessing()

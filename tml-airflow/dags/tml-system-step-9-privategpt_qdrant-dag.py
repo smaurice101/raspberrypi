@@ -4,7 +4,7 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime
 from airflow.decorators import dag, task
 import os 
-
+import tsslogging
 import sys
 
 sys.dont_write_bytecode = True
@@ -24,6 +24,9 @@ def starttmldeploymentprocess():
   basedir = "/"
   viperconfigfile=basedir + "/Viper-produce/viper.env"
 
+  tsslogging.tsslogit("PrivateGPT DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+    
   @task(task_id="getparams")
   def getparams():
      VIPERHOST=""

@@ -1,11 +1,11 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-
 from datetime import datetime
 from airflow.decorators import dag, task
 import sys
 import maadstml
+import tsslogging
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -34,6 +34,8 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
     
+  tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
   
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
@@ -100,8 +102,12 @@ def startproducingtotopic():
           pass  
   
       file1.close()
+  try:  
+       readdata(gettmlsystemsparams())
+  except Exception as e:
+       tsslogging.tsslogit("Localfile producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
     
-  readdata(gettmlsystemsparams())
     
 
 dag = startproducingtotopic()

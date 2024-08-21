@@ -1,11 +1,11 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-
 from datetime import datetime
 from airflow.decorators import dag, task
 import maadstml 
 import sys
+import tsslogging
 
 sys.dont_write_bytecode = True
 
@@ -83,7 +83,12 @@ def startkafkasetup():
                                      microserviceid='')
           print("Result=",result)
 
-      setupkafkatopic(default_args)
-      
+  try:             
+       setupkafkatopic(default_args)
+       tsslogging.tsslogit("Creating topics in in {}".format(os.path.basename(__file__)), "INFO" )                     
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
+  except Exception as e:
+       tsslogging.tsslogit("Creating topics in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
       
 dag = startkafkasetup()

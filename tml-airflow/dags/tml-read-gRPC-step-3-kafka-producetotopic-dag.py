@@ -2,7 +2,6 @@ import maadstml
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-
 from datetime import datetime
 from airflow.decorators import dag, task
 import grpc
@@ -10,7 +9,7 @@ from concurrent import futures
 import time
 import tml_grpc_pb2_grpc as pb2_grpc
 import tml_grpc_pb2 as pb2
-
+import tsslogging
 import sys
 
 sys.dont_write_bytecode = True
@@ -46,6 +45,9 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
 
+  tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+    
   class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
     def __init__(self, *args, **kwargs):
@@ -114,8 +116,11 @@ def startproducingtotopic():
           print(e)  
           pass  
   
-    
-  serve()
-    
+  try:  
+    serve()    
+  except Exception as e:
+       tsslogging.tsslogit("gRPC producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+     
 
 dag = startproducingtotopic()

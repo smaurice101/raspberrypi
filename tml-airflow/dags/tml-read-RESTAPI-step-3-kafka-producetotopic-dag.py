@@ -7,6 +7,7 @@ from datetime import datetime
 from airflow.decorators import dag, task
 from flask import Flask
 import sys
+import tsslogging
 
 sys.dont_write_bytecode = True
 ##################################################  REST API SERVER #####################################
@@ -42,6 +43,8 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
     
+  tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
 
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
@@ -102,7 +105,11 @@ def startproducingtotopic():
           print(e)  
           pass  
   
+  try:  
+    gettmlsystemsparams()   
+  except Exception as e:
+       tsslogging.tsslogit("RESTAPI producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
     
-  gettmlsystemsparams()   
 
 dag = startproducingtotopic()

@@ -6,6 +6,7 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime
 from airflow.decorators import dag, task
 import sys
+import tsslogging
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -60,7 +61,10 @@ def startpredictions():
   mainproducerid = default_args['producerid']     
   maintopic=default_args['preprocess_data_topic']
   predictiontopic=default_args['ml_prediction_topic']
-                
+
+  tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+
 
   @task(task_id="performPredictions")  
   def performPrediction(maintopic):
@@ -135,7 +139,12 @@ def startpredictions():
 
   if VIPERHOST != "":
     while True:
-      performPrediction(maintopic)      
+      try:  
+        performPrediction(maintopic)      
+      except Exception as e:
+        tsslogging.tsslogit("Predictions DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+        tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+        
 
 
 dag = startpredictions()

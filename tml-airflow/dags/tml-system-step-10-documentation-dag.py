@@ -31,16 +31,6 @@ default_args = {
 def startdocumentation():
     # Define tasks
 
-  def git_push(repopath,message):
-    try:
-        repo = Repo(repopath)
-        repo.git.add(update=True)
-        repo.index.commit(COMMIT_MESSAGE)
-        origin = repo.remote(name='origin')
-        origin.push()
-    except:
-        print('Some error occured while pushing the code')    
-
   @task(task_id="generatedoc")
   def generatedoc():    
     
@@ -261,7 +251,7 @@ def startdocumentation():
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
     # Kick off shell script 
-    git_push("/{}".format(sname),"{}-readthedocs".format(sname))
+    tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname))
     
     URL = 'https://readthedocs.org/api/v3/projects/'
     TOKEN = os.environ['READTHEDOCS']
@@ -290,6 +280,13 @@ def startdocumentation():
     print(response.json())
     tsslogging.tsslogit(response.json())
   
-  generatedoc()  
+  try:
+    tsslogging.tsslogit("Documentation DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+    tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry fron {}".format(os.path.basename(__file__)))                    
+    generatedoc()  
+  except Exception as e:
+      tsslogging.tsslogit("Documentation DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+      tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+
     
 dag = startdocumentation()

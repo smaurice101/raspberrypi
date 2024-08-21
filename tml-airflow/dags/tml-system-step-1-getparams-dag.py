@@ -5,7 +5,7 @@ import datetime
 from airflow.decorators import dag, task
 import os 
 import sys
-#import tsslogging
+import tsslogging
 
 sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
@@ -221,8 +221,13 @@ def tmlparams():
 
                  
      updateviperenv()
-         
-  tmlsystemparams=getparams(default_args)
+  try:       
+       tmlsystemparams=getparams(default_args)
+       tsslogging.tsslogit("Getting TML system parameters in {}".format(os.path.basename(__file__)), "INFO" )                     
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
+  except Exception as e:
+       tsslogging.tsslogit("Getting TML system parameters in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
   
     
 dag = tmlparams()
