@@ -2133,3 +2133,65 @@ hint: See "git help submodule" for more information.
  * branch            main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-08-21_21:25:09] TML Solution Studio: Starting Git commit process for project: tmliotlocalfile
+[INFO 2024-08-21_21:25:09] TML Solution Studio: git commit -a Status for project tmliotlocalfile: [main b2e8751] new project
+ 58 files changed, 5 insertions(+), 5055 deletions(-)
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-1-getparams-dag-myawesometmlproject5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-10-documentation-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-2-kafka-createtopic-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-4-kafka-preprocess-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-5-kafka-machine-learning-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-6-kafka-predictions-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-7-kafka-visualization-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml-system-step-9-privategpt_qdrant-dag-myawesometmlproject5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject5/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject5/tsslogging.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-1-getparams-dag-myawesometmlproject6.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-10-documentation-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-2-kafka-createtopic-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-4-kafka-preprocess-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-5-kafka-machine-learning-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-6-kafka-predictions-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-7-kafka-visualization-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml-system-step-9-privategpt_qdrant-dag-myawesometmlproject6.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject6/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject6/tsslogging.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-1-getparams-dag-myawesometmlproject7.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-10-documentation-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-2-kafka-createtopic-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-4-kafka-preprocess-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-5-kafka-machine-learning-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-6-kafka-predictions-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-7-kafka-visualization-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml-system-step-9-privategpt_qdrant-dag-myawesometmlproject7.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlproject7/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject7/tsslogging.py
+[INFO 2024-08-21_21:25:10] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   6cc851c..b2e8751  main -> main
+[INFO 2024-08-21_21:25:10] TML Solution Studio: git add . Status: 
