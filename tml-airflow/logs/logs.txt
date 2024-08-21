@@ -2532,3 +2532,19 @@ Already up to date.
  create mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/tsslogging.py
 [INFO 2024-08-21_21:34:03] TML Solution Studio: git push Status for project tmliotlocalfile: To https://github.com/smaurice101/raspberrypi.git
    6fc540c..1bb8990  main -> main
+[INFO 2024-08-21_21:34:29] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:34:29] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py name 'repo' is not defined
+[INFO 2024-08-21_21:34:30] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:34:31] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:34:33] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:34:37] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/tmliotlocalfile
+[INFO 2024-08-21_21:34:37] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-21_21:34:39] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:34:39] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py name 'repo' is not defined
+[INFO 2024-08-21_21:34:45] Solution file DAG in soluton_template_processing_dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:34:48] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:34:48] Solution file DAG in soluton_template_processing_dag.py
+[INFO 2024-08-21_21:34:50] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:34:51] TML Solution Studio: Starting Git commit process for project: tmliotlocalfile
