@@ -2128,3 +2128,8 @@ hint: See "git help submodule" for more information.
  create mode 160000 tml-airflow/dags/tmliotlocalfile
 [INFO 2024-08-21_21:24:21] TML Solution Studio: git push Status for project tmliotlocalfile: To https://github.com/smaurice101/raspberrypi.git
    32459c5..c61963e  main -> main
+[INFO 2024-08-21_21:24:55] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/tmliotlocalfile
+[INFO 2024-08-21_21:24:55] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-21_21:25:09] TML Solution Studio: Starting Git commit process for project: tmliotlocalfile
