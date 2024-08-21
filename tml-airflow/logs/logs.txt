@@ -2652,3 +2652,12 @@ Already up to date.
 [INFO 2024-08-21_21:37:58] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
 [INFO 2024-08-21_21:37:59] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
 [INFO 2024-08-21_21:38:00] TML Solution Studio: Starting Git commit process for project: tmliotlocalfile
+[INFO 2024-08-21_21:38:00] TML Solution Studio: git commit -a Status for project tmliotlocalfile: [main 9799037] new project
+ 6 files changed, 84 insertions(+), 451 deletions(-)
+ delete mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-10-documentation-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:38:00] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   3216ee0..9799037  main -> main
+[INFO 2024-08-21_21:38:00] TML Solution Studio: git add . Status: 
