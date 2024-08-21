@@ -2572,3 +2572,4 @@ Already up to date.
  create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
 [INFO 2024-08-21_21:34:53] TML Solution Studio: git push Status for project tmliotlocalfile: To https://github.com/smaurice101/raspberrypi.git
    f8e43cb..1c0ee42  main -> main
+[INFO 2024-08-21_21:34:53] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
