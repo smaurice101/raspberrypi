@@ -42,9 +42,10 @@ def startproducingtotopic():
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
-
-  tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__),e), "INFO" )                     
-  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
+  
+  repo = tsslogging.getrepo()
+  tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
     
   # setting callbacks for different events to see if it works, print the message etc.
   def on_connect(client, userdata, flags, rc, properties=None):
