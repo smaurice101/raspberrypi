@@ -7,6 +7,7 @@ from airflow.decorators import dag, task
 import sys
 import maadstml
 import tsslogging
+import os
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################

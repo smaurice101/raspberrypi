@@ -6,6 +6,7 @@ from airflow.models.dag import DAG
 from airflow.operators.bash import BashOperator
 from airflow.sensors.external_task import ExternalTaskSensor 
 import tsslogging
+import os
 
 # TML Solution template for processing
 # Use this DAG to start processing data with:
