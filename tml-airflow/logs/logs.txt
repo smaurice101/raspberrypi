@@ -2483,3 +2483,28 @@ Already up to date.
 [INFO 2024-08-21_21:33:54] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-21_21:33:55] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-21_21:34:02] TML Solution Studio: Starting Git commit process for project: tmliotlocalfile
+[INFO 2024-08-21_21:34:02] TML Solution Studio: git commit -a Status for project tmliotlocalfile: [main 6fc540c] new project
+ 21 files changed, 35 insertions(+), 2061 deletions(-)
+ delete mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/soluton_template_processing_dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-1-getparams-dag-tmliotlocalfile.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-10-documentation-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/tsslogging.py
+[INFO 2024-08-21_21:34:02] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   3bee9ee..6fc540c  main -> main
+[INFO 2024-08-21_21:34:02] TML Solution Studio: git add . Status: 
