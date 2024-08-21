@@ -63,11 +63,18 @@ def startproducingtotopic():
     
   @task(task_id="serve")  
   def serve():
+
+    ti.xcom_push(key='PRODUCETYPE',value='gRPC')
+    ti.xcom_push(key='TOPIC',value=default_args['topics'])
+    ti.xcom_push(key='PORT',value=default_args['gRPC_Port'])
+    ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+        
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UnaryServicer_to_server(UnaryService(), server)
     server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
     server.start()
     server.wait_for_termination()
+    
     
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     

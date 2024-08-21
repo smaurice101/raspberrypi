@@ -56,6 +56,11 @@ def startproducingtotopic():
     VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
     VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
     
+    ti.xcom_push(key='PRODUCETYPE',value='LOCALFILE')
+    ti.xcom_push(key='TOPIC',value=default_args['topics'])
+    ti.xcom_push(key='PORT',value=default_args['inputfile'])
+    ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+
     return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
   @task(task_id="readdata")        

@@ -58,6 +58,13 @@ def startproducingtotopic():
     
   @task(task_id="mqttserverconnect")
   def mqttserverconnect():
+     ti.xcom_push(key='PRODUCETYPE',value='MQTT')
+     ti.xcom_push(key='TOPIC',value=default_args['topics'])
+     buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
+     ti.xcom_push(key='PORT',value=buf)
+     buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
+     ti.xcom_push(key='IDENTIFIER',value=buf)
+        
      client = paho.Client(paho.CallbackAPIVersion.VERSION2)
      mqttBroker = default_args['mqtt_broker'] 
      mqttport = default_args['mqtt_port']
