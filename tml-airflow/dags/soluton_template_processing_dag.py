@@ -14,8 +14,9 @@ import os
 # 2. containerization
 # 3. documentationa
 
+repo=tsslogging.getrepo()
 tsslogging.tsslogit("Solution file DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
+tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
 
 with DAG(
     dag_id="solution_preprocessing_dag",
