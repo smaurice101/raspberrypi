@@ -44,8 +44,9 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
     
+  repo=tsslogging.getrepo()  
   tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))            
 
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
@@ -110,7 +111,7 @@ def startproducingtotopic():
     gettmlsystemsparams()   
   except Exception as e:
        tsslogging.tsslogit("RESTAPI producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))    
     
 
 dag = startproducingtotopic()
