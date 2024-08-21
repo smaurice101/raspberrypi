@@ -50,6 +50,31 @@ def startdocumentation():
     ml_data_topic = ti.xcom_pull(dag_id='tml_system_step_2_kafka_createtopic_dag',task_ids='setupkafkatopics',key="ml_data_topic")
     prediction_data_topic = ti.xcom_pull(dag_id='tml_system_step_2_kafka_createtopic_dag',task_ids='setupkafkatopics',key="prediction_data_topic")
 
+    PRODUCETYPE = ""  
+    TOPIC = ""
+    PORT = ""
+    IDENTIFIER = ""
+    if ingestdatamethod == "localfile":
+            PRODUCETYPE = ti.xcom_pull(dag_id='tml_localfile_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="PRODUCETYPE")
+            TOPIC = ti.xcom_pull(dag_id='tml_localfile_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="TOPIC")
+            PORT = ti.xcom_pull(dag_id='tml_localfile_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="PORT")
+            IDENTIFIER = ti.xcom_pull(dag_id='tml_localfile_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="IDENTIFIER")   
+    elif ingestdatamethod == "mqtt":
+            PRODUCETYPE = ti.xcom_pull(dag_id='tml_mqtt_step_3_kafka_producetotopic_dag',task_ids='mqttserverconnect',key="PRODUCETYPE")
+            TOPIC = ti.xcom_pull(dag_id='tml_mqtt_step_3_kafka_producetotopic_dag',task_ids='mqttserverconnect',key="TOPIC")
+            PORT = ti.xcom_pull(dag_id='tml_mqtt_step_3_kafka_producetotopic_dag',task_ids='mqttserverconnect',key="PORT")
+            IDENTIFIER = ti.xcom_pull(dag_id='tml_mqtt_step_3_kafka_producetotopic_dag',task_ids='mqttserverconnect',key="IDENTIFIER")
+    elif ingestdatamethod == "rest":
+            PRODUCETYPE = ti.xcom_pull(dag_id='tml_read_RESTAPI_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="PRODUCETYPE")
+            TOPIC = ti.xcom_pull(dag_id='tml_read_RESTAPI_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="TOPIC")
+            PORT = ti.xcom_pull(dag_id='tml_read_RESTAPI_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="PORT")
+            IDENTIFIER = ti.xcom_pull(dag_id='tml_read_RESTAPI_step_3_kafka_producetotopic_dag',task_ids='gettmlsystemsparams',key="IDENTIFIER")
+    elif ingestdatamethod == "grpc":
+            PRODUCETYPE = ti.xcom_pull(dag_id='tml_read_gRPC_step_3_kafka_producetotopic_dag',task_ids='serve',key="PRODUCETYPE")
+            TOPIC = ti.xcom_pull(dag_id='tml_read_gRPC_step_3_kafka_producetotopic_dag',task_ids='serve',key="TOPIC")
+            PORT = ti.xcom_pull(dag_id='tml_read_gRPC_step_3_kafka_producetotopic_dag',task_ids='serve',key="PORT")
+            IDENTIFIER = ti.xcom_pull(dag_id='tml_read_gRPC_step_3_kafka_producetotopic_dag',task_ids='serve',key="IDENTIFIER")
+    
     raw_data_topic = ti.xcom_pull(dag_id='tml-system-step-4-kafka-preprocess-dag',task_ids='processtransactiondata',key="raw_data_topic")
     preprocess_data_topic = ti.xcom_pull(dag_id='tml-system-step-4-kafka-preprocess-dag',task_ids='processtransactiondata',key="preprocess_data_topic")    
     preprocessconditions = ti.xcom_pull(dag_id='tml-system-step-4-kafka-preprocess-dag',task_ids='processtransactiondata',key="preprocessconditions")
