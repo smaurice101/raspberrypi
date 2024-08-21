@@ -217,6 +217,8 @@ def tmlparams():
      ti.xcom_push(key='solutiondescription',value=desc)
      ti.xcom_push(key='solutiontitle',value=stitle)
      ti.xcom_push(key='ingestdatamethod',value=method)
+     ti.xcom_push(key='containername',value='')
+
                  
      updateviperenv()
          

@@ -41,7 +41,7 @@ def startdocumentation():
     except:
         print('Some error occured while pushing the code')    
 
-  @task(task_id="getparams")
+  @task(task_id="generatedoc")
   def generatedoc():    
     
     sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
@@ -241,7 +241,8 @@ def startdocumentation():
     subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset), "/{}/docs/source/details.rst".format(sname)])
 
-    dockercontainer = os.environ['DOCKERUSERNAME'] +  "/{}".format(sname)
+    cname = ti.xcom_pull(dag_id='tml_system_step_8_deploy_solution_to_docker_dag',task_ids='dockerit',key="containername")
+    dockercontainer = os.environ['DOCKERUSERNAME'] +  "/{}".format(cname)
     subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(dockercontainer), "/{}/docs/source/operating.rst".format(sname)])
 
     dockerrun = "docker run -d --net=host --env VIPERVIZPORT={} {}/{}".format(vipervizport,os.environ['DOCKERUSERNAME'],sname)
@@ -288,6 +289,7 @@ def startdocumentation():
     )
     print(response.json())
     tsslogging.tsslogit(response.json())
+  
+  generatedoc()  
     
 dag = startdocumentation()
-
