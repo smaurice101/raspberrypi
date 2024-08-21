@@ -23,6 +23,8 @@ def tsslogit(message,mtype="INFO"):
     # Reading from a file
     repo=file1.read()
 
+  repo=repo.rstrip()
+
     #[INFO 2024-08-18_19:24:06]
   with open("/{}/tml-airflow/logs/logs.txt".format(repo), "a") as file1:
     # Reading from a file

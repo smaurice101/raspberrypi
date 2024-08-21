@@ -19,7 +19,7 @@ tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.
 with DAG(
     dag_id="solution_preprocessing_dag",
     start_date=datetime(2023, 1, 1),
-    schedule=@daily,
+    schedule=None,
 ) as dag:
   start_task = BashOperator(
     task_id="start_tasks",

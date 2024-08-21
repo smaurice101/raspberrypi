@@ -1401,3 +1401,15 @@ Already up to date.
 [INFO 2024-08-21_17:45:05] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-21_17:45:05] TML Solution Studio: git commit -a Status for project tmliotlocalfile: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-21_17:45:05] TML Solution Studio: git push Status for project tmliotlocalfile: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-21_19:27:03] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_19:27:03] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_19:27:04] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_19:27:05] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_19:27:14] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_19:27:14] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_19:27:22] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-21_19:27:22] Getting TML system parameters in tml-system-step-1-getparams-dag.py 'SREPO'
+[INFO 2024-08-21_19:27:30] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_19:27:31] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_19:27:31] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-21_19:27:31] Documentation DAG in tml-system-step-10-documentation-dag.py 'SREPO'
