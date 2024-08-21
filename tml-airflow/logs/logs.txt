@@ -2703,3 +2703,34 @@ Already up to date.
  1 file changed, 5 insertions(+)
 [INFO 2024-08-21_21:38:57] TML Solution Studio: git push Status for project tmliotlocalfile: To https://github.com/smaurice101/raspberrypi.git
    87f5c90..8f83818  main -> main
+[INFO 2024-08-21_21:39:02] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:03] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:04] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:05] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:06] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:07] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:08] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:09] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:11] Solution file DAG in soluton_template_processing_dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:17] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:18] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:20] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:21] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:39:21] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-21_21:39:23] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-21_21:39:23] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:39:24] Solution file DAG in soluton_template_processing_dag.py
+[INFO 2024-08-21_21:39:24] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:39:28] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_21:39:29] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_21:39:30] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-21_21:39:31] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-21_21:39:32] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-21_21:39:33] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-21_21:39:37] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:39:37] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:39:52] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/tmliotlocalfile
+[INFO 2024-08-21_21:39:52] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-21_21:40:06] TML Solution Studio: Starting Git commit process for project: tmliotlocalfile

@@ -6,6 +6,7 @@ from airflow.decorators import dag, task
 import maadstml 
 import sys
 import tsslogging
+import os
 
 sys.dont_write_bytecode = True
 
@@ -83,12 +84,14 @@ def startkafkasetup():
                                      microserviceid='')
           print("Result=",result)
 
-  repo=tsslogging.getrepo()       
+         
   try:         
+       repo=tsslogging.getrepo()
        setupkafkatopic(default_args)
        tsslogging.tsslogit("Creating topics in in {}".format(os.path.basename(__file__)), "INFO" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
   except Exception as e:
+       repo=tsslogging.getrepo()
        tsslogging.tsslogit("Creating topics in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))    
       
