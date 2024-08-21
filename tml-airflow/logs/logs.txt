@@ -2424,3 +2424,27 @@ Already up to date.
 [INFO 2024-08-21_21:32:56] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    b56c145..81e761b  main -> main
 [INFO 2024-08-21_21:32:56] TML Solution Studio: git add . Status: 
+[INFO 2024-08-21_21:32:56] TML Solution Studio: git commit -a Status for project tmliotlocalfile: [main 8654ae6] new project
+ 21 files changed, 2086 insertions(+)
+ create mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/soluton_template_processing_dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-client-gRPC-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-1-getparams-dag-tmliotlocalfile.py
+ create mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-10-documentation-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml_grpc.proto
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml_grpc_pb2.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml_grpc_pb2_grpc.py
+ create mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/tsslogging.py
+[INFO 2024-08-21_21:32:57] TML Solution Studio: git push Status for project tmliotlocalfile: To https://github.com/smaurice101/raspberrypi.git
+   81e761b..8654ae6  main -> main
