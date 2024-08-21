@@ -221,13 +221,14 @@ def tmlparams():
 
                  
      updateviperenv()
+     repo=tsslogging.getrepo()
   try:       
        tmlsystemparams=getparams(default_args)
        tsslogging.tsslogit("Getting TML system parameters in {}".format(os.path.basename(__file__)), "INFO" )                     
-       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
+       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
   except Exception as e:
        tsslogging.tsslogit("Getting TML system parameters in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))        
+       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
   
     
 dag = tmlparams()

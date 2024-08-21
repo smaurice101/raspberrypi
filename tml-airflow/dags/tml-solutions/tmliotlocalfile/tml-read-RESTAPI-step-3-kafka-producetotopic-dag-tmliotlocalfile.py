@@ -8,6 +8,7 @@ from airflow.decorators import dag, task
 from flask import Flask
 import sys
 import tsslogging
+import os
 
 sys.dont_write_bytecode = True
 ##################################################  REST API SERVER #####################################

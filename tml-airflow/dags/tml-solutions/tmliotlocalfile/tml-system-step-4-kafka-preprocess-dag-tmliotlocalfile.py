@@ -7,6 +7,7 @@ from airflow.decorators import dag, task
 import sys
 import maadstml
 import tsslogging
+import os
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -51,8 +52,9 @@ def startprocessing():
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
+  repo=tsslogging.getrepo()  
   tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))    
     
   @task(task_id="processtransactiondata")
   def processtransactiondata():
@@ -134,7 +136,7 @@ def startprocessing():
          processtransactiondata()
        except Exception as e:     
          tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-         tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))    
          break
             
     

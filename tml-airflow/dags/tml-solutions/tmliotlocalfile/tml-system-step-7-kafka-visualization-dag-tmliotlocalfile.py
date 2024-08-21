@@ -7,6 +7,7 @@ from airflow.decorators import dag, task
 import sys
 import subprocess
 import tsslogging
+import os
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -29,8 +30,9 @@ default_args = {
 @dag(dag_id="tml_system_step_7_kafka_visualization_dag_tmliotlocalfile", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag_tmliotlocalfile"], schedule=None,catchup=False)
 def startstreaming():    
     
+  repo=tsslogging.getrepo()  
   tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))            
 
   @task(task_id="startstreamingengine")  
   def startstreamingengine():
