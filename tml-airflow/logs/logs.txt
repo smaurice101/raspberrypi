@@ -1391,3 +1391,13 @@ Already up to date.
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlproject7/tsslogging.py
 [INFO 2024-08-20_21:28:19] TML Solution Studio: git push Status for project myawesometmlproject7: To https://github.com/smaurice101/raspberrypi.git
    960897b..ab22db7  main -> main
+[INFO 2024-08-21_17:44:51] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/tmliotlocalfile
+[INFO 2024-08-21_17:44:51] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-21_17:45:05] TML Solution Studio: Starting Git commit process for project: tmliotlocalfile
+[INFO 2024-08-21_17:45:05] TML Solution Studio: git commit -a Status for project tmliotlocalfile: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-21_17:45:05] TML Solution Studio: git push origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-21_17:45:05] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-21_17:45:05] TML Solution Studio: git commit -a Status for project tmliotlocalfile: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-21_17:45:05] TML Solution Studio: git push Status for project tmliotlocalfile: fatal: not a git repository (or any of the parent directories): .git
