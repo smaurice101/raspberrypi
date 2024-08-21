@@ -62,9 +62,9 @@ def startmachinelearning():
 
   maintopic =  default_args['preprocess_data_topic']  
   mainproducerid = default_args['producerid']     
-
+  repo=tsslogging.getrepo()
   tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))    
                 
         
   @task(task_id="performSupervisedMachineLearning")  
@@ -156,7 +156,7 @@ def startmachinelearning():
          performSupervisedMachineLearning(maintopic)
        except Exception as e:
           tsslogging.tsslogit("Machine Learning DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-          tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))    
           break
             
 

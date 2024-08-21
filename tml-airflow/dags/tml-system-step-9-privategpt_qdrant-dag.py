@@ -23,9 +23,9 @@ def starttmldeploymentprocess():
     # Define tasks
   basedir = "/"
   viperconfigfile=basedir + "/Viper-produce/viper.env"
-
+  repo=tsslogging.getrepo()
   tsslogging.tsslogit("PrivateGPT DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))            
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))            
     
   @task(task_id="getparams")
   def getparams():
