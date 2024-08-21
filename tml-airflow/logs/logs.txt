@@ -2561,3 +2561,14 @@ Already up to date.
 [INFO 2024-08-21_21:34:52] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    2b9381f..f8e43cb  main -> main
 [INFO 2024-08-21_21:34:52] TML Solution Studio: git add . Status: 
+[INFO 2024-08-21_21:34:52] TML Solution Studio: git commit -a Status for project tmliotlocalfile: [main 1c0ee42] new project
+ 8 files changed, 918 insertions(+)
+ create mode 100644 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-10-documentation-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+ create mode 100755 tml-airflow/dags/tml-solutions/tmliotlocalfile/tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:34:53] TML Solution Studio: git push Status for project tmliotlocalfile: To https://github.com/smaurice101/raspberrypi.git
+   f8e43cb..1c0ee42  main -> main
