@@ -1732,3 +1732,7 @@ Already up to date.
 [ERROR 2024-08-21_20:38:15] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
 [INFO 2024-08-21_20:38:24] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [ERROR 2024-08-21_20:38:24] Getting TML system parameters in tml-system-step-1-getparams-dag.py 'SREPO'
+[INFO 2024-08-21_20:38:28] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_20:38:28] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_20:38:29] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-21_20:38:29] Documentation DAG in tml-system-step-10-documentation-dag.py 'SREPO'
