@@ -1856,3 +1856,103 @@ Already up to date.
 [INFO 2024-08-21_20:57:33] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
 [ERROR 2024-08-21_20:57:33] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
 [INFO 2024-08-21_20:57:41] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_21:00:20] Solution file DAG in soluton_template_processing_dag.py
+[INFO 2024-08-21_21:00:21] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_21:00:22] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_21:00:23] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-21_21:00:24] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-21_21:00:25] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-21_21:00:26] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-21_21:00:28] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-21_21:00:28] Documentation DAG in tml-system-step-10-documentation-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:00:29] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-21_21:00:29] Getting TML system parameters in tml-system-step-1-getparams-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:00:30] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:00:33] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:00:34] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:00:35] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:00:35] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:00:36] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:00:37] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:00:47] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:00:47] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:03:30] Solution file DAG in soluton_template_processing_dag.py
+[INFO 2024-08-21_21:03:31] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_21:03:32] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_21:03:32] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-21_21:03:33] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-21_21:03:35] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-21_21:03:36] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-21_21:03:38] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-21_21:03:38] Documentation DAG in tml-system-step-10-documentation-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:03:39] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-21_21:03:39] Getting TML system parameters in tml-system-step-1-getparams-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:03:41] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:03:43] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:03:44] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:03:45] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:03:45] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:03:46] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:03:47] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:03:56] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:03:56] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:06:38] Solution file DAG in soluton_template_processing_dag.py
+[INFO 2024-08-21_21:06:39] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_21:06:40] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_21:06:41] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-21_21:06:42] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-21_21:06:43] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-21_21:06:45] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-21_21:06:46] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-21_21:06:46] Documentation DAG in tml-system-step-10-documentation-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:06:47] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-21_21:06:47] Getting TML system parameters in tml-system-step-1-getparams-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:06:49] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:06:51] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:06:53] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:06:54] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:06:54] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:06:55] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:06:56] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:07:05] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:07:05] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:09:51] Solution file DAG in soluton_template_processing_dag.py
+[INFO 2024-08-21_21:09:52] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_21:09:54] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_21:09:55] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-21_21:09:56] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-21_21:09:56] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-21_21:09:57] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-21_21:10:00] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-21_21:10:00] Documentation DAG in tml-system-step-10-documentation-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:10:01] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-21_21:10:01] Getting TML system parameters in tml-system-step-1-getparams-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:10:03] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:10:06] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:10:06] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:10:07] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:10:07] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:10:08] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:10:09] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:10:19] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:10:19] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:13:05] Solution file DAG in soluton_template_processing_dag.py
+[INFO 2024-08-21_21:13:06] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-21_21:13:07] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-21_21:13:07] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-21_21:13:08] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-21_21:13:10] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-21_21:13:10] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-21_21:13:13] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-21_21:13:13] Documentation DAG in tml-system-step-10-documentation-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:13:14] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-21_21:13:14] Getting TML system parameters in tml-system-step-1-getparams-dag.py name 'repo' is not defined
+[INFO 2024-08-21_21:13:16] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:13:18] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:13:19] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-21_21:13:20] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:13:20] Documentation DAG in tml-system-step-10-documentation-dag-tmliotlocalfile.py 'SREPO'
+[INFO 2024-08-21_21:13:21] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:13:22] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-21_21:13:31] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-21_21:13:31] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py 'SREPO'
