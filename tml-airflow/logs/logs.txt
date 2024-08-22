@@ -9620,3 +9620,4 @@ Already up to date.
 [INFO 2024-08-22_02:32:36] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-22_02:32:37] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
 [INFO 2024-08-22_02:32:38] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_02:32:40] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
