@@ -37,7 +37,7 @@ def starttmldeploymentprocess():
        cname = default_args['containername'] 
        if cname == "":
           cname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
-
+       scid = tsslogging.getrepo('/tmux/cidname.txt')
        ti.xcom_push(key='containername',value=cname)
        cid = os.environ['SCID']
        subprocess.call("docker commit {} {}/{}".format(cid,os.environ['DOCKERUSERNAME'],cname), shell=True, stdout=output, stderr=output)
