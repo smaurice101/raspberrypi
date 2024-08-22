@@ -10571,3 +10571,4 @@ Already up to date.
 [INFO 2024-08-22_14:04:40] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_14:04:42] Solution file DAG in solution_template_processing_ml_dag.py
 [INFO 2024-08-22_14:04:44] Solution file DAG in solution_template_processing_ml_ai_dag.py
+[INFO 2024-08-22_14:04:46] Solution file DAG in solution_template_processing_ml_dag_restapi.py
