@@ -9617,3 +9617,4 @@ Already up to date.
 [INFO 2024-08-22_02:32:26] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-22_02:32:28] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-22_02:32:34] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_02:32:36] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
