@@ -9516,3 +9516,4 @@ Already up to date.
 [INFO 2024-08-22_02:27:01] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_02:27:04] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_02:27:06] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:27:08] Solution file DAG in solution_template_processing_dag.py
