@@ -9961,3 +9961,4 @@ Already up to date.
 [INFO 2024-08-22_13:31:34] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-22_13:31:38] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-22_13:31:44] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_13:31:46] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
