@@ -9933,3 +9933,4 @@ Already up to date.
 [INFO 2024-08-22_13:30:03] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-22_13:30:05] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
 [INFO 2024-08-22_13:30:07] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_13:30:10] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
