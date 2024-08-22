@@ -10306,3 +10306,4 @@ Already up to date.
 [INFO 2024-08-22_13:50:23] Solution file DAG in solution_template_processing_dag_restapi.py
 [INFO 2024-08-22_13:50:25] Solution file DAG in solution_template_processing_ml_dag.py
 [INFO 2024-08-22_13:50:27] Solution file DAG in solution_template_processing_ml_ai_dag.py
+[INFO 2024-08-22_13:50:29] Solution file DAG in solution_template_processing_ml_dag_restapi.py
