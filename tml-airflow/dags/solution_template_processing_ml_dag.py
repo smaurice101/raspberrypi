@@ -56,12 +56,12 @@ with DAG(
   sensor_C = ExternalTaskSensor(
       task_id="solution_task_ml",
       external_dag_id="tml_system_step_5_kafka_machine_learning_dag",
-      external_task_id="readdata",
+      external_task_id="performSupervisedMachineLearning",
   )
 # STEP 6: Predictions        
   sensor_C = ExternalTaskSensor(
       task_id="solution_task_prediction",
-      external_dag_id="tml_localfile_step_3_kafka_producetotopic_dag",
+      external_dag_id="tml_system_step_6_kafka_predictions_dag",
       external_task_id="readdata",
   )
     
