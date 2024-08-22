@@ -11037,3 +11037,4 @@ Already up to date.
 [INFO 2024-08-22_14:29:55] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_14:29:57] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
 [INFO 2024-08-22_14:29:59] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_14:30:02] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
