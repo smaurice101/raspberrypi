@@ -11131,3 +11131,4 @@ Already up to date.
 [INFO 2024-08-22_14:34:58] Solution file DAG in solution_template_processing_ml_dag_restapi.py
 [INFO 2024-08-22_14:35:00] Solution file DAG in solution_template_processing_ml_dag.py
 [INFO 2024-08-22_14:35:02] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
+[INFO 2024-08-22_14:35:05] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
