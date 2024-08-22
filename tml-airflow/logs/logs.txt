@@ -9885,3 +9885,4 @@ Already up to date.
 [INFO 2024-08-22_13:27:44] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-22_13:27:46] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-22_13:27:48] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-22_13:27:50] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
