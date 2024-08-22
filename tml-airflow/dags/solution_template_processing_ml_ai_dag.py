@@ -67,9 +67,9 @@ with DAG(
 
 # STEP 6: Predictions        
   sensor_F = ExternalTaskSensor(
-      task_id="solution_task_prediction",
+      task_id="solution_task_ai",
       external_dag_id="tml_system_step_9_privategpt_qdrant_dag",
-      external_task_id="performPredictions",
+      external_task_id="startprivategpt",
   )        
   sensor_G = ExternalTaskSensor(
       task_id="solution_task_visualization",
