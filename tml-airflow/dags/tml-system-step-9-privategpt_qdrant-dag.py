@@ -27,8 +27,8 @@ def startaiprocess():
   tsslogging.tsslogit("PrivateGPT DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
   tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
     
-  @task(task_id="getparams")
-  def getparams():
+  @task(task_id="startprivategpt")
+  def startprivategpt():
      VIPERHOST=""
      VIPERPORT=""
      HTTPADDR=""
