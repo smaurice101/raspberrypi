@@ -10359,3 +10359,4 @@ Already up to date.
 [INFO 2024-08-22_13:52:56] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-22_13:53:02] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-22_13:53:03] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_13:53:06] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
