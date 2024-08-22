@@ -9165,3 +9165,4 @@ Already up to date.
 [INFO 2024-08-22_02:10:33] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-22_02:10:36] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-22_02:10:38] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_02:10:40] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
