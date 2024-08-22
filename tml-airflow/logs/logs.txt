@@ -9462,3 +9462,4 @@ Already up to date.
 [INFO 2024-08-22_02:24:00] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_02:24:02] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-22_02:24:04] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:24:44] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
