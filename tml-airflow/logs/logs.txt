@@ -9224,3 +9224,46 @@ Already up to date.
 [INFO 2024-08-22_02:12:35] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_02:12:37] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-22_02:12:39] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:12:42] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:12:42] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:12:43] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:44] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:45] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:46] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:47] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:48] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:48] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:49] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:50] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:52] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:12:53] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:12:53] Creating topics in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:12:53] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:12:53] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:12:55] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-22_02:13:04] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:06] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:07] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:13:08] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:08] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:10] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:11] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:12] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:13] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/iotfailuredetection
+[INFO 2024-08-22_02:13:13] TML Solution Studio: git pull --rebase --autostash origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_02:13:13] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:13:13] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:13:14] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:13:14] Creating topics in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:13:17] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:18] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-22_02:13:18] Documentation DAG in tml-system-step-10-documentation-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:13:18] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:21] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:13:28] TML Solution Studio: Starting Git commit process for project: iotfailuredetection
+[INFO 2024-08-22_02:13:28] TML Solution Studio: git commit -a Status for project iotfailuredetection: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_02:13:28] TML Solution Studio: git push origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_02:13:28] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_02:13:28] TML Solution Studio: git commit -a Status for project iotfailuredetection: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_02:13:28] TML Solution Studio: git push Status for project iotfailuredetection: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_02:13:52] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py

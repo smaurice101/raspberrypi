@@ -45,7 +45,7 @@ def startproducingtotopic():
   
   repo = tsslogging.getrepo()
   tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
     
   # setting callbacks for different events to see if it works, print the message etc.
   def on_connect(client, userdata, flags, rc, properties=None):
@@ -122,7 +122,7 @@ def startproducingtotopic():
        gettmlsystemsparams(mqttserverconnect())
   except Exception as e:
        tsslogging.tsslogit("MQTT producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)),"origin")    
     
    
 dag = startproducingtotopic()

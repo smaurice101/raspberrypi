@@ -12,12 +12,12 @@ def getrepo():
     
   return repo
 
-def git_push(repopath,message):
+def git_push(repopath,message,sname):
     try:
         repo = Repo(repopath)
         repo.git.add(update=True)
-        repo.index.commit(COMMIT_MESSAGE)
-        origin = repo.remote(name='origin')
+        repo.index.commit(message)
+        origin = repo.remote(name=sname)
         origin.push()
     except:
         print('Some error occured while pushing the code')    

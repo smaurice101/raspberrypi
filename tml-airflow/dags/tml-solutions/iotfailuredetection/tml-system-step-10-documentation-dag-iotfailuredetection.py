@@ -241,17 +241,15 @@ def startdocumentation():
     vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
 
-    if 'SREPO' in os.environ: 
-      gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(os.environ['SREPO'],sname)
-    else:
-      gitrepo = "/tml-airflow/dags/tml-solutions/{}".format(sname)  
+    repo = tsslogging.getrepo() 
+    gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(repo,sname)
     
     subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
     readthedocs = "https://{}.readthedocs.io".format(sname)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
     # Kick off shell script 
-    tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname))
+    tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
     
     URL = 'https://readthedocs.org/api/v3/projects/'
     TOKEN = os.environ['READTHEDOCS']
@@ -282,12 +280,12 @@ def startdocumentation():
   try:
       repo=tsslogging.getrepo()
       tsslogging.tsslogit("Documentation DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-      tsslogging.git_push("/{}".format(repo),"Entry fron {}".format(os.path.basename(__file__)))                    
+      tsslogging.git_push("/{}".format(repo),"Entry fron {}".format(os.path.basename(__file__)),"origin")                    
       generatedoc()  
   except Exception as e:
       repo=tsslogging.getrepo()
       tsslogging.tsslogit("Documentation DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-      tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))            
+      tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
 
     
 dag = startdocumentation()

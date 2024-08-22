@@ -28,7 +28,7 @@ def starttmldeploymentprocess():
 
   repo=tsslogging.getrepo()    
   tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))            
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
     
   @task(task_id="dockerit")
   def dockerit():
@@ -43,7 +43,7 @@ def starttmldeploymentprocess():
        subprocess.call("docker push {}/{}".format(os.environ['DOCKERUSERNAME'],cname), shell=True, stdout=output, stderr=output)    
      except Exception as e:
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
-        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
         
 
 dag = starttmldeploymentprocess()
