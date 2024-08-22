@@ -9770,3 +9770,4 @@ Already up to date.
 [INFO 2024-08-22_13:20:37] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_13:20:39] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-22_13:20:41] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_13:21:16] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
