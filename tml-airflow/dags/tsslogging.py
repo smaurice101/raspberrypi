@@ -4,8 +4,8 @@ import datetime
 from datetime import timezone 
 from git import Repo
 
-def getrepo():
-  with open("/tmux/reponame.txt", "r") as file1:
+def getrepo(filename='/tmux/reponame.txt'):
+  with open(filename, "r") as file1:
     # Reading from a file
     repo=file1.read()
     repo=repo.rstrip()
