@@ -9910,3 +9910,4 @@ Already up to date.
 [INFO 2024-08-22_13:28:38] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [INFO 2024-08-22_13:28:40] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_13:28:42] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_13:28:44] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
