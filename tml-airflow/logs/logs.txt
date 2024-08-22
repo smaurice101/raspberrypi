@@ -10089,3 +10089,4 @@ Already up to date.
 [INFO 2024-08-22_13:38:33] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-22_13:38:35] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-22_13:38:37] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_13:38:39] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
