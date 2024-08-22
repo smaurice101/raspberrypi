@@ -17,7 +17,7 @@ from datetime import datetime
 
 repo=tsslogging.getrepo()
 tsslogging.tsslogit("Solution file DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
+tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
 
 with DAG(
     dag_id="solution_preprocessing_dag",
