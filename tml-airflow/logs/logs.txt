@@ -9855,3 +9855,4 @@ Already up to date.
 [INFO 2024-08-22_13:25:28] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-22_13:25:30] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_13:26:06] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_13:26:08] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
