@@ -54,7 +54,6 @@ def startproducingtotopic():
      except Exception as e:
         print("ERROR:",e)
 
-  @task(task_id="gettmlsystemsparams")         
   def gettmlsystemsparams():
     VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
     VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
@@ -67,7 +66,8 @@ def startproducingtotopic():
         
   @task(task_id="readdata")        
   def readdata(params):
-      args = default_args    
+      args = default_args  
+      gettmlsystemsparams()
       basedir = '/'  
       inputfile=basedir + args['inputfile']
 
