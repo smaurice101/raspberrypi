@@ -64,6 +64,7 @@ with DAG(
       external_dag_id="tml_system_step_6_kafka_predictions_dag",
       external_task_id="performPredictions",
   )    
+# STEP 7: Visualization
   sensor_G = ExternalTaskSensor(
       task_id="solution_task_visualization",
       external_dag_id="tml_system_step_7_kafka_visualization_dag",
@@ -76,7 +77,7 @@ with DAG(
       external_task_id="dockerit",
   )
 # STEP 10: Document the solution
-  sensor_H = ExternalTaskSensor(
+  sensor_I = ExternalTaskSensor(
       task_id="solution_task_document",
       external_dag_id="tml_system_step_10_documentation_dag",
       external_task_id="generatedoc",
