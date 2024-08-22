@@ -10654,3 +10654,4 @@ Already up to date.
 [INFO 2024-08-22_14:08:51] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
 [INFO 2024-08-22_14:08:53] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-22_14:08:57] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-22_14:09:03] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
