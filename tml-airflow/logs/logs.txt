@@ -9163,3 +9163,4 @@ Already up to date.
 [INFO 2024-08-22_02:10:01] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
 [INFO 2024-08-22_02:10:03] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
 [INFO 2024-08-22_02:10:33] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_02:10:36] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
