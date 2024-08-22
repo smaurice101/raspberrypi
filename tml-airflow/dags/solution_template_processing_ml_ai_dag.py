@@ -64,13 +64,7 @@ with DAG(
       external_dag_id="tml_system_step_6_kafka_predictions_dag",
       external_task_id="performPredictions",
   )    
-
-# STEP 6: Predictions        
-  sensor_F = ExternalTaskSensor(
-      task_id="solution_task_ai",
-      external_dag_id="tml_system_step_9_privategpt_qdrant_dag",
-      external_task_id="startprivategpt",
-  )        
+# STEP 7: Visualization        
   sensor_G = ExternalTaskSensor(
       task_id="solution_task_visualization",
       external_dag_id="tml_system_step_7_kafka_visualization_dag",
@@ -82,6 +76,12 @@ with DAG(
       external_dag_id="tml_system_step_8_deploy_solution_to_docker_dag",
       external_task_id="dockerit",
   )
+# STEP 9: PrivateGPT      
+  sensor_F = ExternalTaskSensor(
+      task_id="solution_task_ai",
+      external_dag_id="tml_system_step_9_privategpt_qdrant_dag",
+      external_task_id="startprivategpt",
+  )            
 # STEP 10: Document the solution
   sensor_I = ExternalTaskSensor(
       task_id="solution_task_document",
