@@ -52,6 +52,19 @@ with DAG(
       external_dag_id="tml_system_step_4_kafka_preprocess_dag",
       external_task_id="processtransactiondata",
   )
+# STEP 5: ML        
+  sensor_C = ExternalTaskSensor(
+      task_id="solution_task_ml",
+      external_dag_id="tml_system_step_5_kafka_machine_learning_dag",
+      external_task_id="readdata",
+  )
+# STEP 6: Predictions        
+  sensor_C = ExternalTaskSensor(
+      task_id="solution_task_prediction",
+      external_dag_id="tml_localfile_step_3_kafka_producetotopic_dag",
+      external_task_id="readdata",
+  )
+    
   sensor_E = ExternalTaskSensor(
       task_id="solution_task_visualization",
       external_dag_id="tml_system_step_7_kafka_visualization_dag",
