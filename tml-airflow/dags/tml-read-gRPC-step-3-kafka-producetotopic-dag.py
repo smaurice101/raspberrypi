@@ -48,7 +48,7 @@ def startproducingtotopic():
 
   repo=tsslogging.getrepo()   
   tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))            
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
     
   class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
@@ -123,7 +123,7 @@ def startproducingtotopic():
   except Exception as e:
        repo=tsslogging.getrepo()
        tsslogging.tsslogit("gRPC producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))    
+       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
      
 
 dag = startproducingtotopic()

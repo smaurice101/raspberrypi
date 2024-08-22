@@ -8626,3 +8626,391 @@ Already up to date.
 [INFO 2024-08-22_01:42:55] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
 [INFO 2024-08-22_01:42:57] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-22_01:42:58] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_01:54:22] TML Solution Studio Started: DOCKERUSERNAME=maadsdocker, GITUSERNAME=smaurice101, GITREPOURL=https://github.com/smaurice101/raspberrypi.git, AIRFLOWPORT=9000
+[INFO 2024-08-22_01:54:22] TML Solution Studio: Docker Login Status: WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[INFO 2024-08-22_01:54:22] TML Solution Studio: Github Config Status: core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/smaurice101/raspberrypi.git
+remote.origin.fetch=+refs/heads/main:refs/remotes/origin/main
+remote.origin.pushurl=https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+[INFO 2024-08-22_01:54:22] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
+origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-08-22_01:54:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:54:24] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_01:54:24] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_01:54:24] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_01:54:24] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-22_01:54:24] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-22_01:54:24] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:54:24] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_01:54:24] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_01:54:24] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_01:54:24] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:54:24] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:54:24] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:54:24] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_01:54:24] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_01:54:24] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_01:54:24] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-22_01:54:24] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-22_01:54:24] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:54:24] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_01:54:24] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_01:54:24] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:24] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_01:54:24] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:54:24] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:24] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:25] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:25] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:25] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:25] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:25] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:54:25] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:25] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:54:46] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:47] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:54:49] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_01:54:51] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_01:54:52] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_01:54:53] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:54:56] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-22_01:54:57] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-22_01:54:58] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:55:00] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_01:55:01] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:55:01] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_01:55:02] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:55:05] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_01:55:06] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:08] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:09] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:55:10] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:12] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:13] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:14] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:15] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:16] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:17] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:20] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:22] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:55:22] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:55:26] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:27] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:56:27] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:56:28] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_01:56:29] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/iotfailuredetection
+[INFO 2024-08-22_01:56:29] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-22_01:56:31] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_01:56:32] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_01:56:33] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:56:35] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-22_01:56:37] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-22_01:56:37] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:56:39] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_01:56:40] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:56:41] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_01:56:42] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:56:45] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_01:56:45] TML Solution Studio: Starting Git commit process for project: iotfailuredetection
+[INFO 2024-08-22_01:56:45] TML Solution Studio: git commit -a Status for project iotfailuredetection: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_01:56:45] TML Solution Studio: git push origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_01:56:45] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_01:56:45] TML Solution Studio: git commit -a Status for project iotfailuredetection: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_01:56:45] TML Solution Studio: git push Status for project iotfailuredetection: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-22_01:56:46] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:47] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:48] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:56:49] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:50] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:51] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:53] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:54] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:55] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:55] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:56:59] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:57:00] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:57:01] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:57:03] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:57:37] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:57:38] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:57:38] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_01:57:41] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_01:57:42] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_01:57:43] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:57:45] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-22_01:57:47] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-22_01:57:48] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:57:49] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_01:57:50] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:57:51] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_01:57:52] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:57:55] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_01:57:57] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:57:57] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:57:59] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:57:59] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:01] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:03] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:03] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:04] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:05] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:06] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:09] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:10] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:58:11] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:14] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:58:45] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:58:46] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:58:46] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_01:58:48] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_01:58:49] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_01:58:50] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:58:52] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-22_01:58:54] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-22_01:58:56] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:58:57] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_01:58:58] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:58:59] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_01:59:00] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_01:59:01] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_01:59:04] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:05] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:06] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_01:59:07] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:10] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:10] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:11] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:13] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:14] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:15] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:19] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:20] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_01:59:20] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:24] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_01:59:46] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:48] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:49] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:50] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:52] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:54] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:55] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:56] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:57] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
+[INFO 2024-08-22_01:59:59] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:00:00] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-22_02:00:01] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:00:03] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:00:04] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:00:12] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_02:00:13] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:00:14] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:00:15] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_02:00:17] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_02:00:18] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_02:00:19] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:00:21] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-22_02:00:23] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-22_02:00:25] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_02:00:26] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:00:27] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_02:00:27] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:00:30] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_02:00:31] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:33] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:34] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:00:35] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:37] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:38] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:39] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:40] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:41] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:43] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:45] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:46] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_02:00:47] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:00:49] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:01:40] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-22_02:01:41] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:42] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:42] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:43] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:45] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:46] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:47] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:48] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:49] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:50] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:50] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:01:52] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:01:52] Creating topics in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:01:52] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:01:52] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:01:55] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-22_02:02:00] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:02:00] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:02:01] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_02:02:03] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_02:02:04] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_02:02:05] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:02:06] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[ERROR 2024-08-22_02:02:06] Creating topics in tml-system-step-2-kafka-createtopic-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:02:08] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-22_02:02:08] Getting TML system parameters in tml-system-step-1-getparams-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:02:09] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_02:02:10] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:02:12] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_02:02:13] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:02:15] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_02:02:17] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:18] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:19] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:02:20] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:21] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:22] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:23] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:24] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:25] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:02:25] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:02:26] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:02:26] Creating topics in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:02:29] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:30] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-22_02:02:30] Documentation DAG in tml-system-step-10-documentation-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:02:31] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:02:34] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:06] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-22_02:03:06] Documentation DAG in tml-system-step-10-documentation-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:07] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:03:07] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:08] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:09] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:10] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:12] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:12] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:13] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:14] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:15] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:16] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:17] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:18] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:03:18] Creating topics in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:20] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:03:20] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:21] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-22_02:03:26] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:03:27] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:03:28] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_02:03:29] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_02:03:30] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_02:03:31] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:03:33] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[ERROR 2024-08-22_02:03:33] Creating topics in tml-system-step-2-kafka-createtopic-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:35] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-22_02:03:35] Getting TML system parameters in tml-system-step-1-getparams-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:36] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_02:03:37] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:03:38] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_02:03:38] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:03:40] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_02:03:43] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:43] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:44] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:03:45] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:47] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:48] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:50] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:51] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:52] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:03:52] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:53] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:03:53] Creating topics in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:55] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:03:56] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-22_02:03:56] Documentation DAG in tml-system-step-10-documentation-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:03:58] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:04:01] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:04:29] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-22_02:04:29] Documentation DAG in tml-system-step-10-documentation-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:04:32] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:04:32] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:04:33] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:34] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:35] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:36] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:37] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:38] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:40] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:41] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:42] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:43] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:45] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:04:45] Creating topics in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:04:45] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[ERROR 2024-08-22_02:04:45] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:04:46] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-22_02:04:51] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:04:52] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:04:53] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-22_02:04:55] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-22_02:04:55] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_02:04:56] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:04:58] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[ERROR 2024-08-22_02:04:58] Creating topics in tml-system-step-2-kafka-createtopic-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:05:00] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[ERROR 2024-08-22_02:05:00] Getting TML system parameters in tml-system-step-1-getparams-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:05:01] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_02:05:02] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:05:04] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_02:05:05] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-22_02:05:05] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_02:05:07] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:09] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:10] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:05:10] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:13] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:14] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:15] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:16] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:17] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:05:17] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:05:18] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:05:18] Creating topics in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:05:21] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:22] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-22_02:05:22] Documentation DAG in tml-system-step-10-documentation-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:05:23] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:05:55] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
