@@ -9144,3 +9144,22 @@ Already up to date.
 [INFO 2024-08-22_02:09:37] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-22_02:09:40] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
 [INFO 2024-08-22_02:09:41] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-22_02:09:43] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-22_02:09:46] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:09:46] Predictions DAG in tml-system-step-6-kafka-predictions-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:09:47] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-22_02:09:48] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:09:50] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:09:52] Visualization DAG in tml-system-step-7-kafka-visualization-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:09:52] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:09:53] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:09:55] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:09:55] Getting TML system parameters in tml-system-step-1-getparams-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:09:56] Creating topics in in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py
+[ERROR 2024-08-22_02:09:56] Creating topics in tml-system-step-2-kafka-createtopic-dag-tmliotlocalfile.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:09:58] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:10:00] Documentation DAG in tml-system-step-10-documentation-dag.py
+[ERROR 2024-08-22_02:10:00] Documentation DAG in tml-system-step-10-documentation-dag.py git_push() missing 1 required positional argument: 'sname'
+[INFO 2024-08-22_02:10:01] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:10:03] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-tmliotlocalfile.py
+[INFO 2024-08-22_02:10:33] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
