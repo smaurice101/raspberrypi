@@ -37,7 +37,7 @@ def startproducingtotopic():
   
   repo = tsslogging.getrepo()
   tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
   
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
@@ -108,7 +108,7 @@ def startproducingtotopic():
        readdata(gettmlsystemsparams())
   except Exception as e:
        tsslogging.tsslogit("Localfile producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)))    
+       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)),"origin")    
     
     
 
