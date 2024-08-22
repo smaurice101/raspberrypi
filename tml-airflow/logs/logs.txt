@@ -10772,3 +10772,4 @@ Already up to date.
 [INFO 2024-08-22_14:15:30] Solution file DAG in solution_template_processing_ml_dag_restapi.py
 [INFO 2024-08-22_14:15:32] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
 [INFO 2024-08-22_14:15:34] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-22_14:15:38] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
