@@ -44,7 +44,7 @@ with DAG(
   sensor_C = ExternalTaskSensor(
       task_id="solution_task_producetotopic",
       external_dag_id="tml_RESTAPI_step_3_kafka_producetotopic_dag",
-      external_task_id="readdata",
+      external_task_id="gettmlsystemsparams",
   )
 # STEP 4: Preprocess the data        
   sensor_D = ExternalTaskSensor(
