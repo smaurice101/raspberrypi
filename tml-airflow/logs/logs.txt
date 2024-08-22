@@ -11050,3 +11050,4 @@ Already up to date.
 [INFO 2024-08-22_14:30:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-22_14:30:26] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
 [INFO 2024-08-22_14:30:28] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[INFO 2024-08-22_14:30:30] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
