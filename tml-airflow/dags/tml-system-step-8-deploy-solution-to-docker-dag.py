@@ -16,6 +16,7 @@ sys.dont_write_bytecode = True
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed   
  'containername' : '', # << Specify the name of the container (NO SPACES IN NAME)- if BLANK the solutionname will be used
+ 'solution_airflowport' : '',   
  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
 }
