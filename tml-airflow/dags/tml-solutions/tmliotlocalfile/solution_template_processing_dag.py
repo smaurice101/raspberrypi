@@ -20,12 +20,12 @@ tsslogging.tsslogit("Solution file DAG in {}".format(os.path.basename(__file__))
 tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))        
 
 with DAG(
-    dag_id="solution_preprocessing_dag_tmliotlocalfile",
+    dag_id="solution_preprocessing_dag",
     start_date=datetime(2023, 1, 1),
     schedule=None,
 ) as dag:
   start_task = BashOperator(
-    task_id="start_tasks",
+    task_id="start_tasks_tml_preprocessing",
     bash_command="echo 'Start task'",
   )
 # STEP 1: Get the Parameters
