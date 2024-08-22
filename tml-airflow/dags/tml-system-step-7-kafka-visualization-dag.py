@@ -32,7 +32,7 @@ def startstreaming():
     
   repo=tsslogging.getrepo()  
   tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)))            
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
 
   @task(task_id="startstreamingengine")  
   def startstreamingengine():
