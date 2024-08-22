@@ -64,7 +64,7 @@ with DAG(
       external_dag_id="tml_system_step_6_kafka_predictions_dag",
       external_task_id="performPredictions",
   )
-    
+# STEP 7: Predictions            
   sensor_G = ExternalTaskSensor(
       task_id="solution_task_visualization",
       external_dag_id="tml_system_step_7_kafka_visualization_dag",
