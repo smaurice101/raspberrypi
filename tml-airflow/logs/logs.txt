@@ -9143,3 +9143,4 @@ Already up to date.
 [INFO 2024-08-22_02:09:31] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-22_02:09:37] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-22_02:09:40] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-22_02:09:41] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
