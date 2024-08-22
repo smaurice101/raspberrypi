@@ -64,8 +64,6 @@ def startproducingtotopic():
     ti.xcom_push(key='TOPIC',value=default_args['topics'])
     ti.xcom_push(key='PORT',value=default_args['inputfile'])
     ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
-
-    return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
   @task(task_id="readdata")        
   def readdata(params):
