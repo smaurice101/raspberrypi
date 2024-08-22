@@ -9688,3 +9688,4 @@ Already up to date.
 [INFO 2024-08-22_02:35:55] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-22_02:36:29] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-22_02:36:32] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-22_02:36:34] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
