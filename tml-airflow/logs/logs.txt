@@ -21538,3 +21538,4 @@ Applied autostash.
 [INFO 2024-08-23_19:13:04] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
 [INFO 2024-08-23_19:13:07] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
 [INFO 2024-08-23_19:13:09] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
+[INFO 2024-08-23_19:13:11] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
