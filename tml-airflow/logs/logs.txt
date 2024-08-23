@@ -64,3 +64,4 @@
 [INFO 2024-08-23_20:56:54] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution.py
 [INFO 2024-08-23_20:56:55] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_20:56:57] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
+[INFO 2024-08-23_20:56:59] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
