@@ -59,7 +59,6 @@ def startproducingtotopic():
     print(msg.payload.decode("utf-8"))
     readdata(data)
     
-  @task(task_id="mqttserverconnect")
   def mqttserverconnect():
 
      repo = tsslogging.getrepo()
@@ -107,7 +106,7 @@ def startproducingtotopic():
     VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
     VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
     
-    return [VIPERTOKEN,VIPERHOST,VIPERPORT]
+    mqttserverconnect()
         
   def readdata(valuedata):
       # MAin Kafka topic to store the real-time data
