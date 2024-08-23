@@ -23626,3 +23626,4 @@ Already up to date.
 [INFO 2024-08-23_20:46:15] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:46:17] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:46:19] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution2.py
+[INFO 2024-08-23_20:46:21] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution2.py
