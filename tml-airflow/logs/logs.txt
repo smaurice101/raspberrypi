@@ -12130,3 +12130,4 @@ Already up to date.
 [INFO 2024-08-23_01:14:06] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
 [INFO 2024-08-23_01:14:08] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
 [INFO 2024-08-23_01:14:10] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-23_01:14:12] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
