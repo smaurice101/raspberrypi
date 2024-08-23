@@ -20319,3 +20319,4 @@ Applied autostash.
 [INFO 2024-08-23_18:17:51] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
 [INFO 2024-08-23_18:17:53] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
 [INFO 2024-08-23_18:17:56] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_18:17:57] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
