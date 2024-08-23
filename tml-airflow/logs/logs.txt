@@ -13142,3 +13142,4 @@ Already up to date.
 [INFO 2024-08-23_02:08:25] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_02:08:27] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_02:08:28] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-23_02:08:30] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
