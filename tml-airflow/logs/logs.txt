@@ -19670,3 +19670,4 @@ to recover.
 [INFO 2024-08-23_17:47:14] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_17:47:15] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [INFO 2024-08-23_17:47:18] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-23_17:47:20] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
