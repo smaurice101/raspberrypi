@@ -44,9 +44,6 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
     
-  repo=tsslogging.getrepo()  
-  tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
 
   def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
@@ -65,6 +62,11 @@ def startproducingtotopic():
 
   @task(task_id="gettmlsystemsparams")         
   def gettmlsystemsparams():
+
+    repo=tsslogging.getrepo()  
+    tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+        
     VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
     VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
     VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
@@ -107,11 +109,11 @@ def startproducingtotopic():
           print(e)  
           pass  
   
-  try:  
-    gettmlsystemsparams()   
-  except Exception as e:
-       tsslogging.tsslogit("RESTAPI producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+  #try:  
+   # gettmlsystemsparams()   
+  #except Exception as e:
+   #    tsslogging.tsslogit("RESTAPI producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+    #   tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
     
 
 dag = startproducingtotopic()
