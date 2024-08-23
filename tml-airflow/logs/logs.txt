@@ -16142,3 +16142,4 @@ Already up to date.
 [INFO 2024-08-23_14:42:50] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
 [INFO 2024-08-23_14:42:52] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
 [INFO 2024-08-23_14:42:54] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
+[INFO 2024-08-23_14:42:56] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
