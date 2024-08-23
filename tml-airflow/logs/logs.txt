@@ -23035,3 +23035,4 @@ Already up to date.
 [INFO 2024-08-23_20:18:12] Solution file DAG in solution_template_processing_dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:18:19] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:18:21] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution.py
+[INFO 2024-08-23_20:18:23] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
