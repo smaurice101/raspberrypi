@@ -22266,3 +22266,6 @@ Already up to date.
 [INFO 2024-08-23_19:45:41] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:45:43] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:45:45] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-23_19:45:46] TML Solution Studio: TML Project Creation: Copying old project : mytmltestsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmltestsolution2
+[INFO 2024-08-23_19:45:46] TML Solution Studio: git pull --rebase --autostash origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:45:47] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
