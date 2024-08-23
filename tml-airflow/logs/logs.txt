@@ -80,3 +80,4 @@
 [INFO 2024-08-23_20:57:28] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-23_20:57:31] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-23_20:58:30] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-23_20:58:32] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
