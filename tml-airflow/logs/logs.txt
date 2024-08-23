@@ -19501,3 +19501,4 @@ to recover.
 [INFO 2024-08-23_17:39:08] Solution file DAG in solution_template_processing_ml_dag-mytmltestsolution.py
 [INFO 2024-08-23_17:39:10] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:39:12] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:39:14] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
