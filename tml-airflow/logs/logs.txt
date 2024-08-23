@@ -16757,3 +16757,4 @@ Already up to date.
 [INFO 2024-08-23_15:14:35] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_15:14:36] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_15:14:38] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_15:14:40] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
