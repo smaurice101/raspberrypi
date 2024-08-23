@@ -23352,3 +23352,4 @@ Already up to date.
 [INFO 2024-08-23_20:32:15] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [INFO 2024-08-23_20:32:17] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-23_20:32:20] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-23_20:32:22] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
