@@ -22914,3 +22914,4 @@ Already up to date.
 [INFO 2024-08-23_20:12:59] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-23_20:13:01] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_20:13:04] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-23_20:13:06] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
