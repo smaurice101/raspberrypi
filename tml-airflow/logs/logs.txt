@@ -20605,3 +20605,4 @@ Applied autostash.
 [INFO 2024-08-23_18:31:53] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_18:31:55] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_18:31:57] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
+[INFO 2024-08-23_18:31:59] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution.py
