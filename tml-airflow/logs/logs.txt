@@ -19876,3 +19876,4 @@ to recover.
 [INFO 2024-08-23_17:57:09] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:57:12] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:57:13] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:57:16] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
