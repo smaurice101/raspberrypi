@@ -1,2 +1,3 @@
 [INFO 2024-08-23_20:53:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:53:26] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_20:53:28] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
