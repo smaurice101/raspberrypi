@@ -14568,3 +14568,4 @@ Already up to date.
 [INFO 2024-08-23_03:21:03] Solution file DAG in solution_template_processing_ml_dag.py
 [INFO 2024-08-23_03:21:04] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-23_03:21:07] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-23_03:21:09] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
