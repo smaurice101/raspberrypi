@@ -22425,3 +22425,10 @@ Already up to date.
 [INFO 2024-08-23_19:53:01] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_19:53:03] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
 [INFO 2024-08-23_19:53:10] Solution file DAG in solution_template_processing_ml_dag_restapi.py
+[INFO 2024-08-23_19:53:11] TML Solution Studio: Starting Git commit process for project: mytmltestsolution
+[INFO 2024-08-23_19:53:11] TML Solution Studio: git commit -a Status for project mytmltestsolution: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:53:11] TML Solution Studio: git push origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:53:11] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:53:11] TML Solution Studio: git commit -a Status for project mytmltestsolution: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:53:11] TML Solution Studio: git push Status for project mytmltestsolution: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:53:11] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
