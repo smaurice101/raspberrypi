@@ -50,3 +50,4 @@
 [INFO 2024-08-23_20:56:28] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:56:30] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:56:32] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
+[INFO 2024-08-23_20:56:34] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution.py
