@@ -20754,3 +20754,4 @@ Applied autostash.
 [INFO 2024-08-23_18:38:34] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
 [INFO 2024-08-23_18:38:36] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
 [INFO 2024-08-23_18:38:38] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
+[INFO 2024-08-23_18:38:40] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
