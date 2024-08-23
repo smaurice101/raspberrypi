@@ -15484,3 +15484,4 @@ Already up to date.
 [INFO 2024-08-23_14:08:30] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-23_14:08:32] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_14:09:04] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-23_14:09:05] Solution file DAG in solution_template_processing_dag_restapi.py
