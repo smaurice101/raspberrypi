@@ -23737,3 +23737,4 @@ Already up to date.
 [INFO 2024-08-23_20:52:36] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:52:38] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:52:40] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution2.py
+[INFO 2024-08-23_20:52:42] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution2.py
