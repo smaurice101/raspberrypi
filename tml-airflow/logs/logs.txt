@@ -16397,3 +16397,4 @@ Already up to date.
 [INFO 2024-08-23_14:55:54] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
 [INFO 2024-08-23_14:55:55] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
 [INFO 2024-08-23_14:55:57] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-23_14:55:59] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
