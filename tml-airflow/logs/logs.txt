@@ -23044,3 +23044,4 @@ Already up to date.
 [INFO 2024-08-23_20:18:35] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:18:37] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:18:39] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_20:18:41] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
