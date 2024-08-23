@@ -21413,3 +21413,4 @@ Applied autostash.
 [INFO 2024-08-23_19:07:51] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:07:52] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:07:55] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
+[INFO 2024-08-23_19:07:57] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution.py
