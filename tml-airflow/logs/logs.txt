@@ -19504,3 +19504,4 @@ to recover.
 [INFO 2024-08-23_17:39:14] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:39:16] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:39:20] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:39:24] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
