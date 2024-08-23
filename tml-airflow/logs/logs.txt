@@ -11,3 +11,4 @@
 [INFO 2024-08-23_20:53:43] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
 [INFO 2024-08-23_20:53:51] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
 [INFO 2024-08-23_20:53:53] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
+[INFO 2024-08-23_20:53:55] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
