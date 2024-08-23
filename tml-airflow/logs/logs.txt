@@ -23209,3 +23209,4 @@ Already up to date.
 [INFO 2024-08-23_20:25:37] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_20:25:39] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
 [INFO 2024-08-23_20:25:46] Solution file DAG in solution_template_processing_ml_dag_restapi.py
+[INFO 2024-08-23_20:25:54] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
