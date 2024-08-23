@@ -22235,3 +22235,4 @@ Already up to date.
 [INFO 2024-08-23_19:44:36] TML Solution Studio: Project mytmltestsolution does not exist.  You cannot copy from a non-esistent project.  Create mytmltestsolution first, then you can copy it.
 [INFO 2024-08-23_19:44:36] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
 [INFO 2024-08-23_19:44:38] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_19:44:39] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
