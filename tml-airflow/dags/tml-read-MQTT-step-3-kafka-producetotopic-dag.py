@@ -43,9 +43,6 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
   
-  repo = tsslogging.getrepo()
-  tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
     
   # setting callbacks for different events to see if it works, print the message etc.
   def on_connect(client, userdata, flags, rc, properties=None):
@@ -64,6 +61,11 @@ def startproducingtotopic():
     
   @task(task_id="mqttserverconnect")
   def mqttserverconnect():
+
+     repo = tsslogging.getrepo()
+     tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
+        
      ti.xcom_push(key='PRODUCETYPE',value='MQTT')
      ti.xcom_push(key='TOPIC',value=default_args['topics'])
      buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
@@ -118,11 +120,11 @@ def startproducingtotopic():
       except Exception as e:
           print(e)  
           pass  
-  try:    
-       gettmlsystemsparams(mqttserverconnect())
-  except Exception as e:
-       tsslogging.tsslogit("MQTT producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+#  try:    
+ #      gettmlsystemsparams(mqttserverconnect())
+ # except Exception as e:
+  #     tsslogging.tsslogit("MQTT producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+   #    tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)),"origin")    
     
    
 dag = startproducingtotopic()
