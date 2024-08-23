@@ -20603,3 +20603,4 @@ Applied autostash.
 [INFO 2024-08-23_18:31:14] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_18:31:51] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_18:31:53] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_18:31:55] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
