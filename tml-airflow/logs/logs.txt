@@ -20756,3 +20756,4 @@ Applied autostash.
 [INFO 2024-08-23_18:38:38] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
 [INFO 2024-08-23_18:38:40] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_18:38:42] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_18:38:44] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
