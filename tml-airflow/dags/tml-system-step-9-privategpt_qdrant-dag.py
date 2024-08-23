@@ -21,11 +21,11 @@ default_args = {
 @dag(dag_id="tml_system_step_9_privategpt_qdrant_dag", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag"], schedule=None,  catchup=False)
 def startaiprocess():
     # Define tasks
-  basedir = "/"
-  viperconfigfile=basedir + "/Viper-produce/viper.env"
   repo=tsslogging.getrepo()
   tsslogging.tsslogit("PrivateGPT DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")                
+  basedir = "/"
+  viperconfigfile=basedir + "/Viper-produce/viper.env"
     
   @task(task_id="startprivategpt")
   def startprivategpt():
