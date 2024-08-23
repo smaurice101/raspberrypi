@@ -21350,3 +21350,10 @@ Applied autostash.
 [INFO 2024-08-23_19:05:05] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
 [INFO 2024-08-23_19:05:11] Solution file DAG in solution_template_processing_ml_dag_restapi.py
 [INFO 2024-08-23_19:05:13] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
+[INFO 2024-08-23_19:05:13] TML Solution Studio: Starting Git commit process for project: mytmltestsolution2
+[INFO 2024-08-23_19:05:13] TML Solution Studio: git commit -a Status for project mytmltestsolution2: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:05:13] TML Solution Studio: git push origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:05:13] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:05:13] TML Solution Studio: git commit -a Status for project mytmltestsolution2: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:05:13] TML Solution Studio: git push Status for project mytmltestsolution2: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_19:05:15] Solution file DAG in solution_template_processing_dag_restapi.py
