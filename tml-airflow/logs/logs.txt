@@ -21817,3 +21817,4 @@ Already up to date.
 [INFO 2024-08-23_19:24:31] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:24:33] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:24:35] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution.py
+[INFO 2024-08-23_19:24:37] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution.py
