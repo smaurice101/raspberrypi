@@ -21498,3 +21498,4 @@ Applied autostash.
 [INFO 2024-08-23_19:11:33] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:11:35] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:11:37] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_19:11:39] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
