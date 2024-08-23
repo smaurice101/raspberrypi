@@ -20206,3 +20206,4 @@ Applied autostash.
 [INFO 2024-08-23_18:12:26] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_18:12:28] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
 [INFO 2024-08-23_18:12:31] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-23_18:12:33] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
