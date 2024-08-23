@@ -21111,3 +21111,4 @@ Already up to date.
 [INFO 2024-08-23_18:54:35] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution2.py
 [INFO 2024-08-23_18:54:37] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution2.py
 [INFO 2024-08-23_18:54:39] Solution file DAG in solution_template_processing_dag-mytmltestsolution2.py
+[INFO 2024-08-23_18:54:42] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution2.py
