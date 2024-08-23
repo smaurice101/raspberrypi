@@ -16275,3 +16275,4 @@ Already up to date.
 [INFO 2024-08-23_14:49:32] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_14:49:34] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_14:49:36] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_14:49:38] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
