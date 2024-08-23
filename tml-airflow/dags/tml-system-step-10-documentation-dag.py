@@ -34,6 +34,10 @@ def startdocumentation():
   @task(task_id="generatedoc")
   def generatedoc():    
     
+    if 'tssdoc' in os.environ:
+        if os.environ['tssdoc']==1:
+            return
+    
     sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
     shutil.copytree('/tss_readthedocs', "/{}".format(sname), dirs_exist_ok=True) 
 
