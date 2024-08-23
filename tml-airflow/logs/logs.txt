@@ -19378,3 +19378,21 @@ Already up to date.
 [INFO 2024-08-23_17:34:21] Solution file DAG in solution_template_processing_ai_dag_restapi.py
 [INFO 2024-08-23_17:34:21] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmltestsolution
 [INFO 2024-08-23_17:34:23] Solution file DAG in solution_template_processing_ai_dag.py
+[INFO 2024-08-23_17:34:24] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+warning: fetch updated the current branch head.
+fast-forwarding your working tree from
+commit 22078246b210cb6d99fd277243622c4868fbf4db.
+error: Your local changes to the following files would be overwritten by merge:
+	tml-airflow/logs/logs.txt
+Please commit your changes or stash them before you merge.
+Aborting
+fatal: Cannot fast-forward your working tree.
+After making sure that you saved anything precious from
+$ git diff 22078246b210cb6d99fd277243622c4868fbf4db
+output, run
+$ git reset --hard
+to recover.
+[INFO 2024-08-23_17:34:25] Solution file DAG in solution_template_processing_ml_dag.py
