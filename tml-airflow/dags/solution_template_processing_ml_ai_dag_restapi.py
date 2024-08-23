@@ -89,4 +89,4 @@ with DAG(
       external_task_id="generatedoc",
   )
 
-  start_task >> sensor_A >> sensor_B >> sensor_C >> sensor_D >> [sensor_E, sensor_F, sensor_I] >> sensor_G >> sensor_H >> sensor_J
+  start_task >> sensor_A >> sensor_B >> [sensor_C, sensor_D, sensor_E, sensor_F, sensor_I, sensor_G, sensor_H, sensor_J]
