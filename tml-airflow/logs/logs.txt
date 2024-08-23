@@ -21100,3 +21100,4 @@ Already up to date.
 [INFO 2024-08-23_18:54:10] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-23_18:54:12] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_18:54:14] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
+[INFO 2024-08-23_18:54:17] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution.py
