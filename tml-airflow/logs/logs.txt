@@ -19514,3 +19514,4 @@ to recover.
 [INFO 2024-08-23_17:39:39] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_17:39:42] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:39:45] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:39:47] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution.py
