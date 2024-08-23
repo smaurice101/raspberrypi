@@ -19642,3 +19642,4 @@ to recover.
 [INFO 2024-08-23_17:46:11] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:46:13] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:46:16] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:46:17] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
