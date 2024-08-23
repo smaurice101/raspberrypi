@@ -17424,3 +17424,4 @@ Already up to date.
 [INFO 2024-08-23_15:48:55] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
 [INFO 2024-08-23_15:48:57] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_15:48:59] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_15:49:01] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
