@@ -15155,3 +15155,4 @@ Already up to date.
 [INFO 2024-08-23_03:54:40] Solution file DAG in solution_template_processing_dag_restapi.py
 [INFO 2024-08-23_03:54:42] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_03:54:44] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-23_03:54:46] Getting TML system parameters in tml-system-step-1-getparams-dag.py
