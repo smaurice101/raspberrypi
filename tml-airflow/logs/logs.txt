@@ -15781,3 +15781,4 @@ Already up to date.
 [INFO 2024-08-23_14:24:10] Solution file DAG in solution_template_processing_dag_restapi.py
 [INFO 2024-08-23_14:24:12] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-23_14:24:14] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-23_14:24:16] Documentation DAG in tml-system-step-10-documentation-dag.py
