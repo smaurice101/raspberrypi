@@ -19460,3 +19460,4 @@ to recover.
 [INFO 2024-08-23_17:37:03] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:37:05] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:37:07] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[INFO 2024-08-23_17:37:10] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
