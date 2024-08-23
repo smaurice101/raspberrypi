@@ -22356,3 +22356,4 @@ Already up to date.
 [INFO 2024-08-23_19:49:40] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:49:42] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:49:44] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
+[INFO 2024-08-23_19:49:48] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
