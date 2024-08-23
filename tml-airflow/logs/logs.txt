@@ -19772,3 +19772,4 @@ to recover.
 [INFO 2024-08-23_17:52:05] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
 [INFO 2024-08-23_17:52:12] Solution file DAG in solution_template_processing_ai_dag_restapi.py
 [INFO 2024-08-23_17:52:14] Solution file DAG in solution_template_processing_ai_dag.py
+[INFO 2024-08-23_17:52:16] Solution file DAG in solution_template_processing_ml_dag.py
