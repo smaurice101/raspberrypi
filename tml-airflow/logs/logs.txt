@@ -22370,3 +22370,4 @@ Already up to date.
 [INFO 2024-08-23_19:50:11] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:50:13] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:50:16] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
+[INFO 2024-08-23_19:50:18] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution2.py
