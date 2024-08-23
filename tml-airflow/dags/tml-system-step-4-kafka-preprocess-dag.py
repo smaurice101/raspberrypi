@@ -52,9 +52,7 @@ def startprocessing():
   VIPERTOKEN=""
   VIPERHOST=""
   VIPERPORT=""
-  repo=tsslogging.getrepo()  
-  tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+
     
   @task(task_id="processtransactiondata")
   def processtransactiondata():
@@ -131,6 +129,10 @@ def startprocessing():
         return e
   
   if VIPERHOST != "":
+     repo=tsslogging.getrepo()  
+     tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+        
      while True:
        try: 
          processtransactiondata()
