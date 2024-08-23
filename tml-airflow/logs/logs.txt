@@ -17005,3 +17005,4 @@ Already up to date.
 [INFO 2024-08-23_15:27:36] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_15:27:37] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_15:27:39] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-23_15:27:41] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
