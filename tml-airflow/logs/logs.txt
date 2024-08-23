@@ -23241,3 +23241,4 @@ Already up to date.
 [INFO 2024-08-23_20:27:35] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:27:37] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:27:39] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution2.py
+[INFO 2024-08-23_20:27:41] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution2.py
