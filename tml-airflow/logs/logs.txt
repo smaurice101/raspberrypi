@@ -21105,3 +21105,4 @@ Already up to date.
 [INFO 2024-08-23_18:54:23] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution2.py
 [INFO 2024-08-23_18:54:25] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution2.py
 [INFO 2024-08-23_18:54:27] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution2.py
+[INFO 2024-08-23_18:54:29] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
