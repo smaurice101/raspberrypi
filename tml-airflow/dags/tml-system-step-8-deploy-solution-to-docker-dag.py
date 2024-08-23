@@ -33,6 +33,9 @@ def starttmldeploymentprocess():
     
   @task(task_id="dockerit")
   def dockerit():
+     if 'tssbuild' in os.environ:
+        if os.environ['tssbuild']==1:
+            return        
      try:
        cname = default_args['containername'] 
        if cname == "":
