@@ -21710,3 +21710,10 @@ Already up to date.
 [INFO 2024-08-23_19:21:01] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
 [INFO 2024-08-23_19:21:02] Solution file DAG in solution_template_processing_dag_restapi.py
 [INFO 2024-08-23_19:21:04] Solution file DAG in solution_template_processing_ai_dag_restapi.py
+[INFO 2024-08-23_19:21:04] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmltestsolution
+[INFO 2024-08-23_19:21:05] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch              main       -> FETCH_HEAD
+Created autostash: 2b6c3a17
+Current branch main is up to date.
+Applied autostash.
+[INFO 2024-08-23_19:21:06] Solution file DAG in solution_template_processing_ai_dag.py
