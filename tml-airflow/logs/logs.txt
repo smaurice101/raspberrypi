@@ -18811,3 +18811,4 @@ Already up to date.
 [INFO 2024-08-23_17:03:52] Solution file DAG in solution_template_processing_ai_dag_restapi.py
 [INFO 2024-08-23_17:03:54] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_17:03:56] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-23_17:03:58] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
