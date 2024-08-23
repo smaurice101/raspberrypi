@@ -20296,3 +20296,4 @@ Applied autostash.
 [INFO 2024-08-23_18:17:00] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-23_18:17:02] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_18:17:03] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-23_18:17:05] Getting TML system parameters in tml-system-step-1-getparams-dag.py
