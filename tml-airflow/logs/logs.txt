@@ -21115,3 +21115,4 @@ Already up to date.
 [INFO 2024-08-23_18:54:45] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution2.py
 [INFO 2024-08-23_18:54:47] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution2.py
 [INFO 2024-08-23_18:54:49] Solution file DAG in solution_template_processing_ml_dag_restapi-mytmltestsolution2.py
+[INFO 2024-08-23_18:54:51] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
