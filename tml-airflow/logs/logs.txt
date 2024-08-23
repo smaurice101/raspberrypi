@@ -19900,3 +19900,10 @@ to recover.
 [INFO 2024-08-23_17:58:04] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:58:06] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:58:07] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
+[INFO 2024-08-23_17:58:08] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmltestsolution
+[INFO 2024-08-23_17:58:08] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch              main       -> FETCH_HEAD
+Created autostash: 6d34a855
+Current branch main is up to date.
+Applied autostash.
+[INFO 2024-08-23_17:58:10] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
