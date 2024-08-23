@@ -14809,3 +14809,4 @@ Already up to date.
 [INFO 2024-08-23_03:34:28] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
 [INFO 2024-08-23_03:34:30] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_03:34:32] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_03:34:35] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
