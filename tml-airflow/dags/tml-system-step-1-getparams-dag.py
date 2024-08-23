@@ -74,7 +74,9 @@ def tmlparams():
 
   def updateviperenv():
   # update ALL
-     os.environ['tssbuild']=0
+    os.environ['tssbuild']=0
+    os.environ['tssdoc']=0
+    
     filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
         with open(mainfile, 'r', encoding='utf-8') as file: 
