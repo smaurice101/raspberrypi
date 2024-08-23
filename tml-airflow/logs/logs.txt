@@ -23597,3 +23597,4 @@ Already up to date.
 [INFO 2024-08-23_20:44:15] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:44:16] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:44:18] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_20:44:20] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
