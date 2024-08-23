@@ -21689,3 +21689,8 @@ Applied autostash.
 [INFO 2024-08-23_19:19:42] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:19:43] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:19:46] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-23_19:19:50] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmltestsolution
+[INFO 2024-08-23_19:19:50] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch              main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-23_19:19:52] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
