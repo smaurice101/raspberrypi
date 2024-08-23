@@ -17237,3 +17237,4 @@ Already up to date.
 [INFO 2024-08-23_15:39:27] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_15:39:29] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [INFO 2024-08-23_15:39:31] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-23_15:39:33] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
