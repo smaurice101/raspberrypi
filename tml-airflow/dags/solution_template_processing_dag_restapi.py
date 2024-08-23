@@ -25,7 +25,7 @@ with DAG(
     schedule=None,
 ) as dag:
   start_task = BashOperator(
-    task_id="start_tasks_tml_preprocessing",
+    task_id="start_tasks_tml_preprocessing_restapi",
     bash_command="echo 'Start task'",
   )
 # STEP 1: Get the Parameters
