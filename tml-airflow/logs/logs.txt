@@ -26,3 +26,4 @@
 [INFO 2024-08-23_20:55:46] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:55:48] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution2.py
 [INFO 2024-08-23_20:55:49] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution2.py
+[INFO 2024-08-23_20:55:51] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution2.py
