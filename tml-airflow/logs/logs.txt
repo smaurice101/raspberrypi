@@ -20172,3 +20172,4 @@ Applied autostash.
 [INFO 2024-08-23_18:11:07] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_18:11:09] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
 [INFO 2024-08-23_18:11:12] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_18:11:14] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
