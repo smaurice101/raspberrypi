@@ -20821,3 +20821,4 @@ Applied autostash.
 [INFO 2024-08-23_18:41:38] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
 [INFO 2024-08-23_18:41:41] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_18:41:43] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-23_18:41:45] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
