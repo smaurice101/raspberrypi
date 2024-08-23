@@ -8,3 +8,11 @@ Already up to date.
 [INFO 2024-08-23_21:24:46] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-23_21:24:46] TML Solution Studio: git commit -a Status for project mytmlsolution2: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-23_21:24:46] TML Solution Studio: git push Status for project mytmlsolution2: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:27:14] TML Solution Studio: TML Project Creation: Copying old project : mytmlsolution2  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmlsolution3
+[INFO 2024-08-23_21:27:14] TML Solution Studio: git pull --rebase --autostash origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:27:37] TML Solution Studio: Starting Git commit process for project: mytmlsolution3
+[INFO 2024-08-23_21:27:37] TML Solution Studio: git commit -a Status for project mytmlsolution3: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:27:37] TML Solution Studio: git push origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:27:37] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:27:37] TML Solution Studio: git commit -a Status for project mytmlsolution3: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:27:37] TML Solution Studio: git push Status for project mytmlsolution3: fatal: not a git repository (or any of the parent directories): .git
