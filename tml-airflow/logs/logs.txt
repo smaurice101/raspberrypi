@@ -17221,3 +17221,4 @@ Already up to date.
 [INFO 2024-08-23_15:38:20] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-23_15:38:26] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
 [INFO 2024-08-23_15:38:28] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-23_15:38:30] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
