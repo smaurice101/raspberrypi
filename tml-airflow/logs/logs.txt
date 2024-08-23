@@ -19927,3 +19927,4 @@ Applied autostash.
 [INFO 2024-08-23_17:59:06] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_17:59:08] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
 [INFO 2024-08-23_17:59:10] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_17:59:12] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
