@@ -13915,3 +13915,4 @@ Already up to date.
 [INFO 2024-08-23_02:47:04] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
 [INFO 2024-08-23_02:47:06] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
 [INFO 2024-08-23_02:47:08] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
+[INFO 2024-08-23_02:47:10] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
