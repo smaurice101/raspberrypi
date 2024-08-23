@@ -20675,3 +20675,4 @@ Applied autostash.
 [INFO 2024-08-23_18:35:02] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_18:35:05] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_18:35:08] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-23_18:35:10] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
