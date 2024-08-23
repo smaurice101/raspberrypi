@@ -19843,3 +19843,4 @@ to recover.
 [INFO 2024-08-23_17:55:20] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:55:22] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:55:24] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
+[INFO 2024-08-23_17:55:27] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
