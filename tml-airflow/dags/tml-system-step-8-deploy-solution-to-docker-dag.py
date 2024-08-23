@@ -41,7 +41,8 @@ def starttmldeploymentprocess():
        ti.xcom_push(key='containername',value=cname)
        cid = os.environ['SCID']
        subprocess.call("docker commit {} {}/{}".format(cid,os.environ['DOCKERUSERNAME'],cname), shell=True, stdout=output, stderr=output)
-       subprocess.call("docker push {}/{}".format(os.environ['DOCKERUSERNAME'],cname), shell=True, stdout=output, stderr=output)    
+       subprocess.call("docker push {}/{}".format(os.environ['DOCKERUSERNAME'],cname), shell=True, stdout=output, stderr=output)  
+       os.environ['tssbuild']=1
      except Exception as e:
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
