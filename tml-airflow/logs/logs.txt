@@ -16411,3 +16411,4 @@ Already up to date.
 [INFO 2024-08-23_14:56:25] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
 [INFO 2024-08-23_14:56:27] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_14:56:29] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-23_14:56:31] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
