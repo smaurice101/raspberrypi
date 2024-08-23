@@ -19518,3 +19518,4 @@ to recover.
 [INFO 2024-08-23_17:39:48] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:39:52] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-23_17:39:57] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-23_17:39:59] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
