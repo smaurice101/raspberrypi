@@ -16861,3 +16861,4 @@ Already up to date.
 [INFO 2024-08-23_15:19:55] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_15:19:56] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
 [INFO 2024-08-23_15:19:59] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
+[INFO 2024-08-23_15:20:00] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
