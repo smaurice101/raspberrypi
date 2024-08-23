@@ -1,95 +1,10 @@
-[INFO 2024-08-23_20:53:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:53:26] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:53:28] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:53:30] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:53:32] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:53:33] Solution file DAG in solution_template_processing_ml_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:53:35] Solution file DAG in solution_template_processing_ml_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:53:37] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:53:39] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:53:41] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:53:43] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:53:51] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:53:53] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:53:55] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:53:57] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:53:58] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:00] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:02] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:04] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:06] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:08] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:09] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:10] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:12] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:54:14] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
-[INFO 2024-08-23_20:55:46] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:55:48] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:55:49] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:55:51] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:55:53] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:55:55] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:55:56] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:55:58] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:00] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:00] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:02] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:04] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:05] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:06] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:08] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:10] Solution file DAG in solution_template_processing_ml_dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:12] Solution file DAG in solution_template_processing_ml_dag_restapi-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:12] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:14] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:16] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:17] Solution file DAG in solution_template_processing_dag-mytmltestsolution2.py
-[INFO 2024-08-23_20:56:23] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:25] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:27] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:28] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:30] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:32] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:34] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:36] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:38] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:40] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:42] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:43] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:45] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:47] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:48] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:56:50] Solution file DAG in solution_template_processing_ml_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:52] Solution file DAG in solution_template_processing_ml_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:56:54] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:56:55] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:56:57] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
-[INFO 2024-08-23_20:56:59] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
-[INFO 2024-08-23_20:57:06] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:08] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:10] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:12] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:14] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:15] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:17] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:19] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:21] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:23] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:25] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:26] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:28] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:57:31] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:30] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:32] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:34] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:35] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:37] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:39] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:41] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:43] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:45] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:47] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:49] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:50] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:51] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
-[INFO 2024-08-23_20:58:54] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-23_21:24:22] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmlsolution2
+[INFO 2024-08-23_21:24:23] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch                main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-23_21:24:46] TML Solution Studio: Starting Git commit process for project: mytmlsolution2
+[INFO 2024-08-23_21:24:46] TML Solution Studio: git commit -a Status for project mytmlsolution2: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:24:46] TML Solution Studio: git push origin main Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:24:46] TML Solution Studio: git add . Status: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:24:46] TML Solution Studio: git commit -a Status for project mytmlsolution2: fatal: not a git repository (or any of the parent directories): .git
+[INFO 2024-08-23_21:24:46] TML Solution Studio: git push Status for project mytmlsolution2: fatal: not a git repository (or any of the parent directories): .git
