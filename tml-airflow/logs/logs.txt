@@ -20100,3 +20100,4 @@ Applied autostash.
 [INFO 2024-08-23_18:07:49] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_18:07:51] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_18:07:54] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_18:07:56] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
