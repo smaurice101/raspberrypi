@@ -20353,3 +20353,4 @@ Applied autostash.
 [INFO 2024-08-23_18:19:38] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_18:19:39] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_18:19:41] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-23_18:19:43] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
