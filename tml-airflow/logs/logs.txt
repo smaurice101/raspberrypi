@@ -21736,3 +21736,4 @@ Applied autostash.
 [INFO 2024-08-23_19:21:40] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:21:42] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:21:44] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_19:21:46] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
