@@ -19780,3 +19780,4 @@ to recover.
 [INFO 2024-08-23_17:52:26] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-23_17:52:28] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_17:52:30] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-23_17:52:32] Getting TML system parameters in tml-system-step-1-getparams-dag.py
