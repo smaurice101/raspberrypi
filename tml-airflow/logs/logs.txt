@@ -20841,3 +20841,10 @@ Applied autostash.
 [INFO 2024-08-23_18:42:52] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
 [INFO 2024-08-23_18:42:54] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_18:43:06] Solution file DAG in solution_template_processing_ml_dag_restapi.py
+[INFO 2024-08-23_18:43:08] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmltestsolution
+[INFO 2024-08-23_18:43:08] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch              main       -> FETCH_HEAD
+Auto packing the repository in background for optimum performance.
+See "git help gc" for manual housekeeping.
+Already up to date.
+[INFO 2024-08-23_18:43:08] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
