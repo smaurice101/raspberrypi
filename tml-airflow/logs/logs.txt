@@ -11927,3 +11927,4 @@ Already up to date.
 [INFO 2024-08-23_01:03:29] Solution file DAG in solution_template_processing_dag_restapi.py
 [INFO 2024-08-23_01:03:31] Solution file DAG in solution_template_processing_dag.py
 [INFO 2024-08-23_01:03:32] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_01:03:34] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
