@@ -11942,3 +11942,4 @@ Already up to date.
 [INFO 2024-08-23_01:03:58] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_01:04:00] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-23_01:04:03] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-23_01:04:07] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
