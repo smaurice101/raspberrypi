@@ -23565,3 +23565,4 @@ Already up to date.
 [INFO 2024-08-23_20:42:19] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
 [INFO 2024-08-23_20:42:21] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_20:43:14] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution2.py
+[INFO 2024-08-23_20:43:15] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution2.py
