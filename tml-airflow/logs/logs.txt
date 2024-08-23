@@ -19727,3 +19727,4 @@ to recover.
 [INFO 2024-08-23_17:49:52] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [INFO 2024-08-23_17:49:54] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-23_17:49:57] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_17:50:00] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
