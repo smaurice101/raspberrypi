@@ -22823,3 +22823,4 @@ Already up to date.
 [INFO 2024-08-23_20:09:19] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_20:09:20] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_20:09:23] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
+[INFO 2024-08-23_20:09:30] Solution file DAG in solution_template_processing_ml_dag_restapi.py
