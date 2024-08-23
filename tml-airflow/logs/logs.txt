@@ -21394,3 +21394,4 @@ Applied autostash.
 [INFO 2024-08-23_19:07:09] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:07:11] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:07:12] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
+[INFO 2024-08-23_19:07:14] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution2.py
