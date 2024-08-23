@@ -27,9 +27,6 @@ default_args = {
 def starttmldeploymentprocess():
     # Define tasks
 
-  repo=tsslogging.getrepo()    
-  tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
     
   @task(task_id="dockerit")
   def dockerit():
@@ -37,6 +34,10 @@ def starttmldeploymentprocess():
         if os.environ['tssbuild']==1:
             return        
      try:
+       repo=tsslogging.getrepo()    
+       tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+        
        cname = default_args['containername'] 
        if cname == "":
           cname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
