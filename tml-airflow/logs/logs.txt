@@ -20018,3 +20018,4 @@ Applied autostash.
 [INFO 2024-08-23_18:03:34] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_18:03:36] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [INFO 2024-08-23_18:03:38] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
+[INFO 2024-08-23_18:03:40] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
