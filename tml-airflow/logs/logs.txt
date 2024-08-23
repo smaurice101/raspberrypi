@@ -20545,3 +20545,4 @@ Applied autostash.
 [INFO 2024-08-23_18:28:32] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_18:28:34] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_18:28:37] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_18:29:12] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
