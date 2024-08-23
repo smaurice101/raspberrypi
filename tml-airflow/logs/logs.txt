@@ -22387,3 +22387,4 @@ Already up to date.
 [INFO 2024-08-23_19:50:48] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:50:50] Solution file DAG in solution_template_processing_ml_dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:50:52] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution2.py
+[INFO 2024-08-23_19:50:55] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution2.py
