@@ -21410,3 +21410,4 @@ Applied autostash.
 [INFO 2024-08-23_19:07:44] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:07:46] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:07:48] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
+[INFO 2024-08-23_19:07:51] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
