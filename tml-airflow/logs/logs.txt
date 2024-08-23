@@ -20840,3 +20840,4 @@ Applied autostash.
 [INFO 2024-08-23_18:42:50] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_18:42:52] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
 [INFO 2024-08-23_18:42:54] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
+[INFO 2024-08-23_18:43:06] Solution file DAG in solution_template_processing_ml_dag_restapi.py
