@@ -20111,3 +20111,4 @@ Applied autostash.
 [INFO 2024-08-23_18:08:12] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
 [INFO 2024-08-23_18:08:14] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
 [INFO 2024-08-23_18:08:17] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
+[INFO 2024-08-23_18:08:20] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
