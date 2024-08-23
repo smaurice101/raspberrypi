@@ -21646,3 +21646,4 @@ Applied autostash.
 [INFO 2024-08-23_19:18:11] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:18:13] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:18:15] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
+[INFO 2024-08-23_19:18:17] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
