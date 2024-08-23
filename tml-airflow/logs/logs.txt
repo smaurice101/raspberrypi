@@ -58,3 +58,4 @@
 [INFO 2024-08-23_20:56:43] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:56:45] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:56:47] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution.py
+[INFO 2024-08-23_20:56:48] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution.py
