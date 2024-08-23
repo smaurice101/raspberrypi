@@ -20425,3 +20425,4 @@ Applied autostash.
 [INFO 2024-08-23_18:22:50] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_18:22:52] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-23_18:22:55] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
+[INFO 2024-08-23_18:23:02] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
