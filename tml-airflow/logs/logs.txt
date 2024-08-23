@@ -21837,3 +21837,4 @@ Already up to date.
 [INFO 2024-08-23_19:25:13] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:25:15] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:25:16] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution2.py
+[INFO 2024-08-23_19:25:17] Solution file DAG in solution_template_processing_ml_dag_restapi-mytmltestsolution2.py
