@@ -11326,3 +11326,4 @@ Already up to date.
 [INFO 2024-08-23_00:30:39] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_00:30:40] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_00:31:19] Solution file DAG in solution_template_processing_ml_ai_dag.py
+[INFO 2024-08-23_00:31:20] Solution file DAG in solution_template_processing_ml_dag_restapi.py
