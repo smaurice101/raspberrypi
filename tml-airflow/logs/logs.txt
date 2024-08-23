@@ -20904,3 +20904,4 @@ Already up to date.
 [INFO 2024-08-23_18:45:27] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
 [INFO 2024-08-23_18:45:29] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
 [INFO 2024-08-23_18:45:31] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution.py
+[INFO 2024-08-23_18:45:33] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution.py
