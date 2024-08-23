@@ -119,11 +119,5 @@ def startproducingtotopic():
       except Exception as e:
           print(e)  
           pass  
-#  try:    
- #      gettmlsystemsparams()
- # except Exception as e:
-  #     tsslogging.tsslogit("MQTT producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-   #    tsslogging.git_push("/{}".format(os.environ['SREPO']),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-    
    
 dag = startproducingtotopic()
