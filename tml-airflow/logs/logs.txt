@@ -22391,3 +22391,4 @@ Already up to date.
 [INFO 2024-08-23_19:50:57] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution2.py
 [INFO 2024-08-23_19:50:59] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:51:01] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_19:51:03] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
