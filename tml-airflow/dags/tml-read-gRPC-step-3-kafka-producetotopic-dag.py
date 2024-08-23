@@ -118,12 +118,4 @@ def startproducingtotopic():
           print(e)  
           pass  
   
-  #try:  
-  #  serve()    
-  #except Exception as e:
-   #    repo=tsslogging.getrepo()
-    #   tsslogging.tsslogit("gRPC producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-     #  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-     
-
 dag = startproducingtotopic()
