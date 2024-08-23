@@ -20780,3 +20780,4 @@ Applied autostash.
 [INFO 2024-08-23_18:40:06] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution.py
 [INFO 2024-08-23_18:40:08] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_18:40:10] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
+[INFO 2024-08-23_18:40:12] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
