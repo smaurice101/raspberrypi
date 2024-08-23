@@ -20763,3 +20763,4 @@ Applied autostash.
 [INFO 2024-08-23_18:38:53] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-23_18:39:00] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
 [INFO 2024-08-23_18:39:01] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
+[INFO 2024-08-23_18:39:04] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag.py
