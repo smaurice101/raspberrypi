@@ -12702,3 +12702,4 @@ Already up to date.
 [INFO 2024-08-23_01:44:52] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
 [INFO 2024-08-23_01:44:55] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
 [INFO 2024-08-23_01:45:01] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-23_01:45:03] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
