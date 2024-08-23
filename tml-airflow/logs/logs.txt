@@ -17896,3 +17896,4 @@ Already up to date.
 [INFO 2024-08-23_16:14:47] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_16:14:49] Documentation DAG in tml-system-step-10-documentation-dag.py
 [INFO 2024-08-23_16:14:51] Getting TML system parameters in tml-system-step-1-getparams-dag.py
+[INFO 2024-08-23_16:14:53] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
