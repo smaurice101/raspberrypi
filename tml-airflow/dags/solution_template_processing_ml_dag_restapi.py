@@ -43,7 +43,7 @@ with DAG(
 # STEP 3: Produce data to topic        
   sensor_C = ExternalTaskSensor(
       task_id="solution_task_producetotopic",
-      external_dag_id="tml_RESTAPI_step_3_kafka_producetotopic_dag",
+      external_dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag",
       external_task_id="gettmlsystemsparams",
   )
 # STEP 4: Preprocess the data        
