@@ -22285,3 +22285,4 @@ Already up to date.
 [INFO 2024-08-23_19:46:08] TML Solution Studio: git commit -a Status for project mytmltestsolution2: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-23_19:46:08] TML Solution Studio: git push Status for project mytmltestsolution2: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-23_19:46:11] Visualization DAG in tml-system-step-7-kafka-visualization-dag.py
+[INFO 2024-08-23_19:46:13] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
