@@ -277,6 +277,7 @@ def startdocumentation():
     )
     print(response.json())
     tsslogging.tsslogit(response.json())
+    os.environ['tssdoc']=1
   try:
       repo=tsslogging.getrepo()
       tsslogging.tsslogit("Documentation DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
