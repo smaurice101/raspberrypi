@@ -21705,3 +21705,4 @@ Already up to date.
 [INFO 2024-08-23_19:20:46] Solution file DAG in solution_template_processing_ml_ai_dag-mytmltestsolution.py
 [INFO 2024-08-23_19:20:48] Solution file DAG in solution_template_processing_ml_ai_dag_restapi-mytmltestsolution.py
 [INFO 2024-08-23_19:20:50] Solution file DAG in solution_template_processing_dag_restapi-mytmltestsolution.py
+[INFO 2024-08-23_19:20:51] Solution file DAG in solution_template_processing_dag-mytmltestsolution.py
