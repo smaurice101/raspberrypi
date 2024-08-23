@@ -19488,3 +19488,4 @@ to recover.
 [INFO 2024-08-23_17:38:40] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:38:42] Predictions DAG in tml-system-step-6-kafka-predictions-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:38:44] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-iotfailuredetection.py
+[INFO 2024-08-23_17:38:46] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-iotfailuredetection.py
