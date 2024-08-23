@@ -11335,3 +11335,4 @@ Already up to date.
 [INFO 2024-08-23_00:31:33] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_00:31:35] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_00:31:38] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
+[INFO 2024-08-23_00:31:40] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
