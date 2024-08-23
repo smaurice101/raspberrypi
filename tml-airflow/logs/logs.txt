@@ -22464,3 +22464,4 @@ Already up to date.
 [INFO 2024-08-23_19:53:54] TML Solution Studio: git push Status for project mytmltestsolution2: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-23_19:53:56] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:53:58] Getting TML system parameters in tml-system-step-1-getparams-dag-iotfailuredetection.py
+[INFO 2024-08-23_19:54:01] Solution file DAG in solution_template_processing_dag-iotfailuredetection.py
