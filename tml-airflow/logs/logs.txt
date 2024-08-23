@@ -19794,3 +19794,4 @@ to recover.
 [INFO 2024-08-23_17:52:55] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:52:58] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
 [INFO 2024-08-23_17:53:00] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_17:53:01] Creating topics in in tml-system-step-2-kafka-createtopic-dag-iotfailuredetection.py
