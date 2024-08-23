@@ -19815,3 +19815,4 @@ to recover.
 [INFO 2024-08-23_17:54:18] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:54:20] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:54:22] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:54:24] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
