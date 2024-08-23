@@ -23013,3 +23013,4 @@ Already up to date.
 [INFO 2024-08-23_20:16:57] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_20:16:59] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_20:17:34] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution2.py
+[INFO 2024-08-23_20:17:36] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution2.py
