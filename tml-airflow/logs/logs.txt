@@ -21454,3 +21454,4 @@ Applied autostash.
 [INFO 2024-08-23_19:09:18] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:09:20] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution2.py
 [INFO 2024-08-23_19:09:22] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-iotfailuredetection.py
+[INFO 2024-08-23_19:09:25] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-iotfailuredetection.py
