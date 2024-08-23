@@ -30,12 +30,13 @@ default_args = {
 @dag(dag_id="tml_system_step_7_kafka_visualization_dag", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag"], schedule=None,catchup=False)
 def startstreaming():    
     
-  repo=tsslogging.getrepo()  
-  tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
 
   @task(task_id="startstreamingengine")  
   def startstreamingengine():
+        repo=tsslogging.getrepo()  
+        tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+        
         chip = default_args['chip']
         vipervizport = default_args['vipervizport']
        
@@ -45,7 +46,5 @@ def startstreaming():
         subprocess.run(["tmux", "new", "-d", "-s", "visualization-viperviz"])
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "'cd /Viperviz'", "ENTER"])
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "'/Viperviz/viperviz-linux-{} 0.0.0.0 {}'".format(chip,vipervizport), "ENTER"])  
-
-  startstreamingengine()      
         
 dag = startstreaming()
