@@ -20506,3 +20506,4 @@ Applied autostash.
 [INFO 2024-08-23_18:27:02] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_18:27:04] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_18:27:09] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-23_18:27:11] Predictions DAG in tml-system-step-6-kafka-predictions-dag.py
