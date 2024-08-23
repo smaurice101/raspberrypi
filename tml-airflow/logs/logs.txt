@@ -19477,3 +19477,4 @@ to recover.
 [INFO 2024-08-23_17:38:19] Solution file DAG in solution_template_processing_ml_ai_dag_restapi.py
 [INFO 2024-08-23_17:38:20] Solution file DAG in solution_template_processing_dag_restapi.py
 [INFO 2024-08-23_17:38:22] Solution file DAG in solution_template_processing_dag.py
+[INFO 2024-08-23_17:38:23] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
