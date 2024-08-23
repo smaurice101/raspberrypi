@@ -54,3 +54,4 @@
 [INFO 2024-08-23_20:56:36] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:56:38] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_20:56:40] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmltestsolution.py
+[INFO 2024-08-23_20:56:42] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmltestsolution.py
