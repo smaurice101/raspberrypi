@@ -103,3 +103,46 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-08-23_21:43:02] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    55be338d6..20d8ba246  main -> main
 [INFO 2024-08-23_21:43:02] TML Solution Studio: git add . Status: 
+[INFO 2024-08-23_21:43:02] TML Solution Studio: git commit -a Status for project mytmlsolution5: [main 70d6f710b] copying project to new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 28 files changed, 2609 insertions(+)
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ai_dag-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ai_dag_restapi-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_dag-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_dag_restapi-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_ai_dag-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_ai_dag_restapi-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_dag-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_dag_restapi-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-client-gRPC-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-1-getparams-dag-mytmlsolution5.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-10-documentation-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-2-kafka-createtopic-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-4-kafka-preprocess-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-5-kafka-machine-learning-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-6-kafka-predictions-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-7-kafka-visualization-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-8-deploy-solution-to-docker-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-9-privategpt_qdrant-dag-mytmlsolution5.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml_grpc.proto
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml_grpc_pb2.py
+ create mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml_grpc_pb2_grpc.py
+ create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/tsslogging.py
+[INFO 2024-08-23_21:43:03] TML Solution Studio: git push Status for project mytmlsolution5: To https://github.com/smaurice101/raspberrypi.git
+   20d8ba246..70d6f710b  main -> main
