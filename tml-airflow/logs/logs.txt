@@ -21335,3 +21335,10 @@ Already up to date.
 [INFO 2024-08-23_19:04:47] Creating topics in in tml-system-step-2-kafka-createtopic-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:04:49] Getting TML system parameters in tml-system-step-1-getparams-dag-mytmltestsolution.py
 [INFO 2024-08-23_19:04:51] Solution file DAG in solution_template_processing_ai_dag-mytmltestsolution.py
+[INFO 2024-08-23_19:04:51] TML Solution Studio: TML Project Creation: Copying old project : mytmltestsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/mytmltestsolution2
+[INFO 2024-08-23_19:04:52] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch              main       -> FETCH_HEAD
+Created autostash: 7efb0bfe
+Current branch main is up to date.
+Applied autostash.
+[INFO 2024-08-23_19:04:52] Solution file DAG in solution_template_processing_ai_dag_restapi-mytmltestsolution.py
