@@ -19756,3 +19756,4 @@ to recover.
 [INFO 2024-08-23_17:51:33] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:51:35] Machine Learning DAG in tml-system-step-5-kafka-machine-learning-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:51:37] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:51:39] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmltestsolution.py
