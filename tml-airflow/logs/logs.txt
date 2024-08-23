@@ -15721,3 +15721,4 @@ Already up to date.
 [INFO 2024-08-23_14:20:56] Getting TML system parameters in tml-system-step-1-getparams-dag.py
 [INFO 2024-08-23_14:20:58] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag.py
 [INFO 2024-08-23_14:21:00] Localfile producing DAG in tml-read-LOCALFILE-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_14:21:03] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
