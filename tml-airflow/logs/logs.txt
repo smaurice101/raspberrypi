@@ -13700,3 +13700,4 @@ Already up to date.
 [INFO 2024-08-23_02:36:03] RESTAPI producing DAG in tml-read-RESTAPI-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_02:36:05] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_02:36:06] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_02:36:41] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
