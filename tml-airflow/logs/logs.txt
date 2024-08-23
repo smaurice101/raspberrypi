@@ -11816,3 +11816,4 @@ Already up to date.
 [INFO 2024-08-23_00:57:10] Preprocessing DAG in tml-system-step-4-kafka-preprocess-dag.py
 [INFO 2024-08-23_00:57:12] Creating topics in in tml-system-step-2-kafka-createtopic-dag.py
 [INFO 2024-08-23_00:57:14] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-23_00:57:16] Getting TML system parameters in tml-system-step-1-getparams-dag.py
