@@ -46,9 +46,6 @@ def startproducingtotopic():
   VIPERHOST=""
   VIPERPORT=""
 
-  repo=tsslogging.getrepo()   
-  tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
     
   class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
@@ -67,6 +64,9 @@ def startproducingtotopic():
     
   @task(task_id="serve")  
   def serve():
+    repo=tsslogging.getrepo()   
+    tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
 
     ti.xcom_push(key='PRODUCETYPE',value='gRPC')
     ti.xcom_push(key='TOPIC',value=default_args['topics'])
@@ -118,12 +118,12 @@ def startproducingtotopic():
           print(e)  
           pass  
   
-  try:  
-    serve()    
-  except Exception as e:
-       repo=tsslogging.getrepo()
-       tsslogging.tsslogit("gRPC producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+  #try:  
+  #  serve()    
+  #except Exception as e:
+   #    repo=tsslogging.getrepo()
+    #   tsslogging.tsslogit("gRPC producing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+     #  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
      
 
 dag = startproducingtotopic()
