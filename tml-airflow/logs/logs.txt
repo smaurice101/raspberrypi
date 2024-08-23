@@ -21601,3 +21601,4 @@ Applied autostash.
 [INFO 2024-08-23_19:15:58] Documentation DAG in tml-system-step-10-documentation-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:16:00] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-iotfailuredetection.py
 [INFO 2024-08-23_19:16:02] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-iotfailuredetection.py
+[INFO 2024-08-23_19:16:04] Visualization DAG in tml-system-step-7-kafka-visualization-dag-iotfailuredetection.py
