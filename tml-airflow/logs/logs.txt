@@ -13339,3 +13339,4 @@ Already up to date.
 [INFO 2024-08-23_02:17:56] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_02:18:34] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag.py
 [INFO 2024-08-23_02:18:36] Documentation DAG in tml-system-step-10-documentation-dag.py
+[INFO 2024-08-23_02:18:38] Getting TML system parameters in tml-system-step-1-getparams-dag.py
