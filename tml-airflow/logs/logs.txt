@@ -19694,3 +19694,4 @@ to recover.
 [INFO 2024-08-23_17:48:08] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_17:48:10] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_17:48:48] Documentation DAG in tml-system-step-10-documentation-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:48:49] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution.py
