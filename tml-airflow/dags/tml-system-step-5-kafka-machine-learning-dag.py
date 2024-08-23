@@ -61,11 +61,7 @@ def startmachinelearning():
   HPDEPORT = ''
 
   maintopic =  default_args['preprocess_data_topic']  
-  mainproducerid = default_args['producerid']     
-  repo=tsslogging.getrepo()
-  tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-                
+  mainproducerid = default_args['producerid']                     
         
   @task(task_id="performSupervisedMachineLearning")  
   def performSupervisedMachineLearning(maintopic):
@@ -151,6 +147,10 @@ def startmachinelearning():
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
   if VIPERHOST != "":
+     repo=tsslogging.getrepo()
+     tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+    
      while True:
        try:     
          performSupervisedMachineLearning(maintopic)

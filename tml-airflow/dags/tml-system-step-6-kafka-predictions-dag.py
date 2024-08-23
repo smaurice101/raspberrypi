@@ -63,10 +63,6 @@ def startpredictions():
   maintopic=default_args['preprocess_data_topic']
   predictiontopic=default_args['ml_prediction_topic']
 
-  repo=tsslogging.getrepo()
-  tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-
 
   @task(task_id="performPredictions")  
   def performPrediction(maintopic):
@@ -140,6 +136,10 @@ def startpredictions():
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
   if VIPERHOST != "":
+    repo=tsslogging.getrepo()
+    tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+    
     while True:
       try:  
         performPrediction(maintopic)      
