@@ -19641,3 +19641,4 @@ to recover.
 [INFO 2024-08-23_17:46:10] PrivateGPT DAG in tml-system-step-9-privategpt_qdrant-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:46:11] Docker DAG in tml-system-step-8-deploy-solution-to-docker-dag-mytmltestsolution.py
 [INFO 2024-08-23_17:46:13] Visualization DAG in tml-system-step-7-kafka-visualization-dag-mytmltestsolution.py
+[INFO 2024-08-23_17:46:16] Predictions DAG in tml-system-step-6-kafka-predictions-dag-mytmltestsolution.py
