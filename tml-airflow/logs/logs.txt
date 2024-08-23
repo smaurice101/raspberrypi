@@ -21757,3 +21757,4 @@ Already up to date.
 [INFO 2024-08-23_19:22:09] TML Solution Studio: git push Status for project mytmltestsolution: fatal: not a git repository (or any of the parent directories): .git
 [INFO 2024-08-23_19:22:09] MQTT producing DAG in tml-read-MQTT-step-3-kafka-producetotopic-dag.py
 [INFO 2024-08-23_19:22:11] gRPC producing DAG in tml-read-gRPC-step-3-kafka-producetotopic-dag.py
+[INFO 2024-08-23_19:22:48] Solution file DAG in solution_template_processing_ml_dag_restapi-mytmltestsolution.py
