@@ -3,6 +3,12 @@
 import datetime
 from datetime import timezone 
 from git import Repo
+import socketserver
+
+def getfreeport():
+  with socketserver.TCPServer(("localhost", 0), None) as s:
+    free_port = s.server_address
+  return free_port[1]
 
 def getrepo(filename='/tmux/reponame.txt'):
   with open(filename, "r") as file1:
