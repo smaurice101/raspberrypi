@@ -23,7 +23,7 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="container_run_stop_process_dag", default_args=default_args, tags=["container_run_stop_process_dag"], schedule=None,  catchup=False)
+@dag(dag_id="container_run_stop_process_dag_myawesometmlsolution", default_args=default_args, tags=["container_run_stop_process_dag_myawesometmlsolution"], schedule=None,  catchup=False)
 def containerprocess():
     # Define tasks
   
