@@ -410,3 +410,48 @@ After doing this, you may fix the identity used for this commit with:
  * branch            main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-08-24_19:12:19] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
+[INFO 2024-08-24_19:12:19] TML Solution Studio: git commit -a Status for project myawesometmlsolution: [main b0d61c7] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 29 files changed, 5 insertions(+), 2772 deletions(-)
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/docker_run_stop-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ai_dag-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ai_dag_restapi-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_dag-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_dag_restapi-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_ai_dag-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_ai_dag_restapi-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_dag-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_dag_restapi-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-1-getparams-dag-myawesometmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-10-documentation-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-2-kafka-createtopic-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-4-kafka-preprocess-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-5-kafka-machine-learning-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-6-kafka-predictions-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-7-kafka-visualization-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-9-privategpt_qdrant-dag-myawesometmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/tsslogging.py
+[INFO 2024-08-24_19:12:20] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   b86e880..b0d61c7  main -> main
+[INFO 2024-08-24_19:12:20] TML Solution Studio: git add . Status: 
