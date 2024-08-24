@@ -15,13 +15,13 @@ sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'solution_dag_to_trigger' : 'solution_preprocessing_dag',   # << Enter the name of the Solution DAG to trigger when container runs
- 'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
+ 'start_date': datetime (2023, 1, 1),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag", default_args=default_args, tags=["tml_system_step_8_deploy_solution_to_docker_dag"], schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag", default_args=default_args, tags=["tml_system_step_8_deploy_solution_to_docker_dag"], start_date=datetime(2023, 1, 1), schedule=None,  catchup=False)
 def starttmldeploymentprocess():
     # Define tasks
 

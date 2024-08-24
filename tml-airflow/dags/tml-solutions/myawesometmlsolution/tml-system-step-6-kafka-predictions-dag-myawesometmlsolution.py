@@ -39,14 +39,14 @@ default_args = {
   'topicid' : -1,   # << leave as is
   'pathtoalgos' : '', # << this is specified in fullpathtotrainingdata in STEP 5
   'array' : 0, # 0=do not save as array, 1=save as array    
-  'start_date': datetime (2024, 6, 29),    # <<< *** Change as needed   
+  'start_date': datetime (2023, 1, 1),    # <<< *** Change as needed   
   'retries': 1,   # <<< *** Change as needed   
     
 }
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_6_kafka_predictions_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_6_kafka_predictions_dag_myawesometmlsolution"], schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_6_kafka_predictions_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_6_kafka_predictions_dag_myawesometmlsolution"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
 def startpredictions():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""

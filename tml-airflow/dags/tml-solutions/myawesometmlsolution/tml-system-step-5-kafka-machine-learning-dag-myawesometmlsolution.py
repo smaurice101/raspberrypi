@@ -44,14 +44,14 @@ default_args = {
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
   'coeftoprocess' : '', # indicate the index of the coefficients to process i.e. 0,1,2 For example, for a 3 estimated parameters 0=constant, 1,2 are the other estmated paramters
   'coefsubtopicnames' : '',  # Give the coefficients a name: constant,elasticity,elasticity2    
-  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
+  'start_date': datetime (2023, 1, 1),   # <<< *** Change as needed   
   'retries': 1,   # <<< *** Change as needed   
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_5_kafka_machine_learning_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_5_kafka_machine_learning_dag_myawesometmlsolution"], schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_5_kafka_machine_learning_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_5_kafka_machine_learning_dag_myawesometmlsolution"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
 def startmachinelearning():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""

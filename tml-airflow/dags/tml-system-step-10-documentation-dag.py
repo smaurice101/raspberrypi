@@ -16,7 +16,7 @@ sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {    
- 'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
+ 'start_date': datetime (2023, 1, 1),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
  'conf_project' : 'Transactional Machine Learning (TML)',
  'conf_copyright' : '2024, Otics Advanced Analytics, Incorporated - For Support email support@otics.ca',
@@ -27,7 +27,7 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_10_documentation_dag", default_args=default_args, tags=["tml_system_step_10_documentation_dag"], schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_10_documentation_dag", default_args=default_args, tags=["tml_system_step_10_documentation_dag"], start_date=datetime(2023, 1, 1), schedule=None,  catchup=False)
 def startdocumentation():
     # Define tasks
 

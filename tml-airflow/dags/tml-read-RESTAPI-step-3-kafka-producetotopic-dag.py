@@ -29,7 +29,7 @@ default_args = {
   'rest_port' : 9001,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
   'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : -999, # <<< ********* do not modify          
-  'start_date': datetime (2024, 6, 29),
+  'start_date': datetime (2023, 1, 1),
   'retries': 1,
     
 }
@@ -37,7 +37,7 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag"], schedule=None,catchup=False)
+@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""

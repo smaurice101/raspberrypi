@@ -66,7 +66,7 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_1_getparams_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_1_getparams_dag_myawesometmlsolution"], schedule=None, start_date=datetime.datetime(2022, 3, 4), catchup=False)
+@dag(dag_id="tml_system_step_1_getparams_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_1_getparams_dag_myawesometmlsolution"], schedule=None, start_date=datetime.datetime(2023, 1, 1), catchup=False)
 def tmlparams():
     # Define tasks
   basedir = "/"
@@ -177,8 +177,7 @@ def tmlparams():
 
   @task(task_id="getparams")
   def getparams():
-    try:    
-     args = default_args   
+     args = default_args    
      VIPERHOST = ""
      VIPERPORT = ""
      HTTPADDR = "http://"
@@ -188,11 +187,11 @@ def tmlparams():
      HPDEHOSTPREDICT = ""
      HPDEPORTPREDICT = ""
     
-     with open("/Viper-produce/admin.tok", "r") as f:
+     with open(basedir + "/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
      if VIPERHOST=="":
-        with open('/Viper-produce/viper.txt', 'r') as f:
+        with open(basedir + '/Viper-produce/viper.txt', 'r') as f:
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
@@ -224,10 +223,6 @@ def tmlparams():
 
                  
      updateviperenv()
-    except Exception as e:
-      repo = tsslogging.getrepo()
-      tsslogging.tsslogit("Get params DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-      tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-    
+     
     
 dag = tmlparams()

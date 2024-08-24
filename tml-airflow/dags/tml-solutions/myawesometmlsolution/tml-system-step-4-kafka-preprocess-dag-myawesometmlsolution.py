@@ -38,7 +38,7 @@ default_args = {
   'pathtotmlattrs' : '', # Leave blank         
   'jsoncriteria' : '', # <<< **** Specify your json criteria  refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'identifier' : 'TML solution',   # <<< *** Change as needed   
-  'start_date': datetime (2024, 6, 29),  # <<< *** Change as needed   
+  'start_date': datetime (2023, 1, 1),  # <<< *** Change as needed   
   'retries': 1,  # <<< *** Change as needed   
     
 }
@@ -46,7 +46,7 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution"], schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
 def startprocessing():
   # This sets the lat/longs for the IoT devices so it can be map
   VIPERTOKEN=""

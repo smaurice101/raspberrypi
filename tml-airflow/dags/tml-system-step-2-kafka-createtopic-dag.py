@@ -28,7 +28,7 @@ default_args = {
   'ml_data_topic' : 'ml-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'prediction_data_topic' : 'prediction-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'description' : 'Topics to store iot data',  
-  'start_date': datetime (2024, 6, 29),
+  'start_date': datetime (2023, 1, 1),
   'retries': 1,
     
 }
@@ -36,7 +36,7 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_2_kafka_createtopic_dag", default_args=default_args, tags=["tml_system_step_2_kafka_createtopic_dag"], schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_2_kafka_createtopic_dag", default_args=default_args, tags=["tml_system_step_2_kafka_createtopic_dag"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
 def startkafkasetup():
   @task(task_id="setupkafkatopics")
   def setupkafkatopic(args):
