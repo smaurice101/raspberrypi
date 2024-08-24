@@ -493,3 +493,47 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-08-24_19:12:51] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    cf096bd..7795901  main -> main
 [INFO 2024-08-24_19:12:51] TML Solution Studio: git add . Status: 
+[INFO 2024-08-24_19:12:51] TML Solution Studio: git commit -a Status for project myawesometmlsolution: [main 015518f] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 29 files changed, 2789 insertions(+)
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/docker_run_stop-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ai_dag-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ai_dag_restapi-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_dag-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_dag_restapi-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_ai_dag-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_ai_dag_restapi-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_dag-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/solution_template_processing_ml_dag_restapi-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-client-gRPC-step-3-kafka-producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-MQTT-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-read-gRPC-step-3-kafka-producetotopic-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-1-getparams-dag-myawesometmlsolution.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-10-documentation-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-2-kafka-createtopic-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-4-kafka-preprocess-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-5-kafka-machine-learning-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-6-kafka-predictions-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-7-kafka-visualization-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-8-deploy-solution-to-docker-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml-system-step-9-privategpt_qdrant-dag-myawesometmlsolution.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml_grpc.proto
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml_grpc_pb2.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution/tml_grpc_pb2_grpc.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/tsslogging.py
+[INFO 2024-08-24_19:12:52] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
+   7795901..015518f  main -> main
