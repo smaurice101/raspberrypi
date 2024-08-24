@@ -146,3 +146,9 @@ After doing this, you may fix the identity used for this commit with:
  create mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/tsslogging.py
 [INFO 2024-08-23_21:43:03] TML Solution Studio: git push Status for project mytmlsolution5: To https://github.com/smaurice101/raspberrypi.git
    20d8ba246..70d6f710b  main -> main
+[ERROR 2024-08-24_16:52:17] TML Solution Studio: Project mytmlsolution4 does not exist.  You cannot copy from a non-esistent project.  Create mytmlsolution4 first, then you can copy it.
+[INFO 2024-08-24_16:53:51] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution
+[INFO 2024-08-24_16:53:51] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch                main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-24_16:54:15] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution

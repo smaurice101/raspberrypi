@@ -37,15 +37,21 @@ def starttmldeploymentprocess():
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-        
-       cname = default_args['containername'] 
-       if cname == "":
-          cname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
+       sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
+       if 'CHIP' in os.environ:
+          chip = os.environ['CHIP']
+       else:
+          chip=""
+       if chip.lower() == "arm64":  
+          cname = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
+       else:    
+          cname = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
+    
        scid = tsslogging.getrepo('/tmux/cidname.txt')
        ti.xcom_push(key='containername',value=cname)
        cid = os.environ['SCID']
-       subprocess.call("docker commit {} {}/{}".format(cid,os.environ['DOCKERUSERNAME'],cname), shell=True, stdout=output, stderr=output)
-       subprocess.call("docker push {}/{}".format(os.environ['DOCKERUSERNAME'],cname), shell=True, stdout=output, stderr=output)  
+       subprocess.call("docker commit {} {}".format(cid,cname), shell=True, stdout=output, stderr=output)
+       subprocess.call("docker push {}".format(cname), shell=True, stdout=output, stderr=output)  
        os.environ['tssbuild']=1
      except Exception as e:
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             

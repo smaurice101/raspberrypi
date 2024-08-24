@@ -15,7 +15,8 @@ sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'solution_airflow_port' : '', # << Leave blank if you waant TSS to choose a free port automatically  
- 'solution_viperviz_port' : '', # << Leave blank if you waant TSS to choose a free port automatically       
+ 'solution_viperviz_port' : '', # << Leave blank if you waant TSS to choose a free port automatically    
+ 'instances': 1,  # << Number of instances of your container 
  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
 }
@@ -25,6 +26,7 @@ default_args = {
 @dag(dag_id="container_run_stop_process_dag", default_args=default_args, tags=["container_run_stop_process_dag"], schedule=None,  catchup=False)
 def containerprocess():
     # Define tasks
+  
   
   def getfreeport():
         airflowport=default_args['solution_airflow_port']
@@ -40,7 +42,6 @@ def containerprocess():
             
         return airflowport, vipervizport    
     
-  @task(task_id="run")
   def run():
     if 'CHIP' in os.environ:
          chip = os.environ['CHIP']
@@ -63,18 +64,12 @@ def containerprocess():
                  .format(vipervizport,os.environ['GITUSERNAME'],os.environ['GITPASSWORD'],os.environ['GITREPOURL'], \
                   airflowport,containername))        
     subprocess.call(dockerrun, shell=True, stdout=output, stderr=output)
-    key="DOCKERRUN-{}".format(sname)
-    
-    os.environ[key]=dockerrun
     
     maxtime = 300 # 2 min
     s=""
     iter=0
     while True:
-      if chip != "":  
-        s=subprocess.check_output("/tmux/dockerid.sh {}/{}-{}".format(os.environ['DOCKERUSERNAME'],sname,chip), shell=True)
-      else:  
-        s=subprocess.check_output("/tmux/dockerid.sh {}/{}".format(os.environ['DOCKERUSERNAME'],sname), shell=True)
+      s=subprocess.check_output("/tmux/dockerid.sh {}".format(containername), shell=True)
 
       s=s.rstrip()
       s=s.decode("utf-8")
@@ -91,11 +86,21 @@ def containerprocess():
         os.environ[containername]=s
     else:
         os.environ[containername]=""
-        
+
+    return dockerrun
+
   @task(task_id="stop")
   def stop():
+    if 'CHIP' in os.environ:
+         chip = os.environ['CHIP']
+    else:
+         chip=""
+    if chip.lower() == "arm64":  
+        containername = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
+    else:    
+        containername = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
+
     sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")  
-    containername = os.environ['DOCKERUSERNAME']  + "/" + sname
     if os.environ[containername] == "":        
       repo = tsslogging.getrepo() 
       tsslogging.tsslogit("Your container {} is not running".format(containername), "WARN" )                     
@@ -103,8 +108,21 @@ def containerprocess():
     else:
       tsslogging.tsslogit("Stopping container {} in {}".format(containername,os.path.basename(__file__)), "INFO" )                     
       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
-      dockerstop = "docker stop {}".format(os.environ[containername])        
+      dockerstop = "docker container stop $(docker container ls -q --filter name={}*)".format(os.environ[containername])        
       subprocess.call(dockerstop, shell=True, stdout=output, stderr=output)
-        
+  
+  @task(task_id="startruns")
+  def startruns():        
+    cnum = int(default_args['instances'])
+    sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")    
+    
+    runsapp = []
+    for i in range(0,cnum):
+        dr=run()
+        runsapp.append(dr)
+    
+    key="DOCKERRUN-{}".format(sname)    
+    os.environ[key]=",".join(runsapp)
+    
 
 dag = containerprocess()
