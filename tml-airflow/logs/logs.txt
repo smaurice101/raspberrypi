@@ -152,3 +152,155 @@ After doing this, you may fix the identity used for this commit with:
  * branch                main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-08-24_16:54:15] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
+[INFO 2024-08-24_16:54:15] TML Solution Studio: git commit -a Status for project myawesometmlsolution: [main 04d0ad10c] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 141 files changed, 65 insertions(+), 12983 deletions(-)
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_ai_dag-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_ai_dag_restapi-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_dag-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_dag_restapi-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_ml_ai_dag-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_ml_ai_dag_restapi-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_ml_dag-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/solution_template_processing_ml_dag_restapi-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-1-getparams-dag-mytmlsolution.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-10-documentation-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-2-kafka-createtopic-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-4-kafka-preprocess-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-5-kafka-machine-learning-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-6-kafka-predictions-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-7-kafka-visualization-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-8-deploy-solution-to-docker-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml-system-step-9-privategpt_qdrant-dag-mytmlsolution.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution/tsslogging.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_ai_dag-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_ai_dag_restapi-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_dag-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_dag_restapi-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_ml_ai_dag-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_ml_ai_dag_restapi-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_ml_dag-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/solution_template_processing_ml_dag_restapi-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-1-getparams-dag-mytmlsolution2.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-10-documentation-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-2-kafka-createtopic-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-4-kafka-preprocess-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-5-kafka-machine-learning-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-6-kafka-predictions-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-7-kafka-visualization-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-8-deploy-solution-to-docker-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml-system-step-9-privategpt_qdrant-dag-mytmlsolution2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution2/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution2/tsslogging.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_ai_dag-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_ai_dag_restapi-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_dag-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_dag_restapi-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_ml_ai_dag-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_ml_ai_dag_restapi-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_ml_dag-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/solution_template_processing_ml_dag_restapi-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-1-getparams-dag-mytmlsolution3.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-10-documentation-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-2-kafka-createtopic-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-4-kafka-preprocess-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-5-kafka-machine-learning-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-6-kafka-predictions-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-7-kafka-visualization-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-8-deploy-solution-to-docker-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml-system-step-9-privategpt_qdrant-dag-mytmlsolution3.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution3/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution3/tsslogging.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_ai_dag-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_ai_dag_restapi-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_dag-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_dag_restapi-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_ml_ai_dag-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_ml_ai_dag_restapi-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_ml_dag-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/solution_template_processing_ml_dag_restapi-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-1-getparams-dag-mytmlsolution4.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-10-documentation-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-2-kafka-createtopic-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-4-kafka-preprocess-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-5-kafka-machine-learning-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-6-kafka-predictions-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-7-kafka-visualization-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-8-deploy-solution-to-docker-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml-system-step-9-privategpt_qdrant-dag-mytmlsolution4.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution4/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution4/tsslogging.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ai_dag-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ai_dag_restapi-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_dag-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_dag_restapi-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_ai_dag-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_ai_dag_restapi-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_dag-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/solution_template_processing_ml_dag_restapi-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-client-RESTAPI-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-client-gRPC-step-3-kafka-producetotopic.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-LOCALFILE-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-MQTT-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-RESTAPI-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-read-gRPC-step-3-kafka-producetotopic-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-1-getparams-dag-mytmlsolution5.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-10-documentation-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-2-kafka-createtopic-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-4-kafka-preprocess-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-5-kafka-machine-learning-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-6-kafka-predictions-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-7-kafka-visualization-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-8-deploy-solution-to-docker-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml-system-step-9-privategpt_qdrant-dag-mytmlsolution5.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml_grpc.proto
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml_grpc_pb2.py
+ delete mode 100755 tml-airflow/dags/tml-solutions/mytmlsolution5/tml_grpc_pb2_grpc.py
+ delete mode 100644 tml-airflow/dags/tml-solutions/mytmlsolution5/tsslogging.py
+[INFO 2024-08-24_16:54:15] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   260a6b63b..04d0ad10c  main -> main
+[INFO 2024-08-24_16:54:15] TML Solution Studio: git add . Status: 
