@@ -370,3 +370,21 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
  * branch            main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-08-24_19:11:15] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
+[INFO 2024-08-24_19:11:16] TML Solution Studio: git commit -a Status for project myawesometmlsolution: [main 0fcc6f4] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 4 files changed, 45 insertions(+), 141 deletions(-)
+ delete mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/docker_run_stop.py
+[INFO 2024-08-24_19:11:17] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   473e330..0fcc6f4  main -> main
+[INFO 2024-08-24_19:11:17] TML Solution Studio: git add . Status: 
