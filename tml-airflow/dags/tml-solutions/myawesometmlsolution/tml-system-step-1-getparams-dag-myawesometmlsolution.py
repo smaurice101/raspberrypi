@@ -176,8 +176,8 @@ def tmlparams():
 
 
   @task(task_id="getparams")
-  def getparams(args):
-        
+  def getparams():
+     args = default_args   
      VIPERHOST = ""
      VIPERPORT = ""
      HTTPADDR = "http://"
