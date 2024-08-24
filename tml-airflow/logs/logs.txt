@@ -348,3 +348,25 @@ After doing this, you may fix the identity used for this commit with:
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/tsslogging.py
 [INFO 2024-08-24_16:54:16] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
    04d0ad10c..60ea9a3e0  main -> main
+[INFO 2024-08-24_18:55:18] TML Solution Studio Started: DOCKERUSERNAME=maadsdocker, GITUSERNAME=smaurice101, GITREPOURL=https://github.com/smaurice101/raspberrypi.git, AIRFLOWPORT=9000
+[INFO 2024-08-24_18:55:18] TML Solution Studio: Docker Login Status: WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[INFO 2024-08-24_18:55:18] TML Solution Studio: Github Config Status: core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/smaurice101/raspberrypi.git
+remote.origin.fetch=+refs/heads/main:refs/remotes/origin/main
+remote.origin.pushurl=https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+[INFO 2024-08-24_18:55:18] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
+origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-08-24_19:10:51] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution
+[INFO 2024-08-24_19:10:51] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-24_19:11:15] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution

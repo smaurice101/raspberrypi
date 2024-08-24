@@ -227,13 +227,6 @@ def startdocumentation():
     chip = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="chip")
     rollbackoffset = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="rollbackoffset")
 
-    subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--topic--/{}/g".format(topic), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--secure--/{}/g".format(secure), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--offset--/{}/g".format(offset), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--append--/{}/g".format(append), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset), "/{}/docs/source/details.rst".format(sname)])
     if 'CHIP' in os.environ:
          chip = os.environ['CHIP']
     else:
@@ -242,6 +235,14 @@ def startdocumentation():
         containername = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
     else:    
         containername = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
+    
+    subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--topic--/{}/g".format(topic), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--secure--/{}/g".format(secure), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--offset--/{}/g".format(offset), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--append--/{}/g".format(append), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset), "/{}/docs/source/details.rst".format(sname)])
 
     cname = ti.xcom_pull(dag_id='tml_system_step_8_deploy_solution_to_docker_dag',task_ids='dockerit',key="containername")
     key="DOCKERRUN-{}".format(sname)    
@@ -251,9 +252,16 @@ def startdocumentation():
 
     subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
     
-    vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
-    subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
+    key="VISUALRUN-{}".format(sname)    
+    visualrun=os.environ[key]
+    visualrun=visualrun.replace(",","\n\n")
+    subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
 
+    key="AIRFLOWRUN-{}".format(sname)    
+    airflowrun=os.environ[key]
+    airflowrun=visualrun.replace(",","\n\n")
+    subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
+    
     repo = tsslogging.getrepo() 
     gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(repo,sname)
     
