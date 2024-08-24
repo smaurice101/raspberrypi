@@ -56,6 +56,13 @@ def containerprocess():
     airflowport,vipervizport=getfreeport()    
     
     sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")    
+    topic = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="topic")
+    secure = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="secure")
+    offset = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="offset")
+    append = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="append")
+    chip = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="chip")
+    rollbackoffset = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="rollbackoffset")
+
     repo = tsslogging.getrepo()
     tsslogging.tsslogit("Executing docker run in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
@@ -64,6 +71,8 @@ def containerprocess():
                  .format(vipervizport,os.environ['GITUSERNAME'],os.environ['GITPASSWORD'],os.environ['GITREPOURL'], \
                   airflowport,containername))        
     subprocess.call(dockerrun, shell=True, stdout=output, stderr=output)
+    vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
+    airflowurl = "http://localhost:{}".format(airflowport)
     
     maxtime = 300 # 2 min
     s=""
@@ -87,7 +96,7 @@ def containerprocess():
     else:
         os.environ[containername]=""
 
-    return dockerrun
+    return dockerrun,vizurl,airflowurl
 
   @task(task_id="stop")
   def stop():
@@ -114,15 +123,24 @@ def containerprocess():
   @task(task_id="startruns")
   def startruns():        
     cnum = int(default_args['instances'])
-    sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")    
-    
+    sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")        
+        
     runsapp = []
+    visualapp = []
+    airflowapp = []
     for i in range(0,cnum):
-        dr=run()
+        dr,viz,air=run()
         runsapp.append(dr)
+        visualapp.append(viz)
+        airflowapp.append(air)
     
     key="DOCKERRUN-{}".format(sname)    
     os.environ[key]=",".join(runsapp)
+    key="VISUALRUN-{}".format(sname)    
+    os.environ[key]=",".join(visualapp)
+    key="AIRFLOWRUN-{}".format(sname)    
+    os.environ[key]=",".join(airflowapp)
+
     
 
 dag = containerprocess()

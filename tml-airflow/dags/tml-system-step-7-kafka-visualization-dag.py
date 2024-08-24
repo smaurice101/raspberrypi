@@ -17,7 +17,6 @@ default_args = {
   'vipervizport' : 9005,   # <<< *** Port where viperviz is listening
   'offset' : -1,    # <<< *** -1 indicates to read from the last offset always
   'append' : 0,   # << ** Do not append new data in the browser
-  'chip' : "amd64", # << ** windows/linux=amd64, MAC/linux=arm64   
   'rollbackoffset' : 500, # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
   'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
   'retries': 1,   # <<< *** Change as needed   
@@ -36,9 +35,12 @@ def startstreaming():
         repo=tsslogging.getrepo()  
         tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-        
-        chip = default_args['chip']
-        vipervizport = default_args['vipervizport']
+        chip = "amd64"         
+        if 'CHIP' in os.environ:
+            chip = os.environ['CHIP']
+            chip = chip.tolower()
+       
+        vipervizport = os.environ['VIPERVIZPORT']
        
         ti.xcom_push(key='VIPERVIZPORT',value=vipervizport)
         # start the viperviz on Vipervizport
