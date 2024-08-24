@@ -188,11 +188,11 @@ def tmlparams():
      HPDEHOSTPREDICT = ""
      HPDEPORTPREDICT = ""
     
-     with open(basedir + "/Viper-produce/admin.tok", "r") as f:
+     with open("/Viper-produce/admin.tok", "r") as f:
         VIPERTOKEN=f.read()
 
      if VIPERHOST=="":
-        with open(basedir + '/Viper-produce/viper.txt', 'r') as f:
+        with open('/Viper-produce/viper.txt', 'r') as f:
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
