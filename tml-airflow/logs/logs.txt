@@ -563,3 +563,19 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-08-24_19:23:36] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    c911273..a5e7ad7  main -> main
 [INFO 2024-08-24_19:23:36] TML Solution Studio: git add . Status: 
+[INFO 2024-08-24_19:23:36] TML Solution Studio: git commit -a Status for project myawesometmlsolution: [main 9bfc730] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 17 insertions(+)
+[INFO 2024-08-24_19:23:37] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
+   a5e7ad7..9bfc730  main -> main
