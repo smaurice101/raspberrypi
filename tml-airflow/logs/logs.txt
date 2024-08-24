@@ -579,3 +579,8 @@ After doing this, you may fix the identity used for this commit with:
  1 file changed, 17 insertions(+)
 [INFO 2024-08-24_19:23:37] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
    a5e7ad7..9bfc730  main -> main
+[INFO 2024-08-24_19:25:05] TML Solution Studio: TML Project Creation: Copying old project : myawesometmlsolution  ---> To create new project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution2
+[INFO 2024-08-24_19:25:05] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-08-24_19:25:30] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution2
