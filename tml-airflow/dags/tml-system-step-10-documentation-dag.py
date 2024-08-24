@@ -269,6 +269,10 @@ def startdocumentation():
     readthedocs = "https://{}.readthedocs.io".format(sname)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
+    key = "trigger-{}".format(sname)
+    triggername=os.environ[key]
+    subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
+    
     # Kick off shell script 
     tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
     

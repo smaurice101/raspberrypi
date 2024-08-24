@@ -177,6 +177,7 @@ def tmlparams():
 
   @task(task_id="getparams")
   def getparams():
+    try:    
      args = default_args   
      VIPERHOST = ""
      VIPERPORT = ""
@@ -223,6 +224,10 @@ def tmlparams():
 
                  
      updateviperenv()
-     
+    except Exception as e:
+      repo = tsslogging.getrepo()
+      tsslogging.tsslogit("Get params DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+      tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+    
     
 dag = tmlparams()

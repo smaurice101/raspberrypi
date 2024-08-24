@@ -14,9 +14,7 @@ sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
- 'owner': 'Sebastian Maurice',   # <<< *** Change as needed   
- 'containername' : '', # << Specify the name of the container (NO SPACES IN NAME)- if BLANK the solutionname will be used
- 'solution_airflowport' : '',   
+ 'solution_dag_to_trigger' : 'solution_preprocessing_dag',   # << Enter the name of the Solution DAG to trigger when container runs
  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
 }
@@ -50,6 +48,9 @@ def starttmldeploymentprocess():
        scid = tsslogging.getrepo('/tmux/cidname.txt')
        ti.xcom_push(key='containername',value=cname)
        cid = os.environ['SCID']
+       tsslogging.tmuxchange(default_args['solution_dag_to_trigger'])
+       key = "trigger-{}".format(sname)
+       os.environ[key] = default_args['solution_dag_to_trigger']
        subprocess.call("docker commit {} {}".format(cid,cname), shell=True, stdout=output, stderr=output)
        subprocess.call("docker push {}".format(cname), shell=True, stdout=output, stderr=output)  
        os.environ['tssbuild']=1
