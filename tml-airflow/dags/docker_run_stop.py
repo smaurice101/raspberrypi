@@ -66,7 +66,7 @@ def containerprocess():
     repo = tsslogging.getrepo()
     tsslogging.tsslogit("Executing docker run in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
-    dockerrun = ("docker run -d --net=host --env VIPERVIZPORT={} --env GITUSERNAME={} " \
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env VIPERVIZPORT={} --env GITUSERNAME={} " \
                  "--env GITPASSWORD={}  --env GITREPOURL={} --env AIRFLOWPORT={} {}" \
                  .format(vipervizport,os.environ['GITUSERNAME'],os.environ['GITPASSWORD'],os.environ['GITREPOURL'], \
                   airflowport,containername))        
