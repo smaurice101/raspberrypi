@@ -37,6 +37,10 @@ with DAG(
       external_dag_id="tml_system_step_2_kafka_createtopic_dag_myawesometmlsolution",
       external_task_id="setupkafkatopics",
   )
+  start_task2 = BashOperator(
+    task_id="Completed_TML_Setup - Now Spawn Main Processes",
+    bash_command="echo 'Start task Completed'",
+  )
 # STEP 3: Produce data to topic        
   sensor_C = ExternalTaskSensor(
       task_id="solution_task_producetotopic",
@@ -60,6 +64,10 @@ with DAG(
       external_dag_id="tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution",
       external_task_id="dockerit",
   )
+  start_task3 = BashOperator(
+    task_id="Gathering_for_Documentation",
+    bash_command="echo 'Start task Completed'",
+  )    
 # STEP 10: Document the solution
   sensor_G = ExternalTaskSensor(
       task_id="solution_task_document",
@@ -67,4 +75,4 @@ with DAG(
       external_task_id="generatedoc",
   )
 
-  start_task >> sensor_A >> sensor_B >> [sensor_C, sensor_D, sensor_E, sensor_F] >> sensor_G
+  start_task >> sensor_A >> sensor_B >> start_task2 >> [sensor_C, sensor_D, sensor_E, sensor_F] >> start_task3 >> sensor_G
