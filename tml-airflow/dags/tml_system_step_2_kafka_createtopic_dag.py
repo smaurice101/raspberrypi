@@ -44,10 +44,12 @@ dag = startkafkasetup()
 
 def setupkafkatopics(**context):
  # Set personal data
+  args = default_args
   companyname=args['companyname']
   myname=args['myname']
   myemail=args['myemail']
   mylocation=args['mylocation']
+  description=args['description']  
 
   # Replication factor for Kafka redundancy
   replication=args['replication']
@@ -56,6 +58,7 @@ def setupkafkatopics(**context):
   # Enable SSL/TLS communication with Kafka
   enabletls=args['enabletls']
   # If brokerhost is empty then this function will use the brokerhost address in your
+  brokerhost = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="brokerhost")  
   # VIPER.ENV in the field 'KAFKA_CONNECT_BOOTSTRAP_SERVERS'
   brokerhost=args['brokerhost']
   # If this is -999 then this function uses the port address for Kafka in VIPER.ENV in the
@@ -65,9 +68,13 @@ def setupkafkatopics(**context):
   # empty then no reverse proxy is being used
   microserviceid=args['microserviceid']
 
-  VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-  VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
+
+  print("Vipertoken=", VIPERTOKEN)
+  print("VIPERHOST=", VIPERHOST)
+  print("VIPERPORT=", VIPERPORT)
 
   #############################################################################################################
   #                         CREATE TOPIC TO STORE TRAINED PARAMS FROM ALGORITHM  

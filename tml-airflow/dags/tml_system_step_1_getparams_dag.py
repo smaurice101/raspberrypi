@@ -82,8 +82,8 @@ def updateviperenv():
     for mainfile in filepaths:
      with open(mainfile, 'r', encoding='utf-8') as file: 
        data = file.readlines() 
-    r=0 
-    for d in data:
+     r=0 
+     for d in data:
        if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
          data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}".format(default_args['brokerhost'],default_args['brokerport'])
        if 'CLOUD_USERNAME' in d: 
@@ -172,7 +172,7 @@ def updateviperenv():
          data[r] = "KUBERNETES={}".format(default_args['KUBERNETES'])                
 
        r += 1
-    with open(mainfile, 'w', encoding='utf-8') as file: 
+     with open(mainfile, 'w', encoding='utf-8') as file: 
       file.writelines(data)
 
 
@@ -187,11 +187,11 @@ def getparams(**context):
   HPDEHOSTPREDICT = ""
   HPDEPORTPREDICT = ""
 
-  with open(basedir + "/Viper-produce/admin.tok", "r") as f:
+  with open("/Viper-produce/admin.tok", "r") as f:
     VIPERTOKEN=f.read()
 
   if VIPERHOST=="":
-    with open(basedir + '/Viper-produce/viper.txt', 'r') as f:
+    with open('/Viper-produce/viper.txt', 'r') as f:
       output = f.read()
       VIPERHOST = HTTPADDR + output.split(",")[0]
       VIPERPORT = output.split(",")[1]
@@ -208,17 +208,20 @@ def getparams(**context):
   desc = args['description']        
   stitle = args['solutiontitle']    
   method = args['ingestdatamethod'] 
+  brokerhost = args['brokerhost']   
+  task_instance = context['task_instance']
 
-  context['ti'].xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
-  context['ti'].xcom_push(key='VIPERHOST',value=VIPERHOST)
-  context['ti'].xcom_push(key='VIPERPORT',value=VIPERPORT)
-  context['ti'].xcom_push(key='HTTPADDR',value=HTTPADDR)
-  context['ti'].xcom_push(key='HPDEHOST',value=HPDEHOST)
-  context['ti'].xcom_push(key='HPDEPORT',value=HPDEPORT)
-  context['ti'].xcom_push(key='solutionname',value=sname)
-  context['ti'].xcom_push(key='solutiondescription',value=desc)
-  context['ti'].xcom_push(key='solutiontitle',value=stitle)
-  context['ti'].xcom_push(key='ingestdatamethod',value=method)
-  context['ti'].xcom_push(key='containername',value='')
+  task_instance.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
+  task_instance.xcom_push(key='VIPERHOST',value=VIPERHOST)
+  task_instance.xcom_push(key='VIPERPORT',value=VIPERPORT)
+  task_instance.xcom_push(key='HTTPADDR',value=HTTPADDR)
+  task_instance.xcom_push(key='HPDEHOST',value=HPDEHOST)
+  task_instance.xcom_push(key='HPDEPORT',value=HPDEPORT)
+  task_instance.xcom_push(key='solutionname',value=sname)
+  task_instance.xcom_push(key='solutiondescription',value=desc)
+  task_instance.xcom_push(key='solutiontitle',value=stitle)
+  task_instance.xcom_push(key='ingestdatamethod',value=method)
+  task_instance.xcom_push(key='containername',value='')
+  task_instance.xcom_push(key='brokerhost',value=brokerhost)
 
   updateviperenv()
