@@ -13,16 +13,16 @@ from airflow.operators.python import (
     ExternalPythonOperator,
     PythonOperator
 )
-step1 = importlib.import_module("tml_system_step_1_getparams_dag_myawesometmlsolution")
-step2 = importlib.import_module("tml_system_step_2_kafka_createtopic_dag_myawesometmlsolution")
+step1 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_1_getparams_dag_myawesometmlsolution")
+step2 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_2_kafka_createtopic_dag_myawesometmlsolution")
 step3 = importlib.import_module("tml_read_LOCALFILE_step_3_kafka_producetotopic_dag")
-step4 = importlib.import_module("tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution")
-step5 = importlib.import_module("tml_system_step_5_kafka_machine_learning_dag_myawesometmlsolution")
-step6 = importlib.import_module("tml_system_step_6_kafka_predictions_dag_myawesometmlsolution")
-step7 = importlib.import_module("tml_system_step_7_kafka_visualization_dag_myawesometmlsolution")
-step8 = importlib.import_module("tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution")
-step9 = importlib.import_module("tml_system_step_9_privategpt_qdrant_dag_myawesometmlsolution")
-step10 = importlib.import_module("tml_system_step_10_documentation_dag_myawesometmlsolution")
+step4 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution")
+step5 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_5_kafka_machine_learning_dag_myawesometmlsolution")
+step6 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_6_kafka_predictions_dag_myawesometmlsolution")
+step7 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_7_kafka_visualization_dag_myawesometmlsolution")
+step8 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution")
+step9 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_9_privategpt_qdrant_dag_myawesometmlsolution")
+step10 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_10_documentation_dag_myawesometmlsolution")
 
 
 with DAG(

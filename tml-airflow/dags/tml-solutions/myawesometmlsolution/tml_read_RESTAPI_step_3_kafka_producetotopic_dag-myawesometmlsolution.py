@@ -39,13 +39,17 @@ default_args = {
 # Instantiate your DAG
 @dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myawesometmlsolution", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myawesometmlsolution"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
 def startproducingtotopic():
-  # This sets the lat/longs for the IoT devices so it can be map
-  VIPERTOKEN=""
-  VIPERHOST=""
-  VIPERPORT=""
+   def empty():
+     pass
+    
+dag = startproducingtotopic()
+
+VIPERTOKEN=""
+VIPERHOST=""
+VIPERPORT=""
     
 
-  def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
+def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
      topicid=args['topicid']
   
@@ -60,21 +64,20 @@ def startproducingtotopic():
      except Exception as e:
         print("ERROR:",e)
 
-  @task(task_id="gettmlsystemsparams")         
-  def gettmlsystemsparams():
+def gettmlsystemsparams(**context):
 
     repo=tsslogging.getrepo()  
     tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
         
-    VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-    VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-    VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+    VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
+    VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
+    VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
 
-    ti.xcom_push(key='PRODUCETYPE',value='REST')
-    ti.xcom_push(key='TOPIC',value=default_args['topics'])
-    ti.xcom_push(key='PORT',value=default_args['rest_port'])
-    ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+    context['ti'].xcom_push(key='PRODUCETYPE',value='REST')
+    context['ti'].xcom_push(key='TOPIC',value=default_args['topics'])
+    context['ti'].xcom_push(key='PORT',value=default_args['rest_port'])
+    context['ti'].xcom_push(key='IDENTIFIER',value=default_args['identifier'])
 
     if VIPERHOST != "":
         app = Flask(__name__)
@@ -95,7 +98,7 @@ def startproducingtotopic():
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
-  def readdata(valuedata):
+def readdata(valuedata):
       args = default_args    
 
       # MAin Kafka topic to store the real-time data
@@ -109,4 +112,6 @@ def startproducingtotopic():
           print(e)  
           pass  
   
-dag = startproducingtotopic()
+  
+def startproducing(**context):
+       gettmlsystemsparams(context)
