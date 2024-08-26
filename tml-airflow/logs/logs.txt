@@ -1103,3 +1103,4 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-08-26_02:28:53] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
    e6ac66e..2058763  main -> main
 [INFO 2024-08-26_03:05:28] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag.py
+[ERROR 2024-08-26_03:05:29] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag.py: name 'ti' is not defined
