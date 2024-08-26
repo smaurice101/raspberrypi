@@ -59,7 +59,7 @@ def readdata():
   tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
 
   args = default_args  
-  inputfile=basedir + args['inputfile']
+  inputfile=args['inputfile']
 
   # MAin Kafka topic to store the real-time data
   maintopic = args['topics']
