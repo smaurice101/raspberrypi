@@ -246,24 +246,7 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset), "/{}/docs/source/details.rst".format(sname)])
 
-    cname = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="containername")
-    key="DOCKERRUN-{}".format(sname)    
-    dockerrun=os.environ[key]
-    dockerrun=dockerrun.replace(",","\n\n")
-    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(containername), "/{}/docs/source/operating.rst".format(sname)])
-
-    subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
-    
-    key="VISUALRUN-{}".format(sname)    
-    visualrun=os.environ[key]
-    visualrun=visualrun.replace(",","\n\n")
-    subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
-
-    key="AIRFLOWRUN-{}".format(sname)    
-    airflowrun=os.environ[key]
-    airflowrun=visualrun.replace(",","\n\n")
-    subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
-    
+        
     repo = tsslogging.getrepo() 
     gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(repo,sname)
     

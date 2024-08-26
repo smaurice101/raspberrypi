@@ -1110,3 +1110,4 @@ After doing this, you may fix the identity used for this commit with:
 [ERROR 2024-08-26_15:07:20] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag.py: local variable 'ti' referenced before assignment
 [INFO 2024-08-26_15:11:04] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag.py
 [ERROR 2024-08-26_15:11:05] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag.py: name 'output' is not defined
+[INFO 2024-08-26_16:08:58] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag.py

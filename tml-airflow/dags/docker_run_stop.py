@@ -140,3 +140,23 @@ def startruns(**context):
     os.environ[key]=",".join(visualapp)
     key="AIRFLOWRUN-{}".format(sname)    
     os.environ[key]=",".join(airflowapp)
+    
+    cname = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="containername")
+    key="DOCKERRUN-{}".format(sname)    
+    dockerrun=os.environ[key]
+    dockerrun=dockerrun.replace(",","\n\n")
+    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(cname), "/{}/docs/source/operating.rst".format(sname)])
+
+    subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
+    
+    key="VISUALRUN-{}".format(sname)    
+    visualrun=os.environ[key]
+    visualrun=visualrun.replace(",","\n\n")
+    subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
+
+    key="AIRFLOWRUN-{}".format(sname)    
+    airflowrun=os.environ[key]
+    airflowrun=visualrun.replace(",","\n\n")
+    subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
+
+    tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
