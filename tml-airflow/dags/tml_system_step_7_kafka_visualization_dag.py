@@ -39,7 +39,7 @@ def startstreamingengine(**context):
         chip = "amd64"         
         if 'CHIP' in os.environ:
             chip = os.environ['CHIP']
-            chip = chip.tolower()
+            chip = chip.lower()
        
         topic = default_args['topic']
         secure = default_args['secure']
