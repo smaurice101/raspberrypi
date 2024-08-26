@@ -124,7 +124,9 @@ def processtransactiondata(**context):
  preprocesstypes=default_args['preprocesstypes']
 
  pathtotmlattrs=default_args['pathtotmlattrs']       
-    
+ raw_data_topic = default_args['raw_data_topic']  
+ preprocess_data_topic = default_args['preprocess_data_topic']  
+
  ti.xcom_push(key="raw_data_topic", value=raw_data_topic)
  ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
  ti.xcom_push(key="preprocessconditions", value=preprocessconditions)

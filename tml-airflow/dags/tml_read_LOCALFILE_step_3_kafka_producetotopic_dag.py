@@ -66,9 +66,13 @@ def readdata():
   producerid = args['producerid']
 
   k=0
-
-  file1 = open(inputfile, 'r')
-  print("Data Producing to Kafka Started:",datetime.now())
+  try:
+    file1 = open(inputfile, 'r')
+    print("Data Producing to Kafka Started:",datetime.now())
+  except Exception as e:
+    tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
+    return
 
   while True:
     line = file1.readline()
