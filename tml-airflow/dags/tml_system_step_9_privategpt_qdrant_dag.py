@@ -42,8 +42,8 @@ def startprivategpt(**context):
           output = f.read()
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
-
-     context['ti'].xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
-     context['ti'].xcom_push(key='VIPERHOST',value=VIPERHOST)
-     context['ti'].xcom_push(key='VIPERPORT',value=VIPERPORT)
-     context['ti'].xcom_push(key='HTTPADDR',value=HTTPADDR)
+     ti = context['task_instance']
+     ti.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
+     ti.xcom_push(key='VIPERHOST',value=VIPERHOST)
+     ti.xcom_push(key='VIPERPORT',value=VIPERPORT)
+     ti.xcom_push(key='HTTPADDR',value=HTTPADDR)

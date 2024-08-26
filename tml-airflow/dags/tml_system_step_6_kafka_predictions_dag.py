@@ -69,12 +69,12 @@ predictiontopic=default_args['ml_prediction_topic']
 
 def performPrediction(**context):
 
-      VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-      VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-      VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+      VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERTOKEN")
+      VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERHOST")
+      VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERPORT")
 
-      HPDEHOSTPREDICT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOSTPREDICT")
-      HPDEPORTPREDICT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORTPREDICT")
+      HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEHOSTPREDICT")
+      HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEPORTPREDICT")
         
       # Set personal data
       companyname=default_args['companyname']
@@ -130,6 +130,20 @@ def performPrediction(**context):
       pathtoalgos=default_args['pathtoalgos'] #'/Viper-tml/viperlogs/iotlogistic'
       array=default_args['array']
       
+      ti = context['task_instance']
+      ti.xcom_push(key="preprocess_data_topic",value=preprocess_data_topic)
+      ti.xcom_push(key="ml_prediction_topic",value=ml_prediction_topic)
+      ti.xcom_push(key="streamstojoin",value=streamstojoin)
+      ti.xcom_push(key="inputdata",value=inputdata)
+      ti.xcom_push(key="consumefrom",value=consumefrom)
+      ti.xcom_push(key="offset",value=offset)
+      ti.xcom_push(key="delay",value=delay)
+      ti.xcom_push(key="usedeploy",value=usedeploy)
+      ti.xcom_push(key="networktimeout",value=networktimeout)
+      ti.xcom_push(key="maxrows",value=maxrows)
+      ti.xcom_push(key="topicid",value=topicid)
+      ti.xcom_push(key="pathtoalgos",value=pathtoalgos)
+    
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
                                      companyname,consumeridtraininedparams,
                                      produceridhyperprediction, HPDEHOST,inputdata,maxrows,mainalgokey,

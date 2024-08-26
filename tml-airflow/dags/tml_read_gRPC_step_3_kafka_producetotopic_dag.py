@@ -70,11 +70,11 @@ def serve(**context):
     repo=tsslogging.getrepo()   
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-    
-    context['ti'].xcom_push(key='PRODUCETYPE',value='gRPC')
-    context['ti'].xcom_push(key='TOPIC',value=default_args['topics'])
-    context['ti'].xcom_push(key='PORT',value=default_args['gRPC_Port'])
-    context['ti'].xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+    ti = context['task_instance']
+    ti.xcom_push(key='PRODUCETYPE',value='gRPC')
+    ti.xcom_push(key='TOPIC',value=default_args['topics'])
+    ti.xcom_push(key='PORT',value=default_args['gRPC_Port'])
+    ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UnaryServicer_to_server(UnaryService(), server)
@@ -87,9 +87,9 @@ def gettmlsystemsparams(**context):
   global VIPERHOST
   global VIPERPORT
 
-  VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-  VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
     
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):

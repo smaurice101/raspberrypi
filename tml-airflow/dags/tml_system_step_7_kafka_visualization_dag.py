@@ -32,7 +32,7 @@ def startstreaming():
       pass
 dag = startstreaming()
 
-def startstreamingengine():
+def startstreamingengine(**context):
         repo=tsslogging.getrepo()  
         tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
@@ -41,9 +41,22 @@ def startstreamingengine():
             chip = os.environ['CHIP']
             chip = chip.tolower()
        
+        topic = default_args['topic']
+        secure = default_args['secure']
+        offset = default_args['offset']
+        append = default_args['append']
+        rollbackoffset = default_args['rollbackoffset']
+        
         vipervizport = os.environ['VIPERVIZPORT']
-       
+        ti = context['task_instance']
         ti.xcom_push(key='VIPERVIZPORT',value=vipervizport)
+        ti.xcom_push(key='topic',value=topic)
+        ti.xcom_push(key='secure',value=secure)
+        ti.xcom_push(key='offset',value=offset)
+        ti.xcom_push(key='append',value=append)
+        ti.xcom_push(key='chip',value=chip)
+        ti.xcom_push(key='rollbackoffset',value=rollbackoffset)
+    
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 
         subprocess.run(["tmux", "new", "-d", "-s", "visualization-viperviz"])

@@ -71,7 +71,21 @@ def setupkafkatopics(**context):
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
   VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
   VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
-
+   
+  ti = context['task_instance'] 
+  ti.xcom_push(key="companyname", value=companyname)
+  ti.xcom_push(key="myname", value=myname)
+  ti.xcom_push(key="myemail", value=myemail)
+  ti.xcom_push(key="mylocation", value=mylocation)
+  ti.xcom_push(key="replication", value=replication)
+  ti.xcom_push(key="numpartitions", value=numpartitions)
+  ti.xcom_push(key="enabletls", value=enabletls)
+  ti.xcom_push(key="microserviceid", value=microserviceid)
+  ti.xcom_push(key="raw_data_topic", value=raw_data_topic)
+  ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
+  ti.xcom_push(key="ml_data_topic", value=ml_data_topic)
+  ti.xcom_push(key="prediction_data_topic", value=prediction_data_topic)
+  
   print("Vipertoken=", VIPERTOKEN)
   print("VIPERHOST=", VIPERHOST)
   print("VIPERPORT=", VIPERPORT)

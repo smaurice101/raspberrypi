@@ -142,6 +142,25 @@ def performSupervisedMachineLearning(**context):
       coeftoprocess=default_args['coeftoprocess']  # indicate the index of the coefficients to process i.e. 0,1,2
       coefsubtopicnames=default_args['coefsubtopicnames']  # Give the coefficients a name: constant,elasticity,elasticity2
 
+      ti = context['task_instance']
+      ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
+      ti.xcom_push(key="ml_data_topic", value=ml_data_topic)
+      ti.xcom_push(key="modelruns", value=modelruns)
+      ti.xcom_push(key="offset", value=offset)
+      ti.xcom_push(key="islogistic", value=islogistic)
+      ti.xcom_push(key="networktimeout", value=networktimeout)
+      ti.xcom_push(key="modelsearchtuner", value=modelsearchtuner)
+      ti.xcom_push(key="dependentvariable", value=dependentvariable)
+      ti.xcom_push(key="independentvariables", value=independentvariables)
+      ti.xcom_push(key="rollbackoffsets", value=rollbackoffsets)
+      ti.xcom_push(key="topicid", value=topicid)
+      ti.xcom_push(key="consumefrom", value=consumefrom)
+      ti.xcom_push(key="fullpathtotrainingdata", value=fullpathtotrainingdata)
+      ti.xcom_push(key="transformtype", value=transformtype)
+      ti.xcom_push(key="sendcoefto", value=sendcoefto)
+      ti.xcom_push(key="coeftoprocess", value=coeftoprocess)
+      ti.xcom_push(key="coefsubtopicnames", value=coefsubtopicnames)
+    
      # Call HPDE to train the model
       result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
                                       companyname,consumeridtrainingdata2,producerid, HPDEHOST,

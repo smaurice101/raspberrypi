@@ -66,13 +66,13 @@ def mqttserverconnect(**context):
  repo = tsslogging.getrepo()
  tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
-
- context['ti'].xcom_push(key='PRODUCETYPE',value='MQTT')
- context['ti'].xcom_push(key='TOPIC',value=default_args['topics'])
+ ti = context['task_instance']
+ ti.xcom_push(key='PRODUCETYPE',value='MQTT')
+ ti.xcom_push(key='TOPIC',value=default_args['topics'])
  buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
- context['ti'].xcom_push(key='PORT',value=buf)
+ ti.xcom_push(key='PORT',value=buf)
  buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
- context['ti'].xcom_push(key='IDENTIFIER',value=buf)
+ ti.xcom_push(key='IDENTIFIER',value=buf)
 
  client = paho.Client(paho.CallbackAPIVersion.VERSION2)
  mqttBroker = default_args['mqtt_broker'] 
@@ -103,15 +103,15 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
     print("ERROR:",e)
 
 def gettmlsystemsparams(**context):
- global VIPERTOKEN
- global VIPERHOST
- global VIPERPORT
+  global VIPERTOKEN
+  global VIPERHOST
+  global VIPERPORT
 
- VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
- VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
- VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
-
- mqttserverconnect(context)
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
+    
+  mqttserverconnect(context)
 
 def readdata(valuedata):
   # MAin Kafka topic to store the real-time data

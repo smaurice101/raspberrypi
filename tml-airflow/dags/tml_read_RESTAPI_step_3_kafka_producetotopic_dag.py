@@ -70,14 +70,15 @@ def gettmlsystemsparams(**context):
     tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
         
-    VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-    VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-    VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
-
-    context['ti'].xcom_push(key='PRODUCETYPE',value='REST')
-    context['ti'].xcom_push(key='TOPIC',value=default_args['topics'])
-    context['ti'].xcom_push(key='PORT',value=default_args['rest_port'])
-    context['ti'].xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+    VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+    VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
+    VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
+    
+    ti = context['task_instance'] 
+    ti.xcom_push(key='PRODUCETYPE',value='REST')
+    ti.xcom_push(key='TOPIC',value=default_args['topics'])
+    ti.xcom_push(key='PORT',value=default_args['rest_port'])
+    ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
 
     if VIPERHOST != "":
         app = Flask(__name__)

@@ -30,13 +30,13 @@ dag = starttmldeploymentprocess()
     
 def dockerit(**context):
      if 'tssbuild' in os.environ:
-        if os.environ['tssbuild']==1:
+        if os.environ['tssbuild']=="1":
             return        
      try:
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-       sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
+       sname = ti.xcom_pull(task_ids='solution_task_getparams',key="solutionname")
        if 'CHIP' in os.environ:
           chip = os.environ['CHIP']
        else:
@@ -45,9 +45,11 @@ def dockerit(**context):
           cname = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
        else:    
           cname = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
-    
+      
+       ti = context['task_instance']
+       ti.xcom_push(key="containername",value=cname)
+        
        scid = tsslogging.getrepo('/tmux/cidname.txt')
-       context['ti'].xcom_push(key='containername',value=cname)
        cid = os.environ['SCID']
        tsslogging.tmuxchange(default_args['solution_dag_to_trigger'])
        key = "trigger-{}".format(sname)

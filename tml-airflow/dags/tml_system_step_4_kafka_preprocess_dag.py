@@ -64,13 +64,15 @@ def processtransactiondata(**context):
  preprocesstopic = default_args['preprocess_data_topic']
  maintopic =  default_args['raw_data_topic']  
  mainproducerid = default_args['producerid']     
-
- VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
- VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
- VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+  
+ VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+ VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
+ VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
 
 #############################################################################################################
   #                                    PREPROCESS DATA STREAMS
+
+ ti = context['task_instance']
 
   # Roll back each data stream by 10 percent - change this to a larger number if you want more data
   # For supervised machine learning you need a minimum of 30 data points in each stream
@@ -122,6 +124,23 @@ def processtransactiondata(**context):
  preprocesstypes=default_args['preprocesstypes']
 
  pathtotmlattrs=default_args['pathtotmlattrs']       
+    
+ ti.xcom_push(key="raw_data_topic", value=raw_data_topic)
+ ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
+ ti.xcom_push(key="preprocessconditions", value=preprocessconditions)
+ ti.xcom_push(key="delay", value=delay)
+ ti.xcom_push(key="array", value=array)
+ ti.xcom_push(key="saveasarray", value=saveasarray)
+ ti.xcom_push(key="topicid", value=topicid)
+ ti.xcom_push(key="rawdataoutput", value=rawdataoutput)
+ ti.xcom_push(key="asynctimeout", value=asynctimeout)
+ ti.xcom_push(key="timedelay", value=timedelay)
+ ti.xcom_push(key="usemysql", value=usemysql)
+ ti.xcom_push(key="preprocesstypes", value=preprocesstypes)
+ ti.xcom_push(key="pathtotmlattrs", value=pathtotmlattrs)
+ ti.xcom_push(key="identifier", value=identifier)
+ ti.xcom_push(key="jsoncriteria", value=jsoncriteria)
+    
  try:
     result=maadstml.viperpreprocesscustomjson(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,jsoncriteria,rawdataoutput,maxrows,enabletls,delay,brokerhost,
                                       brokerport,microserviceid,topicid,streamstojoin,preprocesstypes,preprocessconditions,identifier,
