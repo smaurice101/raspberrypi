@@ -254,8 +254,7 @@ def generatedoc(**context):
     readthedocs = "https://{}.readthedocs.io".format(sname)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
-    key = "trigger-{}".format(sname)
-    triggername=os.environ[key]
+    triggername = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="solution_dag_to_trigger")
     subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
     
     # Kick off shell script 

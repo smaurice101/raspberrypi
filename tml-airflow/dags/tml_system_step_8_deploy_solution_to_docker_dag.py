@@ -48,6 +48,7 @@ def dockerit(**context):
       
        ti = context['task_instance']
        ti.xcom_push(key="containername",value=cname)
+       ti.xcom_push(key='solution_dag_to_trigger', value=solution_dag_to_trigger)
         
        scid = tsslogging.getrepo('/tmux/cidname.txt')
        cid = os.environ['SCID']
