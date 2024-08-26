@@ -7,35 +7,28 @@ from airflow.operators.bash import BashOperator
 from airflow.sensors.external_task import ExternalTaskSensor 
 import tsslogging
 import os
-from datetime import datetime, timedelta
-import importlib  
+from datetime import datetime
+import importlib
 from airflow.operators.python import (
     ExternalPythonOperator,
     PythonOperator
 )
-step1 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step2 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step3 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step4 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step5 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step6 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step7 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step8 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step9 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step10 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-
-# TML Solution template for processing
-# Use this DAG to start processing data with:
-# 1. visualization
-# 2. containerization
-# 3. documentationa
+step1 = importlib.import_module("tml_system_step_1_getparams_dag_myawesometmlsolution")
+step2 = importlib.import_module("tml_system_step_2_kafka_createtopic_dag_myawesometmlsolution")
+step3 = importlib.import_module("tml_read_LOCALFILE_step_3_kafka_producetotopic_dag")
+step4 = importlib.import_module("tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution")
+step5 = importlib.import_module("tml_system_step_5_kafka_machine_learning_dag_myawesometmlsolution")
+step6 = importlib.import_module("tml_system_step_6_kafka_predictions_dag_myawesometmlsolution")
+step7 = importlib.import_module("tml_system_step_7_kafka_visualization_dag_myawesometmlsolution")
+step8 = importlib.import_module("tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution")
+step9 = importlib.import_module("tml_system_step_9_privategpt_qdrant_dag_myawesometmlsolution")
+step10 = importlib.import_module("tml_system_step_10_documentation_dag_myawesometmlsolution")
 
 
 with DAG(
     dag_id="solution_preprocessing_dag_myawesometmlsolution",
-    start_date = pendulum.datetime(2021, 1, 1, tz="UTC"),
+    start_date=datetime(2023, 1, 1),
     schedule=None,
-    schedule_interval="@once"
 ) as dag:
   start_task = BashOperator(
     task_id="start_tasks_tml_preprocessing",
@@ -46,37 +39,37 @@ with DAG(
             task_id="solution_task_getparams",
             python_callable=step1.getparams,
             provide_context=True,
-            #python=PATH_TO_PYTHON_BINARY,
   )
 
 # STEP 2: Create the Kafka topics
-  sensor_B = ExternalTaskSensor(
+  sensor_B = PythonOperator(
       task_id="solution_task_createtopic",
-      external_dag_id="tml_system_step_2_kafka_createtopic_dag_myawesometmlsolution",
-      external_task_id="setupkafkatopics",
+      python_callable=step2.setupkafkatopics,
+      provide_context=True,
   )
 # STEP 3: Produce data to topic        
-  sensor_C = ExternalTaskSensor(
+  sensor_C = PythonOperator(
       task_id="solution_task_producetotopic",
-      external_dag_id="tml_localfile_step_3_kafka_producetotopic_dag_myawesometmlsolution",
-      external_task_id="readdata",
+      python_callable=step3.startproducing,
+      provide_context=True,
   )
 # STEP 4: Preprocess the data        
-  sensor_D = ExternalTaskSensor(
+  sensor_D = PythonOperator(
       task_id="solution_task_preprocess",
-      external_dag_id="tml_system_step_4_kafka_preprocess_dag_myawesometmlsolution",
-      external_task_id="processtransactiondata",
+      python_callable=step4.processtransactiondata,
+      provide_context=True,
   )
-  sensor_E = ExternalTaskSensor(
+# STEP 7: Containerize the solution     
+  sensor_E = PythonOperator(
       task_id="solution_task_visualization",
-      external_dag_id="tml_system_step_7_kafka_visualization_dag_myawesometmlsolution",
-      external_task_id="startstreamingengine",
+      python_callable=step7.startstreamingengine,
+      provide_context=True,
   )
 # STEP 8: Containerize the solution        
-  sensor_F = ExternalTaskSensor(
+  sensor_F = PythonOperator(
       task_id="solution_task_containerize",
-      external_dag_id="tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution",
-      external_task_id="dockerit",
+      python_callable=step8.dockerit,
+      provide_context=True,      
   )
   start_task2 = BashOperator(
     task_id="Starting_Docker",
@@ -91,10 +84,10 @@ with DAG(
     bash_command="echo 'Start task Completed'",
   )
 # STEP 10: Document the solution
-  sensor_G = ExternalTaskSensor(
+  sensor_G = PythonOperator(
       task_id="solution_task_document",
-      external_dag_id="tml_system_step_10_documentation_dag_myawesometmlsolution",
-      external_task_id="generatedoc",
+      python_callable=step10.generatedoc,
+      provide_context=True,      
   )
 
   start_task >> sensor_A >> sensor_B >> start_task2 >> sensor_F >> start_task3 >> sensor_G >> start_task4 >> [sensor_C, sensor_D, sensor_E]
