@@ -815,3 +815,20 @@ After doing this, you may fix the identity used for this commit with:
  * branch            main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-08-26_01:04:50] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
+[INFO 2024-08-26_01:04:50] TML Solution Studio: git commit -a Status for project myawesometmlsolution: [main 26940ec] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 5 insertions(+)
+[INFO 2024-08-26_01:04:51] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   2650da0..26940ec  main -> main
+[INFO 2024-08-26_01:04:51] TML Solution Studio: git add . Status: 
