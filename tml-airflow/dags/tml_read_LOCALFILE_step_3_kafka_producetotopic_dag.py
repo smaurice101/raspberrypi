@@ -52,17 +52,6 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
  except Exception as e:
     print("ERROR:",e)
 
-def gettmlsystemsparams2(**context):
-    
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
-  ti = context['task_instance']
-  ti.xcom_push(key='PRODUCETYPE',value='LOCALFILE')
-  ti.xcom_push(key='TOPIC',value=default_args['topics'])
-  ti.xcom_push(key='PORT',value=default_args['inputfile'])
-  ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
-
 def readdata():
 
   repo = tsslogging.getrepo()
@@ -106,6 +95,13 @@ def readdata():
 
 def startproducing(**context):
     
-       gettmlsystemsparams2(context)
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
+  ti = context['task_instance']
+  ti.xcom_push(key='PRODUCETYPE',value='LOCALFILE')
+  ti.xcom_push(key='TOPIC',value=default_args['topics'])
+  ti.xcom_push(key='PORT',value=default_args['inputfile'])
+  ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
     
-       readdata()
+  readdata()
