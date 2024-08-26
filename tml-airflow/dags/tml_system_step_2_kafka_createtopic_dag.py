@@ -68,6 +68,11 @@ def setupkafkatopics(**context):
   # empty then no reverse proxy is being used
   microserviceid=args['microserviceid']
 
+  raw_data_topic=args['raw_data_topic']
+  preprocess_data_topic=args['preprocess_data_topic']
+  ml_data_topic=args['ml_data_topic']
+  prediction_data_topic=args['prediction_data_topic']
+  
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
   VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
   VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
