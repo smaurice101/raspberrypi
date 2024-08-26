@@ -104,5 +104,7 @@ def readdata():
   file1.close()
 
 def startproducing(**context):
+    
        gettmlsystemsparams(context)
+    
        readdata()
