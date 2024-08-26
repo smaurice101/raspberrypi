@@ -26,9 +26,11 @@ default_args = {
 @dag(dag_id="container_run_stop_process_dag", default_args=default_args, tags=["container_run_stop_process_dag"], schedule=None,  catchup=False)
 def containerprocess():
     # Define tasks
-  
-  
-  def getfreeport():
+   def empty():
+     pass
+dag = containerprocess()
+
+def getfreeport():
         airflowport=default_args['solution_airflow_port']
         vipervizport=default_args['solution_viperviz_port']
         
@@ -42,7 +44,7 @@ def containerprocess():
             
         return airflowport, vipervizport    
     
-  def run():
+def run(**context):
     if 'CHIP' in os.environ:
          chip = os.environ['CHIP']
     else:
@@ -55,13 +57,13 @@ def containerprocess():
     
     airflowport,vipervizport=getfreeport()    
     
-    sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")    
-    topic = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="topic")
-    secure = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="secure")
-    offset = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="offset")
-    append = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="append")
-    chip = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="chip")
-    rollbackoffset = ti.xcom_pull(dag_id='tml-system-step-7-kafka-visualization-dag',task_ids='startstreamingengine',key="rollbackoffset")
+    sname = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="solutionname")    
+    topic = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="topic")
+    secure = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="secure")
+    offset = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="offset")
+    append = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="append")
+    chip = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="chip")
+    rollbackoffset = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="rollbackoffset")
 
     repo = tsslogging.getrepo()
     tsslogging.tsslogit("Executing docker run in {}".format(os.path.basename(__file__)), "INFO" )                     
@@ -98,8 +100,7 @@ def containerprocess():
 
     return dockerrun,vizurl,airflowurl
 
-  @task(task_id="stop")
-  def stop():
+def stop(**context):
     if 'CHIP' in os.environ:
          chip = os.environ['CHIP']
     else:
@@ -109,7 +110,7 @@ def containerprocess():
     else:    
         containername = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
 
-    sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")  
+    sname = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="solutionname")  
     if os.environ[containername] == "":        
       repo = tsslogging.getrepo() 
       tsslogging.tsslogit("Your container {} is not running".format(containername), "WARN" )                     
@@ -120,16 +121,15 @@ def containerprocess():
       dockerstop = "docker container stop $(docker container ls -q --filter name={}*)".format(os.environ[containername])        
       subprocess.call(dockerstop, shell=True, stdout=output, stderr=output)
   
-  @task(task_id="startruns")
-  def startruns():        
+def startruns(**context):        
     cnum = int(default_args['instances'])
-    sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")        
+    sname = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="solutionname")        
         
     runsapp = []
     visualapp = []
     airflowapp = []
     for i in range(0,cnum):
-        dr,viz,air=run()
+        dr,viz,air=run(context)
         runsapp.append(dr)
         visualapp.append(viz)
         airflowapp.append(air)
@@ -140,7 +140,3 @@ def containerprocess():
     os.environ[key]=",".join(visualapp)
     key="AIRFLOWRUN-{}".format(sname)    
     os.environ[key]=",".join(airflowapp)
-
-    
-
-dag = containerprocess()
