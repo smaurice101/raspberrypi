@@ -1131,3 +1131,4 @@ branch.main.remote=origin
 branch.main.merge=refs/heads/main
 [INFO 2024-08-26_16:26:21] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-08-26_16:33:02] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag.py
