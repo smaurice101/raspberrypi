@@ -68,7 +68,7 @@ def readdata():
   k=0
 
   file1 = open(inputfile, 'r')
-  print("Data Producing to Kafka Started:",datetime.datetime.now())
+  print("Data Producing to Kafka Started:",datetime.now())
 
   while True:
     line = file1.readline()
@@ -81,7 +81,7 @@ def readdata():
         file1.seek(0)
         k=0
         print("Reached End of File - Restarting")
-        print("Read End:",datetime.datetime.now())
+        print("Read End:",datetime.now())
         continue
 
       producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
