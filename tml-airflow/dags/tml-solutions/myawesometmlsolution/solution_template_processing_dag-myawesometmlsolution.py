@@ -15,7 +15,7 @@ from airflow.operators.python import (
 )
 step1 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_1_getparams_dag-myawesometmlsolution")
 step2 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_2_kafka_createtopic_dag-myawesometmlsolution")
-step3 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_localfile_step_3_kafka_producetotopic_dag-myawesometmlsolution")
+step3 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution")
 step4 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution")
 step5 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_5_kafka_machine_learning_dag-myawesometmlsolution")
 step6 = importlib.import_module("tml-solutions.myawesometmlsolution.tml_system_step_6_kafka_predictions_dag-myawesometmlsolution")
