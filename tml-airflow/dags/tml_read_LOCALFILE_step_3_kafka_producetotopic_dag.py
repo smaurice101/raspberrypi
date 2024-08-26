@@ -52,7 +52,8 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
  except Exception as e:
     print("ERROR:",e)
 
-def gettmlsystemsparams(**context):
+def gettmlsystemsparams2(**context):
+    
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
   VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
   VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
@@ -105,6 +106,6 @@ def readdata():
 
 def startproducing(**context):
     
-       gettmlsystemsparams(context)
+       gettmlsystemsparams2(context)
     
        readdata()
