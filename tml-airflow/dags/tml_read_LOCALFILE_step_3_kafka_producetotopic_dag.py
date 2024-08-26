@@ -17,12 +17,9 @@ default_args = {
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',   # <<< *** Change as needed   
-  'inputfile' : '/rawdata/?',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'inputfile' : '/rawdata/IoTData.txt',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
   'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : -999, # <<< ********* do not modify  
-  'start_date': datetime (2023, 1, 1),  # <<< *** Change as needed   
-  'retries': 1,  # <<< *** Change as needed   
-    
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -72,8 +69,6 @@ def readdata():
   tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
 
   args = default_args  
-  gettmlsystemsparams()
-  basedir = '/'  
   inputfile=basedir + args['inputfile']
 
   # MAin Kafka topic to store the real-time data
