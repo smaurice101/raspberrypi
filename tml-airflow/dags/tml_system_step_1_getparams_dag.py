@@ -180,7 +180,7 @@ def getparams(**context):
   args = default_args    
   VIPERHOST = ""
   VIPERPORT = ""
-  HTTPADDR = "http://"
+  HTTPADDR = "https://"
   HPDEHOST = ""
   HPDEPORT = ""
   VIPERTOKEN = ""

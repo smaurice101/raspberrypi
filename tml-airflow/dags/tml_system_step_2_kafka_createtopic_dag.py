@@ -88,6 +88,7 @@ def setupkafkatopics(**context):
     topicsarr = producetotopic.split(",")
 
     for topic in topicsarr:  
+      print("Creating topic=",topic)  
       result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,companyname,
                                  myname,myemail,mylocation,description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,
