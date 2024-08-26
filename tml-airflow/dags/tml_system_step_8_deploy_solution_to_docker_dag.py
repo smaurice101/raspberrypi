@@ -24,10 +24,11 @@ default_args = {
 @dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag", default_args=default_args, tags=["tml_system_step_8_deploy_solution_to_docker_dag"], start_date=datetime(2023, 1, 1), schedule=None,  catchup=False)
 def starttmldeploymentprocess():
     # Define tasks
-
+    def empty():
+        pass
+dag = starttmldeploymentprocess()
     
-  @task(task_id="dockerit")
-  def dockerit():
+def dockerit(**context):
      if 'tssbuild' in os.environ:
         if os.environ['tssbuild']==1:
             return        
@@ -46,17 +47,14 @@ def starttmldeploymentprocess():
           cname = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
     
        scid = tsslogging.getrepo('/tmux/cidname.txt')
-       ti.xcom_push(key='containername',value=cname)
+       context['ti'].xcom_push(key='containername',value=cname)
        cid = os.environ['SCID']
        tsslogging.tmuxchange(default_args['solution_dag_to_trigger'])
        key = "trigger-{}".format(sname)
        os.environ[key] = default_args['solution_dag_to_trigger']
        subprocess.call("docker commit {} {}".format(cid,cname), shell=True, stdout=output, stderr=output)
        subprocess.call("docker push {}".format(cname), shell=True, stdout=output, stderr=output)  
-       os.environ['tssbuild']=1
+       os.environ['tssbuild']="1"
      except Exception as e:
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-        
-
-dag = starttmldeploymentprocess()

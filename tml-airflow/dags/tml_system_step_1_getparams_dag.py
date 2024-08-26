@@ -1,17 +1,17 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-from datetime import datetime,timedelta
+from datetime import datetime
 from airflow.decorators import dag, task
 import os 
 import sys
 import tsslogging
-import pendulum
 
 sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'owner': 'Sebastian Maurice',  # <<< ******** change as needed 
+ 'start_date': datetime (2023, 1, 1),
  'brokerhost' : '127.0.0.1',  # <<<<***************** THIS WILL ACCESS LOCAL KAFKA - YOU CAN CHANGE TO CLOUD KAFKA HOST
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
  'cloudusername' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API KEY  - OTHERWISE LEAVE BLANK
@@ -58,26 +58,30 @@ default_args = {
  'SSL_CLIENT_KEY_FILE' : 'client.key.pem', 
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
  'KUBERNETES' : 0,
- 'solutionname': 'myawesometmlsolution',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
+ 'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
- 'start_date' : pendulum.datetime(2021, 1, 1, tz="UTC"),
  'retries': 1,
 }
 
-
 ############################################################### DO NOT MODIFY BELOW ####################################################
-        
-#@task
-def updateviperenv():
-# update ALL
-  os.environ['tssbuild']="0"
-  os.environ['tssdoc']="0"
+# Instantiate your DAG
+@dag(dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml_system_step_1_getparams_dag"], schedule=None, start_date=datetime(2023, 1, 1), catchup=False)
+def tmlparams():
+    # Define tasks
+    def empty():
+        pass
+dag = tmlparams()
 
-  filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
-  for mainfile in filepaths:
-    with open(mainfile, 'r', encoding='utf-8') as file: 
-      data = file.readlines() 
+def updateviperenv():
+    # update ALL
+    os.environ['tssbuild']="0"
+    os.environ['tssdoc']="0"
+
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
+    for mainfile in filepaths:
+     with open(mainfile, 'r', encoding='utf-8') as file: 
+       data = file.readlines() 
     r=0 
     for d in data:
        if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
@@ -172,24 +176,22 @@ def updateviperenv():
       file.writelines(data)
 
 
-#@task(task_id="getparams")
 def getparams(**context):
- print("OKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")   
- args = default_args    
- VIPERHOST = ""
- VIPERPORT = ""
- HTTPADDR = "http://"
- HPDEHOST = ""
- HPDEPORT = ""
- VIPERTOKEN = ""
- HPDEHOSTPREDICT = ""
- HPDEPORTPREDICT = ""
+  args = default_args    
+  VIPERHOST = ""
+  VIPERPORT = ""
+  HTTPADDR = "http://"
+  HPDEHOST = ""
+  HPDEPORT = ""
+  VIPERTOKEN = ""
+  HPDEHOSTPREDICT = ""
+  HPDEPORTPREDICT = ""
 
- with open("/Viper-produce/admin.tok", "r") as f:
+  with open(basedir + "/Viper-produce/admin.tok", "r") as f:
     VIPERTOKEN=f.read()
 
- if VIPERHOST=="":
-    with open('/Viper-produce/viper.txt', 'r') as f:
+  if VIPERHOST=="":
+    with open(basedir + '/Viper-produce/viper.txt', 'r') as f:
       output = f.read()
       VIPERHOST = HTTPADDR + output.split(",")[0]
       VIPERPORT = output.split(",")[1]
@@ -202,30 +204,21 @@ def getparams(**context):
       HPDEHOSTPREDICT = HTTPADDR + output.split(",")[0]
       HPDEPORTPREDICT = output.split(",")[1]
 
- sname = args['solutionname']    
- desc = args['description']        
- stitle = args['solutiontitle']    
- method = args['ingestdatamethod'] 
+  sname = args['solutionname']    
+  desc = args['description']        
+  stitle = args['solutiontitle']    
+  method = args['ingestdatamethod'] 
 
- context['ti'].xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
- context['ti'].xcom_push(key='VIPERHOST',value=VIPERHOST)
- context['ti'].xcom_push(key='VIPERPORT',value=VIPERPORT)
- context['ti'].xcom_push(key='HTTPADDR',value=HTTPADDR)
- context['ti'].xcom_push(key='HPDEHOST',value=HPDEHOST)
- context['ti'].xcom_push(key='HPDEPORT',value=HPDEPORT)
- context['ti'].xcom_push(key='solutionname',value=sname)
- context['ti'].xcom_push(key='solutiondescription',value=desc)
- context['ti'].xcom_push(key='solutiontitle',value=stitle)
- context['ti'].xcom_push(key='ingestdatamethod',value=method)
- context['ti'].xcom_push(key='containername',value='')
+  context['ti'].xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
+  context['ti'].xcom_push(key='VIPERHOST',value=VIPERHOST)
+  context['ti'].xcom_push(key='VIPERPORT',value=VIPERPORT)
+  context['ti'].xcom_push(key='HTTPADDR',value=HTTPADDR)
+  context['ti'].xcom_push(key='HPDEHOST',value=HPDEHOST)
+  context['ti'].xcom_push(key='HPDEPORT',value=HPDEPORT)
+  context['ti'].xcom_push(key='solutionname',value=sname)
+  context['ti'].xcom_push(key='solutiondescription',value=desc)
+  context['ti'].xcom_push(key='solutiontitle',value=stitle)
+  context['ti'].xcom_push(key='ingestdatamethod',value=method)
+  context['ti'].xcom_push(key='containername',value='')
 
-
- updateviperenv()
-    
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_1_getparams_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_1_getparams_dag_myawesometmlsolution"], schedule=None, catchup=False)
-def tmlparams():
-    # Define tasks
-    def empty():
-       pass
-tmlparams()
+  updateviperenv()

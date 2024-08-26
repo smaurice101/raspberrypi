@@ -53,22 +53,25 @@ default_args = {
 # Instantiate your DAG
 @dag(dag_id="tml_system_step_5_kafka_machine_learning_dag", default_args=default_args, tags=["tml_system_step_5_kafka_machine_learning_dag"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
 def startmachinelearning():
-  # This sets the lat/longs for the IoT devices so it can be map
-  VIPERTOKEN=""
-  VIPERHOST=""
-  VIPERPORT=""
-  HPDEHOST = ''    
-  HPDEPORT = ''
+  def empty():
+      pass
+dag = startmachinelearning()
 
-  maintopic =  default_args['preprocess_data_topic']  
-  mainproducerid = default_args['producerid']                     
+# This sets the lat/longs for the IoT devices so it can be map
+VIPERTOKEN=""
+VIPERHOST=""
+VIPERPORT=""
+HPDEHOST = ''    
+HPDEPORT = ''
+
+maintopic =  default_args['preprocess_data_topic']  
+mainproducerid = default_args['producerid']                     
         
-  @task(task_id="performSupervisedMachineLearning")  
-  def performSupervisedMachineLearning(maintopic):
+def performSupervisedMachineLearning(**context):
       
-      VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-      VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-      VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+      VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
+      VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
+      VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
 
       HPDEHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOST")
       HPDEPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORT")
@@ -146,18 +149,17 @@ def startmachinelearning():
                                       deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
+      
+def startml(**context):
   if VIPERHOST != "":
-     repo=tsslogging.getrepo()
-     tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+       repo=tsslogging.getrepo()
+       tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
     
-     while True:
-       try:     
-         performSupervisedMachineLearning(maintopic)
-       except Exception as e:
+       while True:
+        try:     
+         performSupervisedMachineLearning(**context)
+        except Exception as e:
           tsslogging.tsslogit("Machine Learning DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
           break
-            
-
-dag = startmachinelearning()

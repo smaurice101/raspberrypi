@@ -42,80 +42,85 @@ default_args = {
 @dag(dag_id="tml_read_gRPC_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_gRPC_step_3_kafka_producetotopic_dag"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
-  VIPERTOKEN=""
-  VIPERHOST=""
-  VIPERPORT=""
+  def empty():
+      pass
 
+dag = startproducingtotopic()
+
+VIPERTOKEN=""
+VIPERHOST=""
+VIPERPORT=""
     
-  class TmlprotoService(pb2_grpc.TmlprotoServicer):
+class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
-    def __init__(self, *args, **kwargs):
-        pass
+  def __init__(self, *args, **kwargs):
+    pass
 
-    def GetServerResponse(self, request, context):
+  def GetServerResponse(self, request, context):
 
-        # get the string from the incoming request
-        message = request.message
-        readata(message)
-        #result = f'Hello I am up and running received "{message}" message from you'
-        #result = {'message': result, 'received': True}
+    # get the string from the incoming request
+    message = request.message
+    readata(message)
+    #result = f'Hello I am up and running received "{message}" message from you'
+    #result = {'message': result, 'received': True}
 
-        #return pb2.MessageResponse(**result)
-    
-  @task(task_id="serve")  
-  def serve():
+    #return pb2.MessageResponse(**result)
+
+def serve(**context):
     repo=tsslogging.getrepo()   
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+    
+    context['ti'].xcom_push(key='PRODUCETYPE',value='gRPC')
+    context['ti'].xcom_push(key='TOPIC',value=default_args['topics'])
+    context['ti'].xcom_push(key='PORT',value=default_args['gRPC_Port'])
+    context['ti'].xcom_push(key='IDENTIFIER',value=default_args['identifier'])
 
-    ti.xcom_push(key='PRODUCETYPE',value='gRPC')
-    ti.xcom_push(key='TOPIC',value=default_args['topics'])
-    ti.xcom_push(key='PORT',value=default_args['gRPC_Port'])
-    ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
-        
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UnaryServicer_to_server(UnaryService(), server)
     server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
     server.start()
     server.wait_for_termination()
-    
-    
-  def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
-     inputbuf=value     
-     topicid=args['topicid']
-  
-     # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=args['delay']
-     enabletls = args['enabletls']
-     identifier = args['identifier']
 
-     try:
-        result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
-                                            topicid,identifier)
-     except Exception as e:
-        print("ERROR:",e)
+def gettmlsystemsparams(**context):
+  global VIPERTOKEN
+  global VIPERHOST
+  global VIPERPORT
 
-  @task(task_id="gettmlsystemsparams")         
-  def gettmlsystemsparams():
-    VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-    VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-    VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+  VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
+  VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
     
-    return [VIPERTOKEN,VIPERHOST,VIPERPORT]
-        
-          
-  def readdata(valuedata):
-      args = default_args
-      # MAin Kafka topic to store the real-time data
-      maintopic = args['topics']
-      producerid = args['producerid']
-    
-      try:
-          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
-          # change time to speed up or slow down data   
-          time.sleep(0.15)
-      except Exception as e:
-          print(e)  
-          pass  
+
+def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
+ inputbuf=value     
+ topicid=args['topicid']
+
+ # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
+ delay=args['delay']
+ enabletls = args['enabletls']
+ identifier = args['identifier']
+
+ try:
+    result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
+                                        topicid,identifier)
+ except Exception as e:
+    print("ERROR:",e)
+
+def readdata(valuedata):
+  args = default_args
+  # MAin Kafka topic to store the real-time data
+  maintopic = args['topics']
+  producerid = args['producerid']
+
+  try:
+      producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
+      # change time to speed up or slow down data   
+      time.sleep(0.15)
+  except Exception as e:
+      print(e)  
+      pass  
   
-dag = startproducingtotopic()
+def startproducing(**context):
+       gettmlsystemsparams(context)
+       serve(context)

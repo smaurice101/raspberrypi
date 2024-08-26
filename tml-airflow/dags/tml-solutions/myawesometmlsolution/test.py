@@ -5,24 +5,10 @@ from airflow.decorators import task
 from airflow.models.dag import DAG
 from airflow.operators.bash import BashOperator
 from airflow.sensors.external_task import ExternalTaskSensor 
+from airflow.operators.python_operator import PythonOperator
 import tsslogging
 import os
 from datetime import datetime, timedelta
-import importlib  
-from airflow.operators.python import (
-    ExternalPythonOperator,
-    PythonOperator
-)
-step1 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step2 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step3 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step4 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step5 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step6 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step7 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step8 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step9 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
-step10 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-step-1-getparams-dag-myawesometmlsolution")
 
 # TML Solution template for processing
 # Use this DAG to start processing data with:
@@ -32,28 +18,30 @@ step10 = importlib.import_module("tml-solutions.myawesometmlsolution.tml-system-
 
 
 with DAG(
-    dag_id="solution_preprocessing_dag_myawesometmlsolution",
-    start_date = pendulum.datetime(2021, 1, 1, tz="UTC"),
+    dag_id="solution_preprocessing_dag_myawesometmlsolution_test",
+    start_date=datetime(2024, 8, 25),
     schedule=None,
-    schedule_interval="@once"
 ) as dag:
   start_task = BashOperator(
     task_id="start_tasks_tml_preprocessing",
     bash_command="echo 'Start task'",
   )
 # STEP 1: Get the Parameters
-  sensor_A = PythonOperator(
-            task_id="solution_task_getparams",
-            python_callable=step1.getparams,
-            provide_context=True,
-            #python=PATH_TO_PYTHON_BINARY,
+  sensor_A = ExternalTaskSensor(
+      task_id="solution_task_getparams",
+      external_dag_id="tml_system_step_1_getparams_dag_myawesometmlsolution",
+      external_task_id="getparams",
+      timeout=10,
   )
-
 # STEP 2: Create the Kafka topics
   sensor_B = ExternalTaskSensor(
       task_id="solution_task_createtopic",
       external_dag_id="tml_system_step_2_kafka_createtopic_dag_myawesometmlsolution",
       external_task_id="setupkafkatopics",
+  )
+  start_task2 = BashOperator(
+    task_id="Completed_TML_Setup_Now_Spawn_Main_Processes",
+    bash_command="echo 'Start task Completed'",
   )
 # STEP 3: Produce data to topic        
   sensor_C = ExternalTaskSensor(
@@ -78,18 +66,10 @@ with DAG(
       external_dag_id="tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution",
       external_task_id="dockerit",
   )
-  start_task2 = BashOperator(
-    task_id="Starting_Docker",
+  start_task3 = BashOperator(
+    task_id="Gathering_for_Documentation",
     bash_command="echo 'Start task Completed'",
   )    
-  start_task3 = BashOperator(
-    task_id="Starting_Documentation",
-    bash_command="echo 'Start task Completed'",
-  )
-  start_task4 = BashOperator(
-    task_id="Completed_TML_Setup_Now_Spawn_Main_Processes",
-    bash_command="echo 'Start task Completed'",
-  )
 # STEP 10: Document the solution
   sensor_G = ExternalTaskSensor(
       task_id="solution_task_document",
@@ -97,4 +77,4 @@ with DAG(
       external_task_id="generatedoc",
   )
 
-  start_task >> sensor_A >> sensor_B >> start_task2 >> sensor_F >> start_task3 >> sensor_G >> start_task4 >> [sensor_C, sensor_D, sensor_E]
+  start_task >> sensor_A >> sensor_B >> start_task2 >> [sensor_C, sensor_D, sensor_E, sensor_F] >> start_task3 >> sensor_G

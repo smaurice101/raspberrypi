@@ -223,9 +223,10 @@ def getparams(**context):
  updateviperenv()
     
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_1_getparams_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_1_getparams_dag_myawesometmlsolution"], schedule=None, catchup=False)
+@dag(dag_id="tml_system_step_1_getparams_dag_myawesometmlsolution22", default_args=default_args, tags=["tml_system_step_1_getparams_dag_myawesometmlsolution22"], schedule=None, catchup=False)
 def tmlparams():
     # Define tasks
+    @task
     def empty():
        pass
 tmlparams()

@@ -48,31 +48,33 @@ default_args = {
 # Instantiate your DAG
 @dag(dag_id="tml_system_step_6_kafka_predictions_dag", default_args=default_args, tags=["tml_system_step_6_kafka_predictions_dag"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
 def startpredictions():
-  # This sets the lat/longs for the IoT devices so it can be map
-  VIPERTOKEN=""
-  VIPERHOST=""
-  VIPERPORT=""
-  HPDEHOST=''
-  HPDEPORT=''
+  def empty():
+     pass
+dag = startpredictions()
+
+VIPERTOKEN=""
+VIPERHOST=""
+VIPERPORT=""
+HPDEHOST=''
+HPDEPORT=''
     
 
-  # Set Global variable for Viper confifuration file - change the folder path for your computer
-  viperconfigfile="/Viper-predict/viper.env"
+# Set Global variable for Viper confifuration file - change the folder path for your computer
+viperconfigfile="/Viper-predict/viper.env"
 
-  mainproducerid = default_args['producerid']     
-  maintopic=default_args['preprocess_data_topic']
-  predictiontopic=default_args['ml_prediction_topic']
+mainproducerid = default_args['producerid']     
+maintopic=default_args['preprocess_data_topic']
+predictiontopic=default_args['ml_prediction_topic']
 
 
-  @task(task_id="performPredictions")  
-  def performPrediction(maintopic):
+def performPrediction(**context):
 
-      VIPERTOKEN = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-      VIPERHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-      VIPERPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+      VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
+      VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
+      VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
 
-      HPDEHOSTPREDICT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOSTPREDICT")
-      HPDEPORTPREDICT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORTPREDICT")
+      HPDEHOSTPREDICT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOSTPREDICT")
+      HPDEPORTPREDICT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORTPREDICT")
         
       # Set personal data
       companyname=default_args['companyname']
@@ -135,6 +137,8 @@ def startpredictions():
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
+        
+def startpredictions(**context):
   if VIPERHOST != "":
     repo=tsslogging.getrepo()
     tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
@@ -142,11 +146,7 @@ def startpredictions():
     
     while True:
       try:  
-        performPrediction(maintopic)      
+        performPrediction(context)      
       except Exception as e:
         tsslogging.tsslogit("Predictions DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-        
-
-
-dag = startpredictions()
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")

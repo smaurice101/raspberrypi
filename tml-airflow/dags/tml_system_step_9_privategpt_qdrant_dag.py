@@ -21,11 +21,12 @@ default_args = {
 @dag(dag_id="tml_system_step_9_privategpt_qdrant_dag", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag"], start_date=datetime(2023, 1, 1), schedule=None,  catchup=False)
 def startaiprocess():
     # Define tasks
-  basedir = "/"
-  viperconfigfile=basedir + "/Viper-produce/viper.env"
+    def empty():
+        pass
+dag = startaiprocess()    
+
     
-  @task(task_id="startprivategpt")
-  def startprivategpt():
+def startprivategpt(**context):
      VIPERHOST=""
      VIPERPORT=""
      HTTPADDR=""
@@ -42,15 +43,7 @@ def startaiprocess():
           VIPERHOST = HTTPADDR + output.split(",")[0]
           VIPERPORT = output.split(",")[1]
 
-     ti.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
-     ti.xcom_push(key='VIPERHOST',value=VIPERHOST)
-     ti.xcom_push(key='VIPERPORT',value=VIPERPORT)
-     ti.xcom_push(key='HTTPADDR',value=HTTPADDR)
-    
-     return [VIPERTOKEN,VIPERHOST,VIPERPORT,HTTPADDR]
-     
-     tmlsystemparams=getparams()
-     if tmlsystemparams[1]=="":
-        print("ERROR: No host specified")
-    
-dag = startaiprocess()
+     context['ti'].xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
+     context['ti'].xcom_push(key='VIPERHOST',value=VIPERHOST)
+     context['ti'].xcom_push(key='VIPERPORT',value=VIPERPORT)
+     context['ti'].xcom_push(key='HTTPADDR',value=HTTPADDR)
