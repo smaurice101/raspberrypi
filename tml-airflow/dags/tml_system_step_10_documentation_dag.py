@@ -269,6 +269,30 @@ def generatedoc(**context):
     
     triggername = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="solution_dag_to_trigger")
     subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
+
+    producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODCE")
+    producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
+    preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
+    preprocessport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREPROCESS")
+    mlhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTML")
+    mlport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTML")
+    predictionhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
+    predictionport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
+
+    hpdehost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOST")
+    hpdeport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORT")
+
+    hpdepredicthost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOSTPREDICT")
+    hpdepredictport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORTPREDICT")
+    
+    tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}\n\n"
+                   "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}\n\n"
+                   "VIPERHOST_ML={}, VIPERPORT_ML={}\n\n"
+                   "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}\n\n"
+                   "HPDEHOST={}, HPDEPORT={}\n\n"
+                   "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],mlhost,mlport[1:],predictionhost,predictionport[1:],
+                                                                          hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport ))
+    subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
     
     # Kick off shell script 
     tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)

@@ -52,13 +52,13 @@ def startstreamingengine(**context):
             vipervizport=tsslogging.getfreeport()
           
         ti = context['task_instance']
-        ti.xcom_push(key='VIPERVIZPORT',value=vipervizport)
+        ti.xcom_push(key='VIPERVIZPORT',value="_{}".format(vipervizport))
         ti.xcom_push(key='topic',value=topic)
-        ti.xcom_push(key='secure',value=secure)
-        ti.xcom_push(key='offset',value=offset)
-        ti.xcom_push(key='append',value=append)
+        ti.xcom_push(key='secure',value="_{}".format(secure))
+        ti.xcom_push(key='offset',value="_{}".format(offset))
+        ti.xcom_push(key='append',value="_{}".format(append))
         ti.xcom_push(key='chip',value=chip)
-        ti.xcom_push(key='rollbackoffset',value=rollbackoffset)
+        ti.xcom_push(key='rollbackoffset',value="_{}".format(rollbackoffset))
     
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 
