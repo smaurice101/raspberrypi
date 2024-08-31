@@ -8,6 +8,7 @@ import maadstml
 import tsslogging
 import os
 import subprocess
+import json 
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -121,6 +122,7 @@ def startproducing(**context):
   subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
+  context = json.dumps(context)
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
         
 if __name__ == '__main__':
