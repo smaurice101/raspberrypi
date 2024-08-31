@@ -9,6 +9,7 @@ import maadstml
 import tsslogging
 import os
 import subprocess
+import time
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -165,6 +166,10 @@ def dopreprocessing(**context):
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-preprocess-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "/Viper-preprocess/viper-linux-{}".format(chip), "ENTER"])        
+       time.sleep(10)  
+    
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "cd /Viper-preprocess", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "python {} 1 {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
 

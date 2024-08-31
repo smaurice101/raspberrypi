@@ -9,6 +9,7 @@ import maadstml
 import tsslogging
 import os
 import subprocess
+import time
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -179,6 +180,10 @@ def startml(**context):
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-ml-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{}".format(chip), "ENTER"])        
+       time.sleep(10)  
+        
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "cd /Viper-ml", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN, VIPERHOST, VIPERPORT, HPDEHOST, HPDEPORT), "ENTER"])        
 

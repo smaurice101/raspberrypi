@@ -159,6 +159,10 @@ def startpredictions(**context):
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-predict-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{}".format(chip), "ENTER"])        
+       time.sleep(10)  
+        
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "cd /Viper-predict", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT,HPDEHOSTPREDICT,HPDEPORTPREDICT), "ENTER"])        
 
