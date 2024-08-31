@@ -94,7 +94,7 @@ def readdata():
         continue
       producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
       # change time to speed up or slow down data   
-      time.sleep(args[sleep])
+      time.sleep(args['sleep'])
     except Exception as e:
       print(e)  
       pass  
