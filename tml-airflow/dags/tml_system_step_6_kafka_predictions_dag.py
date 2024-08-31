@@ -160,7 +160,7 @@ def startpredictions(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-predict-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "C-c", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{}".format(chip), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT), "ENTER"])        
        time.sleep(10)  
         
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "cd /Viper-predict", "ENTER"])

@@ -100,7 +100,7 @@ def readdata():
       pass  
 
   file1.close()
-
+    
 def startproducing(**context):
 
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
@@ -123,7 +123,7 @@ def startproducing(**context):
   subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-c", "ENTER"])
-  subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{}".format(chip), "ENTER"])        
+  subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT), "ENTER"])        
   time.sleep(10)  
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {} {} ".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
