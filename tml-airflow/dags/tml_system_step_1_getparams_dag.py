@@ -223,6 +223,9 @@ def getparams(**context):
   brokerhost = args['brokerhost']   
   task_instance = context['task_instance']
 
+  print("VIPERHOST=", VIPERHOST) 
+  print("VIPERPORT=", VIPERPORT) 
+     
   task_instance.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
   task_instance.xcom_push(key='VIPERHOST',value=VIPERHOST)
   task_instance.xcom_push(key='VIPERPORT',value=VIPERPORT)

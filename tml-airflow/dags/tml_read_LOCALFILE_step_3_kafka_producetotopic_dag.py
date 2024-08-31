@@ -53,9 +53,9 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
     print("ERROR:",e)
 
 def readdata(**context):
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPRODUCE")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPRODUCE")
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
 
   repo = tsslogging.getrepo()
   tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     

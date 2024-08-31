@@ -66,9 +66,9 @@ def mqttserverconnect(**context):
  repo = tsslogging.getrepo()
  tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
- VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
- VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPRODUCE")
- VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPRODUCE")
+ VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+ VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
+ VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
 
  ti = context['task_instance']
  ti.xcom_push(key='PRODUCETYPE',value='MQTT')
@@ -111,9 +111,9 @@ def gettmlsystemsparams(**context):
   global VIPERHOST
   global VIPERPORT
 
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPRODUCE")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPRODUCE")    
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")    
 
 def readdata(valuedata):
   # MAin Kafka topic to store the real-time data

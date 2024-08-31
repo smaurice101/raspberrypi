@@ -88,9 +88,9 @@ def gettmlsystemsparams(**context):
   global VIPERHOST
   global VIPERPORT
 
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPRODUCE")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPRODUCE")
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
     
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):

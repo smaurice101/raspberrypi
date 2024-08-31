@@ -102,4 +102,4 @@ with DAG(
       provide_context=True,      
   )
 
-  start_task >> sensor_A >> sensor_B >> start_task2 >> sensor_H >> start_task3 >> sensor_J >> start_task4 >> [sensor_C, sensor_D, sensor_E, sensor_F, sensor_G]
+  start_task >> sensor_A >> sensor_B >> start_task2 >> sensor_H >> start_task4 >> [sensor_C, sensor_D, sensor_E, sensor_F, sensor_G] >> start_task3 >> sensor_J
