@@ -181,11 +181,11 @@ def startml(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-ml-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-c", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
        time.sleep(10)  
         
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN, VIPERHOST, VIPERPORT, HPDEHOST, HPDEPORT), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN, VIPERHOST, VIPERPORT[1:], HPDEHOST, HPDEPORT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

@@ -160,11 +160,11 @@ def startpredictions(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-predict-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "C-c", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
        time.sleep(10)  
         
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "cd /Viper-predict", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT,HPDEHOSTPREDICT,HPDEPORTPREDICT), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT[1:],HPDEHOSTPREDICT,HPDEPORTPREDICT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
