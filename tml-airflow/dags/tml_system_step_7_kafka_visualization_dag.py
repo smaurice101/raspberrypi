@@ -67,5 +67,5 @@ def startstreamingengine(**context):
         # STEP 5: START Visualization Viperviz 
         subprocess.run(["tmux", "new", "-d", "-s", "visualization-viperviz"])
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "C-c", "ENTER"])
-        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "'cd /Viperviz'", "ENTER"])
-        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "'/Viperviz/viperviz-linux-{} 0.0.0.0 {}'".format(chip,vipervizport), "ENTER"])
+        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "cd /Viperviz", "ENTER"])
+        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport), "ENTER"])

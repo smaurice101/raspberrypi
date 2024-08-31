@@ -174,8 +174,8 @@ def startml(**context):
        fullpath=os.path.abspath(os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-ml-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-c", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "'cd /Viper-ml'", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "cd /Viper-ml", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

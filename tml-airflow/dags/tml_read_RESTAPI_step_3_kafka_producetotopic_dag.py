@@ -119,8 +119,8 @@ def startproducing(**context):
        fullpath=os.path.abspath(os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "'cd /Viper-produce'", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
         
 if __name__ == '__main__':
     
