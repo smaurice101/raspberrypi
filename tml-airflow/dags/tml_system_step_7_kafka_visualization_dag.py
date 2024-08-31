@@ -50,9 +50,9 @@ def startstreamingengine(**context):
             if os.environ['VIPERVIZPORT'] != '':
               vipervizport = os.environ['VIPERVIZPORT']
             else:
-              vipervizport=tsslogging.getfreeprot()
+              vipervizport=tsslogging.getfreeport()
         else:
-            vipervizport=tsslogging.getfreeprot()
+            vipervizport=tsslogging.getfreeport()
           
         ti = context['task_instance']
         ti.xcom_push(key='VIPERVIZPORT',value=vipervizport)
