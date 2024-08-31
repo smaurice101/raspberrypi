@@ -123,7 +123,6 @@ def startproducing(**context):
   subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
-  context = json.dumps(context)
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {} {} ".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
         
 if __name__ == '__main__':
