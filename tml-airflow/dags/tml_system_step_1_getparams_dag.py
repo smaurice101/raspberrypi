@@ -57,6 +57,7 @@ default_args = {
  'SSL_CLIENT_KEY_FILE' : 'client.key.pem', 
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
  'KUBERNETES' : '0',
+ 'COMPANYNAME' : 'My company',   
  'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
@@ -169,6 +170,8 @@ def updateviperenv():
          data[r] = "SSL_SERVER_CERT_FILE={}\n".format(default_args['SSL_SERVER_CERT_FILE'])                
        if 'KUBERNETES' in d: 
          data[r] = "KUBERNETES={}\n".format(default_args['KUBERNETES'])                
+       if 'COMPANYNAME' in d: 
+         data[r] = "COMPANYNAME={}\n".format(default_args['COMPANYNAME'])                
 
        r += 1
      with open(mainfile, 'w', encoding='utf-8') as file: 
