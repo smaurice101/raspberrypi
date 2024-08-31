@@ -85,6 +85,7 @@ def updateviperenv():
      for d in data:
        print("d=",d) 
        if d[0] == '#':
+          r += 1  
           continue 
         
        if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
