@@ -1242,3 +1242,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-08-31_19:33:09] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag.py
 [INFO 2024-08-31_19:33:10] Visualization DAG in tml_system_step_7_kafka_visualization_dag.py
 [INFO 2024-08-31_19:33:16] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag.py
+[ERROR 2024-08-31_19:33:17] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag.py: name 'solution_dag_to_trigger' is not defined
