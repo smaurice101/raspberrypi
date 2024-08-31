@@ -1245,3 +1245,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [ERROR 2024-08-31_19:33:17] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag.py: name 'solution_dag_to_trigger' is not defined
 [INFO 2024-08-31_19:33:24] {'name': ['Project with slug "mysolution" already exists.']}
 [INFO 2024-08-31_19:58:38] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag.py
+[INFO 2024-08-31_19:58:41] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag.py
