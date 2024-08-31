@@ -1306,3 +1306,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-08-31_20:57:48] {'name': ['Project with slug "mysolution" already exists.']}
 [INFO 2024-08-31_20:59:36] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag.py
 [INFO 2024-08-31_20:59:38] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag.py
+[INFO 2024-08-31_20:59:40] Visualization DAG in tml_system_step_7_kafka_visualization_dag.py
