@@ -61,6 +61,7 @@ default_args = {
  'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
+ 'HTTPADDR' : 'https://'
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -186,7 +187,7 @@ def getparams(**context):
   args = default_args    
   VIPERHOST = ""
   VIPERPORT = ""
-  HTTPADDR = "https://"
+  HTTPADDR = args['HTTPADDR']
   HPDEHOST = ""
   HPDEPORT = ""
   VIPERTOKEN = ""
@@ -199,27 +200,27 @@ def getparams(**context):
   if VIPERHOST=="":
     with open('/Viper-produce/viper.txt', 'r') as f:
       output = f.read()
-      VIPERHOST = HTTPADDR + output.split(",")[0]
+      VIPERHOST = output.split(",")[0]
       VIPERPORT = output.split(",")[1]
     with open('/Viper-preprocess/viper.txt', 'r') as f:
       output = f.read()
-      VIPERHOSTPREPROCESS = HTTPADDR + output.split(",")[0]
+      VIPERHOSTPREPROCESS = output.split(",")[0]
       VIPERPORTPREPROCESS = output.split(",")[1]    
     with open('/Viper-ml/viper.txt', 'r') as f:
       output = f.read()
-      VIPERHOSTML = HTTPADDR + output.split(",")[0]
+      VIPERHOSTML = output.split(",")[0]
       VIPERPORTML = output.split(",")[1]    
     with open('/Viper-predict/viper.txt', 'r') as f:
       output = f.read()
-      VIPERHOSTPREDICT = HTTPADDR + output.split(",")[0]
+      VIPERHOSTPREDICT = output.split(",")[0]
       VIPERPORTPREDICT = output.split(",")[1]    
     with open('/Hpde/hpde.txt', 'r') as f:
       output = f.read()
-      HPDEHOST = HTTPADDR + output.split(",")[0]
+      HPDEHOST = output.split(",")[0]
       HPDEPORT = output.split(",")[1]
     with open('/Hpde-predict/hpde.txt', 'r') as f:
       output = f.read()
-      HPDEHOSTPREDICT = HTTPADDR + output.split(",")[0]
+      HPDEHOSTPREDICT = output.split(",")[0]
       HPDEPORTPREDICT = output.split(",")[1]
 
   sname = args['solutionname']    
