@@ -68,14 +68,8 @@ maintopic=default_args['preprocess_data_topic']
 predictiontopic=default_args['ml_prediction_topic']
 
 
-def performPrediction(**context):
+def performPrediction():
 
-      VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERTOKEN")
-      VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERHOSTPREDICT")
-      VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERPORTPREDICT")
-
-      HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEHOSTPREDICT")
-      HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEPORTPREDICT")
         
       # Set personal data
       companyname=default_args['companyname']
@@ -130,21 +124,7 @@ def performPrediction(**context):
       # Path where the trained algorithms are stored in the machine learning python file
       pathtoalgos=default_args['pathtoalgos'] #'/Viper-tml/viperlogs/iotlogistic'
       array=default_args['array']
-      
-      ti = context['task_instance']
-      ti.xcom_push(key="preprocess_data_topic",value=preprocess_data_topic)
-      ti.xcom_push(key="ml_prediction_topic",value=ml_prediction_topic)
-      ti.xcom_push(key="streamstojoin",value=streamstojoin)
-      ti.xcom_push(key="inputdata",value=inputdata)
-      ti.xcom_push(key="consumefrom",value=consumefrom)
-      ti.xcom_push(key="offset",value=offset)
-      ti.xcom_push(key="delay",value=delay)
-      ti.xcom_push(key="usedeploy",value=usedeploy)
-      ti.xcom_push(key="networktimeout",value=networktimeout)
-      ti.xcom_push(key="maxrows",value=maxrows)
-      ti.xcom_push(key="topicid",value=topicid)
-      ti.xcom_push(key="pathtoalgos",value=pathtoalgos)
-    
+          
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
                                      companyname,consumeridtraininedparams,
                                      produceridhyperprediction, HPDEHOST,inputdata,maxrows,mainalgokey,
@@ -153,6 +133,27 @@ def performPrediction(**context):
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
 def startpredictions(**context):
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERTOKEN")
+       VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERHOSTPREDICT")
+       VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERPORTPREDICT")
+
+       HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEHOSTPREDICT")
+       HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEPORTPREDICT")
+    
+       ti = context['task_instance']
+       ti.xcom_push(key="preprocess_data_topic",value=default_args['preprocess_data_topic'])
+       ti.xcom_push(key="ml_prediction_topic",value=default_args['ml_prediction_topic'])
+       ti.xcom_push(key="streamstojoin",value=default_args['streamstojoin'])
+       ti.xcom_push(key="inputdata",value=default_args['inputdata'])
+       ti.xcom_push(key="consumefrom",value=default_args['consumefrom'])
+       ti.xcom_push(key="offset",value=default_args['offset'])
+       ti.xcom_push(key="delay",value=default_args['delay'])
+       ti.xcom_push(key="usedeploy",value=default_args['usedeploy'])
+       ti.xcom_push(key="networktimeout",value=default_args['networktimeout'])
+       ti.xcom_push(key="maxrows",value=default_args['maxrows'])
+       ti.xcom_push(key="topicid",value=default_args['topicid'])
+       ti.xcom_push(key="pathtoalgos",value=default_args['pathtoalgos'])
+    
        repo=tsslogging.getrepo() 
        sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
@@ -162,7 +163,7 @@ def startpredictions(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-predict-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "cd /Viper-predict", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT,HPDEHOSTPREDICT,HPDEPORTPREDICT), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -173,7 +174,13 @@ if __name__ == '__main__':
     
          while True:
           try:  
-            performPrediction(sys.argv[2])      
+            VIPERTOKEN=sys.argv[2]
+            VIPERHOST=sys.argv[3]
+            VIPERPORT=sys.argv[4]
+            HPDEHOSTPREDICT=sys.argv[5]
+            HPDEPORTPREDICT=sys.argv[6]
+            
+            performPrediction()      
           except Exception as e:
             tsslogging.tsslogit("Predictions DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
             tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")

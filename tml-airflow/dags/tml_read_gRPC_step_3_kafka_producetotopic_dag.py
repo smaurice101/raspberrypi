@@ -67,16 +67,10 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
     #return pb2.MessageResponse(**result)
 
-def serve(**context):
+def serve():
     repo=tsslogging.getrepo()   
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")          
-    gettmlsystemsparams(context)
-    ti = context['task_instance']
-    ti.xcom_push(key='PRODUCETYPE',value='gRPC')
-    ti.xcom_push(key='TOPIC',value=default_args['topics'])
-    ti.xcom_push(key='PORT',value=default_args['gRPC_Port'])
-    ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UnaryServicer_to_server(UnaryService(), server)
@@ -92,6 +86,12 @@ def gettmlsystemsparams(**context):
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
+
+  ti = context['task_instance']
+  ti.xcom_push(key='PRODUCETYPE',value='gRPC')
+  ti.xcom_push(key='TOPIC',value=default_args['topics'])
+  ti.xcom_push(key='PORT',value=default_args['gRPC_Port'])
+  ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
     
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
@@ -134,10 +134,13 @@ def startproducing(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
         
 if __name__ == '__main__':
     
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
-         serve(sys.argv[2])
+         VIPERTOKEN = sys.argv[2]
+         VIPERHOST = sys.argv[3] 
+         VIPERPORT = sys.argv[4]                  
+         serve()

@@ -62,22 +62,12 @@ def on_message(client, userdata, msg):
   #print(msg.payload.decode("utf-8"))
   readdata(data)
 
-def mqttserverconnect(**context):
+def mqttserverconnect():
 
  repo = tsslogging.getrepo()
  tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
- VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
- VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
- VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
 
- ti = context['task_instance']
- ti.xcom_push(key='PRODUCETYPE',value='MQTT')
- ti.xcom_push(key='TOPIC',value=default_args['topics'])
- buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
- ti.xcom_push(key='PORT',value=buf)
- buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
- ti.xcom_push(key='IDENTIFIER',value=buf)
 
  client = paho.Client(paho.CallbackAPIVersion.VERSION2)
  mqttBroker = default_args['mqtt_broker'] 
@@ -116,6 +106,14 @@ def gettmlsystemsparams(**context):
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")    
 
+  ti = context['task_instance']
+  ti.xcom_push(key='PRODUCETYPE',value='MQTT')
+  ti.xcom_push(key='TOPIC',value=default_args['topics'])
+  buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
+  ti.xcom_push(key='PORT',value=buf)
+  buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
+  ti.xcom_push(key='IDENTIFIER',value=buf)
+    
 def readdata(valuedata):
   # MAin Kafka topic to store the real-time data
   maintopic = default_args['topics']
@@ -141,10 +139,14 @@ def startproducing(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
         
 if __name__ == '__main__':
     
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
-         mqttserverconnect(sys.argv[2])
+         VIPERTOKEN = sys.argv[2]
+         VIPERHOST = sys.argv[3] 
+         VIPERPORT = sys.argv[4]                  
+        
+         mqttserverconnect()

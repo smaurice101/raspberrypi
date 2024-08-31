@@ -90,8 +90,6 @@ def readdata():
         print("Reached End of File - Restarting")
         print("Read End:",datetime.now())
         continue
-      if k > 1000:
-        break
       producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
       # change time to speed up or slow down data   
       #time.sleep(0.15)

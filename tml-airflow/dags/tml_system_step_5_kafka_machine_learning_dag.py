@@ -68,14 +68,8 @@ HPDEPORT = ''
 maintopic =  default_args['preprocess_data_topic']  
 mainproducerid = default_args['producerid']                     
         
-def performSupervisedMachineLearning(**context):
+def performSupervisedMachineLearning():
       
-      VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-      VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOSTML")
-      VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORTML")
-
-      HPDEHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOST")
-      HPDEPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORT")
         
       # Set personal data
       companyname=default_args['companyname']
@@ -143,24 +137,6 @@ def performSupervisedMachineLearning(**context):
       coeftoprocess=default_args['coeftoprocess']  # indicate the index of the coefficients to process i.e. 0,1,2
       coefsubtopicnames=default_args['coefsubtopicnames']  # Give the coefficients a name: constant,elasticity,elasticity2
 
-      ti = context['task_instance']
-      ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
-      ti.xcom_push(key="ml_data_topic", value=ml_data_topic)
-      ti.xcom_push(key="modelruns", value=modelruns)
-      ti.xcom_push(key="offset", value=offset)
-      ti.xcom_push(key="islogistic", value=islogistic)
-      ti.xcom_push(key="networktimeout", value=networktimeout)
-      ti.xcom_push(key="modelsearchtuner", value=modelsearchtuner)
-      ti.xcom_push(key="dependentvariable", value=dependentvariable)
-      ti.xcom_push(key="independentvariables", value=independentvariables)
-      ti.xcom_push(key="rollbackoffsets", value=rollbackoffsets)
-      ti.xcom_push(key="topicid", value=topicid)
-      ti.xcom_push(key="consumefrom", value=consumefrom)
-      ti.xcom_push(key="fullpathtotrainingdata", value=fullpathtotrainingdata)
-      ti.xcom_push(key="transformtype", value=transformtype)
-      ti.xcom_push(key="sendcoefto", value=sendcoefto)
-      ti.xcom_push(key="coeftoprocess", value=coeftoprocess)
-      ti.xcom_push(key="coefsubtopicnames", value=coefsubtopicnames)
     
      # Call HPDE to train the model
       result=maadstml.viperhpdetraining(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
@@ -171,6 +147,32 @@ def performSupervisedMachineLearning(**context):
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
  
 def startml(**context):
+       VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
+       VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOSTML")
+       VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORTML")
+
+       HPDEHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOST")
+       HPDEPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORT")
+    
+       ti = context['task_instance']
+       ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
+       ti.xcom_push(key="ml_data_topic", value=ml_data_topic)
+       ti.xcom_push(key="modelruns", value=modelruns)
+       ti.xcom_push(key="offset", value=offset)
+       ti.xcom_push(key="islogistic", value=islogistic)
+       ti.xcom_push(key="networktimeout", value=networktimeout)
+       ti.xcom_push(key="modelsearchtuner", value=modelsearchtuner)
+       ti.xcom_push(key="dependentvariable", value=dependentvariable)
+       ti.xcom_push(key="independentvariables", value=independentvariables)
+       ti.xcom_push(key="rollbackoffsets", value=rollbackoffsets)
+       ti.xcom_push(key="topicid", value=topicid)
+       ti.xcom_push(key="consumefrom", value=consumefrom)
+       ti.xcom_push(key="fullpathtotrainingdata", value=fullpathtotrainingdata)
+       ti.xcom_push(key="transformtype", value=transformtype)
+       ti.xcom_push(key="sendcoefto", value=sendcoefto)
+       ti.xcom_push(key="coeftoprocess", value=coeftoprocess)
+       ti.xcom_push(key="coefsubtopicnames", value=coefsubtopicnames)
+
        repo=tsslogging.getrepo() 
        sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
@@ -180,7 +182,7 @@ def startml(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-ml-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN, VIPERHOST, VIPERPORT, HPDEHOST, HPDEPORT), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -191,7 +193,13 @@ if __name__ == '__main__':
     
         while True:
          try:     
-          performSupervisedMachineLearning(sys.argv[2] )
+          VIPERTOKEN = sys.argv[2]
+          VIPERHOST = sys.argv[3]
+          VIPERPORT = sys.argv[4]
+          HPDEHOST = sys.argv[5]
+          HPDEPORT = sys.argv[6]
+        
+          performSupervisedMachineLearning()
          except Exception as e:
           tsslogging.tsslogit("Machine Learning DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    

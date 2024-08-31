@@ -57,7 +57,7 @@ VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
 
-def processtransactiondata(**context):
+def processtransactiondata():
  global VIPERTOKEN
  global VIPERHOST
  global VIPERPORT   
@@ -65,14 +65,9 @@ def processtransactiondata(**context):
  maintopic =  default_args['raw_data_topic']  
  mainproducerid = default_args['producerid']     
   
- VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
- VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPREPROCESS")
- VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPREPROCESS")
-
 #############################################################################################################
   #                                    PREPROCESS DATA STREAMS
 
- ti = context['task_instance']
 
   # Roll back each data stream by 10 percent - change this to a larger number if you want more data
   # For supervised machine learning you need a minimum of 30 data points in each stream
@@ -126,22 +121,6 @@ def processtransactiondata(**context):
  pathtotmlattrs=default_args['pathtotmlattrs']       
  raw_data_topic = default_args['raw_data_topic']  
  preprocess_data_topic = default_args['preprocess_data_topic']  
-
- ti.xcom_push(key="raw_data_topic", value=raw_data_topic)
- ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
- ti.xcom_push(key="preprocessconditions", value=preprocessconditions)
- ti.xcom_push(key="delay", value=delay)
- ti.xcom_push(key="array", value=array)
- ti.xcom_push(key="saveasarray", value=saveasarray)
- ti.xcom_push(key="topicid", value=topicid)
- ti.xcom_push(key="rawdataoutput", value=rawdataoutput)
- ti.xcom_push(key="asynctimeout", value=asynctimeout)
- ti.xcom_push(key="timedelay", value=timedelay)
- ti.xcom_push(key="usemysql", value=usemysql)
- ti.xcom_push(key="preprocesstypes", value=preprocesstypes)
- ti.xcom_push(key="pathtotmlattrs", value=pathtotmlattrs)
- ti.xcom_push(key="identifier", value=identifier)
- ti.xcom_push(key="jsoncriteria", value=jsoncriteria)
     
  try:
     result=maadstml.viperpreprocesscustomjson(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,jsoncriteria,rawdataoutput,maxrows,enabletls,delay,brokerhost,
@@ -154,6 +133,27 @@ def processtransactiondata(**context):
     return e
 
 def dopreprocessing(**context):
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+       VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPREPROCESS")
+       VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPREPROCESS")
+
+       ti = context['task_instance']    
+       ti.xcom_push(key="raw_data_topic", value=default_args['raw_data_topic'])
+       ti.xcom_push(key="preprocess_data_topic", value=default_args['preprocess_data_topic'])
+       ti.xcom_push(key="preprocessconditions", value=default_args['preprocessconditions'])
+       ti.xcom_push(key="delay", value=default_args['delay'])
+       ti.xcom_push(key="array", value=default_args['array'])
+       ti.xcom_push(key="saveasarray", value=default_args['saveasarray'])
+       ti.xcom_push(key="topicid", value=default_args['topicid'])
+       ti.xcom_push(key="rawdataoutput", value=default_args['rawdataoutput'])
+       ti.xcom_push(key="asynctimeout", value=default_args['asynctimeout'])
+       ti.xcom_push(key="timedelay", value=default_args['timedelay'])
+       ti.xcom_push(key="usemysql", value=default_args['usemysql'])
+       ti.xcom_push(key="preprocesstypes", value=default_args['preprocesstypes'])
+       ti.xcom_push(key="pathtotmlattrs", value=default_args['pathtotmlattrs'])
+       ti.xcom_push(key="identifier", value=default_args['identifier'])
+       ti.xcom_push(key="jsoncriteria", value=default_args['jsoncriteria'])
+        
        repo=tsslogging.getrepo() 
        sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
@@ -163,7 +163,7 @@ def dopreprocessing(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-preprocess-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "cd /Viper-preprocess", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "python {} 1 {}".format(fullpath,context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "python {} 1 {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -171,10 +171,13 @@ if __name__ == '__main__':
         repo=tsslogging.getrepo()  
         tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+        VIPERTOKEN = sys.argv[2]
+        VIPERHOST = sys.argv[3] 
+        VIPERPORT = sys.argv[4]                  
 
         while True:
           try: 
-            processtransactiondata(sys.argv[2])
+            processtransactiondata()
           except Exception as e:     
            tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
