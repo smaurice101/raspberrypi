@@ -234,7 +234,7 @@ def getparams(**context):
      
   task_instance.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
   task_instance.xcom_push(key='VIPERHOST',value=VIPERHOST)
-  task_instance.xcom_push(key='VIPERPORT',value=str(VIPERPORT))
+  task_instance.xcom_push(key='VIPERPORT',value="{}".format(VIPERPORT))
   task_instance.xcom_push(key='VIPERHOSTPRODUCE',value=VIPERHOST)
   task_instance.xcom_push(key='VIPERPORTPRODUCE',value=str(VIPERPORT))
   task_instance.xcom_push(key='VIPERHOSTPREPROCESS',value=VIPERHOSTPREPROCESS)
