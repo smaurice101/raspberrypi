@@ -12,13 +12,11 @@ sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed   
- 'start_date': datetime (2023, 1, 1),   # <<< *** Change as needed   
- 'retries': 1,   # <<< *** Change as needed   
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_9_privategpt_qdrant_dag", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag"], start_date=datetime(2023, 1, 1), schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_9_privategpt_qdrant_dag", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag"], schedule=None,  catchup=False)
 def startaiprocess():
     # Define tasks
     def empty():

@@ -22,23 +22,20 @@ sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice',    
-  'enabletls': 1,
+  'enabletls': '1',
   'microserviceid' : '',
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'rest_port' : 9001,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
-  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : -999, # <<< ********* do not modify          
-  'start_date': datetime (2023, 1, 1),
-  'retries': 1,
-    
+  'rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
+  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : '-999', # <<< ********* do not modify              
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
+@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag"],schedule=None,catchup=False)
 def startproducingtotopic():
    def empty():
      pass
@@ -52,11 +49,11 @@ VIPERPORT=""
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
-     topicid=args['topicid']
+     topicid=int(args['topicid'])
   
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=args['delay']
-     enabletls = args['enabletls']
+     delay=int(args['delay'])
+     enabletls = int(args['enabletls'])
      identifier = args['identifier']
 
      try:

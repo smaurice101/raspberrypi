@@ -14,14 +14,14 @@ sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice', # <<< *** Change as needed   
-  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',   # <<< *** Change as needed   
   'inputfile' : '/rawdata/IoTData.txt',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
-  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : -999, # <<< ********* do not modify  
+  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : '-999', # <<< ********* do not modify  
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -41,11 +41,11 @@ VIPERPORT=""
   
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
  inputbuf=value     
- topicid=args['topicid']
+ topicid=int(args['topicid'])
 
  # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
- delay = args['delay']
- enabletls = args['enabletls']
+ delay = int(args['delay'])
+ enabletls = int(args['enabletls'])
  identifier = args['identifier']
 
  try:

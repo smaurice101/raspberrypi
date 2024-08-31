@@ -17,20 +17,17 @@ default_args = {
   'myname' : 'Sebastian',  # <<< ********** You change as needed
   'myemail' : 'Sebastian.Maurice',  # <<< ********** You change as needed
   'mylocation' : 'Toronto',  # <<< ********** You change as needed
-  'replication' : 1,  # <<< ********** You change as needed
-  'numpartitions': 1,  # <<< ********** You change as needed
-  'enabletls': 1,  # <<< ********** You change as needed
+  'replication' : '1',  # <<< ********** You change as needed
+  'numpartitions': '1',  # <<< ********** You change as needed
+  'enabletls': '1',  # <<< ********** You change as needed
   'brokerhost' : '',  # <<< ********** Leave as is
-  'brokerport' : -999,  # <<< ********** Leave as is
+  'brokerport' : '-999',  # <<< ********** Leave as is
   'microserviceid' : '',  # <<< ********** You change as needed
   'raw_data_topic' : 'iot-raw-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'preprocess_data_topic' : 'iot-preprocess-data,iot-preprocess2-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'ml_data_topic' : 'ml-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'prediction_data_topic' : 'prediction-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
-  'description' : 'Topics to store iot data',  
-  'start_date': datetime (2023, 1, 1),
-  'retries': 1,
-    
+  'description' : 'Topics to store iot data',      
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -52,18 +49,18 @@ def setupkafkatopics(**context):
   description=args['description']  
 
   # Replication factor for Kafka redundancy
-  replication=args['replication']
+  replication=int(args['replication'])
   # Number of partitions for joined topic
-  numpartitions=args['numpartitions']
+  numpartitions=int(args['numpartitions'])
   # Enable SSL/TLS communication with Kafka
-  enabletls=args['enabletls']
+  enabletls=int(args['enabletls'])
   # If brokerhost is empty then this function will use the brokerhost address in your
   brokerhost = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="brokerhost")  
   # VIPER.ENV in the field 'KAFKA_CONNECT_BOOTSTRAP_SERVERS'
   brokerhost=args['brokerhost']
   # If this is -999 then this function uses the port address for Kafka in VIPER.ENV in the
   # field 'KAFKA_CONNECT_BOOTSTRAP_SERVERS'
-  brokerport=args['brokerport']
+  brokerport=int(args['brokerport'])
   # If you are using a reverse proxy to reach VIPER then you can put it here - otherwise if
   # empty then no reverse proxy is being used
   microserviceid=args['microserviceid']

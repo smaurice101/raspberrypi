@@ -24,23 +24,20 @@ sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice', # <<< *** Change as needed
-  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< ***** leave blank
   'producerid' : 'iotsolution',  # <<< *** Change as needed
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  # <<< *** Change as needed
-  'gRPC_Port' : 9001,  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
-  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : -999, # <<< ********* do not modify          
-  'start_date': datetime (2023, 1, 1),  # <<< *** Change as needed   
-  'retries': 1,  # <<< *** Change as needed   
-    
+  'gRPC_Port' : '9001',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
+  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : '-999', # <<< ********* do not modify              
 }
     
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_read_gRPC_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_gRPC_step_3_kafka_producetotopic_dag"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
+@dag(dag_id="tml_read_gRPC_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_gRPC_step_3_kafka_producetotopic_dag"], schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
   def empty():
@@ -99,8 +96,8 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
  topicid=args['topicid']
 
  # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
- delay=args['delay']
- enabletls = args['enabletls']
+ delay=int(args['delay'])
+ enabletls = int(args['enabletls'])
  identifier = args['identifier']
 
  try:

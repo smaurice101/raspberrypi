@@ -17,15 +17,12 @@ default_args = {
   'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
   'append' : '0',   # << ** Do not append new data in the browser
   'rollbackoffset' : '500', # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
-  'start_date': datetime (2023, 1, 1),   # <<< *** Change as needed   
-  'retries': 1,   # <<< *** Change as needed   
-    
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_7_kafka_visualization_dag", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_7_kafka_visualization_dag", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag"], schedule=None,catchup=False)
 def startstreaming():    
   def empty():
       pass

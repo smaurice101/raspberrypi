@@ -14,25 +14,25 @@ sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice',  # <<< *** Change as needed      
-  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '',  # <<< *** leave blank
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'raw_data_topic' : 'iot-raw-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'preprocess_data_topic' : 'iot-preprocess-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'maxrows' : 500, # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
-  'offset' : -1, # <<< Rollback from the end of the data streams  
+  'maxrows' : '500', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
+  'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
-  'brokerport' : -999,  # <<< *** Leave as is   
+  'brokerport' : '-999',  # <<< *** Leave as is   
   'preprocessconditions' : '', ## <<< Leave blank      
-  'delay' : 70, # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
-  'array' : 0, # do not modify
-  'saveasarray' : 1, # do not modify
-  'topicid' : -999, # do not modify
-  'rawdataoutput' : 1, # <<< 1 to output raw data used in the preprocessing, 0 do not output
-  'asynctimeout' : 120, # <<< 120 seconds for connection timeout 
-  'timedelay' : 0, # <<< connection delay
+  'delay' : '70', # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
+  'array' : '0', # do not modify
+  'saveasarray' : '1', # do not modify
+  'topicid' : '-999', # do not modify
+  'rawdataoutput' : '1', # <<< 1 to output raw data used in the preprocessing, 0 do not output
+  'asynctimeout' : '120', # <<< 120 seconds for connection timeout 
+  'timedelay' : '0', # <<< connection delay
   'tmlfilepath' : '', # leave blank
-  'usemysql' : 1, # do not modify
+  'usemysql' : '1', # do not modify
   'streamstojoin' : '', # leave blank
   'identifier' : 'IoT device performance and failures', # <<< ** Change as needed
   'preprocesstypes' : 'anomprob,trend,avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
@@ -45,9 +45,6 @@ datetime=datapoint.updated_at~\
 msgid=datapoint.id~\
 latlong=lat:long', # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'identifier' : 'TML solution',   # <<< *** Change as needed   
-  'start_date': datetime (2023, 1, 1),  # <<< *** Change as needed   
-  'retries': 1,  # <<< *** Change as needed   
-    
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -77,11 +74,11 @@ def processtransactiondata():
 
   # Roll back each data stream by 10 percent - change this to a larger number if you want more data
   # For supervised machine learning you need a minimum of 30 data points in each stream
- maxrows=default_args['maxrows']
+ maxrows=int(default_args['maxrows'])
 
   # Go to the last offset of each stream: If lastoffset=500, then this function will rollback the 
   # streams to offset=500-50=450
- offset=default_args['offset']
+ offset=int(default_args['offset'])
   # Max wait time for Kafka to response on milliseconds - you can increase this number if
   #maintopic to produce the preprocess data to
  topic=maintopic
@@ -90,7 +87,7 @@ def processtransactiondata():
   # use the host in Viper.env file
  brokerhost=default_args['brokerhost']
   # use the port in Viper.env file
- brokerport=default_args['brokerport']
+ brokerport=int(default_args['brokerport'])
   #if load balancing enter the microsericeid to route the HTTP to a specific machine
  microserviceid=default_args['microserviceid']
 
@@ -102,21 +99,21 @@ def processtransactiondata():
  preprocessconditions=default_args['preprocessconditions']
 
  # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
- delay=default_args['delay']
+ delay=int(default_args['delay'])
  # USE TLS encryption when sending to Kafka Cloud (GCP/AWS/Azure)
- enabletls=default_args['enabletls']
- array=default_args['array']
- saveasarray=default_args['saveasarray']
- topicid=default_args['topicid']
+ enabletls=int(default_args['enabletls'])
+ array=int(default_args['array'])
+ saveasarray=int(default_args['saveasarray'])
+ topicid=int(default_args['topicid'])
 
- rawdataoutput=default_args['rawdataoutput']
- asynctimeout=default_args['asynctimeout']
- timedelay=default_args['timedelay']
+ rawdataoutput=int(default_args['rawdataoutput'])
+ asynctimeout=int(default_args['asynctimeout'])
+ timedelay=int(default_args['timedelay'])
 
  jsoncriteria = default_args['jsoncriteria']
 
  tmlfilepath=default_args['tmlfilepath']
- usemysql=default_args['usemysql']
+ usemysql=int(default_args['usemysql'])
 
  streamstojoin=default_args['streamstojoin']
  identifier = default_args['identifier']
