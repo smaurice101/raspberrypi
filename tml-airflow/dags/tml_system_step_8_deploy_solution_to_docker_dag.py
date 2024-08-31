@@ -34,7 +34,7 @@ def dockerit(**context):
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-       sname = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="solutionname")
+       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if 'CHIP' in os.environ:
           chip = os.environ['CHIP']
        else:
