@@ -36,8 +36,14 @@ default_args = {
   'streamstojoin' : '', # leave blank
   'identifier' : 'IoT device performance and failures', # <<< ** Change as needed
   'preprocesstypes' : 'anomprob,trend,avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
-  'pathtotmlattrs' : '', # Leave blank         
-  'jsoncriteria' : '', # <<< **** Specify your json criteria  refer to https://tml-readthedocs.readthedocs.io/en/latest/
+  'pathtotmlattrs' : 'oem=n/a,lat=n/a,long=n/a,location=n/a,identifier=n/a', # Change as needed     
+  'jsoncriteria' : 'uid=metadata.dsn,filter:allrecords~\
+subtopics=metadata.property_name~\
+values=datapoint.value~\
+identifiers=metadata.display_name~\
+datetime=datapoint.updated_at~\
+msgid=datapoint.id~\
+latlong=lat:long', # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'identifier' : 'TML solution',   # <<< *** Change as needed   
   'start_date': datetime (2023, 1, 1),  # <<< *** Change as needed   
   'retries': 1,  # <<< *** Change as needed   
