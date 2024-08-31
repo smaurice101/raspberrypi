@@ -84,6 +84,9 @@ def updateviperenv():
      r=0 
      for d in data:
        print("d=",d) 
+       if d[0] == '#':
+          continue 
+        
        if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
          data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}\n".format(default_args['brokerhost'],default_args['brokerport'])
        if 'CLOUD_USERNAME' in d: 
