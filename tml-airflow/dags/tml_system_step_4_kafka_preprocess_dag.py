@@ -139,7 +139,7 @@ def dopreprocessing(**context):
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
        VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPREPROCESS")
        VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPREPROCESS")
-
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
        ti = context['task_instance']    
        ti.xcom_push(key="raw_data_topic", value=default_args['raw_data_topic'])
        ti.xcom_push(key="preprocess_data_topic", value=default_args['preprocess_data_topic'])

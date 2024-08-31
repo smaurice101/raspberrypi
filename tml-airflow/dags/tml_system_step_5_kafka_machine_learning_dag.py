@@ -151,7 +151,7 @@ def startml(**context):
 
        HPDEHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOST")
        HPDEPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORT")
-    
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
        ti = context['task_instance']
        ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
        ti.xcom_push(key="ml_data_topic", value=ml_data_topic)

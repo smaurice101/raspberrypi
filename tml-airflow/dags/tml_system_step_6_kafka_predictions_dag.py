@@ -136,7 +136,7 @@ def startpredictions(**context):
 
        HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEHOSTPREDICT")
        HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEPORTPREDICT")
-    
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
        ti = context['task_instance']
        ti.xcom_push(key="preprocess_data_topic",value=default_args['preprocess_data_topic'])
        ti.xcom_push(key="ml_prediction_topic",value=default_args['ml_prediction_topic'])

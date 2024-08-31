@@ -22,6 +22,7 @@ default_args = {
   'inputfile' : '/rawdata/IoTData.txt',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify  
+  'sleep' : 0.15, # << Control how fast data streams - if 0 - the data will stream as fast as possible - BUT this may cause connecion reset by peer 
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -92,7 +93,7 @@ def readdata():
         continue
       producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
       # change time to speed up or slow down data   
-      #time.sleep(0.15)
+      time.sleep(args[sleep])
     except Exception as e:
       print(e)  
       pass  
@@ -104,7 +105,7 @@ def startproducing(**context):
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
-    
+  chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip")   
   ti = context['task_instance']
   ti.xcom_push(key='PRODUCETYPE',value='LOCALFILE')
   ti.xcom_push(key='TOPIC',value=default_args['topics'])
@@ -120,6 +121,9 @@ def startproducing(**context):
     
   subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
+  subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-c", "ENTER"])
+  subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{}".format(chip), "ENTER"])        
+  time.sleep(10)  
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {} {} ".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
         

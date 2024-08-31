@@ -105,7 +105,7 @@ def startproducing(**context):
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
-    
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
        ti = context['task_instance'] 
        ti.xcom_push(key='PRODUCETYPE',value='REST')
        ti.xcom_push(key='TOPIC',value=default_args['topics'])
@@ -120,6 +120,10 @@ def startproducing(**context):
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{}".format(chip), "ENTER"])        
+       time.sleep(10) 
+        
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT), "ENTER"])        
         

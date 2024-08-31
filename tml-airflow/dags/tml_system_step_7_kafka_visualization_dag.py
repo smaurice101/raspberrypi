@@ -31,11 +31,8 @@ dag = startstreaming()
 def startstreamingengine(**context):
         repo=tsslogging.getrepo()  
         tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-        chip = "amd64"         
-        if 'CHIP' in os.environ:
-            chip = os.environ['CHIP']
-            chip = chip.lower()
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
        
         topic = default_args['topic']
         secure = default_args['secure']
