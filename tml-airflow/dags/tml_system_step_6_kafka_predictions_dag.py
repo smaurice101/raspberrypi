@@ -153,7 +153,12 @@ def performPrediction(**context):
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
 def startpredictions(**context):
-       fullpath=os.path.abspath(os.path.basename(__file__))  
+       repo=tsslogging.getrepo() 
+       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
+       if sname != '_mysolution_':
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+       else:
+         fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-predict-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "cd /Viper-predict", "ENTER"])
