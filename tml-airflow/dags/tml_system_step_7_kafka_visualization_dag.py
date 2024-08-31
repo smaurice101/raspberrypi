@@ -13,11 +13,10 @@ sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'topic' : 'iot-preprocess',    # <<< *** Separate multiple topics by a comma - Viperviz will stream data from these topics to your browser
-  'secure': 1,   # <<< *** 1=connection is encrypted, 0=no encryption
-  'vipervizport' : 9005,   # <<< *** Port where viperviz is listening
-  'offset' : -1,    # <<< *** -1 indicates to read from the last offset always
-  'append' : 0,   # << ** Do not append new data in the browser
-  'rollbackoffset' : 500, # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
+  'secure': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
+  'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
+  'append' : '0',   # << ** Do not append new data in the browser
+  'rollbackoffset' : '500', # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
   'start_date': datetime (2023, 1, 1),   # <<< *** Change as needed   
   'retries': 1,   # <<< *** Change as needed   
     
@@ -47,7 +46,14 @@ def startstreamingengine(**context):
         append = default_args['append']
         rollbackoffset = default_args['rollbackoffset']
         
-        vipervizport = os.environ['VIPERVIZPORT']
+        if 'VIPERVIZPORT' in os.environ:
+            if os.environ['VIPERVIZPORT'] != '':
+              vipervizport = os.environ['VIPERVIZPORT']
+            else:
+              vipervizport=tsslogging.getfreeprot()
+        else:
+            vipervizport=tsslogging.getfreeprot()
+          
         ti = context['task_instance']
         ti.xcom_push(key='VIPERVIZPORT',value=vipervizport)
         ti.xcom_push(key='topic',value=topic)
@@ -60,5 +66,6 @@ def startstreamingengine(**context):
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 
         subprocess.run(["tmux", "new", "-d", "-s", "visualization-viperviz"])
+        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "C-c", "ENTER"])
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "'cd /Viperviz'", "ENTER"])
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "'/Viperviz/viperviz-linux-{} 0.0.0.0 {}'".format(chip,vipervizport), "ENTER"])

@@ -52,7 +52,10 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
  except Exception as e:
     print("ERROR:",e)
 
-def readdata():
+def readdata(**context):
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPRODUCE")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPRODUCE")
 
   repo = tsslogging.getrepo()
   tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
@@ -101,13 +104,20 @@ def readdata():
 
 def startproducing(**context):
     
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
   ti = context['task_instance']
   ti.xcom_push(key='PRODUCETYPE',value='LOCALFILE')
   ti.xcom_push(key='TOPIC',value=default_args['topics'])
   ti.xcom_push(key='PORT',value=default_args['inputfile'])
   ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+
+  fullpath=os.path.abspath(os.path.basename(__file__))  
+  subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
+  subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
+  subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "'cd /Viper-produce'", "ENTER"])
+  subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+        
+if __name__ == '__main__':
     
-  readdata()
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":  
+         readdata(sys.argv[2])

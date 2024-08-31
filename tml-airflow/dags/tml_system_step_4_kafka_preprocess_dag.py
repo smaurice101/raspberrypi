@@ -56,7 +56,14 @@ VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
 
-    
+   
+def dopreprocessing(**context):
+       fullpath=os.path.abspath(os.path.basename(__file__))  
+       subprocess.run(["tmux", "new", "-d", "-s", "viper-preprocess-python"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "'cd /Viper-preprocess'", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+
 def processtransactiondata(**context):
  global VIPERTOKEN
  global VIPERHOST
@@ -66,8 +73,8 @@ def processtransactiondata(**context):
  mainproducerid = default_args['producerid']     
   
  VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
- VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
- VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
+ VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPREPROCESS")
+ VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPREPROCESS")
 
 #############################################################################################################
   #                                    PREPROCESS DATA STREAMS
@@ -153,15 +160,17 @@ def processtransactiondata(**context):
     print(e)
     return e
 
- if VIPERHOST != "":
-  repo=tsslogging.getrepo()  
-  tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+        repo=tsslogging.getrepo()  
+        tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
 
-  while True:
-    try: 
-     processtransactiondata()
-    except Exception as e:     
-     tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-     break
+        while True:
+          try: 
+            processtransactiondata(sys.argv[2])
+          except Exception as e:     
+           tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+           break

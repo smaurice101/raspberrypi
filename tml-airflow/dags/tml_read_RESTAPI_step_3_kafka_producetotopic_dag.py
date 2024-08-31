@@ -71,8 +71,8 @@ def gettmlsystemsparams(**context):
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
         
     VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-    VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
-    VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
+    VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPRODUCE")
+    VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPRODUCE")
     
     ti = context['task_instance'] 
     ti.xcom_push(key='PRODUCETYPE',value='REST')
@@ -113,6 +113,16 @@ def readdata(valuedata):
           print(e)  
           pass  
   
-  
 def startproducing(**context):
-       gettmlsystemsparams(context)
+       
+       fullpath=os.path.abspath(os.path.basename(__file__))  
+       subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "'cd /Viper-produce'", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+        
+if __name__ == '__main__':
+    
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+         gettmlsystemsparams(sys.argv[2])

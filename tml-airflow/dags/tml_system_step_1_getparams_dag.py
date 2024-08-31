@@ -195,6 +195,18 @@ def getparams(**context):
       output = f.read()
       VIPERHOST = HTTPADDR + output.split(",")[0]
       VIPERPORT = output.split(",")[1]
+    with open('/Viper-preprocess/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTPREPROCESS = HTTPADDR + output.split(",")[0]
+      VIPERPORTPREPROCESS = output.split(",")[1]    
+    with open('/Viper-ml/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTML = HTTPADDR + output.split(",")[0]
+      VIPERPORTML = output.split(",")[1]    
+    with open('/Viper-predict/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTPREDICT = HTTPADDR + output.split(",")[0]
+      VIPERPORTPREDICT = output.split(",")[1]    
     with open('/Hpde/hpde.txt', 'r') as f:
       output = f.read()
       HPDEHOST = HTTPADDR + output.split(",")[0]
@@ -214,9 +226,19 @@ def getparams(**context):
   task_instance.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
   task_instance.xcom_push(key='VIPERHOST',value=VIPERHOST)
   task_instance.xcom_push(key='VIPERPORT',value=VIPERPORT)
+  task_instance.xcom_push(key='VIPERHOSTPRODUCE',value=VIPERHOST)
+  task_instance.xcom_push(key='VIPERPORTPRODUCE',value=VIPERPORT)
+  task_instance.xcom_push(key='VIPERHOSTPREPROCESS',value=VIPERHOSTPREPROCESS)
+  task_instance.xcom_push(key='VIPERPORTPREPROCESS',value=VIPERPORTPREPROCESS)
+  task_instance.xcom_push(key='VIPERHOSTML',value=VIPERHOSTML)
+  task_instance.xcom_push(key='VIPERPORTML',value=VIPERPORTML)
+  task_instance.xcom_push(key='VIPERHOSTPREDICT',value=VIPERHOSTPREDICT)
+  task_instance.xcom_push(key='VIPERPORTPREDICT',value=VIPERPORTPREDICT)
   task_instance.xcom_push(key='HTTPADDR',value=HTTPADDR)
   task_instance.xcom_push(key='HPDEHOST',value=HPDEHOST)
   task_instance.xcom_push(key='HPDEPORT',value=HPDEPORT)
+  task_instance.xcom_push(key='HPDEHOSTPREDICT',value=HPDEHOSTPREDICT)
+  task_instance.xcom_push(key='HPDEPORTPREDICT',value=HPDEPORTPREDICT)
   task_instance.xcom_push(key='solutionname',value=sname)
   task_instance.xcom_push(key='solutiondescription',value=desc)
   task_instance.xcom_push(key='solutiontitle',value=stitle)

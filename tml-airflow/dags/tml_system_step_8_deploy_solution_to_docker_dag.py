@@ -46,6 +46,8 @@ def dockerit(**context):
        else:    
           cname = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
       
+       print("Containername=",cname)
+        
        ti = context['task_instance']
        ti.xcom_push(key="containername",value=cname)
        ti.xcom_push(key='solution_dag_to_trigger', value=solution_dag_to_trigger)

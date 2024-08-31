@@ -69,7 +69,8 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
 def serve(**context):
     repo=tsslogging.getrepo()   
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")          
+    gettmlsystemsparams(context)
     ti = context['task_instance']
     ti.xcom_push(key='PRODUCETYPE',value='gRPC')
     ti.xcom_push(key='TOPIC',value=default_args['topics'])
@@ -88,8 +89,8 @@ def gettmlsystemsparams(**context):
   global VIPERPORT
 
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOST")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORT")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPRODUCE")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPRODUCE")
     
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
@@ -123,4 +124,14 @@ def readdata(valuedata):
   
 def startproducing(**context):
        gettmlsystemsparams(context)
-       serve(context)
+       fullpath=os.path.abspath(os.path.basename(__file__))  
+       subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "'cd /Viper-produce'", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+        
+if __name__ == '__main__':
+    
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+         serve(sys.argv[2])

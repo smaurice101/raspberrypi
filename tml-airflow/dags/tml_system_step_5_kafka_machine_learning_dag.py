@@ -70,8 +70,8 @@ mainproducerid = default_args['producerid']
 def performSupervisedMachineLearning(**context):
       
       VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-      VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-      VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+      VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOSTML")
+      VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORTML")
 
       HPDEHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOST")
       HPDEPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORT")
@@ -168,17 +168,25 @@ def performSupervisedMachineLearning(**context):
                                       deploy,modelruns,modelsearchtuner,HPDEPORT,offset,islogistic,
                                       brokerhost,brokerport,networktimeout,microserviceid,topicid,maintopic,
                                       independentvariables,dependentvariable,rollbackoffsets,fullpathtotrainingdata,processlogic,identifier)    
-      
+ 
 def startml(**context):
-  if VIPERHOST != "":
-       repo=tsslogging.getrepo()
-       tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+       fullpath=os.path.abspath(os.path.basename(__file__))  
+       subprocess.run(["tmux", "new", "-d", "-s", "viper-ml-python"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "'cd /Viper-ml'", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+        repo=tsslogging.getrepo()
+        tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
     
-       while True:
-        try:     
-         performSupervisedMachineLearning(**context)
-        except Exception as e:
+        while True:
+         try:     
+          performSupervisedMachineLearning(sys.argv[2] )
+         except Exception as e:
           tsslogging.tsslogit("Machine Learning DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
           break

@@ -70,8 +70,8 @@ predictiontopic=default_args['ml_prediction_topic']
 def performPrediction(**context):
 
       VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERTOKEN")
-      VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERHOST")
-      VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERPORT")
+      VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERHOSTPREDICT")
+      VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="VIPERPORTPREDICT")
 
       HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEHOSTPREDICT")
       HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='solution_task_prediction',key="HPDEPORTPREDICT")
@@ -151,16 +151,23 @@ def performPrediction(**context):
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
-        
 def startpredictions(**context):
-  if VIPERHOST != "":
-    repo=tsslogging.getrepo()
-    tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
+       fullpath=os.path.abspath(os.path.basename(__file__))  
+       subprocess.run(["tmux", "new", "-d", "-s", "viper-predict-python"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "'cd /Viper-predict'", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "{} 1 {}".format(fullpath,context), "ENTER"])        
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+         repo=tsslogging.getrepo()
+         tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
     
-    while True:
-      try:  
-        performPrediction(context)      
-      except Exception as e:
-        tsslogging.tsslogit("Predictions DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+         while True:
+          try:  
+            performPrediction(sys.argv[2])      
+          except Exception as e:
+            tsslogging.tsslogit("Predictions DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
