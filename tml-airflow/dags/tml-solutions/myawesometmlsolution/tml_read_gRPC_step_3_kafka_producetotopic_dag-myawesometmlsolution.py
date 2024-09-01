@@ -12,6 +12,8 @@ import tml_grpc_pb2 as pb2
 import tsslogging
 import sys
 import os
+import subprocess
+import random
 
 sys.dont_write_bytecode = True
 ##################################################  gRPC SERVER ###############################################
@@ -23,23 +25,20 @@ sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice', # <<< *** Change as needed
-  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< ***** leave blank
   'producerid' : 'iotsolution',  # <<< *** Change as needed
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  # <<< *** Change as needed
-  'gRPC_Port' : 9001,  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
-  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : -999, # <<< ********* do not modify          
-  'start_date': datetime (2023, 1, 1),  # <<< *** Change as needed   
-  'retries': 1,  # <<< *** Change as needed   
-    
+  'gRPC_Port' : '9001',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
+  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : '-999', # <<< ********* do not modify              
 }
     
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_read_gRPC_step_3_kafka_producetotopic_dag_myawesometmlsolution", default_args=default_args, tags=["tml_read_gRPC_step_3_kafka_producetotopic_dag_myawesometmlsolution"], start_date=datetime(2023, 1, 1), schedule=None,catchup=False)
+@dag(dag_id="tml_read_gRPC_step_3_kafka_producetotopic_dag_myawesometmlsolution", default_args=default_args, tags=["tml_read_gRPC_step_3_kafka_producetotopic_dag_myawesometmlsolution"], schedule=None,catchup=False)
 def startproducingtotopic():
   # This sets the lat/longs for the IoT devices so it can be map
   def empty():
@@ -50,7 +49,8 @@ dag = startproducingtotopic()
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-    
+HTTPADDR=""
+
 class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
   def __init__(self, *args, **kwargs):
@@ -66,15 +66,10 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
     #return pb2.MessageResponse(**result)
 
-def serve(**context):
+def serve():
     repo=tsslogging.getrepo()   
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-    
-    context['ti'].xcom_push(key='PRODUCETYPE',value='gRPC')
-    context['ti'].xcom_push(key='TOPIC',value=default_args['topics'])
-    context['ti'].xcom_push(key='PORT',value=default_args['gRPC_Port'])
-    context['ti'].xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")          
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UnaryServicer_to_server(UnaryService(), server)
@@ -86,10 +81,18 @@ def gettmlsystemsparams(**context):
   global VIPERTOKEN
   global VIPERHOST
   global VIPERPORT
+  global HTTPADDR 
+    
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
+  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
+  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
 
-  VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-  VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
+  ti = context['task_instance']
+  ti.xcom_push(key='PRODUCETYPE',value='gRPC')
+  ti.xcom_push(key='TOPIC',value=default_args['topics'])
+  ti.xcom_push(key='PORT',value=default_args['gRPC_Port'])
+  ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
     
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
@@ -97,8 +100,8 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
  topicid=args['topicid']
 
  # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
- delay=args['delay']
- enabletls = args['enabletls']
+ delay=int(args['delay'])
+ enabletls = int(args['enabletls'])
  identifier = args['identifier']
 
  try:
@@ -121,6 +124,34 @@ def readdata(valuedata):
       print(e)  
       pass  
   
+def windowname(wtype,sname):
+    randomNumber = random.randrange(10, 9999)
+    wn = "python-{}-{}-{}".format(wtype,randomNumber,sname)
+    with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
+      file.writelines("{}\n".format(wn))
+    
+    return wn
+
 def startproducing(**context):
        gettmlsystemsparams(context)
-       serve(context)
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
+       repo=tsslogging.getrepo() 
+       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
+       if sname != '_mysolution_':
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+       else:
+         fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
+            
+       wn = windowname('produce',sname)     
+       subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+        
+if __name__ == '__main__':
+    
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+         VIPERTOKEN = sys.argv[2]
+         VIPERHOST = sys.argv[3] 
+         VIPERPORT = sys.argv[4]                  
+         serve()

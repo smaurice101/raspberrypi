@@ -8,39 +8,45 @@ import sys
 import maadstml
 import tsslogging
 import os
+import subprocess
+import time
+import random
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice',  # <<< *** Change as needed      
-  'enabletls': 1, # <<< *** 1=connection is encrypted, 0=no encryption
+  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '',  # <<< *** leave blank
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'raw_data_topic' : 'iot-raw-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'preprocess_data_topic' : 'iot-preprocess-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'maxrows' : 500, # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
-  'offset' : -1, # <<< Rollback from the end of the data streams  
+  'maxrows' : '1500', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
+  'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
-  'brokerport' : -999,  # <<< *** Leave as is   
+  'brokerport' : '-999',  # <<< *** Leave as is   
   'preprocessconditions' : '', ## <<< Leave blank      
-  'delay' : 70, # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
-  'array' : 0, # do not modify
-  'saveasarray' : 1, # do not modify
-  'topicid' : -999, # do not modify
-  'rawdataoutput' : 1, # <<< 1 to output raw data used in the preprocessing, 0 do not output
-  'asynctimeout' : 120, # <<< 120 seconds for connection timeout 
-  'timedelay' : 0, # <<< connection delay
+  'delay' : '70', # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
+  'array' : '0', # do not modify
+  'saveasarray' : '1', # do not modify
+  'topicid' : '-999', # do not modify
+  'rawdataoutput' : '1', # <<< 1 to output raw data used in the preprocessing, 0 do not output
+  'asynctimeout' : '120', # <<< 120 seconds for connection timeout 
+  'timedelay' : '0', # <<< connection delay
   'tmlfilepath' : '', # leave blank
-  'usemysql' : 1, # do not modify
+  'usemysql' : '1', # do not modify
   'streamstojoin' : '', # leave blank
   'identifier' : 'IoT device performance and failures', # <<< ** Change as needed
-  'preprocesstypes' : 'anomprob,trend,avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
-  'pathtotmlattrs' : '', # Leave blank         
-  'jsoncriteria' : '', # <<< **** Specify your json criteria  refer to https://tml-readthedocs.readthedocs.io/en/latest/
+  'preprocesstypes' : 'anomprob,trend,avg,entropy,kurtosis', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
+  'pathtotmlattrs' : 'oem=n/a,lat=n/a,long=n/a,location=n/a,identifier=n/a', # Change as needed     
+  'jsoncriteria' : 'uid=metadata.dsn,filter:allrecords~\
+subtopics=metadata.property_name~\
+values=datapoint.value~\
+identifiers=metadata.display_name~\
+datetime=datapoint.updated_at~\
+msgid=datapoint.id~\
+latlong=lat:long', # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'identifier' : 'TML solution',   # <<< *** Change as needed   
-  'start_date': datetime (2023, 1, 1),  # <<< *** Change as needed   
-  'retries': 1,  # <<< *** Change as needed   
-    
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -55,30 +61,28 @@ dag = startprocessing()
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
+HTTPADDR=""
 
-    
-def processtransactiondata(**context):
+def processtransactiondata():
  global VIPERTOKEN
  global VIPERHOST
  global VIPERPORT   
+ global HTTPADDR
  preprocesstopic = default_args['preprocess_data_topic']
  maintopic =  default_args['raw_data_topic']  
  mainproducerid = default_args['producerid']     
-
- VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
- VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
- VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
-
+  
 #############################################################################################################
   #                                    PREPROCESS DATA STREAMS
 
+
   # Roll back each data stream by 10 percent - change this to a larger number if you want more data
   # For supervised machine learning you need a minimum of 30 data points in each stream
- maxrows=default_args['maxrows']
+ maxrows=int(default_args['maxrows'])
 
   # Go to the last offset of each stream: If lastoffset=500, then this function will rollback the 
   # streams to offset=500-50=450
- offset=default_args['offset']
+ offset=int(default_args['offset'])
   # Max wait time for Kafka to response on milliseconds - you can increase this number if
   #maintopic to produce the preprocess data to
  topic=maintopic
@@ -87,7 +91,7 @@ def processtransactiondata(**context):
   # use the host in Viper.env file
  brokerhost=default_args['brokerhost']
   # use the port in Viper.env file
- brokerport=default_args['brokerport']
+ brokerport=int(default_args['brokerport'])
   #if load balancing enter the microsericeid to route the HTTP to a specific machine
  microserviceid=default_args['microserviceid']
 
@@ -99,21 +103,21 @@ def processtransactiondata(**context):
  preprocessconditions=default_args['preprocessconditions']
 
  # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
- delay=default_args['delay']
+ delay=int(default_args['delay'])
  # USE TLS encryption when sending to Kafka Cloud (GCP/AWS/Azure)
- enabletls=default_args['enabletls']
- array=default_args['array']
- saveasarray=default_args['saveasarray']
- topicid=default_args['topicid']
+ enabletls=int(default_args['enabletls'])
+ array=int(default_args['array'])
+ saveasarray=int(default_args['saveasarray'])
+ topicid=int(default_args['topicid'])
 
- rawdataoutput=default_args['rawdataoutput']
- asynctimeout=default_args['asynctimeout']
- timedelay=default_args['timedelay']
+ rawdataoutput=int(default_args['rawdataoutput'])
+ asynctimeout=int(default_args['asynctimeout'])
+ timedelay=int(default_args['timedelay'])
 
  jsoncriteria = default_args['jsoncriteria']
 
  tmlfilepath=default_args['tmlfilepath']
- usemysql=default_args['usemysql']
+ usemysql=int(default_args['usemysql'])
 
  streamstojoin=default_args['streamstojoin']
  identifier = default_args['identifier']
@@ -122,6 +126,9 @@ def processtransactiondata(**context):
  preprocesstypes=default_args['preprocesstypes']
 
  pathtotmlattrs=default_args['pathtotmlattrs']       
+ raw_data_topic = default_args['raw_data_topic']  
+ preprocess_data_topic = default_args['preprocess_data_topic']  
+    
  try:
     result=maadstml.viperpreprocesscustomjson(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,jsoncriteria,rawdataoutput,maxrows,enabletls,delay,brokerhost,
                                       brokerport,microserviceid,topicid,streamstojoin,preprocesstypes,preprocessconditions,identifier,
@@ -132,15 +139,67 @@ def processtransactiondata(**context):
     print(e)
     return e
 
- if VIPERHOST != "":
-  repo=tsslogging.getrepo()  
-  tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+def windowname(wtype,sname):
+    randomNumber = random.randrange(10, 9999)
+    wn = "python-{}-{}-{}".format(wtype,randomNumber,sname)
+    with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
+      file.writelines("{}\n".format(wn))
+    
+    return wn
 
-  while True:
-    try: 
-     processtransactiondata()
-    except Exception as e:     
-     tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-     break
+def dopreprocessing(**context):
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREPROCESS")
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
+        
+       print("VIPERHOST=",VIPERHOST)
+       print("VIPERPORT=",VIPERPORT)
+        
+       ti = context['task_instance']    
+       ti.xcom_push(key="raw_data_topic", value=default_args['raw_data_topic'])
+       ti.xcom_push(key="preprocess_data_topic", value=default_args['preprocess_data_topic'])
+       ti.xcom_push(key="preprocessconditions", value=default_args['preprocessconditions'])
+       ti.xcom_push(key="delay", value="_{}".format(default_args['delay']))
+       ti.xcom_push(key="array", value="_{}".format(default_args['array']))
+       ti.xcom_push(key="saveasarray", value="_{}".format(default_args['saveasarray']))
+       ti.xcom_push(key="topicid", value="_{}".format(default_args['topicid']))
+       ti.xcom_push(key="rawdataoutput", value="_{}".format(default_args['rawdataoutput']))
+       ti.xcom_push(key="asynctimeout", value="_{}".format(default_args['asynctimeout']))
+       ti.xcom_push(key="timedelay", value="_{}".format(default_args['timedelay']))
+       ti.xcom_push(key="usemysql", value="_{}".format(default_args['usemysql']))
+       ti.xcom_push(key="preprocesstypes", value=default_args['preprocesstypes'])
+       ti.xcom_push(key="pathtotmlattrs", value=default_args['pathtotmlattrs'])
+       ti.xcom_push(key="identifier", value=default_args['identifier'])
+       ti.xcom_push(key="jsoncriteria", value=default_args['jsoncriteria'])
+        
+       repo=tsslogging.getrepo() 
+       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
+       if sname != '_mysolution_':
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+       else:
+         fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
+            
+       wn = windowname('preprocess',sname)     
+       subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+        repo=tsslogging.getrepo()  
+        tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+        VIPERTOKEN = sys.argv[2]
+        VIPERHOST = sys.argv[3] 
+        VIPERPORT = sys.argv[4]                  
+
+        while True:
+          try: 
+            processtransactiondata()
+          except Exception as e:     
+           tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+           break

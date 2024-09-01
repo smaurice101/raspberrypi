@@ -9,6 +9,9 @@ from flask import Flask
 import sys
 import tsslogging
 import os
+import subprocess
+import time
+import random
 
 sys.dont_write_bytecode = True
 ##################################################  REST API SERVER #####################################
@@ -21,23 +24,20 @@ sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice',    
-  'enabletls': 1,
+  'enabletls': '1',
   'microserviceid' : '',
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'rest_port' : 9001,  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
-  'delay' : 7000, # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : -999, # <<< ********* do not modify          
-  'start_date': datetime (2023, 1, 1),
-  'retries': 1,
-    
+  'rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
+  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : '-999', # <<< ********* do not modify              
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myawesometmlsolution", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myawesometmlsolution"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
+@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myawesometmlsolution", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag_myawesometmlsolution"],schedule=None,catchup=False)
 def startproducingtotopic():
    def empty():
      pass
@@ -47,15 +47,15 @@ dag = startproducingtotopic()
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-    
+HTTPADDR=""    
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
-     topicid=args['topicid']
+     topicid=int(args['topicid'])
   
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
-     delay=args['delay']
-     enabletls = args['enabletls']
+     delay=int(args['delay'])
+     enabletls = int(args['enabletls'])
      identifier = args['identifier']
 
      try:
@@ -64,21 +64,12 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
      except Exception as e:
         print("ERROR:",e)
 
-def gettmlsystemsparams(**context):
+def gettmlsystemsparams():
 
     repo=tsslogging.getrepo()  
     tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
         
-    VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
-    VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOST")
-    VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORT")
-
-    context['ti'].xcom_push(key='PRODUCETYPE',value='REST')
-    context['ti'].xcom_push(key='TOPIC',value=default_args['topics'])
-    context['ti'].xcom_push(key='PORT',value=default_args['rest_port'])
-    context['ti'].xcom_push(key='IDENTIFIER',value=default_args['identifier'])
-
     if VIPERHOST != "":
         app = Flask(__name__)
         app.run(port=default_args['rest_port'])
@@ -111,7 +102,45 @@ def readdata(valuedata):
       except Exception as e:
           print(e)  
           pass  
-  
-  
+
+def windowname(wtype,sname):
+    randomNumber = random.randrange(10, 9999)
+    wn = "python-{}-{}-{}".format(wtype,randomNumber,sname)
+    with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
+      file.writelines("{}\n".format(wn))
+    
+    return wn
+
 def startproducing(**context):
-       gettmlsystemsparams(context)
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
+        
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
+       ti = context['task_instance'] 
+       ti.xcom_push(key='PRODUCETYPE',value='REST')
+       ti.xcom_push(key='TOPIC',value=default_args['topics'])
+       ti.xcom_push(key='PORT',value=default_args['rest_port'])
+       ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+       
+       repo=tsslogging.getrepo() 
+       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
+       if sname != '_mysolution_':
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+       else:
+         fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
+            
+       wn = windowname('produce',sname)     
+       subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+        
+if __name__ == '__main__':
+    
+    if len(sys.argv) > 1:
+       if sys.argv[1] == "1":          
+         VIPERTOKEN = sys.argv[2]
+         VIPERHOST = sys.argv[3] 
+         VIPERPORT = sys.argv[4]                  
+         gettmlsystemsparams()

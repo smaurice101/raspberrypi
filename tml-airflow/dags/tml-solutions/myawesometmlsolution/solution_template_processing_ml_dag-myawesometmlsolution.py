@@ -35,51 +35,51 @@ with DAG(
   )
 # STEP 1: Get the Parameters
   sensor_A = PythonOperator(
-            task_id="solution_task_getparams",
+            task_id="step_1_solution_task_getparams",
             python_callable=step1.getparams,
             provide_context=True,
   )
 
 # STEP 2: Create the Kafka topics
   sensor_B = PythonOperator(
-      task_id="solution_task_createtopic",
+      task_id="step_2_solution_task_createtopic",
       python_callable=step2.setupkafkatopics,
       provide_context=True,
   )
 # STEP 3: Produce data to topic        
   sensor_C = PythonOperator(
-      task_id="solution_task_producetotopic",
+      task_id="step_3_solution_task_producetotopic",
       python_callable=step3.startproducing,
       provide_context=True,
   )
 # STEP 4: Preprocess the data        
   sensor_D = PythonOperator(
-      task_id="solution_task_preprocess",
-      python_callable=step4.processtransactiondata,
+      task_id="step_4_solution_task_preprocess",
+      python_callable=step4.dopreprocessing,
       provide_context=True,
   )
 # STEP 5: ML        
   sensor_E = PythonOperator(
-      task_id="solution_task_ml",
+      task_id="step_5_solution_task_ml",
       python_callable=step5.startml,
       provide_context=True,
   )
 # STEP 6: Predictions        
   sensor_F = PythonOperator(
-      task_id="solution_task_prediction",
+      task_id="step_6_solution_task_prediction",
       python_callable=step6.startpredictions,
       provide_context=True,
   )    
     
 # STEP 7: Visualization the solution     
   sensor_G = PythonOperator(
-      task_id="solution_task_visualization",
+      task_id="step_7_solution_task_visualization",
       python_callable=step7.startstreamingengine,
       provide_context=True,
   )
 # STEP 8: Containerize the solution        
   sensor_H = PythonOperator(
-      task_id="solution_task_containerize",
+      task_id="step_8_solution_task_containerize",
       python_callable=step8.dockerit,
       provide_context=True,      
   )
@@ -97,9 +97,9 @@ with DAG(
   )
 # STEP 10: Document the solution
   sensor_J = PythonOperator(
-      task_id="solution_task_document",
+      task_id="step_10_solution_task_document",
       python_callable=step10.generatedoc,
       provide_context=True,      
   )
 
-  start_task >> sensor_A >> sensor_B >> start_task2 >> sensor_H >> start_task3 >> sensor_J >> start_task4 >> [sensor_C, sensor_D, sensor_E, sensor_F, sensor_G]
+  start_task >> sensor_A >> sensor_B >> start_task4 >> [sensor_C, sensor_D, sensor_E, sensor_F, sensor_G] >> start_task2 >> sensor_H >> start_task3 >> sensor_J

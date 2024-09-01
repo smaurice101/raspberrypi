@@ -12,16 +12,9 @@ import sys
 
 sys.dont_write_bytecode = True
 
-######################################################USER CHOSEN PARAMETERS ###########################################################
-default_args = {
- 'solution_dag_to_trigger' : 'solution_preprocessing_dag',   # << Enter the name of the Solution DAG to trigger when container runs
- 'start_date': datetime (2023, 1, 1),   # <<< *** Change as needed   
- 'retries': 1,   # <<< *** Change as needed   
-}
-
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution", default_args=default_args, tags=["tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution"], start_date=datetime(2023, 1, 1), schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution", tags=["tml_system_step_8_deploy_solution_to_docker_dag_myawesometmlsolution"], schedule=None,  catchup=False)
 def starttmldeploymentprocess():
     # Define tasks
     def empty():
@@ -30,31 +23,34 @@ dag = starttmldeploymentprocess()
     
 def dockerit(**context):
      if 'tssbuild' in os.environ:
-        if os.environ['tssbuild']==1:
+        if os.environ['tssbuild']=="1":
             return        
      try:
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-       sname = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="solutionname")
-       if 'CHIP' in os.environ:
-          chip = os.environ['CHIP']
-       else:
-          chip=""
-       if chip.lower() == "arm64":  
-          cname = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
-       else:    
-          cname = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
-    
+       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip")         
+       cname = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
+      
+       print("Containername=",cname)
+        
+       ti = context['task_instance']
+       ti.xcom_push(key="containername",value=cname)
+       sd = context['dag'].dag_id 
+       ti.xcom_push(key='solution_dag_to_trigger', value=sd)
+        
        scid = tsslogging.getrepo('/tmux/cidname.txt')
-       context['ti'].xcom_push(key='containername',value=cname)
        cid = os.environ['SCID']
-       tsslogging.tmuxchange(default_args['solution_dag_to_trigger'])
+       tsslogging.tmuxchange(sd)
        key = "trigger-{}".format(sname)
-       os.environ[key] = default_args['solution_dag_to_trigger']
-       subprocess.call("docker commit {} {}".format(cid,cname), shell=True, stdout=output, stderr=output)
-       subprocess.call("docker push {}".format(cname), shell=True, stdout=output, stderr=output)  
+       os.environ[key] = sd
+       v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
+       print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
+       v=subprocess.call("docker push {}".format(cname), shell=True)  
+       print("[INFO] docker push {} - message={}".format(cname,v))  
        os.environ['tssbuild']="1"
      except Exception as e:
+        print("[ERROR] Step 8: ",e)
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
