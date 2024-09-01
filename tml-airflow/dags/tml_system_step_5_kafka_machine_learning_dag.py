@@ -180,8 +180,8 @@ def startml(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-ml-python"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-c", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-z", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-z", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
        time.sleep(10)  
         

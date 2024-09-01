@@ -122,8 +122,8 @@ def startproducing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
        subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-c", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-z", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-z", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
        time.sleep(7) 
         
