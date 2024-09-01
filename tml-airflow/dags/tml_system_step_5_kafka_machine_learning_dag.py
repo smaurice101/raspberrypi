@@ -63,7 +63,7 @@ VIPERHOST=""
 VIPERPORT=""
 HPDEHOST = ''    
 HPDEPORT = ''
-
+HTTPADDR=""
 maintopic =  default_args['preprocess_data_topic']  
 mainproducerid = default_args['producerid']                     
         
@@ -149,6 +149,7 @@ def startml(**context):
        VIPERTOKEN = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERTOKEN")
        VIPERHOST = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERHOSTML")
        VIPERPORT = context['ti'].xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="VIPERPORTML")
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
 
        HPDEHOST = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEHOST")
        HPDEPORT = ti.xcom_pull(dag_id='tml_system_step_1_getparams_dag',task_ids='getparams',key="HPDEPORT")
@@ -185,7 +186,7 @@ def startml(**context):
        time.sleep(10)  
         
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN, VIPERHOST, VIPERPORT[1:], HPDEHOST, HPDEPORT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "python {} 1 {} {}{} {} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEHOST, HPDEPORT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

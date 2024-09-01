@@ -60,6 +60,7 @@ dag = startprocessing()
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
+HTTPADDR=""
 
 def processtransactiondata():
  global VIPERTOKEN
@@ -140,6 +141,7 @@ def dopreprocessing(**context):
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
        VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPREPROCESS")
        VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPREPROCESS")
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
        ti = context['task_instance']    
        ti.xcom_push(key="raw_data_topic", value=default_args['raw_data_topic'])
@@ -171,7 +173,7 @@ def dopreprocessing(**context):
        time.sleep(10)  
     
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "cd /Viper-preprocess", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "python {} 1 {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

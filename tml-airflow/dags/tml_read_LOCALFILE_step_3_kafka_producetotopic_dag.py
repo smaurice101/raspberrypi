@@ -130,7 +130,7 @@ def startproducing(**context):
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
   time.sleep(7)  
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
-  subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {}/{} {} ".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+  subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {}{} {} ".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
         
 if __name__ == '__main__':
     

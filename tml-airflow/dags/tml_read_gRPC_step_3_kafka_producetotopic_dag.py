@@ -48,7 +48,8 @@ dag = startproducingtotopic()
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-    
+HTTPADDR=""
+
 class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
   def __init__(self, *args, **kwargs):
@@ -79,10 +80,12 @@ def gettmlsystemsparams(**context):
   global VIPERTOKEN
   global VIPERHOST
   global VIPERPORT
-
+  global HTTPADDR 
+    
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
+  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
 
   ti = context['task_instance']
   ti.xcom_push(key='PRODUCETYPE',value='gRPC')
@@ -133,9 +136,9 @@ def startproducing(**context):
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
-       time.sleep(10) 
+       time.sleep(7) 
        subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "cd /Viper-produce", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
         
 if __name__ == '__main__':
     

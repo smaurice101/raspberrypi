@@ -55,7 +55,7 @@ VIPERHOST=""
 VIPERPORT=""
 HPDEHOST=''
 HPDEPORT=''
-    
+HTTPADDR=""    
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
 viperconfigfile="/Viper-predict/viper.env"
@@ -164,7 +164,7 @@ def startpredictions(**context):
        time.sleep(10)  
         
        subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "cd /Viper-predict", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "python {} 1 {} {} {} {} {}".format(fullpath,VIPERTOKEN,VIPERHOST,VIPERPORT[1:],HPDEHOSTPREDICT,HPDEPORTPREDICT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "viper-predict-python", "python {} 1 {} {}{} {} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEHOSTPREDICT,HPDEPORTPREDICT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
