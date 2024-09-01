@@ -292,6 +292,7 @@ def getparams(**context):
   task_instance.xcom_push(key='ingestdatamethod',value=method)
   task_instance.xcom_push(key='containername',value='')
   task_instance.xcom_push(key='brokerhost',value=brokerhost)
+  task_instance.xcom_push(key='brokerport',value="_{}".format(brokerport))
   task_instance.xcom_push(key='chip',value=chip)
 
   updateviperenv()
