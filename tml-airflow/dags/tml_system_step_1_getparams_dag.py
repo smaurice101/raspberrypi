@@ -258,6 +258,7 @@ def getparams(**context):
   stitle = args['solutiontitle']    
   method = args['ingestdatamethod'] 
   brokerhost = args['brokerhost']   
+  brokerport = args['brokerport'] 
   task_instance = context['task_instance']
   if 'CHIP' in os.environ:
      chip = os.environ['CHIP']
