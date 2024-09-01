@@ -1569,3 +1569,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-01_17:49:25] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag.py
 [INFO 2024-09-01_17:49:27] Visualization DAG in tml_system_step_7_kafka_visualization_dag.py
 [INFO 2024-09-01_17:49:33] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag.py
+[ERROR 2024-09-01_17:49:33] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag.py: name 'output' is not defined
