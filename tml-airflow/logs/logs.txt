@@ -1400,3 +1400,5 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-01_01:54:01] Visualization DAG in tml_system_step_7_kafka_visualization_dag.py
 [INFO 2024-09-01_01:54:10] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag.py
 [ERROR 2024-09-01_01:54:10] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag.py: name 'solution_dag_to_trigger' is not defined
+[INFO 2024-09-01_01:54:17] {'name': ['Project with slug "mysolution" already exists.']}
+[INFO 2024-09-01_01:56:11] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag.py
