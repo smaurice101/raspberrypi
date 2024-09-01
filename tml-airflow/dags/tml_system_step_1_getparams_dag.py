@@ -122,8 +122,8 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
              dsp = d.split(",")[1]
              print("DSW,DSP=",dsw,dsp)
              if dsw != "":  
-               subprocess.run(["tmux", "kill-window", "-t", "{}".format(dsw.rstrip())])        
-               v=subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(dsp.rstrip())])
+               subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw.rstrip())])        
+               v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp.rstrip())])
                print("v=",v) 
                time.sleep(1) 
       os.remove('/tmux/vipervizwindows.txt')                    
