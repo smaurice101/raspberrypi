@@ -75,45 +75,21 @@ def tmlparams():
         pass
 dag = tmlparams()
 
-def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML):
-
-    subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-z", "ENTER"])
-    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORT)])
-    time.sleep(2)  
-    VIPERPORT=tsslogging.getfreeport()
-    subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT), "ENTER"])        
-  
-    subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "C-z", "ENTER"])
-    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTPREPROCESS)])
-    time.sleep(2)  
-    VIPERPORTPREPROCESS=tsslogging.getfreeport()
-    subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "/Viper-preprocess/viper-linux-{} {} {}".format(chip,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS), "ENTER"])        
-
-    subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-z", "ENTER"])
-    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTML)])
-    time.sleep(2)  
-    VIPERPORTML=tsslogging.getfreeport()
-    subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{} {} {}".format(chip,VIPERHOSTML,VIPERPORTML), "ENTER"])        
-
-    subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "C-z", "ENTER"])
-    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTPREDICT)])
-    time.sleep(2)  
-    VIPERPORTPREDICT=tsslogging.getfreeport()
-    subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{} {} {}".format(chip,VIPERHOSTPREDICT,VIPERPORTPREDICT), "ENTER"])        
+def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML,sname):  
 
     try:
-      with open('/tmux/pythonwindows.txt', 'r', encoding='utf-8') as file: 
+      with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
         for d in data:          
           if d != "":             
             v=subprocess.call(["tmux", "kill-window", "-t", "{}".format(d.rstrip())])   
-      os.remove('/tmux/pythonwindows.txt')        
+      os.remove("/tmux/pythonwindows_{}.txt".format(sname))        
     except Exception as e:
      print("ERROR=",e)   
      pass
     
     try:
-      with open('/tmux/vipervizwindows.txt', 'r', encoding='utf-8') as file: 
+      with open("/tmux/vipervizwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
          data = file.readlines()  
          for d in data:
              dsw = d.split(",")[0]
@@ -122,7 +98,7 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
                subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw.rstrip())])        
                v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp.rstrip())])
                time.sleep(1) 
-      os.remove('/tmux/vipervizwindows.txt')                    
+      os.remove("/tmux/vipervizwindows_{}.txt".format(sname))                    
     except Exception as e:
      pass
         
@@ -290,7 +266,7 @@ def getparams(**context):
       chip = 'amd64'
      
   VIPERPORT,VIPERPORTPREPROCESS,VIPERPORTPREDICT,VIPERPORTML = reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,
-                                                                              VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML)
+                                                                              VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML,sname)
   print("VIPERHOST=", VIPERHOST) 
   print("VIPERPORT=", VIPERPORT) 
 
