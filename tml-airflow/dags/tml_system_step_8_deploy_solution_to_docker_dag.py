@@ -51,5 +51,6 @@ def dockerit(**context):
        print("[INFO] docker push {} - message={}".format(cname,v))  
        os.environ['tssbuild']="1"
      except Exception as e:
+        print("[ERROR] Step 8: ",e)
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
