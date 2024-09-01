@@ -45,9 +45,9 @@ def dockerit(**context):
        tsslogging.tmuxchange(sd)
        key = "trigger-{}".format(sname)
        os.environ[key] = sd
-       v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True, stdout=output, stderr=output)
+       v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
        print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
-       v=subprocess.call("docker push {}".format(cname), shell=True, stdout=output, stderr=output)  
+       v=subprocess.call("docker push {}".format(cname), shell=True)  
        print("[INFO] docker push {} - message={}".format(cname,v))  
        os.environ['tssbuild']="1"
      except Exception as e:
