@@ -19,7 +19,7 @@ default_args = {
   'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
   'append' : '0',   # << ** Do not append new data in the browser
   'rollbackoffset' : '500', # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
-  'vipervizport' : '9006', # Enter port or leave blank to let TSS automatically pick free port  
+  'vipervizport' : '', # Enter port or leave blank to let TSS automatically pick free port  
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
