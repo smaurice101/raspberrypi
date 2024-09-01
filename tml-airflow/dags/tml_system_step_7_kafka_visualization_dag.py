@@ -18,6 +18,7 @@ default_args = {
   'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
   'append' : '0',   # << ** Do not append new data in the browser
   'rollbackoffset' : '500', # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
+  'vipervizport' : '', # Enter port or leave blank to let TSS automatically pick free port  
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -28,6 +29,14 @@ def startstreaming():
   def empty():
       pass
 dag = startstreaming()
+
+def windowname(wtype,vipervizport):
+    randomNumber = random.randrange(10, 9999)
+    wn = "viperviz-{}-{},{}".format(wtype,randomNumber,vipervizport)
+    with open('/tmux/vipervizwindows.txt', 'a', encoding='utf-8') as file: 
+      file.writelines("{}\n".format(wn))
+    
+    return wn
 
 def startstreamingengine(**context):
         repo=tsslogging.getrepo()  
@@ -48,7 +57,11 @@ def startstreamingengine(**context):
               vipervizport=tsslogging.getfreeport()
         else:
             vipervizport=tsslogging.getfreeport()
-          
+        
+        vipervizportp = default_args['vipervizport']
+        if vipervizportp != '':
+            vipervizport = int(vipervizportp)
+        
         ti = context['task_instance']
         ti.xcom_push(key='VIPERVIZPORT',value="_{}".format(vipervizport))
         ti.xcom_push(key='topic',value=topic)
@@ -60,9 +73,7 @@ def startstreamingengine(**context):
     
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 
-        subprocess.run(["tmux", "new", "-d", "-s", "visualization-viperviz"])
-        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "C-z", "ENTER"])
-        subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(vipervizport)])
-        time.sleep(3)
-        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "cd /Viperviz", "ENTER"])
-        subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport), "ENTER"])
+        wn = windowname('visual',vipervizport)
+        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
+        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport), "ENTER"])

@@ -6,6 +6,8 @@ from airflow.decorators import dag, task
 import os 
 import sys
 import tsslogging
+import time 
+import subprocess
 
 sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
@@ -73,6 +75,53 @@ def tmlparams():
         pass
 dag = tmlparams()
 
+def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML):
+
+    subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-z", "ENTER"])
+    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORT)])
+    time.sleep(2)  
+    subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT), "ENTER"])        
+  
+    subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "C-z", "ENTER"])
+    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTPREPROCESS)])
+    time.sleep(2)  
+    subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "/Viper-preprocess/viper-linux-{} {} {}".format(chip,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS), "ENTER"])        
+
+    subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-z", "ENTER"])
+    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTML)])
+    time.sleep(2)  
+    subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{} {} {}".format(chip,VIPERHOSTML,VIPERPORTML), "ENTER"])        
+
+    subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "C-z", "ENTER"])
+    subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTPREDICT)])
+    time.sleep(2)  
+    subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{} {} {}".format(chip,VIPERHOSTPREDICT,VIPERPORTPREDICT), "ENTER"])        
+
+    try:
+      with open('/tmux/pythonwindows.txt', 'r', encoding='utf-8') as file: 
+        data = file.readlines() 
+        for d in data:
+          if d != "":  
+            subprocess.run(["tmux", "kill-window", "-t", "{}".format(d), "ENTER"])        
+      os.remove('/tmux/pythonwindows.txt')        
+    except Exception as e:
+     pass
+    
+    try:
+      with open('/tmux/vipervizwindows.txt', 'r', encoding='utf-8') as file: 
+         data = file.readlines()  
+         for d in data:
+             dsw = d.split(",")[0]
+             dsp = d.split(",")[1]
+             if dsw != "":  
+               subprocess.run(["tmux", "kill-window", "-t", "{}".format(dsw), "ENTER"])        
+               subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
+               time.sleep(1) 
+      os.remove('/tmux/vipervizwindows.txt')                    
+    except Exception as e:
+     pass
+        
+        
 def updateviperenv():
     # update ALL
     os.environ['tssbuild']="0"
@@ -262,4 +311,5 @@ def getparams(**context):
   task_instance.xcom_push(key='brokerhost',value=brokerhost)
   task_instance.xcom_push(key='chip',value=chip)
 
+  reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML)
   updateviperenv()

@@ -10,6 +10,7 @@ import tsslogging
 import os
 import subprocess
 import time
+import random
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -138,6 +139,14 @@ def processtransactiondata():
     print(e)
     return e
 
+def windowname(wtype):
+    randomNumber = random.randrange(10, 9999)
+    wn = "viper-{}-python-{}".format(wtype,randomNumber)
+    with open('/tmux/pythonwindows.txt', 'a', encoding='utf-8') as file: 
+      file.writelines("{}\n".format(wn))
+    
+    return wn
+
 def dopreprocessing(**context):
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
@@ -171,15 +180,12 @@ def dopreprocessing(**context):
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
-       subprocess.run(["tmux", "new", "-d", "-s", "viper-preprocess-python"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "C-z", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "C-z", "ENTER"])
-       subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORT[1:])])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "/Viper-preprocess/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
-       time.sleep(7)  
-    
-       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "cd /Viper-preprocess", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+            
+       wn = windowname('preprocess')     
+       subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "C-z", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

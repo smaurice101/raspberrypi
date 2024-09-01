@@ -284,7 +284,7 @@ def generatedoc(**context):
 
     hpdepredicthost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOSTPREDICT")
     hpdepredictport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORTPREDICT")
-    
+        
     tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}\n\n"
                    "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}\n\n"
                    "VIPERHOST_ML={}, VIPERPORT_ML={}\n\n"
@@ -293,6 +293,11 @@ def generatedoc(**context):
                    "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],mlhost,mlport[1:],predictionhost,predictionport[1:],
                                                                           hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport ))
     subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
+    
+    with open('/tmux/pythonwindows.txt', 'r', encoding='utf-8') as file: 
+        data = file.readlines() 
+        tmuxwindows = "\n\n".join(data)
+        subprocess.call(["sed", "-i", "-e",  "s/--tmuxwindows--/{}/g".format(tmuxwindows), "/{}/docs/source/operating.rst".format(sname)])
     
     # Kick off shell script 
     tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
