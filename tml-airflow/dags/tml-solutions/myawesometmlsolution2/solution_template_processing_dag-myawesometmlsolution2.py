@@ -26,7 +26,7 @@ step10 = importlib.import_module("tml-solutions.myawesometmlsolution2.tml_system
 
 
 with DAG(
-    dag_id="solution_preprocessing_dag-myawesometmlsolution",
+    dag_id="solution_preprocessing_dag-myawesometmlsolution2",
     start_date=datetime(2023, 1, 1),
     schedule=None,
 ) as dag:
