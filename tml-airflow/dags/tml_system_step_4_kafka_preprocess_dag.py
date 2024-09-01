@@ -144,6 +144,10 @@ def dopreprocessing(**context):
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREPROCESS")
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
+        
+       print("VIPERHOST=",VIPERHOST)
+       print("VIPERPORT=",VIPERPORT)
+        
        ti = context['task_instance']    
        ti.xcom_push(key="raw_data_topic", value=default_args['raw_data_topic'])
        ti.xcom_push(key="preprocess_data_topic", value=default_args['preprocess_data_topic'])
