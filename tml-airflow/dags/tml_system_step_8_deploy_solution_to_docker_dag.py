@@ -44,9 +44,11 @@ def dockerit(**context):
        cid = os.environ['SCID']
        tsslogging.tmuxchange(default_args['solution_dag_to_trigger'])
        key = "trigger-{}".format(sname)
-       os.environ[key] = default_args['solution_dag_to_trigger']
-       subprocess.call("docker commit {} {}".format(cid,cname), shell=True, stdout=output, stderr=output)
-       subprocess.call("docker push {}".format(cname), shell=True, stdout=output, stderr=output)  
+       os.environ[key] = sd
+       v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True, stdout=output, stderr=output)
+       print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
+       v=subprocess.call("docker push {}".format(cname), shell=True, stdout=output, stderr=output)  
+       print("[INFO] docker push {} - message={}".format(cname,v))  
        os.environ['tssbuild']="1"
      except Exception as e:
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
