@@ -1810,3 +1810,4 @@ After doing this, you may fix the identity used for this commit with:
  1 file changed, 17 insertions(+)
 [INFO 2024-09-01_18:55:26] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
    982b719..de89d56  main -> main
+[INFO 2024-09-01_18:56:36] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
