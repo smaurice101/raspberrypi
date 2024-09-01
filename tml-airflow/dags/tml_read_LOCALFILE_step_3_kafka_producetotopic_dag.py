@@ -127,7 +127,7 @@ def startproducing(**context):
   subprocess.run(["tmux", "new", "-d", "-s", "viper-produce-python"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce-python", "C-z", "ENTER"])
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-z", "ENTER"])
-  subprocess.run(["kill -9 $(lsof -i:{} -t)".format(VIPERPORT[1:])])
+  subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORT[1:])])
 
   subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
   time.sleep(7)  
