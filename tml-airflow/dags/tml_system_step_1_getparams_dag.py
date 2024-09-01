@@ -104,10 +104,11 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
     try:
       with open('/tmux/pythonwindows.txt', 'r', encoding='utf-8') as file: 
         data = file.readlines() 
-        for d in data:
-          print("d=",d)  
+        for d in data:          
           if d != "":  
-            subprocess.run(["tmux", "kill-window", "-t", "{}".format(d), "ENTER"])        
+            print("d=",d)      
+            v=subprocess.run(["tmux", "kill-window", "-t", "{}".format(d), "ENTER"])   
+            print("v=",v) 
       os.remove('/tmux/pythonwindows.txt')        
     except Exception as e:
      print("ERROR=",e)   
