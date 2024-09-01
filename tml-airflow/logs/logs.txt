@@ -1347,3 +1347,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-08-31_23:58:40] Visualization DAG in tml_system_step_7_kafka_visualization_dag.py
 [INFO 2024-09-01_00:15:40] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag.py
 [INFO 2024-09-01_00:15:44] Visualization DAG in tml_system_step_7_kafka_visualization_dag.py
+[INFO 2024-09-01_00:32:50] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag.py

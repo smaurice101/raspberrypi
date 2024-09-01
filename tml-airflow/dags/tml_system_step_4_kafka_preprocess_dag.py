@@ -66,6 +66,7 @@ def processtransactiondata():
  global VIPERTOKEN
  global VIPERHOST
  global VIPERPORT   
+ global HTTPADDR
  preprocesstopic = default_args['preprocess_data_topic']
  maintopic =  default_args['raw_data_topic']  
  mainproducerid = default_args['producerid']     
@@ -138,9 +139,9 @@ def processtransactiondata():
     return e
 
 def dopreprocessing(**context):
-       VIPERTOKEN = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERTOKEN")
-       VIPERHOST = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERHOSTPREPROCESS")
-       VIPERPORT = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="VIPERPORTPREPROCESS")
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREPROCESS")
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
        ti = context['task_instance']    
@@ -170,7 +171,7 @@ def dopreprocessing(**context):
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "C-c", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "/Viper-preprocess/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
-       time.sleep(10)  
+       time.sleep(7)  
     
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "cd /Viper-preprocess", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
