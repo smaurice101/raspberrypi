@@ -294,7 +294,7 @@ def generatedoc(**context):
                                                                           hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport ))
     subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
     
-    with open('/tmux/pythonwindows.txt', 'r', encoding='utf-8') as file: 
+    with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
         tmuxwindows = "\n\n".join(data)
         subprocess.call(["sed", "-i", "-e",  "s/--tmuxwindows--/{}/g".format(tmuxwindows), "/{}/docs/source/operating.rst".format(sname)])
