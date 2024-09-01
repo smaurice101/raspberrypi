@@ -8,6 +8,7 @@ import sys
 import subprocess
 import tsslogging
 import os
+import time
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -61,5 +62,6 @@ def startstreamingengine(**context):
         # STEP 5: START Visualization Viperviz 
         subprocess.run(["tmux", "new", "-d", "-s", "visualization-viperviz"])
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "C-c", "ENTER"])
+        time.sleep(3)
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "cd /Viperviz", "ENTER"])
         subprocess.run(["tmux", "send-keys", "-t", "visualization-viperviz", "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport), "ENTER"])
