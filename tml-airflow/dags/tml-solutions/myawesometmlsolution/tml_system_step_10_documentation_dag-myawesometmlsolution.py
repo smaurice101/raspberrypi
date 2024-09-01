@@ -34,9 +34,6 @@ dag = startdocumentation()
 
 def generatedoc(**context):    
     
-    if 'tssdoc' in os.environ:
-        if os.environ['tssdoc']=="1":
-            return
     
     sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
     shutil.copytree('/tss_readthedocs', "/{}".format(sname), dirs_exist_ok=True) 
@@ -306,10 +303,13 @@ def generatedoc(**context):
     # Kick off shell script 
     tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
     
-    URL = 'https://readthedocs.org/api/v3/projects/'
-    TOKEN = os.environ['READTHEDOCS']
-    HEADERS = {'Authorization': f'token {TOKEN}'}
-    data={
+    rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="READTHEDOCS")
+    
+    if rtd == None :
+     URL = 'https://readthedocs.org/api/v3/projects/'
+     TOKEN = os.environ['READTHEDOCS']
+     HEADERS = {'Authorization': f'token {TOKEN}'}
+     data={
         "name": "{}".format(sname),
         "repository": {
             "url": "https://github.com/{}/{}".format(os.environ['GITUSERNAME'],sname),
@@ -317,19 +317,22 @@ def generatedoc(**context):
         },
         "homepage": "http://template.readthedocs.io/",
         "programming_language": "py",
-        "language": "es",
+        "language": "en",
         "privacy_level": "public",
         "external_builds_privacy_level": "public",
         "tags": [
             "automation",
             "sphinx"
         ]
-    }
-    response = requests.post(
+     }
+     response = requests.post(
         URL,
         json=data,
         headers=HEADERS,
-    )
-    print(response.json())
-    tsslogging.tsslogit(response.json())
+     )
+     print(response.json())
+     tsslogging.tsslogit(response.json())
+    
+    task_instance = context['task_instance']
+    task_instance.xcom_push(key='READTHEDOCS',value="DONE")
     os.environ['tssdoc']="1"
