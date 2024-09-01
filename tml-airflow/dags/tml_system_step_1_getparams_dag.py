@@ -117,6 +117,7 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
          for d in data:
              dsw = d.split(",")[0]
              dsp = d.split(",")[1]
+             print("DSW,DSP=",dsw,dsp)
              if dsw != "":  
                subprocess.run(["tmux", "kill-window", "-t", "{}".format(dsw), "ENTER"])        
                subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
