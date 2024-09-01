@@ -12,14 +12,9 @@ import sys
 
 sys.dont_write_bytecode = True
 
-######################################################USER CHOSEN PARAMETERS ###########################################################
-default_args = {
- 'solution_dag_to_trigger' : 'solution_preprocessing_dag',   # << Enter the name of the Solution DAG to trigger when container runs
-}
-
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag", default_args=default_args, tags=["tml_system_step_8_deploy_solution_to_docker_dag"], schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag", tags=["tml_system_step_8_deploy_solution_to_docker_dag"], schedule=None,  catchup=False)
 def starttmldeploymentprocess():
     # Define tasks
     def empty():
@@ -42,7 +37,8 @@ def dockerit(**context):
         
        ti = context['task_instance']
        ti.xcom_push(key="containername",value=cname)
-       ti.xcom_push(key='solution_dag_to_trigger', value=solution_dag_to_trigger)
+       sd = context['dag'].dag_id 
+       ti.xcom_push(key='solution_dag_to_trigger', value=sd)
         
        scid = tsslogging.getrepo('/tmux/cidname.txt')
        cid = os.environ['SCID']
