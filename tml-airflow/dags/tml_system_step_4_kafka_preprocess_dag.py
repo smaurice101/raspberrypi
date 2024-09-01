@@ -141,7 +141,7 @@ def processtransactiondata():
 
 def windowname(wtype):
     randomNumber = random.randrange(10, 9999)
-    wn = "viper-{}-python-{}".format(wtype,randomNumber)
+    wn = "python-{}-{}".format(wtype,randomNumber)
     with open('/tmux/pythonwindows.txt', 'a', encoding='utf-8') as file: 
       file.writelines("{}\n".format(wn))
     
