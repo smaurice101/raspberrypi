@@ -109,6 +109,7 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
             subprocess.run(["tmux", "kill-window", "-t", "{}".format(d), "ENTER"])        
       os.remove('/tmux/pythonwindows.txt')        
     except Exception as e:
+     print("ERROR=",e)   
      pass
     
     try:
@@ -138,8 +139,7 @@ def updateviperenv():
      with open(mainfile, 'r', encoding='utf-8') as file: 
        data = file.readlines() 
      r=0 
-     for d in data:
-       print("d=",d) 
+     for d in data:  
        if d[0] == '#':
           r += 1  
           continue 
