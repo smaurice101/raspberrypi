@@ -174,6 +174,7 @@ def dopreprocessing(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-preprocess-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess-python", "C-z", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "C-z", "ENTER"])
+       subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORT[1:])])
        subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "/Viper-preprocess/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
        time.sleep(7)  
     

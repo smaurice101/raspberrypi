@@ -182,6 +182,7 @@ def startml(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "viper-ml-python"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml-python", "C-z", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-z", "ENTER"])
+       subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORT[1:])])
        subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
        time.sleep(10)  
         
