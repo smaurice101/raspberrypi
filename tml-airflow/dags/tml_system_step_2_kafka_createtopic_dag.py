@@ -55,8 +55,6 @@ def setupkafkatopics(**context):
   # Enable SSL/TLS communication with Kafka
   enabletls=int(args['enabletls'])
   # If brokerhost is empty then this function will use the brokerhost address in your
-  brokerhost = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="brokerhost")  
-  # VIPER.ENV in the field 'KAFKA_CONNECT_BOOTSTRAP_SERVERS'
   brokerhost=args['brokerhost']
   # If this is -999 then this function uses the port address for Kafka in VIPER.ENV in the
   # field 'KAFKA_CONNECT_BOOTSTRAP_SERVERS'
