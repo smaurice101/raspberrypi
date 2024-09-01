@@ -33,9 +33,9 @@ dag = startstreaming()
 
 def windowname(wtype,vipervizport):
     randomNumber = random.randrange(10, 9999)
-    wn = "viperviz-{}-{},{}".format(wtype,randomNumber,vipervizport)
+    wn = "viperviz-{}-{}".format(wtype,randomNumber)
     with open('/tmux/vipervizwindows.txt', 'a', encoding='utf-8') as file: 
-      file.writelines("{}\n".format(wn))
+      file.writelines("{},{}\n".format(wn,vipervizport))
     
     return wn
 

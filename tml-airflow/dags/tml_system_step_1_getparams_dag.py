@@ -80,21 +80,25 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
     subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "C-z", "ENTER"])
     subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORT)])
     time.sleep(2)  
+    VIPERPORT=tsslogging.getfreeport()
     subprocess.run(["tmux", "send-keys", "-t", "viper-produce", "/Viper-produce/viper-linux-{} {} {}".format(chip,VIPERHOST,VIPERPORT), "ENTER"])        
   
     subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "C-z", "ENTER"])
     subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTPREPROCESS)])
     time.sleep(2)  
+    VIPERPORTPREPROCESS=tsslogging.getfreeport()
     subprocess.run(["tmux", "send-keys", "-t", "viper-preprocess", "/Viper-preprocess/viper-linux-{} {} {}".format(chip,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS), "ENTER"])        
 
     subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "C-z", "ENTER"])
     subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTML)])
     time.sleep(2)  
+    VIPERPORTML=tsslogging.getfreeport()
     subprocess.run(["tmux", "send-keys", "-t", "viper-ml", "/Viper-ml/viper-linux-{} {} {}".format(chip,VIPERHOSTML,VIPERPORTML), "ENTER"])        
 
     subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "C-z", "ENTER"])
     subprocess.run(["kill", "-9", "$(lsof -i:{} -t)".format(VIPERPORTPREDICT)])
     time.sleep(2)  
+    VIPERPORTPREDICT=tsslogging.getfreeport()
     subprocess.run(["tmux", "send-keys", "-t", "viper-predict", "/Viper-predict/viper-linux-{} {} {}".format(chip,VIPERHOSTPREDICT,VIPERPORTPREDICT), "ENTER"])        
 
     try:
@@ -121,6 +125,7 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
     except Exception as e:
      pass
         
+    return VIPERPORT,VIPERPORTPREPROCESS,VIPERPORTPREDICT,VIPERPORTML
         
 def updateviperenv():
     # update ALL
@@ -283,10 +288,12 @@ def getparams(**context):
      chip = chip.lower()   
   else:   
       chip = 'amd64'
-
+     
+  VIPERPORT,VIPERPORTPREPROCESS,VIPERPORTPREDICT,VIPERPORTML = reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,
+                                                                              VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML)
   print("VIPERHOST=", VIPERHOST) 
   print("VIPERPORT=", VIPERPORT) 
-     
+
   task_instance.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
   task_instance.xcom_push(key='VIPERHOST',value=VIPERHOST)
   task_instance.xcom_push(key='VIPERPORT',value="_{}".format(VIPERPORT))
@@ -311,5 +318,4 @@ def getparams(**context):
   task_instance.xcom_push(key='brokerhost',value=brokerhost)
   task_instance.xcom_push(key='chip',value=chip)
 
-  reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML)
   updateviperenv()
