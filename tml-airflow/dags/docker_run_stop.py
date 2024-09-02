@@ -68,10 +68,11 @@ def run(**context):
     repo = tsslogging.getrepo()
     tsslogging.tsslogit("Executing docker run in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
-    dockerrun = ("docker run -d --net=host --env TSS=0 --env VIPERVIZPORT={} --env GITUSERNAME={} " \
-                 "--env GITPASSWORD={}  --env GITREPOURL={} --env AIRFLOWPORT={} {}" \
-                 .format(vipervizport,os.environ['GITUSERNAME'],os.environ['GITPASSWORD'],os.environ['GITREPOURL'], \
-                  airflowport,containername))        
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
+                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT={} " \
+                 "--env READTHEDOCS=<Enter Readthedocs token> {}" \
+                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'], \
+                  airflowport,os.environ['READTHEDOCS'],containername))        
     subprocess.call(dockerrun, shell=True, stdout=output, stderr=output)
     vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
     airflowurl = "http://localhost:{}".format(airflowport)

@@ -49,7 +49,8 @@ def generatedoc(**context):
     mlport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTML")
     predictionhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
     predictionport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
-
+    dashboardhtml = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="dashboardhtml")
+    
     hpdehost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOST")
     hpdeport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORT")
 
@@ -247,9 +248,9 @@ def generatedoc(**context):
     else:
          chip=""
     if chip.lower() == "arm64":  
-        containername = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
+        containername = os.environ['DOCKERUSERNAME']  + "\/{}-{}".format(sname,chip)          
     else:    
-        containername = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
+        containername = os.environ['DOCKERUSERNAME']  + "\/{}".format(sname)
     
     subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--topic--/{}/g".format(topic), "/{}/docs/source/details.rst".format(sname)])
@@ -265,11 +266,30 @@ def generatedoc(**context):
     
     v=subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
     print("V=",v)
+    subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(containername), "/{}/docs/source/operating.rst".format(sname)])
+    
+    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(containername), "/{}/docs/source/operating.rst".format(sname)])
+   
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
+                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT={} " \
+                 "--env READTHEDOCS=<Enter Readthedocs token> {}" \
+                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'], \
+                  airflowport,os.environ['READTHEDOCS'],containername))   
+    
+    subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
+    
+    vizurl = "http:\/\/localhost:{}\/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,dashboardhtml,topic,offset,rollbackoffset,append,secure)
+    subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
+
+
+    airflowurl = "http:\/\/localhost:{}".format(airflowport)
+    subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(airflowurl), "/{}/docs/source/operating.rst".format(sname)])
     
     readthedocs = "https:\/\/{}.readthedocs.io".format(sname)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
-    triggername = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="solution_dag_to_trigger")
+    triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="solution_dag_to_trigger")
     subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
 
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")

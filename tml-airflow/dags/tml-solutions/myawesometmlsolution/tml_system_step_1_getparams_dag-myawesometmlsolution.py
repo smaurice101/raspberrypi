@@ -63,7 +63,8 @@ default_args = {
  'solutionname': 'myawesometmlsolution',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
- 'HTTPADDR' : 'https://'
+ 'HTTPADDR' : 'https://',
+ 'dashboardhtml' : 'dashboard.html',   ## << Update with your custom dashboard
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -259,6 +260,8 @@ def getparams(**context):
   method = args['ingestdatamethod'] 
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
+  dashboardhtml = args['dashboardhtml']
+
   task_instance = context['task_instance']
   if 'CHIP' in os.environ:
      chip = os.environ['CHIP']
@@ -295,5 +298,6 @@ def getparams(**context):
   task_instance.xcom_push(key='brokerhost',value=brokerhost)
   task_instance.xcom_push(key='brokerport',value="_{}".format(brokerport))
   task_instance.xcom_push(key='chip',value=chip)
+  task_instance.xcom_push(key='dashboardhtml',value=dashboardhtml)
 
   updateviperenv()
