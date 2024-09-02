@@ -2432,3 +2432,4 @@ After doing this, you may fix the identity used for this commit with:
    46ab2b0..0b46818  main -> main
 [INFO 2024-09-02_00:23:32] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
 [INFO 2024-09-02_00:23:34] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
+[INFO 2024-09-02_00:23:35] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
