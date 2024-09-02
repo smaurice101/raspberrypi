@@ -3035,3 +3035,8 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-09-02_18:47:56] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution5.py
 [INFO 2024-09-02_18:48:02] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution5.py
 [INFO 2024-09-02_18:48:38] {'name': ['Project with slug "myawesometmlsolution5" already exists.']}
+[INFO 2024-09-02_20:05:52] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution6
+[INFO 2024-09-02_20:05:52] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-02_20:06:16] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution6
