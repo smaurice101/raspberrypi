@@ -32,6 +32,20 @@ def startdocumentation():
         pass
 dag = startdocumentation()
 
+def doparse(fname,farr):
+      data = ''
+      with open(fname, 'r', encoding='utf-8') as file: 
+        data = file.readlines() 
+        r=0
+        for d in data:        
+            for f in farr:
+                fs = f.split(";")
+                if fs[0] in d:
+                    data[r] = d.replace(fs[0],fs[1])
+            r += 1  
+      with open(fname, 'w', encoding='utf-8') as file: 
+        file.writelines(data)
+    
 def generatedoc(**context):    
     
     if 'tssdoc' in os.environ:
@@ -39,7 +53,7 @@ def generatedoc(**context):
             return
     
     sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
-    
+
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODCE")
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
     preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
@@ -156,7 +170,7 @@ def generatedoc(**context):
     identifier = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="identifier")
     jsoncriteria = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="jsoncriteria")
 
-    if jsoncriteria:
+    if preprocess_data_topic:
         subprocess.call(["sed", "-i", "-e",  "s/--raw_data_topic--/{}/g".format(raw_data_topic), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--preprocess_data_topic--/{}/g".format(preprocess_data_topic), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--preprocessconditions--/{}/g".format(preprocessconditions), "/{}/docs/source/details.rst".format(sname)])
@@ -190,7 +204,7 @@ def generatedoc(**context):
     coeftoprocess = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="coeftoprocess")
     coefsubtopicnames = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="coefsubtopicnames")
 
-    if modelruns:
+    if modelruns: 
         subprocess.call(["sed", "-i", "-e",  "s/--preprocess_data_topic--/{}/g".format(preprocess_data_topic), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--ml_data_topic--/{}/g".format(ml_data_topic), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--modelruns--/{}/g".format(modelruns[1:]), "/{}/docs/source/details.rst".format(sname)])
@@ -244,16 +258,13 @@ def generatedoc(**context):
     append = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="append")
     chip = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="chip")
     rollbackoffset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="rollbackoffset")
-    
+
     containername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="containername")
-    
     if containername:
         hcname = containername.split('/')[1]
         huser = containername.split('/')[0]
-        hurl = "https:\/\/hub.docker.com\/r\/{}\/{}".format(huser,hcname)
-
-        containername = containername.replace('/','\/')
-    else:
+        hurl = "https://hub.docker.com/r/{}/{}".format(huser,hcname)
+    else:    
         containername="TBD"
     
     if vipervizport:
@@ -268,21 +279,38 @@ def generatedoc(**context):
     airflowport = tsslogging.getfreeport()
     
     repo = tsslogging.getrepo() 
-    gitrepo = "\/{}\/tml-airflow\/dags\/tml-solutions\/{}".format(repo,sname)
+    gitrepo="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}".format(os.environ['GITUSERNAME'],repo,sname)
+   # gitrepo = "\/{}\/tml-airflow\/dags\/tml-solutions\/{}".format(repo,sname)
     
     v=subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
     print("V=",v)
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--gitrepo--;{}".format(gitrepo)])
+    
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
-
-    if containername: 
-      subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}\n\n{}/g".format(containername,hurl), "/{}/docs/source/operating.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}\n\n{}/g".format(containername,hurl), "/{}/docs/source/operating.rst".format(sname)])
        
-    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env AIRFLOWPORT={} --env GITUSERNAME={} " \
                  "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT=<TBD At Runtime> " \
                  "--env READTHEDOCS=<Enter Readthedocs token> {}" \
-                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
+                 .format(airflowport,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
     
-    subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
+   # dockerrun = re.escape(dockerrun) 
+    v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
+   
+
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
+    doparse("/{}/docs/source/details.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
+    
+    privategptcontainer = "https://hub.docker.com/r/maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
+    privategptrun = "docker run -d -p 8001:8001 --gpus all --net=host --env PORT=8001 --env GPU=1 --env WEB_CONCURRENCY=1 --env COLLECTION=tml-cisco --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
+    doparse("/{}/docs/source/details.rst".format(sname), ["--privategptcontainer--;{}".format(privategptcontainer),"--privategptrun--;{}".format(privategptrun)])
+
+    qdrantcontainer = "qdrant/qdrant"
+    qdrantrun = "docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
+    doparse("/{}/docs/source/details.rst".format(sname), ["--qdrantcontainer--;{}".format(qdrantcontainer),"--qdrantrun--;{}".format(qdrantrun)])
+
+    rbuf = "https://{}.readthedocs.io".format(sname)
+    doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
     
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
@@ -295,7 +323,8 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
     triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="solution_dag_to_trigger")
-    subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
+    print("triggername=",triggername)
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(triggername)])
 
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
@@ -304,7 +333,7 @@ def generatedoc(**context):
     mlhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTML")
     mlport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTML")
     predictionhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
-    predictionport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
+    predictionport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREDICT")
 
     hpdehost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOST")
     hpdeport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORT")
@@ -312,11 +341,11 @@ def generatedoc(**context):
     hpdepredicthost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOSTPREDICT")
     hpdepredictport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORTPREDICT")
         
-    tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}\n\n"
-                       "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}\n\n"
-                       "VIPERHOST_ML={}, VIPERPORT_ML={}\n\n"
-                       "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}\n\n"
-                       "HPDEHOST={}, HPDEPORT={}\n\n"
+    tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}, "
+                       "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}, "
+                       "VIPERHOST_ML={}, VIPERPORT_ML={}, "
+                       "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}, "
+                       "HPDEHOST={}, HPDEPORT={}, "
                        "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],
                                                                               mlhost,mlport[1:],predictionhost,predictionport[1:],
                                                                               hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
@@ -326,16 +355,21 @@ def generatedoc(**context):
     
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
-        tmuxwindows = "\n\n".join(data)
+        data.append("viper-produce")
+        data.append("viper-preprocess")
+        data.append("viper-ml")
+        data.append("viper-predict")
+        tmuxwindows = ", ".join(data)
+        tmuxwindows = tmuxwindows.replace("\n","")
         print("tmuxwindows=",tmuxwindows)
-        subprocess.call(["sed", "-i", "-e",  "s/--tmuxwindows--/{}/g".format(tmuxwindows), "/{}/docs/source/operating.rst".format(sname)])
-    
+
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
+        
     # Kick off shell script 
     tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
-    
     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="RTD")
-    
-    if rtd == None:
+
+    if rtd == None: 
         URL = 'https://readthedocs.org/api/v3/projects/'
         TOKEN = os.environ['READTHEDOCS']
         HEADERS = {'Authorization': f'token {TOKEN}'}
@@ -363,6 +397,6 @@ def generatedoc(**context):
         print(response.json())
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
-    
+
     ti = context['task_instance']
     ti.xcom_push(key="RTD", value="DONE")
