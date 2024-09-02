@@ -33,6 +33,20 @@ def startdocumentation():
         pass
 dag = startdocumentation()
 
+def doparse(fname,farr):
+      data = ''
+      with open(fname, 'r', encoding='utf-8') as file: 
+        data = file.readlines() 
+        r=0
+        for d in data:        
+            for f in farr:
+                fs = f.split(":")
+                if fs[0] in d:
+                    data[r] = d.replace(fs[0],fs[1])
+            r += 1  
+      with open(fname, 'w', encoding='utf-8') as file: 
+        file.writelines(data)
+    
 def generatedoc(**context):    
     
     if 'tssdoc' in os.environ:
@@ -257,6 +271,7 @@ def generatedoc(**context):
     
     print("containername=",containername, hurl)
     
+    
     if vipervizport:
         subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--topic--/{}/g".format(topic), "/{}/docs/source/details.rst".format(sname)])
@@ -284,7 +299,9 @@ def generatedoc(**context):
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
     print("Vdocker=",v,dockerrun)
-    
+
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--:{}".format(dockerrun),"--dockercontainer--:{}({})".format(containername, hurl)])
+
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
 
