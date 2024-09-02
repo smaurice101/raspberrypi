@@ -47,6 +47,9 @@ def dockerit(**context):
        os.environ[key] = sd
        v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
        print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
+       subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
+    
+    
        v=subprocess.call("docker push {}".format(cname), shell=True)  
        print("[INFO] docker push {} - message={}".format(cname,v))  
        os.environ['tssbuild']="1"
