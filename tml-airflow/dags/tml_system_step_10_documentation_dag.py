@@ -250,7 +250,7 @@ def generatedoc(**context):
     if containername:
         hcname = containername.split('/')[1]
         huser = containername.split('/')[0]
-        hurl = "https:\/\/hub.docker.com\/r\/{}/{}".format(huser,hcname)
+        hurl = "https:\/\/hub.docker.com\/r\/{}\/{}".format(huser,hcname)
 
         containername = containername.replace('/','\/')
     else:
@@ -327,6 +327,7 @@ def generatedoc(**context):
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
         tmuxwindows = "\n\n".join(data)
+        print("tmuxwindows=",tmuxwindows)
         subprocess.call(["sed", "-i", "-e",  "s/--tmuxwindows--/{}/g".format(tmuxwindows), "/{}/docs/source/operating.rst".format(sname)])
     
     # Kick off shell script 
