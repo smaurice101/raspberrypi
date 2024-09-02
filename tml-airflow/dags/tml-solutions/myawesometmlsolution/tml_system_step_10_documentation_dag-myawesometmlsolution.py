@@ -11,6 +11,7 @@ import subprocess
 import tsslogging
 import shutil
 from git import Repo
+import re
 
 sys.dont_write_bytecode = True
 
@@ -270,11 +271,12 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(containername), "/{}/docs/source/operating.rst".format(sname)])
        
-    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env AIRFLOWPORT={} --env GITUSERNAME={} " \
                  "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT=<TBD At Runtime> " \
                  "--env READTHEDOCS=<Enter Readthedocs token> {}" \
-                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
+                 .format(airflowport,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
     
+    dockerrun = re.escape(dockerrun) 
     subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
     
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
