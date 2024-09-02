@@ -260,7 +260,7 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset), "/{}/docs/source/details.rst".format(sname)])
 
-        
+    airflowport = os.environ['AIRFLOWPORT']     
     repo = tsslogging.getrepo() 
     gitrepo = "\/{}\/tml-airflow\/dags\/tml-solutions\/{}".format(repo,sname)
     
