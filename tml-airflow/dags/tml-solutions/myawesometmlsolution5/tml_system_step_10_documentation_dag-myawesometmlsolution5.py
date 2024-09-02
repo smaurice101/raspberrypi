@@ -369,7 +369,10 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
         
     # Kick off shell script 
-    tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
+    #tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
+    os.chdir("/{}".format(repo))
+    subprocess.call("git push -f origin main", shell=True)
+    
     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="RTD")
 
     if rtd == None: 
