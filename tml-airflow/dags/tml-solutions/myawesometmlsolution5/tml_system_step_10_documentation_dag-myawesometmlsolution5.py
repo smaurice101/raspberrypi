@@ -382,7 +382,7 @@ def generatedoc(**context):
             },
             "homepage": "http://template.readthedocs.io/",
             "programming_language": "py",
-            "language": "es",
+            "language": "en",
             "privacy_level": "public",
             "external_builds_privacy_level": "public",
             "tags": [
