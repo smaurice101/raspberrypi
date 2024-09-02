@@ -72,7 +72,7 @@ def run(**context):
                  "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT={} " \
                  "--env READTHEDOCS=<Enter Readthedocs token> {}" \
                  .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'], \
-                  airflowport,os.environ['READTHEDOCS'],containername))        
+                  airflowport,containername))        
     subprocess.call(dockerrun, shell=True, stdout=output, stderr=output)
     vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
     airflowurl = "http://localhost:{}".format(airflowport)

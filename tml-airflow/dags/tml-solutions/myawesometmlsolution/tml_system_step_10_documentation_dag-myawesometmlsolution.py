@@ -260,7 +260,8 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset), "/{}/docs/source/details.rst".format(sname)])
 
-    airflowport = os.environ['AIRFLOWPORT']     
+    airflowport = tsslogging.getfreeport()
+    
     repo = tsslogging.getrepo() 
     gitrepo = "\/{}\/tml-airflow\/dags\/tml-solutions\/{}".format(repo,sname)
     
@@ -268,18 +269,15 @@ def generatedoc(**context):
     print("V=",v)
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(containername), "/{}/docs/source/operating.rst".format(sname)])
-    
-    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(containername), "/{}/docs/source/operating.rst".format(sname)])
-   
+       
     dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
-                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT={} " \
+                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT=<TBD At Runtime> " \
                  "--env READTHEDOCS=<Enter Readthedocs token> {}" \
-                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'], \
-                  airflowport,os.environ['READTHEDOCS'],containername))   
+                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
     
     subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
     
-    vizurl = "http:\/\/localhost:{}\/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,dashboardhtml,topic,offset,rollbackoffset,append,secure)
+    vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset,rollbackoffset,append,secure)
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
 
 
