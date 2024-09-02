@@ -261,11 +261,12 @@ def generatedoc(**context):
 
         
     repo = tsslogging.getrepo() 
-    gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(repo,sname)
+    gitrepo = "\/{}\/tml-airflow\/dags\/tml-solutions\/{}".format(repo,sname)
     
     v=subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
     print("V=",v)
-    readthedocs = "https://{}.readthedocs.io".format(sname)
+    
+    readthedocs = "https:\/\/{}.readthedocs.io".format(sname)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
     triggername = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="solution_dag_to_trigger")
