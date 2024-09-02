@@ -26,19 +26,21 @@ def dockerit(**context):
         if os.environ['tssbuild']=="1":
             return        
      try:
+       sd = context['dag'].dag_id
+       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+        
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
-       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
-       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip")         
+       
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))         
        cname = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
       
        print("Containername=",cname)
         
        ti = context['task_instance']
-       ti.xcom_push(key="containername",value=cname)
-       sd = context['dag'].dag_id 
-       ti.xcom_push(key='solution_dag_to_trigger', value=sd)
+       ti.xcom_push(key="{}_containername".format(sname),value=cname)
+       ti.xcom_push(key="{}_solution_dag_to_trigger".format(sname), value=sd)
         
        scid = tsslogging.getrepo('/tmux/cidname.txt')
        cid = os.environ['SCID']

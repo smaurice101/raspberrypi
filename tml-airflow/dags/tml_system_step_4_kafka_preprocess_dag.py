@@ -148,34 +148,34 @@ def windowname(wtype,sname):
     return wn
 
 def dopreprocessing(**context):
-       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
-       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
-       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREPROCESS")
-       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
-       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
-        
-       print("VIPERHOST=",VIPERHOST)
-       print("VIPERPORT=",VIPERPORT)
-        
+       sd = context['dag'].dag_id
+       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESS".format(sname))
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESS".format(sname))
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
+                
        ti = context['task_instance']    
-       ti.xcom_push(key="raw_data_topic", value=default_args['raw_data_topic'])
-       ti.xcom_push(key="preprocess_data_topic", value=default_args['preprocess_data_topic'])
-       ti.xcom_push(key="preprocessconditions", value=default_args['preprocessconditions'])
-       ti.xcom_push(key="delay", value="_{}".format(default_args['delay']))
-       ti.xcom_push(key="array", value="_{}".format(default_args['array']))
-       ti.xcom_push(key="saveasarray", value="_{}".format(default_args['saveasarray']))
-       ti.xcom_push(key="topicid", value="_{}".format(default_args['topicid']))
-       ti.xcom_push(key="rawdataoutput", value="_{}".format(default_args['rawdataoutput']))
-       ti.xcom_push(key="asynctimeout", value="_{}".format(default_args['asynctimeout']))
-       ti.xcom_push(key="timedelay", value="_{}".format(default_args['timedelay']))
-       ti.xcom_push(key="usemysql", value="_{}".format(default_args['usemysql']))
-       ti.xcom_push(key="preprocesstypes", value=default_args['preprocesstypes'])
-       ti.xcom_push(key="pathtotmlattrs", value=default_args['pathtotmlattrs'])
-       ti.xcom_push(key="identifier", value=default_args['identifier'])
-       ti.xcom_push(key="jsoncriteria", value=default_args['jsoncriteria'])
+       ti.xcom_push(key="{}_raw_data_topic".format(sname), value=default_args['raw_data_topic'])
+       ti.xcom_push(key="{}_preprocess_data_topic".format(sname), value=default_args['preprocess_data_topic'])
+       ti.xcom_push(key="{}_preprocessconditions".format(sname), value=default_args['preprocessconditions'])
+       ti.xcom_push(key="{}_delay".format(sname), value="_{}".format(default_args['delay']))
+       ti.xcom_push(key="{}_array".format(sname), value="_{}".format(default_args['array']))
+       ti.xcom_push(key="{}_saveasarray".format(sname), value="_{}".format(default_args['saveasarray']))
+       ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
+       ti.xcom_push(key="{}_rawdataoutput".format(sname), value="_{}".format(default_args['rawdataoutput']))
+       ti.xcom_push(key="{}_asynctimeout".format(sname), value="_{}".format(default_args['asynctimeout']))
+       ti.xcom_push(key="{}_timedelay".format(sname), value="_{}".format(default_args['timedelay']))
+       ti.xcom_push(key="{}_usemysql".format(sname), value="_{}".format(default_args['usemysql']))
+       ti.xcom_push(key="{}_preprocesstypes".format(sname), value=default_args['preprocesstypes'])
+       ti.xcom_push(key="{}_pathtotmlattrs".format(sname), value=default_args['pathtotmlattrs'])
+       ti.xcom_push(key="{}_identifier".format(sname), value=default_args['identifier'])
+       ti.xcom_push(key="{}_jsoncriteria".format(sname), value=default_args['jsoncriteria'])
         
        repo=tsslogging.getrepo() 
-       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
        else:
@@ -205,7 +205,7 @@ if __name__ == '__main__':
         while True:
           try: 
             processtransactiondata()
-            time.sleep(1)
+            time.sleep(.5)
           except Exception as e:     
            tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    

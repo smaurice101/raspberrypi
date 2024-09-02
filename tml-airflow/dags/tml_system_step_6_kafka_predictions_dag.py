@@ -140,29 +140,34 @@ def windowname(wtype,sname):
     return wn
 
 def startpredictions(**context):
-       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
-       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
-       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREDICT")
+    
+       sd = context['dag'].dag_id
+       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREDICT".format(sname))
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREDICT".format(sname))
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
-       HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOSTPREDICT")
-       HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORTPREDICT")
-       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
+       HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEHOSTPREDICT".format(sname))
+       HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEPORTPREDICT".format(sname))
+        
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
        ti = context['task_instance']
-       ti.xcom_push(key="preprocess_data_topic",value=default_args['preprocess_data_topic'])
-       ti.xcom_push(key="ml_prediction_topic",value=default_args['ml_prediction_topic'])
-       ti.xcom_push(key="streamstojoin",value=default_args['streamstojoin'])
-       ti.xcom_push(key="inputdata",value=default_args['inputdata'])
-       ti.xcom_push(key="consumefrom",value=default_args['consumefrom'])
-       ti.xcom_push(key="offset",value="_{}".format(default_args['offset']))
-       ti.xcom_push(key="delay",value="_{}".format(default_args['delay']))
-       ti.xcom_push(key="usedeploy",value="_{}".format(default_args['usedeploy']))
-       ti.xcom_push(key="networktimeout",value="_{}".format(default_args['networktimeout']))
-       ti.xcom_push(key="maxrows",value="_{}".format(default_args['maxrows']))
-       ti.xcom_push(key="topicid",value="_{}".format(default_args['topicid']))
-       ti.xcom_push(key="pathtoalgos",value=default_args['pathtoalgos'])
+       ti.xcom_push(key="{}_preprocess_data_topic".format(sname),value=default_args['preprocess_data_topic'])
+       ti.xcom_push(key="{}_ml_prediction_topic".format(sname),value=default_args['ml_prediction_topic'])
+       ti.xcom_push(key="{}_streamstojoin".format(sname),value=default_args['streamstojoin'])
+       ti.xcom_push(key="{}_inputdata".format(sname),value=default_args['inputdata'])
+       ti.xcom_push(key="{}_consumefrom".format(sname),value=default_args['consumefrom'])
+       ti.xcom_push(key="{}_offset".format(sname),value="_{}".format(default_args['offset']))
+       ti.xcom_push(key="{}_delay".format(sname),value="_{}".format(default_args['delay']))
+       ti.xcom_push(key="{}_usedeploy".format(sname),value="_{}".format(default_args['usedeploy']))
+       ti.xcom_push(key="{}_networktimeout".format(sname),value="_{}".format(default_args['networktimeout']))
+       ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(default_args['maxrows']))
+       ti.xcom_push(key="{}_topicid".format(sname),value="_{}".format(default_args['topicid']))
+       ti.xcom_push(key="{}_pathtoalgos".format(sname),value=default_args['pathtoalgos'])
     
        repo=tsslogging.getrepo() 
-       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
        else:
@@ -194,7 +199,7 @@ if __name__ == '__main__':
          while True:
           try:              
             performPrediction()      
-            time.sleep(1)
+            time.sleep(.5)
           except Exception as e:
             tsslogging.tsslogit("Predictions DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
             tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")

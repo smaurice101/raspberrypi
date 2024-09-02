@@ -112,20 +112,22 @@ def windowname(wtype,sname):
     return wn
 
 def startproducing(**context):
-       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
-       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
-       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
-       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
+       sd = context['dag'].dag_id
+       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+
+       ti = context['task_instance']
+       ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='REST')
+       ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
+       ti.xcom_push(key="{}_PORT".format(sname),value=default_args['rest_port'])
+       ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
         
-       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
-       ti = context['task_instance'] 
-       ti.xcom_push(key='PRODUCETYPE',value='REST')
-       ti.xcom_push(key='TOPIC',value=default_args['topics'])
-       ti.xcom_push(key='PORT',value=default_args['rest_port'])
-       ti.xcom_push(key='IDENTIFIER',value=default_args['identifier'])
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
        
        repo=tsslogging.getrepo() 
-       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
        else:

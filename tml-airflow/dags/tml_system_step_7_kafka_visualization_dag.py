@@ -49,8 +49,9 @@ def startstreamingengine(**context):
             os.chdir("/{}".format(repo))
             subprocess.call("git push -f origin main", shell=True)
     
-        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
-        sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
+        sd = context['dag'].dag_id
+        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
     
         topic = default_args['topic']
         secure = default_args['secure']
@@ -69,15 +70,15 @@ def startstreamingengine(**context):
         vipervizportp = default_args['vipervizport']
         if vipervizportp != '':
             vipervizport = int(vipervizportp)
-        
+                
         ti = context['task_instance']
-        ti.xcom_push(key='VIPERVIZPORT',value="_{}".format(vipervizport))
-        ti.xcom_push(key='topic',value=topic)
-        ti.xcom_push(key='secure',value="_{}".format(secure))
-        ti.xcom_push(key='offset',value="_{}".format(offset))
-        ti.xcom_push(key='append',value="_{}".format(append))
-        ti.xcom_push(key='chip',value=chip)
-        ti.xcom_push(key='rollbackoffset',value="_{}".format(rollbackoffset))
+        ti.xcom_push(key="{}_VIPERVIZPORT".format(sname),value="_{}".format(vipervizport))
+        ti.xcom_push(key="{}_topic".format(sname),value=topic)
+        ti.xcom_push(key="{}_secure".format(sname),value="_{}".format(secure))
+        ti.xcom_push(key="{}_offset".format(sname),value="_{}".format(offset))
+        ti.xcom_push(key="{}_append".format(sname),value="_{}".format(append))
+        ti.xcom_push(key="{}_chip".format(sname),value=chip)
+        ti.xcom_push(key="{}_rollbackoffset".format(sname),value="_{}".format(rollbackoffset))
     
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 

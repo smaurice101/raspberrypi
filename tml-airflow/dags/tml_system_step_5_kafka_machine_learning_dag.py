@@ -155,35 +155,38 @@ def windowname(wtype,sname):
     return wn
 
 def startml(**context):
-       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
-       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTML")
-       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTML")
-       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
-
-       HPDEHOST = ti.xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOST")
-       HPDEPORT = ti.xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORT")
-       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
+       sd = context['dag'].dag_id
+       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTML".format(sname))
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTML".format(sname))
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+    
+       HPDEHOST = ti.xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEHOST".format(sname))
+       HPDEPORT = ti.xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEPORT".format(sname))
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
+        
        ti = context['task_instance']
-       ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
-       ti.xcom_push(key="ml_data_topic", value=ml_data_topic)
-       ti.xcom_push(key="modelruns", value="_{}".format(modelruns))
-       ti.xcom_push(key="offset", value="_{}".format(offset))
-       ti.xcom_push(key="islogistic", value="_{}".format(islogistic))
-       ti.xcom_push(key="networktimeout", value="_{}".format(networktimeout))
-       ti.xcom_push(key="modelsearchtuner", value="_{}".format(modelsearchtuner))
-       ti.xcom_push(key="dependentvariable", value=dependentvariable)
-       ti.xcom_push(key="independentvariables", value=independentvariables)
-       ti.xcom_push(key="rollbackoffsets", value="_{}".format(rollbackoffsets))
-       ti.xcom_push(key="topicid", value="_{}".format(topicid))
-       ti.xcom_push(key="consumefrom", value=consumefrom)
-       ti.xcom_push(key="fullpathtotrainingdata", value=fullpathtotrainingdata)
-       ti.xcom_push(key="transformtype", value=transformtype)
-       ti.xcom_push(key="sendcoefto", value=sendcoefto)
-       ti.xcom_push(key="coeftoprocess", value=coeftoprocess)
-       ti.xcom_push(key="coefsubtopicnames", value=coefsubtopicnames)
+       ti.xcom_push(key="{}_preprocess_data_topic".format(sname), value=preprocess_data_topic)
+       ti.xcom_push(key="{}_ml_data_topic".format(sname), value=ml_data_topic)
+       ti.xcom_push(key="{}_modelruns".format(sname), value="_{}".format(modelruns))
+       ti.xcom_push(key="{}_offset".format(sname), value="_{}".format(offset))
+       ti.xcom_push(key="{}_islogistic".format(sname), value="_{}".format(islogistic))
+       ti.xcom_push(key="{}_networktimeout".format(sname), value="_{}".format(networktimeout))
+       ti.xcom_push(key="{}_modelsearchtuner".format(sname), value="_{}".format(modelsearchtuner))
+       ti.xcom_push(key="{}_dependentvariable".format(sname), value=dependentvariable)
+       ti.xcom_push(key="{}_independentvariables".format(sname), value=independentvariables)
+       ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(rollbackoffsets))
+       ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(topicid))
+       ti.xcom_push(key="{}_consumefrom".format(sname), value=consumefrom)
+       ti.xcom_push(key="{}_fullpathtotrainingdata".format(sname), value=fullpathtotrainingdata)
+       ti.xcom_push(key="{}_transformtype".format(sname), value=transformtype)
+       ti.xcom_push(key="{}_sendcoefto".format(sname), value=sendcoefto)
+       ti.xcom_push(key="{}_coeftoprocess".format(sname), value=coeftoprocess)
+       ti.xcom_push(key="{}_coefsubtopicnames".format(sname), value=coefsubtopicnames)
 
        repo=tsslogging.getrepo() 
-       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
        else:

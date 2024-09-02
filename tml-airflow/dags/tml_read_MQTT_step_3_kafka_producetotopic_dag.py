@@ -102,18 +102,22 @@ def gettmlsystemsparams(**context):
   global VIPERPORT
   global HTTPADDR
 
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")    
-  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HTTPADDR")
+  sd = context['dag'].dag_id
+  sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
+  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
+  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+    
   ti = context['task_instance']
-  ti.xcom_push(key='PRODUCETYPE',value='MQTT')
-  ti.xcom_push(key='TOPIC',value=default_args['topics'])
+  ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='MQTT')
+  ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
   buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
-  ti.xcom_push(key='PORT',value=buf)
+  ti.xcom_push(key="{}_PORT".format(sname),value=buf)
   buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
-  ti.xcom_push(key='IDENTIFIER',value=buf)
+  ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=buf)
+
     
 def readdata(valuedata):
   # MAin Kafka topic to store the real-time data
@@ -137,9 +141,11 @@ def windowname(wtype,sname):
 
 def startproducing(**context):
        gettmlsystemsparams(context)
-       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip")          
+       sd = context['dag'].dag_id
+       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+        
+       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))          
        repo=tsslogging.getrepo() 
-       sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
        else:

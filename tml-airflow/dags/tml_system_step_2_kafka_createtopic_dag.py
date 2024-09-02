@@ -68,23 +68,26 @@ def setupkafkatopics(**context):
   ml_data_topic=args['ml_data_topic']
   prediction_data_topic=args['prediction_data_topic']
   
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERTOKEN")
-  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
-  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
-   
+  sd = context['dag'].dag_id
+  sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
+  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
+    
   ti = context['task_instance'] 
-  ti.xcom_push(key="companyname", value=companyname)
-  ti.xcom_push(key="myname", value=myname)
-  ti.xcom_push(key="myemail", value=myemail)
-  ti.xcom_push(key="mylocation", value=mylocation)
-  ti.xcom_push(key="replication", value="_{}".format(replication))
-  ti.xcom_push(key="numpartitions", value="_{}".format(numpartitions))
-  ti.xcom_push(key="enabletls", value="_{}".format(enabletls))
-  ti.xcom_push(key="microserviceid", value=microserviceid)
-  ti.xcom_push(key="raw_data_topic", value=raw_data_topic)
-  ti.xcom_push(key="preprocess_data_topic", value=preprocess_data_topic)
-  ti.xcom_push(key="ml_data_topic", value=ml_data_topic)
-  ti.xcom_push(key="prediction_data_topic", value=prediction_data_topic)
+  ti.xcom_push(key="{}_companyname".format(sname), value=companyname)
+  ti.xcom_push(key="{}_myname".format(sname), value=myname)
+  ti.xcom_push(key="{}_myemail".format(sname), value=myemail)
+  ti.xcom_push(key="{}_mylocation".format(sname), value=mylocation)
+  ti.xcom_push(key="{}_replication".format(sname), value="_{}".format(replication))
+  ti.xcom_push(key="{}_numpartitions".format(sname), value="_{}".format(numpartitions))
+  ti.xcom_push(key="{}_enabletls".format(sname), value="_{}".format(enabletls))
+  ti.xcom_push(key="{}_microserviceid".format(sname), value=microserviceid)
+  ti.xcom_push(key="{}_raw_data_topic".format(sname), value=raw_data_topic)
+  ti.xcom_push(key="{}_preprocess_data_topic".format(sname), value=preprocess_data_topic)
+  ti.xcom_push(key="{}_ml_data_topic".format(sname), value=ml_data_topic)
+  ti.xcom_push(key="{}_prediction_data_topic".format(sname), value=prediction_data_topic)
   
   print("Vipertoken=", VIPERTOKEN)
   print("VIPERHOST=", VIPERHOST)
