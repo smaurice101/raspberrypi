@@ -332,30 +332,36 @@ def generatedoc(**context):
     # Kick off shell script 
     tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
     
-    URL = 'https://readthedocs.org/api/v3/projects/'
-    TOKEN = os.environ['READTHEDOCS']
-    HEADERS = {'Authorization': f'token {TOKEN}'}
-    data={
-        "name": "{}".format(sname),
-        "repository": {
-            "url": "https://github.com/{}/{}".format(os.environ['GITUSERNAME'],sname),
-            "type": "git"
-        },
-        "homepage": "http://template.readthedocs.io/",
-        "programming_language": "py",
-        "language": "es",
-        "privacy_level": "public",
-        "external_builds_privacy_level": "public",
-        "tags": [
-            "automation",
-            "sphinx"
-        ]
-    }
-    response = requests.post(
-        URL,
-        json=data,
-        headers=HEADERS,
-    )
-    print(response.json())
-    tsslogging.tsslogit(response.json())
-    os.environ['tssdoc']="1"
+    rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="RTD")
+    
+    if rtd == None:
+        URL = 'https://readthedocs.org/api/v3/projects/'
+        TOKEN = os.environ['READTHEDOCS']
+        HEADERS = {'Authorization': f'token {TOKEN}'}
+        data={
+            "name": "{}".format(sname),
+            "repository": {
+                "url": "https://github.com/{}/{}".format(os.environ['GITUSERNAME'],sname),
+                "type": "git"
+            },
+            "homepage": "http://template.readthedocs.io/",
+            "programming_language": "py",
+            "language": "es",
+            "privacy_level": "public",
+            "external_builds_privacy_level": "public",
+            "tags": [
+                "automation",
+                "sphinx"
+            ]
+        }
+        response = requests.post(
+            URL,
+            json=data,
+            headers=HEADERS,
+        )
+        print(response.json())
+        tsslogging.tsslogit(response.json())
+        os.environ['tssdoc']="1"
+    
+    ti = context['task_instance']
+    ti.xcom_push(key="RTD", value="DONE")
