@@ -40,7 +40,6 @@ def generatedoc(**context):
             return
     
     sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
-    shutil.copytree('/tss_readthedocs', "/{}".format(sname), dirs_exist_ok=True) 
 
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODCE")
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
@@ -244,14 +243,13 @@ def generatedoc(**context):
     chip = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="chip")
     rollbackoffset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="rollbackoffset")
 
-    if 'CHIP' in os.environ:
-         chip = os.environ['CHIP']
-    else:
-         chip=""
-    if chip.lower() == "arm64":  
-        containername = os.environ['DOCKERUSERNAME']  + "\/{}-{}".format(sname,chip)          
-    else:    
-        containername = os.environ['DOCKERUSERNAME']  + "\/{}".format(sname)
+    containername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="containername")
+    containername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="containername")
+    hcname = containername.split('/')[1]
+    huser = containername.split('/')[0]
+    hurl = "https:\/\/hub.docker.com\/r\/{}/{}".format(huser,hcname)
+    
+    containername = containername.replace('/','\/')
     
     subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--topic--/{}/g".format(topic), "/{}/docs/source/details.rst".format(sname)])
@@ -269,7 +267,7 @@ def generatedoc(**context):
     v=subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
     print("V=",v)
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(containername), "/{}/docs/source/operating.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}\n\n{}/g".format(containername,hurl), "/{}/docs/source/operating.rst".format(sname)])
        
     dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env AIRFLOWPORT={} --env GITUSERNAME={} " \
                  "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT=<TBD At Runtime> " \
@@ -277,7 +275,8 @@ def generatedoc(**context):
                  .format(airflowport,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
     
     dockerrun = re.escape(dockerrun) 
-    subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
+    v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
+    print("Vdocker=",v)
     
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
