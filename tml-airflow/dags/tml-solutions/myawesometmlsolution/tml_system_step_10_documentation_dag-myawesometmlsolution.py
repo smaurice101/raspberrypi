@@ -313,7 +313,6 @@ def generatedoc(**context):
     
     triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="solution_dag_to_trigger")
     print("triggername=",triggername)
-    subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(triggername)])
 
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
@@ -349,9 +348,8 @@ def generatedoc(**context):
         data.append("viper-preprocess")
         data.append("viper-ml")
         data.append("viper-predict")
-        tmuxwindows = "\n\n".join(data)
+        tmuxwindows = ", ".join(data)
         print("tmuxwindows=",tmuxwindows)
-        subprocess.call(["sed", "-i", "-e",  "s/--tmuxwindows--/{}/g".format(tmuxwindows), "/{}/docs/source/operating.rst".format(sname)])
 
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
         
