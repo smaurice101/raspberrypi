@@ -2488,3 +2488,4 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-09-02_12:48:25] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
 [INFO 2024-09-02_12:48:27] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
 [INFO 2024-09-02_12:48:36] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
+[INFO 2024-09-02_12:50:54] {'name': ['Project with slug "myawesometmlsolution" already exists.']}
