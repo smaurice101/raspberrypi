@@ -259,7 +259,7 @@ def getparams(**context):
   method = args['ingestdatamethod'] 
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
-  task_instance = context['task_instance']
+  
   if 'CHIP' in os.environ:
      chip = os.environ['CHIP']
      chip = chip.lower()   
@@ -271,6 +271,7 @@ def getparams(**context):
   print("VIPERHOST=", VIPERHOST) 
   print("VIPERPORT=", VIPERPORT) 
 
+  task_instance = context['task_instance']
   task_instance.xcom_push(key='VIPERTOKEN',value=VIPERTOKEN)
   task_instance.xcom_push(key='VIPERHOST',value=VIPERHOST)
   task_instance.xcom_push(key='VIPERPORT',value="_{}".format(VIPERPORT))
