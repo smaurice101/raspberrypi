@@ -2566,3 +2566,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-02_14:58:20] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
 [INFO 2024-09-02_14:59:01] {'name': ['Project with slug "myawesometmlsolution" already exists.']}
 [INFO 2024-09-02_15:03:19] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
+[INFO 2024-09-02_15:03:21] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
