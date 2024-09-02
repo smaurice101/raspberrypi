@@ -304,11 +304,11 @@ def generatedoc(**context):
     
     privategptcontainer = "https://hub.docker.com/r/maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
     privategptrun = "docker run -d -p 8001:8001 --gpus all --net=host --env PORT=8001 --env GPU=1 --env WEB_CONCURRENCY=1 --env COLLECTION=tml-cisco --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
-    doparse("/{}/docs/source/details.rst".format(sname), ["--privategptcontainer--;{}".format(privategptcontainer),"--privategptrun--;{} ({})".format(privategptrun)])
+    doparse("/{}/docs/source/details.rst".format(sname), ["--privategptcontainer--;{}".format(privategptcontainer),"--privategptrun--;{}".format(privategptrun)])
 
     qdrantcontainer = "qdrant/qdrant"
     qdrantrun = "docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
-    doparse("/{}/docs/source/details.rst".format(sname), ["--qdrantcontainer--;{}".format(privategptcontainer),"--qdrantrun--;{} ({})".format(qdrantrun)])
+    doparse("/{}/docs/source/details.rst".format(sname), ["--qdrantcontainer--;{}".format(privategptcontainer),"--qdrantrun--;{}".format(qdrantrun)])
 
     rbuf = "https://{}.readthedocs.io".format(sname)
     doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
