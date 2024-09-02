@@ -260,41 +260,42 @@ def generatedoc(**context):
      subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
      subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset[1:]), "/{}/docs/source/details.rst".format(sname)])
 
-        
-    repo = tsslogging.getrepo() 
-    gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(repo,sname)
-    
-    subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
-    readthedocs = "https://{}.readthedocs.io".format(sname)
-    subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
-    
-    triggername = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="solution_dag_to_trigger")
-    subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
+    try:    
+        repo = tsslogging.getrepo() 
+        gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(repo,sname)
 
-    producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODCE")
-    producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
-    preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
-    preprocessport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREPROCESS")
-    mlhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTML")
-    mlport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTML")
-    predictionhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
-    predictionport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
+        subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
+        readthedocs = "https://{}.readthedocs.io".format(sname)
+        subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
 
-    hpdehost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOST")
-    hpdeport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORT")
+        triggername = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="solution_dag_to_trigger")
+        subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
 
-    hpdepredicthost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOSTPREDICT")
-    hpdepredictport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORTPREDICT")
-        
-    tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}\n\n"
-                   "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}\n\n"
-                   "VIPERHOST_ML={}, VIPERPORT_ML={}\n\n"
-                   "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}\n\n"
-                   "HPDEHOST={}, HPDEPORT={}\n\n"
-                   "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],mlhost,mlport[1:],predictionhost,predictionport[1:],
-                                                                          hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
-    subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
-    
+        producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODCE")
+        producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
+        preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREPROCESS")
+        preprocessport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPREPROCESS")
+        mlhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTML")
+        mlport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTML")
+        predictionhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
+        predictionport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPREDICT")
+
+        hpdehost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOST")
+        hpdeport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORT")
+
+        hpdepredicthost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOSTPREDICT")
+        hpdepredictport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORTPREDICT")
+
+        tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}\n\n"
+                       "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}\n\n"
+                       "VIPERHOST_ML={}, VIPERPORT_ML={}\n\n"
+                       "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}\n\n"
+                       "HPDEHOST={}, HPDEPORT={}\n\n"
+                       "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],mlhost,mlport[1:],predictionhost,predictionport[1:],
+                                                                              hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
+        subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
+    except Exception as e:
+        print("ERROR: ",e
     
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 

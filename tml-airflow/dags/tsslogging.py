@@ -4,6 +4,7 @@ import datetime
 from datetime import timezone 
 from git import Repo
 import socketserver
+import subprocess
 
 def tmuxchange(tmuxname):
   with open("/tmux/tmux-airflow.sh", "a") as myfile:
@@ -22,6 +23,13 @@ def getrepo(filename='/tmux/reponame.txt'):
     
   return repo
 
+def git_push2(solution):
+    gitpass = os.environ['GITPASSWORD']
+    gituser = os.environ['GITUSERNAME']
+    
+    subprocess.call(["git", "remote", "set-url", "--push", "origin","https://{}@github.com/{}/{}.git".format(gitpass,gituser,solution)])
+    
+    
 def git_push(repopath,message,sname):
     try:
         repo = Repo(repopath)
