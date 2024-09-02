@@ -96,8 +96,8 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--brokerport--/{}/g".format(brokerport[1:]), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--cloudusername--/{}/g".format(cloudusername), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--ingestdatamethod--/{}/g".format(ingestdatamethod), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--solutiontitle--/{}/g".format(sname), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--solutiondescription--/{}/g".format(sname), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--solutiontitle--/{}/g".format(stitle), "/{}/docs/source/details.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--solutiondescription--/{}/g".format(sdesc), "/{}/docs/source/details.rst".format(sname)])
 
     
     companyname = context['ti'].xcom_pull(task_ids='step_2_solution_task_createtopic',key="companyname")
