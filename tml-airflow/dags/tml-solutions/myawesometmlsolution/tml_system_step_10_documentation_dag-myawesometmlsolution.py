@@ -280,10 +280,13 @@ def generatedoc(**context):
     airflowport = tsslogging.getfreeport()
     
     repo = tsslogging.getrepo() 
-    gitrepo = "\/{}\/tml-airflow\/dags\/tml-solutions\/{}".format(repo,sname)
+    gitrepo="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}".format(os.environ['GITUSERNAME'],repo,sname)
+   # gitrepo = "\/{}\/tml-airflow\/dags\/tml-solutions\/{}".format(repo,sname)
     
     v=subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
     print("V=",v)
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--gitrepo--;{}".format(gitrepo)])
+    
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}\n\n{}/g".format(containername,hurl), "/{}/docs/source/operating.rst".format(sname)])
        
@@ -311,6 +314,7 @@ def generatedoc(**context):
     triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="solution_dag_to_trigger")
     print("triggername=",triggername)
     subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(triggername)])
 
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERPORTPRODUCE")
