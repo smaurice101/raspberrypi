@@ -263,7 +263,8 @@ def generatedoc(**context):
     repo = tsslogging.getrepo() 
     gitrepo = "/{}/tml-airflow/dags/tml-solutions/{}".format(repo,sname)
     
-    subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
+    v=subprocess.call(["sed", "-i", "-e",  "s/--gitrepo--/{}/g".format(gitrepo), "/{}/docs/source/operating.rst".format(sname)])
+    print("V=",v)
     readthedocs = "https://{}.readthedocs.io".format(sname)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
