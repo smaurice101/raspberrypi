@@ -8,6 +8,7 @@ import sys
 import tsslogging
 import time 
 import subprocess
+import shutil
 
 sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
@@ -102,7 +103,10 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
       os.remove("/tmux/vipervizwindows_{}.txt".format(sname))                    
     except Exception as e:
      pass
-        
+       
+    # copy folders
+    shutil.copytree("/tss_readthedocs/docs/source", "/{}/docs/source".format(sname),dirs_exist_ok=True)
+    shutil.copy2("/tss_readthedocs/docs/source/conf.py", "/{}/docs/source/conf.py".format(sname))
     return VIPERPORT,VIPERPORTPREPROCESS,VIPERPORTPREDICT,VIPERPORTML
         
 def updateviperenv():
