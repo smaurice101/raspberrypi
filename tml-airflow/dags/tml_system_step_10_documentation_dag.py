@@ -244,13 +244,17 @@ def generatedoc(**context):
     append = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="append")
     chip = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="chip")
     rollbackoffset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="rollbackoffset")
-
-    containername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="containername")
-    hcname = containername.split('/')[1]
-    huser = containername.split('/')[0]
-    hurl = "https:\/\/hub.docker.com\/r\/{}/{}".format(huser,hcname)
     
-    containername = containername.replace('/','\/')
+    containername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="containername")
+    
+    if containername:
+        hcname = containername.split('/')[1]
+        huser = containername.split('/')[0]
+        hurl = "https:\/\/hub.docker.com\/r\/{}/{}".format(huser,hcname)
+
+        containername = containername.replace('/','\/')
+    else:
+        containername="TBD"
     
     if vipervizport:
         subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport[1:]), "/{}/docs/source/details.rst".format(sname)])
