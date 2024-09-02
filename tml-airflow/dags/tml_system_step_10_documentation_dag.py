@@ -295,7 +295,7 @@ def generatedoc(**context):
                                                                               hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
         subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
     except Exception as e:
-        print("ERROR: ",e
+        print("ERROR: ",e)
     
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
