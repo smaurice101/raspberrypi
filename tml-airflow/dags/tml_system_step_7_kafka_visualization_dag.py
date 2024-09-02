@@ -41,8 +41,14 @@ def windowname(wtype,vipervizport,sname):
 
 def startstreamingengine(**context):
         repo=tsslogging.getrepo()  
-        tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+        try:
+          tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+        except Exception as e:
+            #git push -f origin main
+            os.chdir("/{}".format(repo))
+            subprocess.call("git push -f origin main", shell=True)
+    
         chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="chip") 
         sname = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="solutionname")
     

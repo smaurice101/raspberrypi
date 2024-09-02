@@ -188,10 +188,16 @@ def dopreprocessing(**context):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-       if sys.argv[1] == "1":          
-        repo=tsslogging.getrepo()  
-        tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+       if sys.argv[1] == "1": 
+        repo=tsslogging.getrepo()
+        try:            
+          tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+        except Exception as e:
+            #git push -f origin main
+            os.chdir("/{}".format(repo))
+            subprocess.call("git push -f origin main", shell=True)
+        
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3] 
         VIPERPORT = sys.argv[4]                  

@@ -5,6 +5,7 @@ from datetime import timezone
 from git import Repo
 import socketserver
 import subprocess
+import os
 
 def tmuxchange(tmuxname):
   with open("/tmux/tmux-airflow.sh", "a") as myfile:
@@ -38,7 +39,11 @@ def git_push(repopath,message,sname):
         origin = repo.remote(name=sname)
         origin.push()
     except:
-        print('Some error occured while pushing the code')    
+        print('Some error occured while pushing the code') 
+        #git push -f origin main
+        os.chdir("/{}".format(repopath))
+        subprocess.call("git push -f {} main".format(sname), shell=True)
+        
 
 def tsslogit(message,mtype="INFO"):
   repo=""    
