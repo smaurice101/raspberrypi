@@ -300,7 +300,19 @@ def generatedoc(**context):
     print("Vdocker=",v,dockerrun)
 
     doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
+    doparse("/{}/docs/source/details.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
+    
+    privategptcontainer = "https://hub.docker.com/r/maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
+    privategptrun = "docker run -d -p 8001:8001 --gpus all --net=host --env PORT=8001 --env GPU=1 --env WEB_CONCURRENCY=1 --env COLLECTION=tml-cisco --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
+    doparse("/{}/docs/source/details.rst".format(sname), ["--privategptcontainer--;{}".format(privategptcontainer),"--privategptrun--;{} ({})".format(privategptrun)])
 
+    qdrantcontainer = "qdrant/qdrant"
+    qdrantrun = "docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
+    doparse("/{}/docs/source/details.rst".format(sname), ["--qdrantcontainer--;{}".format(privategptcontainer),"--qdrantrun--;{} ({})".format(qdrantrun)])
+
+    rbuf = "https://{}.readthedocs.io".format(sname)
+    doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
+    
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
 
