@@ -49,6 +49,7 @@ def dockerit(**context):
        print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
        v=subprocess.call("docker push {}".format(cname), shell=True)  
        print("[INFO] docker push {} - message={}".format(cname,v))  
+       subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
        os.environ['tssbuild']="1"
      except Exception as e:
         print("[ERROR] Step 8: ",e)
