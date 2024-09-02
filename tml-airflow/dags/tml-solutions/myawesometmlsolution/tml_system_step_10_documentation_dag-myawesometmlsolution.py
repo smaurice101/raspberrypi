@@ -264,12 +264,9 @@ def generatedoc(**context):
     if containername:
         hcname = containername.split('/')[1]
         huser = containername.split('/')[0]
-        hurl = "https:\/\/hub.docker.com\/r\/{}\/{}".format(huser,hcname)
+        hurl = "https://hub.docker.com/r/{}/{}".format(huser,hcname)
     else:    
         containername="TBD"
-    
-    print("containername=",containername, hurl)
-    
     
     if vipervizport:
         subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport[1:]), "/{}/docs/source/details.rst".format(sname)])
@@ -312,6 +309,7 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
     triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="solution_dag_to_trigger")
+    print("triggername=",triggername)
     subprocess.call(["sed", "-i", "-e",  "s/--triggername--/{}/g".format(triggername), "/{}/docs/source/operating.rst".format(sname)])
 
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="VIPERHOSTPRODUCE")
