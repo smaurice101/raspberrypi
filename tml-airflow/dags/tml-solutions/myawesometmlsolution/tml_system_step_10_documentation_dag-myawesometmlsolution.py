@@ -40,7 +40,7 @@ def doparse(fname,farr):
         r=0
         for d in data:        
             for f in farr:
-                fs = f.split(":")
+                fs = f.split(";")
                 if fs[0] in d:
                     data[r] = d.replace(fs[0],fs[1])
             r += 1  
@@ -265,7 +265,6 @@ def generatedoc(**context):
         hcname = containername.split('/')[1]
         huser = containername.split('/')[0]
         hurl = "https:\/\/hub.docker.com\/r\/{}\/{}".format(huser,hcname)
-        containername = containername.replace('/','\/')
     else:    
         containername="TBD"
     
@@ -300,7 +299,7 @@ def generatedoc(**context):
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
     print("Vdocker=",v,dockerrun)
 
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--:{}".format(dockerrun),"--dockercontainer--:{}({})".format(containername, hurl)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
 
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
@@ -344,10 +343,16 @@ def generatedoc(**context):
     
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
+        data.append("viper-produce")
+        data.append("viper-preprocess")
+        data.append("viper-ml")
+        data.append("viper-predict")
         tmuxwindows = "\n\n".join(data)
         print("tmuxwindows=",tmuxwindows)
         subprocess.call(["sed", "-i", "-e",  "s/--tmuxwindows--/{}/g".format(tmuxwindows), "/{}/docs/source/operating.rst".format(sname)])
-    
+
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
+        
     # Kick off shell script 
     tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="RTD")
