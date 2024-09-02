@@ -255,6 +255,8 @@ def generatedoc(**context):
     else:    
         containername="TBD"
     
+    print("containername=",containername, hurl)
+    
     if vipervizport:
         subprocess.call(["sed", "-i", "-e",  "s/--vipervizport--/{}/g".format(vipervizport[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--topic--/{}/g".format(topic), "/{}/docs/source/details.rst".format(sname)])
