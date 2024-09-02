@@ -277,7 +277,7 @@ def generatedoc(**context):
     
     subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
     
-    vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset,rollbackoffset,append,secure)
+    vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(vipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
 
 
@@ -305,11 +305,11 @@ def generatedoc(**context):
     hpdepredicthost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEHOSTPREDICT")
     hpdepredictport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="HPDEPORTPREDICT")
         
-    tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}\n\n"
-                       "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}\n\n"
-                       "VIPERHOST_ML={}, VIPERPORT_ML={}\n\n"
-                       "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}\n\n"
-                       "HPDEHOST={}, HPDEPORT={}\n\n"
+    tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}, "
+                       "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}, "
+                       "VIPERHOST_ML={}, VIPERPORT_ML={}, "
+                       "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}, "
+                       "HPDEHOST={}, HPDEPORT={}, "
                        "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],
                                                                               mlhost,mlport[1:],predictionhost,predictionport[1:],
                                                                               hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
