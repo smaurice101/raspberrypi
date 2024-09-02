@@ -185,15 +185,17 @@ if __name__ == '__main__':
             os.chdir("/{}".format(repo))
             subprocess.call("git push -f origin main", shell=True)
     
+         VIPERTOKEN=sys.argv[2]
+         VIPERHOST=sys.argv[3]
+         VIPERPORT=sys.argv[4]
+         HPDEHOSTPREDICT=sys.argv[5]
+         HPDEPORTPREDICT=sys.argv[6]    
+        
          while True:
-          try:  
-            VIPERTOKEN=sys.argv[2]
-            VIPERHOST=sys.argv[3]
-            VIPERPORT=sys.argv[4]
-            HPDEHOSTPREDICT=sys.argv[5]
-            HPDEPORTPREDICT=sys.argv[6]
-            
+          try:              
             performPrediction()      
+            time.sleep(1)
           except Exception as e:
             tsslogging.tsslogit("Predictions DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
             tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+            break
