@@ -349,6 +349,7 @@ def generatedoc(**context):
         data.append("viper-ml")
         data.append("viper-predict")
         tmuxwindows = ", ".join(data)
+        tmuxwindows = tmuxwindows.replace("\n","")
         print("tmuxwindows=",tmuxwindows)
 
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
