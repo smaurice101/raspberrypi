@@ -151,7 +151,8 @@ def generatedoc(**context):
 
     subprocess.call(["sed", "-i", "-e",  "s/--PRODUCETYPE--/{}/g".format(PRODUCETYPE), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--TOPIC--/{}/g".format(TOPIC), "/{}/docs/source/details.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--PORT--/{}/g".format(PORT), "/{}/docs/source/details.rst".format(sname)])
+    doparse("/{}/docs/source/details.rst".format(sname), ["--PORT--;{}".format(PORT)])
+    
     subprocess.call(["sed", "-i", "-e",  "s/--IDENTIFIER--/{}/g".format(IDENTIFIER), "/{}/docs/source/details.rst".format(sname)])
             
     raw_data_topic = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="raw_data_topic")
