@@ -2809,3 +2809,20 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
  * branch            main       -> FETCH_HEAD
 Already up to date.
 [INFO 2024-09-02_16:57:17] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution3
+[INFO 2024-09-02_16:57:18] TML Solution Studio: git commit -a Status for project myawesometmlsolution3: [main 2fa8278] new project
+ Committer: root <root@smaurice>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+[INFO 2024-09-02_16:57:19] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
+   9ad6c11..2fa8278  main -> main
+[INFO 2024-09-02_16:57:19] TML Solution Studio: git add . Status: 
