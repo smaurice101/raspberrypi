@@ -330,7 +330,7 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--tmuxwindows--/{}/g".format(tmuxwindows), "/{}/docs/source/operating.rst".format(sname)])
     
     # Kick off shell script 
-    tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
+    tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
     
     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="RTD")
     
