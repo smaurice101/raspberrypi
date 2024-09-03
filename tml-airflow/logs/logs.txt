@@ -3612,3 +3612,8 @@ branch.main.remote=origin
 branch.main.merge=refs/heads/main
 [INFO 2024-09-03_21:24:50] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-09-03_21:26:04] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution
+[INFO 2024-09-03_21:26:04] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-03_21:26:29] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
