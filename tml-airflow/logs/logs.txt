@@ -3821,3 +3821,4 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-09-03_22:04:48] TML Solution Studio: git push Status for project myawesometmlsolution2: To https://github.com/smaurice101/raspberrypi.git
    67a7ca2..74ac8e3  main -> main
 [INFO 2024-09-03_22:05:50] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution2.py
+[INFO 2024-09-03_22:05:53] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution2.py
