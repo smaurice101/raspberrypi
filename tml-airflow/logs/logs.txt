@@ -3377,3 +3377,25 @@ After doing this, you may fix the identity used for this commit with:
 [INFO 2024-09-03_01:40:05] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution1.py
 [INFO 2024-09-03_01:40:11] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution1.py
 [INFO 2024-09-03_01:42:41] {'_links': {'_self': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/', 'builds': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/builds/', 'environmentvariables': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/environmentvariables/', 'notifications': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/notifications/', 'redirects': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/redirects/', 'subprojects': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/subprojects/', 'superproject': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/superproject/', 'sync_versions': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/sync-versions/', 'translations': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/translations/', 'versions': 'https://readthedocs.org/api/v3/projects/myawesometmlsolution1/versions/'}, 'created': '2024-09-03T01:42:41.661185Z', 'default_branch': 'master', 'default_version': 'latest', 'external_builds_privacy_level': 'public', 'homepage': 'http://template.readthedocs.io/', 'id': 1096341, 'language': {'code': 'en', 'name': 'English'}, 'modified': '2024-09-03T01:42:41.661212Z', 'name': 'myawesometmlsolution1', 'privacy_level': 'public', 'programming_language': {'code': 'py', 'name': 'Python'}, 'repository': {'type': 'git', 'url': 'https://github.com/smaurice101/myawesometmlsolution1'}, 'single_version': False, 'slug': 'myawesometmlsolution1', 'subproject_of': None, 'tags': ['automation', 'sphinx'], 'translation_of': None, 'urls': {'builds': 'https://readthedocs.org/projects/myawesometmlsolution1/builds/', 'documentation': 'https://myawesometmlsolution1.readthedocs.io/en/latest/', 'downloads': 'https://readthedocs.org/projects/myawesometmlsolution1/downloads/', 'home': 'https://readthedocs.org/projects/myawesometmlsolution1/', 'versions': 'https://readthedocs.org/projects/myawesometmlsolution1/versions/'}, 'users': [{'username': 'sebastian.maurice@gmail.com'}], 'versioning_scheme': 'multiple_versions_with_translations'}
+[INFO 2024-09-03_12:52:26] TML Solution Studio Started: DOCKERUSERNAME=maadsdocker, GITUSERNAME=smaurice101, GITREPOURL=https://github.com/smaurice101/raspberrypi.git, AIRFLOWPORT=9000
+[INFO 2024-09-03_12:52:26] TML Solution Studio: Docker Login Status: WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[INFO 2024-09-03_12:52:26] TML Solution Studio: Github Config Status: core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/smaurice101/raspberrypi.git
+remote.origin.fetch=+refs/heads/main:refs/remotes/origin/main
+remote.origin.pushurl=https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+[INFO 2024-09-03_12:52:26] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
+origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-09-03_12:57:00] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution
+[INFO 2024-09-03_12:57:00] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-03_12:57:25] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
