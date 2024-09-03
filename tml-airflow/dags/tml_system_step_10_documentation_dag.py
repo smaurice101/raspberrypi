@@ -402,6 +402,7 @@ def generatedoc(**context):
             },
             "homepage": "http://template.readthedocs.io/",
             "programming_language": "py",
+            "default_branch": "main",
             "language": "en",
             "privacy_level": "public",
             "external_builds_privacy_level": "public",
@@ -418,6 +419,6 @@ def generatedoc(**context):
         print(response.json())
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
-
+    
     ti = context['task_instance']
     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
