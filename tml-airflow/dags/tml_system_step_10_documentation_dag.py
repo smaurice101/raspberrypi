@@ -328,9 +328,9 @@ def generatedoc(**context):
     readthedocs = "https:\/\/{}.readthedocs.io".format(sname)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
-    triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="{}_solution_dag_to_trigger")
+    triggername = sd
     print("triggername=",triggername)
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(triggername)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(sd)])
     tssdockerrun = ("docker run -d \-\-net=host \-\-env MAINHOST=127.0.0.1 \-\-env AIRFLOWPORT=9000 " \
                     " -v <change to your local folder>:/dagslocalbackup:z " \
                     " -v /var/run/docker.sock:/var/run/docker.sock:z " \
