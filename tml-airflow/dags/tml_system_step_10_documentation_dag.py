@@ -293,10 +293,10 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}\n\n{}/g".format(containername,hurl), "/{}/docs/source/operating.rst".format(sname)])
        
-    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env AIRFLOWPORT={} --env GITUSERNAME={} " \
-                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT=<TBD At Runtime> " \
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
+                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={}  " \
                  "--env READTHEDOCS=<Enter Readthedocs token> {}" \
-                 .format(airflowport,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
+                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
     
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])

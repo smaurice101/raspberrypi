@@ -69,10 +69,10 @@ def run(**context):
     tsslogging.tsslogit("Executing docker run in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
     dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
-                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={} --env AIRFLOWPORT={} " \
+                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={}  " \
                  "--env READTHEDOCS=<Enter Readthedocs token> {}" \
-                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'], \
-                  airflowport,containername))        
+                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))  
+        
     subprocess.call(dockerrun, shell=True, stdout=output, stderr=output)
     vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
     airflowurl = "http://localhost:{}".format(airflowport)
