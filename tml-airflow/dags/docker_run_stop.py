@@ -14,10 +14,8 @@ sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
- 'solution_airflow_port' : '', # << Leave blank if you waant TSS to choose a free port automatically  
- 'solution_viperviz_port' : '', # << Leave blank if you waant TSS to choose a free port automatically   
- 'solution_name' : '', # << Leave blank - these will be updated by TSS
- 'solution_dag' : '', # << Leave blank - these will be updated by TSS     
+ 'solution_name' : '--solution-name--', # << Leave blank - these will be updated by TSS
+ 'solution_dag' : '--solution-dag--', # << Leave blank - these will be updated by TSS     
  'instances': 1,  # << Number of instances of your container 
  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
@@ -31,7 +29,7 @@ def containerprocess():
    def empty():
      pass
 dag = containerprocess()
-
+        
 def getfreeport():
         airflowport=default_args['solution_airflow_port']
         vipervizport=default_args['solution_viperviz_port']

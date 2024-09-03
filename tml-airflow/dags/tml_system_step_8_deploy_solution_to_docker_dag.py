@@ -21,6 +21,21 @@ def starttmldeploymentprocess():
         pass
 dag = starttmldeploymentprocess()
     
+
+def doparse(fname,farr):
+      data = ''
+      with open(fname, 'r', encoding='utf-8') as file: 
+        data = file.readlines() 
+        r=0
+        for d in data:        
+            for f in farr:
+                fs = f.split(";")
+                if fs[0] in d:
+                    data[r] = d.replace(fs[0],fs[1])
+            r += 1  
+      with open(fname, 'w', encoding='utf-8') as file: 
+        file.writelines(data)
+        
 def dockerit(**context):
      if 'tssbuild' in os.environ:
         if os.environ['tssbuild']=="1":
@@ -51,10 +66,13 @@ def dockerit(**context):
        print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
        subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
     
-    
        v=subprocess.call("docker push {}".format(cname), shell=True)  
        print("[INFO] docker push {} - message={}".format(cname,v))  
        os.environ['tssbuild']="1"
+    
+       doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,sname,sname), ["--solution-name--;{}".format(sname)])
+       doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,sname,sname), ["--solution-dag--;{}".format(sd)])
+    
      except Exception as e:
         print("[ERROR] Step 8: ",e)
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
