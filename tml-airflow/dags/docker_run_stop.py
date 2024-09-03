@@ -15,7 +15,9 @@ sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'solution_airflow_port' : '', # << Leave blank if you waant TSS to choose a free port automatically  
- 'solution_viperviz_port' : '', # << Leave blank if you waant TSS to choose a free port automatically    
+ 'solution_viperviz_port' : '', # << Leave blank if you waant TSS to choose a free port automatically   
+ 'solution_name' : '', # << Leave blank - these will be updated by TSS
+ 'solution_dag' : '', # << Leave blank - these will be updated by TSS     
  'instances': 1,  # << Number of instances of your container 
  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
@@ -48,39 +50,21 @@ def run(**context):
     if 'CHIP' in os.environ:
          chip = os.environ['CHIP']
     else:
-         chip=""
+         chip="amd64"
 
-    if chip.lower() == "arm64":  
-        containername = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
-    else:    
-        containername = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
+    sname = default_args['solution_name']
+    snamedag = default_args['solution_dag']
+            
+    containername = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
     
-    airflowport,vipervizport=getfreeport()    
-    if 'SOLUTIONNAME' in os.environ:
-      sname = os.environ['SOLUTIONNAME']
-    else:
-      print("ERROR: No SOLUTIONNAME in Docker run")
-      return
-    
-     
-    topic = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_topic".format(sname))
-    secure = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_secure".format(sname))
-    offset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_offset".format(sname))
-    append = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_append".format(sname))
-    chip = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_chip".format(sname))
-    rollbackoffset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_rollbackoffset".format(sname))
-
     repo = tsslogging.getrepo()
     tsslogging.tsslogit("Executing docker run in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
-    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME={} --env GITUSERNAME={} " \
-                 "--env GITPASSWORD={}  --env GITREPOURL={}  " \
-                 "--env READTHEDOCS={} {}" \
-                 .format(sname,os.environ['GITUSERNAME'],os.environ['GITPASSWORD'],os.environ['GITREPOURL'],os.environ['READTHEDOCS'],containername))  
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME={} --env SOLUTIONDAG={} --env GITUSERNAME={} " \
+                 "--env GITPASSWORD={}  --env GITREPOURL={}  --env READTHEDOCS={} {}" \
+                 .format(sname,snamedag,os.environ['GITUSERNAME'],os.environ['GITPASSWORD'],os.environ['GITREPOURL'],os.environ['READTHEDOCS'],containername))  
         
     subprocess.call(dockerrun, shell=True)
-    vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
-    airflowurl = "http://localhost:{}".format(airflowport)
     
     maxtime = 300 # 2 min
     s=""
@@ -104,19 +88,18 @@ def run(**context):
     else:
         os.environ[containername]=""
 
-    return dockerrun,vizurl,airflowurl
+    return dockerrun
 
 def stop(**context):
     if 'CHIP' in os.environ:
          chip = os.environ['CHIP']
     else:
-         chip=""
-    if chip.lower() == "arm64":  
-        containername = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
-    else:    
-        containername = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
+         chip="amd64"
 
-    sname = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="solutionname")  
+    sname = default_args['solution_name']
+            
+    containername = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
+
     if os.environ[containername] == "":        
       repo = tsslogging.getrepo() 
       tsslogging.tsslogit("Your container {} is not running".format(containername), "WARN" )                     
@@ -129,40 +112,13 @@ def stop(**context):
   
 def startruns(**context):        
     cnum = int(default_args['instances'])
-    sname = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="solutionname")        
+    sname = default_args['solution_name']      
+    snamedag = default_args['solution_dag']      
         
     runsapp = []
-    visualapp = []
-    airflowapp = []
     for i in range(0,cnum):
-        dr,viz,air=run(context)
+        dr=run(context)
         runsapp.append(dr)
-        visualapp.append(viz)
-        airflowapp.append(air)
-    
-    key="DOCKERRUN-{}".format(sname)    
-    os.environ[key]=",".join(runsapp)
-    key="VISUALRUN-{}".format(sname)    
-    os.environ[key]=",".join(visualapp)
-    key="AIRFLOWRUN-{}".format(sname)    
-    os.environ[key]=",".join(airflowapp)
-    
-    cname = context['ti'].xcom_pull(task_ids='solution_task_containerize',key="containername")
-    key="DOCKERRUN-{}".format(sname)    
-    dockerrun=os.environ[key]
-    dockerrun=dockerrun.replace(",","\n\n")
-    subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}/g".format(cname), "/{}/docs/source/operating.rst".format(sname)])
-
-    subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
-    
-    key="VISUALRUN-{}".format(sname)    
-    visualrun=os.environ[key]
-    visualrun=visualrun.replace(",","\n\n")
-    subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
-
-    key="AIRFLOWRUN-{}".format(sname)    
-    airflowrun=os.environ[key]
-    airflowrun=visualrun.replace(",","\n\n")
-    subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(visualrun), "/{}/docs/source/operating.rst".format(sname)])
-
-    tsslogging.git_push("/{}".format(sname),"{}-readthedocs".format(sname),sname)
+    repo=tsslogging.getrepo()
+    tsslogging.tsslogit("Running Solution (Name={}, DAG={}} to Docker in {}: {}".format(sname,snamedag,os.path.basename(__file__),e), "INFO" )             
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
