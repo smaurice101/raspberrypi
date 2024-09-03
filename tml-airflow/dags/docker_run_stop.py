@@ -29,20 +29,6 @@ def containerprocess():
    def empty():
      pass
 dag = containerprocess()
-        
-def getfreeport():
-        airflowport=default_args['solution_airflow_port']
-        vipervizport=default_args['solution_viperviz_port']
-        
-        if airflowport=='':
-              airflowport=tsslogging.getfreeport()
-                
-        if vipervizport=='':
-            vipervizport=tsslogging.getfreeport()
-            if vipervizport == airflowport:
-                vipervizport=tsslogging.getfreeport()
-            
-        return airflowport, vipervizport    
     
 def run(**context):
     if 'CHIP' in os.environ:
