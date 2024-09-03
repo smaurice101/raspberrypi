@@ -32,6 +32,33 @@ def startdocumentation():
         pass
 dag = startdocumentation()
 
+def updatebranch(sname,branch):
+        URL = 'https://readthedocs.org/api/v3/projects/pip/'
+        TOKEN = os.environ['READTHEDOCS']
+        HEADERS = {'Authorization': f'token {TOKEN}'}
+        data={
+            "name": "{}".format(sname),
+            "repository": {
+                "url": "https://github.com/{}/{}".format(os.environ['GITUSERNAME'],sname),
+                "type": "git"
+            },
+            "default_branch": "{}".format(branch),
+            "homepage": "http://template.readthedocs.io/",
+            "programming_language": "py",
+            "language": "en",
+            "privacy_level": "public",
+            "external_builds_privacy_level": "public",
+            "tags": [
+                "automation",
+                "sphinx"
+            ]
+        }
+        response = requests.patch(
+            URL,
+            json=data,
+            headers=HEADERS,
+        )
+    
 def doparse(fname,farr):
       data = ''
       with open(fname, 'r', encoding='utf-8') as file: 
@@ -402,7 +429,6 @@ def generatedoc(**context):
             },
             "homepage": "http://template.readthedocs.io/",
             "programming_language": "py",
-            "default_branch": "main",
             "language": "en",
             "privacy_level": "public",
             "external_builds_privacy_level": "public",
@@ -420,5 +446,6 @@ def generatedoc(**context):
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
     
+    updatebranch(sname,"main")
     ti = context['task_instance']
     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
