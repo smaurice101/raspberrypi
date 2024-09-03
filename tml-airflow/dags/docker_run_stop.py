@@ -56,24 +56,29 @@ def run(**context):
         containername = os.environ['DOCKERUSERNAME']  + "/{}".format(sname)
     
     airflowport,vipervizport=getfreeport()    
+    if 'SOLUTIONNAME' in os.environ:
+      sname = os.environ['SOLUTIONNAME']
+    else:
+      print("ERROR: No SOLUTIONNAME in Docker run")
+      return
     
-    sname = context['ti'].xcom_pull(task_ids='solution_task_getparams',key="solutionname")    
-    topic = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="topic")
-    secure = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="secure")
-    offset = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="offset")
-    append = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="append")
-    chip = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="chip")
-    rollbackoffset = context['ti'].xcom_pull(task_ids='solution_task_visualization',key="rollbackoffset")
+     
+    topic = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_topic".format(sname))
+    secure = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_secure".format(sname))
+    offset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_offset".format(sname))
+    append = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_append".format(sname))
+    chip = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_chip".format(sname))
+    rollbackoffset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_rollbackoffset".format(sname))
 
     repo = tsslogging.getrepo()
     tsslogging.tsslogit("Executing docker run in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
-    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
-                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={}  " \
-                 "--env READTHEDOCS=<Enter Readthedocs token> {}" \
-                 .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))  
+    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME={} --env GITUSERNAME={} " \
+                 "--env GITPASSWORD={}  --env GITREPOURL={}  " \
+                 "--env READTHEDOCS={} {}" \
+                 .format(sname,os.environ['GITUSERNAME'],os.environ['GITPASSWORD'],os.environ['GITREPOURL'],os.environ['READTHEDOCS'],containername))  
         
-    subprocess.call(dockerrun, shell=True, stdout=output, stderr=output)
+    subprocess.call(dockerrun, shell=True)
     vizurl = "http://localhost:{}/dashboard.html?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(vipervizport,topic,offset,rollbackoffset,append,secure)
     airflowurl = "http://localhost:{}".format(airflowport)
     
