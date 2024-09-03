@@ -279,8 +279,11 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--append--/{}/g".format(append[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset[1:]), "/{}/docs/source/details.rst".format(sname)])
-
-    airflowport = tsslogging.getfreeport()
+    
+    if 'AIRFLOWPORT' in  os.environ:
+      airflowport = os.environ['AIRFLOWPORT']
+    else:
+      airflowport = tsslogging.getfreeport()
     
     repo = tsslogging.getrepo() 
     gitrepo="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}".format(os.environ['GITUSERNAME'],repo,sname)
@@ -293,9 +296,9 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/operating.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}\n\n{}/g".format(containername,hurl), "/{}/docs/source/operating.rst".format(sname)])
        
-    dockerrun = ("docker run -d --net=host --env TSS=0 --env SOLUTIONNAME=TSS --env GITUSERNAME={} " \
-                 "--env GITPASSWORD=<Enter Github Password>  --env GITREPOURL={}  " \
-                 "--env READTHEDOCS=<Enter Readthedocs token> {}" \
+    dockerrun = ("docker run -d \-\-net=host \-\-env TSS=0 \-\-env SOLUTIONNAME=TSS \-\-env GITUSERNAME={} \n\n" \
+                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \n\n" \
+                 "\-\-env READTHEDOCS=<Enter Readthedocs token> {}\n\n" \
                  .format(os.environ['GITUSERNAME'],os.environ['GITREPOURL'],containername))   
     
    # dockerrun = re.escape(dockerrun) 
@@ -329,16 +332,16 @@ def generatedoc(**context):
     triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="{}_solution_dag_to_trigger")
     print("triggername=",triggername)
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(triggername)])
-    tssdockerrun = ("docker run -d --net=host --env MAINHOST=127.0.0.1 --env AIRFLOWPORT=9000 \n\n" \
+    tssdockerrun = ("docker run -d \-\-net=host \-\-env MAINHOST=127.0.0.1 \-\-env AIRFLOWPORT=9000 \n\n" \
                     " -v <change to your local folder>:/dagslocalbackup:z \n\n" \
                     " -v /var/run/docker.sock:/var/run/docker.sock:z \n\n" \
-                    " --env GITREPOURL=https://github.com/<Enter Github username>/raspberrypi.git \n\n"\
-                    " --env CHIP=AMD64 --env TSS=1 --env SOLUTIONNAME=TSS \n\n" \
-                    " --env READTHEDOCS=<Enter your readthedocs token> \n\n" 
-                    " --env  GITUSERNAME=<Enter your Github username> \n\n" \
-                    " --env GITPASSWORD=<Enter personal access token> \n\n" \
-                    " --env DOCKERUSERNAME=<Enter Dockerhub username> \n\n" \
-                    " --env DOCKERPASSWORD=<Enter your docker hub password> \n\n" \
+                    " \-\-env GITREPOURL=https://github.com/<Enter Github username>/raspberrypi.git \n\n"\
+                    " \-\-env CHIP=AMD64 \-\-env TSS=1 \-\-env SOLUTIONNAME=TSS \n\n" \
+                    " \-\-env READTHEDOCS=<Enter your readthedocs token> \n\n" 
+                    " \-\-env  GITUSERNAME=<Enter your Github username> \n\n" \
+                    " \-\-env GITPASSWORD=<Enter personal access token> \n\n" \
+                    " \-\-env DOCKERUSERNAME=<Enter Dockerhub username> \n\n" \
+                    " \-\-env DOCKERPASSWORD=<Enter your docker hub password> \n\n" \
                     " maadsdocker/tml-solution-studio-with-airflow-amd64")
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tssdockerrun--;{}".format(tssdockerrun)])
     
