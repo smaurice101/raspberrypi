@@ -329,7 +329,19 @@ def generatedoc(**context):
     triggername = context['ti'].xcom_pull(task_ids='step_8_solution_task_containerize',key="{}_solution_dag_to_trigger")
     print("triggername=",triggername)
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(triggername)])
-
+    tssdockerrun = ("docker run -d --net=host --env MAINHOST=127.0.0.1 --env AIRFLOWPORT=9000 \n\n" \
+                    " -v <change to your local folder>:/dagslocalbackup:z \n\n" \
+                    " -v /var/run/docker.sock:/var/run/docker.sock:z \n\n" \
+                    " --env GITREPOURL=https://github.com/<Enter Github username>/raspberrypi.git \n\n"\
+                    " --env CHIP=AMD64 --env TSS=1 --env SOLUTIONNAME=TSS \n\n" \
+                    " --env READTHEDOCS=<Enter your readthedocs token> \n\n" 
+                    " --env  GITUSERNAME=<Enter your Github username> \n\n" \
+                    " --env GITPASSWORD=<Enter personal access token> \n\n" \
+                    " --env DOCKERUSERNAME=<Enter Dockerhub username> \n\n" \
+                    " --env DOCKERPASSWORD=<Enter your docker hub password> \n\n" \
+                    " maadsdocker/tml-solution-studio-with-airflow-amd64")
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--tssdockerrun--;{}".format(tssdockerrun)])
+    
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
     preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESS".format(sname))
