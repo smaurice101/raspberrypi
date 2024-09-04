@@ -333,10 +333,13 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--dockercontainer--/{}\n\n{}/g".format(containername,hurl), "/{}/docs/source/operating.rst".format(sname)])
        
     chipmain = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))  
+    
     doparse("/{}/docs/source/operating.rst".format(sname), ["--chip--;{}".format(chipmain)])
+    
     dockerrun = ("docker run -d \-\-net=host \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
-                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} " \
-                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} {}".format(sname,sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,containername))   
+                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env EXTERNALPORT={}" \
+                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} {}".format(sname,sd,os.environ['GITUSERNAME'],
+                                                                                           os.environ['GITREPOURL'],os.environ['EXTERNALPORT'],chipmain,containername))   
     
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
@@ -369,17 +372,19 @@ def generatedoc(**context):
     triggername = sd
     print("triggername=",triggername)
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(sd)])
-    tssdockerrun = ("docker run -d \-\-net=host \-\-env MAINHOST=127.0.0.1 \-\-env AIRFLOWPORT=9000 " \
+    
+    tssdockerrun = ("docker run -d \-\-net=host \-\-env MAINHOST=127.0.0.1 \-\-env AIRFLOWPORT={} " \
                     " -v <change to your local folder>:/dagslocalbackup:z " \
                     " -v /var/run/docker.sock:/var/run/docker.sock:z " \
-                    " \-\-env GITREPOURL=https://github.com/<Enter Github username>/raspberrypi.git "\
-                    " \-\-env CHIP=AMD64 \-\-env TSS=1 \-\-env SOLUTIONNAME=TSS " \
-                    " \-\-env READTHEDOCS=<Enter your readthedocs token> " 
-                    " \-\-env  GITUSERNAME=<Enter your Github username> " \
+                    " \-\-env GITREPOURL={} " \
+                    " \-\-env CHIP={} \-\-env TSS=1 \-\-env SOLUTIONNAME=TSS " \
+                    " \-\-env READTHEDOCS=<Enter your readthedocs token> " \
+                    " \-\-env  GITUSERNAME={} " \
                     " \-\-env GITPASSWORD=<Enter personal access token> " \
-                    " \-\-env DOCKERUSERNAME=<Enter Dockerhub username> " \
+                    " \-\-env DOCKERUSERNAME={} " \
                     " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
-                    " maadsdocker/tml-solution-studio-with-airflow-amd64")
+                    " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport,os.environ['GITREPOURL'],chip,os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME']))
+    
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tssdockerrun--;{}".format(tssdockerrun)])
     
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
