@@ -14,8 +14,8 @@ sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
- 'solution_name' : '--solution-name--', # << Leave blank - these will be updated by TSS
- 'solution_dag' : '--solution-dag--', # << Leave blank - these will be updated by TSS     
+ 'solution_name' : 'myawesometmlsolution', # << Leave blank - these will be updated by TSS
+ 'solution_dag' : 'solution_preprocessing_ai_dag-myawesometmlsolution', # << Leave blank - these will be updated by TSS     
  'instances': 1,  # << Number of instances of your container 
  'start_date': datetime (2024, 6, 29),   # <<< *** Change as needed   
  'retries': 1,   # <<< *** Change as needed   
