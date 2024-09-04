@@ -41,6 +41,7 @@ def triggerbuild(sname):
         print(response.json())
 
 def updatebranch(sname,branch):
+    
         URL = "https://readthedocs.org/api/v3/projects/{}/".format(sname)
         TOKEN = os.environ['READTHEDOCS']
         HEADERS = {'Authorization': f'token {TOKEN}'}

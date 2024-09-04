@@ -4705,3 +4705,4 @@ Already up to date.
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution/tsslogging.py
 [INFO 2024-09-04_13:29:07] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
    d32be2c..0f3bdee  main -> main
+[INFO 2024-09-04_13:30:43] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
