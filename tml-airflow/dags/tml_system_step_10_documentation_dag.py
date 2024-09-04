@@ -32,8 +32,16 @@ def startdocumentation():
         pass
 dag = startdocumentation()
 
+def triggerbuild(sname):
+
+        URL = "https://readthedocs.org/api/v3/projects/{}/versions/latest/builds/".format(sname)
+        TOKEN = os.environ['READTHEDOCS']
+        HEADERS = {'Authorization': f'token {TOKEN}'}
+        response = requests.post(URL, headers=HEADERS)
+        print(response.json())
+
 def updatebranch(sname,branch):
-        URL = 'https://readthedocs.org/api/v3/projects/pip/'
+        URL = "https://readthedocs.org/api/v3/projects/{}/".format(sname)
         TOKEN = os.environ['READTHEDOCS']
         HEADERS = {'Authorization': f'token {TOKEN}'}
         data={
