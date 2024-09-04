@@ -294,8 +294,6 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--topicid--/{}/g".format(topicid[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--pathtoalgos--/{}/g".format(pathtoalgos), "/{}/docs/source/details.rst".format(sname)])
 
-    
-    vipervizport = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_VIPERVIZPORT".format(sname))
     topic = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_topic".format(sname))
     secure = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_secure".format(sname))
     offset = context['ti'].xcom_pull(task_ids='step_7_solution_task_visualization',key="{}_offset".format(sname))
@@ -339,8 +337,8 @@ def generatedoc(**context):
     chipmain = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))  
     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--chip--;{}".format(chipmain)])
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(os.environ['SOLUTIONAIRFLOWPORT'])])
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--externalport--;{}".format(os.environ['SOLUTIONAIRFLOWPORT'])])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(solutionairflowport[1:])])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--externalport--;{}".format(externalport[1:])])
     
     
     dockerrun = ("docker run -d \-\-net=host \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
