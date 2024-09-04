@@ -4527,3 +4527,35 @@ Already up to date.
 [INFO 2024-09-04_02:22:36] TML Solution Studio: git push origin main Status: To https://github.com/smaurice101/raspberrypi.git
    d4acd0a..66aee67  main -> main
 [INFO 2024-09-04_02:22:36] TML Solution Studio: git add . Status: 
+[INFO 2024-09-04_02:22:36] TML Solution Studio: git commit -a Status for project myawesometmlsolution4: [main 30309d5] new project
+ 29 files changed, 3567 insertions(+)
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/docker_run_stop-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_ai_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_ai_dag_restapi-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_dag_restapi-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_ml_ai_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_ml_ai_dag_restapi-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_ml_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/solution_template_processing_ml_dag_restapi-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_client_RESTAPI_step_3_kafka_producetotopic.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_client_gRPC_step_3_kafka_producetotopic.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_grpc.proto
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_grpc_pb2.py
+ create mode 100755 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_grpc_pb2_grpc.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_read_MQTT_step_3_kafka_producetotopic_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_read_RESTAPI_step_3_kafka_producetotopic_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_read_gRPC_step_3_kafka_producetotopic_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_10_documentation_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_1_getparams_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_2_kafka_createtopic_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_5_kafka_machine_learning_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_6_kafka_predictions_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_7_kafka_visualization_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tml_system_step_9_privategpt_qdrant_dag-myawesometmlsolution4.py
+ create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution4/tsslogging.py
+[INFO 2024-09-04_02:22:37] TML Solution Studio: git push Status for project myawesometmlsolution4: To https://github.com/smaurice101/raspberrypi.git
+   66aee67..30309d5  main -> main
