@@ -4562,3 +4562,4 @@ Already up to date.
 [INFO 2024-09-04_02:34:44] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution4.py
 [INFO 2024-09-04_02:34:47] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution4.py
 [INFO 2024-09-04_02:34:48] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution4.py
+[INFO 2024-09-04_02:34:54] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution4.py
