@@ -4433,3 +4433,8 @@ Already up to date.
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution2/tsslogging.py
 [INFO 2024-09-04_01:40:37] TML Solution Studio: git push Status for project myawesometmlsolution2: To https://github.com/smaurice101/raspberrypi.git
    5893955..1aeafd7  main -> main
+[INFO 2024-09-04_01:53:57] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution3
+[INFO 2024-09-04_01:53:57] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-04_01:54:22] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution3
