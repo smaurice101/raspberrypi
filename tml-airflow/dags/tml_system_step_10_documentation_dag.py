@@ -455,5 +455,6 @@ def generatedoc(**context):
         os.environ['tssdoc']="1"
     
     updatebranch(sname,"main")
+    triggerbuild(sname)
     ti = context['task_instance']
     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
