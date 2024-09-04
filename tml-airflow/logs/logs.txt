@@ -4659,3 +4659,4 @@ Already up to date.
 [INFO 2024-09-04_13:22:50] TML Solution Studio: git push Status for project myawesometmlsolution: To https://github.com/smaurice101/raspberrypi.git
    d13d03d..6a71892  main -> main
 [INFO 2024-09-04_13:24:56] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
+[INFO 2024-09-04_13:24:59] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
