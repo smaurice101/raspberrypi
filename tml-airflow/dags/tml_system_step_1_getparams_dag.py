@@ -276,8 +276,37 @@ def getparams(**context):
                                                                               VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML,sname)
   print("VIPERHOST=", VIPERHOST) 
   print("VIPERPORT=", VIPERPORT) 
+
+  if 'VIPERVIZPORT' in os.environ:
+      if os.environ['VIPERVIZPORT'] != '' and os.environ['VIPERVIZPORT'] != '-1':
+           vipervizport = int(os.environ['VIPERVIZPORT'])
+      else:
+           vipervizport=tsslogging.getfreeport()
+  else:
+           vipervizport=tsslogging.getfreeport()
+
+  if 'SOLUTIONAIRFLOWPORT' in os.environ:
+      if os.environ['SOLUTIONAIRFLOWPORT'] != '' and os.environ['SOLUTIONAIRFLOWPORT'] != '-1':
+           solutionairflowport = int(os.environ['SOLUTIONAIRFLOWPORT'])
+      else:
+           solutionairflowport=tsslogging.getfreeport()
+  else:
+           solutionairflowport=tsslogging.getfreeport()
+
+  if 'EXTERNALPORT' in os.environ:
+      if os.environ['EXTERNALPORT'] != '' and os.environ['EXTERNALPORT'] != '-1':
+           externalport = int(os.environ['EXTERNALPORT'])
+      else:
+           externalport=tsslogging.getfreeport()
+  else:
+           externalport=tsslogging.getfreeport()
+        
+            
   sd = context['dag'].dag_id 
   task_instance = context['task_instance']
+  task_instance.xcom_push(key="{}_EXTERNALPORT".format(sname),value="_{}".format(externalport)) 
+  task_instance.xcom_push(key="{}_SOLUTIONAIRFLOWPORT".format(sname),value="_{}".format(solutionairflowport)) 
+  task_instance.xcom_push(key="{}_VIPERVIZPORT".format(sname),value="_{}".format(vipervizport))  
   task_instance.xcom_push(key="{}_VIPERTOKEN".format(sname),value=VIPERTOKEN)
   task_instance.xcom_push(key="{}_VIPERHOST".format(sname),value=VIPERHOST)
   task_instance.xcom_push(key="{}_VIPERPORT".format(sname),value="_{}".format(VIPERPORT))

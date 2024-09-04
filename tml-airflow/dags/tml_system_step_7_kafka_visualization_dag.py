@@ -19,7 +19,6 @@ default_args = {
   'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
   'append' : '0',   # << ** Do not append new data in the browser
   'rollbackoffset' : '500', # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
-  'vipervizport' : '', # Enter port or leave blank to let TSS automatically pick free port  
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -52,27 +51,15 @@ def startstreamingengine(**context):
         sd = context['dag'].dag_id
         sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
         chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
+        vipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERVIZPORT".format(sname)) 
     
         topic = default_args['topic']
         secure = default_args['secure']
         offset = default_args['offset']
         append = default_args['append']
         rollbackoffset = default_args['rollbackoffset']
-        
-        if 'VIPERVIZPORT' in os.environ:
-            if os.environ['VIPERVIZPORT'] != '':
-              vipervizport = os.environ['VIPERVIZPORT']
-            else:
-              vipervizport=tsslogging.getfreeport()
-        else:
-            vipervizport=tsslogging.getfreeport()
-        
-        vipervizportp = default_args['vipervizport']
-        if vipervizportp != '':
-            vipervizport = int(vipervizportp)
                 
         ti = context['task_instance']
-        ti.xcom_push(key="{}_VIPERVIZPORT".format(sname),value="_{}".format(vipervizport))
         ti.xcom_push(key="{}_topic".format(sname),value=topic)
         ti.xcom_push(key="{}_secure".format(sname),value="_{}".format(secure))
         ti.xcom_push(key="{}_offset".format(sname),value="_{}".format(offset))
@@ -85,4 +72,4 @@ def startstreamingengine(**context):
         wn = windowname('visual',vipervizport,sname)
         subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
         subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
-        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport), "ENTER"])
+        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport[1:]), "ENTER"])

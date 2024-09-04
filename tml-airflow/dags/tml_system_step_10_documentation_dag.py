@@ -100,6 +100,10 @@ def generatedoc(**context):
     predictionhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREDICT".format(sname))
     predictionport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREDICT".format(sname))
     dashboardhtml = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_dashboardhtml".format(sname))
+    vipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERVIZPORT".format(sname))
+
+    externalport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_EXTERNALPORT".format(sname))
+    solutionairflowport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_SOLUTIONAIRFLOWPORT".format(sname))
     
     hpdehost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEHOST".format(sname))
     hpdeport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEPORT".format(sname))
@@ -335,11 +339,16 @@ def generatedoc(**context):
     chipmain = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))  
     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--chip--;{}".format(chipmain)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(os.environ['SOLUTIONAIRFLOWPORT'])])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--externalport--;{}".format(os.environ['SOLUTIONAIRFLOWPORT'])])
+    
     
     dockerrun = ("docker run -d \-\-net=host \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
                  "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env EXTERNALPORT={}" \
-                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} {}".format(sname,sd,os.environ['GITUSERNAME'],
-                                                                                           os.environ['GITREPOURL'],os.environ['EXTERNALPORT'],chipmain,containername))   
+                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} \-\-env VIPERVIZPORT={} {}".format(sname,sd,
+                                                    os.environ['GITUSERNAME'],
+                                                    os.environ['GITREPOURL'],externalport[1:],chipmain,
+                                                    solutionairflowport[1:],vipervizport[1:],containername))   
     
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
@@ -379,11 +388,16 @@ def generatedoc(**context):
                     " \-\-env GITREPOURL={} " \
                     " \-\-env CHIP={} \-\-env TSS=1 \-\-env SOLUTIONNAME=TSS " \
                     " \-\-env READTHEDOCS=<Enter your readthedocs token> " \
-                    " \-\-env  GITUSERNAME={} " \
+                    " \-\-env EXTERNALPORT={} " \
+                    " \-\-env VIPERVIZPORT={} " \
+                    " \-\-env SOLUTIONAIRFLOWPORT={} " \
+                    " \-\-env GITUSERNAME={} " \
                     " \-\-env GITPASSWORD=<Enter personal access token> " \
                     " \-\-env DOCKERUSERNAME={} " \
                     " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
-                    " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport,os.environ['GITREPOURL'],chip,os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME']))
+                    " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport,os.environ['GITREPOURL'],
+                            chip,externalport[1:],vipervizport[1:],solutionairflowport[1:],
+                            os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME']))
     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tssdockerrun--;{}".format(tssdockerrun)])
     
