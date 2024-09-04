@@ -4349,3 +4349,8 @@ After doing this, you may fix the identity used for this commit with:
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution2/tsslogging.py
 [INFO 2024-09-04_01:18:15] TML Solution Studio: git push Status for project myawesometmlsolution2: To https://github.com/smaurice101/raspberrypi.git
    fdf8825..c8b2306  main -> main
+[INFO 2024-09-04_01:38:15] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution3
+[INFO 2024-09-04_01:38:15] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-04_01:38:40] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution3
