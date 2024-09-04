@@ -380,7 +380,7 @@ def generatedoc(**context):
     print("triggername=",triggername)
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(sd)])
     
-    tssdockerrun = ("docker run -d \-\-net=host \-\-env MAINHOST=127.0.0.1 \-\-env AIRFLOWPORT={} " \
+    tssdockerrun = ("docker run -d \-\-net=host \-\-env AIRFLOWPORT={} " \
                     " -v <change to your local folder>:/dagslocalbackup:z " \
                     " -v /var/run/docker.sock:/var/run/docker.sock:z " \
                     " \-\-env GITREPOURL={} " \
@@ -395,7 +395,7 @@ def generatedoc(**context):
                     " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport,os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],solutionairflowport[1:],
-                            os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME']))
+                            os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],containername))
     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tssdockerrun--;{}".format(tssdockerrun)])
     
