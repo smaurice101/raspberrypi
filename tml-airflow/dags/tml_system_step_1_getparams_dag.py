@@ -19,6 +19,15 @@ default_args = {
  'cloudusername' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API KEY  - OTHERWISE LEAVE BLANK
  'cloudpassword' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API SECRET - OTHERWISE LEAVE BLANK   
  'ingestdatamethod' : 'localfile', # << CHOOSE BETWEEN: 1. localfle, 2. mqtt, 3. rest, 4. grpc     
+ 'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
+ 'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
+ 'solutionairflowport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
+ 'solutionexternalport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
+ 'solutionvipervizport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number   
+ 'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
+ 'HTTPADDR' : 'https://',
+ 'dashboardhtml' : 'dashboard.html',   ## << Update with your custom dashboard    
+ 'COMPANYNAME' : 'My company',       
  'WRITELASTCOMMIT' : '0',   ## <<<<<<<<< ******************** FOR DETAILS ON BELOW PARAMETER SEE: https://tml.readthedocs.io/en/latest/viper.html
  'NOWINDOWOVERLAP' : '0',
  'NUMWINDOWSFORDUPLICATECHECK' : '5',
@@ -60,12 +69,6 @@ default_args = {
  'SSL_CLIENT_KEY_FILE' : 'client.key.pem', 
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
  'KUBERNETES' : '0',
- 'COMPANYNAME' : 'My company',   
- 'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
- 'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
- 'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
- 'HTTPADDR' : 'https://',
- 'dashboardhtml' : 'dashboard.html',   ## << Update with your custom dashboard
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -284,12 +287,9 @@ def getparams(**context):
            vipervizport=tsslogging.getfreeport()
   else:
            vipervizport=tsslogging.getfreeport()
-
-  if 'SOLUTIONAIRFLOWPORT' in os.environ:
-      if os.environ['SOLUTIONAIRFLOWPORT'] != '' and os.environ['SOLUTIONAIRFLOWPORT'] != '-1':
-           solutionairflowport = int(os.environ['SOLUTIONAIRFLOWPORT'])
-      else:
-           solutionairflowport=tsslogging.getfreeport()
+        
+  if default_args['solutionairflowport'] != '-1':
+           solutionairflowport = int(default_args['solutionairflowport'])
   else:
            solutionairflowport=tsslogging.getfreeport()
 
@@ -300,10 +300,25 @@ def getparams(**context):
            externalport=tsslogging.getfreeport()
   else:
            externalport=tsslogging.getfreeport()
+
+  if default_args['solutionexternalport'] != '-1':
+           solutionexternalport = int(default_args['solutionexternalport'])
+  else:
+           solutionexternalport=tsslogging.getfreeport()
         
+  if default_args['solutionvipervizport'] != '-1':
+          solutionvipervizport = int(default_args['solutionvipervizport'])
+  else:
+           solutionvipervizport=tsslogging.getfreeport()
             
+  tss = os.environ['TSS']          
   sd = context['dag'].dag_id 
   task_instance = context['task_instance']
+    
+  task_instance.xcom_push(key="{}_SOLUTIONEXTERNALPORT".format(sname),value="_{}".format(solutionexternalport)) 
+  task_instance.xcom_push(key="{}_SOLUTIONVIPERVIZPORT".format(sname),value="_{}".format(solutionvipervizport))  
+  task_instance.xcom_push(key="{}_TSS".format(sname),value="_{}".format(tss))  
+    
   task_instance.xcom_push(key="{}_EXTERNALPORT".format(sname),value="_{}".format(externalport)) 
   task_instance.xcom_push(key="{}_SOLUTIONAIRFLOWPORT".format(sname),value="_{}".format(solutionairflowport)) 
   task_instance.xcom_push(key="{}_VIPERVIZPORT".format(sname),value="_{}".format(vipervizport))  
