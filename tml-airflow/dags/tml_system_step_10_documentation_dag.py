@@ -346,7 +346,7 @@ def generatedoc(**context):
     
     
     dockerrun = ("docker run -d \-\-net=host \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
-                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env EXTERNALPORT={}" \
+                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env EXTERNALPORT={} " \
                  "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} \-\-env VIPERVIZPORT={} {}".format(sname,sd,
                                                     os.environ['GITUSERNAME'],
                                                     os.environ['GITREPOURL'],externalport[1:],chipmain,
