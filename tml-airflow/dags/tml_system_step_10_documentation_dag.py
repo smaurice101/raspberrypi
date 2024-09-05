@@ -384,7 +384,8 @@ def generatedoc(**context):
     print("triggername=",triggername)
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(sd)])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--airflowport--;{}".format(airflowport)])
-        
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--vipervizport--;{}".format(vipervizport[1:])])
+
     tssdockerrun = ("docker run -d \-\-net=host \-\-env AIRFLOWPORT={} " \
                     " -v <change to your local folder>:/dagslocalbackup:z " \
                     " -v /var/run/docker.sock:/var/run/docker.sock:z " \
