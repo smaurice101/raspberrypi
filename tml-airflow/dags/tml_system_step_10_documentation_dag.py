@@ -349,12 +349,14 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionexternalport--;{}".format(solutionexternalport[1:])])
     
     
-    dockerrun = ("docker run -d \-\-net=host \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
-                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env EXTERNALPORT={} " \
-                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} \-\-env VIPERVIZPORT={} {}".format(sname,sd,
-                                                    os.environ['GITUSERNAME'],
-                                                    os.environ['GITREPOURL'],externalport[1:],chipmain,
-                                                    solutionairflowport[1:],vipervizport[1:],containername))   
+    dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
+                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
+                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
+                 " \-\-env SOLUTIONVIPERVIZPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
+                          solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
+                          sname,sd,os.environ['GITUSERNAME'],
+                          os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
+                          solutionairflowport[1:],solutionvipervizport[1:],containername))   
     
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
@@ -399,15 +401,12 @@ def generatedoc(**context):
                     " \-\-env READTHEDOCS=<Enter your readthedocs token> " \
                     " \-\-env EXTERNALPORT={} " \
                     " \-\-env VIPERVIZPORT={} " \
-                    " \-\-env SOLUTIONEXTERNALPORT={} " \
-                    " \-\-env SOLUTIONVIPERVIZPORT={} " \
-                    " \-\-env SOLUTIONAIRFLOWPORT={} " \
                     " \-\-env GITUSERNAME={} " \
                     " \-\-env GITPASSWORD=<Enter personal access token> " \
                     " \-\-env DOCKERUSERNAME={} " \
                     " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport,os.environ['GITREPOURL'],
-                            chip,externalport[1:],vipervizport[1:],solutionexternalport[1:],solutionvipervizport[1:],solutionairflowport[1:],
+                            chip,externalport[1:],vipervizport[1:],
                             os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],chip))
     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tssdockerrun--;{}".format(tssdockerrun)])
