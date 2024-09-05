@@ -336,6 +336,10 @@ def generatedoc(**context):
        
     chipmain = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))  
     
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--justcontainer--;{}".format(containername)])
+    
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--tsscontainer--;maadsdocker/tml-solution-studio-with-airflow-{}".format(chip)])
+    
     doparse("/{}/docs/source/operating.rst".format(sname), ["--chip--;{}".format(chipmain)])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(solutionairflowport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--externalport--;{}".format(externalport[1:])])
@@ -396,7 +400,7 @@ def generatedoc(**context):
                     " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport,os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],solutionairflowport[1:],
-                            os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],containername))
+                            os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],chip))
     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tssdockerrun--;{}".format(tssdockerrun)])
     
