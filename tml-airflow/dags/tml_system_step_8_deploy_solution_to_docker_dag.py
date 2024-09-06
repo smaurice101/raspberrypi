@@ -41,6 +41,10 @@ def dockerit(**context):
         if os.environ['tssbuild']=="1":
             return        
      try:
+
+       if os.environ['TSS'] == "0":
+             return
+
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
         
