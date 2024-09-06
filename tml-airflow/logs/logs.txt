@@ -5904,3 +5904,4 @@ After doing this, you may fix the identity used for this commit with:
    695a858..ea27e6f  main -> main
 [INFO 2024-09-06_14:44:16] RESTAPI producing DAG in tml_read_RESTAPI_step_3_kafka_producetotopic_dag-myawesometmlsolution2.py
 [INFO 2024-09-06_14:44:19] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution2.py
+[INFO 2024-09-06_14:44:22] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution2.py
