@@ -6025,3 +6025,4 @@ branch.main.merge=refs/heads/main
 [INFO 2024-09-06_15:20:48] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
 [INFO 2024-09-06_15:21:04] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution2.py
+[ERROR 2024-09-06_15:21:06] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution2.py: [Errno 2] No such file or directory: '/raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution2/docker_run_stop-myawesometmlsolution2.py'
