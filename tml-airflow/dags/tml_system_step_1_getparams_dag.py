@@ -295,13 +295,8 @@ def getparams(**context):
   else:
            solutionairflowport=tsslogging.getfreeport()
 
-  if 'EXTERNALPORT' in os.environ:
-      if os.environ['EXTERNALPORT'] != '' and os.environ['EXTERNALPORT'] != '-1':
-           externalport = int(os.environ['EXTERNALPORT'])
-      else:
-           externalport=tsslogging.getfreeport()
-  else:
-           externalport=tsslogging.getfreeport()
+  externalport=VIPERPORT
+
 
   if default_args['solutionexternalport'] != '-1':
            solutionexternalport = int(default_args['solutionexternalport'])
