@@ -6357,3 +6357,13 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-06_19:01:31] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
 [INFO 2024-09-06_19:01:40] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
 [INFO 2024-09-06_19:03:35] {'name': ['Project with slug "myawesometmlsolution" already exists.']}
+[INFO 2024-09-06_19:23:53] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution
+[INFO 2024-09-06_19:23:54] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-06_19:24:19] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
+[INFO 2024-09-06_19:24:19] TML Solution Studio: git commit -a Status for project myawesometmlsolution: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-06_19:24:19] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-09-06_19:24:19] TML Solution Studio: git add . Status: 
+[INFO 2024-09-06_19:24:19] TML Solution Studio: git commit -a Status for project myawesometmlsolution: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-06_19:24:20] TML Solution Studio: git push Status for project myawesometmlsolution: Everything up-to-date
