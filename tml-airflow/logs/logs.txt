@@ -6232,3 +6232,13 @@ After doing this, you may fix the identity used for this commit with:
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution2/tsslogging.py
 [INFO 2024-09-06_16:25:22] TML Solution Studio: git push Status for project myawesometmlsolution2: To https://github.com/smaurice101/raspberrypi.git
    f0ed437..a23e93e  main -> main
+[INFO 2024-09-06_16:29:36] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution3
+[INFO 2024-09-06_16:29:36] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-06_16:30:01] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution3
+[INFO 2024-09-06_16:30:01] TML Solution Studio: git commit -a Status for project myawesometmlsolution3: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-06_16:30:01] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-09-06_16:30:01] TML Solution Studio: git add . Status: 
+[INFO 2024-09-06_16:30:01] TML Solution Studio: git commit -a Status for project myawesometmlsolution3: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-06_16:30:01] TML Solution Studio: git push Status for project myawesometmlsolution3: Everything up-to-date
