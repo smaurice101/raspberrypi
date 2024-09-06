@@ -6109,3 +6109,4 @@ After doing this, you may fix the identity used for this commit with:
  create mode 100644 tml-airflow/dags/tml-solutions/myawesometmlsolution2/tsslogging.py
 [INFO 2024-09-06_15:34:06] TML Solution Studio: git push Status for project myawesometmlsolution2: To https://github.com/smaurice101/raspberrypi.git
    c943d99..aa49146  main -> main
+[INFO 2024-09-06_15:39:58] RESTAPI producing DAG in tml_read_RESTAPI_step_3_kafka_producetotopic_dag-myawesometmlsolution2.py
