@@ -42,9 +42,6 @@ def dockerit(**context):
             return        
      try:
 
-       if os.environ['TSS'] == "0":
-             return
-
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
         
@@ -66,12 +63,13 @@ def dockerit(**context):
   
        key = "trigger-{}".format(sname)
        os.environ[key] = sd
-       v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
-       print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
-       subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
+       if os.environ['TSS'] == "1": 
+         v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
+         print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
+         subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
     
-       v=subprocess.call("docker push {}".format(cname), shell=True)  
-       print("[INFO] docker push {} - message={}".format(cname,v))  
+         v=subprocess.call("docker push {}".format(cname), shell=True)  
+         print("[INFO] docker push {} - message={}".format(cname,v))  
        os.environ['tssbuild']="1"
     
        doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,sname,sname), ["--solution-name--;{}".format(sname)])
