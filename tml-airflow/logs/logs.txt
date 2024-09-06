@@ -5567,3 +5567,19 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-06_00:52:20] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
 [INFO 2024-09-06_00:52:22] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
 [INFO 2024-09-06_00:52:27] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
+[INFO 2024-09-06_00:55:19] TML Solution Studio Started: DOCKERUSERNAME=maadsdocker, GITUSERNAME=smaurice101, GITREPOURL=https://github.com/smaurice101/raspberrypi.git, AIRFLOWPORT=9000
+[INFO 2024-09-06_00:55:19] TML Solution Studio: Docker Login Status: Get "https://registry-1.docker.io/v2/": unauthorized: incorrect username or password
+[INFO 2024-09-06_00:55:19] TML Solution Studio: Github Config Status: safe.directory=/raspberrypi
+pull.rebase=true
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/smaurice101/raspberrypi.git
+remote.origin.fetch=+refs/heads/main:refs/remotes/origin/main
+remote.origin.pushurl=https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+[INFO 2024-09-06_00:55:19] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
+origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-09-06_00:55:35] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
