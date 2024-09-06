@@ -6354,3 +6354,4 @@ branch.main.merge=refs/heads/main
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
 [INFO 2024-09-06_19:01:25] RESTAPI producing DAG in tml_read_RESTAPI_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
 [INFO 2024-09-06_19:01:29] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
+[INFO 2024-09-06_19:01:31] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
