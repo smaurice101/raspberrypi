@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from airflow.decorators import dag, task
 from flask import Flask
+from gevent.pywsgi import WSGIServer
 import sys
 import tsslogging
 import os
@@ -72,7 +73,6 @@ def gettmlsystemsparams():
         
     if VIPERHOST != "":
         app = Flask(__name__)
-        app.run(port=default_args['rest_port'])
 
         @app.route('/jsondataline', methods=['POST'])
         def storejsondataline():
@@ -86,6 +86,9 @@ def gettmlsystemsparams():
           for item in json_array: 
              readdata(item)
         
+        #app.run(port=default_args['rest_port']) # for dev
+        http_server = WSGIServer(('', int(default_args['rest_port'])), app)
+        http_server.serve_forever()        
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
