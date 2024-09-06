@@ -87,8 +87,10 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
         data = file.readlines() 
         for d in data:          
           if d != "":             
-            d=d.rstrip()            
+            d=d.rstrip()     
+            print("D=",d)
             v=subprocess.call(["tmux", "kill-window", "-t", "{}".format(d)])   
+            print("V=",v)
       os.remove("/tmux/pythonwindows_{}.txt".format(sname))        
     except Exception as e:
      print("ERROR=",e)   
