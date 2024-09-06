@@ -103,9 +103,9 @@ def readdata(valuedata):
           print(e)  
           pass  
 
-def windowname(wtype,sname):
+def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
-    wn = "python-{}-{}-{}".format(wtype,randomNumber,sname)
+    wn = "python-{}-{}-{},{}".format(wtype,randomNumber,sname,dagname)
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
       file.writelines("{}\n".format(wn))
     
@@ -133,7 +133,7 @@ def startproducing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             
-       wn = windowname('produce',"{},{}".format(sname,sd))      
+       wn = windowname('produce',sname,sd)      
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        

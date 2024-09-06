@@ -139,9 +139,9 @@ def processtransactiondata():
     print(e)
     return e
 
-def windowname(wtype,sname):
+def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
-    wn = "python-{}-{}-{}".format(wtype,randomNumber,sname)
+    wn = "python-{}-{}-{},{}".format(wtype,randomNumber,sname,dagname)
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
       file.writelines("{}\n".format(wn))
     
@@ -181,7 +181,7 @@ def dopreprocessing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             
-       wn = windowname('preprocess',"{},{}".format(sname,sd))     
+       wn = windowname('preprocess',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        

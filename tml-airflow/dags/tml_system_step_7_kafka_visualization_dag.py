@@ -30,9 +30,9 @@ def startstreaming():
       pass
 dag = startstreaming()
 
-def windowname(wtype,vipervizport,sname):
+def windowname(wtype,vipervizport,sname,dagname):
     randomNumber = random.randrange(10, 9999)
-    wn = "viperviz-{}-{}-{}".format(wtype,randomNumber,sname)
+    wn = "viperviz-{}-{}-{}={}".format(wtype,randomNumber,sname,dagname)
     with open("/tmux/vipervizwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
       file.writelines("{},{}\n".format(wn,vipervizport))
     
@@ -71,7 +71,7 @@ def startstreamingengine(**context):
     
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 
-        wn = windowname('visual',vipervizport,"{};{}".format(sname,sd))
+        wn = windowname('visual',vipervizport,sname,sd)
         subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
         subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
         if tss[1:] == "1":
