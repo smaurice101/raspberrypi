@@ -5695,3 +5695,8 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-06_02:00:11] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
 [INFO 2024-09-06_02:00:16] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
 [INFO 2024-09-06_02:00:41] {'name': ['Project with slug "myawesometmlsolution" already exists.']}
+[INFO 2024-09-06_13:58:51] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution2
+[INFO 2024-09-06_13:58:51] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-06_13:59:16] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution2
