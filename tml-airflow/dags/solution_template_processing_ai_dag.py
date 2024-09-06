@@ -16,7 +16,7 @@ from airflow.operators.python import (
 )
 step1 = importlib.import_module("tml_system_step_1_getparams_dag")
 step2 = importlib.import_module("tml_system_step_2_kafka_createtopic_dag")
-step3 = importlib.import_module("tml_read_RESTAPI_step_3_kafka_producetotopic_dag")
+step3 = importlib.import_module("tml_read_LOCALFILE_step_3_kafka_producetotopic_dag")
 step4 = importlib.import_module("tml_system_step_4_kafka_preprocess_dag")
 step5 = importlib.import_module("tml_system_step_5_kafka_machine_learning_dag")
 step6 = importlib.import_module("tml_system_step_6_kafka_predictions_dag")
