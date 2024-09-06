@@ -59,7 +59,7 @@ def dockerit(**context):
         
        scid = tsslogging.getrepo('/tmux/cidname.txt')
        cid = os.environ['SCID']
-       tsslogging.tmuxchange(sd)
+  
        key = "trigger-{}".format(sname)
        os.environ[key] = sd
        v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
