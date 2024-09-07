@@ -6679,3 +6679,6 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-07_19:33:27] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
 [INFO 2024-09-07_19:33:29] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
 [INFO 2024-09-07_19:33:35] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
+[INFO 2024-09-07_19:40:45] TML Solution Studio: DELETE initiated for project myawesometmlsolution by smaurice101
+[INFO 2024-09-07_19:40:45] TML Solution Studio: GIT REPO myawesometmlsolution DELETED by smaurice101
+[INFO 2024-09-07_19:40:45] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-amd64 DELETED by maadsdocker
