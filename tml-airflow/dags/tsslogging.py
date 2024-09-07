@@ -32,17 +32,19 @@ def git_push2(solution):
     
     
 def git_push(repopath,message,sname):
-    try:
-        repo = Repo(repopath)
-        repo.git.add(update=True)
-        repo.index.commit(message)
-        origin = repo.remote(name=sname)
-        origin.push()
-    except:
-        print('Some error occured while pushing the code') 
+    subprocess.call("/tmux/gitp.sh {} {}".format(sname,message), shell=True)
+    
+#    try:
+ #       repo = Repo(repopath)
+  #      repo.git.add(update=True)
+   #     repo.index.commit(message)
+    #    origin = repo.remote(name=sname)
+     #   origin.push()
+   # except:
+    #    print('Some error occured while pushing the code') 
         #git push -f origin main
-        os.chdir("/{}".format(repopath))
-        subprocess.call("git push -f {} main".format(sname), shell=True)
+     #   os.chdir("/{}".format(repopath))
+      #  subprocess.call("git push -f {} main".format(sname), shell=True)
         
 
 def tsslogit(message,mtype="INFO"):
