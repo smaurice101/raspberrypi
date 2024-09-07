@@ -430,6 +430,10 @@ def generatedoc(**context):
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_SOLUTIONEXTERNALPORT".format(sname))
     preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESS".format(sname))
     preprocessport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESS".format(sname))
+
+    preprocesshostpgpt = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
+    preprocessportpgpt = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESSPGPT".format(sname))
+    
     mlhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTML".format(sname))
     mlport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTML".format(sname))
     predictionhost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREDICT".format(sname))
@@ -443,10 +447,12 @@ def generatedoc(**context):
         
     tmlbinaries = ("VIPERHOST_PRODUCE={}, VIPERPORT_PRODUCE={}, "
                        "VIPERHOST_PREPOCESS={}, VIPERPORT_PREPROCESS={}, "
+                       "VIPERHOST_PREPOCESS_PGPT={}, VIPERPORT_PREPROCESS_PGPT={}, "                   
                        "VIPERHOST_ML={}, VIPERPORT_ML={}, "
                        "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}, "
                        "HPDEHOST={}, HPDEPORT={}, "
                        "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],
+                                                                             preprocesshostpgpt,preprocessportpgpt[1:]
                                                                               mlhost,mlport[1:],predictionhost,predictionport[1:],
                                                                               hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
     print("TML=",tmlbinaries)
