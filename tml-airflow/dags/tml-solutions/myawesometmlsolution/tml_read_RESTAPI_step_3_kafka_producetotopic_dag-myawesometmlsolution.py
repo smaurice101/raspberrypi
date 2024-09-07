@@ -5,7 +5,7 @@ from airflow.operators.bash import BashOperator
 import json
 from datetime import datetime
 from airflow.decorators import dag, task
-from flask import Flask
+from flask import Flask, request, jsonify
 from gevent.pywsgi import WSGIServer
 import sys
 import tsslogging
