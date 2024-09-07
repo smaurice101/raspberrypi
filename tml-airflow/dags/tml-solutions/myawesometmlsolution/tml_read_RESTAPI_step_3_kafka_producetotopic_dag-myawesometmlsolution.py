@@ -148,5 +148,6 @@ if __name__ == '__main__':
        if sys.argv[1] == "1":          
          VIPERTOKEN = sys.argv[2]
          VIPERHOST = sys.argv[3] 
-         VIPERPORT = sys.argv[4]                  
+         VIPERPORT = sys.argv[4]       
+         print("VIPERPORT=", VIPERPORT)  
          gettmlsystemsparams()
