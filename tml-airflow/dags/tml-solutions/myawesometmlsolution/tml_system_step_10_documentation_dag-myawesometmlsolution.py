@@ -515,3 +515,5 @@ def generatedoc(**context):
     triggerbuild(sname)
     ti = context['task_instance']
     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
+    
+    print("HERE 5")
