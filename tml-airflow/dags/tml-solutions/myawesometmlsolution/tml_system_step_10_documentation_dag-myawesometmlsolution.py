@@ -483,6 +483,7 @@ def generatedoc(**context):
     subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,sname), shell=True)
     
     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
+    print("HERE 6")
 
     if rtd == None: 
         URL = 'https://readthedocs.org/api/v3/projects/'
