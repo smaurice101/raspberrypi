@@ -6592,3 +6592,9 @@ Already up to date.
 [INFO 2024-09-07_16:15:10] TML Solution Studio: executed git add . by smaurice101: 
 [INFO 2024-09-07_16:15:10] TML Solution Studio: executed git commit by smaurice101: fatal: paths 'initiated ...' with -a does not make sense
 [INFO 2024-09-07_16:15:10] TML Solution Studio: executed git push -f origin main by smaurice101: Everything up-to-date
+[INFO 2024-09-07_16:15:22] TML Solution Studio: executed git reset --hard origin/main by smaurice101: HEAD is now at 18760c0 +gitresetpush on user request
+[INFO 2024-09-07_16:15:22] TML Solution Studio: executed git pull --rebase by smaurice101: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+[INFO 2024-09-07_16:15:22] TML Solution Studio: executed git rebase --skip by smaurice101: fatal: No rebase in progress?
+[INFO 2024-09-07_16:15:22] TML Solution Studio: executed git pull by smaurice101: error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
