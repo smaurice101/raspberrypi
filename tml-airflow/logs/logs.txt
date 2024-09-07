@@ -6598,3 +6598,13 @@ error: please commit or stash them.
 [INFO 2024-09-07_16:15:22] TML Solution Studio: executed git rebase --skip by smaurice101: fatal: No rebase in progress?
 [INFO 2024-09-07_16:15:22] TML Solution Studio: executed git pull by smaurice101: error: cannot pull with rebase: You have unstaged changes.
 error: please commit or stash them.
+[INFO 2024-09-07_16:16:11] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution
+[INFO 2024-09-07_16:16:11] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-07_16:16:36] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution
+[INFO 2024-09-07_16:16:36] TML Solution Studio: git commit -a Status for project myawesometmlsolution: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-07_16:16:36] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-09-07_16:16:36] TML Solution Studio: git add . Status: 
+[INFO 2024-09-07_16:16:36] TML Solution Studio: git commit -a Status for project myawesometmlsolution: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-07_16:16:36] TML Solution Studio: git push Status for project myawesometmlsolution: Everything up-to-date
