@@ -299,9 +299,6 @@ def getparams(**context):
   else:
            solutionairflowport=tsslogging.getfreeport()
 
-  externalport=VIPERPORT
-
-
   if default_args['solutionexternalport'] != '-1':
            solutionexternalport = int(default_args['solutionexternalport'])
   else:
@@ -316,7 +313,12 @@ def getparams(**context):
       airflowport = os.environ['AIRFLOWPORT']
   else:
       airflowport = tsslogging.getfreeport()
-    
+
+  externalport=VIPERPORT          
+  if 'EXTERNALPORT' in  os.environ:
+      if os.environ['EXTERNALPORT'] != "-1":  
+        externalport = os.environ['EXTERNALPORT']
+        
   tss = os.environ['TSS']          
   sd = context['dag'].dag_id 
   task_instance = context['task_instance']
