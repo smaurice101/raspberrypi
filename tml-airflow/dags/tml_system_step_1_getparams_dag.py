@@ -110,8 +110,7 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
      pass
        
     # copy folders
-    shutil.copytree("/tss_readthedocs/docs/source", "/{}/docs/source".format(sname),dirs_exist_ok=True)
-    shutil.copy2("/tss_readthedocs/docs/source/conf.py", "/{}/docs/source/conf.py".format(sname))
+    shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
     return VIPERPORT,VIPERPORTPREPROCESS,VIPERPORTPREDICT,VIPERPORTML
         
 def updateviperenv():
