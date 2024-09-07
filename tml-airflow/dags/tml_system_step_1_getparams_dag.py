@@ -311,7 +311,12 @@ def getparams(**context):
           solutionvipervizport = int(default_args['solutionvipervizport'])
   else:
            solutionvipervizport=tsslogging.getfreeport()
-            
+
+  if 'AIRFLOWPORT' in  os.environ:
+      airflowport = os.environ['AIRFLOWPORT']
+  else:
+      airflowport = tsslogging.getfreeport()
+    
   tss = os.environ['TSS']          
   sd = context['dag'].dag_id 
   task_instance = context['task_instance']
@@ -329,6 +334,7 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_TSS".format(sname),value="_{}".format(tss))  
     
   task_instance.xcom_push(key="{}_EXTERNALPORT".format(sname),value="_{}".format(externalport)) 
+  task_instance.xcom_push(key="{}_AIRFLOWPORT".format(sname),value="_{}".format(airflowport)) 
   
   task_instance.xcom_push(key="{}_VIPERVIZPORT".format(sname),value="_{}".format(vipervizport))  
   task_instance.xcom_push(key="{}_VIPERTOKEN".format(sname),value=VIPERTOKEN)

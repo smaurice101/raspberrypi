@@ -91,6 +91,7 @@ def generatedoc(**context):
     sd = context['dag'].dag_id
     sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
+    
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODCE".format(sname))
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
     preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESS".format(sname))
@@ -102,7 +103,9 @@ def generatedoc(**context):
     dashboardhtml = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_dashboardhtml".format(sname))
     vipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERVIZPORT".format(sname))
     solutionvipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_SOLUTIONVIPERVIZPORT".format(sname))
-
+    airflowport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_AIRFLOWPORT".format(sname))
+    airflowport = airflowport[1:]
+    
     externalport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_EXTERNALPORT".format(sname))
     solutionexternalport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_SOLUTIONEXTERNALPORT".format(sname))
     
@@ -321,10 +324,6 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--chip--/{}/g".format(chip), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--rollbackoffset--/{}/g".format(rollbackoffset[1:]), "/{}/docs/source/details.rst".format(sname)])
     
-    if 'AIRFLOWPORT' in  os.environ:
-      airflowport = os.environ['AIRFLOWPORT']
-    else:
-      airflowport = tsslogging.getfreeport()
     
     repo = tsslogging.getrepo() 
     gitrepo="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}".format(os.environ['GITUSERNAME'],repo,sname)
@@ -352,11 +351,14 @@ def generatedoc(**context):
     dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
                  "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
                  "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
-                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
+                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} " \
+                 " \-\-env EXTERNALPORT={} " \
+                 " \-\-env VIPERVIZPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
-                          solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],containername))   
+                          solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],
+                          externalport[1:],vipervizport[1:],containername))   
     
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
@@ -455,6 +457,7 @@ def generatedoc(**context):
         data = file.readlines() 
         data.append("viper-produce")
         data.append("viper-preprocess")
+        data.append("viper-preprocess-pgpt")
         data.append("viper-ml")
         data.append("viper-predict")
         tmuxwindows = ", ".join(data)
@@ -462,7 +465,12 @@ def generatedoc(**context):
         print("tmuxwindows=",tmuxwindows)
 
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
-        
+    
+    if os.environ['TSS'] == "1":
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TSS Development Environment Container"])
+    else:
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container"])
+    
     # Kick off shell script 
     #tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
     
