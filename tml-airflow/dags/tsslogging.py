@@ -32,6 +32,7 @@ def git_push2(solution):
     
     
 def git_push(repopath,message,sname):
+    sname=getrepo()
     subprocess.call("/tmux/gitp.sh {} {}".format(sname,message), shell=True)
     
 #    try:
