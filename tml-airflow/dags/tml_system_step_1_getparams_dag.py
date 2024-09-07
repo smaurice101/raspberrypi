@@ -246,6 +246,10 @@ def getparams(**context):
       output = f.read()
       VIPERHOSTPREPROCESS = output.split(",")[0]
       VIPERPORTPREPROCESS = output.split(",")[1]    
+    with open('/Viper-preprocess-pgpt/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTPREPROCESSPGPT = output.split(",")[0]
+      VIPERPORTPREPROCESSPGPT = output.split(",")[1]        
     with open('/Viper-ml/viper.txt', 'r') as f:
       output = f.read()
       VIPERHOSTML = output.split(",")[0]
@@ -334,6 +338,10 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_VIPERPORTPRODUCE".format(sname),value="_{}".format(VIPERPORT))
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS".format(sname),value=VIPERHOSTPREPROCESS)
   task_instance.xcom_push(key="{}_VIPERPORTPREPROCESS".format(sname),value="_{}".format(VIPERPORTPREPROCESS))
+
+  task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESSPGPT".format(sname),value=VIPERHOSTPREPROCESSPGPT)
+  task_instance.xcom_push(key="{}_VIPERPORTPREPROCESSPGPT".format(sname),value="_{}".format(VIPERPORTPREPROCESSPGPT))
+    
   task_instance.xcom_push(key="{}_VIPERHOSTML".format(sname),value=VIPERHOSTML)
   task_instance.xcom_push(key="{}_VIPERPORTML".format(sname),value="_{}".format(VIPERPORTML))
   task_instance.xcom_push(key="{}_VIPERHOSTPREDICT".format(sname),value=VIPERHOSTPREDICT)
