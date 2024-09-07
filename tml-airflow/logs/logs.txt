@@ -6635,3 +6635,6 @@ Already up to date.
 [INFO 2024-09-07_17:14:54] TML Solution Studio: executed git commit by smaurice101: fatal: paths 'initiated ...' with -a does not make sense
 [INFO 2024-09-07_17:15:00] TML Solution Studio: executed git push -f origin main by smaurice101: To https://github.com/smaurice101/raspberrypi.git
  + 87dfdad...3103fcc main -> main (forced update)
+[INFO 2024-09-07_19:16:35] TML Solution Studio: DELETE initiated for project myawesometmlsolution by smaurice101
+[INFO 2024-09-07_19:16:35] TML Solution Studio: GIT REPO myawesometmlsolution DELETED by smaurice101
+[INFO 2024-09-07_19:16:35] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-amd64 DELETED by maadsdocker
