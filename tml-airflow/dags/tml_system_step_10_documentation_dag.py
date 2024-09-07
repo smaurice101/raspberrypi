@@ -452,7 +452,7 @@ def generatedoc(**context):
                        "VIPERHOST_PREDCT={}, VIPERPORT_PREDICT={}, "
                        "HPDEHOST={}, HPDEPORT={}, "
                        "HPDEHOST_PREDICT={}, HPDEPORT_PREDICT={}".format(producinghost,producingport[1:],preprocesshost,preprocessport[1:],
-                                                                             preprocesshostpgpt,preprocessportpgpt[1:]
+                                                                             preprocesshostpgpt,preprocessportpgpt[1:],
                                                                               mlhost,mlport[1:],predictionhost,predictionport[1:],
                                                                               hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
     print("TML=",tmlbinaries)
