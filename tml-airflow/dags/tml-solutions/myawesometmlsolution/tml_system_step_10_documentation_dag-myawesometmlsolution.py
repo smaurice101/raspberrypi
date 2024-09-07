@@ -475,6 +475,8 @@ def generatedoc(**context):
     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container"])
     
+    print("HERE 5")
+
     # Kick off shell script 
     #tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
     
@@ -515,5 +517,3 @@ def generatedoc(**context):
     triggerbuild(sname)
     ti = context['task_instance']
     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
-    
-    print("HERE 5")
