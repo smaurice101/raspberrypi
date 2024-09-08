@@ -132,13 +132,15 @@ def startproducing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             
-       VIPERHOST=tsslogging.getip(VIPERHOST)     
+       VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
        ti = context['task_instance']
        ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='REST')
        ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
        ti.xcom_push(key="{}_CLIENTPORT".format(sname),value=default_args['rest_port'])
        ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
-       ti.xcom_push(key="{}_CLIENTHOST".format(sname),value=VIPERHOST)
+       ti.xcom_push(key="{}_FROMHOST".format(sname),value=VIPERHOSTFROM)
+       ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
+    
        ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
        ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
     
