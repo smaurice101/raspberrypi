@@ -132,13 +132,13 @@ def startproducing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             
-       VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
+       hs,VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
        ti = context['task_instance']
        ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='REST')
        ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
        ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['rest_port']))
        ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
-       ti.xcom_push(key="{}_FROMHOST".format(sname),value=VIPERHOSTFROM)
+       ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
        ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
     
        ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
@@ -147,7 +147,7 @@ def startproducing(**context):
        wn = windowname('produce',sname,sd)      
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOSTFROM,VIPERPORT[1:]), "ENTER"])        
         
 if __name__ == '__main__':
     

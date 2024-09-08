@@ -50,6 +50,7 @@ VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
 HTTPADDR=""
+VIPERHOSTFROM=""
 
 class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
@@ -82,6 +83,7 @@ def gettmlsystemsparams(**context):
   global VIPERHOST
   global VIPERPORT
   global HTTPADDR 
+  global VIPERHOSTFROM  
 
   sd = context['dag'].dag_id
   sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
@@ -91,14 +93,14 @@ def gettmlsystemsparams(**context):
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
   HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
-  VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
+  hs,VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
   ti = context['task_instance']
   ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='gRPC')
   ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
   ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))
   ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
 
-  ti.xcom_push(key="{}_FROMHOST".format(sname),value=VIPERHOSTFROM)
+  ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
   ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
 
   ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
@@ -158,7 +160,7 @@ def startproducing(**context):
        wn = windowname('produce',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOSTFROM,VIPERPORT[1:]), "ENTER"])        
         
 if __name__ == '__main__':
     

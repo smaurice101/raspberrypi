@@ -18,8 +18,10 @@ def getip(viperhost):
     
     if IPAddr == "":
         IPAddr="127.0.0.1"
-    
-    return hostname,viperhost 
+    if viperhost != "0.0.0.0":
+        IPAddr=viperhost
+        
+    return hostname,IPAddr 
 
 def getfreeport():
   with socketserver.TCPServer(("localhost", 0), None) as s:
