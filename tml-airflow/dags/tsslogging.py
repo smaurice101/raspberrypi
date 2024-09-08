@@ -6,11 +6,18 @@ from git import Repo
 import socketserver
 import subprocess
 import os
+import socket
 
 def tmuxchange(tmuxname):
   with open("/tmux/tmux-airflow.sh", "a") as myfile:
     myfile.write("airflow dags trigger {}".format(tmuxname))
     
+def getip():
+    hostname = socket.gethostname()
+    IPAddr = socket.gethostbyname(hostname)
+    
+    return hostname,IPAddr 
+
 def getfreeport():
   with socketserver.TCPServer(("localhost", 0), None) as s:
     free_port = s.server_address
