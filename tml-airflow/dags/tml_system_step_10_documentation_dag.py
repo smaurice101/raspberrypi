@@ -345,18 +345,19 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(solutionairflowport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--externalport--;{}".format(externalport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionexternalport--;{}".format(solutionexternalport[1:])])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(CLIENTPORT[1:])])
     
     
-    dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
+    dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
                  "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
                  "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
-                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} " \
+                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} \-\-env CLIENTPORT={} " \
                  " \-\-env EXTERNALPORT={} " \
                  " \-\-env VIPERVIZPORT={} \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
-                          sname,sd,os.environ['GITUSERNAME'],
+                          CLIENTPORT[1:],CLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
-                          solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],
+                          solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],CLIENTPORT[1:],
                           externalport[1:],vipervizport[1:],airflowport[1:],containername))   
     
    # dockerrun = re.escape(dockerrun) 
