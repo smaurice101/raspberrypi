@@ -129,7 +129,7 @@ def readdata(valuedata):
   producerid = args['producerid']
 
   try:
-      producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
+      producetokafka(valuedata, "", "",producerid,maintopic,"",args)
       # change time to speed up or slow down data   
       time.sleep(0.15)
   except Exception as e:

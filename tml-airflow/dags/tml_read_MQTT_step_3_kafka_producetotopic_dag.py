@@ -132,7 +132,7 @@ def readdata(valuedata):
   maintopic = default_args['topics']
   producerid = default_args['producerid']
   try:
-      producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",default_args)
+      producetokafka(valuedata, "", "",producerid,maintopic,"",default_args)
       # change time to speed up or slow down data   
       #time.sleep(0.15)
   except Exception as e:
