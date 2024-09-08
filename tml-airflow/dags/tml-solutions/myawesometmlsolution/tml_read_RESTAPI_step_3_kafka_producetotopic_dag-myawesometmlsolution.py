@@ -77,7 +77,7 @@ def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
         app = Flask(__name__)
                  
         app.config['VIPERTOKEN'] = os.environ['VIPERTOKEN']
-        app.config['VIPERHOST'] = os.environ['VIPERHOST']
+        app.config['VIPERHOST'] = "https://127.0.0.1"
         app.config['VIPERPORT'] = os.environ['VIPERPORT']
                 
                
