@@ -75,9 +75,10 @@ def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
         
     if VIPERHOST != "":
         app = Flask(__name__)
-        app.config['VIPERTOKEN'] = VIPERTOKEN
-        app.config['VIPERHOST'] = VIPERHOST
-        app.config['VIPERPORT'] = VIPERPORT
+                 
+        app.config['VIPERTOKEN'] = os.environ['VIPERTOKEN']
+        app.config['VIPERHOST'] = os.environ['VIPERHOST']
+        app.config['VIPERPORT'] = os.environ['VIPERPORT']
                 
                
         @app.route(rule='/jsondataline', methods=['POST'])
