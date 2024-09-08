@@ -76,12 +76,12 @@ def gettmlsystemsparams():
         app = Flask(__name__)
         app.debug = True
 
-        @app.route('/jsondataline', methods=['POST'])
+        @app.route(rule='/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
           readdata(jdata)
 
-        @app.route('/jsondataarray', methods=['POST'])
+        @app.route(rule='/jsondataarray', methods=['POST'])
         def storejsondataarray():    
           jdata = request.get_json()
           json_array = json.load(jdata)
