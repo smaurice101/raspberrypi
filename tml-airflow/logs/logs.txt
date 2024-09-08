@@ -7052,3 +7052,4 @@ Already up to date.
 [INFO 2024-09-08_19:00:19] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
 [INFO 2024-09-08_19:00:21] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
 [INFO 2024-09-08_19:00:29] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
+[INFO 2024-09-08_19:01:04] {'name': ['Project with slug "myawesometmlsolution" already exists.']}

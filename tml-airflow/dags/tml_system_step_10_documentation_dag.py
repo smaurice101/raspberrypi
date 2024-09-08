@@ -104,7 +104,6 @@ def generatedoc(**context):
     vipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERVIZPORT".format(sname))
     solutionvipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_SOLUTIONVIPERVIZPORT".format(sname))
     airflowport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_AIRFLOWPORT".format(sname))
-    airflowport = airflowport[1:]
     
     externalport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_EXTERNALPORT".format(sname))
     solutionexternalport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_SOLUTIONEXTERNALPORT".format(sname))
@@ -417,7 +416,7 @@ def generatedoc(**context):
     githublogs = "https:\/\/github.com\/{}\/{}\/blob\/main\/tml-airflow\/logs\/logs.txt".format(os.environ['GITUSERNAME'],repo)
     subprocess.call(["sed", "-i", "-e",  "s/--githublogs--/{}/g".format(githublogs), "/{}/docs/source/operating.rst".format(sname)])
     
-    airflowurl = "http:\/\/localhost:{}".format(airflowport)
+    airflowurl = "http:\/\/localhost:{}".format(airflowport[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(airflowurl), "/{}/docs/source/operating.rst".format(sname)])
     
     readthedocs = "https:\/\/{}.readthedocs.io".format(sname)
@@ -426,7 +425,7 @@ def generatedoc(**context):
     triggername = sd
     print("triggername=",triggername)
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(sd)])
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--airflowport--;{}".format(airflowport)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--airflowport--;{}".format(airflowport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--vipervizport--;{}".format(vipervizport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionvipervizport--;{}".format(solutionvipervizport[1:])])
 
@@ -442,7 +441,7 @@ def generatedoc(**context):
                     " \-\-env GITPASSWORD=<Enter personal access token> " \
                     " \-\-env DOCKERUSERNAME={} " \
                     " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
-                    " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport,os.environ['GITREPOURL'],
+                    " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport[1:],os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],
                             os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],chip))
     
