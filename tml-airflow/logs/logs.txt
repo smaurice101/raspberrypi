@@ -7112,3 +7112,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-08_23:05:30] TML Solution Studio: +gitresetpush initiated by smaurice101
 [INFO 2024-09-08_23:05:30] TML Solution Studio: executed git push -f origin main by smaurice101: Everything up-to-date
 [INFO 2024-09-08_23:38:33] RESTAPI producing DAG in tml_read_RESTAPI_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
+[INFO 2024-09-08_23:38:35] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
