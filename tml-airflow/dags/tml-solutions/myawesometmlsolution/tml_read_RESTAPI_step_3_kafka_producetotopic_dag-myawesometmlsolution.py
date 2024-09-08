@@ -87,9 +87,9 @@ def gettmlsystemsparams():
           for item in json_array: 
              readdata(item)
         
-        #app.run(port=default_args['rest_port']) # for dev
-        http_server = WSGIServer(('', int(default_args['rest_port'])), app)
-        http_server.serve_forever()        
+        app.run(port=default_args['rest_port']) # for dev
+        #http_server = WSGIServer(('', int(default_args['rest_port'])), app)
+        #http_server.serve_forever()        
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
