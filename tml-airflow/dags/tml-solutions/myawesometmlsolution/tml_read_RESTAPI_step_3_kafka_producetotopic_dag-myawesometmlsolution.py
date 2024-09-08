@@ -79,8 +79,6 @@ def gettmlsystemsparams():
         @app.route(rule='/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
-          with open("/tmux/test.txt", 'w', encoding='utf-8') as file: 
-               file.writelines("{},{}\n".format(os.environ['VIPERHOST'],app.config['VIPERPORT']))
           readdata(jdata,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
           return "ok"
     
