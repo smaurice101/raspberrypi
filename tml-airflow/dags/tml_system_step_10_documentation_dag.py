@@ -201,9 +201,15 @@ def generatedoc(**context):
     doparse("/{}/docs/source/details.rst".format(sname), ["--FROMHOST--;{}".format(FROMHOST)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--TOHOST--;{}".format(TOHOST)])
     
-    doparse("/{}/docs/source/details.rst".format(sname), ["--CLIENTPORT--;{}".format(CLIENTPORT[1:])])
-    doparse("/{}/docs/source/details.rst".format(sname), ["--TSSCLIENTPORT--;{}".format(TSSCLIENTPORT[1:])])
-    doparse("/{}/docs/source/details.rst".format(sname), ["--TMLCLIENTPORT--;{}".format(TMLCLIENTPORT[1:])])
+    if len(CLIENTPORT) > 1:
+      doparse("/{}/docs/source/details.rst".format(sname), ["--CLIENTPORT--;{}".format(CLIENTPORT[1:])])
+      doparse("/{}/docs/source/details.rst".format(sname), ["--TSSCLIENTPORT--;{}".format(TSSCLIENTPORT[1:])])
+      doparse("/{}/docs/source/details.rst".format(sname), ["--TMLCLIENTPORT--;{}".format(TMLCLIENTPORT[1:])])
+    else:
+      doparse("/{}/docs/source/details.rst".format(sname), ["--CLIENTPORT--;Not Applicable"])
+      doparse("/{}/docs/source/details.rst".format(sname), ["--TSSCLIENTPORT--;Not Applicable"])
+      doparse("/{}/docs/source/details.rst".format(sname), ["--TMLCLIENTPORT--;Not Applicable"])
+    
     
     subprocess.call(["sed", "-i", "-e",  "s/--IDENTIFIER--/{}/g".format(IDENTIFIER), "/{}/docs/source/details.rst".format(sname)])
             
@@ -349,10 +355,10 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(solutionairflowport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--externalport--;{}".format(externalport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionexternalport--;{}".format(solutionexternalport[1:])])
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(CLIENTPORT[1:])])
     
-    
-    dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
+    if len(CLIENTPORT) > 1:
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(CLIENTPORT[1:])])
+      dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
                  "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
                  "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
                  " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} \-\-env CLIENTPORT={} " \
@@ -362,8 +368,21 @@ def generatedoc(**context):
                           CLIENTPORT[1:],CLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],CLIENTPORT[1:],
-                          externalport[1:],vipervizport[1:],airflowport[1:],containername))   
-    
+                          externalport[1:],vipervizport[1:],airflowport[1:],containername))       
+    else:
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
+      dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
+                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
+                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
+                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} " \
+                 " \-\-env EXTERNALPORT={} " \
+                 " \-\-env VIPERVIZPORT={} \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
+                          solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
+                          sname,sd,os.environ['GITUSERNAME'],
+                          os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
+                          solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],
+                          externalport[1:],vipervizport[1:],airflowport[1:],containername))       
+        
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
    
