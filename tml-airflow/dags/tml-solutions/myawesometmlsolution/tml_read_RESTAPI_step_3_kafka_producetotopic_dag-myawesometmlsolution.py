@@ -74,6 +74,7 @@ def gettmlsystemsparams():
         
     if VIPERHOST != "":
         app = Flask(__name__)
+        app.debug = True
 
         @app.route('/jsondataline', methods=['POST'])
         def storejsondataline():
