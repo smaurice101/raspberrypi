@@ -7050,3 +7050,4 @@ Already up to date.
 [INFO 2024-09-08_18:58:27] TML Solution Studio: git push Status for project myawesometmlsolution: Everything up-to-date
 [INFO 2024-09-08_19:00:15] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
 [INFO 2024-09-08_19:00:19] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
+[INFO 2024-09-08_19:00:21] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
