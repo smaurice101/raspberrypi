@@ -51,6 +51,10 @@ VIPERPORT=""
 HTTPADDR="https://"    
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
+     global VIPERTOKEN
+     global VIPERHOST
+     global VIPERPORT
+     global HTTPADDR
      inputbuf=value     
      topicid=int(args['topicid'])
   
