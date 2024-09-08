@@ -63,7 +63,7 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
      enabletls = int(args['enabletls'])
      identifier = args['identifier']
      print("VIPERPORT=",VIPERPORT,VIPERHOST)
-
+     VIPERPORT="1121"
      try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
                                             topicid,identifier)
