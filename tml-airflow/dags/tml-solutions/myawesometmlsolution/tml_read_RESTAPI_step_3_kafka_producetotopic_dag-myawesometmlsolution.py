@@ -45,11 +45,6 @@ def startproducingtotopic():
     
 dag = startproducingtotopic()
 
-VIPERTOKEN=""
-VIPERHOST=""
-VIPERPORT=""
-HTTPADDR="https://"    
-
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,VIPERTOKEN, VIPERHOST, VIPERPORT):
      inputbuf=value     
      topicid=int(args['topicid'])
