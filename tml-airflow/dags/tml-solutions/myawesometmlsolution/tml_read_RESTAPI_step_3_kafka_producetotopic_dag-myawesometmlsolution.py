@@ -65,11 +65,7 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,
      except Exception as e:
         print("ERROR:",e)
 
-def gettmlsystemsparams():
-    global VIPERTOKEN
-    global VIPERHOST
-    global VIPERPORT
-    global HTTPADDR
+def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
     repo=tsslogging.getrepo()  
     tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
@@ -156,4 +152,4 @@ if __name__ == '__main__':
          VIPERTOKEN = sys.argv[2]
          VIPERHOST = sys.argv[3] 
          VIPERPORT = sys.argv[4]       
-         gettmlsystemsparams()
+         gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT)
