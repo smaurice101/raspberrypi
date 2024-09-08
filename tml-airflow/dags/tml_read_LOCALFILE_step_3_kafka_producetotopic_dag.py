@@ -130,6 +130,9 @@ def startproducing(**context):
   ti.xcom_push(key="{}_FROMHOST".format(sname),value=VIPERHOSTFROM)
   ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
 
+  ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value=default_args['inputfile'])
+  ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value=default_args['inputfile'])
+    
   ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
   ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
         

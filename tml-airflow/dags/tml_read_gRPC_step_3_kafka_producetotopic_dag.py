@@ -108,6 +108,9 @@ def gettmlsystemsparams(**context):
   else:
     ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))
     
+  ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))  
+  ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))  
+
   ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
 
   ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
