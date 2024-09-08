@@ -79,6 +79,9 @@ def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
         app.config['VIPERHOST'] = VIPERHOST
         app.config['VIPERPORT'] = VIPERPORT
         
+        print("---------",app.config['VIPERPORT'])
+        
+        
         @app.route(rule='/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
