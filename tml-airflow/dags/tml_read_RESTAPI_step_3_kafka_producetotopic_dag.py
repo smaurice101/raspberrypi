@@ -13,7 +13,6 @@ import os
 import subprocess
 import time
 import random
-import request
 
 sys.dont_write_bytecode = True
 ##################################################  REST API SERVER #####################################
