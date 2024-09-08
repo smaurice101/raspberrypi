@@ -48,7 +48,7 @@ dag = startproducingtotopic()
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-HTTPADDR=""    
+HTTPADDR="https://"    
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
      inputbuf=value     
@@ -78,7 +78,7 @@ def gettmlsystemsparams():
         @app.route('/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
-          readdata(jdata)
+          return readdata(jdata)
 
         @app.route('/jsondataarray', methods=['POST'])
         def storejsondataarray():    
