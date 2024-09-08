@@ -30,7 +30,8 @@ default_args = {
   'producerid' : 'iotsolution',  
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
-  'rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
+  'tss_rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
+  'rest_port' : '9002',  # <<< ***** replace replace with port number i.e. this is listening on port 9000     
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify              
 }
@@ -88,7 +89,11 @@ def gettmlsystemsparams():
           return "ok"      
         
         #app.run(port=default_args['rest_port']) # for dev
-        http_server = WSGIServer(('', int(default_args['rest_port'])), app)
+        if os.environ['TSS']=="0": 
+          http_server = WSGIServer(('', int(default_args['rest_port'])), app)
+        else:
+          http_server = WSGIServer(('', int(default_args['tss_rest_port'])), app)
+        
         http_server.serve_forever()        
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
@@ -136,7 +141,11 @@ def startproducing(**context):
        ti = context['task_instance']
        ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='REST')
        ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
-       ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['rest_port']))
+       if os.environ['TSS']=="0": 
+         ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['rest_port']))
+       else:
+         ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['tss_rest_port']))
+            
        ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
        ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
        ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)

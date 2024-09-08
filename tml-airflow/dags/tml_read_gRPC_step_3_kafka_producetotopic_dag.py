@@ -30,7 +30,8 @@ default_args = {
   'producerid' : 'iotsolution',  # <<< *** Change as needed
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  # <<< *** Change as needed
-  'gRPC_Port' : '9001',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
+  'tss_gRPC_Port' : '9001',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001     
+  'gRPC_Port' : '9002',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001 
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify              
 }
@@ -74,7 +75,11 @@ def serve():
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UnaryServicer_to_server(UnaryService(), server)
-    server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
+    if os.environ['TSS']=="0":
+      server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
+    else:
+      server.add_insecure_port("[::]:{}".format(default_args['tss_gRPC_Port']))
+    
     server.start()
     server.wait_for_termination()
 
@@ -97,7 +102,12 @@ def gettmlsystemsparams(**context):
   ti = context['task_instance']
   ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='gRPC')
   ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
-  ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))
+  
+  if os.environ['TSS']=="0":
+    ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))
+  else:
+    ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))
+    
   ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
 
   ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
