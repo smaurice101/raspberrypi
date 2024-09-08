@@ -7048,3 +7048,4 @@ Already up to date.
 [INFO 2024-09-08_18:58:27] TML Solution Studio: git add . Status: 
 [INFO 2024-09-08_18:58:27] TML Solution Studio: git commit -a Status for project myawesometmlsolution: fatal: paths 'project ...' with -a does not make sense
 [INFO 2024-09-08_18:58:27] TML Solution Studio: git push Status for project myawesometmlsolution: Everything up-to-date
+[INFO 2024-09-08_19:00:15] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
