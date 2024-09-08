@@ -80,6 +80,7 @@ def gettmlsystemsparams():
         def storejsondataline():
           jdata = request.get_json()
           readdata(jdata)
+          return 1
 
         @app.route(rule='/jsondataarray', methods=['POST'])
         def storejsondataarray():    
