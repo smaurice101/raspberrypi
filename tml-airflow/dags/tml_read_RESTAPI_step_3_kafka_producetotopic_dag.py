@@ -46,12 +46,7 @@ def startproducingtotopic():
     
 dag = startproducingtotopic()
 
-VIPERTOKEN=""
-VIPERHOST=""
-VIPERPORT=""
-HTTPADDR=""    
-
-def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
+def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,VIPERTOKEN, VIPERHOST, VIPERPORT):
      inputbuf=value     
      topicid=int(args['topicid'])
   
@@ -59,7 +54,7 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
      delay=int(args['delay'])
      enabletls = int(args['enabletls'])
      identifier = args['identifier']
-
+        
      try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
                                             topicid,identifier)
@@ -67,25 +62,31 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
         print("ERROR:",e)
 
 def gettmlsystemsparams():
-
     repo=tsslogging.getrepo()  
     tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
         
     if VIPERHOST != "":
         app = Flask(__name__)
-
-        @app.route('/jsondataline', methods=['POST'])
+                 
+        app.config['VIPERTOKEN'] = os.environ['VIPERTOKEN']
+        app.config['VIPERHOST'] = os.environ['VIPERHOST']
+        app.config['VIPERPORT'] = os.environ['VIPERPORT']
+                
+               
+        @app.route(rule='/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
-          readdata(jdata)
-
-        @app.route('/jsondataarray', methods=['POST'])
+          readdata(jdata,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
+          return "ok"
+    
+        @app.route(rule='/jsondataarray', methods=['POST'])
         def storejsondataarray():    
           jdata = request.get_json()
           json_array = json.load(jdata)
           for item in json_array: 
-             readdata(item)
+             readdata(item,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
+          return "ok"      
         
         #app.run(port=default_args['rest_port']) # for dev
         http_server = WSGIServer(('', int(default_args['rest_port'])), app)
@@ -93,14 +94,14 @@ def gettmlsystemsparams():
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
-def readdata(valuedata):
+def readdata(valuedata,VIPERTOKEN, VIPERHOST, VIPERPORT):
       args = default_args    
 
       # MAin Kafka topic to store the real-time data
       maintopic = args['topics']
       producerid = args['producerid']
       try:
-          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
+          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args,VIPERTOKEN, VIPERHOST, VIPERPORT)
           # change time to speed up or slow down data   
           #time.sleep(0.15)
       except Exception as e:
@@ -148,5 +149,9 @@ if __name__ == '__main__':
        if sys.argv[1] == "1":          
          VIPERTOKEN = sys.argv[2]
          VIPERHOST = sys.argv[3] 
-         VIPERPORT = sys.argv[4]                  
+         VIPERPORT = sys.argv[4]
+         os.environ['VIPERTOKEN']=VIPERTOKEN
+         os.environ['VIPERHOST']=VIPERHOST
+         os.environ['VIPERPORT']=VIPERPORT
+        
          gettmlsystemsparams()
