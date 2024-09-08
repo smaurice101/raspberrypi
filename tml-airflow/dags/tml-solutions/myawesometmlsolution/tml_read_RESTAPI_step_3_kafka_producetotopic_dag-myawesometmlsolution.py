@@ -100,7 +100,7 @@ def readdata(valuedata,VIPERTOKEN, VIPERHOST, VIPERPORT):
       maintopic = args['topics']
       producerid = args['producerid']
       try:
-          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args,VIPERTOKEN, VIPERHOST, VIPERPORT)
+          producetokafka(valuedata, "", "",producerid,maintopic,"",args,VIPERTOKEN, VIPERHOST, VIPERPORT)
           # change time to speed up or slow down data   
           #time.sleep(0.15)
       except Exception as e:
