@@ -120,12 +120,16 @@ def startproducing(**context):
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
   HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
+  VIPERHOST=tsslogging.getip(VIPERHOST)     
   ti = context['task_instance']
   ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='LOCALFILE')
   ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
-  ti.xcom_push(key="{}_PORT".format(sname),value=default_args['inputfile'])
+  ti.xcom_push(key="{}_CLIENTPORT".format(sname),value=default_args['inputfile'])
   ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
-    
+  ti.xcom_push(key="{}_CLIENTHOST".format(sname),value=VIPERHOST)
+  ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+  ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
+        
   chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))   
 
   repo=tsslogging.getrepo() 

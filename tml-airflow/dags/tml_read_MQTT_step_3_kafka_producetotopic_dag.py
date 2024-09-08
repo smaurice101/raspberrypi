@@ -110,14 +110,18 @@ def gettmlsystemsparams(**context):
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
   HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
     
+  VIPERHOST=tsslogging.getip(VIPERHOST)     
   ti = context['task_instance']
   ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='MQTT')
   ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
   buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
-  ti.xcom_push(key="{}_PORT".format(sname),value=buf)
+  ti.xcom_push(key="{}_CLIENTPORT".format(sname),value=buf)
   buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
   ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=buf)
-
+  ti.xcom_push(key="{}_CLIENTHOST".format(sname),value=VIPERHOST)
+  ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+  ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
+    
     
 def readdata(valuedata):
   # MAin Kafka topic to store the real-time data

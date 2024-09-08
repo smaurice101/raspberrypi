@@ -124,11 +124,6 @@ def startproducing(**context):
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
-       ti = context['task_instance']
-       ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='REST')
-       ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
-       ti.xcom_push(key="{}_PORT".format(sname),value=default_args['rest_port'])
-       ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
         
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
        
@@ -138,6 +133,16 @@ def startproducing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             
+       VIPERHOST=tsslogging.getip(VIPERHOST)     
+       ti = context['task_instance']
+       ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='REST')
+       ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
+       ti.xcom_push(key="{}_CLIENTPORT".format(sname),value=default_args['rest_port'])
+       ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
+       ti.xcom_push(key="{}_CLIENTHOST".format(sname),value=VIPERHOST)
+       ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+       ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
+    
        wn = windowname('produce',sname,sd)      
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])

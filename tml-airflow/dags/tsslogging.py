@@ -12,11 +12,14 @@ def tmuxchange(tmuxname):
   with open("/tmux/tmux-airflow.sh", "a") as myfile:
     myfile.write("airflow dags trigger {}".format(tmuxname))
     
-def getip():
+def getip(viperhost):
     hostname = socket.gethostname()
     IPAddr = socket.gethostbyname(hostname)
     
-    return hostname,IPAddr 
+    if viperhost=="0.0.0.0":
+        return hostname,IPAddr 
+    else:
+        return hostname,viperhost 
 
 def getfreeport():
   with socketserver.TCPServer(("localhost", 0), None) as s:
