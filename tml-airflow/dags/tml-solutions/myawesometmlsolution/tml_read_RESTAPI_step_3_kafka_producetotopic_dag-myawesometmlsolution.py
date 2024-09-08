@@ -5,7 +5,7 @@ from airflow.operators.bash import BashOperator
 import json
 from datetime import datetime
 from airflow.decorators import dag, task
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from gevent.pywsgi import WSGIServer
 import sys
 import tsslogging
@@ -50,11 +50,7 @@ VIPERHOST=""
 VIPERPORT=""
 HTTPADDR="https://"    
 
-def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
-     global VIPERTOKEN
-     global VIPERHOST
-     global VIPERPORT
-     global HTTPADDR
+def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,VIPERTOKEN, VIPERHOST, VIPERPORT):
      inputbuf=value     
      topicid=int(args['topicid'])
   
@@ -82,20 +78,23 @@ def gettmlsystemsparams():
         
     if VIPERHOST != "":
         app = Flask(__name__)
-        app.debug = True
-
+        app.config['VIPERTOKEN'] = VIPERTOKEN
+        app.config['VIPERHOST'] = VIPERHOST
+        app.config['VIPERPORT'] = VIPERPORT
+        
         @app.route(rule='/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
-          readdata(jdata)
-          return "ok-viperport=".format(VIPERPORT)
-
+          readdata(jdata,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
+          return "ok"
+    
         @app.route(rule='/jsondataarray', methods=['POST'])
         def storejsondataarray():    
           jdata = request.get_json()
           json_array = json.load(jdata)
           for item in json_array: 
-             readdata(item)
+             readdata(item,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
+          return "ok"      
         
         #app.run(port=default_args['rest_port']) # for dev
         http_server = WSGIServer(('', int(default_args['rest_port'])), app)
@@ -103,14 +102,14 @@ def gettmlsystemsparams():
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
-def readdata(valuedata):
+def readdata(valuedata,VIPERTOKEN, VIPERHOST, VIPERPORT):
       args = default_args    
 
       # MAin Kafka topic to store the real-time data
       maintopic = args['topics']
       producerid = args['producerid']
       try:
-          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args)
+          producetokafka(valuedata.strip(), "", "",producerid,maintopic,"",args,VIPERTOKEN, VIPERHOST, VIPERPORT)
           # change time to speed up or slow down data   
           #time.sleep(0.15)
       except Exception as e:
