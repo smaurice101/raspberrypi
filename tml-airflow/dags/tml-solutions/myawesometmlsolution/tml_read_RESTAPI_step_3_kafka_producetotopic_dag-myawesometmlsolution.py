@@ -68,7 +68,7 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,
      except Exception as e:
         print("ERROR:",e)
 
-def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
+def gettmlsystemsparams():
     repo=tsslogging.getrepo()  
     tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
@@ -77,7 +77,7 @@ def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
         app = Flask(__name__)
                  
         app.config['VIPERTOKEN'] = os.environ['VIPERTOKEN']
-        app.config['VIPERHOST'] = "https://127.0.0.1"
+        app.config['VIPERHOST'] = os.environ['VIPERHOST']
         app.config['VIPERPORT'] = os.environ['VIPERPORT']
                 
                
@@ -163,4 +163,4 @@ if __name__ == '__main__':
          os.environ['VIPERHOST']=VIPERHOST
          os.environ['VIPERPORT']=VIPERPORT
         
-         gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT)
+         gettmlsystemsparams()
