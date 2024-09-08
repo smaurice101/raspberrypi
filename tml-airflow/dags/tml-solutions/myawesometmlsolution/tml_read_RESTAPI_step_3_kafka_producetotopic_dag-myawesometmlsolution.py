@@ -80,7 +80,7 @@ def gettmlsystemsparams():
         def storejsondataline():
           jdata = request.get_json()
           readdata(jdata)
-          return "ok"
+          return "ok-viperport=".format(VIPERPORT)
 
         @app.route(rule='/jsondataarray', methods=['POST'])
         def storejsondataarray():    
