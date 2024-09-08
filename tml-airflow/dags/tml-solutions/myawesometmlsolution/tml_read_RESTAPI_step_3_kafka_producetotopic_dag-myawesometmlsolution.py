@@ -82,7 +82,7 @@ def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
         @app.route(rule='/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
-          readdata(jdata,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
+          readdata(item,app.config.get('VIPERTOKEN'),app.config.get('VIPERHOST'),app.config.get('VIPERPORT'))
           return "ok"
     
         @app.route(rule='/jsondataarray', methods=['POST'])
@@ -90,7 +90,7 @@ def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
           jdata = request.get_json()
           json_array = json.load(jdata)
           for item in json_array: 
-             readdata(item,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
+             readdata(item,app.config.get('VIPERTOKEN'),app.config.get('VIPERHOST'),app.config.get('VIPERPORT'))
           return "ok"      
         
         #app.run(port=default_args['rest_port']) # for dev
