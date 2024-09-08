@@ -355,7 +355,7 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionexternalport--;{}".format(solutionexternalport[1:])])
     
     if len(CLIENTPORT) > 1:
-      doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(CLIENTPORT[1:])])
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
       dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
                  "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
                  "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
@@ -363,9 +363,9 @@ def generatedoc(**context):
                  " \-\-env EXTERNALPORT={} " \
                  " \-\-env VIPERVIZPORT={} \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
-                          CLIENTPORT[1:],CLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
+                          TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
-                          solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],CLIENTPORT[1:],
+                          solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],TMLCLIENTPORT[1:],
                           externalport[1:],vipervizport[1:],airflowport[1:],containername))       
     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
