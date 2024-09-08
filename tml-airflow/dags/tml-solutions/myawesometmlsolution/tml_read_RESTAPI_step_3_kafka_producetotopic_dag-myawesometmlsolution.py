@@ -78,13 +78,13 @@ def gettmlsystemsparams(VIPERTOKEN,VIPERHOST,VIPERPORT):
         app.config['VIPERTOKEN'] = VIPERTOKEN
         app.config['VIPERHOST'] = VIPERHOST
         app.config['VIPERPORT'] = VIPERPORT
-        
-        print("---------",app.config['VIPERPORT'])
-        
-        
+                
+               
         @app.route(rule='/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
+          with open("/tmux/test.txt".format(sname), 'a', encoding='utf-8') as file: 
+               file.writelines("{},{}\n".format(app.config['VIPERHOST'],app.config['VIPERPORT']))
           readdata(jdata,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])
           return "ok"
     
