@@ -1,4 +1,5 @@
-  GNU nano 7.2                                                                                                                                                                                                                                                                                                                                                                                                  /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution-3f10/tml_read_gRPC_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py                                                                                                                                                                                                                                                                                                                                                                                                            import maadstml
+  GNU nano 7.2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution-3f10/tml_read_gRPC_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
+import maadstml
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
@@ -81,33 +82,6 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
     except Exception as e:
      pass
 
-  def readdata(self,valuedata):
-    args = default_args
-  # MAin Kafka topic to store the real-time data
-    maintopic = args['topics']
-    producerid = args['producerid']
-
-    try:
-      producetokafka(valuedata, "", "",producerid,maintopic,"",args)
-      # change time to speed up or slow down data
-      time.sleep(0.15)
-    except Exception as e:
-      print(e)
-      pass
-
-  def producetokafka(self,value, tmlid, identifier,producerid,maintopic,substream,args):
-    inputbuf=value
-    topicid=args['topicid']
-
- # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topi> delay=int(args['delay'])
-    enabletls = int(args['enabletls'])
-    identifier = args['identifier']
-
-    try:
-      result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,s>
-                                        topicid,identifier)
-    except Exception as e:
-      print("ERROR:",e)
 
 def serve():
     repo=tsslogging.getrepo()
@@ -124,34 +98,6 @@ def serve():
     server.start()
     server.wait_for_termination()
 
-def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
- inputbuf=value
- topicid=args['topicid']
-
- # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
- delay=int(args['delay'])
- enabletls = int(args['enabletls'])
- identifier = args['identifier']
-
- try:
-    result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
-                                        topicid,identifier)
- except Exception as e:
-    print("ERROR:",e)
-
-def readdata(valuedata):
-  args = default_args
-  # MAin Kafka topic to store the real-time data
-  maintopic = args['topics']
-  producerid = args['producerid']
-
-  try:
-      producetokafka(valuedata, "", "",producerid,maintopic,"",args)
-      # change time to speed up or slow down data
-      time.sleep(0.15)
-  except Exception as e:
-      print(e)
-      pass
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
