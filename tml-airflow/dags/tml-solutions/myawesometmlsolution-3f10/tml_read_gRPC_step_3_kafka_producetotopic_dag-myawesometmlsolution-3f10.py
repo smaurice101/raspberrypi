@@ -73,7 +73,7 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topi> delay=int(args['delay'])
       enabletls = int(default_args['enabletls'])
       identifier = default_args['identifier']
-
+      delay = int(default_args['delay'])
       try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,s>
                                         topicid,identifier)
