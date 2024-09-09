@@ -67,7 +67,7 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
     #readata(message)
     result = f'Hello I am up and running received "{message}" message from you'
     result = {'message': result, 'received': True}
-    print(result)
+#    print(result)
 #    print(pb2.MessageResponse(**result))
     #return pb2.MessageResponse(**result)
   def readdata(self,valuedata):
