@@ -74,7 +74,7 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
       identifier = default_args['identifier']
       delay = int(default_args['delay'])
       try:
-        result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,s>
+        result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,
                                         topicid,identifier)
       except Exception as e:
         print("ERROR:",e)
