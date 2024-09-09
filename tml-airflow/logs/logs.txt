@@ -7158,3 +7158,4 @@ Already up to date.
 [INFO 2024-09-09_00:26:18] RESTAPI producing DAG in tml_read_RESTAPI_step_3_kafka_producetotopic_dag-myawesometmlsolution.py
 [INFO 2024-09-09_00:26:21] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution.py
 [INFO 2024-09-09_00:26:22] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
+[INFO 2024-09-09_00:26:29] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
