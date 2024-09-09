@@ -7186,3 +7186,6 @@ Already up to date.
 [INFO 2024-09-09_00:52:20] TML Solution Studio: git add . Status: 
 [INFO 2024-09-09_00:52:20] TML Solution Studio: git commit -a Status for project myawesometmlsolutiongrpc: fatal: paths 'project ...' with -a does not make sense
 [INFO 2024-09-09_00:52:21] TML Solution Studio: git push Status for project myawesometmlsolutiongrpc: Everything up-to-date
+[INFO 2024-09-09_00:57:42] TML Solution Studio: DELETE initiated for project myawesometmlsolutiongrpc by smaurice101
+[INFO 2024-09-09_00:57:42] TML Solution Studio: GIT REPO myawesometmlsolutiongrpc DELETED by smaurice101
+[INFO 2024-09-09_00:57:42] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolutiongrpc-amd64 DELETED by maadsdocker
