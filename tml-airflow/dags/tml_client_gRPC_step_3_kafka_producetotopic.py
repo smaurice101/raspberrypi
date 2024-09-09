@@ -2,6 +2,8 @@ import grpc
 import tml_grpc_pb2_grpc as pb2_grpc
 import tml_grpc_pb2 as pb2
 import sys
+from datetime import datetime
+import time
 
 sys.dont_write_bytecode = True
 
@@ -21,7 +23,7 @@ class TmlgrpcClient(object):
         # bind the client and the server
         self.stub = pb2_grpc.TmlprotoStub(self.channel)
 
-    def get_url(self, message):
+    def sendtotmlgrpcserver(self, message):
         """
         Client function to call the rpc for GetServerResponse
         """
@@ -29,11 +31,49 @@ class TmlgrpcClient(object):
         print(f'{message}')
         return self.stub.GetServerResponse(message)
 
+    def readdata(self, inputfile):
+        
+      ##############################################################
+      # NOTE: You can send any "EXTERNAL" data through this API
+      # It is reading a localfile as an example
+      ############################################################
+      
+      try:
+        file1 = open(inputfile, 'r')
+        print("Data Producing to Kafka Started:",datetime.now())
+      except Exception as e:
+        print("ERROR: Something went wrong ",e)  
+        return
+      k = 0
+      while True:
+        line = file1.readline()
+        line = line.replace(";", " ")
+        print("line=",line)
+        # add lat/long/identifier
+        k = k + 1
+        try:
+          if line == "":
+            #break
+            file1.seek(0)
+            k=0
+            print("Reached End of File - Restarting")
+            print("Read End:",datetime.now())
+            continue
+          ret = self.sendtotmlgrpcserver(line)
+          print(ret)
+          # change time to speed up or slow down data   
+          time.sleep(.5)
+        except Exception as e:
+          print(e)
+          time.sleep(.5)
+          pass
+
 
 if __name__ == '__main__':
     try:
       client = TmlgrpcClient()
-      result = client.get_url(message="PUT YOUR DATA HERE")
+      inputfile = "IoTDatasample.txt"
+      result = client.readdata(inputfile)
       print(f'{result}')
     except Exception as e:
       print("ERROR: ",e)
