@@ -61,13 +61,13 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
   def GetServerResponse(self, request, context):
 
     # get the string from the incoming request
-    print(pb2.MessageResponse(**result))
+    #print(pb2.MessageResponse(**result))
     message = request.message
 #    print({message})
     #readata(message)
     result = f'Hello I am up and running received "{message}" message from you'
     result = {'message': result, 'received': True}
-
+    print(pb2.MessageResponse(**result))
     #return pb2.MessageResponse(**result)
   def readdata(self,valuedata):
     args = default_args
