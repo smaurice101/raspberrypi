@@ -74,7 +74,7 @@ def serve():
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")          
 
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    pb2_grpc.add_TmlprotoServicer_to_server(UnaryService(), server)
+    pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoServicer(), server)
     if os.environ['TSS']=="0":
       server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
     else:
