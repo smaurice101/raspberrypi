@@ -7116,3 +7116,9 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-08_23:38:37] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution.py
 [INFO 2024-09-08_23:38:43] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution.py
 [INFO 2024-09-08_23:40:18] {'name': ['Project with slug "myawesometmlsolution" already exists.']}
+[INFO 2024-09-08_23:58:13] TML Solution Studio: +gitresetpush initiated by smaurice101
+[INFO 2024-09-08_23:58:19] TML Solution Studio: executed git push -f origin main by smaurice101: To https://github.com/smaurice101/raspberrypi.git
+ + 1018f30...93fe37a main -> main (forced update)
+[INFO 2024-09-09_00:02:45] TML Solution Studio: DELETE initiated for project myawesometmlsolution by smaurice101
+[INFO 2024-09-09_00:02:45] TML Solution Studio: GIT REPO myawesometmlsolution DELETED by smaurice101
+[INFO 2024-09-09_00:02:45] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-amd64 DELETED by maadsdocker
