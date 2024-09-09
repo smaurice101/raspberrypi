@@ -62,7 +62,8 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
     # get the string from the incoming request
     message = request.message
-    self.readata(message)
+    print("Message=".message)
+    #readata(message)
     #result = f'Hello I am up and running received "{message}" message from you'
     #result = {'message': result, 'received': True}
 
