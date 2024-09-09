@@ -64,10 +64,9 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
     message = request.message
     try:
-      result = f'Hello I am up and running received "{message}" message from you'
-      result = {'message': result, 'received': True} 
-      print(result)
       inputbuf=f"{message}"
+      print("inputbuf=",inputbuf)
+
       topicid=default_args['topicid']
 
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topi> delay=int(args['delay'])
