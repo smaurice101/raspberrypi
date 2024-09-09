@@ -61,6 +61,7 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
   def GetServerResponse(self, request, context):
 
     # get the string from the incoming request
+    print(pb2.MessageResponse(**result))
     message = request.message
 #    print({message})
     #readata(message)
