@@ -81,44 +81,7 @@ def serve():
       server.add_insecure_port("[::]:{}".format(default_args['tss_gRPC_Port']))
     
     server.start()
-    server.wait_for_termination()
-
-def gettmlsystemsparams(**context):
-  global VIPERTOKEN
-  global VIPERHOST
-  global VIPERPORT
-  global HTTPADDR 
-  global VIPERHOSTFROM  
-
-  sd = context['dag'].dag_id
-  sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
-    
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
-  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
-  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
-  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
-
-  hs,VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
-  ti = context['task_instance']
-  ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='gRPC')
-  ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
-  
-  if os.environ['TSS']=="0":
-    ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))
-  else:
-    ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))
-    
-  ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))  
-  ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))  
-
-  ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
-
-  ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
-  ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
-
-  ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
-  ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
-        
+    server.wait_for_termination()        
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
  inputbuf=value     
@@ -158,9 +121,19 @@ def windowname(wtype,sname,dagname):
     return wn
 
 def startproducing(**context):
-       gettmlsystemsparams(context)
+       global VIPERTOKEN
+       global VIPERHOST
+       global VIPERPORT
+       global HTTPADDR 
+       global VIPERHOSTFROM  
+        
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+    
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
         
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
        repo=tsslogging.getrepo() 
@@ -169,6 +142,27 @@ def startproducing(**context):
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
+
+       hs,VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
+       ti = context['task_instance']
+       ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='gRPC')
+       ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
+
+       if os.environ['TSS']=="0":
+        ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))
+       else:
+        ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))
+
+       ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))  
+       ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))  
+
+       ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
+
+       ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
+       ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
+
+       ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+       ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
             
        wn = windowname('produce',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
