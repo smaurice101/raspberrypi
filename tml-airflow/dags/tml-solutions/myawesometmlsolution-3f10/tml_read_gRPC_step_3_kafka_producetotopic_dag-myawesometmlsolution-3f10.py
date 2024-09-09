@@ -68,6 +68,7 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
     try:
       result = f'Hello I am up and running received "{message}" message from you'
       result = {'message': result, 'received': True} 
+      print(result)
     except Exception as e:
      pass
 #    print(result)
