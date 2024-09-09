@@ -59,21 +59,29 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
     pass
 
   def GetServerResponse(self, request, context):
+    maintopic = default_args['topics']
+    producerid = default_args['producerid']
 
-    # get the string from the incoming request
-    #print(pb2.MessageResponse(**result))
     message = request.message
-#    print({message})
-    #readata(message)
     try:
       result = f'Hello I am up and running received "{message}" message from you'
       result = {'message': result, 'received': True} 
       print(result)
+      inputbuf=f"{message}"
+      topicid=default_args['topicid']
+
+     # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topi> delay=int(args['delay'])
+      enabletls = int(default_args['enabletls'])
+      identifier = default_args['identifier']
+
+      try:
+        result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,s>
+                                        topicid,identifier)
+      except Exception as e:
+        print("ERROR:",e)
     except Exception as e:
      pass
-#    print(result)
-#    print(pb2.MessageResponse(**result))
-    #return pb2.MessageResponse(**result)
+
   def readdata(self,valuedata):
     args = default_args
   # MAin Kafka topic to store the real-time data
