@@ -7284,3 +7284,4 @@ Already up to date.
 [INFO 2024-09-09_14:44:48] TML Solution Studio: git push Status for project myawesometmlsolution-3f10: Everything up-to-date
 [INFO 2024-09-09_14:49:03] gRPC producing DAG in tml_read_gRPC_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-09_14:49:05] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution-3f10.py
+[INFO 2024-09-09_14:49:07] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution-3f10.py
