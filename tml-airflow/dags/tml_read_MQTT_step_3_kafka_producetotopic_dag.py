@@ -28,7 +28,7 @@ default_args = {
   'identifier' : 'TML solution',  
   'mqtt_broker' : '', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
   'mqtt_port' : '', # <<<******** Enter MQTT port i.e. 1883    
-  'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#  
+  'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. tmliot/#  
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify      
 }
@@ -71,7 +71,7 @@ def mqttserverconnect():
 
  client = paho.Client(paho.CallbackAPIVersion.VERSION2)
  mqttBroker = default_args['mqtt_broker'] 
- mqttport = default_args['mqtt_port']
+ mqttport = int(default_args['mqtt_port'])
  client.connect(mqttBroker,mqttport)
 
  if client:
