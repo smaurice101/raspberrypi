@@ -30,7 +30,7 @@ default_args = {
   'producerid' : 'iotsolution',  # <<< *** Change as needed
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  # <<< *** Change as needed
-  'tss_gRPC_Port' : '9003',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001
+  'tss_gRPC_Port' : '9001',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001
   'gRPC_Port' : '9002',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify
@@ -95,6 +95,7 @@ def serve():
       server.add_insecure_port("[::]:{}".format(default_args['tss_gRPC_Port']))
 
     server.start()
+    server.stop(0)
     server.wait_for_termination()
 
 
