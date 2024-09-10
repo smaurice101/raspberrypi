@@ -67,13 +67,3 @@ class TmlgrpcClient(object):
           print(e)
           time.sleep(.5)
           pass
-
-
-if __name__ == '__main__':
-    try:
-      client = TmlgrpcClient()
-      inputfile = "IoTDatasample.txt"
-      result = client.readdata(inputfile)
-      print(f'{result}')
-    except Exception as e:
-      print("ERROR: ",e)
