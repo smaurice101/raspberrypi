@@ -7389,3 +7389,6 @@ Already up to date.
 [INFO 2024-09-10_00:46:46] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-10_00:46:47] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-10_00:47:13] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
+[INFO 2024-09-10_00:52:55] TML Solution Studio: DELETE initiated for project myawesometmlsolution-3f10 by smaurice101
+[INFO 2024-09-10_00:52:55] TML Solution Studio: GIT REPO myawesometmlsolution-3f10 DELETED by smaurice101
+[INFO 2024-09-10_00:52:55] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-3f10-amd64 DELETED by maadsdocker
