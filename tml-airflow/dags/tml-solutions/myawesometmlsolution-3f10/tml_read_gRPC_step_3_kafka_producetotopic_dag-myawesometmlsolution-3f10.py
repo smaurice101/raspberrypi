@@ -94,8 +94,8 @@ def serve():
     else:
       server.add_insecure_port("[::]:{}".format(default_args['tss_gRPC_Port']))
 
-#    server.start()
- #   server.wait_for_termination()
+    server.start()
+    server.wait_for_termination()
 
 
 def windowname(wtype,sname,dagname):
@@ -162,4 +162,4 @@ if __name__ == '__main__':
          VIPERTOKEN = sys.argv[2]
          VIPERHOST = sys.argv[3]
          VIPERPORT = sys.argv[4]
-         serve()
+#         serve()
