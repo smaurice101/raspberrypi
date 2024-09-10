@@ -18,6 +18,9 @@ sys.dont_write_bytecode = True
 # This is a MQTT server that will handle connections from a client.  It will handle connections
 # from an MQTT client for on_message, on_connect, and on_subscribe
 
+# If Connecting to HiveMQ cluster you will need USERNAME/PASSWORD and mqtt_enabletls = 1
+# USERNAME/PASSWORD should be set in your DOCKER RUN command of the TSS container
+
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
   'owner' : 'Sebastian Maurice',    
@@ -28,7 +31,8 @@ default_args = {
   'identifier' : 'TML solution',  
   'mqtt_broker' : '', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
   'mqtt_port' : '', # <<<******** Enter MQTT port i.e. 1883    
-  'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. tmliot/#  
+  'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. tml/iot  
+  'mqtt_enabletls': '0', # set 1=TLS, 0=no TLSS  
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify      
 }
@@ -68,19 +72,34 @@ def mqttserverconnect():
  tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
 
+ username = ""    
+ password = ""   
+     if 'MQTTUSERNAME' in os.environ:
+       username = os.environ['MQTTUSERNAME']  
+     if 'MQTTPASSWORD' in os.environ:
+       password = os.environ['MQTTPASSWORD']  
 
  client = paho.Client(paho.CallbackAPIVersion.VERSION2)
  mqttBroker = default_args['mqtt_broker'] 
  mqttport = int(default_args['mqtt_port'])
+ if default_args['mqtt_enabletls'] == "1":
+   client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
+   client.username_pw_set(username, password)
+
  client.connect(mqttBroker,mqttport)
 
  if client:
+   print("Connected")   
    client.on_subscribe = on_subscribe
    client.on_message = on_message
-   client.subscribe(args['mqtt_subscribe_topic'], qos=1)            
+   client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)            
    client.on_connect = on_connect
-
-   client.loop_start()
+   client.loop_forever()
+ else:   
+    print("Cannot Connected")   
+    tsslogging.tsslogit("CANNOT Connect to MQTT Broker in {}".format(os.path.basename(__file__)), "ERROR" )                     
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
+    
 
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
  inputbuf=value     

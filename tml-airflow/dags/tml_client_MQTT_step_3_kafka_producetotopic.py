@@ -2,7 +2,6 @@ import paho.mqtt.client as paho
 from paho import mqtt
 import sys
 import maadstml
-#import tsslogging
 import os
 import subprocess
 import time
@@ -10,9 +9,10 @@ import random
 from datetime import datetime
 
 default_args = {
-  'mqtt_broker' : 'test.mosquitto.org', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
+  'mqtt_broker' : 'test.mosquitto.org', # <<<****** Enter MQTT broker i.e. test.mosquitto.org or HiveMQ cluster
   'mqtt_port' : '1883', # <<<******** Enter MQTT port i.e. 1883    
-  'mqtt_subscribe_topic' : 'tmliot/#', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#  
+  'mqtt_subscribe_topic' : 'tml/iot', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#  
+  'mqtt_enabletls' : '0'
 }
 
 sys.dont_write_bytecode = True
@@ -20,13 +20,27 @@ sys.dont_write_bytecode = True
 # This is a MQTT server that will handle connections from a client.  It will handle connections
 # from an MQTT client for on_message, on_connect, and on_subscribe
 
+# If Connecting to HiveMQ cluster you will need USERNAME/PASSWORD and mqtt_enabletls = 1
+# USERNAME/PASSWORD should be set in your DOCKER RUN command of the TSS container
+
 ######################################## USER CHOOSEN PARAMETERS ########################################
 
 
 def mqttconnection():
+     username = ""    
+     password = ""   
+     if 'MQTTUSERNAME' in os.environ:
+       username = os.environ['MQTTUSERNAME']  
+     if 'MQTTPASSWORD' in os.environ:
+       password = os.environ['MQTTPASSWORD']  
+        
      client = paho.Client(paho.CallbackAPIVersion.VERSION2)
      mqttBroker = default_args['mqtt_broker'] 
      mqttport = int(default_args['mqtt_port'])
+     if default_args['mqtt_enabletls'] == "1":
+        client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
+        client.username_pw_set(username, password)     
+
      client.connect(mqttBroker,mqttport)
 
      client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)
@@ -34,7 +48,8 @@ def mqttconnection():
 
 def publishtomqttbroker(client,line):
 
-     client.publish(topic="tml/", payload=line, qos=1, retain=False)
+     client.publish(topic=default_args['mqtt_subscribe_topic'], payload=line, qos=1, retain=False)
+     client.loop()
 
 def readdatafile(client,inputfile):
 
