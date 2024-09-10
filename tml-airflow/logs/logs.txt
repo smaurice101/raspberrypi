@@ -7422,3 +7422,13 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-10_01:02:08] TML Solution Studio: DELETE initiated for project myawesometmlsolution-3f10 by smaurice101
 [INFO 2024-09-10_01:02:08] TML Solution Studio: GIT REPO myawesometmlsolution-3f10 DELETED by smaurice101
 [INFO 2024-09-10_01:02:08] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-3f10-amd64 DELETED by maadsdocker
+[INFO 2024-09-10_01:02:48] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution-3f10
+[INFO 2024-09-10_01:02:48] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-10_01:03:21] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution-3f10
+[INFO 2024-09-10_01:03:21] TML Solution Studio: git commit -a Status for project myawesometmlsolution-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-10_01:03:22] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-09-10_01:03:22] TML Solution Studio: git add . Status: 
+[INFO 2024-09-10_01:03:22] TML Solution Studio: git commit -a Status for project myawesometmlsolution-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-10_01:03:22] TML Solution Studio: git push Status for project myawesometmlsolution-3f10: Everything up-to-date
