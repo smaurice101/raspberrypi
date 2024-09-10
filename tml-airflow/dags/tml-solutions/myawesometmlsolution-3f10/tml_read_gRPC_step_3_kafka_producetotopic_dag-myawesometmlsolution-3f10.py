@@ -112,7 +112,7 @@ def startproducing(**context):
        global VIPERPORT
        global HTTPADDR
        global VIPERHOSTFROM
-
+       return
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
@@ -162,4 +162,4 @@ if __name__ == '__main__':
          VIPERTOKEN = sys.argv[2]
          VIPERHOST = sys.argv[3]
          VIPERPORT = sys.argv[4]
-#         serve()
+         serve()
