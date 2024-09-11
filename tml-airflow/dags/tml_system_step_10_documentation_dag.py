@@ -450,7 +450,7 @@ def generatedoc(**context):
                     " \-\-env MQTTUSERNAME={} " \
                     " \-\-env MQTTPASSWORD=<Enter your docker hub password> " \
                     " \-\-env KAFKACLOUDUSERNAME={} " \
-                    " \-\-env KAFKACLOUDPASSWORD=<Enter your docker hub password> " \                    
+                    " \-\-env KAFKACLOUDPASSWORD=<Enter your docker hub password> " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport[1:],os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],
                             os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],mqttusername,kafkacloudusername,chip))
