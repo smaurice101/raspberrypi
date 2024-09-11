@@ -372,7 +372,7 @@ def generatedoc(**context):
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],TMLCLIENTPORT[1:],
-                          externalport[1:],kafkacloudusername,vipervizport[1:],airflowport[1:],mqttusername,containername))       
+                          externalport[1:],kafkacloudusername,vipervizport[1:],mqttusername,airflowport[1:],containername))       
     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
       dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
@@ -385,7 +385,7 @@ def generatedoc(**context):
                           sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],
-                          externalport[1:],kafkacloudusername,vipervizport[1:],airflowport[1:],mqttusername,containername))       
+                          externalport[1:],kafkacloudusername,vipervizport[1:],mqttusername,airflowport[1:],containername))       
         
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
@@ -448,9 +448,9 @@ def generatedoc(**context):
                     " \-\-env DOCKERUSERNAME={} " \
                     " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
                     " \-\-env MQTTUSERNAME={} " \
-                    " \-\-env MQTTPASSWORD=<Enter your docker hub password> " \
+                    " \-\-env MQTTPASSWORD=<Enter your mqtt password> " \
                     " \-\-env KAFKACLOUDUSERNAME={} " \
-                    " \-\-env KAFKACLOUDPASSWORD=<Enter your docker hub password> " \
+                    " \-\-env KAFKACLOUDPASSWORD=<Enter your API secret> " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport[1:],os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],
                             os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],mqttusername,kafkacloudusername,chip))
