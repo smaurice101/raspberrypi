@@ -8010,3 +8010,6 @@ Already up to date.
 [INFO 2024-09-11_20:14:01] TML Solution Studio: git add . Status: 
 [INFO 2024-09-11_20:14:01] TML Solution Studio: git commit -a Status for project iotsolutionmqtt-3f10: fatal: paths 'project ...' with -a does not make sense
 [INFO 2024-09-11_20:14:02] TML Solution Studio: git push Status for project iotsolutionmqtt-3f10: Everything up-to-date
+[INFO 2024-09-11_20:15:47] TML Solution Studio: DELETE initiated for project iotsolutionmqtt-3f10 by smaurice101
+[INFO 2024-09-11_20:15:47] TML Solution Studio: GIT REPO iotsolutionmqtt-3f10 DELETED by smaurice101
+[INFO 2024-09-11_20:15:47] TML Solution Studio: LOCAL DOCKER IMAGE iotsolutionmqtt-3f10-amd64 DELETED by maadsdocker

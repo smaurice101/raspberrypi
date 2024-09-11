@@ -248,7 +248,6 @@ def getparams(**context):
   method = args['ingestdatamethod'] 
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
-  dashboardhtml = args['dashboardhtml'] 
   reinitbinaries(sname)
   updateviperenv()
 
