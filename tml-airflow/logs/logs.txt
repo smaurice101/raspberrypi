@@ -8088,3 +8088,4 @@ branch.main.merge=refs/heads/main
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
 [INFO 2024-09-11_22:37:41] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-11_22:37:44] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-11_22:37:46] Preprocessing2 DAG in tml_system_step_4b_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
