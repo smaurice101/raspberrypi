@@ -16,8 +16,8 @@ default_args = {
  'owner': 'Sebastian Maurice',  # <<< ******** change as needed 
  'brokerhost' : '127.0.0.1',  # <<<<***************** THIS WILL ACCESS LOCAL KAFKA - YOU CAN CHANGE TO CLOUD KAFKA HOST
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
- 'cloudusername' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API KEY  - OTHERWISE LEAVE BLANK
- 'cloudpassword' : '',  # <<<< --------FOR KAFKA CLOUD UPDATE WITH API SECRET - OTHERWISE LEAVE BLANK   
+ 'cloudusername' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API KEY  - LEAVE BLANK
+ 'cloudpassword' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API SECRET - LEAVE BLANK   
  'ingestdatamethod' : 'localfile', # << CHOOSE BETWEEN: 1. localfle, 2. mqtt, 3. rest, 4. grpc     
  'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
@@ -118,6 +118,14 @@ def updateviperenv():
     os.environ['tssbuild']="0"
     os.environ['tssdoc']="0"
 
+    cloudusername = ""
+    cloudpassword = ""
+    
+    if 'KAFKACLOUDUSERNAME' in os.environ:
+          cloudusername = os.environ['KAFKACLOUDUSERNAME']
+    if 'KAFKACLOUDPASSWORD' in os.environ:
+          cloudpassword = os.environ['KAFKACLOUDPASSWORD']
+                
     filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
      with open(mainfile, 'r', encoding='utf-8') as file: 
@@ -131,9 +139,9 @@ def updateviperenv():
        if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
          data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}\n".format(default_args['brokerhost'],default_args['brokerport'])
        if 'CLOUD_USERNAME' in d: 
-         data[r] = "CLOUD_USERNAME={}\n".format(default_args['cloudusername'])
+         data[r] = "CLOUD_USERNAME={}\n".format(cloudusername)
        if 'CLOUD_PASSWORD' in d: 
-         data[r] = "CLOUD_PASSWORD={}\n".format(default_args['cloudpassword'])                
+         data[r] = "CLOUD_PASSWORD={}\n".format(cloudpassword)                
        if 'WRITELASTCOMMIT' in d: 
          data[r] = "WRITELASTCOMMIT={}\n".format(default_args['WRITELASTCOMMIT'])
        if 'NOWINDOWOVERLAP' in d: 
@@ -331,6 +339,26 @@ def getparams(**context):
     task_instance.xcom_push(key="{}_SOLUTIONVIPERVIZPORT".format(sname),value="_{}".format(os.environ['SOLUTIONVIPERVIZPORT']))  
     task_instance.xcom_push(key="{}_SOLUTIONAIRFLOWPORT".format(sname),value="_{}".format(os.environ['SOLUTIONAIRFLOWPORT'])) 
     
+
+  if 'MQTTUSERNAME' in os.environ:
+    task_instance.xcom_push(key="{}_MQTTUSERNAME".format(sname),value=MQTTUSERNAME)
+  else:
+    task_instance.xcom_push(key="{}_MQTTUSERNAME".format(sname),value="")
+
+  if 'MQTTPASSWORD' in os.environ:
+    task_instance.xcom_push(key="{}_MQTTPASSWORD".format(sname),value=MQTTPASSWORD)
+  else:
+    task_instance.xcom_push(key="{}_MQTTPASSWORD".format(sname),value="")
+
+  if 'KAFKACLOUDUSERNAME' in os.environ:
+    task_instance.xcom_push(key="{}_KAFKACLOUDUSERNAME".format(sname),value=KAFKACLOUDUSERNAME)
+  else:
+    task_instance.xcom_push(key="{}_KAFKACLOUDUSERNAME".format(sname),value="")
+
+  if 'KAFKACLOUDPASSWORD' in os.environ:
+    task_instance.xcom_push(key="{}_KAFKACLOUDPASSWORD".format(sname),value=KAFKACLOUDPASSWORD)
+  else:
+    task_instance.xcom_push(key="{}_KAFKACLOUDPASSWORD".format(sname),value="")
     
   task_instance.xcom_push(key="{}_TSS".format(sname),value="_{}".format(tss))  
     
@@ -369,3 +397,4 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_dashboardhtml".format(sname),value=dashboardhtml)
     
   updateviperenv()
+  subprocess.call("/tmux/starttml.sh", shell=True)
