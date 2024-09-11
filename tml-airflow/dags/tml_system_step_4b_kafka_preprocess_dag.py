@@ -29,7 +29,7 @@ default_args = {
   'delay' : '70', # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
   'array' : '0', # do not modify
   'saveasarray' : '1', # do not modify
-  'topicid' : '-999', # do not modify
+  'topicid' : '-1', # do not modify
   'rawdataoutput' : '1', # <<< 1 to output raw data used in the preprocessing, 0 do not output
   'asynctimeout' : '120', # <<< 120 seconds for connection timeout 
   'timedelay' : '0', # <<< connection delay
