@@ -80,7 +80,7 @@ def tmlparams():
         pass
 dag = tmlparams()
 
-def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML,sname):  
+def reinitbinaries(sname):  
 
     try:
       with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
@@ -111,7 +111,7 @@ def reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROC
        
     # copy folders
     shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
-    return VIPERPORT,VIPERPORTPREPROCESS,VIPERPORTPREDICT,VIPERPORTML
+    
         
 def updateviperenv():
     # update ALL
@@ -229,6 +229,7 @@ def updateviperenv():
      with open(mainfile, 'w', encoding='utf-8') as file: 
       file.writelines(data)
 
+    subprocess.call("/tmux/starttml.sh", shell=True)
 
 def getparams(**context):
   args = default_args    
@@ -240,6 +241,16 @@ def getparams(**context):
   VIPERTOKEN = ""
   HPDEHOSTPREDICT = ""
   HPDEPORTPREDICT = ""
+
+  sname = args['solutionname']    
+  desc = args['description']        
+  stitle = args['solutiontitle']    
+  method = args['ingestdatamethod'] 
+  brokerhost = args['brokerhost']   
+  brokerport = args['brokerport'] 
+  dashboardhtml = args['dashboardhtml'] 
+  reinitbinaries(sname)
+  updateviperenv()
 
   with open("/Viper-produce/admin.tok", "r") as f:
     VIPERTOKEN=f.read()
@@ -274,25 +285,13 @@ def getparams(**context):
       HPDEHOSTPREDICT = output.split(",")[0]
       HPDEPORTPREDICT = output.split(",")[1]
 
-  sname = args['solutionname']    
-  desc = args['description']        
-  stitle = args['solutiontitle']    
-  method = args['ingestdatamethod'] 
-  brokerhost = args['brokerhost']   
-  brokerport = args['brokerport'] 
-  dashboardhtml = args['dashboardhtml'] 
   
   if 'CHIP' in os.environ:
      chip = os.environ['CHIP']
      chip = chip.lower()   
   else:   
       chip = 'amd64'
-     
-  VIPERPORT,VIPERPORTPREPROCESS,VIPERPORTPREDICT,VIPERPORTML = reinitbinaries(chip,VIPERHOST,VIPERPORT,VIPERHOSTPREPROCESS,VIPERPORTPREPROCESS,
-                                                                              VIPERHOSTPREDICT,VIPERPORTPREDICT,VIPERHOSTML,VIPERPORTML,sname)
-  print("VIPERHOST=", VIPERHOST) 
-  print("VIPERPORT=", VIPERPORT) 
-
+       
   if 'VIPERVIZPORT' in os.environ:
       if os.environ['VIPERVIZPORT'] != '' and os.environ['VIPERVIZPORT'] != '-1':
            vipervizport = int(os.environ['VIPERVIZPORT'])
@@ -395,6 +394,3 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_brokerport".format(sname),value="_{}".format(brokerport))
   task_instance.xcom_push(key="{}_chip".format(sname),value=chip)
   task_instance.xcom_push(key="{}_dashboardhtml".format(sname),value=dashboardhtml)
-    
-  updateviperenv()
-  subprocess.call("/tmux/starttml.sh", shell=True)
