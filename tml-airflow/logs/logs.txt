@@ -7987,3 +7987,13 @@ Already up to date.
 [INFO 2024-09-11_19:52:38] TML Solution Studio: DELETE initiated for project iotsolutionmqtt-3f10 by smaurice101
 [INFO 2024-09-11_19:52:38] TML Solution Studio: GIT REPO iotsolutionmqtt-3f10 DELETED by smaurice101
 [INFO 2024-09-11_19:52:38] TML Solution Studio: LOCAL DOCKER IMAGE iotsolutionmqtt-3f10-amd64 DELETED by maadsdocker
+[INFO 2024-09-11_19:52:47] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/iotsolutionmqtt-3f10
+[INFO 2024-09-11_19:52:47] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-11_19:53:22] TML Solution Studio: Starting Git commit process for project: iotsolutionmqtt-3f10
+[INFO 2024-09-11_19:53:22] TML Solution Studio: git commit -a Status for project iotsolutionmqtt-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-11_19:53:22] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-09-11_19:53:22] TML Solution Studio: git add . Status: 
+[INFO 2024-09-11_19:53:22] TML Solution Studio: git commit -a Status for project iotsolutionmqtt-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-11_19:53:22] TML Solution Studio: git push Status for project iotsolutionmqtt-3f10: Everything up-to-date
