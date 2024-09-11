@@ -14,7 +14,8 @@ import random
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
-  'topic' : 'iot-preprocess-data',    # <<< *** Separate multiple topics by a comma - Viperviz will stream data from these topics to your browser
+  'topic' : 'iot-preprocess-data,iot-preprocess2-data',    # <<< *** Separate multiple topics by a comma - Viperviz will stream data from these topics to your browser
+  'dashboardhtml' : 'dashboard.html',   ## << Update with your custom dashboard        
   'secure': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
   'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
   'append' : '0',   # << ** Do not append new data in the browser
@@ -56,6 +57,7 @@ def startstreamingengine(**context):
         tss = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_TSS".format(sname)) 
     
         topic = default_args['topic']
+        dashboardhtml = default_args['dashboardhtml']
         secure = default_args['secure']
         offset = default_args['offset']
         append = default_args['append']
@@ -63,6 +65,7 @@ def startstreamingengine(**context):
                 
         ti = context['task_instance']
         ti.xcom_push(key="{}_topic".format(sname),value=topic)
+        ti.xcom_push(key="{}_dashboardhtml".format(sname),value=dashboardhtml)
         ti.xcom_push(key="{}_secure".format(sname),value="_{}".format(secure))
         ti.xcom_push(key="{}_offset".format(sname),value="_{}".format(offset))
         ti.xcom_push(key="{}_append".format(sname),value="_{}".format(append))

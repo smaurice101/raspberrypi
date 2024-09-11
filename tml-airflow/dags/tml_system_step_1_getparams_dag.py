@@ -26,7 +26,6 @@ default_args = {
  'solutionvipervizport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number   
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
  'HTTPADDR' : 'https://',
- 'dashboardhtml' : 'dashboard.html',   ## << Update with your custom dashboard    
  'COMPANYNAME' : 'My company',       
  'WRITELASTCOMMIT' : '0',   ## <<<<<<<<< ******************** FOR DETAILS ON BELOW PARAMETER SEE: https://tml.readthedocs.io/en/latest/viper.html
  'NOWINDOWOVERLAP' : '0',
@@ -400,4 +399,3 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_brokerhost".format(sname),value=brokerhost)
   task_instance.xcom_push(key="{}_brokerport".format(sname),value="_{}".format(brokerport))
   task_instance.xcom_push(key="{}_chip".format(sname),value=chip)
-  task_instance.xcom_push(key="{}_dashboardhtml".format(sname),value=dashboardhtml)
