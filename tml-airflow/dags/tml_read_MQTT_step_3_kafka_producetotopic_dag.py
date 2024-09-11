@@ -64,8 +64,8 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 def on_message(client, userdata, msg):
   data=json.loads(msg.payload.decode("utf-8"))
-  #print(msg.payload.decode("utf-8"))
-  readdata(data)
+  datad = json.dumps(data)
+  readdata(datad)
 
 def mqttserverconnect():
 
