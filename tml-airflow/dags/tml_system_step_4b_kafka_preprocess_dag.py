@@ -46,7 +46,7 @@ default_args = {
 ######################################## DO NOT MODIFY BELOW #############################################
 
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_4b_kafka_preprocess2_dag", default_args=default_args, tags=["tml_system_step_4b_kafka_preprocess2_dag"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
+@dag(dag_id="tml_system_step_4b_kafka_preprocess_dag", default_args=default_args, tags=["tml_system_step_4b_kafka_preprocess_dag"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
 def startprocessing():
   def empty():
      pass
