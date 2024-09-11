@@ -126,7 +126,7 @@ def updateviperenv():
     if 'KAFKACLOUDPASSWORD' in os.environ:
           cloudpassword = os.environ['KAFKACLOUDPASSWORD']
                 
-    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
      with open(mainfile, 'r', encoding='utf-8') as file: 
        data = file.readlines() 
@@ -230,7 +230,7 @@ def updateviperenv():
       file.writelines(data)
 
     subprocess.call("/tmux/starttml.sh", shell=True)
-    time.sleep(10)
+    time.sleep(3)
 
 def getparams(**context):
   args = default_args    
