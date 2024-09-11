@@ -404,7 +404,7 @@ def generatedoc(**context):
                  "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
                  " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} \-\-env CLIENTPORT={} " \
                  " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME={}  \-\-env KAFKACLOUDPASSWORD=<Enter API secret> " \
-                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME={} \-\-env MQTTPASSWORD=<Enter mqtt password> \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
+                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}' \-\-env MQTTPASSWORD='<Enter mqtt password>' \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
