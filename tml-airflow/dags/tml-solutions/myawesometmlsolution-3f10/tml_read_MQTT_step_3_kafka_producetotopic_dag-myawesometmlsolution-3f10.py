@@ -67,7 +67,7 @@ def on_message(client, userdata, msg):
   datas = json.dumps(data)
   print("datas=",datas)
   #print(msg.payload.decode("utf-8"))
-#  readdata(data)
+  readdata(datas)
 
 def mqttserverconnect():
 
