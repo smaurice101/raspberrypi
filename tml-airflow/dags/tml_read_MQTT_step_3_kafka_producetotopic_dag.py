@@ -30,7 +30,7 @@ default_args = {
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
   'mqtt_broker' : '', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
-  'mqtt_port' : '', # <<<******** Enter MQTT port i.e. 1883    
+  'mqtt_port' : '', # <<<******** Enter MQTT port i.e. 1883, 8883    (for HiveMQ cluster)
   'mqtt_subscribe_topic' : '', # <<<******** enter name of MQTT to subscribe to i.e. tml/iot  
   'mqtt_enabletls': '0', # set 1=TLS, 0=no TLSS  
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
@@ -116,38 +116,6 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args)
  except Exception as e:
     print("ERROR:",e)
 
-def gettmlsystemsparams(**context):
-  global VIPERTOKEN
-  global VIPERHOST
-  global VIPERPORT
-  global HTTPADDR
-  global VIPERHOSTFROM
-
-  sd = context['dag'].dag_id
-  sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
-
-  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
-  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
-  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
-  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
-    
-  hs,VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
-  ti = context['task_instance']
-  ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='MQTT')
-  ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
-  buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
-  ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
-  buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
-  ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=buf)
-  ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
-  ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
-
-  ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
-  ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
-  
-  ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
-  ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
-    
     
 def readdata(valuedata):
   # MAin Kafka topic to store the real-time data
@@ -170,7 +138,36 @@ def windowname(wtype,sname,dagname):
     return wn
 
 def startproducing(**context):
-       gettmlsystemsparams(context)
+       global VIPERTOKEN
+       global VIPERHOST
+       global VIPERPORT
+       global HTTPADDR
+       global VIPERHOSTFROM
+
+       sd = context['dag'].dag_id
+       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
+       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+
+       hs,VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
+       ti = context['task_instance']
+       ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='MQTT')
+       ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
+       buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
+       ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
+       buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
+       ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=buf)
+       ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
+       ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
+
+       ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
+       ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
+
+       ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+       ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
         
