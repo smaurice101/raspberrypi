@@ -8035,3 +8035,4 @@ Already up to date.
 [INFO 2024-09-11_20:19:27] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-11_20:19:42] {'name': ['Project with slug "iotsolutionmqtt-3f10" already exists.']}
 [INFO 2024-09-11_20:22:09] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-11_20:22:10] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
