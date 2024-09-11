@@ -230,6 +230,7 @@ def updateviperenv():
       file.writelines(data)
 
     subprocess.call("/tmux/starttml.sh", shell=True)
+    time.sleep(10)
 
 def getparams(**context):
   args = default_args    
