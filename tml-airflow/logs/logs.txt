@@ -8096,3 +8096,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-11_22:53:20] TML Solution Studio: executed git push -f origin main by smaurice101: To https://github.com/smaurice101/raspberrypi.git
  + 83d52b4...bc91ff5 main -> main (forced update)
 [INFO 2024-09-11_22:54:13] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-11_22:54:16] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
