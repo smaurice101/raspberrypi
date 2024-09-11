@@ -7631,3 +7631,7 @@ Already up to date.
 [INFO 2024-09-11_00:53:45] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-11_00:53:47] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-11_00:53:53] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution-3f10.py
+[INFO 2024-09-11_00:54:14] {'name': ['Project with slug "myawesometmlsolution-3f10" already exists.']}
+[INFO 2024-09-11_01:18:06] TML Solution Studio: DELETE initiated for project myawesometmlsolution-3f10 by smaurice101
+[INFO 2024-09-11_01:18:06] TML Solution Studio: GIT REPO myawesometmlsolution-3f10 DELETED by smaurice101
+[INFO 2024-09-11_01:18:06] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-3f10-amd64 DELETED by maadsdocker

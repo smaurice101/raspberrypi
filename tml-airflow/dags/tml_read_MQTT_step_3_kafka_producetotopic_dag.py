@@ -79,13 +79,19 @@ def mqttserverconnect():
        username = os.environ['MQTTUSERNAME']  
  if 'MQTTPASSWORD' in os.environ:
        password = os.environ['MQTTPASSWORD']  
-
- client = paho.Client(paho.CallbackAPIVersion.VERSION2)
- mqttBroker = default_args['mqtt_broker'] 
- mqttport = int(default_args['mqtt_port'])
- if default_args['mqtt_enabletls'] == "1":
-   client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
-   client.username_pw_set(username, password)
+ 
+ try: 
+   client = paho.Client(paho.CallbackAPIVersion.VERSION2)
+   mqttBroker = default_args['mqtt_broker'] 
+   mqttport = int(default_args['mqtt_port'])
+   if default_args['mqtt_enabletls'] == "1":
+     client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
+     client.username_pw_set(username, password)
+ except Exception as e:       
+   tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+   tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
+   print("ERROR: Cannot connect to MQTT broker") 
+   return 
 
  client.connect(mqttBroker,mqttport)
 
