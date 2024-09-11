@@ -341,22 +341,22 @@ def getparams(**context):
     
 
   if 'MQTTUSERNAME' in os.environ:
-    task_instance.xcom_push(key="{}_MQTTUSERNAME".format(sname),value=MQTTUSERNAME)
+    task_instance.xcom_push(key="{}_MQTTUSERNAME".format(sname),value=os.environ['MQTTUSERNAME'])
   else:
     task_instance.xcom_push(key="{}_MQTTUSERNAME".format(sname),value="")
 
   if 'MQTTPASSWORD' in os.environ:
-    task_instance.xcom_push(key="{}_MQTTPASSWORD".format(sname),value=MQTTPASSWORD)
+    task_instance.xcom_push(key="{}_MQTTPASSWORD".format(sname),value=os.environ['MQTTPASSWORD'])
   else:
     task_instance.xcom_push(key="{}_MQTTPASSWORD".format(sname),value="")
 
   if 'KAFKACLOUDUSERNAME' in os.environ:
-    task_instance.xcom_push(key="{}_KAFKACLOUDUSERNAME".format(sname),value=KAFKACLOUDUSERNAME)
+    task_instance.xcom_push(key="{}_KAFKACLOUDUSERNAME".format(sname),value=os.environ['KAFKACLOUDUSERNAME'])
   else:
     task_instance.xcom_push(key="{}_KAFKACLOUDUSERNAME".format(sname),value="")
 
   if 'KAFKACLOUDPASSWORD' in os.environ:
-    task_instance.xcom_push(key="{}_KAFKACLOUDPASSWORD".format(sname),value=KAFKACLOUDPASSWORD)
+    task_instance.xcom_push(key="{}_KAFKACLOUDPASSWORD".format(sname),value=os.environ['KAFKACLOUDPASSWORD'])
   else:
     task_instance.xcom_push(key="{}_KAFKACLOUDPASSWORD".format(sname),value="")
     
