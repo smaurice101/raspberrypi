@@ -7660,3 +7660,6 @@ Already up to date.
 [INFO 2024-09-11_01:39:28] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-11_01:40:54] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-11_01:42:05] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-myawesometmlsolution-3f10.py
+[INFO 2024-09-11_01:45:05] TML Solution Studio: DELETE initiated for project myawesometmlsolution-3f10 by smaurice101
+[INFO 2024-09-11_01:45:05] TML Solution Studio: GIT REPO myawesometmlsolution-3f10 DELETED by smaurice101
+[INFO 2024-09-11_01:45:05] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-3f10-amd64 DELETED by maadsdocker
