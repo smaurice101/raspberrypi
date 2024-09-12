@@ -8127,3 +8127,4 @@ Already up to date.
 [INFO 2024-09-12_18:13:48] TML Solution Studio: git commit -a Status for project iotsolutionmqtt-3f10: fatal: paths 'project ...' with -a does not make sense
 [INFO 2024-09-12_18:13:49] TML Solution Studio: git push Status for project iotsolutionmqtt-3f10: Everything up-to-date
 [INFO 2024-09-12_18:25:15] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-12_18:25:19] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
