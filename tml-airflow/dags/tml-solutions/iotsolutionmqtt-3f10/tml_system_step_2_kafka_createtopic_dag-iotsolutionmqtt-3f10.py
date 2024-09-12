@@ -24,7 +24,7 @@ default_args = {
   'brokerport' : '-999',  # <<< ********** Leave as is
   'microserviceid' : '',  # <<< ********** You change as needed
   'raw_data_topic' : 'iot-raw-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
-  'preprocess_data_topic' : 'iot-preprocess-data,iot-preprocess2-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
+  'preprocess_data_topic' : 'iot-preprocess,iot-preprocess2', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'ml_data_topic' : 'ml-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'prediction_data_topic' : 'prediction-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'description' : 'Topics to store iot data',      
