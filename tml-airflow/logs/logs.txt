@@ -8106,3 +8106,5 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-12_17:51:47] Preprocessing2 DAG in tml_system_step_4b_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-12_17:51:49] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-12_17:51:58] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-12_17:53:19] {'name': ['Project with slug "iotsolutionmqtt-3f10" already exists.']}
+[INFO 2024-09-12_17:56:06] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
