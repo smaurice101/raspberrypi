@@ -8156,3 +8156,7 @@ Already up to date.
 [INFO 2024-09-12_18:49:53] Preprocessing2 DAG in tml_system_step_4b_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-12_18:49:55] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-12_18:50:04] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-12_18:51:38] {'name': ['Project with slug "iotsolutionmqtt-3f10" already exists.']}
+[INFO 2024-09-12_23:39:00] TML Solution Studio: DELETE initiated for project iotsolutionmqtt-3f10 by smaurice101
+[INFO 2024-09-12_23:39:00] TML Solution Studio: GIT REPO iotsolutionmqtt-3f10 DELETED by smaurice101
+[INFO 2024-09-12_23:39:00] TML Solution Studio: LOCAL DOCKER IMAGE iotsolutionmqtt-3f10-amd64 DELETED by maadsdocker
