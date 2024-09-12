@@ -17,6 +17,8 @@ step1 = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_system_s
 step2 = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10")
 step3 = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10")
 step4 = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10")
+step4b = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_system_step_4b_kafka_preprocess_dag-iotsolutionmqtt-3f10")
+
 step5 = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10")
 step6 = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10")
 step7 = importlib.import_module("tml-solutions.iotsolutionmqtt-3f10.tml_system_step_7_kafka_visualization_dag-iotsolutionmqtt-3f10")
@@ -59,6 +61,12 @@ with DAG(
       python_callable=step4.dopreprocessing,
       provide_context=True,
   )
+# STEP 4b: Preprocess the data        
+  sensor_D2 = PythonOperator(
+      task_id="step_4b_solution_task_preprocess",
+      python_callable=step4b.dopreprocessing,
+      provide_context=True,
+  )    
 # STEP 7: Containerize the solution     
   sensor_E = PythonOperator(
       task_id="step_7_solution_task_visualization",
@@ -90,4 +98,4 @@ with DAG(
       provide_context=True,      
   )
 
-  start_task >> sensor_A >> sensor_B >> start_task4 >> [sensor_C, sensor_D, sensor_E] >> start_task2 >> sensor_F >> start_task3  >> sensor_G
+  start_task >> sensor_A >> sensor_B >> start_task4 >> [sensor_C, sensor_D, sensor_D2, sensor_E] >> start_task2 >> sensor_F >> start_task3  >> sensor_G
