@@ -23,8 +23,6 @@ default_args = {
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
-  'topic' : 'iot-preprocess,iot-preprocess2',    # <<< *** Separate multiple topics by a comma - Viperviz will stream data from these topics to your browser
-  'dashboardhtml': 'iot-failure-seneca.html', # <<< *** name of your dashboard html file  
 
 # Instantiate your DAG
 @dag(dag_id="tml_system_step_7_kafka_visualization_dag", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag"], schedule=None,catchup=False)
