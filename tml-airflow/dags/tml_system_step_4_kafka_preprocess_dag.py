@@ -20,7 +20,7 @@ default_args = {
   'microserviceid' : '',  # <<< *** leave blank
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'raw_data_topic' : 'iot-raw-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'preprocess_data_topic' : 'iot-preprocess-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
+  'preprocess_data_topic' : 'iot-preprocess', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'maxrows' : '800', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
   'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
