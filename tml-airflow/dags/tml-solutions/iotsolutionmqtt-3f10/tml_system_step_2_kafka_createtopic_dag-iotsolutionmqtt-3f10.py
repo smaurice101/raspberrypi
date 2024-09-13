@@ -25,7 +25,7 @@ default_args = {
   'microserviceid' : '',  # <<< ********** You change as needed
   'raw_data_topic' : 'iot-raw-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'preprocess_data_topic' : 'iot-preprocess,iot-preprocess2', # Separate multiple topics with comma <<< ********** You change topic names as needed
-  'ml_data_topic' : 'ml-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
+  'ml_data_topic' : 'ml-data,iot-trained-params-input', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'prediction_data_topic' : 'prediction-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'description' : 'Topics to store iot data',      
 }

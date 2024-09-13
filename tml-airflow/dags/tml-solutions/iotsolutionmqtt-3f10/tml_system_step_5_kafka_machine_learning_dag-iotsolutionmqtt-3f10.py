@@ -18,9 +18,9 @@ default_args = {
   'enabletls': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
-  'preprocess_data_topic' : 'iot-preprocess-data', # << *** topic/data to use for training datasets - You created this in STEP 2
+  'preprocess_data_topic' : 'iot-preprocess', # << *** topic/data to use for training datasets - You created this in STEP 2
   'ml_data_topic' : 'ml-data', # topic to store the trained algorithms  - You created this in STEP 2
-  'identifier' : 'TML solution',    # <<< *** Change as needed   
+  'identifier' : 'IoT Failure Probability Model',    # <<< *** Change as needed   
   'companyname' : 'Your company', # <<< *** Change as needed      
   'myemail' : 'Your email', # <<< *** Change as needed      
   'mylocation' : 'Your location', # <<< *** Change as needed      
@@ -29,18 +29,18 @@ default_args = {
   'deploy' : '1', # <<< *** do not modofy
   'modelruns': '100', # <<< *** Change as needed      
   'offset' : '-1', # <<< *** Do not modify
-  'islogistic' : '0',  # <<< *** Change as needed, 1=logistic, 0=not logistic
+  'islogistic' : '1',  # <<< *** Change as needed, 1=logistic, 0=not logistic
   'networktimeout' : '600', # <<< *** Change as needed      
   'modelsearchtuner' : '90', # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
-  'dependentvariable' : '', # <<< *** Change as needed, 
-  'independentvariables': '', # <<< *** Change as needed, 
+  'dependentvariable' : 'failure', # <<< *** Change as needed, 
+  'independentvariables': 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # <<< *** Change as needed, 
   'rollbackoffsets' : '500', # <<< *** Change as needed, 
   'consumeridtrainingdata2': '', # leave blank
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
   'topicid' : '-1',  # leave as is
-  'fullpathtotrainingdata' : '/Viper-ml/viperlogs/<choose foldername>',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
-  'processlogic' : '',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
+  'fullpathtotrainingdata' : '/Viper-ml/viperlogs/iotlogistic',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
+  'processlogic' : 'classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
   'array' : '0',  # leave as is
   'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
