@@ -8407,3 +8407,4 @@ Already up to date.
 [INFO 2024-09-13_15:34:59] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_15:35:01] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_15:35:03] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_15:35:05] Deleting topic iot-trained-params-input in tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10.py
