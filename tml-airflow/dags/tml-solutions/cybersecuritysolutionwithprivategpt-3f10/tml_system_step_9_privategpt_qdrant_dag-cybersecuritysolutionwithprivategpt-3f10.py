@@ -265,6 +265,7 @@ if __name__ == '__main__':
              sendtoprivategpt(maindata)
              time.sleep(1)
          except Exception as e:
+          print("EE----",e)
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
           break
