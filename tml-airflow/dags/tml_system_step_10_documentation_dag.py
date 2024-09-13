@@ -400,11 +400,17 @@ def generatedoc(**context):
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
       dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
-                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
-                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
-                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} \-\-env CLIENTPORT={} " \
-                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME={}  \-\-env KAFKACLOUDPASSWORD=<Enter API secret> " \
-                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}' \-\-env MQTTPASSWORD='<Enter mqtt password>' \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
+                 " \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
+                 " \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
+                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME='{}' \-\-env CLIENTPORT={} " \
+                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME='{}' " \
+                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}'" \
+                 " \-\-env AIRFLOWPORT={} " \
+                 " \-\-env GITPASSWORD='<Enter Github Password>' " \
+                 " \-\-env KAFKACLOUDPASSWORD='<Enter API secret>' " \
+                 " \-\-env MQTTPASSWORD='<Enter mqtt password>' " \
+                 " \-\-env READTHEDOCS='<Enter Readthedocs token>' " \
+                 " {}".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
@@ -413,11 +419,16 @@ def generatedoc(**context):
     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
       dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
-                 "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
-                 "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
-                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} " \
-                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME={} \-\-env KAFKACLOUDPASSWORD='<Enter API secret>' " \
-                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}' \-\-env MQTTPASSWORD=<Enter mqtt password>  \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
+                 " \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
+                 " \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
+                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME='{}' " \
+                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME='{}' " \
+                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}' \-\-env AIRFLOWPORT={} " \
+                 " \-\-env MQTTPASSWORD='<Enter mqtt password>' " \
+                 " \-\-env KAFKACLOUDPASSWORD='<Enter API secret>' " \
+                 " \-\-env GITPASSWORD='<Enter Github Password>' " \
+                 " \-\-env READTHEDOCS='<Enter Readthedocs token>' " \
+                 " {}".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
@@ -477,17 +488,17 @@ def generatedoc(**context):
                     " -v /var/run/docker.sock:/var/run/docker.sock:z " \
                     " \-\-env GITREPOURL={} " \
                     " \-\-env CHIP={} \-\-env TSS=1 \-\-env SOLUTIONNAME=TSS " \
-                    " \-\-env READTHEDOCS=<Enter your readthedocs token> " \
                     " \-\-env EXTERNALPORT={} " \
                     " \-\-env VIPERVIZPORT={} " \
-                    " \-\-env GITUSERNAME={} " \
-                    " \-\-env GITPASSWORD=<Enter personal access token> " \
-                    " \-\-env DOCKERUSERNAME={} " \
-                    " \-\-env DOCKERPASSWORD=<Enter your docker hub password> " \
-                    " \-\-env MQTTUSERNAME={} " \
-                    " \-\-env MQTTPASSWORD=<Enter your mqtt password> " \
-                    " \-\-env KAFKACLOUDUSERNAME={} " \
-                    " \-\-env KAFKACLOUDPASSWORD=<Enter your API secret> " \
+                    " \-\-env GITUSERNAME='{}' " \
+                    " \-\-env DOCKERUSERNAME='{}' " \
+                    " \-\-env MQTTUSERNAME='{}' " \
+                    " \-\-env KAFKACLOUDUSERNAME='{}' " \
+                    " \-\-env KAFKACLOUDPASSWORD='<Enter your API secret>' " \
+                    " \-\-env READTHEDOCS='<Enter your readthedocs token>' " \
+                    " \-\-env GITPASSWORD='<Enter personal access token>' " \
+                    " \-\-env DOCKERPASSWORD='<Enter your docker hub password>' " \
+                    " \-\-env MQTTPASSWORD='<Enter your mqtt password>' " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport[1:],os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],
                             os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],mqttusername,kafkacloudusername,chip))
