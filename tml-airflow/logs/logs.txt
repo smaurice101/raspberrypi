@@ -8251,3 +8251,4 @@ Already up to date.
 [INFO 2024-09-13_02:23:46] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10.py
 [ERROR 2024-09-13_02:23:47] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10.py name 'producetotopic' is not defined
 [INFO 2024-09-13_02:23:47] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_02:23:54] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
