@@ -416,8 +416,8 @@ def generatedoc(**context):
                  "\-\-env GITPASSWORD=<Enter Github Password>  \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
                  "\-\-env READTHEDOCS=<Enter Readthedocs token> \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
                  " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME={} " \
-                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME={} \-\-env KAFKACLOUDPASSWORD=<Enter API secret> " \
-                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME={} \-\-env MQTTPASSWORD=<Enter mqtt password>  \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
+                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME={} \-\-env KAFKACLOUDPASSWORD='<Enter API secret>' " \
+                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}' \-\-env MQTTPASSWORD=<Enter mqtt password>  \-\-env AIRFLOWPORT={} {}".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
