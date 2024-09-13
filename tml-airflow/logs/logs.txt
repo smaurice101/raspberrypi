@@ -8529,3 +8529,4 @@ Already up to date.
 [INFO 2024-09-13_20:42:59] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-13_20:43:00] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-13_20:43:02] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[INFO 2024-09-13_20:43:03] Visualization DAG in tml_system_step_7_kafka_visualization_dag-cybersecuritysolutionwithprivategpt-3f10.py
