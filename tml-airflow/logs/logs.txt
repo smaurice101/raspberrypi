@@ -8350,3 +8350,4 @@ Already up to date.
 [INFO 2024-09-13_14:58:51] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_15:01:18] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_15:01:22] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_15:01:26] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10.py
