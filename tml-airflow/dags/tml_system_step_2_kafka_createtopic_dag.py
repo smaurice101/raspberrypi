@@ -28,6 +28,7 @@ default_args = {
   'preprocess_data_topic' : 'iot-preprocess,iot-preprocess2', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'ml_data_topic' : 'ml-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'prediction_data_topic' : 'prediction-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
+  'pgpt_data_topic' : 'cisco-network-privategpt',  #  PrivateGPT will produce responses to this topic - change as  needed
   'description' : 'Topics to store iot data',      
 }
 
@@ -109,7 +110,7 @@ def setupkafkatopics(**context):
   #############################################################################################################
   #                         CREATE TOPIC TO STORE TRAINED PARAMS FROM ALGORITHM  
 
-  topickeys = ['raw_data_topic','preprocess_data_topic','ml_data_topic','prediction_data_topic'] 
+  topickeys = ['raw_data_topic','preprocess_data_topic','ml_data_topic','prediction_data_topic','pgpt_data_topic'] 
 
   for k in topickeys:
     producetotopic=args[k]
@@ -117,7 +118,7 @@ def setupkafkatopics(**context):
 
     topicsarr = producetotopic.split(",")
     for topic in topicsarr:  
-        if "127.0.0.1" in mainbroker:
+        if topic != '' and "127.0.0.1" in mainbroker:
           try:  
             deletetopics(topic)
           except Exception as e:
@@ -125,6 +126,8 @@ def setupkafkatopics(**context):
             continue 
         
     for topic in topicsarr:  
+      if topic != '':
+          continue
       print("Creating topic=",topic)  
       try:
         result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,companyname,

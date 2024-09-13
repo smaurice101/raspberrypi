@@ -125,7 +125,7 @@ def updateviperenv():
     if 'KAFKACLOUDPASSWORD' in os.environ:
           cloudpassword = os.environ['KAFKACLOUDPASSWORD']
                 
-    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess-pgpt/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
      with open(mainfile, 'r', encoding='utf-8') as file: 
        data = file.readlines() 
