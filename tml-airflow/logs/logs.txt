@@ -8348,3 +8348,4 @@ Already up to date.
 [ERROR 2024-09-13_14:58:40] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10.py name 'time' is not defined
 [INFO 2024-09-13_14:58:42] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_14:58:51] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_15:01:18] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
