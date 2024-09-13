@@ -9,6 +9,7 @@ import sys
 import time
 import maadstml
 import subprocess
+import random
 
 sys.dont_write_bytecode = True
 
@@ -182,6 +183,14 @@ def sendtoprivategpt(maindata):
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
           print("response=",response)
+
+def windowname(wtype,sname,dagname):
+    randomNumber = random.randrange(10, 9999)
+    wn = "python-{}-{}-{},{}".format(wtype,randomNumber,sname,dagname)
+    with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
+      file.writelines("{}\n".format(wn))
+    
+    return wn
             
 def startprivategpt(**context):
        sd = context['dag'].dag_id
