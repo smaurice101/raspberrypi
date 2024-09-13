@@ -128,8 +128,8 @@ def performPrediction():
     
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,ml_prediction_topic,
                                      companyname,consumeridtraininedparams,
-                                     produceridhyperprediction, HPDEHOST,inputdata,maxrows,mainalgokey,
-                                     -1,offset,enabletls,delay,HPDEPORT,
+                                     produceridhyperprediction, HPDEHOSTPREDICT,inputdata,maxrows,mainalgokey,
+                                     -1,offset,enabletls,delay,HPDEPORTPREDICT,
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
