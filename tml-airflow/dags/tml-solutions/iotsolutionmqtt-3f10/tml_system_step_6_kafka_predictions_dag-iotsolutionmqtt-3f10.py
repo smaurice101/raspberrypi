@@ -41,6 +41,7 @@ default_args = {
   'topicid' : '-1',   # << leave as is
   'pathtoalgos' : '/Viper-ml/viperlogs/iotlogistic', # << this is specified in fullpathtotrainingdata in STEP 5
   'array' : '0', # 0=do not save as array, 1=save as array    
+  'HPDEADDR' : 'http://' # Do not modify
 }
 ######################################## DO NOT MODIFY BELOW #############################################
 
