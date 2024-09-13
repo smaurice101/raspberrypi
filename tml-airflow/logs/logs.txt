@@ -8211,3 +8211,4 @@ Already up to date.
 [INFO 2024-09-13_01:22:10] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10.py
 [ERROR 2024-09-13_01:22:11] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10.py invalid literal for int() with base 10: 'Your location'
 [INFO 2024-09-13_01:28:31] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_01:28:34] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
