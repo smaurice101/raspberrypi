@@ -121,7 +121,7 @@ def performSupervisedMachineLearning():
       producerid=default_args['producerid']
       consumefrom=default_args['consumefrom']
 
-      topicid=int(default_args['mylocation'])      
+      topicid=int(default_args['topicid'])      
       fullpathtotrainingdata=default_args['fullpathtotrainingdata']
 
      # These are the conditions that sets the dependent variable to a 1 - if condition not met it will be 0
@@ -222,7 +222,6 @@ if __name__ == '__main__':
           performSupervisedMachineLearning()
           time.sleep(1)
          except Exception as e:
-          print("E=",e)
           tsslogging.tsslogit("Machine Learning DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
           break

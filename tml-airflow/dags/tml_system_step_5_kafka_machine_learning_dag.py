@@ -121,7 +121,7 @@ def performSupervisedMachineLearning():
       producerid=default_args['producerid']
       consumefrom=default_args['consumefrom']
 
-      topicid=int(default_args['mylocation'])      
+      topicid=int(default_args['topicid'])      
       fullpathtotrainingdata=default_args['fullpathtotrainingdata']
 
      # These are the conditions that sets the dependent variable to a 1 - if condition not met it will be 0
