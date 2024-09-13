@@ -126,14 +126,10 @@ def performPrediction():
       array=int(default_args['array'])
       ml_prediction_topic = default_args['ml_prediction_topic']  
 
-      print("a=",VIPERHOST)    
-      print("b=",VIPERPORT)
-      print("c=",consumefrom,ml_prediction_topic,HPDEHOST,HPDEPORT)
-
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,ml_prediction_topic,
                                      companyname,consumeridtraininedparams,
-                                     produceridhyperprediction, HPDEHOST,inputdata,maxrows,mainalgokey,
-                                     -1,offset,enabletls,delay,HPDEPORT,
+                                     produceridhyperprediction, HPDEHOSTPREDICT,inputdata,maxrows,mainalgokey,
+                                     -1,offset,enabletls,delay,HPDEPORTPREDICT,
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
