@@ -8182,3 +8182,4 @@ Already up to date.
 [INFO 2024-09-13_00:33:39] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_00:33:42] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_00:33:49] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_00:38:42] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py

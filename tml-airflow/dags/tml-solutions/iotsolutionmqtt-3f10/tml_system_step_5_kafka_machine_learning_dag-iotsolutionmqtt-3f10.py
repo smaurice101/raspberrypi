@@ -163,8 +163,8 @@ def startml(**context):
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTML".format(sname))
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
     
-       HPDEHOST = ti.xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEHOST".format(sname))
-       HPDEPORT = ti.xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEPORT".format(sname))
+       HPDEHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEHOST".format(sname))
+       HPDEPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEPORT".format(sname))
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
         
        ti = context['task_instance']
