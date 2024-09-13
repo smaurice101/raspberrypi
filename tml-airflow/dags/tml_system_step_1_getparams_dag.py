@@ -18,7 +18,6 @@ default_args = {
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
  'cloudusername' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API KEY  - LEAVE BLANK
  'cloudpassword' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API SECRET - LEAVE BLANK   
- 'ingestdatamethod' : 'localfile', # << CHOOSE BETWEEN: 1. localfle, 2. mqtt, 3. rest, 4. grpc     
  'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'solutionairflowport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
@@ -246,7 +245,7 @@ def getparams(**context):
   sname = args['solutionname']    
   desc = args['description']        
   stitle = args['solutiontitle']    
-  method = args['ingestdatamethod'] 
+  
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
   reinitbinaries(sname)
@@ -394,7 +393,7 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_solutionname".format(sd),value=sname)
   task_instance.xcom_push(key="{}_solutiondescription".format(sname),value=desc)
   task_instance.xcom_push(key="{}_solutiontitle".format(sname),value=stitle)
-  task_instance.xcom_push(key="{}_ingestdatamethod".format(sname),value=method)
+
   task_instance.xcom_push(key="{}_containername".format(sname),value='')
   task_instance.xcom_push(key="{}_brokerhost".format(sname),value=brokerhost)
   task_instance.xcom_push(key="{}_brokerport".format(sname),value="_{}".format(brokerport))
