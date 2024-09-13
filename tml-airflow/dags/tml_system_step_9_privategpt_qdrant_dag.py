@@ -64,7 +64,7 @@ def startpgptcontainer():
       collection = default_args['vectordbcollectionname']
       concurrency = default_args['concurrency']  
       pgptcontainername = default_args['pgptcontainername']  
-      pgptport - int(default_args['pgptport'])
+      pgptport = int(default_args['pgptport'])
       cuda = int(default_args['CUDA_VISIBLE_DEVICES'])
     
       buf = "docker stop {}".format(pgptcontainername)
