@@ -67,18 +67,16 @@ def startpgptcontainer():
       pgptport = int(default_args['pgptport'])
       cuda = int(default_args['CUDA_VISIBLE_DEVICES'])
     
-      buf = "docker stop {}".format(pgptcontainername)
+      buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
       subprocess.call(buf, shell=True)        
       time.sleep(4)  
-      buf = "docker run -d -p {}:{} --net=host --gpus all --env PORT={} --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
-      print("buf=",buf)
-
+      buf = "docker run -d -p {}:{} --net=host --gpus all --env PORT={} --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)              
       subprocess.call(buf, shell=True)
         
 def qdrantcontainer():
     
     if int(default_args['concurrency']) > 1:
-      buf = "docker stop qdrant/qdrant"
+      buf="docker stop $(docker ps -q --filter ancestor=qdrant/qdrant )"    
       subprocess.call(buf, shell=True)        
       time.sleep(4)  
       buf = "docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
