@@ -8383,3 +8383,4 @@ Already up to date.
 [INFO 2024-09-13_15:09:01] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_15:09:38] {'name': ['Project with slug "iotsolutionmqtt-3f10" already exists.']}
 [INFO 2024-09-13_15:12:33] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_15:12:35] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10.py
