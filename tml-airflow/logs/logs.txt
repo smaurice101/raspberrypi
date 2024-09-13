@@ -8310,3 +8310,4 @@ Already up to date.
 [INFO 2024-09-13_13:56:40] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_13:58:27] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10.py
 [ERROR 2024-09-13_13:58:28] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10.py name 'producetotopic' is not defined
+[INFO 2024-09-13_14:04:21] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py

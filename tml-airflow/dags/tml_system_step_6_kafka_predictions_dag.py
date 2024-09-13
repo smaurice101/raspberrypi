@@ -123,8 +123,9 @@ def performPrediction():
       # Path where the trained algorithms are stored in the machine learning python file
       pathtoalgos=default_args['pathtoalgos'] #'/Viper-tml/viperlogs/iotlogistic'
       array=int(default_args['array'])
-          
-      result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,producetotopic,
+      ml_prediction_topic = default_args['ml_prediction_topic']    
+    
+      result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,ml_prediction_topic,
                                      companyname,consumeridtraininedparams,
                                      produceridhyperprediction, HPDEHOST,inputdata,maxrows,mainalgokey,
                                      -1,offset,enabletls,delay,HPDEPORT,
