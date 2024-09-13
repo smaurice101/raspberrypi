@@ -240,7 +240,10 @@ if __name__ == '__main__':
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3]
         VIPERPORT = sys.argv[4]        
-    
+
+        startpgptcontainer()
+        qdrantcontainer()
+        
         while True:
          try:     
              # Get preprocessed data from Kafka
