@@ -8431,3 +8431,4 @@ Already up to date.
 [INFO 2024-09-13_19:10:28] TML Solution Studio: git commit -a Status for project cybersecuritysolutionwithprivategpt-3f10: fatal: paths 'project ...' with -a does not make sense
 [INFO 2024-09-13_19:10:29] TML Solution Studio: git push Status for project cybersecuritysolutionwithprivategpt-3f10: Everything up-to-date
 [INFO 2024-09-13_19:27:44] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[INFO 2024-09-13_19:27:45] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
