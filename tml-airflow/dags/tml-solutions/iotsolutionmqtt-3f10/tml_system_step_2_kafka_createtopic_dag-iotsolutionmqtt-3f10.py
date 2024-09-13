@@ -117,9 +117,9 @@ def setupkafkatopics(**context):
     description=args['description']
 
     topicsarr = producetotopic.split(",")
-    for topic in topicsarr:  
-        print("mainbroker=",mainbroker)
-        if '127.0.0.1' in mainbroker:
+    if "127.0.0.1" in mainbroker:
+      for topic in topicsarr:  
+          print("mainbroker=",mainbroker)        
           try:  
             deletetopics(topic)
           except Exception as e:
