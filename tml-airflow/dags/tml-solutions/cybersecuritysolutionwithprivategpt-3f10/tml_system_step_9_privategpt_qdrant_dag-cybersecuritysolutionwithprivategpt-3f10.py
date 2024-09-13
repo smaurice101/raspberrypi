@@ -34,11 +34,11 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port  
  'preprocesstype' : '',
  'partition' : '-1',
- 'prompt': '', # Enter your prompt here
- 'context' : '', # what is this data about? Provide context to PrivateGPT   
+ 'prompt': 'Do you see any issues in this data?', # Enter your prompt here
+ 'context' : 'This data is IoT device data looking at voltage and current values.', # what is this data about? Provide context to PrivateGPT   
  'jsonkeytogather' : '', # enter key you want to gather data from to analyse with PrivateGpt   
  'keyattribute' : '',   
- 'vectordbcollectionname' : '',   
+ 'vectordbcollectionname' : 'tmliot',   
  'concurrency' : '1',
  'CUDA_VISIBLE_DEVICES' : '0'
 }
@@ -131,6 +131,7 @@ def gatherdataforprivategpt(result):
    
    privategptmessage = [] 
    prompt = default_args['prompt']
+   context = default_args['context']
    jsonkeytogather = default_args['jsonkeytogather']
    attribute = default_args['keyattribute']
     
@@ -149,7 +150,7 @@ def gatherdataforprivategpt(result):
            if attribute in r['Identifier']:     
              for d in r['RawData']:
               message = message  + str(d) + '<br>'
-           message = message + "<br>{}".format(prompt)
+           message = "{}<br> {} <br>{}".format(context,message,prompt)
            privategptmessage.append(message)
          except Excepption as e: 
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
@@ -160,7 +161,7 @@ def gatherdataforprivategpt(result):
          message = message  + buf + '<br>'
    
    if jsonkeytogather != 'Identifier':
-     message = message + "<br>{}".format(prompt)   
+     message = "{}<br> {} <br>{}".format(context,message,prompt)   
      privategptmessage.append(message)
         
    return privategptmessage          
