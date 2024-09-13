@@ -202,8 +202,8 @@ if __name__ == '__main__':
          VIPERTOKEN=sys.argv[2]
          VIPERHOST=sys.argv[3]
          VIPERPORT=sys.argv[4]
-         HPDEHOSTPREDICT=sys.argv[5]
-         HPDEPORTPREDICT=sys.argv[6]    
+         HPDEHOST=sys.argv[5]
+         HPDEPORT=sys.argv[6]    
         
          while True:
           try:              
