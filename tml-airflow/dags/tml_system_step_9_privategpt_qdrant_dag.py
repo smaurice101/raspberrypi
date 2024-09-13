@@ -204,7 +204,7 @@ def startprivategpt(**context):
        ti = context['task_instance']
        ti.xcom_push(key="{}_consumefrom".format(sname), value=default_args['consumefrom'])
        ti.xcom_push(key="{}_pgpt_data_topic".format(sname), value=default_args['pgpt_data_topic'])
-       ti.xcom_push(key="{}_pgptcontainer".format(sname), value="_{}".format(default_args['pgptcontainername']))
+       ti.xcom_push(key="{}_pgptcontainer".format(sname), value=default_args['pgptcontainername'])
        ti.xcom_push(key="{}_offset".format(sname), value="_{}".format(default_args['offset']))
        ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(default_args['rollbackoffset']))
         
