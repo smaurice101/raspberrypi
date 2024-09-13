@@ -128,7 +128,7 @@ def performPrediction():
 
       print("a=",VIPERHOST)    
       print("b=",VIPERPORT)
-      print("c=",VIPERTOKEN)
+      print("c=",consumefrom,ml_prediction_topic)
 
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,ml_prediction_topic,
                                      companyname,consumeridtraininedparams,
