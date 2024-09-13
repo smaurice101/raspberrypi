@@ -133,7 +133,6 @@ def performPrediction():
                                      brokerhost,brokerport,networktimeout,usedeploy,microserviceid,
                                      topicid,maintopic,streamstojoin,array,pathtoalgos)
 
-      print("result6=",result6)
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
