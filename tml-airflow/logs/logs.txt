@@ -8552,3 +8552,4 @@ Already up to date.
 [ERROR 2024-09-13_20:47:54] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritysolutionwithprivategpt-3f10.py consumetopicdata() missing 2 required positional arguments: 'maintopic' and 'rollback'
 [INFO 2024-09-13_20:49:40] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-13_20:49:41] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[INFO 2024-09-13_20:49:43] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
