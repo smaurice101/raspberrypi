@@ -71,6 +71,8 @@ def startpgptcontainer():
       subprocess.call(buf, shell=True)        
       time.sleep(4)  
       buf = "docker run -d -p {}:{} --net=host --gpus all --env PORT={} --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
+      print("buf=",buf)
+
       subprocess.call(buf, shell=True)
         
 def qdrantcontainer():
