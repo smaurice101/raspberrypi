@@ -8320,3 +8320,4 @@ Already up to date.
 [INFO 2024-09-13_14:07:13] {'name': ['Project with slug "iotsolutionmqtt-3f10" already exists.']}
 [INFO 2024-09-13_14:36:36] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_14:36:40] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_14:36:43] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10.py
