@@ -56,8 +56,8 @@ dag = startpredictions()
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-HPDEHOST=''
-HPDEPORT=''
+HPDEHOSTPREDICT=''
+HPDEPORTPREDICT=''
 HTTPADDR=""    
 
 # Set Global variable for Viper confifuration file - change the folder path for your computer
