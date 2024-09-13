@@ -8216,3 +8216,4 @@ Already up to date.
 [ERROR 2024-09-13_01:28:37] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10.py name 'viperconfigfile' is not defined
 [INFO 2024-09-13_01:28:39] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10.py
 [ERROR 2024-09-13_01:28:39] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionmqtt-3f10.py name 'producetotopic' is not defined
+[INFO 2024-09-13_01:28:40] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionmqtt-3f10.py
