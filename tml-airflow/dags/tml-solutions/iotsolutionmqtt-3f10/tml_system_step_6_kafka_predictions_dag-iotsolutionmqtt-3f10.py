@@ -125,7 +125,11 @@ def performPrediction():
       pathtoalgos=default_args['pathtoalgos'] #'/Viper-tml/viperlogs/iotlogistic'
       array=int(default_args['array'])
       ml_prediction_topic = default_args['ml_prediction_topic']  
-    
+
+      print("a=",VIPERHOST)    
+      print("b=",VIPERPORT)
+      print("c=",VIPERTOKEN)
+
       result6=maadstml.viperhpdepredict(VIPERTOKEN,VIPERHOST,VIPERPORT,consumefrom,ml_prediction_topic,
                                      companyname,consumeridtraininedparams,
                                      produceridhyperprediction, HPDEHOST,inputdata,maxrows,mainalgokey,
