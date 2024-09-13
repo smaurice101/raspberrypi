@@ -7,6 +7,7 @@ import maadstml
 import sys
 import tsslogging
 import os
+import subprocess
 
 sys.dont_write_bytecode = True
 
@@ -39,6 +40,14 @@ def startkafkasetup():
         pass
 dag = startkafkasetup()
 
+def deletetopics(topic):
+    
+    buf = "/Kafka/kafka_2.13-3.0.0/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic {} --delete".format(topic)
+    subprocess.call(buf, shell=True)
+    repo=tsslogging.getrepo()    
+    tsslogging.tsslogit("Deleting topic {} in {}".format(topic,os.path.basename(__file__)), "INFO" )                     
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")  
+    
 def setupkafkatopics(**context):
  # Set personal data
   args = default_args
@@ -74,6 +83,7 @@ def setupkafkatopics(**context):
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
+  mainbroker = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_brokerhost".format(sname))
     
   ti = context['task_instance'] 
   ti.xcom_push(key="{}_companyname".format(sname), value=companyname)
@@ -103,11 +113,23 @@ def setupkafkatopics(**context):
     description=args['description']
 
     topicsarr = producetotopic.split(",")
-
+    for topic in topicsarr:  
+        if '127.0.0.1' in mainbroker:
+          try:  
+            deletetopics(topic)
+          except Exception as e:
+            continue 
+        
     for topic in topicsarr:  
       print("Creating topic=",topic)  
-      result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,companyname,
+      try:
+        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,companyname,
                                  myname,myemail,mylocation,description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,
                                  microserviceid='')
+      except Exception as e:
+       repo=tsslogging.getrepo()    
+       tsslogging.tsslogit("Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e), "ERROR" )                     
+       tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")  
+        
       print("Result=",result)
