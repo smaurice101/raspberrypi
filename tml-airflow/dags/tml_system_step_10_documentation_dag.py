@@ -443,14 +443,40 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
     
-    privategptcontainer = "https://hub.docker.com/r/maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
-    privategptrun = "docker run -d -p 8001:8001 --gpus all --net=host --env PORT=8001 --env GPU=1 --env WEB_CONCURRENCY=1 --env COLLECTION=tml-cisco --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
-    doparse("/{}/docs/source/details.rst".format(sname), ["--privategptcontainer--;{}".format(privategptcontainer),"--privategptrun--;{}".format(privategptrun)])
+    #privategptcontainer = "https://hub.docker.com/r/maadsdocker/tml-privategpt-with-gpu-nvidia-amd64"
+    privategptrun = "docker run -d -p 8001:8001 --gpus all --net=host --env PORT=8001 --env GPU=1 --env WEB_CONCURRENCY=1 --env COLLECTION=tml-cisco --env CUDA_VISIBLE_DEVICES=0 {}".format(pgptcontainername)
+    doparse("/{}/docs/source/details.rst".format(sname), ["--pgptcontainername--;{}".format(pgptcontainername),"--privategptrun--;{}".format(privategptrun)])
 
     qdrantcontainer = "qdrant/qdrant"
     qdrantrun = "docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
     doparse("/{}/docs/source/details.rst".format(sname), ["--qdrantcontainer--;{}".format(qdrantcontainer),"--qdrantrun--;{}".format(qdrantrun)])
 
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--consumefrom--;{}".format(consumefrom)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--pgpt_data_topic--;{}".format(pgpt_data_topic)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--vectordbcollectionname--;{}".format(vectordbcollectionname)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--offset--;{}".format(offset)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--rollbackoffset--;{}".format(rollbackoffset)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--topicid--;{}".format(topicid)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--enabletls--;{}".format(enabletls)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--partition--;{}".format(partition)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--prompt--;{}".format(prompt)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--context--;{}".format(context)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--jsonkeytogather--;{}".format(jsonkeytogather)])
+    doparse("/{}/docs/source/operating.rst".format(sname), ["--keyattribute--;{}".format(keyattribute)])
+    
+    consumefrom = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_consumefrom".format(sname))
+    pgpt_data_topic = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgpt_data_topic".format(sname))
+    pgptcontainername = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgptcontainername".format(sname))
+    offset = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_offset".format(sname))
+    rollbackoffset = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_rollbackoffset".format(sname))
+    topicid = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_topicid".format(sname))
+    enabletls = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_enabletls".format(sname))
+    partition = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_partition".format(sname))
+    prompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_prompt".format(sname))
+    context = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
+    jsonkeytogather = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_jsonkeytogather".format(sname))
+    keyattribute = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_keyattribute".format(sname))
+    
     rbuf = "https://{}.readthedocs.io".format(sname)
     doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
     

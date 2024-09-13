@@ -29,7 +29,7 @@ default_args = {
  'consumefrom' : 'iot-preprocess',    # <<< *** Change as needed   
  'pgpt_data_topic' : 'cisco-network-privategpt',   
  'producerid' : 'private-gpt',   # <<< *** Leave as is  
- 'identifier' : 'This is analysing TML output with privategpt'
+ 'identifier' : 'This is analysing TML output with privategpt',
  'pgpthost': 'http://127.0.0.1', # PrivateGPT container listening on this host
  'pgptport' : '8001', # PrivateGPT listening on this port  
  'preprocesstype' : '',
@@ -38,6 +38,7 @@ default_args = {
  'context' : '', # what is this data about? Provide context to PrivateGPT   
  'jsonkeytogather' : '', # enter key you want to gather data from to analyse with PrivateGpt   
  'keyattribute' : '',   
+ 'vectordbcollectionname' : '',   
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -56,11 +57,34 @@ HTTPADDR=""
 maintopic =  default_args['consumefrom']  
 mainproducerid = default_args['producerid']   
 
+def startpgptcontainer():
+    a=1
+
+def qdrantcontainer():
+    a=1
+    
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
   
   response=maadstml.pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint)
   return response
-    
+
+def producegpttokafka(value,maintopic):
+     inputbuf=value     
+     topicid=int(default_args['topicid'])
+     producerid=default_args['producerid']
+     identifier = default_args['identifier']
+       
+     # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
+     delay=default_args['delay']
+     enabletls=default_args['enabletls']
+
+     try:
+        result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,'',
+                                            topicid,identifier)
+        print(result)
+     except Exception as e:
+        print("ERROR:",e)
+        
 def consumetopicdata(maintopic,rollback):
     
       maintopic = default_args['consumefrom']
@@ -104,8 +128,9 @@ def gatherdataforprivategpt(result):
        if jsonkeytogather == 'Identifier':
          identarr=r['Identifier'].split("~")   
          try:   
-           for d in r['RawData']:
-             message = message  + str(d) + '<br>'
+           if attribute in r['Identifier']:     
+             for d in r['RawData']:
+              message = message  + str(d) + '<br>'
            message = message + "<br>{}".format(prompt)
            privategptmessage.append(message)
          except Excepption as e: 
@@ -115,17 +140,23 @@ def gatherdataforprivategpt(result):
        else:
          buf = r[jsonkeytogather] 
          message = message  + buf + '<br>'
-         privategptmessage.append(message)
+   
+   if jsonkeytogather != 'Identifier':
+     message = message + "<br>{}".format(prompt)   
+     privategptmessage.append(message)
         
    return privategptmessage          
         
 
-def sendtoprivategpt(maindata,maintopic):
+def sendtoprivategpt(maindata):
 
    pgptendpoint="/v1/completions"
+   
+   maintopic = default_args['pgpt_data_topic'] 
+   mainport = default_args['pgpthost']
+   mainip = default_args['pgptport']
 
    for m in maindata:
-        print(m)
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
@@ -156,8 +187,8 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_prompt".format(sname), value=default_args['prompt'])
        ti.xcom_push(key="{}_context".format(sname), value=default_args['context']) 
        ti.xcom_push(key="{}_jsonkeytogather".format(sname), value=default_args['jsonkeytogather'])
-
-    
+       ti.xcom_push(key="{}_keyattribute".format(sname), value=default_args['keyattribute'])
+       ti.xcom_push(key="{}_vectordbcollectionname".format(sname), value=default_args['vectordbcollectionname'])
     
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
@@ -195,7 +226,7 @@ if __name__ == '__main__':
              maindata = gatherdataforprivategpt(result)
 
              # Send the data to PrivateGPT and produce to Kafka
-             sendtoprivategpt(maindata,pgpttopic)
+             sendtoprivategpt(maindata)
              time.sleep(1)
          except Exception as e:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
