@@ -104,7 +104,7 @@ def producegpttokafka(value,maintopic):
      except Exception as e:
         print("ERROR:",e)
         
-def consumetopicdata(maintopic,rollback):
+def consumetopicdata():
     
       maintopic = default_args['consumefrom']
       rollbackoffsets = int(default_args['rollbackoffset'])
