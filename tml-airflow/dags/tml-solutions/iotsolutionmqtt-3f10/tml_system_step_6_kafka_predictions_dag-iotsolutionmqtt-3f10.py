@@ -149,7 +149,7 @@ def startpredictions(**context):
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREDICT".format(sname))
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREDICT".format(sname))
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
-
+       HPDEADDR = default_args['HPDEADDR']
        HPDEHOSTPREDICT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEHOSTPREDICT".format(sname))
        HPDEPORTPREDICT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEPORTPREDICT".format(sname))
         
@@ -167,6 +167,7 @@ def startpredictions(**context):
        ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(default_args['maxrows']))
        ti.xcom_push(key="{}_topicid".format(sname),value="_{}".format(default_args['topicid']))
        ti.xcom_push(key="{}_pathtoalgos".format(sname),value=default_args['pathtoalgos'])
+       ti.xcom_push(key="{}_HPDEADDR".format(sname), value=HPDEADDR)
     
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
@@ -177,7 +178,7 @@ def startpredictions(**context):
        wn = windowname('predict',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-predict", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HTTPADDR,HPDEHOSTPREDICT,HPDEPORTPREDICT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,HPDEHOSTPREDICT,HPDEPORTPREDICT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

@@ -8287,3 +8287,4 @@ Already up to date.
 [INFO 2024-09-13_03:05:43] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-13_03:07:35] {'name': ['Project with slug "iotsolutionmqtt-3f10" already exists.']}
 [INFO 2024-09-13_03:08:51] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionmqtt-3f10.py
+[INFO 2024-09-13_13:42:21] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py

@@ -47,7 +47,8 @@ default_args = {
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
   'coeftoprocess' : '', # indicate the index of the coefficients to process i.e. 0,1,2 For example, for a 3 estimated parameters 0=constant, 1,2 are the other estmated paramters
   'coefsubtopicnames' : '',  # Give the coefficients a name: constant,elasticity,elasticity2    
-  'viperconfigfile' : '/Viper-ml/viper.env' # Do not modify    
+  'viperconfigfile' : '/Viper-ml/viper.env', # Do not modify    
+  'HPDEADDR' : 'http://'  
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -164,6 +165,7 @@ def startml(**context):
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTML".format(sname))
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTML".format(sname))
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+       HPDEADDR = default_args['HPDEADDR']
     
        HPDEHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEHOST".format(sname))
        HPDEPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HPDEPORT".format(sname))
@@ -187,7 +189,8 @@ def startml(**context):
        ti.xcom_push(key="{}_sendcoefto".format(sname), value=default_args['sendcoefto'])
        ti.xcom_push(key="{}_coeftoprocess".format(sname), value=default_args['coeftoprocess'])
        ti.xcom_push(key="{}_coefsubtopicnames".format(sname), value=default_args['coefsubtopicnames'])
-        
+       ti.xcom_push(key="{}_HPDEADDR".format(sname), value=HPDEADDR)
+
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
@@ -197,7 +200,7 @@ def startml(**context):
        wn = windowname('ml',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HTTPADDR, HPDEHOST, HPDEPORT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:]), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
