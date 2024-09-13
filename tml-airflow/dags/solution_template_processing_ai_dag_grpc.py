@@ -70,6 +70,7 @@ with DAG(
       task_id="step_8_solution_task_containerize",
       python_callable=step8.dockerit,
       provide_context=True,      
+      op_args=['ai'],
   )
 # STEP 9: PrivateGPT      
   sensor_I = PythonOperator(
