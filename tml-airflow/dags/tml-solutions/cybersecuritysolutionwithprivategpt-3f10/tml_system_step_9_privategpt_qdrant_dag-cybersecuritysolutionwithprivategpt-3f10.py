@@ -152,6 +152,7 @@ def gatherdataforprivategpt(result):
            print(r['Identifier'], " attribute=",attribute)   
            if attribute in r['Identifier']:     
              print("INSIDE::::::")
+             print("RRRRRRRRRRR=",r)
              for d in r['RawData']:
               message = message  + str(d) + '<br>'
            message = "{}<br> {} <br>{}".format(context,message,prompt)
