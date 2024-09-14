@@ -154,13 +154,13 @@ def gatherdataforprivategpt(result):
            aar = attribute.split(",")
            isin=any(x in r['Identifier'].lower() for x in aar)
            if isin:     
-             print("INSIDE::::=",r['Identifier'])
              found=0
              for d in r['RawData']:
                found=1
                message = message  + str(d) + '<br>'
              if found:
                message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
+               print("Messssssssssss=",message)
                privategptmessage.append(message)
              message = ""
          except Excepption as e: 
