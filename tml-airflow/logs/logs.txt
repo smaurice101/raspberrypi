@@ -8588,3 +8588,4 @@ Already up to date.
 [INFO 2024-09-14_15:28:00] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [ERROR 2024-09-14_15:28:01] ERROR: Cannot connect to MQTT broker in tml_read_MQTT_step_3_kafka_producetotopic_dag-cybersecuritysolutionwithprivategpt-3f10.py - invalid literal for int() with base 10: ''
 [INFO 2024-09-14_15:28:04] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[INFO 2024-09-14_15:28:06] Visualization DAG in tml_system_step_7_kafka_visualization_dag-cybersecuritysolutionwithprivategpt-3f10.py
