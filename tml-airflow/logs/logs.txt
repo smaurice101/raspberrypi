@@ -8586,3 +8586,4 @@ Already up to date.
 [INFO 2024-09-14_15:27:47] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-14_15:27:50] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-14_15:28:00] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[ERROR 2024-09-14_15:28:01] ERROR: Cannot connect to MQTT broker in tml_read_MQTT_step_3_kafka_producetotopic_dag-cybersecuritysolutionwithprivategpt-3f10.py - invalid literal for int() with base 10: ''
