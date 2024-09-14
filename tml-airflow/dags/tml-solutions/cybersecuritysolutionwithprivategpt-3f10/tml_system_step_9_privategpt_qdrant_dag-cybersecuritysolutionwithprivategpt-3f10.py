@@ -155,10 +155,13 @@ def gatherdataforprivategpt(result):
            isin=any(x in r['Identifier'].lower() for x in aar)
            if isin:     
              print("INSIDE::::=",r['Identifier'])
+             found=0
              for d in r['RawData']:
+               found=1
                message = message  + str(d) + '<br>'
-             message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
-             privategptmessage.append(message)
+             if found:
+               message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
+               privategptmessage.append(message)
              message = ""
          except Excepption as e: 
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
