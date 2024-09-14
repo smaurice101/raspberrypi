@@ -40,7 +40,7 @@ default_args = {
  'context' : 'This is IoT data from devices.  If voltage or current is low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT   
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction  
  'keyattribute' : 'Voltage,current',   
- 'keyprocesstype' : 'avg,anomprob,trend',
+ 'keyprocesstype' : 'anomprob',
  'vectordbcollectionname' : 'tml',   
  'concurrency' : '1',
  'CUDA_VISIBLE_DEVICES' : '0'
