@@ -157,6 +157,7 @@ def gatherdataforprivategpt(result):
               print("dddddddd=",d)
               message = message  + str(d) + '<br>'
            message = "{}<br> {} <br>{}".format(context,message,prompt)
+           print("MMMEEEEEEEEEE=",message)
            privategptmessage.append(message)
          except Excepption as e: 
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
