@@ -88,11 +88,11 @@ def mqttserverconnect():
      client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
      client.username_pw_set(username, password)
  except Exception as e:       
-   tsslogging.tsslogit("MQTT producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+   tsslogging.tsslogit("ERROR: Cannot connect to MQTT broker in {}".format(os.path.basename(__file__)), "ERROR" )                     
    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
    print("ERROR: Cannot connect to MQTT broker") 
    return 
-
+    
  client.connect(mqttBroker,mqttport)
 
  if client:
