@@ -40,6 +40,7 @@ default_args = {
  'context' : 'This is IoT data from devices.  If voltage or current is low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT   
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction  
  'keyattribute' : 'Voltage,current',   
+ 'keyprocesstype' : 'avg,anomprob,trend',
  'vectordbcollectionname' : 'tml',   
  'concurrency' : '1',
  'CUDA_VISIBLE_DEVICES' : '0'
@@ -136,7 +137,8 @@ def gatherdataforprivategpt(result):
    context = default_args['context']
    jsonkeytogather = default_args['jsonkeytogather']
    attribute = default_args['keyattribute']
-    
+   processtype = default_args['keyprocesstype']
+ 
    res=json.loads(result,strict='False')
    message = "" 
     
@@ -167,8 +169,24 @@ def gatherdataforprivategpt(result):
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
            break 
        else:
-         buf = r[jsonkeytogather] 
-         message = message  + buf + '<br>'
+         isin1 = False
+         isin2 = False
+         if processtype != '':
+           processtype = processtype.lower()
+           ptypearr = processtype.split(",")
+           isin1=any(x in r['Preprocesstype'].lower() for x in ptypearr)
+
+         if attribute != '':
+           attribute = attribute.lower()
+           aar = attribute.split(",")
+           isin2=any(x in r['Identifier'].lower() for x in aar)
+
+         if isin1 or isin2:
+           buf = r[jsonkeytogather] 
+           message = message  + buf + '<br>'
+         else:
+           buf = r[jsonkeytogather]
+           message = message  + buf + '<br>'
    
    if jsonkeytogather != 'Identifier':
      message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)   
