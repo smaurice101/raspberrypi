@@ -187,7 +187,7 @@ def gatherdataforprivategpt(result):
            if buf != '':
              found=1
              message = message  + buf + '<br>'
-         else:
+         if attribute == '' and processtype == '':
            buf = r[jsonkeytogather]
            if buf != '':
              found=1 
