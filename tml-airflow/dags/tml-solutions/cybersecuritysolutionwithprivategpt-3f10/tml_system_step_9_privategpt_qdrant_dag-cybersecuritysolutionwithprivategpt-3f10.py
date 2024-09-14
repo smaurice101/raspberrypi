@@ -149,6 +149,7 @@ def gatherdataforprivategpt(result):
        if jsonkeytogather == 'Identifier':
          identarr=r['Identifier'].split("~")   
          try:   
+           print(r['Identifier'])   
            if attribute in r['Identifier']:     
              for d in r['RawData']:
               message = message  + str(d) + '<br>'
@@ -166,7 +167,7 @@ def gatherdataforprivategpt(result):
      message = "{}<br> {} <br>{}".format(context,message,prompt)   
      privategptmessage.append(message)
 
-   print("privategptmessage=",privategptmessage)        
+#   print("privategptmessage=",privategptmessage)        
    return privategptmessage          
         
 
