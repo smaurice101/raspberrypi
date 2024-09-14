@@ -149,15 +149,15 @@ def gatherdataforprivategpt(result):
        if jsonkeytogather == 'Identifier':
          identarr=r['Identifier'].split("~")   
          try:   
-           print(r['Identifier'], " attribute=",attribute)   
-           if attribute in r['Identifier']:     
-             print("INSIDE::::::")
-             print("RRRRRRRRRRR=",r['RawData'])
+           #print(r['Identifier'], " attribute=",attribute)   
+           attribute = attribute.lower()
+           aar = attribute.split(",")
+           isin=any(x in r['Identifier'].lower() for x in aar)
+           if isin:     
+             print("INSIDE::::=",r['Identifier'])
              for d in r['RawData']:
-               print("dddddddd=",d)
                message = message  + str(d) + '<br>'
              message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
-             print("MMMEEEEEEEEEE=",message)
              privategptmessage.append(message)
              message = ""
          except Excepption as e: 
