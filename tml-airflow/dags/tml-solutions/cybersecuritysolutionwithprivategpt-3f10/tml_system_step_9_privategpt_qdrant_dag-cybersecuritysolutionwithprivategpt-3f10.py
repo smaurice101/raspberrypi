@@ -181,11 +181,14 @@ def sendtoprivategpt(maindata):
    pgptendpoint="/v1/completions"
    
    maintopic = default_args['pgpt_data_topic'] 
-   mainport = default_args['pgpthost']
-   mainip = default_args['pgptport']
+   mainip = default_args['pgpthost']
+   mainport = int(default_args['pgptport'])
+
+   print("INNNNNNN PGPT")
 
    for m in maindata:
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
+        print("RRRRRRESPONSE=",response)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
         if 'ERROR:' not in response:
