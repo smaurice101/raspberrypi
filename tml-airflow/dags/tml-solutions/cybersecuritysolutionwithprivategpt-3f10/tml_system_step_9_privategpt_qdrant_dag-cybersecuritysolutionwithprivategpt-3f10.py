@@ -66,7 +66,7 @@ mainproducerid = default_args['producerid']
 
 def stopcontainers():
  
-   subprocess.call("docker image ls > gptfiles.txt")
+   subprocess.call("docker image ls > gptfiles.txt", shell=True)
    with open('gptfiles.txt', 'r', encoding='utf-8') as file: 
         data = file.readlines() 
         r=0
