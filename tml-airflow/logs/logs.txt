@@ -8564,3 +8564,4 @@ Already up to date.
 [INFO 2024-09-13_20:50:08] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [ERROR 2024-09-13_20:50:19] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritysolutionwithprivategpt-3f10.py name 'json' is not defined
 [INFO 2024-09-13_20:50:37] {'name': ['Project with slug "cybersecuritysolutionwithprivategpt-3f10" already exists.']}
+[INFO 2024-09-14_14:44:46] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritysolutionwithprivategpt-3f10.py
