@@ -172,22 +172,39 @@ def gatherdataforprivategpt(result):
          isin1 = False
          isin2 = False
          found=0 
-         if processtype != '':
+         if processtype != '' and attribute != '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
            isin1=any(x in r['Preprocesstype'].lower() for x in ptypearr)
 
-         if attribute != '':
            attribute = attribute.lower()
            aar = attribute.split(",")
            isin2=any(x in r['Identifier'].lower() for x in aar)
 
-         if isin1 or isin2:
-           buf = r[jsonkeytogather] 
-           if buf != '':
-             found=1
-             message = message  + buf + '<br>'
-         if attribute == '' and processtype == '':
+           if isin1 and isin2:
+             buf = r[jsonkeytogather] 
+             if buf != '':
+               found=1
+               message = message  + buf + '<br>'
+         elif processtype != '' and attribute == '':
+           processtype = processtype.lower()
+           ptypearr = processtype.split(",")
+           isin1=any(x in r['Preprocesstype'].lower() for x in ptypearr)
+           if isin1:
+             buf = r[jsonkeytogather]
+             if buf != '':
+               found=1
+               message = message  + buf + '<br>'
+         elif processtype == '' and attribute != '':
+           attribute = attribute.lower()
+           aar = attribute.split(",")
+           isin2=any(x in r['Identifier'].lower() for x in aar)
+           if isin2:
+             buf = r[jsonkeytogather]
+             if buf != '':
+               found=1
+               message = message  + buf + '<br>'
+         else:
            buf = r[jsonkeytogather]
            if buf != '':
              found=1 
