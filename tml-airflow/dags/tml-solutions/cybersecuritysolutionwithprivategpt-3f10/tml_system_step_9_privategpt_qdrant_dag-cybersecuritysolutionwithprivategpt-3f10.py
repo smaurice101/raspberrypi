@@ -214,7 +214,6 @@ def gatherdataforprivategpt(result):
      message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)   
      privategptmessage.append(message)
 
-   print("MMMMMMMMMM=",message)
 
 #   print("privategptmessage=",privategptmessage)        
    return privategptmessage          
@@ -226,7 +225,7 @@ def sendtoprivategpt(maindata):
    
    maintopic = default_args['pgpt_data_topic'] 
    mainip = default_args['pgpthost']
-   mainport = int(default_args['pgptport'])
+   mainport = default_args['pgptport']
 
    print("INNNNNNN PGPT")
 
@@ -317,7 +316,8 @@ if __name__ == '__main__':
              maindata = gatherdataforprivategpt(result)
 
              # Send the data to PrivateGPT and produce to Kafka
-             sendtoprivategpt(maindata)
+             if len(maindata) > 0:
+               sendtoprivategpt(maindata)
              time.sleep(1)
          except Exception as e:
           print("EE----",e)
