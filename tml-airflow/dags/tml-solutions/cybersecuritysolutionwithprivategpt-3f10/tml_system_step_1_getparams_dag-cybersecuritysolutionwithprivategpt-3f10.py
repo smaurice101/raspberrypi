@@ -9,6 +9,7 @@ import tsslogging
 import time 
 import subprocess
 import shutil
+import glob
 
 sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
@@ -80,33 +81,38 @@ dag = tmlparams()
 
     
 def reinitbinaries(sname):  
-
-    try:
-      with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
-        data = file.readlines() 
-        for d in data:          
-          if d != "":             
-            d=d.rstrip()            
-            v=subprocess.call(["tmux", "kill-window", "-t", "{}".format(d)])   
-      os.remove("/tmux/pythonwindows_{}.txt".format(sname))        
-    except Exception as e:
-     print("ERROR=",e)   
-     pass
+    pywindowfiles=glob.glob("/tmux/pythonwindows_*") 
     
-    try:
-      with open("/tmux/vipervizwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
-         data = file.readlines()  
-         for d in data:
-             d=d.rstrip()
-             dsw = d.split(",")[0]             
-             dsp = d.split(",")[1]
-             if dsw != "":  
-               subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw)])        
-               v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
-               time.sleep(1) 
-      os.remove("/tmux/vipervizwindows_{}.txt".format(sname))                    
-    except Exception as e:
-     pass
+    for f in pywindowfiles: 
+        try:
+          with open(f, 'r', encoding='utf-8') as file: 
+            data = file.readlines() 
+            for d in data:          
+              if d != "":             
+                d=d.rstrip()            
+                v=subprocess.call(["tmux", "kill-window", "-t", "{}".format(d)])   
+          os.remove(f)        
+        except Exception as e:
+         print("ERROR=",e)   
+         pass
+
+    vizwindowfiles=glob.glob("/tmux/vipervizwindows_*") 
+    
+    for f in vizwindowfiles: 
+        try:
+          with open(f, 'r', encoding='utf-8') as file: 
+             data = file.readlines()  
+             for d in data:
+                 d=d.rstrip()
+                 dsw = d.split(",")[0]             
+                 dsp = d.split(",")[1]
+                 if dsw != "":  
+                   subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw)])        
+                   v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
+                   time.sleep(1) 
+          os.remove(f)                    
+        except Exception as e:
+         pass
        
     # copy folders
     shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
