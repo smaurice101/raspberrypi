@@ -171,6 +171,7 @@ def gatherdataforprivategpt(result):
        else:
          isin1 = False
          isin2 = False
+         found=0 
          if processtype != '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
@@ -183,12 +184,16 @@ def gatherdataforprivategpt(result):
 
          if isin1 or isin2:
            buf = r[jsonkeytogather] 
-           message = message  + buf + '<br>'
+           if buf != '':
+             found=1
+             message = message  + buf + '<br>'
          else:
            buf = r[jsonkeytogather]
-           message = message  + buf + '<br>'
+           if buf != '':
+             found=1 
+             message = message  + buf + '<br>'
    
-   if jsonkeytogather != 'Identifier':
+   if jsonkeytogather != 'Identifier' and found:
      message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)   
      privategptmessage.append(message)
 
