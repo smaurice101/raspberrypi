@@ -14,7 +14,7 @@ class TmlgrpcClient(object):
 
     def __init__(self):
         self.host = 'localhost'
-        self.server_port = 9001 # <<<<*********** Change to gRPC server port
+        self.server_port = 9002 # <<<<*********** Change to gRPC server port
 
         # instantiate a channel
         self.channel = grpc.insecure_channel(
@@ -48,7 +48,7 @@ class TmlgrpcClient(object):
       while True:
         line = file1.readline()
         line = line.replace(";", " ")
-        print("line=",line)
+        print("line2=",line)
         # add lat/long/identifier
         k = k + 1
         try:

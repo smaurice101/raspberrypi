@@ -60,7 +60,8 @@ def readdatafile(inputfile):
       # change time to speed up or slow down data   
       time.sleep(.5)
     except Exception as e:
-      print(e)  
+      print(e)
+      time.sleep(0.5)
       pass
     
 def start():
