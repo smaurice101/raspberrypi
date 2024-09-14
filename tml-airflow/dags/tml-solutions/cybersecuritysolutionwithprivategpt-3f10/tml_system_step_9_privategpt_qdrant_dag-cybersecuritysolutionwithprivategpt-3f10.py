@@ -44,7 +44,7 @@ probabilities are low, it is likely the device is not working properly.', # what
  'keyattribute' : 'Voltage,current',   
  'keyprocesstype' : 'anomprob',
  'vectordbcollectionname' : 'tml',   
- 'concurrency' : '1',
+ 'concurrency' : '2',
  'CUDA_VISIBLE_DEVICES' : '0'
 }
 
@@ -229,11 +229,8 @@ def sendtoprivategpt(maindata):
    mainip = default_args['pgpthost']
    mainport = default_args['pgptport']
 
-   print("INNNNNNN PGPT")
-
    for m in maindata:
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
-        print("RRRRRRESPONSE=",response)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
         if 'ERROR:' not in response:
@@ -308,6 +305,7 @@ if __name__ == '__main__':
 
         startpgptcontainer()
         qdrantcontainer()
+        time.sleep(10)  # wait for containers to start
         
         while True:
          try:     
@@ -322,7 +320,6 @@ if __name__ == '__main__':
                sendtoprivategpt(maindata)
              time.sleep(1)
          except Exception as e:
-          print("EE----",e)
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
           break
