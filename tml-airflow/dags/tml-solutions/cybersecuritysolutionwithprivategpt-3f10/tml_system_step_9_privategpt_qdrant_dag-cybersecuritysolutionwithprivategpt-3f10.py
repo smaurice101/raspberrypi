@@ -37,7 +37,9 @@ default_args = {
  'preprocesstype' : '',
  'partition' : '-1',
  'prompt': 'Do the device data show any malfunction or defects?', # Enter your prompt here
- 'context' : 'This is IoT data from devices.  If voltage or current is low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT   
+ 'context' : 'This is IoT data from devices. The data are \
+anomaly probabilities for each IoT device. If voltage or current \
+probabilities are low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT   
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction  
  'keyattribute' : 'Voltage,current',   
  'keyprocesstype' : 'anomprob',
