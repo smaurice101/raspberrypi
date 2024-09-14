@@ -64,15 +64,27 @@ HTTPADDR=""
 maintopic =  default_args['consumefrom']  
 mainproducerid = default_args['producerid']   
 
+def stopcontainers():
+ 
+   subprocess.call("docker image ls > gptfiles.txt")
+   with open('gptfiles.txt', 'r', encoding='utf-8') as file: 
+        data = file.readlines() 
+        r=0
+        for d in data:  
+          darr = d.split(" ")
+          if '-privategpt-' in d[0]:                    
+            buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
+            subprocess.call(buf, shell=True)
+
 def startpgptcontainer():
       collection = default_args['vectordbcollectionname']
       concurrency = default_args['concurrency']  
       pgptcontainername = default_args['pgptcontainername']  
       pgptport = int(default_args['pgptport'])
       cuda = int(default_args['CUDA_VISIBLE_DEVICES'])
-    
-      buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
-      subprocess.call(buf, shell=True)        
+      stopcontainers()  
+#      buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
+ #     subprocess.call(buf, shell=True)        
       time.sleep(4)  
       buf = "docker run -d -p {}:{} --net=host --gpus all --env PORT={} --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)              
       subprocess.call(buf, shell=True)
