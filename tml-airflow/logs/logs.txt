@@ -8628,3 +8628,5 @@ Already up to date.
 [INFO 2024-09-14_16:06:49] Visualization DAG in tml_system_step_7_kafka_visualization_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-14_16:06:55] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-14_16:07:01] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[INFO 2024-09-14_16:07:48] {'name': ['Project with slug "cybersecuritysolutionwithprivategpt-3f10" already exists.']}
+[INFO 2024-09-14_16:17:46] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-iotsolutionmqtt-3f10.py
