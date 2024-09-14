@@ -8606,3 +8606,4 @@ Already up to date.
 [INFO 2024-09-14_15:32:37] {'name': ['Project with slug "cybersecuritysolutionwithprivategpt-3f10" already exists.']}
 [INFO 2024-09-14_15:36:40] MQTT producing DAG in tml_read_MQTT_step_3_kafka_producetotopic_dag-iotsolutionmqtt-3f10.py
 [INFO 2024-09-14_15:40:34] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[INFO 2024-09-14_15:40:36] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
