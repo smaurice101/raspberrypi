@@ -154,6 +154,7 @@ def gatherdataforprivategpt(result):
              print("INSIDE::::::")
              print("RRRRRRRRRRR=",r['RawData'])
              for d in r['RawData']:
+              print("dddddddd=",d)
               message = message  + str(d) + '<br>'
            message = "{}<br> {} <br>{}".format(context,message,prompt)
            privategptmessage.append(message)
