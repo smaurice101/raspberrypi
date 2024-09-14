@@ -8596,3 +8596,4 @@ Already up to date.
 [INFO 2024-09-14_15:31:17] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-14_15:31:20] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-14_15:31:22] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
+[INFO 2024-09-14_15:31:24] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
