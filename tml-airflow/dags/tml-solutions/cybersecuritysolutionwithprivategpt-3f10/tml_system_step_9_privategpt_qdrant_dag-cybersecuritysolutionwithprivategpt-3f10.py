@@ -165,7 +165,8 @@ def gatherdataforprivategpt(result):
    if jsonkeytogather != 'Identifier':
      message = "{}<br> {} <br>{}".format(context,message,prompt)   
      privategptmessage.append(message)
-        
+
+   print("privategptmessage=",privategptmessage)        
    return privategptmessage          
         
 
