@@ -72,7 +72,8 @@ def stopcontainers():
         r=0
         for d in data:  
           darr = d.split(" ")
-          if '-privategpt-' in d[0]:                    
+          print(darr[0])
+          if '-privategpt-' in darr[0]:                    
             buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
             subprocess.call(buf, shell=True)
 
