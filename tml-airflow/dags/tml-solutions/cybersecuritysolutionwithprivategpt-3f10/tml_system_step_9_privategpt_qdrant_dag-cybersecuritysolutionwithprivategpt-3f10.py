@@ -154,11 +154,12 @@ def gatherdataforprivategpt(result):
              print("INSIDE::::::")
              print("RRRRRRRRRRR=",r['RawData'])
              for d in r['RawData']:
-              print("dddddddd=",d)
-              message = message  + str(d) + '<br>'
-           message = "{}<br> {} <br>{}".format(context,message,prompt)
-           print("MMMEEEEEEEEEE=",message)
-           privategptmessage.append(message)
+               print("dddddddd=",d)
+               message = message  + str(d) + '<br>'
+             message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
+             print("MMMEEEEEEEEEE=",message)
+             privategptmessage.append(message)
+             message = ""
          except Excepption as e: 
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
@@ -168,7 +169,7 @@ def gatherdataforprivategpt(result):
          message = message  + buf + '<br>'
    
    if jsonkeytogather != 'Identifier':
-     message = "{}<br> {} <br>{}".format(context,message,prompt)   
+     message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)   
      privategptmessage.append(message)
 
 #   print("privategptmessage=",privategptmessage)        
