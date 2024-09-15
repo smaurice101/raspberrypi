@@ -8741,3 +8741,26 @@ Already up to date.
 [INFO 2024-09-15_16:07:48] TML Solution Studio: DELETE initiated for project myawesometmlsolution-3f10 by smaurice101
 [INFO 2024-09-15_16:07:48] TML Solution Studio: GIT REPO myawesometmlsolution-3f10 DELETED by smaurice101
 [INFO 2024-09-15_16:07:48] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-3f10-amd64 DELETED by maadsdocker
+[INFO 2024-09-15_16:08:02] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolution-3f10
+[INFO 2024-09-15_16:08:02] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-15_16:08:37] TML Solution Studio: Starting Git commit process for project: myawesometmlsolution-3f10
+[INFO 2024-09-15_16:08:37] TML Solution Studio: git commit -a Status for project myawesometmlsolution-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-15_16:08:37] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-09-15_16:08:37] TML Solution Studio: git add . Status: warning: adding embedded git repository: smaurice1013f10
+hint: You've added another git repository inside your current repository.
+hint: Clones of the outer repository will not contain the contents of
+hint: the embedded repository and will not know how to obtain it.
+hint: If you meant to add a submodule, use:
+hint: 
+hint: 	git submodule add <url> smaurice1013f10
+hint: 
+hint: If you added this path by mistake, you can remove it from the
+hint: index with:
+hint: 
+hint: 	git rm --cached smaurice1013f10
+hint: 
+hint: See "git help submodule" for more information.
+[INFO 2024-09-15_16:08:37] TML Solution Studio: git commit -a Status for project myawesometmlsolution-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-15_16:08:37] TML Solution Studio: git push Status for project myawesometmlsolution-3f10: Everything up-to-date
