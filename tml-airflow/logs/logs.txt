@@ -8725,3 +8725,6 @@ Already up to date.
 [INFO 2024-09-15_15:07:35] TML Solution Studio: git add . Status: 
 [INFO 2024-09-15_15:07:35] TML Solution Studio: git commit -a Status for project myawesometmlsolution-3f10: fatal: paths 'project ...' with -a does not make sense
 [INFO 2024-09-15_15:07:35] TML Solution Studio: git push Status for project myawesometmlsolution-3f10: Everything up-to-date
+[INFO 2024-09-15_15:19:43] TML Solution Studio: DELETE initiated for project myawesometmlsolution-3f10 by smaurice101
+[INFO 2024-09-15_15:19:43] TML Solution Studio: GIT REPO myawesometmlsolution-3f10 DELETED by smaurice101
+[INFO 2024-09-15_15:19:43] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolution-3f10-amd64 DELETED by maadsdocker
