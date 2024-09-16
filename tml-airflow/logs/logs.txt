@@ -8900,3 +8900,30 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-16_02:13:51] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-16_02:13:52] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-16_02:13:57] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution-3f10.py
+[INFO 2024-09-16_13:57:51] TML Solution Studio Started: DOCKERUSERNAME=maadsdocker, GITUSERNAME=smaurice101, GITREPOURL=https://github.com/smaurice101/raspberrypi.git, AIRFLOWPORT=9000
+[INFO 2024-09-16_13:57:52] TML Solution Studio: Docker Login Status: WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[INFO 2024-09-16_13:57:52] TML Solution Studio: Github Config Status: core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/smaurice101/raspberrypi.git
+remote.origin.fetch=+refs/heads/main:refs/remotes/origin/main
+remote.origin.pushurl=https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+[INFO 2024-09-16_13:57:52] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
+origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
+[INFO 2024-09-16_13:59:39] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myawesometmlsolutionml-3f10
+[INFO 2024-09-16_13:59:39] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-09-16_14:00:13] TML Solution Studio: Starting Git commit process for project: myawesometmlsolutionml-3f10
+[INFO 2024-09-16_14:00:13] TML Solution Studio: git commit -a Status for project myawesometmlsolutionml-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-16_14:00:14] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-09-16_14:00:14] TML Solution Studio: git add . Status: 
+[INFO 2024-09-16_14:00:14] TML Solution Studio: git commit -a Status for project myawesometmlsolutionml-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-09-16_14:00:14] TML Solution Studio: git push Status for project myawesometmlsolutionml-3f10: Everything up-to-date
