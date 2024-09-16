@@ -8940,3 +8940,4 @@ Already up to date.
 [INFO 2024-09-16_14:17:27] TML Solution Studio: git add . Status: 
 [INFO 2024-09-16_14:17:27] TML Solution Studio: git commit -a Status for project myawesometmlsolutionml-3f10: fatal: paths 'iotsolutionmqtt-3f10 ...' with -a does not make sense
 [INFO 2024-09-16_14:17:27] TML Solution Studio: git push Status for project myawesometmlsolutionml-3f10: Everything up-to-date
+[INFO 2024-09-16_14:29:00] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myawesometmlsolutionml-3f10.py
