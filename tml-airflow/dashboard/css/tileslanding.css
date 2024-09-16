@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
+
+
+
+
+.tile {
+  width:410px;
+  height:89px;
+  margin-top:1px;
+  margin-left:10px;
+  float:left;
+}
+
+.tile.wide {
+  width: 410px;
+}
+
+.tile .header {
+  height:69px;
+  background-color:#f4f4f4;
+  border-radius: 10px 10px 10px 10px;
+  color:white;
+  font-weight:400;
+}
+
+.tile.wide .header .left, .tile.wide .header .right {
+  width:160px;
+  float:left;
+}
+
+.tile .header .count {
+  font-size: 34px;
+  text-align:center;
+  padding:1px 0 0;
+}
+
+.tile .header .title {
+  font-size: 19px;
+  text-align:center;
+}
+
+
+.tile .body .title {
+    text-align:center;
+    font-size:20px;
+    padding-top:1%;
+}
+
+.tile.wide .body .title {
+  padding:1%;
+}
+
+.tile.job .header {
+  background: linear-gradient(to bottom right, #40ff00, #1a6600);
+}
+
+.tile.job  .body {
+  color: #609931;
+}
+.tile.resource .header {
+  background: linear-gradient(to bottom right, #ffbf00, #b38a4d);
+}
+
+.tile.resource  .body {
+  color: #ef7f00;
+}
+
+.tile.quote .header {
+  background: linear-gradient(to bottom right, #00ffff, #0040ff);
+}
+
+.tile.block .header {
+  background: linear-gradient(to bottom right, #0040ff, #ff0000);
+}
+
+.tile.quote  .body {
+  color: #1f6abb;
+}
+
+.tile.block  .body {
+  color: #66d9ff;
+}
+
+.tile.invoice .header {
+  background: linear-gradient(to bottom right, #0aa361, #1adc88);
+}
+
+.tile.invoice  .body {
+  color: #0aa361;
+}

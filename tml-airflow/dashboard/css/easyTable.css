@@ -1,0 +1,43 @@
+/*
+ Table plugin for jQuery
+ Copyright (c) 2016 Gabriel Rodrigues e Gabriel Leite (http://gabrielr47.github.io/)
+ Licensed under the MIT license
+ Version: 0.2
+*/
+
+.easyTable {
+   outline: none;
+}
+
+.easyTableSelect tbody tr {
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -o-user-select: none;
+   user-select: none;
+}
+
+.easyTable .row button {
+   margin: 5px;
+   border-radius: 15px;
+   outline: none;
+}
+
+.easyTable thead {
+   cursor: pointer;
+   margin: 0px;
+   cell-spacing: 0px;
+   left: 0px;
+}
+
+.easyTable th {
+   height: 15px;
+   width: 50px;
+}
+
+.easyTable td {
+   height: 15px;
+   width: 50px;
+   margin: 0px;
+   cell-spacing: 0px;
+}
