@@ -8802,3 +8802,4 @@ Already up to date.
 [INFO 2024-09-15_16:40:06] TML Solution Studio: git push Status for project myawesometmlsolution-3f10: Everything up-to-date
 [INFO 2024-09-16_00:03:45] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myawesometmlsolution-3f10.py
 [INFO 2024-09-16_00:03:47] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-myawesometmlsolution-3f10.py
+[INFO 2024-09-16_00:03:49] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-myawesometmlsolution-3f10.py
