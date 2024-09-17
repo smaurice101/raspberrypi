@@ -170,8 +170,9 @@ def gatherdataforprivategpt(result):
            if isin:
              found=0
              for d in r['RawData']:
-               found=1
-               message = message  + str(d) + ', '
+               is d.isdigit(): 
+                found=1
+                message = message  + str(d) + ', '
              if found:
                message = "{}.  Data: {}. {}".format(context,message,prompt)
                privategptmessage.append([message,identarr[0]])
