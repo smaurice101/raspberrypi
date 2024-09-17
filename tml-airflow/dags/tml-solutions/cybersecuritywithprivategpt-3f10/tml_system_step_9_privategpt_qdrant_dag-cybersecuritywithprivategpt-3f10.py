@@ -170,7 +170,7 @@ def gatherdataforprivategpt(result):
            if isin:
              found=0
              for d in r['RawData']:
-               is d.isdigit(): 
+               if d.isdigit(): 
                 found=1
                 message = message  + str(d) + ', '
              if found:
