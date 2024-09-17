@@ -36,7 +36,7 @@ default_args = {
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
  'prompt': 'You are a cyber security expert. Do any of the values of the inbound or outbound packets look abnormal?', # Enter your prompt here
- 'context' : 'Any inbound and outbound packets that is greater than 1000000 should be suspicious.', # what is this data about? Provide context to PrivateGPT
+ 'context' : 'Any inbound and outbound packets that is greater than 1000 Megabytes, should be suspicious.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'Identifier', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
  'keyprocesstype' : '',  # change as needed
