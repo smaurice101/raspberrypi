@@ -9008,3 +9008,6 @@ Already up to date.
 [INFO 2024-09-17_01:01:13] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-17_01:01:18] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-cybersecuritysolutionwithprivategpt-3f10.py
 [INFO 2024-09-17_01:01:52] {'name': ['Project with slug "cybersecuritysolutionwithprivategpt-3f10" already exists.']}
+[INFO 2024-09-17_01:12:44] TML Solution Studio: DELETE initiated for project cybersecuritysolutionwithprivategpt-3f10 by smaurice101
+[INFO 2024-09-17_01:12:44] TML Solution Studio: GIT REPO cybersecuritysolutionwithprivategpt-3f10 DELETED by smaurice101
+[INFO 2024-09-17_01:12:44] TML Solution Studio: LOCAL DOCKER IMAGE cybersecuritysolutionwithprivategpt-3f10-amd64 DELETED by maadsdocker
