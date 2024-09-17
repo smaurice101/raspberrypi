@@ -345,7 +345,7 @@ if __name__ == '__main__':
              if doneoutput==False:
                     notdone=True
                     with open('data.json', 'w') as f:
-                    json.dump(result, f)
+                     json.dump(result, f)
 
              # Format the preprocessed data for PrivateGPT
              maindata = gatherdataforprivategpt(result)
