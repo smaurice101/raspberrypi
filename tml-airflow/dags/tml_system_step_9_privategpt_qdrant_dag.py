@@ -257,6 +257,7 @@ def sendtoprivategpt(maindata):
           if counter > 60:                
              startpgptcontainer()
              qdrantcontainer()
+             counter = 0 
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
