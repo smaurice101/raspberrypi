@@ -27,7 +27,7 @@ default_args = {
  'delay' : '100', # change as needed
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
- 'consumefrom' : 'iot-preprocess',    # <<< *** Change as needed
+ 'consumefrom' : 'cisco-network-preprocess',    # <<< *** Change as needed
  'pgpt_data_topic' : 'cisco-network-privategpt',
  'producerid' : 'private-gpt',   # <<< *** Leave as is
  'identifier' : 'This is analysing TML output with privategpt',
