@@ -35,13 +35,11 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
- 'prompt': 'Do the device data show any malfunction or defects?', # Enter your prompt here
- 'context' : 'This is IoT data from devices. The data are \
-anomaly probabilities for each IoT device. If voltage or current \
-probabilities are low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT
- 'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
- 'keyattribute' : 'Voltage,current', # change as needed  
- 'keyprocesstype' : 'anomprob',  # change as needed
+ 'prompt': 'Do any of the values of the inbound or outbond packets look abnormal?', # Enter your prompt here
+ 'context' : 'This is computer netwrok packet data of inbound and outbound packets.', # what is this data about? Provide context to PrivateGPT
+ 'jsonkeytogather' : 'Identifier', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
+ 'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
+ 'keyprocesstype' : '',  # change as needed
  'vectordbcollectionname' : 'tml', # change as needed
  'concurrency' : '2', # change as needed 
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
