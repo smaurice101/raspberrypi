@@ -139,7 +139,7 @@ def consumetopicdata():
                   offset, brokerhost,brokerport,microserviceid,
                   topicid,rollbackoffsets,preprocesstype)
 
-      print(result)
+      #print(result)
       return result
 
 def gatherdataforprivategpt(result):
@@ -169,8 +169,7 @@ def gatherdataforprivategpt(result):
            isin=any(x in r['Identifier'].lower() for x in aar)
            if isin:
              found=0
-             for d in r['RawData']:
-               if d.isdigit(): 
+             for d in r['RawData']:              
                 found=1
                 message = message  + str(d) + ', '
              if found:
