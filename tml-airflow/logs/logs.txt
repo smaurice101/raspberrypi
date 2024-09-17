@@ -8996,3 +8996,4 @@ Already up to date.
 [INFO 2024-09-17_00:58:25] TML Solution Studio: DELETE initiated for project myawesometmlsolutionai-3f10 by smaurice101
 [INFO 2024-09-17_00:58:25] TML Solution Studio: GIT REPO myawesometmlsolutionai-3f10 DELETED by smaurice101
 [INFO 2024-09-17_00:58:25] TML Solution Studio: LOCAL DOCKER IMAGE myawesometmlsolutionai-3f10-amd64 DELETED by maadsdocker
+[INFO 2024-09-17_01:00:41] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritysolutionwithprivategpt-3f10.py
