@@ -9123,3 +9123,26 @@ Already up to date.
 [ERROR 2024-09-17_13:55:38] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py ERROR:HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /v1/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fdb0b8967f0>: Failed to establish a new connection: [Errno 111] Connection refused'),"prompt":"This is computer network packet data of inbound and outbound packets.<br><br> 524<br>487<br>208<br>451<br>147<br>75<br>262<br>72<br>401<br>380<br>275<br>189<br>211<br>289<br>350<br>475<br>195<br>91<br> <br><br>Do any of the values of the inbound or outbond packets look abnormal?"}
 [ERROR 2024-09-17_13:55:41] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py ERROR:HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /v1/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fdb0b896f70>: Failed to establish a new connection: [Errno 111] Connection refused'),"prompt":"This is computer network packet data of inbound and outbound packets.<br><br> 174<br>442<br>237<br>201<br>425<br>273<br>329<br>407<br>262<br>361<br>152<br>179<br>387<br>491<br>243<br>123<br>251<br>503<br>311<br> <br><br>Do any of the values of the inbound or outbond packets look abnormal?"}
 [INFO 2024-09-17_13:57:12] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py
+[ERROR 2024-09-17_13:57:38] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py ERROR:HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /v1/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff51f167b50>: Failed to establish a new connection: [Errno 111] Connection refused'),"prompt":"This is computer network packet data of inbound and outbound packets.
+
+ 97
+182
+463
+342
+429
+207
+276
+425
+423
+350
+196
+352
+209
+194
+430
+358
+427
+311
+ 
+
+Do any of the values of the inbound or outbond packets look abnormal?"}
