@@ -235,8 +235,9 @@ def gatherdataforprivategpt(result):
 
 def sendtoprivategpt(maindata):
 
+   counter = 0   
    pgptendpoint="/v1/completions"
-
+   
    maintopic = default_args['pgpt_data_topic']
    mainip = default_args['pgpthost']
    mainport = default_args['pgptport']
@@ -249,8 +250,13 @@ def sendtoprivategpt(maindata):
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
           print("response=",response)
+            sleep(1)
         else:
-          return -1,response  
+          counter += 1
+          sleep(1)
+          if counter > 60:                
+             startpgptcontainer()
+             qdrantcontainer()
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
