@@ -179,7 +179,7 @@ def gatherdataforprivategpt(result):
          except Excepption as e:
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-           break
+#           break
        else:
          isin1 = False
          isin2 = False
@@ -341,4 +341,4 @@ if __name__ == '__main__':
          except Exception as e:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-          break
+#          break
