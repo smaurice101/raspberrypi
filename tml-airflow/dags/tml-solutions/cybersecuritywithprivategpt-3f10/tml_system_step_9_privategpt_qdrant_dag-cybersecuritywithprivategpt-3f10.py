@@ -233,8 +233,9 @@ def gatherdataforprivategpt(result):
 
 def sendtoprivategpt(maindata):
 
+   counter = 0   
    pgptendpoint="/v1/completions"
-
+   
    maintopic = default_args['pgpt_data_topic']
    mainip = default_args['pgpthost']
    mainport = default_args['pgptport']
@@ -246,9 +247,16 @@ def sendtoprivategpt(maindata):
         print("PGPT respnse=",response)
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
-          print("response=",response)
-#        else:
- #         return -1,response  
+          time.sleep(1)
+        else:
+          counter += 1
+          time.sleep(1)
+          if counter > 60:                
+             startpgptcontainer()
+             qdrantcontainer()
+             counter = 0 
+             tsslogging.tsslogit("PrivateGPT Step 9 DAG PrivateGPT Container restarting in {} {}".format(os.path.basename(__file__),response), "WARN" )
+             tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")                    
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
