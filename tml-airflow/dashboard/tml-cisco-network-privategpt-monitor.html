@@ -781,11 +781,13 @@ var div = document.getElementById('gpt');
  
 		document.getElementById("gpt").style.display = "block";
  
+  console.log("Details=",jsondata.TopicReads);
+                                       
 	for (j in jsondata.TopicReads) {
 
 		message = jsondata.TopicReads[j].choices[0].message.content;		
 		details = jsondata.TopicReads[j].responsedetails;
-        console.log("Details=",details);
+        
                                        
 		if (details){
 			  message=message.replaceAll("Question", "<br>Answer");
