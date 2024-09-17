@@ -173,9 +173,9 @@ def gatherdataforprivategpt(result):
              found=0
              for d in r['RawData']:
                found=1
-               message = message  + str(d) + '<br>'
+               message = message  + str(d) + '\n'
              if found:
-               message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
+               message = "{}\n\n {} \n\n{}".format(context,message,prompt)
                privategptmessage.append(message)
              message = ""
          except Excepption as e:
@@ -199,7 +199,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '<br>'
+               message = message  + buf + '\n'
          elif processtype != '' and attribute == '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
@@ -208,7 +208,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '<br>'
+               message = message  + buf + '\n'
          elif processtype == '' and attribute != '':
            attribute = attribute.lower()
            aar = attribute.split(",")
@@ -217,15 +217,15 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '<br>'
+               message = message  + buf + '\n'
          else:
            buf = r[jsonkeytogather]
            if buf != '':
              found=1
-             message = message  + buf + '<br>'
+             message = message  + buf + '\n'
 
    if jsonkeytogather != 'Identifier' and found:
-     message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
+     message = "{}\n\n {} \n\n{}".format(context,message,prompt)
      privategptmessage.append(message)
 
 
@@ -339,7 +339,7 @@ if __name__ == '__main__':
                    tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),response), "ERROR" )
                    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")                    
                       
-             time.sleep(1)
+             time.sleep(2)
          except Exception as e:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
