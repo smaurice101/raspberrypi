@@ -250,7 +250,7 @@ def sendtoprivategpt(maindata):
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
           print("response=",response)
-            sleep(1)
+          sleep(1)
         else:
           counter += 1
           sleep(1)
