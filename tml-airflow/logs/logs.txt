@@ -9901,3 +9901,4 @@ Do any of the values of the inbound or outbond packets look abnormal?"}
 [ERROR 2024-09-17_23:07:51] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py name 'Excepption' is not defined
 [ERROR 2024-09-17_23:07:53] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py name 'Excepption' is not defined
 [ERROR 2024-09-17_23:07:55] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py name 'Excepption' is not defined
+[ERROR 2024-09-17_23:07:57] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py name 'Excepption' is not defined
