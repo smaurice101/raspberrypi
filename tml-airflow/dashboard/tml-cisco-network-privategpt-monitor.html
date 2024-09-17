@@ -803,7 +803,7 @@ var div = document.getElementById('gpt');
 	let uniquemessages = [...new Set(mainmessages)];
 	  for (j in uniquemessages) {
 	  message=uniquemessages[j];
-  console.log(message[0]);                                     
+  console.log("m0=",message[0]);                                     
 		if (message[0].includes("suspicious")){
             highmess += "<font size=5 color='red'><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";			
 			let parr = message[1].split("-");
