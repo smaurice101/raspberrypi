@@ -9225,3 +9225,4 @@ Do any of the values of the inbound or outbond packets look abnormal?"}
 [ERROR 2024-09-17_14:02:40] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py cannot unpack non-iterable NoneType object
 [ERROR 2024-09-17_14:02:41] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py cannot unpack non-iterable NoneType object
 [ERROR 2024-09-17_14:02:43] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py cannot unpack non-iterable NoneType object
+[ERROR 2024-09-17_14:02:46] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py cannot unpack non-iterable NoneType object
