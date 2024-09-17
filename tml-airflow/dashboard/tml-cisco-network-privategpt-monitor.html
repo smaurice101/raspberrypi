@@ -789,7 +789,7 @@ var div = document.getElementById('gpt');
 		message = jsondata.TopicReads[j].choices[0].message.content;		
 		details = jsondata.TopicReads[j].responsedetails;
         
-       console.log("message=",message);
+       //console.log("message=",message);
                                        
 		if (message){
 			  message=message.replaceAll("Question", "<br>Answer");
