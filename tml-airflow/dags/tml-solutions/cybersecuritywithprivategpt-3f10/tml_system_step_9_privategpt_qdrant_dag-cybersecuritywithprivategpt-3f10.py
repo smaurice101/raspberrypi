@@ -174,7 +174,7 @@ def gatherdataforprivategpt(result):
                message = message  + str(d) + '\n'
              if found:
                message = "{}\n\n {} \n\n{}".format(context,message,prompt)
-               privategptmessage.append(message)
+               privategptmessage.append([message,identarr[0]])
              message = ""
          except Excepption as e:
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
@@ -240,7 +240,14 @@ def sendtoprivategpt(maindata):
    mainip = default_args['pgpthost']
    mainport = default_args['pgptport']
 
-   for m in maindata:
+   for mess in maindata:
+        if default_args['jsonkeytogather']=='Identifier':
+           m = mess[0]
+           m1 = mess[1]
+        else:
+           m = mess
+           m1 = default_args['keyattribute']
+            
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
