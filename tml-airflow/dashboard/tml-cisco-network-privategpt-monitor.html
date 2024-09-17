@@ -1543,7 +1543,7 @@ function streamLiveKafkaData() {
 			try {
 				obj = JSON.parse(maindata);
 			} catch (e) {
-			//console.log("-------------maindata=",maindata);
+			console.log("-------------maindata=",maindata);
 				console.log("Json parse issue=", e.message);
 				return;
 			}
