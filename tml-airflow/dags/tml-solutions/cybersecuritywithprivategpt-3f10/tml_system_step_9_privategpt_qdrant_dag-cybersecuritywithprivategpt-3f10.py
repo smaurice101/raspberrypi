@@ -247,8 +247,8 @@ def sendtoprivategpt(maindata):
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
           print("response=",response)
-        else:
-          return -1,response  
+#        else:
+ #         return -1,response  
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
