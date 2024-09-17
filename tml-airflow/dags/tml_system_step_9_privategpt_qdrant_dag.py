@@ -258,6 +258,9 @@ def sendtoprivategpt(maindata):
              startpgptcontainer()
              qdrantcontainer()
              counter = 0 
+             tsslogging.tsslogit("PrivateGPT Step 9 DAG PrivateGPT Container restarting in {} {}".format(os.path.basename(__file__),response), "WARN" )
+             tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")                    
+                
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
