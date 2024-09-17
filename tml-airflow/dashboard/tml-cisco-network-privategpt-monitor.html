@@ -1532,6 +1532,7 @@ function streamLiveKafkaData() {
 			var eventdata = `${event.data}`;
 
 			var maindata = eventdata.replace(/\\"/g, '"');
+    	    maindata = maindata.replace("\\\\"",'');
 			maindata = maindata.substr(1, maindata.length - 3);
 			if (maindata == "") {
 				return
