@@ -243,6 +243,7 @@ def sendtoprivategpt(maindata):
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
+        print("PGPT respnse=",response)
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
           print("response=",response)
