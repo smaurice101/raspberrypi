@@ -326,6 +326,7 @@ if __name__ == '__main__':
 
              # Format the preprocessed data for PrivateGPT
              maindata = gatherdataforprivategpt(result)
+             print("maindata------------",maindata)
 
              # Send the data to PrivateGPT and produce to Kafka
              if len(maindata) > 0:
