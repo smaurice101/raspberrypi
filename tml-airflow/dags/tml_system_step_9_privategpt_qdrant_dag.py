@@ -171,11 +171,11 @@ def gatherdataforprivategpt(result):
            isin=any(x in r['Identifier'].lower() for x in aar)
            if isin:
              found=0
-             for d in r['RawData']:
-               found=1
-               message = message  + str(d) + '\n'
+             for d in r['RawData']:              
+                found=1
+                message = message  + str(d) + ', '
              if found:
-               message = "{}\n\n {} \n\n{}".format(context,message,prompt)
+               message = "{}.  Data: {}. {}".format(context,message,prompt)
                privategptmessage.append([message,identarr[0]])
              message = ""
          except Excepption as e:
@@ -199,7 +199,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '\n'
+               message = message  + buf + ', '
          elif processtype != '' and attribute == '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
@@ -208,7 +208,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '\n'
+               message = message  + buf + ', '
          elif processtype == '' and attribute != '':
            attribute = attribute.lower()
            aar = attribute.split(",")
@@ -217,15 +217,15 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '\n'
+               message = message  + buf + ', '
          else:
            buf = r[jsonkeytogather]
            if buf != '':
              found=1
-             message = message  + buf + '\n'
+             message = message  + buf + ', '
 
    if jsonkeytogather != 'Identifier' and found:
-     message = "{}\n\n {} \n\n{}".format(context,message,prompt)
+     message = "{}.  Data: {}.  {}".format(context,message,prompt)
      privategptmessage.append(message)
 
 
