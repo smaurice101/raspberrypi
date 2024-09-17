@@ -249,11 +249,10 @@ def sendtoprivategpt(maindata):
         print("PGPT respnse=",response)
         if 'ERROR:' not in response:
           producegpttokafka(response,maintopic)
-          print("response=",response)
-          sleep(1)
+          time.sleep(1)
         else:
           counter += 1
-          sleep(1)
+          time.sleep(1)
           if counter > 60:                
              startpgptcontainer()
              qdrantcontainer()
