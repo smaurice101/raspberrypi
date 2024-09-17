@@ -9169,3 +9169,27 @@ Do any of the values of the inbound or outbond packets look abnormal?"}
  
 
 Do any of the values of the inbound or outbond packets look abnormal?"}
+[ERROR 2024-09-17_13:57:44] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py ERROR:HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /v1/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff51e929af0>: Failed to establish a new connection: [Errno 111] Connection refused'),"prompt":"This is computer network packet data of inbound and outbound packets.
+
+ 227
+350
+388
+82
+368
+395
+454
+394
+237
+213
+365
+327
+263
+128
+427
+201
+452
+243
+168
+ 
+
+Do any of the values of the inbound or outbond packets look abnormal?"}
