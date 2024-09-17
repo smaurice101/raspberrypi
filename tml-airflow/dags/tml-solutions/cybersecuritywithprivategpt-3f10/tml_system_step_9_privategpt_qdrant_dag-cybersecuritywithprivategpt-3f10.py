@@ -248,7 +248,7 @@ def sendtoprivategpt(maindata):
           producegpttokafka(response,maintopic)
           print("response=",response)
         else:
-          return -1  
+          return -1,response  
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
@@ -333,7 +333,11 @@ if __name__ == '__main__':
 
              # Send the data to PrivateGPT and produce to Kafka
              if len(maindata) > 0:
-               sendtoprivategpt(maindata)
+               res,response=sendtoprivategpt(maindata)
+               if res == -1:
+                   tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),response), "ERROR" )
+                   tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")                    
+                   break   
              time.sleep(1)
          except Exception as e:
           print("ERROR ------",e)
