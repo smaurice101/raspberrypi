@@ -223,7 +223,7 @@ def gatherdataforprivategpt(result):
              message = message  + buf + ', '
 
    if jsonkeytogather != 'Identifier' and found:
-     message = "{}\n\n {} \n\n{}".format(context,message,prompt)
+     message = "{}.  {},  {}".format(context,message,prompt)
      privategptmessage.append(message)
 
 
