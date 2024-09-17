@@ -41,7 +41,7 @@ default_args = {
  'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
  'keyprocesstype' : '',  # change as needed
  'vectordbcollectionname' : 'tml', # change as needed
- 'concurrency' : '2', # change as needed 
+ 'concurrency' : '1', # change as needed 
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
 }
 
