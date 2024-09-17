@@ -139,7 +139,7 @@ def consumetopicdata():
                   offset, brokerhost,brokerport,microserviceid,
                   topicid,rollbackoffsets,preprocesstype)
 
-#      print(result)
+      print(result)
       return result
 
 def gatherdataforprivategpt(result):
