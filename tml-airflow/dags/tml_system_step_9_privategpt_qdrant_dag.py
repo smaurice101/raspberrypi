@@ -43,7 +43,7 @@ probabilities are low, it is likely the device is not working properly.', # what
  'keyattribute' : 'Voltage,current', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
  'vectordbcollectionname' : 'tml', # change as needed
- 'concurrency' : '2', # change as needed 
+ 'concurrency' : '1', # change as needed Leave at 1
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
 }
 
