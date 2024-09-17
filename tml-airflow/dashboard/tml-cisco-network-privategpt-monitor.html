@@ -798,8 +798,7 @@ var div = document.getElementById('gpt');
 	  for (j in uniquemessages) {
 	  message=uniquemessages[j];
 
-		if (message[0].includes("should be investigate") && !message[0].includes("it is not clear if this machine should be investigated") &&
-      		!message[0].includes("not possible for me to determine if this machine should be investigated")){
+		if (message[0].includes("should be investigate") ){
             highmess += "<font size=5 color='red'><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";			
 			let parr = message[1].split("-");
 			//console.log(parr[1]);
