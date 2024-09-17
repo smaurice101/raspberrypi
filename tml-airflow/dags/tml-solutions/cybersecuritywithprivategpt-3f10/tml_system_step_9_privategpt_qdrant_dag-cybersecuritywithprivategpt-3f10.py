@@ -17,7 +17,7 @@ sys.dont_write_bytecode = True
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
  'pgptcontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
- 'rollbackoffset' : '100',  # <<< *** Change as needed
+ 'rollbackoffset' : '500',  # <<< *** Change as needed
  'offset' : '-1', # leave as is
  'enabletls' : '1', # change as needed
  'brokerhost' : '', # <<< *** Leave as is
@@ -36,7 +36,7 @@ default_args = {
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
  'prompt': 'You are a cyber security expert. Do any of the values of the inbound or outbound packets look abnormal?', # Enter your prompt here
- 'context' : 'Any amount greater than 1000000 should be suspicious.', # what is this data about? Provide context to PrivateGPT
+ 'context' : 'Any inbound and outbound packets that is greater than 1000000 should be suspicious.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'Identifier', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
  'keyprocesstype' : '',  # change as needed
