@@ -804,7 +804,7 @@ console.log(jsondata.TopicReads);
 	let uniquemessages = [...new Set(mainmessages)];
 	  for (j in uniquemessages) {
 	  message=uniquemessages[j];
-  console.log("m0=",message[0]);                                     
+                               
 		if (message[0].includes("suspicious")){
             highmess += "<font size=5 color='red'><b>(" + details + "):</b> " + message[0] + "</font><br><br>";			
 			}			
