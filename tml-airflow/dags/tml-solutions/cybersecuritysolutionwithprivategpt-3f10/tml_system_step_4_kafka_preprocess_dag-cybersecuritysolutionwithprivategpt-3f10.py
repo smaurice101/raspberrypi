@@ -19,8 +19,8 @@ default_args = {
   'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '',  # <<< *** leave blank
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
-  'raw_data_topic' : 'iot-raw-data', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'preprocess_data_topic' : 'iot-preprocess', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
+  'raw_data_topic' : 'cisco-network-mainstream', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
+  'preprocess_data_topic' : 'cisco-network-preprocess', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'maxrows' : '800', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
   'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
@@ -46,6 +46,7 @@ identifiers=metadata.display_name~\
 datetime=datapoint.updated_at~\
 msgid=datapoint.id~\
 latlong=lat:long', # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
+  'identifier' : 'TML solution',   # <<< *** Change as needed   
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
