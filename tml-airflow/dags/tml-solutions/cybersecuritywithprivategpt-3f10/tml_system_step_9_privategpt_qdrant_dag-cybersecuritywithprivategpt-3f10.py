@@ -35,8 +35,8 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
- 'prompt': 'You are a cyber security expert. Do any of the values of the inbound or outbound packets look abnormal?', # Enter your prompt here
- 'context' : 'The inbound and outbound packets are in bytes.', # what is this data about? Provide context to PrivateGPT
+ 'prompt': 'Do any of the values of the inbound or outbound packets look abnormal?', # Enter your prompt here
+ 'context' : 'The inbound and outbound packets are in bytes from a public network.  Large values, like over 1MB are suspicious.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'Identifier', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
  'keyprocesstype' : '',  # change as needed
