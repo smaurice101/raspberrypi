@@ -37,9 +37,9 @@ default_args = {
  'partition' : '-1', # Leave as is 
  'prompt': 'Do any of the values of the inbound or outbound packets look abnormal?', # Enter your prompt here
  'context' : 'The inbound and outbound packets are in bytes from a public network.  Large values, like over 1MB are suspicious.  We are determined if there is a cyber attack.', # what is this data about? Provide context to PrivateGPT
- 'jsonkeytogather' : 'Identifier', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
+ 'jsonkeytogather' : 'Hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
- 'keyprocesstype' : '',  # change as needed
+ 'keyprocesstype' : 'AnomProb',  # change as needed
  'vectordbcollectionname' : 'tml', # change as needed
  'concurrency' : '1', # change as needed 
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
