@@ -252,7 +252,8 @@ def sendtoprivategpt(maindata):
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
         print("PGPT respnse=",response)
-        if 'ERROR:' not in response:          
+        if 'ERROR:' not in response:         
+          response = response.replace('\\"',"'")  
           producegpttokafka(response,maintopic)
           time.sleep(1)
         else:
