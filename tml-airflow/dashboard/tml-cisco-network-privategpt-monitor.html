@@ -788,7 +788,7 @@ console.log(jsondata.TopicReads);
 	for (j in jsondata.TopicReads) {
 
 		message = jsondata.TopicReads[j].choices[0].message.content;		
-		details = jsondata.TopicReads[j].responsedetails;
+		details = jsondata.TopicReads[j].identifier;
         
        //console.log("message=",message);
                                        
@@ -806,7 +806,7 @@ console.log(jsondata.TopicReads);
 	  message=uniquemessages[j];
   console.log("m0=",message[0]);                                     
 		if (message[0].includes("suspicious")){
-            highmess += "<font size=5 color='red'><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";			
+            highmess += "<font size=5 color='red'><b>(" + details + "):</b> " + message[0] + "</font><br><br>";			
 			}			
        
 	   
