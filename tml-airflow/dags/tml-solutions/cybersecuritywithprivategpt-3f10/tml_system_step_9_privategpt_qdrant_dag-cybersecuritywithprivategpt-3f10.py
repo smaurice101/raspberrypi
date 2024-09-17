@@ -173,7 +173,7 @@ def gatherdataforprivategpt(result):
                found=1
                message = message  + str(d) + ', '
              if found:
-               message = "{}.  {}, {}".format(context,message,prompt)
+               message = "{}.  {}. {}".format(context,message,prompt)
                privategptmessage.append([message,identarr[0]])
              message = ""
          except Excepption as e:
@@ -223,7 +223,7 @@ def gatherdataforprivategpt(result):
              message = message  + buf + ', '
 
    if jsonkeytogather != 'Identifier' and found:
-     message = "{}.  {},  {}".format(context,message,prompt)
+     message = "{}.  {}.  {}".format(context,message,prompt)
      privategptmessage.append(message)
 
 
