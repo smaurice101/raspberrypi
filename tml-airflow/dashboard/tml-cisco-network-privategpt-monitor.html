@@ -805,7 +805,9 @@ var div = document.getElementById('gpt');
 			}else{
               lowmess += "<font size=4><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";
             }			
-        } 
+        }else{
+             lowmess = "Hi, I am your AI cybersecurity analyst (PrivateGPT).  I am analysng packet data, when something looks suspicious, I will let you know here."                                    
+        }
        
 	   
 	   if (lowmess!="" || highmess!=""){
