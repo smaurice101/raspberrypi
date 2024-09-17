@@ -171,9 +171,9 @@ def gatherdataforprivategpt(result):
              found=0
              for d in r['RawData']:
                found=1
-               message = message  + str(d) + '<br>'
+               message = message  + str(d) + '\n'
              if found:
-               message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
+               message = "{}\n\n {} \n\n{}".format(context,message,prompt)
                privategptmessage.append(message)
              message = ""
          except Excepption as e:
