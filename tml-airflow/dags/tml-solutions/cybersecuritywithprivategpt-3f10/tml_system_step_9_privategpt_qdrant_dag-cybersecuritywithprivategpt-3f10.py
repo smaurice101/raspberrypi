@@ -343,7 +343,7 @@ if __name__ == '__main__':
              # Get preprocessed data from Kafka
              result = consumetopicdata()
              if doneoutput==False:
-                    notdone=True
+                    doneoutput=True
                     with open('data.json', 'w') as f:
                      json.dump(result, f)
 
