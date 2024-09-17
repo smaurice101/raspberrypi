@@ -343,11 +343,7 @@ if __name__ == '__main__':
 
              # Send the data to PrivateGPT and produce to Kafka
              if len(maindata) > 0:
-               res,response=sendtoprivategpt(maindata)
-               if res == -1:
-                   tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),response), "ERROR" )
-                   tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")                    
-                      
+              sendtoprivategpt(maindata)                      
              time.sleep(2)
          except Exception as e:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
