@@ -36,7 +36,7 @@ default_args = {
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
  'prompt': 'Do any of the values of the inbound or outbound packets look abnormal?', # Enter your prompt here
- 'context' : 'The inbound and outbound packets are in bytes from a public network.  Large values, like over 1MB are suspicious.  We are determined if there is a cyber attack.', # what is this data about? Provide context to PrivateGPT
+ 'context' : 'These data are anomaly probabilities of suspicious data traffic.  A high probability of over 70% is likely suspicious.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
  'keyprocesstype' : 'AnomProb',  # change as needed
@@ -337,11 +337,15 @@ if __name__ == '__main__':
         startpgptcontainer()
         qdrantcontainer()
         time.sleep(10)  # wait for containers to start
-
+        doneoutput = False
         while True:
          try:
              # Get preprocessed data from Kafka
              result = consumetopicdata()
+             if doneoutput==False:
+                    notdone=True
+                    with open('data.json', 'w') as f:
+                    json.dump(result, f)
 
              # Format the preprocessed data for PrivateGPT
              maindata = gatherdataforprivategpt(result)
