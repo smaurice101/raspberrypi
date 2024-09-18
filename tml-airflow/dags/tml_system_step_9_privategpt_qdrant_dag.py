@@ -251,7 +251,7 @@ def sendtoprivategpt(maindata):
    mainport = default_args['pgptport']
 
    for mess in maindata:
-        if default_args['jsonkeytogather']=='Identifier':
+        if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']==0:
            m = mess[0]
            m1 = mess[1]
         else:
@@ -261,8 +261,8 @@ def sendtoprivategpt(maindata):
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
-        print("PGPT respnse=",response)
-        if 'ERROR:' not in response:
+        print("PGPT response=",response)
+        if 'ERROR:' not in response:         
           response = response.replace('\\"',"'").replace('\n',' ')  
           producegpttokafka(response,maintopic)
           time.sleep(1)
