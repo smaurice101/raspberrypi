@@ -42,7 +42,7 @@ probabilities are low, it is likely the device is not working properly.', # what
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'Voltage,current', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
- 'hyperbatch' : '', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
+ 'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
  'concurrency' : '1', # change as needed Leave at 1
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
@@ -311,6 +311,7 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_cuda".format(sname), value="_{}".format(default_args['CUDA_VISIBLE_DEVICES']))
        ti.xcom_push(key="{}_pgpthost".format(sname), value=default_args['pgpthost'])
        ti.xcom_push(key="{}_pgptport".format(sname), value="_{}".format(default_args['pgptport']))
+       ti.xcom_push(key="{}_hyperbatch".format(sname), value="_{}".format(default_args['hyperbatch']))
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
