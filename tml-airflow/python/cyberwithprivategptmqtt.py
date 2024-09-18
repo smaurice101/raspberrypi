@@ -9,7 +9,7 @@ import paho.mqtt.client as paho
 from paho import mqtt
 import time
 import sys
-from datetime import datetime2
+from datetime import datetime
 
 default_args = {
   'mqtt_broker' : 'b526253c5560459da5337e561c142369.s1.eu.hivemq.cloud', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
