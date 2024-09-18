@@ -9921,3 +9921,4 @@ Do any of the values of the inbound or outbond packets look abnormal?"}
 [INFO 2024-09-18_01:16:18] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-09-18_01:21:33] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py
 [ERROR 2024-09-18_01:22:00] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py can only concatenate str (not "list") to str
+[INFO 2024-09-18_01:22:38] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py
