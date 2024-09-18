@@ -19,7 +19,7 @@ default_args = {
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
  'cloudusername' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API KEY  - LEAVE BLANK
  'cloudpassword' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API SECRET - LEAVE BLANK   
- 'solutionname': 'myawesometmlsolutionml-3f10',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
+ 'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
  'solutionairflowport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
  'solutionexternalport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
@@ -72,13 +72,14 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_1_getparams_dag_myawesometmlsolutionml-3f10", default_args=default_args, tags=["tml_system_step_1_getparams_dag_myawesometmlsolutionml-3f10"], schedule=None, catchup=False)
+@dag(dag_id="tml_system_step_1_getparams_dag", default_args=default_args, tags=["tml_system_step_1_getparams_dag"], schedule=None, catchup=False)
 def tmlparams():
     # Define tasks
     def empty():
         pass
 dag = tmlparams()
 
+    
 def reinitbinaries(sname):  
     pywindowfiles=glob.glob("/tmux/pythonwindows_*") 
     
@@ -130,7 +131,7 @@ def updateviperenv():
     if 'KAFKACLOUDPASSWORD' in os.environ:
           cloudpassword = os.environ['KAFKACLOUDPASSWORD']
                 
-    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess-pgpt/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
      with open(mainfile, 'r', encoding='utf-8') as file: 
        data = file.readlines() 
@@ -250,6 +251,7 @@ def getparams(**context):
   sname = args['solutionname']    
   desc = args['description']        
   stitle = args['solutiontitle']    
+  
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
   reinitbinaries(sname)
@@ -397,6 +399,7 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_solutionname".format(sd),value=sname)
   task_instance.xcom_push(key="{}_solutiondescription".format(sname),value=desc)
   task_instance.xcom_push(key="{}_solutiontitle".format(sname),value=stitle)
+
   task_instance.xcom_push(key="{}_containername".format(sname),value='')
   task_instance.xcom_push(key="{}_brokerhost".format(sname),value=brokerhost)
   task_instance.xcom_push(key="{}_brokerport".format(sname),value="_{}".format(brokerport))
