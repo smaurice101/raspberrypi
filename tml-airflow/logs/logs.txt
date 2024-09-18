@@ -10104,3 +10104,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-18_18:36:15] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-myawesometmlsolutionml-3f10.py
 [INFO 2024-09-18_18:36:35] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolutionml-3f10.py
 [INFO 2024-09-18_18:36:42] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolutionml-3f10.py
+[ERROR 2024-09-18_18:36:44] Deploying to Docker in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolutionml-3f10.py: [Errno 2] No such file or directory: '/raspberrypi/tml-airflow/dags/tml-solutions/_mysolution_/docker_run_stop-_mysolution_.py'
