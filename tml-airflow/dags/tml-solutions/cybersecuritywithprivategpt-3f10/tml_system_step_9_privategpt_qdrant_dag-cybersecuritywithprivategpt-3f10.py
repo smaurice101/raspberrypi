@@ -227,7 +227,7 @@ def gatherdataforprivategpt(result):
          
          if found and default_args['hyperbatch']=="0":
               message = "{}.  Data: {}.  {}".format(context,message,prompt)
-              privategptmessage.append(message)
+              privategptmessage.append([message,identarr[0]])
 
                 
    if jsonkeytogather != 'Identifier' and found and default_args['hyperbatch']=="1":
