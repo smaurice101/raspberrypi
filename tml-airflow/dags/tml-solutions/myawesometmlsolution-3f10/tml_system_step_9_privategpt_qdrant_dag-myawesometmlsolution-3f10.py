@@ -42,14 +42,15 @@ probabilities are low, it is likely the device is not working properly.', # what
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'Voltage,current', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
+ 'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
- 'concurrency' : '2', # change as needed 
+ 'concurrency' : '1', # change as needed Leave at 1
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_9_privategpt_qdrant_dag_myawesometmlsolution-3f10", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag_myawesometmlsolution-3f10"], schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_9_privategpt_qdrant_dag", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag"], schedule=None,  catchup=False)
 def startaiprocess():
     # Define tasks
     def empty():
@@ -155,6 +156,7 @@ def gatherdataforprivategpt(result):
 
    res=json.loads(result,strict='False')
    message = ""
+   found=0 
 
    if jsonkeytogather == '':
      tsslogging.tsslogit("PrivateGPT DAG jsonkeytogather is empty in {} {}".format(os.path.basename(__file__),e), "ERROR" )
@@ -171,21 +173,23 @@ def gatherdataforprivategpt(result):
            isin=any(x in r['Identifier'].lower() for x in aar)
            if isin:
              found=0
-             for d in r['RawData']:
-               found=1
-               message = message  + str(d) + '<br>'
+             for d in r['RawData']:              
+                found=1
+                message = message  + str(d) + ', '
              if found:
-               message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
-               privategptmessage.append(message)
+               message = "{}.  Data: {}. {}".format(context,message,prompt)
+               privategptmessage.append([message,identarr[0]])
              message = ""
          except Excepption as e:
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-           break
+#           break
        else:
          isin1 = False
          isin2 = False
          found=0
+         message = ""   
+         identarr=r['Identifier'].split("~")   
          if processtype != '' and attribute != '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
@@ -199,7 +203,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '<br>'
+               message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          elif processtype != '' and attribute == '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
@@ -208,7 +212,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '<br>'
+               message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          elif processtype == '' and attribute != '':
            attribute = attribute.lower()
            aar = attribute.split(",")
@@ -217,15 +221,20 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + '<br>'
+               message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          else:
            buf = r[jsonkeytogather]
            if buf != '':
              found=1
-             message = message  + buf + '<br>'
+             message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
+         
+         if found and default_args['hyperbatch']=="0":
+              message = "{}.  Data: {}.  {}".format(context,message,prompt)
+              privategptmessage.append([message,identarr[0]])
 
-   if jsonkeytogather != 'Identifier' and found:
-     message = "{}<br><br> {} <br><br>{}".format(context,message,prompt)
+                
+   if jsonkeytogather != 'Identifier' and found and default_args['hyperbatch']=="1":
+     message = "{}.  Data: {}.  {}".format(context,message,prompt)
      privategptmessage.append(message)
 
 
@@ -235,19 +244,39 @@ def gatherdataforprivategpt(result):
 
 def sendtoprivategpt(maindata):
 
+   counter = 0   
    pgptendpoint="/v1/completions"
-
+   
    maintopic = default_args['pgpt_data_topic']
    mainip = default_args['pgpthost']
    mainport = default_args['pgptport']
 
-   for m in maindata:
+   for mess in maindata:
+        if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']=="0":
+           m = mess[0]
+           m1 = mess[1]
+        else:
+           m = mess
+           m1 = default_args['keyattribute']
+            
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
-        response = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"
-        if 'ERROR:' not in response:
+        response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
+        print("PGPT response=",response)
+        if 'ERROR:' not in response:         
+          response = response.replace('\\"',"'").replace('\n',' ')  
           producegpttokafka(response,maintopic)
-          print("response=",response)
+          time.sleep(1)
+        else:
+          counter += 1
+          time.sleep(1)
+          if counter > 60:                
+             startpgptcontainer()
+             qdrantcontainer()
+             counter = 0 
+             tsslogging.tsslogit("PrivateGPT Step 9 DAG PrivateGPT Container restarting in {} {}".format(os.path.basename(__file__),response), "WARN" )
+             tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")                    
+                
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
@@ -269,7 +298,7 @@ def startprivategpt(**context):
        ti = context['task_instance']
        ti.xcom_push(key="{}_consumefrom".format(sname), value=default_args['consumefrom'])
        ti.xcom_push(key="{}_pgpt_data_topic".format(sname), value=default_args['pgpt_data_topic'])
-       ti.xcom_push(key="{}_pgptcontainer".format(sname), value=default_args['pgptcontainername'])
+       ti.xcom_push(key="{}_pgptcontainername".format(sname), value=default_args['pgptcontainername'])
        ti.xcom_push(key="{}_offset".format(sname), value="_{}".format(default_args['offset']))
        ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(default_args['rollbackoffset']))
 
@@ -289,6 +318,7 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_cuda".format(sname), value="_{}".format(default_args['CUDA_VISIBLE_DEVICES']))
        ti.xcom_push(key="{}_pgpthost".format(sname), value=default_args['pgpthost'])
        ti.xcom_push(key="{}_pgptport".format(sname), value="_{}".format(default_args['pgptport']))
+       ti.xcom_push(key="{}_hyperbatch".format(sname), value="_{}".format(default_args['hyperbatch']))
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
@@ -300,40 +330,3 @@ def startprivategpt(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:]), "ENTER"])
-
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-       if sys.argv[1] == "1":
-        repo=tsslogging.getrepo()
-        try:
-          tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-        except Exception as e:
-            #git push -f origin main
-            os.chdir("/{}".format(repo))
-            subprocess.call("git push -f origin main", shell=True)
-
-        VIPERTOKEN = sys.argv[2]
-        VIPERHOST = sys.argv[3]
-        VIPERPORT = sys.argv[4]
-
-        startpgptcontainer()
-        qdrantcontainer()
-        time.sleep(10)  # wait for containers to start
-
-        while True:
-         try:
-             # Get preprocessed data from Kafka
-             result = consumetopicdata()
-
-             # Format the preprocessed data for PrivateGPT
-             maindata = gatherdataforprivategpt(result)
-
-             # Send the data to PrivateGPT and produce to Kafka
-             if len(maindata) > 0:
-               sendtoprivategpt(maindata)
-             time.sleep(1)
-         except Exception as e:
-          tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-          break
