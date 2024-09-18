@@ -19,7 +19,7 @@ default_args = {
   'secure': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
   'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
   'append' : '0',   # << ** Do not append new data in the browser
-  'rollbackoffset' : '500', # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
+  'rollbackoffset' : '200', # *************** Rollback the data stream by rollbackoffset.  For example, if 500, then Viperviz wll grab all of the data from the last offset - 500
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
