@@ -10072,3 +10072,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-18_17:46:11] TML Solution Studio: DELETE initiated for project iotsolutionmqtt-3f10 by smaurice101
 [INFO 2024-09-18_17:46:11] TML Solution Studio: GIT REPO iotsolutionmqtt-3f10 DELETED by smaurice101
 [INFO 2024-09-18_17:46:11] TML Solution Studio: LOCAL DOCKER IMAGE iotsolutionmqtt-3f10-amd64 DELETED by maadsdocker
+[INFO 2024-09-18_17:46:47] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myawesometmlsolution-3f10.py
