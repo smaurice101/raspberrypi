@@ -156,6 +156,7 @@ def gatherdataforprivategpt(result):
 
    res=json.loads(result,strict='False')
    message = ""
+   found=0 
 
    if jsonkeytogather == '':
      tsslogging.tsslogit("PrivateGPT DAG jsonkeytogather is empty in {} {}".format(os.path.basename(__file__),e), "ERROR" )
