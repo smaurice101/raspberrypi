@@ -185,6 +185,7 @@ def gatherdataforprivategpt(result):
          isin1 = False
          isin2 = False
          found=0
+         message = ""   
          identarr=r['Identifier'].split("~")   
          if processtype != '' and attribute != '':
            processtype = processtype.lower()
