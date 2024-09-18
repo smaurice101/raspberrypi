@@ -249,7 +249,7 @@ def sendtoprivategpt(maindata):
    mainport = default_args['pgptport']
 
    for mess in maindata:
-        if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']==0:
+        if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']=="0":
            m = mess[0]
            m1 = mess[1]
         else:
