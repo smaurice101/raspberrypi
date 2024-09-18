@@ -184,6 +184,7 @@ def gatherdataforprivategpt(result):
          isin1 = False
          isin2 = False
          found=0
+         identarr=r['Identifier'].split("~")   
          if processtype != '' and attribute != '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
@@ -197,7 +198,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + ', '
+               message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          elif processtype != '' and attribute == '':
            processtype = processtype.lower()
            ptypearr = processtype.split(",")
