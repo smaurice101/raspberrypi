@@ -9933,3 +9933,4 @@ Do any of the values of the inbound or outbond packets look abnormal?"}
 [INFO 2024-09-18_01:41:17] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-09-18_01:41:23] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-09-18_01:43:11] {'name': ['Project with slug "cybersecuritywithprivategpt-3f10" already exists.']}
+[INFO 2024-09-18_02:12:01] Deleting topic cisco-network-mainstream in tml_system_step_2_kafka_createtopic_dag-cybersecuritywithprivategpt-3f10.py
