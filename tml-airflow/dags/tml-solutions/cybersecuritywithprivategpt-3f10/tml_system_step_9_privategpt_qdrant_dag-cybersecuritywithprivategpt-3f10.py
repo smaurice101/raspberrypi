@@ -207,7 +207,7 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + ', '
+               message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          elif processtype == '' and attribute != '':
            attribute = attribute.lower()
            aar = attribute.split(",")
@@ -216,12 +216,12 @@ def gatherdataforprivategpt(result):
              buf = r[jsonkeytogather]
              if buf != '':
                found=1
-               message = message  + buf + ', '
+               message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          else:
            buf = r[jsonkeytogather]
            if buf != '':
              found=1
-             message = message  + buf + ', '
+             message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
 
    if jsonkeytogather != 'Identifier' and found:
      message = "{}.  Data: {}.  {}".format(context,message,prompt)
