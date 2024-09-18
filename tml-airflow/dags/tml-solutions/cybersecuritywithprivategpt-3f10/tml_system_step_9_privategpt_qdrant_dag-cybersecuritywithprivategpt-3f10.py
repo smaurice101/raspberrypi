@@ -40,6 +40,7 @@ default_args = {
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
  'keyprocesstype' : 'AnomProb',  # change as needed
+ 'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
  'concurrency' : '1', # change as needed 
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
@@ -307,6 +308,8 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_cuda".format(sname), value="_{}".format(default_args['CUDA_VISIBLE_DEVICES']))
        ti.xcom_push(key="{}_pgpthost".format(sname), value=default_args['pgpthost'])
        ti.xcom_push(key="{}_pgptport".format(sname), value="_{}".format(default_args['pgptport']))
+       ti.xcom_push(key="{}_hyperbatch".format(sname), value="_{}".format(default_args['hyperbatch']))
+
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
