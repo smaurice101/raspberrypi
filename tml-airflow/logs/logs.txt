@@ -9937,3 +9937,4 @@ Do any of the values of the inbound or outbond packets look abnormal?"}
 [INFO 2024-09-18_02:12:03] Deleting topic cisco-network-preprocess in tml_system_step_2_kafka_createtopic_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-09-18_02:12:06] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-09-18_02:12:08] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-cybersecuritywithprivategpt-3f10.py
+[INFO 2024-09-18_02:12:10] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-cybersecuritywithprivategpt-3f10.py
