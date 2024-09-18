@@ -245,6 +245,7 @@ def gatherdataforprivategpt(result):
 def sendtoprivategpt(maindata):
 
    counter = 0   
+   maxc = 120
    pgptendpoint="/v1/completions"
    
    maintopic = default_args['pgpt_data_topic']
@@ -270,7 +271,7 @@ def sendtoprivategpt(maindata):
         else:
           counter += 1
           time.sleep(1)
-          if counter > 60:                
+          if counter > maxc:                
              startpgptcontainer()
              qdrantcontainer()
              counter = 0 
