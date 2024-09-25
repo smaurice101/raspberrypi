@@ -19,7 +19,7 @@ default_args = {
   'myemail' : 'Sebastian.Maurice',  # <<< ********** You change as needed
   'mylocation' : 'Toronto',  # <<< ********** You change as needed
   'replication' : '3',  # <<< ********** You change as needed
-  'numpartitions': '1',  # <<< ********** You change as needed
+  'numpartitions': '2',  # <<< ********** You change as needed
   'enabletls': '1',  # <<< ********** You change as needed
   'brokerhost' : '',  # <<< ********** Leave as is
   'brokerport' : '-999',  # <<< ********** Leave as is
