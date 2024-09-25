@@ -28,7 +28,7 @@ default_args = {
   'enabletls': '1',
   'microserviceid' : '',
   'producerid' : 'iotsolution',  
-  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
+  'topics' : 'cisco-network-mainstream', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
   'tss_rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
   'rest_port' : '9002',  # <<< ***** replace replace with port number i.e. this is listening on port 9000     
