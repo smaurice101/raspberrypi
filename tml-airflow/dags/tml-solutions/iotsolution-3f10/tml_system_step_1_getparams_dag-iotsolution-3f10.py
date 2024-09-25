@@ -15,7 +15,7 @@ sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'owner': 'Sebastian Maurice',  # <<< ******** change as needed 
- 'brokerhost' : 'pkc-3w22w.us-central1.gcp.confluent.cloud',  # <<<<***************** THIS WILL ACCESS LOCAL KAFKA - YOU CAN CHANGE TO CLOUD KAFKA HOST
+ 'brokerhost' : '127.0.0.1',  # <<<<***************** THIS WILL ACCESS LOCAL KAFKA - YOU CAN CHANGE TO CLOUD KAFKA HOST
  'brokerport' : '9092',     # <<<<***************** LOCAL AND CLOUD KAFKA listen on PORT 9092
  'cloudusername' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API KEY  - LEAVE BLANK
  'cloudpassword' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API SECRET - LEAVE BLANK   
@@ -130,7 +130,10 @@ def updateviperenv():
           cloudusername = os.environ['KAFKACLOUDUSERNAME']
     if 'KAFKACLOUDPASSWORD' in os.environ:
           cloudpassword = os.environ['KAFKACLOUDPASSWORD']
-                
+
+    cloudusername = ""
+    cloudpassword = ""
+            
     filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess-pgpt/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
      with open(mainfile, 'r', encoding='utf-8') as file: 
