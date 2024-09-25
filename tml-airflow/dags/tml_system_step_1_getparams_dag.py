@@ -142,7 +142,10 @@ def updateviperenv():
           continue 
         
        if 'KAFKA_CONNECT_BOOTSTRAP_SERVERS' in d: 
-         data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}\n".format(default_args['brokerhost'],default_args['brokerport'])
+         if default_args['brokerport'] == '':
+           data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}\n".format(default_args['brokerhost'])    
+         else:       
+           data[r] = "KAFKA_CONNECT_BOOTSTRAP_SERVERS={}:{}\n".format(default_args['brokerhost'],default_args['brokerport'])
        if 'CLOUD_USERNAME' in d: 
          data[r] = "CLOUD_USERNAME={}\n".format(cloudusername)
        if 'CLOUD_PASSWORD' in d: 
