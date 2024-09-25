@@ -10235,3 +10235,4 @@ Already up to date.
 [INFO 2024-09-25_00:00:24] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-iotsolution-3f10.py
 [INFO 2024-09-25_00:00:28] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolution-3f10.py
 [INFO 2024-09-25_00:00:31] Preprocessing2 DAG in tml_system_step_4b_kafka_preprocess_dag-iotsolution-3f10.py
+[INFO 2024-09-25_00:00:34] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolution-3f10.py
