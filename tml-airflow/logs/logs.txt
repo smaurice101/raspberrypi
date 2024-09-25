@@ -10346,3 +10346,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-25_17:50:46] {'name': ['Project with slug "iotsolution-3f10" already exists.']}
 [INFO 2024-09-25_17:55:16] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-iotsolution-3f10.py
 [INFO 2024-09-25_17:55:19] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-iotsolution-3f10.py
+[INFO 2024-09-25_17:55:21] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-iotsolution-3f10.py
