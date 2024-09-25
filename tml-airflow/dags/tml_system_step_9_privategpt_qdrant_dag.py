@@ -245,7 +245,7 @@ def gatherdataforprivategpt(result):
 def sendtoprivategpt(maindata):
 
    counter = 0   
-   maxc = 120
+   maxc = 300
    pgptendpoint="/v1/completions"
    
    maintopic = default_args['pgpt_data_topic']
