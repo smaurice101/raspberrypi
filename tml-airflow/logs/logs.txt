@@ -10372,3 +10372,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-25_18:14:41] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolution-3f10.py
 [ERROR 2024-09-25_18:14:43] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolution-3f10.py invalid literal for int() with base 10: ''
 [INFO 2024-09-25_18:14:43] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolution-3f10.py
+[INFO 2024-09-25_18:14:52] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolution-3f10.py
