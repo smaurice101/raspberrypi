@@ -134,6 +134,7 @@ def setupkafkatopics(**context):
                                  myname,myemail,mylocation,description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,
                                  microserviceid='')
+        print("Result after=",result)
       except Exception as e:
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e), "ERROR" )                     
