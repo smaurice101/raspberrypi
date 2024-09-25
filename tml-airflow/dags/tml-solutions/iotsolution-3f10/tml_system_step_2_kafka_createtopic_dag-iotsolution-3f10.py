@@ -130,7 +130,7 @@ def setupkafkatopics(**context):
           continue
       print("Creating topic=",topic)  
       try:
-        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,companyname,
+        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT[1:],topic,companyname,
                                  myname,myemail,mylocation,description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,
                                  microserviceid='')
