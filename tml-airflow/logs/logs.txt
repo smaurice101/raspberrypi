@@ -10248,3 +10248,4 @@ Already up to date.
 [INFO 2024-09-25_00:24:57] Visualization DAG in tml_system_step_7_kafka_visualization_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-09-25_00:25:03] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-09-25_00:25:10] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-cybersecuritywithprivategpt-3f10.py
+[ERROR 2024-09-25_00:25:27] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py local variable 'found' referenced before assignment
