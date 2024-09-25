@@ -28,7 +28,7 @@ default_args = {
   'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< ***** leave blank
   'producerid' : 'iotsolution',  # <<< *** Change as needed
-  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
+  'topics' : 'cisco-network-mainstream', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  # <<< *** Change as needed
   'tss_gRPC_Port' : '9001',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001
   'gRPC_Port' : '9002',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001
