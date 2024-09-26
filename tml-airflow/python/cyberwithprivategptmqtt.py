@@ -36,8 +36,8 @@ lastoutboundpacketd=1000000
 ######################################## USER CHOOSEN PARAMETERS ########################################
 
 def mqttconnection():
-     username="hivemq.webclient.1725974242180"
-     password=",9G*mRjp0$DE8!daFH4f"
+     username="<enter username>"
+     password="<enter password>"
 
      client = paho.Client(paho.CallbackAPIVersion.VERSION2)
      mqttBroker = default_args['mqtt_broker'] 
