@@ -127,13 +127,15 @@ def setupkafkatopics(**context):
         
     if '127.0.0.1' in mainbroker:
         replication=1
+
+    VIPERHOSTMAIN = "{}{}".format(HTTPADDR,VIPERHOST)    
         
     for topic in topicsarr:  
       if topic == '':
           continue
       print("Creating topic=",topic)  
       try:
-        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT[1:],topic,companyname,
+        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOSTMAIN,VIPERPORT[1:],topic,companyname,
                                  myname,myemail,mylocation,description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,
                                  microserviceid='')
