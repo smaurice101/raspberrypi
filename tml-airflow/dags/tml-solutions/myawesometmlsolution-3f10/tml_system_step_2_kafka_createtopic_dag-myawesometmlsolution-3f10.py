@@ -126,7 +126,7 @@ def setupkafkatopics(**context):
             continue 
         
     for topic in topicsarr:  
-      if topic != '':
+      if topic == '':
           continue
       print("Creating topic=",topic)  
       try:
