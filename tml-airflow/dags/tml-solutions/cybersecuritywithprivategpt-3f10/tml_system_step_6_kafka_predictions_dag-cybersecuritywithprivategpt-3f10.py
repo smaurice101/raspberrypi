@@ -33,9 +33,9 @@ default_args = {
   'mainalgokey' : '', # leave blank
   'offset' : '-1', # << ** input data will start from the end of the preprocess_data_topic and rollback maxrows
   'delay' : '60', # << network delay parameter 
-  'usedeploy' : '', # << 1=use algorithms in ./deploy folder, 0=use ./models folder
+  'usedeploy' : '1', # << 1=use algorithms in ./deploy folder, 0=use ./models folder
   'networktimeout' : '6000', # << additional network parameter 
-  'maxrows' : '',  # << ** the number of offsets to rollback - For example, if 50, you will get 50 predictions continuously 
+  'maxrows' : '50',  # << ** the number of offsets to rollback - For example, if 50, you will get 50 predictions continuously 
   'produceridhyperprediction' : '',  # << leave blank
   'consumeridtraininedparams' : '',  # << leave blank
   'groupid' : '',  # << leave blank
