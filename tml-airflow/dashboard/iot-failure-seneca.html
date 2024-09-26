@@ -393,7 +393,7 @@ function image(thetype,mess) {
           <option value=90>90%</option>
           <option value=95>95%</option>
 		  
-      </select> </label><label>&nbsp;&nbsp;<input type="input" class="form__field" width=70 placeholder="Then Enter Emails to Send Patient Data File (Separate with Comma)"
+      </select> </label><label>&nbsp;&nbsp;<input type="input" class="form__field" width=70 placeholder="Enter Emails to Send Data File (Separate with Comma)"
 	  name="Email" id='riskemails'  /> | <input type="input" class="form__field" width=50 placeholder="Enter Kafka Topic To Save Results" name="Kafka" id='kafkatopic'  />
 	  <input type='button' id="emailsave"  class="btnsave" value="Save" name="Save" onclick="saveEmails(riskemails.value);">&nbsp;&nbsp;<input type='checkbox' id='backcheck' onchange="saveCheckbox(this,'background');"> Background
 </label>
