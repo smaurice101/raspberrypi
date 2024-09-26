@@ -36,8 +36,8 @@ lastoutboundpacketd=1000000
 ######################################## USER CHOOSEN PARAMETERS ########################################
 
 def mqttconnection():
-     username="<enter HiveMQ username>"
-     password="<enter hivemq password>"
+     username="hivemq.webclient.1725974242180"
+     password=",9G*mRjp0$DE8!daFH4f"
 
      client = paho.Client(paho.CallbackAPIVersion.VERSION2)
      mqttBroker = default_args['mqtt_broker'] 
@@ -54,11 +54,15 @@ def publishtomqttbroker(client,line):
      client.publish(topic=default_args['mqtt_subscribe_topic'], payload=line, qos=1, retain=False)
      client.loop()
      
-def formatdataandstream(mainjson,hackedid,client):
+def formatdataandstream(mainjson,hackedid,client,noping):
      global lastinboundpacketi,lastoutboundpacketi,lastinboundpacketd,lastoutboundpacketd
 
      harr = hackedid.split(",")
-
+     if noping == '':
+       nopingarr = []
+     else:  
+       nopingarr = noping.split(",")
+          
      jbuf = json.loads(mainjson)
      
      inside=0
@@ -94,7 +98,15 @@ def formatdataandstream(mainjson,hackedid,client):
 
             jbuf["inboundpackets"]=lastinboundpacketd
             jbuf["outboundpackets"]=lastoutboundpacketd
-                  
+
+       if len(nopingarr) > 0: 
+          if jbuf["hostName"] in nopingarr:
+            jbuf["pingStatus"] = "FAILURE"
+            jbuf["inboundpackets"]=0
+            jbuf["outboundpackets"]=0
+       else:
+            jbuf["pingStatus"] = "SUCCESS"
+              
      if inside==0: # normal machines  
          vali=random.randint(64,524)
          valo=random.randint(64,524)
@@ -119,11 +131,14 @@ def formatdataandstream(mainjson,hackedid,client):
 
 if __name__ == '__main__':
     hackedid=""
+    noping=""
     print(sys.argv)
     if len(sys.argv) > 1:
         hackedid = sys.argv[1]
+        noping = sys.argv[2]
     if hackedid == "": 
       hackedid="6.25-i,6.26-i,6.101-i"
+      noping=""
 
     # Connect to MQTT broker:
     client=mqttconnection()
@@ -145,7 +160,7 @@ if __name__ == '__main__':
                print("Read End:",datetime.now())
                continue
         #    senddata(line,producerid,maintopic)
-            formatdataandstream(line,hackedid,client)
+            formatdataandstream(line,hackedid,client,noping)
             time.sleep(.1)
          
            except Exception as e:
@@ -155,5 +170,4 @@ if __name__ == '__main__':
            time.sleep(.1)
 
         file1.close()
-
 
