@@ -124,6 +124,9 @@ def setupkafkatopics(**context):
           except Exception as e:
             print("ERROR: ",e)
             continue 
+
+    if '127.0.0.1' in mainbroker:
+        replication=1
         
     for topic in topicsarr:  
       if topic == '':
