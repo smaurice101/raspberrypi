@@ -197,7 +197,7 @@ if __name__ == '__main__':
         while True:
           try: 
             processtransactiondata()
-            time.sleep(.5)
+            time.sleep(2)
           except Exception as e:     
            tsslogging.tsslogit("Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
