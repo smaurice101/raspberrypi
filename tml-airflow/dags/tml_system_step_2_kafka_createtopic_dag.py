@@ -104,14 +104,13 @@ def setupkafkatopics(**context):
   ti.xcom_push(key="{}_ml_data_topic".format(sname), value=ml_data_topic)
   ti.xcom_push(key="{}_prediction_data_topic".format(sname), value=prediction_data_topic)
   
-  print("Vipertoken=", VIPERTOKEN)
-  print("VIPERHOST=", VIPERHOST)
-  print("VIPERPORT=", VIPERPORT)
+
 
   #############################################################################################################
   #                         CREATE TOPIC TO STORE TRAINED PARAMS FROM ALGORITHM  
 
   topickeys = ['raw_data_topic','preprocess_data_topic','ml_data_topic','prediction_data_topic','pgpt_data_topic'] 
+  VIPERHOSTMAIN = "{}{}".format(HTTPADDR,VIPERHOST)    
 
   for k in topickeys:
     producetotopic=args[k]
@@ -128,9 +127,7 @@ def setupkafkatopics(**context):
 
     if '127.0.0.1' in mainbroker:
         replication=1
-    
-    VIPERHOSTMAIN = "{}{}".format(HTTPADDR,VIPERHOST)    
-        
+            
     for topic in topicsarr:  
       if topic == '':
           continue
