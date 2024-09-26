@@ -10450,3 +10450,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-26_00:54:19] {'name': ['Project with slug "iotsolution-3f10" already exists.']}
 [INFO 2024-09-26_01:01:32] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-iotsolution-3f10.py
 [INFO 2024-09-26_01:01:34] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolution-3f10.py
+[INFO 2024-09-26_01:01:36] Preprocessing2 DAG in tml_system_step_4b_kafka_preprocess_dag-iotsolution-3f10.py
