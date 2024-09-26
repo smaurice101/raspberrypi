@@ -69,7 +69,7 @@ default_args = {
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
  'KUBERNETES' : '0',
 }
-
+http://localhost:9000/home
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
 @dag(dag_id="tml_system_step_1_getparams_dag_iotsolution-3f10", default_args=default_args, tags=["tml_system_step_1_getparams_dag_iotsolution-3f10"], schedule=None, catchup=False)
