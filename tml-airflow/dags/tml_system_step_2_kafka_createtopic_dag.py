@@ -88,7 +88,8 @@ def setupkafkatopics(**context):
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
   mainbroker = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_brokerhost".format(sname))
-    
+  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+
   ti = context['task_instance'] 
   ti.xcom_push(key="{}_companyname".format(sname), value=companyname)
   ti.xcom_push(key="{}_myname".format(sname), value=myname)
