@@ -131,7 +131,7 @@ def updateviperenv():
     if 'KAFKACLOUDPASSWORD' in os.environ:
           cloudpassword = os.environ['KAFKACLOUDPASSWORD']
 
-    if '127.0.0.1' in fault_args['brokerhost']:
+    if '127.0.0.1' in default_args['brokerhost']:
       cloudusername = ""
       cloudpassword = ""
         
