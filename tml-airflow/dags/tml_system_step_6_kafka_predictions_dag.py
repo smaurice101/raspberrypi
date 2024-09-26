@@ -35,7 +35,7 @@ default_args = {
   'delay' : '60', # << network delay parameter 
   'usedeploy' : '', # << 1=use algorithms in ./deploy folder, 0=use ./models folder
   'networktimeout' : '6000', # << additional network parameter 
-  'maxrows' : '',  # << ** the number of offsets to rollback - For example, if 50, you will get 50 predictions continuously 
+  'maxrows' : '50',  # << ** the number of offsets to rollback - For example, if 50, you will get 50 predictions continuously 
   'produceridhyperprediction' : '',  # << leave blank
   'consumeridtraininedparams' : '',  # << leave blank
   'groupid' : '',  # << leave blank
