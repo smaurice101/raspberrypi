@@ -62,7 +62,7 @@ with DAG(
       provide_context=True,
   )
     # STEP 4b: Preprocess the data        
- sensor_D2 = PythonOperator(
+  sensor_D2 = PythonOperator(
       task_id="step_4b_solution_task_preprocess",
       python_callable=step4b.dopreprocessing,
       provide_context=True,
