@@ -10608,3 +10608,4 @@ branch.main.merge=refs/heads/main
 [INFO 2024-09-27_18:23:36] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
 [INFO 2024-09-27_18:26:45] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-iotsolutionml-3f10.py
+[INFO 2024-09-27_18:26:47] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionml-3f10.py
