@@ -10648,3 +10648,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-27_18:57:05] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_18:57:07] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_18:57:15] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionml-3f10.py
+[INFO 2024-09-27_18:57:37] {'name': ['Project with slug "iotsolutionml-3f10" already exists.']}
