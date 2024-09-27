@@ -19,7 +19,7 @@ default_args = {
   'enabletls': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
-  'preprocess_data_topic' : 'iot-preprocess-data', # << *** data for the independent variables - You created this in STEP 2
+  'preprocess_data_topic' : 'iot-preprocess', # << *** data for the independent variables - You created this in STEP 2
   'ml_prediction_topic' : 'iot-ml-prediction-results-output', # topic to store the predictions - You created this in STEP 2
   'description' : 'TML solution',    # <<< *** Change as needed   
   'companyname' : 'Your company', # <<< *** Change as needed      
@@ -29,7 +29,7 @@ default_args = {
   'brokerport' : '-999', # <<< *** Leave as is
   'streamstojoin' : 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # << ** These are the streams in the preprocess_data_topic for these independent variables
   'inputdata' : '', # << ** You can specify independent variables manually - rather than consuming from the preprocess_data_topic stream
-  'consumefrom' : 'ml-data', # << This is ml_data_topic in STEP 5 that contains the estimated parameters
+  'consumefrom' : 'iot-trained-params-input', # << This is ml_data_topic in STEP 5 that contains the estimated parameters
   'mainalgokey' : '', # leave blank
   'offset' : '-1', # << ** input data will start from the end of the preprocess_data_topic and rollback maxrows
   'delay' : '60', # << network delay parameter 
@@ -40,8 +40,8 @@ default_args = {
   'consumeridtraininedparams' : '',  # << leave blank
   'groupid' : '',  # << leave blank
   'topicid' : '-1',   # << leave as is
-  'pathtoalgos' : '/Viper-ml/viperlogs/logistic', # << this is specified in fullpathtotrainingdata in STEP 5
-  'array' : '0', # 0=do not save as array, 1=save as array   
+  'pathtoalgos' : '/Viper-ml/viperlogs/iotlogistic', # << this is specified in fullpathtotrainingdata in STEP 5
+  'array' : '0', # 0=do not save as array, 1=save as array    
   'HPDEADDR' : 'http://' # Do not modify
 }
 ######################################## DO NOT MODIFY BELOW #############################################
