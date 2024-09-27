@@ -67,6 +67,19 @@ with DAG(
       python_callable=step4b.dopreprocessing,
       provide_context=True,
   )    
+# STEP 5: ML        
+  sensor_D3 = PythonOperator(
+      task_id="step_5_solution_task_ml",
+      python_callable=step5.startml,
+      provide_context=True,
+  )
+# STEP 6: Predictions        
+  sensor_D4 = PythonOperator(
+      task_id="step_6_solution_task_prediction",
+      python_callable=step6.startpredictions,
+      provide_context=True,
+  )    
+
 # STEP 7: Containerize the solution     
   sensor_E = PythonOperator(
       task_id="step_7_solution_task_visualization",
@@ -98,4 +111,4 @@ with DAG(
       provide_context=True,      
   )
 
-  start_task >> sensor_A >> sensor_B >> start_task4 >> [sensor_C, sensor_D, sensor_D2, sensor_E] >> start_task2 >> sensor_F >> start_task3  >> sensor_G
+  start_task >> sensor_A >> sensor_B >> start_task4 >> [sensor_C, sensor_D, sensor_D2, sensor_D3, sensor_D4, sensor_E] >> start_task2 >> sensor_F >> start_task3  >> sensor_G
