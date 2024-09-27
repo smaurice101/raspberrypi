@@ -10581,3 +10581,4 @@ Already up to date.
 [INFO 2024-09-27_16:37:54] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_16:37:55] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_16:38:02] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionml-3f10.py
+[INFO 2024-09-27_16:38:37] {'name': ['Project with slug "iotsolutionml-3f10" already exists.']}
