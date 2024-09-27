@@ -17,6 +17,8 @@ step1 = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_system_ste
 step2 = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_system_step_2_kafka_createtopic_dag-iotsolutionml-3f10")
 step3 = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-iotsolutionml-3f10")
 step4 = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_system_step_4_kafka_preprocess_dag-iotsolutionml-3f10")
+step4b = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_system_step_4b_kafka_preprocess_dag-iotsolutionml-3f10")
+
 step5 = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_system_step_5_kafka_machine_learning_dag-iotsolutionml-3f10")
 step6 = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_system_step_6_kafka_predictions_dag-iotsolutionml-3f10")
 step7 = importlib.import_module("tml-solutions.iotsolutionml-3f10.tml_system_step_7_kafka_visualization_dag-iotsolutionml-3f10")
