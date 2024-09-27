@@ -10587,3 +10587,4 @@ Already up to date.
 [INFO 2024-09-27_16:50:16] Preprocessing2 DAG in tml_system_step_4b_kafka_preprocess_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_16:50:19] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_16:50:22] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionml-3f10.py
+[INFO 2024-09-27_16:50:23] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionml-3f10.py
