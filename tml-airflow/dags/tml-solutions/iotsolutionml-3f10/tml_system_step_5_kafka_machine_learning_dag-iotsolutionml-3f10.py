@@ -190,7 +190,9 @@ def startml(**context):
        ti.xcom_push(key="{}_coeftoprocess".format(sname), value=default_args['coeftoprocess'])
        ti.xcom_push(key="{}_coefsubtopicnames".format(sname), value=default_args['coefsubtopicnames'])
        ti.xcom_push(key="{}_HPDEADDR".format(sname), value=HPDEADDR)
+       ti.xcom_push(key="{}_processlogic".format(sname), value=default_args['processlogic'])
 
+    
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
