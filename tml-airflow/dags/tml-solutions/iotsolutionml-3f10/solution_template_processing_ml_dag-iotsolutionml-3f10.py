@@ -60,6 +60,11 @@ with DAG(
       python_callable=step4.dopreprocessing,
       provide_context=True,
   )
+  sensor_D2 = PythonOperator(
+      task_id="step_4b_solution_task_preprocess",
+      python_callable=step4b.dopreprocessing,
+      provide_context=True,
+  )    
 # STEP 5: ML        
   sensor_E = PythonOperator(
       task_id="step_5_solution_task_ml",
@@ -104,4 +109,4 @@ with DAG(
       provide_context=True,      
   )
 
-  start_task >> sensor_A >> sensor_B >> start_task4 >> [sensor_C, sensor_D, sensor_E, sensor_F, sensor_G] >> start_task2 >> sensor_H >> start_task3 >> sensor_J
+  start_task >> sensor_A >> sensor_B >> start_task4 >> [sensor_C, sensor_D, sensor_D2, sensor_E, sensor_F, sensor_G] >> start_task2 >> sensor_H >> start_task3 >> sensor_J
