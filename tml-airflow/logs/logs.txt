@@ -10545,3 +10545,4 @@ Already up to date.
 [INFO 2024-09-27_14:14:38] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_14:14:40] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_14:14:42] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-iotsolutionml-3f10.py
+[INFO 2024-09-27_14:14:44] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-iotsolutionml-3f10.py
