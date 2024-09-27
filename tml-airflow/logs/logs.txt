@@ -10556,3 +10556,4 @@ Already up to date.
 [INFO 2024-09-27_14:19:51] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_14:19:53] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-iotsolutionml-3f10.py
 [INFO 2024-09-27_14:19:54] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionml-3f10.py
+[INFO 2024-09-27_14:20:00] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionml-3f10.py
