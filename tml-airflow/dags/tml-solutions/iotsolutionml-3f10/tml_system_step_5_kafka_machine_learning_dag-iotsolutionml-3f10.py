@@ -21,7 +21,7 @@ default_args = {
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
   'preprocess_data_topic' : 'iot-preprocess', # << *** topic/data to use for training datasets - You created this in STEP 2
   'ml_data_topic' : 'ml-data', # topic to store the trained algorithms  - You created this in STEP 2
-  'identifier' : 'TML solution',    # <<< *** Change as needed   
+  'identifier' : 'IoT Failure Probability Model',    # <<< *** Change as needed   
   'companyname' : 'Your company', # <<< *** Change as needed      
   'myemail' : 'Your email', # <<< *** Change as needed      
   'mylocation' : 'Your location', # <<< *** Change as needed      
@@ -35,7 +35,7 @@ default_args = {
   'modelsearchtuner' : '90', # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
   'dependentvariable' : 'failure', # <<< *** Change as needed, 
   'independentvariables': 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # <<< *** Change as needed, 
-  'rollbackoffsets' : '500', # <<< *** Change as needed, 
+  'rollbackoffsets' : '1000', # <<< *** Change as needed, 
   'consumeridtrainingdata2': '', # leave blank
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
@@ -47,8 +47,8 @@ default_args = {
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
   'coeftoprocess' : '', # indicate the index of the coefficients to process i.e. 0,1,2 For example, for a 3 estimated parameters 0=constant, 1,2 are the other estmated paramters
   'coefsubtopicnames' : '',  # Give the coefficients a name: constant,elasticity,elasticity2    
-  'viperconfigfile' : '/Viper-ml/viper.env', # Do not modify
-  'HPDEADDR' : 'http://'
+  'viperconfigfile' : '/Viper-ml/viper.env', # Do not modify    
+  'HPDEADDR' : 'http://'  
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
