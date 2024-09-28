@@ -10673,3 +10673,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-28_01:37:26] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-iotsolutionml-3f10.py
 [INFO 2024-09-28_01:37:30] Predictions DAG in tml_system_step_6_kafka_predictions_dag-iotsolutionml-3f10.py
 [INFO 2024-09-28_01:37:32] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionml-3f10.py
+[INFO 2024-09-28_01:37:41] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionml-3f10.py
