@@ -10675,3 +10675,20 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-09-28_01:37:32] Visualization DAG in tml_system_step_7_kafka_visualization_dag-iotsolutionml-3f10.py
 [INFO 2024-09-28_01:37:41] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-iotsolutionml-3f10.py
 [INFO 2024-09-28_01:39:49] {'name': ['Project with slug "iotsolutionml-3f10" already exists.']}
+[INFO 2024-10-03_01:14:42] TML Solution Studio Started: DOCKERUSERNAME=maadsdocker, GITUSERNAME=smaurice101, GITREPOURL=https://github.com/smaurice101/raspberrypi.git, AIRFLOWPORT=9000
+[INFO 2024-10-03_01:14:43] TML Solution Studio: Docker Login Status: Get "https://registry-1.docker.io/v2/": unauthorized: incorrect username or password
+[INFO 2024-10-03_01:14:43] TML Solution Studio: Github Config Status: safe.directory=/raspberrypi
+pull.rebase=true
+user.email=smaurice101@email
+user.name=smaurice101
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/smaurice101/raspberrypi.git
+remote.origin.fetch=+refs/heads/main:refs/remotes/origin/main
+remote.origin.pushurl=https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+[INFO 2024-10-03_01:14:43] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
+origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
