@@ -19,8 +19,8 @@ varname="%Fat"
 filename="weight_height.csv"
 # The variable for distributional analysis in weight_height.csv
 varname="Height"
-# Folder path to save output
-folderpath='<specify path to local folder folder>'
+# Folder path to save output.  Enter valid path, or it will be saved in current directory.
+folderpath='.'
 # name of file
 imgname="bml"
 
@@ -31,5 +31,7 @@ varname="Sample Data"
 # 7 to print the TOP 7 distributions in the image and JSON
 # Use either filename or dataarr NOT both
 filename=""
-finddist(filename,varname,dataarr,folderpath,imgname,1,7)
-
+try:
+ finddist(filename,varname,dataarr,folderpath,imgname,1,7)
+except Exception as e:
+  print(e)  
