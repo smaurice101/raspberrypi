@@ -29,5 +29,7 @@ dataarr = genarray()
 varname="Sample Data"
 # here we are using 1 for FAST distribution analysis using the most common distributions
 # 7 to print the TOP 7 distributions in the image and JSON
-finddist("",varname,dataarr,folderpath,imgname,1,7)
+# Use either filename or dataarr NOT both
+filename=""
+finddist(filename,varname,dataarr,folderpath,imgname,1,7)
 
