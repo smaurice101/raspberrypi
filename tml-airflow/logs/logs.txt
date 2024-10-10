@@ -10772,3 +10772,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-10_16:50:25] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-10_16:50:28] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-10_16:50:29] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject-3f10.py
+[INFO 2024-10-10_16:50:36] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject-3f10.py
