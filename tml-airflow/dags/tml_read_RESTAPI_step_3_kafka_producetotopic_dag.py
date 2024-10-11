@@ -103,6 +103,7 @@ def gettmlsystemsparams():
           try:  
             http_server = WSGIServer(('', int(default_args['tss_rest_port'])), app)
           except Exception as e:
+           tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to WSGIServer in {} - {}".format(os.path.basename(__file__),e)                                
            tsslogging.tsslogit("ERROR: Cannot connect to WSGIServer in {}".format(os.path.basename(__file__)), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
            print("ERROR: Cannot connect to  WSGIServer") 
