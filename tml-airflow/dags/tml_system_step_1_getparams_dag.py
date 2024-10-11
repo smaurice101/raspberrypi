@@ -256,6 +256,8 @@ def getparams(**context):
   HPDEHOSTPREDICT = ""
   HPDEPORTPREDICT = ""
 
+  tsslogging.locallogs("INFO", "Build started") 
+    
   sname = args['solutionname']    
   desc = args['description']        
   stitle = args['solutiontitle']    
