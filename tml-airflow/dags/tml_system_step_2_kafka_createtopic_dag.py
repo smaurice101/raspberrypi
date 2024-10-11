@@ -54,6 +54,9 @@ def deletetopics(topic):
     
 def setupkafkatopics(**context):
  # Set personal data
+
+  tsslogging.locallogs("INFO", "STEP 2: Create topics started") 
+    
   args = default_args
   companyname=args['companyname']
   myname=args['myname']
@@ -138,6 +141,8 @@ def setupkafkatopics(**context):
                                  brokerhost,brokerport,numpartitions,replication,
                                  microserviceid='')
       except Exception as e:
+       tsslogging.locallogs("ERROR", "STEP 2: Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e)) 
+    
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e), "ERROR" )                     
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")  
