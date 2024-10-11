@@ -117,6 +117,8 @@ def reinitbinaries(sname):
     # copy folders
     shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
     
+    #remove local logs
+    #os.remove()
         
 def updateviperenv():
     # update ALL
