@@ -83,6 +83,7 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
 
 def serve():
+    tsslogging.locallogs("INFO", "STEP 3: producing data started")
     repo=tsslogging.getrepo()
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
@@ -95,6 +96,8 @@ def serve():
         else:
           server.add_insecure_port("[::]:{}".format(default_args['tss_gRPC_Port']))
     except Exception as e:
+           tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e))
+        
            tsslogging.tsslogit("ERROR: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
            print("ERROR: Cannot connect to gRPC server in") 
@@ -119,6 +122,8 @@ def startproducing(**context):
        global HTTPADDR
        global VIPERHOSTFROM
 
+       tsslogging.locallogs("INFO", "STEP 3: producing data started")
+            
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
