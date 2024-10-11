@@ -11204,3 +11204,6 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-11_18:14:46] TML Solution Studio: DELETE initiated for project myfirsttssproject9-3f10 by smaurice101
 [INFO 2024-10-11_18:14:46] TML Solution Studio: GIT REPO myfirsttssproject9-3f10 DELETED by smaurice101
 [INFO 2024-10-11_18:14:46] TML Solution Studio: LOCAL DOCKER IMAGE myfirsttssproject9-3f10-amd64 DELETED by maadsdocker
+[INFO 2024-10-11_18:14:56] TML Solution Studio: DELETE initiated for project myfirsttssproject8-3f10 by smaurice101
+[INFO 2024-10-11_18:14:56] TML Solution Studio: GIT REPO myfirsttssproject8-3f10 DELETED by smaurice101
+[INFO 2024-10-11_18:14:56] TML Solution Studio: LOCAL DOCKER IMAGE myfirsttssproject8-3f10-amd64 DELETED by maadsdocker
