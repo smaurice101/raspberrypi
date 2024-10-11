@@ -41,7 +41,7 @@ def dockerit(**context):
         if os.environ['tssbuild']=="1":
             return        
      try:
-
+     
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
         
@@ -53,7 +53,8 @@ def dockerit(**context):
        cname = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
       
        print("Containername=",cname)
-        
+       tsslogging.locallogs("INFO", "STEP 8: Starting docker push for: {}".format(cname))
+            
        ti = context['task_instance']
        ti.xcom_push(key="{}_containername".format(sname),value=cname)
        ti.xcom_push(key="{}_solution_dag_to_trigger".format(sname), value=sd)
