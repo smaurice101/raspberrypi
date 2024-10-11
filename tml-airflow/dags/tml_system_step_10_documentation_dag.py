@@ -616,7 +616,7 @@ def generatedoc(**context):
     tsslogging.locallogs("INFO", "STEP 10: Documentation successfully built on GitHub..Readthedocs build in process and should complete in few seconds")
     try:
        sf = "" 
-       with open('/dagslocalbackup/logs.txt') as f:
+       with open('/dagslocalbackup/logs.txt', "r") as f:
             sf=f.read()
             doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
     except Exception as e:
