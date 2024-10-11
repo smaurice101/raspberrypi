@@ -10907,3 +10907,4 @@ Already up to date.
 [INFO 2024-10-11_02:32:26] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject4-3f10.py
 [INFO 2024-10-11_02:32:28] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject4-3f10.py
 [INFO 2024-10-11_02:32:30] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject4-3f10.py
+[INFO 2024-10-11_02:32:38] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myfirsttssproject4-3f10.py
