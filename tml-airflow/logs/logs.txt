@@ -11153,3 +11153,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-11_17:42:12] {'name': ['Project with slug "myfirsttssproject9-3f10" already exists.']}
 [INFO 2024-10-11_17:42:19] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myfirsttssproject9-3f10.py
 [INFO 2024-10-11_17:42:21] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myfirsttssproject9-3f10.py
+[INFO 2024-10-11_17:42:22] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject9-3f10.py
