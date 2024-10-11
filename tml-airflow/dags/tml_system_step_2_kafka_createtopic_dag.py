@@ -148,3 +148,4 @@ def setupkafkatopics(**context):
        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")  
         
       print("Result=",result)
+  tsslogging.locallogs("INFO", "STEP 2: Completed")
