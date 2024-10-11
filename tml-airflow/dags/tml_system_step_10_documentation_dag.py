@@ -614,20 +614,20 @@ def generatedoc(**context):
        pass 
 
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
-    
-    if os.environ['TSS'] == "1":
+    try:
+     if os.environ['TSS'] == "1":
       doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TSS Development Environment Container"])
-    else:
+     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container"])
     
     # Kick off shell script 
     #tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
     
-    subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,sname), shell=True)
+     subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,sname), shell=True)
     
-    rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
+     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
 
-    if rtd == None: 
+     if rtd == None: 
         URL = 'https://readthedocs.org/api/v3/projects/'
         TOKEN = os.environ['READTHEDOCS']
         HEADERS = {'Authorization': f'token {TOKEN}'}
@@ -656,7 +656,9 @@ def generatedoc(**context):
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
     
-    updatebranch(sname,"main")
-    triggerbuild(sname)
-    ti = context['task_instance']
-    ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
+     updatebranch(sname,"main")
+     triggerbuild(sname)
+     ti = context['task_instance']
+     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
+   except Exception as e:
+    print("ERROR=",e)
