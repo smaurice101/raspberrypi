@@ -11089,3 +11089,4 @@ Already up to date.
 [INFO 2024-10-11_15:47:14] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject9-3f10.py
 [INFO 2024-10-11_15:47:16] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject9-3f10.py
 [INFO 2024-10-11_15:47:18] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject9-3f10.py
+[INFO 2024-10-11_15:47:20] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject9-3f10.py
