@@ -11265,3 +11265,5 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-11_18:27:09] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myfirsttssproject10-3f10.py
 [INFO 2024-10-11_18:27:10] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject10-3f10.py
 [INFO 2024-10-11_18:27:16] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject10-3f10.py
+[INFO 2024-10-11_18:27:23] {'name': ['Project with slug "myfirsttssproject10-3f10" already exists.']}
+[INFO 2024-10-11_20:17:52] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject10-3f10.py
