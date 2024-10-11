@@ -109,7 +109,7 @@ def gettmlsystemsparams():
            print("ERROR: Cannot connect to  WSGIServer") 
            return             
             
-        
+        tsslogging.locallogs("INFO", "STEP 3: RESTAPI HTTP Server started ... successfully")
         http_server.serve_forever()        
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
