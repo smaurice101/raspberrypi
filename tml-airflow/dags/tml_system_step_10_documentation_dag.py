@@ -618,7 +618,7 @@ def generatedoc(**context):
        sf = "" 
        with open('/dagslocalbackup/logs.txt', "r") as f:
             sf=f.read()
-            doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
+       doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
     except Exception as e:
       print("Cannot open file - ",e)  
       pass        
