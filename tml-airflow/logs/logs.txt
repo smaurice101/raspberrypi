@@ -11291,3 +11291,4 @@ Already up to date.
 [INFO 2024-10-11_21:19:15] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-11_21:19:17] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-11_21:19:19] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
+[INFO 2024-10-11_21:19:21] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
