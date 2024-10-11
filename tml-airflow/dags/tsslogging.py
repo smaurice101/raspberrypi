@@ -39,7 +39,7 @@ def getrepo(filename='/tmux/reponame.txt'):
 def locallogs(mtype,message):    
   
   now = datetime.datetime.now(timezone.utc)
-  dbuf = "[INFO " + now.strftime("%Y-%m-%d_%H:%M:%S") + "]"
+  dbuf = "[{} ".format(mtype) + now.strftime("%Y-%m-%d_%H:%M:%S") + "]"
 
   with open("/dagslocalbackup/logs.txt", "a") as myfile:
     myfile.write("{} {}".format(dbuf,message)
