@@ -42,7 +42,7 @@ def locallogs(mtype,message):
   dbuf = "[{} ".format(mtype) + now.strftime("%Y-%m-%d_%H:%M:%S") + "]"
 
   with open("/dagslocalbackup/logs.txt", "a") as myfile:
-    myfile.write("{} {}".format(dbuf,message))
+    myfile.write("{} {}\n".format(dbuf,message))
     
     
 def git_push2(solution):
