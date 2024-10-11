@@ -70,6 +70,8 @@ def dockerit(**context):
     
          v=subprocess.call("docker push {}".format(cname), shell=True)  
          print("[INFO] docker push {} - message={}".format(cname,v))  
+         tsslogging.locallogs("INFO", "STEP 8: Docker push is: docker push {} - message={}".format(cname,v)) 
+           
        os.environ['tssbuild']="1"
     
        doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,sname,sname), ["--solution-name--;{}".format(sname)])
@@ -77,5 +79,6 @@ def dockerit(**context):
     
      except Exception as e:
         print("[ERROR] Step 8: ",e)
+        tsslogging.locallogs("ERROR", "STEP 8: Deploying to Docker in {}: {}".format(os.path.basename(__file__),e))
         tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
         tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
