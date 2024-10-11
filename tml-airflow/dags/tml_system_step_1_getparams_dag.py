@@ -256,7 +256,7 @@ def getparams(**context):
   HPDEHOSTPREDICT = ""
   HPDEPORTPREDICT = ""
 
-  tsslogging.locallogs("INFO", "Build started") 
+  tsslogging.locallogs("INFO", "STEP 1: Build started") 
     
   sname = args['solutionname']    
   desc = args['description']        
@@ -414,3 +414,5 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_brokerhost".format(sname),value=brokerhost)
   task_instance.xcom_push(key="{}_brokerport".format(sname),value="_{}".format(brokerport))
   task_instance.xcom_push(key="{}_chip".format(sname),value=chip)
+    
+  tsslogging.locallogs("INFO", "STEP 1: completed - TML system parameters successfully gathered")
