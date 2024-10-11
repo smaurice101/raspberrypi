@@ -245,6 +245,12 @@ def updateviperenv():
     subprocess.call("/tmux/starttml.sh", shell=True)
     time.sleep(3)
 
+def killports():
+    p1=int(os.environ['SOLUTIONEXTERNALPORT'])
+    p2=int(os.environ['SOLUTIONVIPERVIZPORT'])
+    v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(p1)])
+    v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(p2)])
+    
 def getparams(**context):
   args = default_args    
   VIPERHOST = ""
@@ -356,7 +362,7 @@ def getparams(**context):
     task_instance.xcom_push(key="{}_SOLUTIONEXTERNALPORT".format(sname),value="_{}".format(os.environ['SOLUTIONEXTERNALPORT'])) 
     task_instance.xcom_push(key="{}_SOLUTIONVIPERVIZPORT".format(sname),value="_{}".format(os.environ['SOLUTIONVIPERVIZPORT']))  
     task_instance.xcom_push(key="{}_SOLUTIONAIRFLOWPORT".format(sname),value="_{}".format(os.environ['SOLUTIONAIRFLOWPORT'])) 
-    
+    killports()
 
   if 'MQTTUSERNAME' in os.environ:
     task_instance.xcom_push(key="{}_MQTTUSERNAME".format(sname),value=os.environ['MQTTUSERNAME'])
