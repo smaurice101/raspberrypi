@@ -513,9 +513,16 @@ def generatedoc(**context):
        
     githublogs = "https:\/\/github.com\/{}\/{}\/blob\/main\/tml-airflow\/logs\/logs.txt".format(os.environ['GITUSERNAME'],repo)
     subprocess.call(["sed", "-i", "-e",  "s/--githublogs--/{}/g".format(githublogs), "/{}/docs/source/operating.rst".format(sname)])
-    
+    #-----------------------
     subprocess.call(["sed", "-i", "-e",  "s/--githublogs--/{}/g".format(githublogs), "/{}/docs/source/logs.rst".format(sname)])
-        
+    try:
+       sf = "" 
+       with open() as f:
+            sf=f.read()
+            doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
+    except Exception as e:
+      pass        
+    #-------------------    
     airflowurl = "http:\/\/localhost:{}".format(airflowport[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(airflowurl), "/{}/docs/source/operating.rst".format(sname)])
     
