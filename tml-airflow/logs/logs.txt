@@ -11116,3 +11116,4 @@ branch.main.merge=refs/heads/main
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
 [INFO 2024-10-11_17:31:28] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject9-3f10.py
 [INFO 2024-10-11_17:31:52] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject9-3f10.py
+[INFO 2024-10-11_17:31:55] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject9-3f10.py
