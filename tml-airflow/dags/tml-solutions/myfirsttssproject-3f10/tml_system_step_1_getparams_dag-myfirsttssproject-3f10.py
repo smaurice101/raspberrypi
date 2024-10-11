@@ -248,8 +248,8 @@ def updateviperenv():
 def killports():
     p1=int(os.environ['SOLUTIONEXTERNALPORT'])
     p2=int(os.environ['SOLUTIONVIPERVIZPORT'])
-    v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(p1)])
-    v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(p2)])
+    v=subprocess.call("kill -9 $(lsof -i:{} -t)".format(p1), shell=True)  
+    v=subprocess.call("kill -9 $(lsof -i:{} -t)".format(p2), shell=True)  
     
 def getparams(**context):
   args = default_args    
