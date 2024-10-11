@@ -75,6 +75,8 @@ def readdata():
     file1 = open(inputfile, 'r')
     print("Data Producing to Kafka Started:",datetime.now())
   except Exception as e:
+    tsslogging.locallogs("ERROR", "Localfile producing DAG in {} - {}".format(os.path.basename(__file__),e))     
+    
     tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
     return
@@ -112,6 +114,8 @@ def windowname(wtype,sname,dagname):
 
 def startproducing(**context):
 
+  tsslogging.locallogs("INFO", "STEP 3: producing data started")     
+  
   sd = context['dag'].dag_id
 
   sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
