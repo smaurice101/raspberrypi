@@ -147,6 +147,7 @@ def windowname(wtype,sname,dagname):
     return wn
 
 def dopreprocessing(**context):
+       tsslogging.locallogs("INFO", "STEP 4: Preprocessing started")
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
        
@@ -200,7 +201,8 @@ if __name__ == '__main__':
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3] 
         VIPERPORT = sys.argv[4]                  
-
+        tsslogging.locallogs("INFO", "STEP 4: Preprocessing started")
+                     
         while True:
           try: 
             processtransactiondata()
