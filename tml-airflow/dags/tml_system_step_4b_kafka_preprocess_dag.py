@@ -193,12 +193,14 @@ if __name__ == '__main__':
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3] 
         VIPERPORT = sys.argv[4]                  
+        tsslogging.locallogs("INFO", "STEP 4b: Preprocessing 2 started")
 
         while True:
           try: 
             processtransactiondata()
             time.sleep(1)
           except Exception as e:     
+           tsslogging.locallogs("INFO", "STEP 4b: Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e))
            tsslogging.tsslogit("Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
            break
