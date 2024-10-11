@@ -598,8 +598,8 @@ def generatedoc(**context):
  
     
     subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
-    
-    with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
+    try:
+      with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
         data.append("viper-produce")
         data.append("viper-preprocess")
@@ -609,6 +609,8 @@ def generatedoc(**context):
         tmuxwindows = ", ".join(data)
         tmuxwindows = tmuxwindows.replace("\n","")
         print("tmuxwindows=",tmuxwindows)
+    except Exception as e:
+       pass 
 
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
     
