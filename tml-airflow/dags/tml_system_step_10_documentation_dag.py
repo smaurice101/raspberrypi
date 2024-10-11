@@ -599,6 +599,7 @@ def generatedoc(**context):
     
     subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
     try:
+      tmuxwindows = "None"  
       with open("/tmux/pythonwindows_{}.txt".format(sname), 'r', encoding='utf-8') as file: 
         data = file.readlines() 
         data.append("viper-produce")
