@@ -11344,3 +11344,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-11_21:46:52] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-11_21:46:54] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-11_21:46:57] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
+[INFO 2024-10-11_21:47:03] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myfirsttssproject-3f10.py
