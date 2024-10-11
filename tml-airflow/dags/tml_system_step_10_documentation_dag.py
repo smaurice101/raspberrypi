@@ -620,6 +620,7 @@ def generatedoc(**context):
             sf=f.read()
             doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
     except Exception as e:
+      print("Cannot open file - ",e)  
       pass        
 
     if rtd == None: 
