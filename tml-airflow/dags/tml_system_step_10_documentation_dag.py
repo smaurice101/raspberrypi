@@ -516,6 +516,16 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--githublogs--/{}/g".format(githublogs), "/{}/docs/source/operating.rst".format(sname)])
     #-----------------------
     subprocess.call(["sed", "-i", "-e",  "s/--githublogs--/{}/g".format(githublogs), "/{}/docs/source/logs.rst".format(sname)])
+    tsslogging.locallogs("INFO", "STEP 10: Documentation successfully built on GitHub..Readthedocs build in process and should complete in few seconds")
+    try:
+       sf = "" 
+       with open('/dagslocalbackup/logs.txt', "r") as f:
+            sf=f.read()
+       doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
+    except Exception as e:
+      print("Cannot open file - ",e)  
+      pass        
+    
     #-------------------    
     airflowurl = "http:\/\/localhost:{}".format(airflowport[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(airflowurl), "/{}/docs/source/operating.rst".format(sname)])
@@ -613,15 +623,6 @@ def generatedoc(**context):
     subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,sname), shell=True)
     
     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
-    tsslogging.locallogs("INFO", "STEP 10: Documentation successfully built on GitHub..Readthedocs build in process and should complete in few seconds")
-    try:
-       sf = "" 
-       with open('/dagslocalbackup/logs.txt', "r") as f:
-            sf=f.read()
-       doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
-    except Exception as e:
-      print("Cannot open file - ",e)  
-      pass        
 
     if rtd == None: 
         URL = 'https://readthedocs.org/api/v3/projects/'
