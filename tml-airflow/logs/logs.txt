@@ -11225,3 +11225,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-11_18:16:04] TML Solution Studio: DELETE initiated for project myfirsttssproject2-3f10 by smaurice101
 [INFO 2024-10-11_18:16:04] TML Solution Studio: GIT REPO myfirsttssproject2-3f10 DELETED by smaurice101
 [INFO 2024-10-11_18:16:04] TML Solution Studio: LOCAL DOCKER IMAGE myfirsttssproject2-3f10-amd64 DELETED by maadsdocker
+[INFO 2024-10-11_18:20:16] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject10-3f10.py
