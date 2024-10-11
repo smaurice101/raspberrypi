@@ -11144,3 +11144,4 @@ branch.main.merge=refs/heads/main
 [INFO 2024-10-11_17:40:48] TML Solution Studio: Github Remote Status: origin	https://github.com/smaurice101/raspberrypi.git (fetch)
 origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi.git (push)
 [INFO 2024-10-11_17:41:33] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject9-3f10.py
+[INFO 2024-10-11_17:41:57] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject9-3f10.py
