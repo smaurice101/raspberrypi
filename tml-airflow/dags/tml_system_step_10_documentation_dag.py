@@ -660,5 +660,5 @@ def generatedoc(**context):
      triggerbuild(sname)
      ti = context['task_instance']
      ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
-   except Exception as e:
-    print("ERROR=",e)
+    except Exception as e:
+     print("ERROR=",e)
