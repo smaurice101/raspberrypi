@@ -10861,3 +10861,4 @@ Already up to date.
 [INFO 2024-10-11_02:07:58] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject4-3f10.py
 [INFO 2024-10-11_02:08:05] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-myfirsttssproject4-3f10.py
 [INFO 2024-10-11_02:08:08] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myfirsttssproject4-3f10.py
+[INFO 2024-10-11_02:08:09] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject4-3f10.py
