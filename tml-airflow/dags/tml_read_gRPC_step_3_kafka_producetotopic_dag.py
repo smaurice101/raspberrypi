@@ -103,6 +103,7 @@ def serve():
            print("ERROR: Cannot connect to gRPC server in") 
            return             
         
+    tsslogging.locallogs("INFO", "STEP 3: gRPC server started .. waiting for connections")        
     server.start()
     server.wait_for_termination()
 
@@ -165,6 +166,8 @@ def startproducing(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOSTFROM,VIPERPORT[1:]), "ENTER"])
+
+       tsslogging.locallogs("INFO", "STEP 3: producing data completed")
 
 if __name__ == '__main__':
 
