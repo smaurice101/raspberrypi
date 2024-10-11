@@ -10806,3 +10806,13 @@ Already up to date.
 [INFO 2024-10-11_00:21:03] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject3-3f10.py
 [INFO 2024-10-11_00:21:12] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject3-3f10.py
 [INFO 2024-10-11_00:22:07] {'name': ['Project with slug "myfirsttssproject3-3f10" already exists.']}
+[INFO 2024-10-11_01:48:12] TML Solution Studio: TML Project Creation: Creating new TML project: /raspberrypi/tml-airflow/dags/tml-solutions/myfirsttssproject4-3f10
+[INFO 2024-10-11_01:48:12] TML Solution Studio: git pull --rebase --autostash origin main Status: From https://github.com/smaurice101/raspberrypi
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+[INFO 2024-10-11_01:48:46] TML Solution Studio: Starting Git commit process for project: myfirsttssproject4-3f10
+[INFO 2024-10-11_01:48:46] TML Solution Studio: git commit -a Status for project myfirsttssproject4-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-10-11_01:48:47] TML Solution Studio: git push origin main Status: Everything up-to-date
+[INFO 2024-10-11_01:48:47] TML Solution Studio: git add . Status: 
+[INFO 2024-10-11_01:48:47] TML Solution Studio: git commit -a Status for project myfirsttssproject4-3f10: fatal: paths 'project ...' with -a does not make sense
+[INFO 2024-10-11_01:48:47] TML Solution Studio: git push Status for project myfirsttssproject4-3f10: Everything up-to-date
