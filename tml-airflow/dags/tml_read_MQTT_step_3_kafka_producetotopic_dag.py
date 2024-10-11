@@ -88,6 +88,8 @@ def mqttserverconnect():
      client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
      client.username_pw_set(username, password)
  except Exception as e:       
+   tsslogging.locallogs("ERROR", "Cannot connect to MQTT broker in {} - {}".format(os.path.basename(__file__),e))    
+    
    tsslogging.tsslogit("ERROR: Cannot connect to MQTT broker in {} - {}".format(os.path.basename(__file__),e), "ERROR" )                     
    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
    print("ERROR: Cannot connect to MQTT broker") 
@@ -97,6 +99,7 @@ def mqttserverconnect():
 
  if client:
    print("Connected")   
+   tsslogging.locallogs("INFO", "MQTT connection established...")
    client.on_subscribe = on_subscribe
    client.on_message = on_message
    client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)            
@@ -104,6 +107,7 @@ def mqttserverconnect():
    client.loop_forever()
  else:   
     print("Cannot Connect")   
+    tsslogging.locallogs("ERROR", "Cannot connect to MQTT broker in {} - {}".format(os.path.basename(__file__),e)) 
     tsslogging.tsslogit("CANNOT Connect to MQTT Broker in {}".format(os.path.basename(__file__)), "ERROR" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
     
@@ -151,6 +155,8 @@ def startproducing(**context):
        global HTTPADDR
        global VIPERHOSTFROM
 
+       tsslogging.locallogs("INFO", "STEP 3: producing data started")    
+        
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
@@ -189,7 +195,8 @@ def startproducing(**context):
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOSTFROM,VIPERPORT[1:]), "ENTER"])        
-        
+       
+    
 if __name__ == '__main__':
     
     if len(sys.argv) > 1:
