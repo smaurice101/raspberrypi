@@ -118,7 +118,7 @@ def reinitbinaries(sname):
     shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
     
     #remove local logs
-    #os.remove()
+    os.remove('/dagslocalbackup/logs.txt')
         
 def updateviperenv():
     # update ALL
