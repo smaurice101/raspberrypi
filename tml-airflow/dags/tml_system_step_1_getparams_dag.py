@@ -250,6 +250,7 @@ def killports():
     p2=int(os.environ['SOLUTIONVIPERVIZPORT'])
     v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(p1)])
     v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(p2)])
+    #kill -9 $(lsof -i:45495 -t)
     
 def getparams(**context):
   args = default_args    
