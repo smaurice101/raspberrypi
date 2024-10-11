@@ -93,6 +93,8 @@ def gettmlsystemsparams():
           try:  
             http_server = WSGIServer(('', int(default_args['rest_port'])), app)
           except Exception as e:
+           tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to WSGIServer in {} - {}".format(os.path.basename(__file__),e)
+                
            tsslogging.tsslogit("ERROR: Cannot connect to WSGIServer in {}".format(os.path.basename(__file__)), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
            print("ERROR: Cannot connect to  WSGIServer") 
@@ -141,7 +143,8 @@ def startproducing(**context):
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
-        
+       tsslogging.locallogs("INFO", "STEP 3: producing data started")
+
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
        
        repo=tsslogging.getrepo() 
