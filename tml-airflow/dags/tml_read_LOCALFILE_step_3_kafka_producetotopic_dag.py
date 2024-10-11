@@ -81,6 +81,8 @@ def readdata():
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
     return
 
+  tsslogging.locallogs("INFO", "STEP 3: reading local file..successfully")   
+
   while True:
     line = file1.readline()
     line = line.replace(";", " ")
