@@ -10969,3 +10969,4 @@ Already up to date.
 [INFO 2024-10-11_02:53:59] TML Solution Studio: git push Status for project myfirsttssproject6-3f10: Everything up-to-date
 [INFO 2024-10-11_02:55:45] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject6-3f10.py
 [INFO 2024-10-11_02:55:48] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject6-3f10.py
+[INFO 2024-10-11_02:55:50] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject6-3f10.py
