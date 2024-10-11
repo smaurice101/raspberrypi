@@ -87,6 +87,7 @@ def generatedoc(**context):
     if 'tssdoc' in os.environ:
         if os.environ['tssdoc']=="1":
             return
+    tsslogging.locallogs("INFO", "STEP 10: Started to build the documentation")
     
     sd = context['dag'].dag_id
     sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
@@ -517,7 +518,7 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--githublogs--/{}/g".format(githublogs), "/{}/docs/source/logs.rst".format(sname)])
     try:
        sf = "" 
-       with open() as f:
+       with open('/dagslocalbackup/logs.txt') as f:
             sf=f.read()
             doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
     except Exception as e:
