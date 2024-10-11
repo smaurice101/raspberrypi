@@ -36,6 +36,15 @@ def getrepo(filename='/tmux/reponame.txt'):
     
   return repo
 
+def locallogs(mtype,message):    
+  
+  now = datetime.datetime.now(timezone.utc)
+  dbuf = "[INFO " + now.strftime("%Y-%m-%d_%H:%M:%S") + "]"
+
+  with open("/dagslocalbackup/logs.txt", "a") as myfile:
+    myfile.write("{} {}".format(dbuf,message)
+    
+    
 def git_push2(solution):
     gitpass = os.environ['GITPASSWORD']
     gituser = os.environ['GITUSERNAME']
