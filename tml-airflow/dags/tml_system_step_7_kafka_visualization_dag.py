@@ -41,6 +41,7 @@ def windowname(wtype,vipervizport,sname,dagname):
 
 def startstreamingengine(**context):
         repo=tsslogging.getrepo()  
+        tsslogging.locallogs("INFO", "STEP 7: Visualization started")
         try:
           tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
@@ -81,3 +82,5 @@ def startstreamingengine(**context):
           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport[1:]), "ENTER"])            
         else:    
           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]), "ENTER"])
+
+        tsslogging.locallogs("INFO", "STEP 7: /Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]))
