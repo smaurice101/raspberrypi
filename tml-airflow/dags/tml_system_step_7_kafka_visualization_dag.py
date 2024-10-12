@@ -75,12 +75,16 @@ def startstreamingengine(**context):
     
         # start the viperviz on Vipervizport
         # STEP 5: START Visualization Viperviz 
-        wn = windowname('visual',vipervizport,sname,sd)
-        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
-        if tss[1:] == "1":
-          subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport[1:]), "ENTER"])            
-        else:    
-          subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]), "ENTER"])
+        for i in range(5):
+          wn = windowname('visual',vipervizport,sname,sd)
+          subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+          subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
+          if tss[1:] == "1":
+            subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport[1:]), "ENTER"])            
+          else:    
+            subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]), "ENTER"])
 
+          if tsslogging.testvizconnection==1:
+            break
+            
         tsslogging.locallogs("INFO", "STEP 7: /Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]))
