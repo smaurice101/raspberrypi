@@ -241,11 +241,19 @@ def updateviperenv():
        r += 1
      with open(mainfile, 'w', encoding='utf-8') as file: 
       file.writelines(data)
-
+    
+    tmlgood=0
     for i in range(0,5):
       subprocess.call("/tmux/starttml.sh", shell=True)
       if tsslogging.testtmlconnection()==1:
+            tmlgood=1
             break
+            
+    if tmlgood==0:
+        repo=tsslogging.getrepo()   
+        tsslogging.locallogs("ERROR", "STEP 1: Network issue - cannot ping TML binaries.  Tried 5 times in {}".format(os.path.basename(__file__)))
+        tsslogging.tsslogit("Step 1: Network issue - cannot reach TML binaries on ports. In File {}".format(os.path.basename(__file__)), "ERROR" )             
+        tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
     time.sleep(3)        
     
 def getparams(**context):
