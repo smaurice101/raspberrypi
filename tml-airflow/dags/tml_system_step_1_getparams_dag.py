@@ -243,7 +243,7 @@ def updateviperenv():
       file.writelines(data)
     
     tmlgood=0
-    for i in range(0,5):
+    for i in range(5):
       subprocess.call("/tmux/starttml.sh", shell=True)
       if tsslogging.testtmlconnection()==1:
             tmlgood=1
