@@ -11706,3 +11706,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-12_19:55:22] {'name': ['Project with slug "myfirsttssproject3-3f10" already exists.']}
 [INFO 2024-10-12_19:59:09] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject3-3f10.py
 [INFO 2024-10-12_19:59:11] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject3-3f10.py
+[INFO 2024-10-12_19:59:13] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject3-3f10.py
