@@ -11,7 +11,8 @@ import socket
 def testvizconnection(portnum):
    good = 1
    #subprocess.call("curl localhost:{} &> /tmux/c.txt".format(portnum), shell=True)
-   subprocess.run("curl localhost:{} &> /tmux/c.txt".format(portnum), shell = True, executable="/bin/bash")
+   v=subprocess.run("curl localhost:{} &> /tmux/c.txt".format(portnum), shell = True, executable="/bin/bash")
+   print("curl localhost:{} &> /tmux/c.txt".format(portnum), v)
     
    with open('/tmux/c.txt', 'r') as file:
     # Read each line in the file
