@@ -11762,3 +11762,4 @@ Already up to date.
 [INFO 2024-10-12_23:26:14] TML Solution Studio: git push Status for project realtimeiotdataprocessing-3f10: Everything up-to-date
 [INFO 2024-10-12_23:36:13] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-3f10.py
 [INFO 2024-10-12_23:36:16] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-3f10.py
+[INFO 2024-10-12_23:36:18] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-3f10.py
