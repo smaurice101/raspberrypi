@@ -242,7 +242,10 @@ def updateviperenv():
      with open(mainfile, 'w', encoding='utf-8') as file: 
       file.writelines(data)
 
-    subprocess.call("/tmux/starttml.sh", shell=True)
+    for i in range(0,5):
+      subprocess.call("/tmux/starttml.sh", shell=True)
+      if tsslogging.testtmlconnection()==1:
+            break
     time.sleep(3)        
     
 def getparams(**context):
