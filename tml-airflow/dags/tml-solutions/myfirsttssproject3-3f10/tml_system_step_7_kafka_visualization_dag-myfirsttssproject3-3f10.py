@@ -93,8 +93,9 @@ def startstreamingengine(**context):
             vizgood=1
             break
           else:
-             subprocess.call(["tmux", "kill-window", "-t", "{}".format(wn)])        
-             subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(mainport)])
+             if i < 4:
+              subprocess.call(["tmux", "kill-window", "-t", "{}".format(wn)])        
+              subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(mainport)])
              tsslogging.locallogs("WARN", "STEP 7: Cannot make a connection to Viperviz on port {}.  Going to try again...".format(mainport))
              time.sleep(3)   
                     
