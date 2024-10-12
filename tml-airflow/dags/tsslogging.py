@@ -11,16 +11,26 @@ import socket
 
 def testtmlconnection():
     good = 1
-    subprocess.call("curl localhost:{} &> /tmux/c.txt".format(os.environ['SOLUTIONVIPERVIZPORT']), shell=True)
+    if os.environ['SOLUTIONVIPERVIZPORT'] != "":
+      subprocess.call("curl localhost:{} &> /tmux/c.txt".format(os.environ['SOLUTIONVIPERVIZPORT']), shell=True)
     # Open the file in read mode
-    with open('/tmux/c.txt', 'r') as file:
+      with open('/tmux/c.txt', 'r') as file:
     # Read each line in the file
-      for line in file:
+        for line in file:
         # Print each line
-        ls=line.strip()
-        if 'Failed to connect' in ls:
+          ls=line.strip()
+          if 'Failed to connect' in ls:
             good=0
+            subprocess.call(["tmux", "kill-window", "-t", "viper-produce"])             
+            subprocess.call(["tmux", "kill-window", "-t", "viper-preprocess"])             
+            subprocess.call(["tmux", "kill-window", "-t", "viper-preprocess2"])             
+            subprocess.call(["tmux", "kill-window", "-t", "viper-preprocess-pgpt"])             
+            subprocess.call(["tmux", "kill-window", "-t", "viper-predict"])             
+            subprocess.call(["tmux", "kill-window", "-t", "viper-ml"])             
+            subprocess.call(["tmux", "kill-window", "-t", "hpde-ml"])             
+            subprocess.call(["tmux", "kill-window", "-t", "hpde-predict"])                         
             break
+            
     return good
 
 def killport(p):
