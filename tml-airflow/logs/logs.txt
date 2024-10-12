@@ -11485,3 +11485,4 @@ Already up to date.
 [INFO 2024-10-12_15:17:50] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-myfirsttssproject2-3f10.py
 [INFO 2024-10-12_15:17:52] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject2-3f10.py
 [INFO 2024-10-12_15:18:02] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject2-3f10.py
+[INFO 2024-10-12_15:18:47] {'name': ['Project with slug "myfirsttssproject2-3f10" already exists.']}
