@@ -33,7 +33,7 @@ default_args = {
   'islogistic' : '0',  # <<< *** Change as needed, 1=logistic, 0=not logistic
   'networktimeout' : '600', # <<< *** Change as needed      
   'modelsearchtuner' : '90', # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
-  'dependentvariable' : '', # <<< *** Change as needed, 
+  'dependentvariable' : 'failure', # <<< *** Change as needed, 
   'independentvariables': 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # <<< *** Change as needed, 
   'rollbackoffsets' : '500', # <<< *** Change as needed, 
   'consumeridtrainingdata2': '', # leave blank
@@ -41,7 +41,7 @@ default_args = {
   'consumefrom' : '',  # leave blank
   'topicid' : '-1',  # leave as is
   'fullpathtotrainingdata' : '/Viper-ml/viperlogs/logistic',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
-  'processlogic' : '',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
+  'processlogic' : 'classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
   'array' : '0',  # leave as is
   'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
