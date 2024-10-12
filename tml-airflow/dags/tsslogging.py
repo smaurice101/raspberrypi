@@ -8,6 +8,12 @@ import subprocess
 import os
 import socket
 
+
+def killport(p):
+#    p1=int(os.environ['SOLUTIONEXTERNALPORT'])
+#    p2=int(os.environ['SOLUTIONVIPERVIZPORT'])
+    v=subprocess.call("kill -9 $(lsof -i:{} -t)".format(p), shell=True)  
+    
 def tmuxchange(tmuxname):
   with open("/tmux/tmux-airflow.sh", "a") as myfile:
     myfile.write("airflow dags trigger {}".format(tmuxname))
