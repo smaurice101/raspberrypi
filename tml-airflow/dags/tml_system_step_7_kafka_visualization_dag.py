@@ -91,7 +91,7 @@ def startstreamingengine(**context):
             break
           else:
              subprocess.call(["tmux", "kill-window", "-t", "{}".format(wn)])        
-             subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
+             subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(mainport)])
                     
             
-        tsslogging.locallogs("INFO", "STEP 7: /Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]))
+        tsslogging.locallogs("INFO", "STEP 7: /Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,mainport))
