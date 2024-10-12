@@ -248,7 +248,8 @@ def updateviperenv():
       if tsslogging.testtmlconnection()==1:
             tmlgood=1
             break
-            
+      time.sleep(1)
+    
     if tmlgood==0:
         repo=tsslogging.getrepo()   
         tsslogging.locallogs("ERROR", "STEP 1: Network issue - cannot ping TML binaries.  Tried 5 times in {}".format(os.path.basename(__file__)))
