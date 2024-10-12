@@ -9,6 +9,20 @@ import os
 import socket
 
 
+def testtmlconnection():
+    good = 1
+    subprocess.call("curl localhost:{} &> /tmux/c.txt".format(os.environ['SOLUTIONVIPERVIZPORT']), shell=True)
+    # Open the file in read mode
+    with open('/tmux/c.txt', 'r') as file:
+    # Read each line in the file
+      for line in file:
+        # Print each line
+        ls=line.strip()
+        if 'Failed to connect' in ls:
+            good=0
+            break
+    return good
+
 def killport(p):
 #    p1=int(os.environ['SOLUTIONEXTERNALPORT'])
 #    p2=int(os.environ['SOLUTIONVIPERVIZPORT'])
