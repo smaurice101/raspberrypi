@@ -11641,3 +11641,4 @@ Already up to date.
 [INFO 2024-10-12_18:18:46] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject3-3f10.py
 [INFO 2024-10-12_18:18:57] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject3-3f10.py
 [INFO 2024-10-12_18:19:37] {'name': ['Project with slug "myfirsttssproject3-3f10" already exists.']}
+[INFO 2024-10-12_18:26:14] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject3-3f10.py
