@@ -11632,3 +11632,4 @@ Already up to date.
 [INFO 2024-10-12_18:06:34] {'name': ['Project with slug "myfirsttssproject3-3f10" already exists.']}
 [INFO 2024-10-12_18:18:23] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject3-3f10.py
 [INFO 2024-10-12_18:18:25] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject3-3f10.py
+[INFO 2024-10-12_18:18:27] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject3-3f10.py
