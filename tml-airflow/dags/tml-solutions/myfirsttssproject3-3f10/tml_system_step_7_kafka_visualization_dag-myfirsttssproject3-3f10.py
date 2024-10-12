@@ -88,6 +88,7 @@ def startstreamingengine(**context):
             subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]), "ENTER"])
             mainport=int(solutionvipervizport[1:])
 
+          time.sleep(5)  
           if tsslogging.testvizconnection(mainport)==1:
             tsslogging.locallogs("INFO", "STEP 7: /Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,mainport))            
             vizgood=1
@@ -97,7 +98,7 @@ def startstreamingengine(**context):
               subprocess.call(["tmux", "kill-window", "-t", "{}".format(wn)])        
               subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(mainport)])
              tsslogging.locallogs("WARN", "STEP 7: Cannot make a connection to Viperviz on port {}.  Going to try again...".format(mainport))
-             time.sleep(3)   
+             
                     
         if vizgood==0:  
           tsslogging.locallogs("ERROR", "STEP 7: Network issue.  Cannot make a connection to Viperviz on port {}".format(mainport))
