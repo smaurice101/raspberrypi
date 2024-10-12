@@ -243,14 +243,7 @@ def updateviperenv():
       file.writelines(data)
 
     subprocess.call("/tmux/starttml.sh", shell=True)
-    time.sleep(3)
-
-def killports():
-    p1=int(os.environ['SOLUTIONEXTERNALPORT'])
-    p2=int(os.environ['SOLUTIONVIPERVIZPORT'])
-    v=subprocess.call("kill -9 $(lsof -i:{} -t)".format(p1), shell=True)  
-    v=subprocess.call("kill -9 $(lsof -i:{} -t)".format(p2), shell=True)  
-        
+    time.sleep(3)        
     
 def getparams(**context):
   args = default_args    
