@@ -8,6 +8,18 @@ import subprocess
 import os
 import socket
 
+def testvizconnection(portnum):
+   good = 1
+   subprocess.call("curl localhost:{} &> /tmux/c.txt".format(portnum), shell=True)
+   with open('/tmux/c.txt', 'r') as file:
+    # Read each line in the file
+        for line in file:
+        # Print each line
+          ls=line.strip()
+          if 'Failed to connect' in ls:
+            good=0
+            break
+   return good         
 
 def testtmlconnection():
     good = 1
