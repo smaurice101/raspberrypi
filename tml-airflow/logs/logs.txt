@@ -11415,3 +11415,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-12_01:50:52] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-12_01:51:00] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myfirsttssproject-3f10.py
 [INFO 2024-10-12_01:51:27] {'name': ['Project with slug "myfirsttssproject-3f10" already exists.']}
+[INFO 2024-10-12_02:02:47] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myfirsttssproject-3f10.py
