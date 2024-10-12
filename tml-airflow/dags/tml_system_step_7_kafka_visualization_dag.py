@@ -79,12 +79,19 @@ def startstreamingengine(**context):
           wn = windowname('visual',vipervizport,sname,sd)
           subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
+          mainport=0 
           if tss[1:] == "1":
             subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport[1:]), "ENTER"])            
+            mainport=int(vipervizport[1:])
           else:    
             subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]), "ENTER"])
+            mainport=int(solutionvipervizport[1:])
 
-          if tsslogging.testvizconnection==1:
+          if tsslogging.testvizconnection(mainport)==1:
             break
+          else:
+             subprocess.call(["tmux", "kill-window", "-t", "{}".format(wn)])        
+             subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
+                    
             
         tsslogging.locallogs("INFO", "STEP 7: /Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,solutionvipervizport[1:]))
