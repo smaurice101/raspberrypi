@@ -17,7 +17,7 @@ sys.dont_write_bytecode = True
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
  'pgptcontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
- 'rollbackoffset' : '2',  # <<< *** Change as needed
+ 'rollbackoffset' : '50',  # <<< *** Change as needed
  'offset' : '-1', # leave as is
  'enabletls' : '1', # change as needed
  'brokerhost' : '', # <<< *** Leave as is
@@ -27,7 +27,7 @@ default_args = {
  'delay' : '100', # change as needed
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
- 'consumefrom' : 'iot-preprocess',    # <<< *** Change as needed
+ 'consumefrom' : 'cisco-network-preprocess',    # <<< *** Change as needed
  'pgpt_data_topic' : 'cisco-network-privategpt',
  'producerid' : 'private-gpt',   # <<< *** Leave as is
  'identifier' : 'This is analysing TML output with privategpt',
@@ -35,16 +35,14 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
- 'prompt': 'Do the device data show any malfunction or defects?', # Enter your prompt here
- 'context' : 'This is IoT data from devices. The data are \
-anomaly probabilities for each IoT device. If voltage or current \
-probabilities are low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT
+ 'prompt': 'Do any of the values of the inbound or outbound packets look abnormal?', # Enter your prompt here
+ 'context' : 'These data are anomaly probabilities of suspicious data traffic.  A high probability of over 0.80 is likely suspicious.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
- 'keyattribute' : 'Voltage,current', # change as needed  
- 'keyprocesstype' : 'anomprob',  # change as needed
+ 'keyattribute' : 'outboundpackets,inboundpackets', # change as needed  
+ 'keyprocesstype' : 'AnomProb',  # change as needed
  'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
- 'concurrency' : '1', # change as needed Leave at 1
+ 'concurrency' : '1', # change as needed 
  'CUDA_VISIBLE_DEVICES' : '0' # change as needed
 }
 
