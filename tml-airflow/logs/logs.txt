@@ -12086,3 +12086,4 @@ Already up to date.
 [INFO 2024-10-13_15:46:18] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolutionml-3f10.py
 [INFO 2024-10-13_15:46:29] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolutionml-3f10.py
 [INFO 2024-10-13_15:47:14] {'name': ['Project with slug "myawesometmlsolutionml-3f10" already exists.']}
+[INFO 2024-10-13_16:06:11] Deleting topic cisco-network-mainstream in tml_system_step_2_kafka_createtopic_dag-cybersecuritywithprivategpt-3f10.py
