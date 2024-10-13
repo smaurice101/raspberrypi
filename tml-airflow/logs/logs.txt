@@ -11931,3 +11931,4 @@ Already up to date.
 [INFO 2024-10-13_02:31:05] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_02:31:12] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_02:31:14] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-realtimeiotdataprocessing-with-ml-3f10.py
+[INFO 2024-10-13_02:31:17] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-realtimeiotdataprocessing-with-ml-3f10.py
