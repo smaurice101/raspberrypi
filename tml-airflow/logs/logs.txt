@@ -12156,3 +12156,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-13_17:15:09] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-realtimeiotprocessingwithmap-3f10.py
 [INFO 2024-10-13_17:15:16] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-realtimeiotprocessingwithmap-3f10.py
 [INFO 2024-10-13_17:15:19] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-realtimeiotprocessingwithmap-3f10.py
+[INFO 2024-10-13_17:15:21] Preprocessing2 DAG in tml_system_step_4b_kafka_preprocess_dag-realtimeiotprocessingwithmap-3f10.py
