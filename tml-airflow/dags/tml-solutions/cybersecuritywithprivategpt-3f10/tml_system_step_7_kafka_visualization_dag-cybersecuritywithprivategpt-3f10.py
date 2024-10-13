@@ -14,8 +14,8 @@ import random
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
-  'topic' : 'iot-preprocess,iot-preprocess2',    # <<< *** Separate multiple topics by a comma - Viperviz will stream data from these topics to your browser
-  'dashboardhtml': 'dashboard.html', # <<< *** name of your dashboard html file  try: iot-failure-seneca.html
+  'topic' : 'cisco-network-preprocess,cisco-network-privategpt',    # <<< *** Separate multiple topics by a comma - Viperviz will stream data from these topics to your browser
+  'dashboardhtml': 'tml-cisco-network-privategpt-monitor.html', # <<< *** name of your dashboard html file  try: iot-failure-seneca.html
   'secure': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
   'offset' : '-1',    # <<< *** -1 indicates to read from the last offset always
   'append' : '0',   # << ** Do not append new data in the browser
