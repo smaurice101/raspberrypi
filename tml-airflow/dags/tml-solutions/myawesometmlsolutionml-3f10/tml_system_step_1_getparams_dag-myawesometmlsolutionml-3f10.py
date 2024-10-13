@@ -20,7 +20,7 @@ default_args = {
  'cloudusername' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API KEY  - LEAVE BLANK
  'cloudpassword' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API SECRET - LEAVE BLANK   
  'solutionname': 'myawesometmlsolutionml-3f10',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
- 'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
+ 'solutiontitle': 'Real-Time IoT Data Processing with Real-Time Entity Based Machine LEarning', # <<< *** Provide a descriptive title for your solution
  'solutionairflowport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
  'solutionexternalport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
  'solutionvipervizport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number   
