@@ -12060,3 +12060,4 @@ Already up to date.
 [INFO 2024-10-13_15:31:04] Visualization DAG in tml_system_step_7_kafka_visualization_dag-myawesometmlsolution-3f10.py
 [INFO 2024-10-13_15:31:16] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-myawesometmlsolution-3f10.py
 [INFO 2024-10-13_15:31:58] {'name': ['Project with slug "myawesometmlsolution-3f10" already exists.']}
+[INFO 2024-10-13_15:43:55] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-myawesometmlsolutionml-3f10.py
