@@ -11803,3 +11803,4 @@ Already up to date.
 [INFO 2024-10-13_00:55:46] Localfile producing DAG in tml_read_LOCALFILE_step_3_kafka_producetotopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_00:55:49] Preprocessing DAG in tml_system_step_4_kafka_preprocess_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_00:55:53] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-realtimeiotdataprocessing-with-ml-3f10.py
+[INFO 2024-10-13_00:55:57] Predictions DAG in tml_system_step_6_kafka_predictions_dag-realtimeiotdataprocessing-with-ml-3f10.py
