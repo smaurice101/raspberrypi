@@ -19,7 +19,7 @@ default_args = {
   'enabletls': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
-  'preprocess_data_topic' : 'iot-preprocess2', # << *** topic/data to use for training datasets - You created this in STEP 2
+  'preprocess_data_topic' : 'iot-preprocess', # << *** topic/data to use for training datasets - You created this in STEP 2
   'ml_data_topic' : 'iot-trained-params-input', # topic to store the trained algorithms  - You created this in STEP 2
   'identifier' : 'TML solution',    # <<< *** Change as needed   
   'companyname' : 'Your company', # <<< *** Change as needed      
@@ -40,7 +40,7 @@ default_args = {
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
   'topicid' : '-1',  # leave as is
-  'fullpathtotrainingdata' : '/Viper-tml/viperlogs/iotlogistic',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
+  'fullpathtotrainingdata' : '/Viper-ml/viperlogs/iotlogistic',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
   'processlogic' : 'classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
   'array' : '0',  # leave as is
   'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
