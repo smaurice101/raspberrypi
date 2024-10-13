@@ -30,7 +30,7 @@ default_args = {
   'deploy' : '1', # <<< *** do not modofy
   'modelruns': '100', # <<< *** Change as needed      
   'offset' : '-1', # <<< *** Do not modify
-  'islogistic' : '0',  # <<< *** Change as needed, 1=logistic, 0=not logistic
+  'islogistic' : '1',  # <<< *** Change as needed, 1=logistic, 0=not logistic
   'networktimeout' : '600', # <<< *** Change as needed      
   'modelsearchtuner' : '90', # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
   'dependentvariable' : 'failure', # <<< *** Change as needed, 
