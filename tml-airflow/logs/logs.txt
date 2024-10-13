@@ -12118,3 +12118,4 @@ Already up to date.
 [INFO 2024-10-13_16:25:22] Visualization DAG in tml_system_step_7_kafka_visualization_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-10-13_16:25:32] PrivateGPT Step 9 DAG in tml_system_step_9_privategpt_qdrant_dag-cybersecuritywithprivategpt-3f10.py
 [INFO 2024-10-13_16:25:36] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-cybersecuritywithprivategpt-3f10.py
+[INFO 2024-10-13_16:26:21] {'name': ['Project with slug "cybersecuritywithprivategpt-3f10" already exists.']}
