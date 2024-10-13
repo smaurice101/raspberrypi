@@ -40,14 +40,14 @@ default_args = {
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
   'topicid' : '-1',  # leave as is
-  'fullpathtotrainingdata' : '/Viper-tml/viperlogs/iotlogistic',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
+  'fullpathtotrainingdata' : '/Viper-ml/viperlogs/iotlogistic',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
   'processlogic' : 'classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
   'array' : '0',  # leave as is
   'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
   'coeftoprocess' : '', # indicate the index of the coefficients to process i.e. 0,1,2 For example, for a 3 estimated parameters 0=constant, 1,2 are the other estmated paramters
   'coefsubtopicnames' : '',  # Give the coefficients a name: constant,elasticity,elasticity2    
-  'viperconfigfile' : '/Viper-tml/viper.env', # Do not modify
+  'viperconfigfile' : '/Viper-ml/viper.env', # Do not modify
   'HPDEADDR' : 'http://'
 }
 
