@@ -47,7 +47,7 @@ default_args = {
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
   'coeftoprocess' : '', # indicate the index of the coefficients to process i.e. 0,1,2 For example, for a 3 estimated parameters 0=constant, 1,2 are the other estmated paramters
   'coefsubtopicnames' : '',  # Give the coefficients a name: constant,elasticity,elasticity2    
-  'viperconfigfile' : '/Viper-ml/viper.env', # Do not modify
+  'viperconfigfile' : '/Viper-tml/viper.env', # Do not modify
   'HPDEADDR' : 'http://'
 }
 
