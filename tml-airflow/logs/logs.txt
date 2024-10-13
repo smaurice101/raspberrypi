@@ -11964,3 +11964,4 @@ Already up to date.
 [INFO 2024-10-13_02:54:16] {'name': ['Project with slug "realtimeiotdataprocessing-with-ml-3f10" already exists.']}
 [INFO 2024-10-13_03:02:38] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_03:02:40] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
+[INFO 2024-10-13_03:02:42] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
