@@ -11923,3 +11923,4 @@ Already up to date.
 [INFO 2024-10-13_02:28:58] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_02:29:00] Predictions DAG in tml_system_step_6_kafka_predictions_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_02:29:02] Visualization DAG in tml_system_step_7_kafka_visualization_dag-realtimeiotdataprocessing-with-ml-3f10.py
+[INFO 2024-10-13_02:30:54] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
