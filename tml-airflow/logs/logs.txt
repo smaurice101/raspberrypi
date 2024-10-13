@@ -11805,3 +11805,4 @@ Already up to date.
 [INFO 2024-10-13_00:55:53] Machine Learning DAG in tml_system_step_5_kafka_machine_learning_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_00:55:57] Predictions DAG in tml_system_step_6_kafka_predictions_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_00:55:59] Visualization DAG in tml_system_step_7_kafka_visualization_dag-realtimeiotdataprocessing-with-ml-3f10.py
+[INFO 2024-10-13_00:56:13] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-realtimeiotdataprocessing-with-ml-3f10.py
