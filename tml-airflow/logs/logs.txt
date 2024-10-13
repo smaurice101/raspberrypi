@@ -11928,3 +11928,4 @@ Already up to date.
 [INFO 2024-10-13_02:30:58] Deleting topic iot-preprocess2 in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_02:31:01] Deleting topic ml-data in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
 [INFO 2024-10-13_02:31:03] Deleting topic prediction-data in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
+[INFO 2024-10-13_02:31:05] Deleting topic cisco-network-privategpt in tml_system_step_2_kafka_createtopic_dag-realtimeiotdataprocessing-with-ml-3f10.py
