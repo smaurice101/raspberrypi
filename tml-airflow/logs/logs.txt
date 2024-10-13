@@ -12149,3 +12149,4 @@ origin	https://<personal access token hidden>@github.com/smaurice101/raspberrypi
 [INFO 2024-10-13_16:48:04] Docker DAG in tml_system_step_8_deploy_solution_to_docker_dag-realtimeiotprocessingwithmap-3f10.py
 [INFO 2024-10-13_16:49:49] {'name': ['Project with slug "realtimeiotprocessingwithmap-3f10" already exists.']}
 [INFO 2024-10-13_17:14:58] Deleting topic iot-raw-data in tml_system_step_2_kafka_createtopic_dag-realtimeiotprocessingwithmap-3f10.py
+[INFO 2024-10-13_17:15:00] Deleting topic iot-preprocess in tml_system_step_2_kafka_createtopic_dag-realtimeiotprocessingwithmap-3f10.py
