@@ -27,7 +27,7 @@ default_args = {
   'raw_data_topic' : 'iot-raw-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'preprocess_data_topic' : 'iot-preprocess,iot-preprocess2', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'ml_data_topic' : 'ml-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
-  'prediction_data_topic' : 'prediction-data', # Separate multiple topics with comma <<< ********** You change topic names as needed
+  'prediction_data_topic' : 'iot-ml-prediction-results-output', # Separate multiple topics with comma <<< ********** You change topic names as needed
   'pgpt_data_topic' : 'cisco-network-privategpt',  #  PrivateGPT will produce responses to this topic - change as  needed
   'description' : 'Topics to store iot data',      
 }
