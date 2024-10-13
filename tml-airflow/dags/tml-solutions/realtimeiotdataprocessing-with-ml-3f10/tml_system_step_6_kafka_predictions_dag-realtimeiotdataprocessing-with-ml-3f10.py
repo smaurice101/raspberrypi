@@ -20,7 +20,7 @@ default_args = {
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
   'preprocess_data_topic' : 'iot-preprocess', # << *** data for the independent variables - You created this in STEP 2
-  'ml_prediction_topic' : 'prediction-data', # topic to store the predictions - You created this in STEP 2
+  'ml_prediction_topic' : 'iot-ml-prediction-results-output', # topic to store the predictions - You created this in STEP 2
   'description' : 'TML solution',    # <<< *** Change as needed   
   'companyname' : 'Your company', # <<< *** Change as needed      
   'myemail' : 'Your email', # <<< *** Change as needed      
