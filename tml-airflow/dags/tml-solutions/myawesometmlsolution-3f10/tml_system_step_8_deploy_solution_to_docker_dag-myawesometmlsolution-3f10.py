@@ -65,7 +65,7 @@ def dockerit(**context):
        key = "trigger-{}".format(sname)
        os.environ[key] = sd
        if os.environ['TSS'] == "1": 
-         print("[INFO] docker commit {} {} - message={}".format(cid,cname,v))  
+         print("[INFO] docker commit {} {} ".format(cid,cname))  
          subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
