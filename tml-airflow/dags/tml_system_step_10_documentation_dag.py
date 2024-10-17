@@ -11,7 +11,7 @@ import subprocess
 import tsslogging
 import shutil
 from git import Repo
-
+import time
 sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
@@ -656,7 +656,7 @@ def generatedoc(**context):
         print(response.json())
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
-    
+     time.sleep(10)
      updatebranch(sname,"main")
      triggerbuild(sname)
      ti = context['task_instance']
