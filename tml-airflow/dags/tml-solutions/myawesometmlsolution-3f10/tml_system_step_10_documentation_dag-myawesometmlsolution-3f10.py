@@ -657,9 +657,28 @@ def generatedoc(**context):
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
     
+     ti = context['task_instance']
+     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")    
+     tsslogging.locallogs("ERROR", "STEP 10: Documentation successfully created. Check https://{}.readthedocs.io".format(sname))    
+     try:
+       sf = "" 
+       with open('/dagslocalbackup/logs.txt', "r") as f:
+            sf=f.read()
+       doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
+     except Exception as e:
+      print("Cannot open file - ",e)  
+      pass        
+        
      updatebranch(sname,"main")
      triggerbuild(sname)
-     ti = context['task_instance']
-     ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
+        
     except Exception as e:
-     print("ERROR=",e)
+     tsslogging.locallogs("ERROR", "STEP 10: There seems to an issue created the documentation.  Error={}".format(e))
+     try:
+       sf = "" 
+       with open('/dagslocalbackup/logs.txt', "r") as f:
+            sf=f.read()
+       doparse("/{}/docs/source/logs.rst".format(sname), ["--logs--;{}".format(sf)])
+     except Exception as e:
+      print("Cannot open file - ",e)  
+      pass
