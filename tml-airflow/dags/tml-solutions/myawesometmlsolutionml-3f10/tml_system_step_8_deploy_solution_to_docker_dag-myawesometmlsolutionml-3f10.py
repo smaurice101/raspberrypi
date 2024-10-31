@@ -60,11 +60,11 @@ def dockerit(**context):
        ti.xcom_push(key="{}_solution_dag_to_trigger".format(sname), value=sd)
         
        scid = tsslogging.getrepo('/tmux/cidname.txt')
-       cid = os.environ['SCID']
+       cid = scid
   
        key = "trigger-{}".format(sname)
        os.environ[key] = sd
-       if os.environ['TSS'] == "1": 
+       if os.environ['TSS'] == "1" and len(cid) > 1: 
          print("[INFO] docker commit {} {}".format(cid,cname))  
          subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
          cbuf="docker commit {} {}".format(cid,cname)
@@ -81,6 +81,10 @@ def dockerit(**context):
               tsslogging.locallogs("WARN", "STEP 8: There seems to an issue pushing to Docker.  Here is the command: docker push {} - message={}".format(cname,v)) 
          else:                   
               tsslogging.locallogs("INFO", "STEP 8: Successfully ran Docker push: docker push {} - message={}".format(cname,v)) 
+       elif len(cid) <= 1:
+              tsslogging.locallogs("ERROR", "STEP 8: There seems to be an issue with docker commit. Here is the command: docker commit {} {}".format(cid,cname)) 
+              tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
+              tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
            
        os.environ['tssbuild']="1"
     
