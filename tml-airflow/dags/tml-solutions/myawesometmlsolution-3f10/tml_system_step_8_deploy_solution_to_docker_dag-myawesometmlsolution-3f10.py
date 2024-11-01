@@ -83,7 +83,7 @@ def dockerit(**context):
               tsslogging.locallogs("INFO", "STEP 8: Successfully ran Docker push: docker push {} - message={}".format(cname,v)) 
        elif len(cid) <= 1:
               tsslogging.locallogs("ERROR", "STEP 8: There seems to be an issue with docker commit. Here is the command: docker commit {} {}".format(cid,cname)) 
-              tsslogging.tsslogit("Deploying to Docker in {}: {}".format(os.path.basename(__file__),e), "ERROR" )             
+              tsslogging.tsslogit("Deploying to Docker in {}".format(os.path.basename(__file__)), "ERROR" )             
               tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
            
        os.environ['tssbuild']="1"
