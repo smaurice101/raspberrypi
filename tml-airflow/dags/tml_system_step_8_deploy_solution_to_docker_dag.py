@@ -60,7 +60,7 @@ def dockerit(**context):
        ti.xcom_push(key="{}_solution_dag_to_trigger".format(sname), value=sd)
         
        scid = tsslogging.getrepo('/tmux/cidname.txt')
-       cid = scid
+       cid = scid # cid added
   
        key = "trigger-{}".format(sname)
        os.environ[key] = sd
