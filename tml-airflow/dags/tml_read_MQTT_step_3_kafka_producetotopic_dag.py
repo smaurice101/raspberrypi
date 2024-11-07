@@ -102,7 +102,10 @@ def mqttserverconnect():
    tsslogging.locallogs("INFO", "MQTT connection established...")
    client.on_subscribe = on_subscribe
    client.on_message = on_message
-   client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)            
+   b=client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)      
+   if 'MQTT_ERR_SUCCESS' not in str(b):
+           print("ERROR Making a connection to HiveMQ:",b)
+   
    client.on_connect = on_connect
    client.loop_forever()
  else:   
