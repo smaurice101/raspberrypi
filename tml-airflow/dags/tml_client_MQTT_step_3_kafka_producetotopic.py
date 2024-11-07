@@ -39,11 +39,10 @@ def publishtomqttbroker(client,line):
      b=client.publish(topic=default_args['mqtt_subscribe_topic'], payload=line, qos=1, retain=False)
      if 'MQTT_ERR_SUCCESS' in str(b):
         print(line)
+        client.loop()
      else:
         print("ERROR Making a connection to HiveMQ:",b)
   
-     client.loop()
-
 def readdatafile(client,inputfile):
 
   ##############################################################
