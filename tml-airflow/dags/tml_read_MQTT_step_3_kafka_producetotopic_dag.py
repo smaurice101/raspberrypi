@@ -105,9 +105,12 @@ def mqttserverconnect():
    b=client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)      
    if 'MQTT_ERR_SUCCESS' not in str(b):
            print("ERROR Making a connection to HiveMQ:",b)
-   
-   client.on_connect = on_connect
-   client.loop_forever()
+           tsslogging.locallogs("ERROR", "Cannot connect to MQTT broker in {} - {}".format(os.path.basename(__file__),str(b))) 
+           tsslogging.tsslogit("CANNOT Connect to MQTT Broker in {}".format(os.path.basename(__file__)), "ERROR" )                     
+           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
+   else:
+     client.on_connect = on_connect
+     client.loop_forever()
  else:   
     print("Cannot Connect")   
     tsslogging.locallogs("ERROR", "Cannot connect to MQTT broker in {} - {}".format(os.path.basename(__file__),e)) 
