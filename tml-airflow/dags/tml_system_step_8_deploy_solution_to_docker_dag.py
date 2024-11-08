@@ -76,9 +76,9 @@ def dockerit(**context):
            tsslogging.locallogs("INFO", "STEP 8: Docker Container created.  Will push it now.  Here is the commit command: {} - message={}".format(cbuf,v))         
            
          v=subprocess.call("docker push {}".format(cname), shell=True)  
-         time.sleep(7)               
+         time.sleep(20)               
          if v != 0:   
-              tsslogging.locallogs("WARN", "STEP 8: There seems to an issue pushing to Docker.  Here is the command: docker push {} - message={}".format(cname,v)) 
+              tsslogging.locallogs("WARN", "STEP 8: There may be an issue pushing to Docker Hub, or just wait few seconds to see if the container shows up.  Here is the command: docker push {} - message={}".format(cname,v)) 
          else:                   
               tsslogging.locallogs("INFO", "STEP 8: Successfully ran Docker push: docker push {} - message={}".format(cname,v)) 
        elif len(cid) <= 1:
