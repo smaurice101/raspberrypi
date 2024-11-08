@@ -83,7 +83,13 @@ def doparse(fname,farr):
         file.writelines(data)
     
 def generatedoc(**context):    
-    
+    istss1=1
+    if 'TSS' in os.environ:
+      if os.environ['TSS'] == "1":
+        istss1=1
+      else:
+        istss1=0
+       
     if 'tssdoc' in os.environ:
         if os.environ['tssdoc']=="1":
             return
@@ -399,9 +405,16 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tsscontainer--;maadsdocker/tml-solution-studio-with-airflow-{}".format(chip)])
     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--chip--;{}".format(chipmain)])
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(solutionairflowport[1:])])
+    if istss1==0:
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format(solutionairflowport[1:])])
+    else:
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionairflowport--;{}".format("TBD")])
+     
     doparse("/{}/docs/source/operating.rst".format(sname), ["--externalport--;{}".format(externalport[1:])])
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionexternalport--;{}".format(solutionexternalport[1:])])
+    if istss1==0:
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionexternalport--;{}".format(solutionexternalport[1:])])
+    else: 
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionexternalport--;{}".format("TBD")])
     
     pconsumefrom = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_consumefrom".format(sname))
     pgpt_data_topic = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgpt_data_topic".format(sname))
