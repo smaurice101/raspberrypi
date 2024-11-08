@@ -86,10 +86,11 @@ def startpgptcontainer():
       stopcontainers()
 #      buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
  #     subprocess.call(buf, shell=True)
-      time.sleep(4)
+      time.sleep(10)
       buf = "docker run -d -p {}:{} --net=host --gpus all --env PORT={} --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
-      subprocess.call(buf, shell=True)
-
+      v=subprocess.call(buf, shell=True)
+      return v,buf
+ 
 def qdrantcontainer():
 
     if int(default_args['concurrency']) > 1:
@@ -349,7 +350,12 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]
 
         tsslogging.locallogs("INFO", "STEP 9: Starting privateGPT")
-        startpgptcontainer()
+        v,buf=startpgptcontainer()
+        if v==1:
+          tsslogging.locallogs("WARN", "STEP 9: There seems to be an issue starting the privateGPT container.  Here is the run command: {}".format(buf))
+        else:
+          tsslogging.locallogs("INFO", "STEP 9: Success starting privateGPT.  Here is the run command: {}".format(buf))
+         
         qdrantcontainer()
         time.sleep(10)  # wait for containers to start
 
