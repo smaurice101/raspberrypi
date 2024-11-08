@@ -558,7 +558,10 @@ def generatedoc(**context):
     doparse("/{}/docs/source/operating.rst".format(sname), ["--triggername--;{}".format(sd)])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--airflowport--;{}".format(airflowport[1:])])
     doparse("/{}/docs/source/operating.rst".format(sname), ["--vipervizport--;{}".format(vipervizport[1:])])
-    doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionvipervizport--;{}".format(solutionvipervizport[1:])])
+    if istss1==0:
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionvipervizport--;{}".format(solutionvipervizport[1:])])
+    else: 
+      doparse("/{}/docs/source/operating.rst".format(sname), ["--solutionvipervizport--;{}".format("TBD")])
 
     tssdockerrun = ("docker run -d \-\-net=host \-\-env AIRFLOWPORT={} " \
                     " -v <change to your local folder>:/dagslocalbackup:z " \
