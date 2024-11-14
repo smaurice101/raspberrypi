@@ -45,7 +45,7 @@ values=datapoint.value~\
 identifiers=metadata.display_name~\
 datetime=datapoint.updated_at~\
 msgid=datapoint.id~\
-latlong=lat:long', # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
+latlong=lat:long' # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
