@@ -440,7 +440,7 @@ def generatedoc(**context):
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
       dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
                  " \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
-                 " -v /var/run/docker.sock:/var/run/docker.sock:z " \  
+                 " -v /var/run/docker.sock:/var/run/docker.sock:z " \
                  " \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
                  " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME='{}' \-\-env CLIENTPORT={} " \
                  " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME='{}' " \
@@ -460,7 +460,7 @@ def generatedoc(**context):
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
       dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
                  " \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
-                 " -v /var/run/docker.sock:/var/run/docker.sock:z " \  
+                 " -v /var/run/docker.sock:/var/run/docker.sock:z " \
                  " \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
                  " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME='{}' " \
                  " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME='{}' " \
