@@ -46,8 +46,11 @@ def mqttconnection():
      client.username_pw_set(username, password)     
      client.connect(mqttBroker,mqttport)
 
-     client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)
-     return client
+     b=client.subscribe(default_args['mqtt_subscribe_topic'], qos=1)
+     if 'MQTT_ERR_SUCCESS' in str(b):
+       return client
+     else:
+       return NULL   
 
 def publishtomqttbroker(client,line):
      try:
