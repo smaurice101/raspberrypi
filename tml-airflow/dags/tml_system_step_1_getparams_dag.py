@@ -55,6 +55,9 @@ default_args = {
  'MYSQLMAXLIFETIMEMINUTES' : '4',
  'MYSQLMAXCONN' : '4',
  'MYSQLMAXIDLE' : '10',
+ 'MYSQLHOSTNAME' : '127.0.0.1:3306',   
+ 'MYSQLDB' : 'tmlids',
+ 'MYSQLUSER' : 'root',    
  'SASLMECHANISM' : 'PLAIN',
  'MINFORECASTACCURACY' : '55',
  'COMPRESSIONTYPE' : 'gzip',
@@ -237,6 +240,12 @@ def updateviperenv():
          data[r] = "KUBERNETES={}\n".format(default_args['KUBERNETES'])                
        if 'COMPANYNAME' in d: 
          data[r] = "COMPANYNAME={}\n".format(default_args['COMPANYNAME'])                
+       if 'MYSQLHOSTNAME' in d: 
+         data[r] = "MYSQLHOSTNAME={}\n".format(default_args['MYSQLHOSTNAME'])                
+       if 'MYSQLDB' in d: 
+         data[r] = "MYSQLDB={}\n".format(default_args['MYSQLDB'])                
+       if 'MYSQLUSER' in d: 
+         data[r] = "MYSQLUSER={}\n".format(default_args['MYSQLUSER'])                
 
        r += 1
      with open(mainfile, 'w', encoding='utf-8') as file: 
