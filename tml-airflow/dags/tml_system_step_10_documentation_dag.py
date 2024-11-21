@@ -68,9 +68,11 @@ def updatebranch(sname,branch):
             headers=HEADERS,
         )
     
+    
 def doparse(fname,farr):
       data = ''
-      with open(fname, 'r', encoding='utf-8') as file: 
+      try:  
+       with open(fname, 'r', encoding='utf-8') as file: 
         data = file.readlines() 
         r=0
         for d in data:        
@@ -79,8 +81,10 @@ def doparse(fname,farr):
                 if fs[0] in d:
                     data[r] = d.replace(fs[0],fs[1])
             r += 1  
-      with open(fname, 'w', encoding='utf-8') as file: 
+       with open(fname, 'w', encoding='utf-8') as file: 
         file.writelines(data)
+      except Exception as e:
+         pass
     
 def generatedoc(**context):    
     istss1=1
