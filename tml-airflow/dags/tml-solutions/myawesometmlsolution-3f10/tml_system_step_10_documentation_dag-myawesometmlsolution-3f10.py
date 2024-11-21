@@ -638,7 +638,7 @@ def generatedoc(**context):
             kcmd = "kubectl apply -f mysql-storage.yml -f mysql-db-deployment.yml -f privategpt.yml -f {}.yml".format(sname)
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
     
-    kcmd2=genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
+    kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
                        externalport[1:],kafkacloudusername,mqttusername,airflowport[1:],vipervizport[1:])
 
