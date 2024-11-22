@@ -97,12 +97,11 @@ def startpgptcontainer():
 def qdrantcontainer():
     v=0
     buf=""
-    if int(default_args['concurrency']) > 1:
-      buf="docker stop $(docker ps -q --filter ancestor=qdrant/qdrant )"
-      subprocess.call(buf, shell=True)
-      time.sleep(4)
-      buf = "docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
-      v=subprocess.call(buf, shell=True)
+    buf="docker stop $(docker ps -q --filter ancestor=qdrant/qdrant )"
+    subprocess.call(buf, shell=True)
+    time.sleep(4)
+    buf = "docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
+    v=subprocess.call(buf, shell=True)
     return v,buf
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
