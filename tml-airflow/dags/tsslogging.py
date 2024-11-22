@@ -72,58 +72,58 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
            containers:
            - name: {}
              image: {}
-            volumeMounts:
-            - name: dockerpath
-              mountPath: /var/run/docker.sock
-            ports:
-        {}
-            env:
-            - name: TSS
-              value: '0'
-            - name: SOLUTIONNAME
-              value: '{}'
-            - name: SOLUTIONDAG
-              value: '{}'
-            - name: GITUSERNAME
-              value: '{}'
-            - name: GITREPOURL
-              value: '{}'
-            - name: SOLUTIONEXTERNALPORT
-              value: '{}'
-            - name: CHIP
-              value: '{}'
-            - name: SOLUTIONAIRFLOWPORT
-              value: '{}'
-            - name: SOLUTIONVIPERVIZPORT
-              value: '{}'
-            - name: DOCKERUSERNAME
-              value: '{}'
-            - name: CLIENTPORT
-              value: '{}'
-            - name: EXTERNALPORT
-              value: '{}'
-            - name: KAFKACLOUDUSERNAME
-              value: '{}'
-            - name: VIPERVIZPORT
-              value: '{}'
-            - name: MQTTUSERNAME
-              value: '{}'
-            - name: AIRFLOWPORT
-              value: '{}'
-            - name: GITPASSWORD
-              value: '<ENTER GITHUB PASSWORD>'
-            - name: KAFKACLOUDPASSWORD
-              value: '<Enter API secret>'
-            - name: MQTTPASSWORD
-              value: '<ENTER MQTT PASSWORD>'
-            - name: READTHEDOCS
-              value: '<ENTER READTHEDOCS TOKEN>'
-            - name: KUBE
-              value: '1'
-          volumes: 
-          - name: dockerpath
-            hostPath:
-              path: /var/run/docker.sock
+             volumeMounts:
+             - name: dockerpath
+               mountPath: /var/run/docker.sock
+             ports:
+         {}
+             env:
+             - name: TSS
+               value: '0'
+             - name: SOLUTIONNAME
+               value: '{}'
+             - name: SOLUTIONDAG
+               value: '{}'
+             - name: GITUSERNAME
+               value: '{}'
+             - name: GITREPOURL
+               value: '{}'
+             - name: SOLUTIONEXTERNALPORT
+               value: '{}'
+             - name: CHIP
+               value: '{}'
+             - name: SOLUTIONAIRFLOWPORT
+               value: '{}'
+             - name: SOLUTIONVIPERVIZPORT
+               value: '{}'
+             - name: DOCKERUSERNAME
+               value: '{}'
+             - name: CLIENTPORT
+               value: '{}'
+             - name: EXTERNALPORT
+               value: '{}'
+             - name: KAFKACLOUDUSERNAME
+               value: '{}'
+             - name: VIPERVIZPORT
+               value: '{}'
+             - name: MQTTUSERNAME
+               value: '{}'
+             - name: AIRFLOWPORT
+               value: '{}'
+             - name: GITPASSWORD
+               value: '<ENTER GITHUB PASSWORD>'
+             - name: KAFKACLOUDPASSWORD
+               value: '<Enter API secret>'
+             - name: MQTTPASSWORD
+               value: '<ENTER MQTT PASSWORD>'
+             - name: READTHEDOCS
+               value: '<ENTER READTHEDOCS TOKEN>'
+             - name: KUBE
+               value: '1'
+           volumes: 
+           - name: dockerpath
+             hostPath:
+               path: /var/run/docker.sock
      ---
      apiVersion: v1
      kind: Service
