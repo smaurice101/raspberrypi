@@ -15,9 +15,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
     cpp = ""
     if len(clientport) > 1:
         cp = """    - containerPort: {}
-            - containerPort: {}
-            - containerPort: {}
-            - containerPort: {}""".format(clientport,solutionairflowport,solutionvipervizport,solutionexternalport)
+             - containerPort: {}
+             - containerPort: {}
+             - containerPort: {}""".format(clientport,solutionairflowport,solutionvipervizport,solutionexternalport)
         cpp = clientport
         cs="""  - port: {}
          name: p1
@@ -38,8 +38,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
         
     else:    
         cp = """   - containerPort: {}
-            - containerPort: {}
-            - containerPort: {}""".format(solutionexternalport,solutionairflowport,solutionvipervizport)
+             - containerPort: {}
+             - containerPort: {}""".format(solutionexternalport,solutionairflowport,solutionvipervizport)
         cpp = "0"
         cs="""  - port: {}
          name: p2
