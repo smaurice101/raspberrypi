@@ -99,7 +99,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
             - name: DOCKERUSERNAME
               value: '{}'
             - name: CLIENTPORT
-              value: '{}
+              value: '{}'
             - name: EXTERNALPORT
               value: '{}'
             - name: KAFKACLOUDUSERNAME
