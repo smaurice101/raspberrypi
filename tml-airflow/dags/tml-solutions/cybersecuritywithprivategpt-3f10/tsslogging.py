@@ -34,7 +34,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          targetPort: {}""".format(clientport,clientport,solutionairflowport,solutionairflowport,solutionvipervizport,solutionvipervizport,solutionexternalport,solutionexternalport)
         
     else:    
-        cp = """- containerPort: {}
+        cp = """   - containerPort: {}
             - containerPort: {}
             - containerPort: {}""".format(solutionexternalport,solutionairflowport,solutionvipervizport)
         cpp = "0"
@@ -73,7 +73,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
             - name: dockerpath
               mountPath: /var/run/docker.sock
             ports:
-     {}
+        {}
             env:
             - name: TSS
               value: '0'
