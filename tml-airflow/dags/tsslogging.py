@@ -76,7 +76,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
             - name: dockerpath
               mountPath: /var/run/docker.sock
             ports:
-     {}
+        {}
             env:
             - name: TSS
               value: '0'
