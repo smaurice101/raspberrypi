@@ -124,6 +124,11 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
            - name: dockerpath
              hostPath:
                path: /var/run/docker.sock
+           dnsPolicy: "None"
+           dnsConfig:
+             nameservers:
+               - 8.8.8.8                
+               
     ---
      apiVersion: v1
      kind: Service
