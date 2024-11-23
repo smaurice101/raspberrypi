@@ -241,6 +241,18 @@ def updateviperenv():
          data[r] = "KUBERNETES={}\n".format(default_args['KUBERNETES'])                
        if 'COMPANYNAME' in d: 
          data[r] = "COMPANYNAME={}\n".format(default_args['COMPANYNAME'])                
+       if 'MYSQLHOSTNAME' in d: 
+         if "KUBE" in os.environ:
+           if os.environ["KUBE"] == "1":
+            data[r] = "MYSQLHOSTNAME={}\n".format(default_args['KUBEMYSQLHOSTNAME'])            
+           else: 
+            data[r] = "MYSQLHOSTNAME={}\n".format(default_args['MYSQLHOSTNAME'])            
+         else: 
+           data[r] = "MYSQLHOSTNAME={}\n".format(default_args['MYSQLHOSTNAME'])                
+       if 'MYSQLDB' in d: 
+         data[r] = "MYSQLDB={}\n".format(default_args['MYSQLDB'])                
+       if 'MYSQLUSER' in d: 
+         data[r] = "MYSQLUSER={}\n".format(default_args['MYSQLUSER'])                
 
        r += 1
      with open(mainfile, 'w', encoding='utf-8') as file: 
