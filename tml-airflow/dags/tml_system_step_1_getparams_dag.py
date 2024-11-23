@@ -241,7 +241,13 @@ def updateviperenv():
        if 'COMPANYNAME' in d: 
          data[r] = "COMPANYNAME={}\n".format(default_args['COMPANYNAME'])                
        if 'MYSQLHOSTNAME' in d: 
-         data[r] = "MYSQLHOSTNAME={}\n".format(default_args['MYSQLHOSTNAME'])                
+         if "KUBE" in os.environ:
+           if os.environ["KUBE"] == "1":
+            data[r] = "MYSQLHOSTNAME=mysql-service:3306\n")
+           else: 
+            data[r] = "MYSQLHOSTNAME={}\n".format(default_args['MYSQLHOSTNAME'])            
+         else: 
+           data[r] = "MYSQLHOSTNAME={}\n".format(default_args['MYSQLHOSTNAME'])                
        if 'MYSQLDB' in d: 
          data[r] = "MYSQLDB={}\n".format(default_args['MYSQLDB'])                
        if 'MYSQLUSER' in d: 
