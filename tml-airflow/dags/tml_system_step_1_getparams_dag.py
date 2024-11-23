@@ -56,7 +56,7 @@ default_args = {
  'MYSQLMAXCONN' : '4',
  'MYSQLMAXIDLE' : '10',
  'MYSQLHOSTNAME' : '127.0.0.1:3306',   
- 'KUBEMYSQLHOSTNAME' : 'mysql-service:3306',    
+ 'KUBEMYSQLHOSTNAME' : 'mysql-service:3306', # this is the mysql service in kubernetes   
  'MYSQLDB' : 'tmlids',
  'MYSQLUSER' : 'root',    
  'SASLMECHANISM' : 'PLAIN',
