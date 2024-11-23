@@ -262,7 +262,11 @@ def sendtoprivategpt(maindata):
    pgptendpoint="/v1/completions"
    
    maintopic = default_args['pgpt_data_topic']
-   mainip = default_args['pgpthost']
+   if os.environ['TSS']==1:
+     mainip = default_args['pgpthost']
+   else: 
+     mainip = "http://" + os.environ['qip']
+
    mainport = default_args['pgptport']
 
    for mess in maindata:
@@ -342,6 +346,8 @@ def startprivategpt(**context):
 
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+       if os.environ['TSS']==0:
+           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "export qip=os.environ['qip']", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:]), "ENTER"])
 
