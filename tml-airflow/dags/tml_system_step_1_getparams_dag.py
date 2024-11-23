@@ -56,6 +56,7 @@ default_args = {
  'MYSQLMAXCONN' : '4',
  'MYSQLMAXIDLE' : '10',
  'MYSQLHOSTNAME' : '127.0.0.1:3306',   
+ 'KUBEMYSQLHOSTNAME' : 'mysql-service:3306',    
  'MYSQLDB' : 'tmlids',
  'MYSQLUSER' : 'root',    
  'SASLMECHANISM' : 'PLAIN',
@@ -243,7 +244,7 @@ def updateviperenv():
        if 'MYSQLHOSTNAME' in d: 
          if "KUBE" in os.environ:
            if os.environ["KUBE"] == "1":
-            data[r] = "MYSQLHOSTNAME=mysql-service:3306\n")
+            data[r] = "MYSQLHOSTNAME={}\n".format(default_args['KUBEMYSQLHOSTNAME'])            
            else: 
             data[r] = "MYSQLHOSTNAME={}\n".format(default_args['MYSQLHOSTNAME'])            
          else: 
