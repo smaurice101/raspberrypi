@@ -128,9 +128,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
      apiVersion: v1
      kind: Service
      metadata:
-       name: {}
+       name: {}-service
        labels:
-         app: {}
+         app: {}-service
      spec:
        type: NodePort #Exposes the service as a node ports
        ports:
