@@ -347,7 +347,7 @@ def startprivategpt(**context):
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        if os.environ['TSS']=="0":
-           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "export qip=os.environ['qip']", "ENTER"])
+           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "export qip={}".format(os.environ['qip']), "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:]), "ENTER"])
 
