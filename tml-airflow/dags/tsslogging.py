@@ -124,7 +124,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
            - name: dockerpath
              hostPath:
                path: /var/run/docker.sock
-     ---
+    ---
      apiVersion: v1
      kind: Service
      metadata:
