@@ -354,13 +354,6 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]
 
         if "KUBE" not in os.environ:          
-          tsslogging.locallogs("INFO", "STEP 9: Starting privateGPT")
-          v,buf=startpgptcontainer()
-          if v==1:
-            tsslogging.locallogs("WARN", "STEP 9: There seems to be an issue starting the privateGPT container.  Here is the run command - try to run it nanually for testing: {}".format(buf))
-          else:
-            tsslogging.locallogs("INFO", "STEP 9: Success starting privateGPT.  Here is the run command: {}".format(buf))
-         
           v,buf=qdrantcontainer()
           if buf != "":
            if v==1:
@@ -368,15 +361,18 @@ if __name__ == '__main__':
            else:
             tsslogging.locallogs("INFO", "STEP 9: Success starting Qdrant.  Here is the run command: {}".format(buf))
         
-          time.sleep(10)  # wait for containers to start
+          time.sleep(5)  # wait for containers to start
+         
+          tsslogging.locallogs("INFO", "STEP 9: Starting privateGPT")
+          v,buf=startpgptcontainer()
+          if v==1:
+            tsslogging.locallogs("WARN", "STEP 9: There seems to be an issue starting the privateGPT container.  Here is the run command - try to run it nanually for testing: {}".format(buf))
+          else:
+            tsslogging.locallogs("INFO", "STEP 9: Success starting privateGPT.  Here is the run command: {}".format(buf))
+
+          time.sleep(5)  # wait for containers to start
+        
         elif  os.environ["KUBE"] == "0":
-          tsslogging.locallogs("INFO", "STEP 9: Starting privateGPT")
-          v,buf=startpgptcontainer()
-          if v==1:
-            tsslogging.locallogs("WARN", "STEP 9: There seems to be an issue starting the privateGPT container.  Here is the run command - try to run it nanually for testing: {}".format(buf))
-          else:
-            tsslogging.locallogs("INFO", "STEP 9: Success starting privateGPT.  Here is the run command: {}".format(buf))
-         
           v,buf=qdrantcontainer()
           if buf != "":
            if v==1:
@@ -384,7 +380,16 @@ if __name__ == '__main__':
            else:
             tsslogging.locallogs("INFO", "STEP 9: Success starting Qdrant.  Here is the run command: {}".format(buf))
         
-          time.sleep(10)  # wait for containers to start         
+          time.sleep(5)  # wait for containers to start         
+         
+          tsslogging.locallogs("INFO", "STEP 9: Starting privateGPT")
+          v,buf=startpgptcontainer()
+          if v==1:
+            tsslogging.locallogs("WARN", "STEP 9: There seems to be an issue starting the privateGPT container.  Here is the run command - try to run it nanually for testing: {}".format(buf))
+          else:
+            tsslogging.locallogs("INFO", "STEP 9: Success starting privateGPT.  Here is the run command: {}".format(buf))
+
+          time.sleep(5)  # wait for containers to start         
         else:  
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
