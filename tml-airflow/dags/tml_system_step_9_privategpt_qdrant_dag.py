@@ -384,8 +384,8 @@ if __name__ == '__main__':
           else:
             tsslogging.locallogs("INFO", "STEP 9: Success starting privateGPT.  Here is the run command: {}".format(buf))
 
-          time.sleep(5)  # wait for containers to start
-        
+          time.sleep(10)  # wait for containers to start
+          tsslogging.getqip()          
         elif  os.environ["KUBE"] == "0":
           v,buf=qdrantcontainer()
           if buf != "":
