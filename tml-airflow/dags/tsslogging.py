@@ -118,6 +118,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '<ENTER MQTT PASSWORD>'
              - name: READTHEDOCS
                value: '<ENTER READTHEDOCS TOKEN>'
+             - name: qip 
+               value: 'localhost' # This is private GPT IP              
              - name: KUBE
                value: '1'
            volumes: 
