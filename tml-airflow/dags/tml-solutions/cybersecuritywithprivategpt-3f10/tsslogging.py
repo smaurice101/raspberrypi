@@ -138,9 +138,14 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
     return kcmd
 
 def getqip():
-    v=subprocess.run("qid=$(docker container ls  | grep 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64' | awk '{print $1}');export qip=$(docker inspect   --format '{{ .NetworkSettings.IPAddress }}' $qid)", shell = True, executable="/bin/bash")
-    print("INFO in getqip v=",v)
-
+    subprocess.call("/tmux/qip.sh", shell=True)
+    time.sleep(3)
+    with open("/tmux/qip.txt", "r") as file1:
+    # Reading from a file
+     qip=file1.read()
+     qip=qip.rstrip()
+     os.environ['qip']=qip  
+        
 def testvizconnection(portnum):
    good = 1
    #subprocess.call("curl localhost:{} &> /tmux/c.txt".format(portnum), shell=True)
