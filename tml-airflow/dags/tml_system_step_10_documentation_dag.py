@@ -443,43 +443,63 @@ def generatedoc(**context):
           
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
-      dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
-                 " \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
-                 " -v /var/run/docker.sock:/var/run/docker.sock:z " \
-                 " \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
-                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME='{}' \-\-env CLIENTPORT={} " \
-                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME='{}' " \
-                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}'" \
-                 " \-\-env AIRFLOWPORT={} " \
-                 " \-\-env GITPASSWORD='<Enter Github Password>' " \
-                 " \-\-env KAFKACLOUDPASSWORD='<Enter API secret>' " \
-                 " \-\-env MQTTPASSWORD='<Enter mqtt password>' " \
-                 " \-\-env READTHEDOCS='<Enter Readthedocs token>' " \
-                 " {}".format(solutionexternalport[1:],solutionexternalport[1:],
+      dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \\
+          --env TSS=0 \\
+          --env SOLUTIONNAME={} \\
+          --env SOLUTIONDAG={} \\
+          --env GITUSERNAME={} \\
+          --env GITREPOURL={} \\
+          --env SOLUTIONEXTERNALPORT={} \\
+          -v /var/run/docker.sock:/var/run/docker.sock:z  \\
+          --env CHIP={} \\
+          --env SOLUTIONAIRFLOWPORT={}  \\
+          --env SOLUTIONVIPERVIZPORT={} \\
+          --env DOCKERUSERNAME='{}' \\
+          --env CLIENTPORT={}  \\
+          --env EXTERNALPORT={} \\
+          --env KAFKACLOUDUSERNAME='{}' \\
+          --env VIPERVIZPORT={} \\
+          --env MQTTUSERNAME='{}' \\
+          --env AIRFLOWPORT={}  \\
+          --env GITPASSWORD='<Enter Github Password>' \\
+          --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
+          --env MQTTPASSWORD='<Enter mqtt password>' \\
+          --env READTHEDOCS='<Enter Readthedocs token>' \\
+          {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],TMLCLIENTPORT[1:],
-                          externalport[1:],kafkacloudusername,vipervizport[1:],mqttusername,airflowport[1:],containername))       
+                          externalport[1:],kafkacloudusername,vipervizport[1:],mqttusername,airflowport[1:],containername)       
     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
-      dockerrun = ("docker run -d -p {}:{} -p {}:{} -p {}:{} \-\-env TSS=0 \-\-env SOLUTIONNAME={} \-\-env SOLUTIONDAG={} \-\-env GITUSERNAME={} " \
-                 " \-\-env GITREPOURL={} \-\-env SOLUTIONEXTERNALPORT={} " \
-                 " -v /var/run/docker.sock:/var/run/docker.sock:z " \
-                 " \-\-env CHIP={} \-\-env SOLUTIONAIRFLOWPORT={} " \
-                 " \-\-env SOLUTIONVIPERVIZPORT={} \-\-env DOCKERUSERNAME='{}' " \
-                 " \-\-env EXTERNALPORT={} \-\-env KAFKACLOUDUSERNAME='{}' " \
-                 " \-\-env VIPERVIZPORT={} \-\-env MQTTUSERNAME='{}' \-\-env AIRFLOWPORT={} " \
-                 " \-\-env MQTTPASSWORD='<Enter mqtt password>' " \
-                 " \-\-env KAFKACLOUDPASSWORD='<Enter API secret>' " \
-                 " \-\-env GITPASSWORD='<Enter Github Password>' " \
-                 " \-\-env READTHEDOCS='<Enter Readthedocs token>' " \
-                 " {}".format(solutionexternalport[1:],solutionexternalport[1:],
+      dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} \\
+          --env TSS=0 \\
+          --env SOLUTIONNAME={} \\
+          --env SOLUTIONDAG={} \\
+          --env GITUSERNAME={}  \\
+          --env GITREPOURL={} \\
+          --env SOLUTIONEXTERNALPORT={} \\
+          -v /var/run/docker.sock:/var/run/docker.sock:z \\
+          --env CHIP={} \\
+          --env SOLUTIONAIRFLOWPORT={} \\
+          --env SOLUTIONVIPERVIZPORT={} \\
+          --env DOCKERUSERNAME='{}' \\
+          --env EXTERNALPORT={} \\
+          --env KAFKACLOUDUSERNAME='{}' \\
+          --env VIPERVIZPORT={} \\
+          --env MQTTUSERNAME='{}' \\
+          --env AIRFLOWPORT={} \\
+          --env MQTTPASSWORD='<Enter mqtt password>' \\
+          --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
+          --env GITPASSWORD='<Enter Github Password>' \\
+          --env READTHEDOCS='<Enter Readthedocs token>' \\
+          {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,os.environ['GITUSERNAME'],
                           os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],os.environ['DOCKERUSERNAME'],
-                          externalport[1:],kafkacloudusername,vipervizport[1:],mqttusername,airflowport[1:],containername))       
+                          externalport[1:],kafkacloudusername,vipervizport[1:],mqttusername,airflowport[1:],containername)
         
    # dockerrun = re.escape(dockerrun) 
     v=subprocess.call(["sed", "-i", "-e",  "s/--dockerrun--/{}/g".format(dockerrun), "/{}/docs/source/operating.rst".format(sname)])
