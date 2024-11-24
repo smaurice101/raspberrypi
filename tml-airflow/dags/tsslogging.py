@@ -147,6 +147,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
 
 def getqip():
     v=subprocess.run("qid=$(docker container ls  | grep 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64' | awk '{print $1}');export qip=$(docker inspect   --format '{{ .NetworkSettings.IPAddress }}' $qid)", shell = True, executable="/bin/bash")
+    print("INFO in getqip v=",v)
     
 def testvizconnection(portnum):
    good = 1
