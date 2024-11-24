@@ -132,7 +132,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              nameservers:
                - 8.8.8.8                
                
-    ---
+   ---
      apiVersion: v1
      kind: Service
      metadata:
