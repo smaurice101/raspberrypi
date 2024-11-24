@@ -6,6 +6,7 @@ import socketserver
 import subprocess
 import os
 import socket
+import time
 
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport):
     cp = ""
