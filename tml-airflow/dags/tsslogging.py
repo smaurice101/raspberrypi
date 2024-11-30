@@ -120,7 +120,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: READTHEDOCS
                value: '<ENTER READTHEDOCS TOKEN>'
              - name: qip 
-               value: 'localhost' # This is private GPT IP              
+               value: 'privategpt-service' # This is private GPT service in kubernetes
              - name: KUBE
                value: '1'
            volumes: 
