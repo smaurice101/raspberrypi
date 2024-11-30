@@ -116,6 +116,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
               value: '<ENTER MQTT PASSWORD>'
             - name: READTHEDOCS
               value: '<ENTER READTHEDOCS TOKEN>'
+             - name: qip 
+               value: 'privategpt-service' # This is private GPT service in kubernetes              
             - name: KUBE
               value: '1'
           volumes: 
