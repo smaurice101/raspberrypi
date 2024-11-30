@@ -686,8 +686,14 @@ def generatedoc(**context):
      if os.environ['TSS'] == "1":
       doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TSS Development Environment Container"])
      else:
-      doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container"])
-    
+       if "KUBE" not in os.environ:
+         doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container"])
+       else:
+         if os.environ["KUBE"] == "0":
+           doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container"])
+         else: 
+           doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container (RUNNING IN KUBERNETES)"])
+           
     # Kick off shell script 
     #tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
     
