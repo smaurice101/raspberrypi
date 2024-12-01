@@ -72,7 +72,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          spec:
            containers:
            - name: {}
-             image: {}
+             image: {}:latest
              volumeMounts:
              - name: dockerpath
                mountPath: /var/run/docker.sock
