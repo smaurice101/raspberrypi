@@ -671,8 +671,8 @@ def generatedoc(**context):
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
                        externalport[1:],kafkacloudusername,mqttusername,airflowport[1:],vipervizport[1:])
 
-    kpfwd="kubectl port-forward deployment/{} {}:{}".format(sname,)
-    doparse("/{}/docs/source/kube.rst".format(sname), ["--kube-portforward--;{}".format(kpfwd,solutionvipervizport[1:],solutionvipervizport[1:])])
+    kpfwd="kubectl port-forward deployment/{} {}:{}".format(sname,solutionvipervizport[1:],solutionvipervizport[1:])
+    doparse("/{}/docs/source/kube.rst".format(sname), ["--kube-portforward--;{}".format(kpfwd)])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--visualizationurl--;{}".format(vizurl)])
         
     ###########################
