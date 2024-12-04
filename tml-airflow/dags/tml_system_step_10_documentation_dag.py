@@ -663,10 +663,10 @@ def generatedoc(**context):
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamefile--;{}.yml".format(sname)])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionname--;{}".format(sname)])
     if pgptcontainername == None:
-            kcmd = "kubectl apply -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
+            kcmd = "kubectl create -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
     else:
-            kcmd = "kubectl apply -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
+            kcmd = "kubectl create -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
     
     kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
