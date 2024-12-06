@@ -112,13 +112,25 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: AIRFLOWPORT
                value: '{}'
              - name: GITPASSWORD
-               value: '<ENTER GITHUB PASSWORD>'
+               valueFrom:
+                 secretKeyRef:
+                  name: tmlsecrets 
+                  key: githubtoken                       
              - name: KAFKACLOUDPASSWORD
-               value: '<Enter API secret>'
+               valueFrom:
+                 secretKeyRef:
+                  name: tmlsecrets 
+                  key: kafkacloudpassword                      
              - name: MQTTPASSWORD
-               value: '<ENTER MQTT PASSWORD>'
+               valueFrom: 
+                 secretKeyRef:
+                   name: tmlsecrets 
+                   key: mqttpass                        
              - name: READTHEDOCS
-               value: '<ENTER READTHEDOCS TOKEN>'
+               valueFrom:
+                 secretKeyRef:
+                   name: tmlsecrets 
+                   key: readthedocs          
              - name: qip 
                value: 'privategpt-service' # This is private GPT service in kubernetes
              - name: KUBE
