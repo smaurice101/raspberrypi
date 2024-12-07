@@ -11,15 +11,11 @@ import os
 import socket
 import time
 
-def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport):
+def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
+                guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
+               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description):
     cp = ""
     cpp = ""
-    step4maxrows=""
-    step4bmaxrows=""
-    step5rollbackoffsets=""
-    step6maxrows=""
-    step1solutiontitle=""
-    step1description=""
     
     if len(clientport) > 1:
         cp = """    - containerPort: {}
