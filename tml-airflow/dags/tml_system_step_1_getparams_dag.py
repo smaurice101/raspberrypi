@@ -275,8 +275,16 @@ def getparams(**context):
   tsslogging.locallogs("INFO", "STEP 1: Build started") 
     
   sname = args['solutionname']    
-  desc = args['description']        
-  stitle = args['solutiontitle']    
+
+  if 'step1description' in os.environ:
+    desc = os.environ['step1description']
+  else: 
+    desc = args['description']        
+
+  if 'step1solutiontitle' in os.environ:
+    stitle = os.environ['step1solutiontitle']
+  else: 
+    stitle = args['solutiontitle']    
   
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
