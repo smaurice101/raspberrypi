@@ -174,6 +174,7 @@ def dopreprocessing(**context):
        ti.xcom_push(key="{}_pathtotmlattrs".format(sname), value=default_args['pathtotmlattrs'])
        ti.xcom_push(key="{}_identifier".format(sname), value=default_args['identifier'])
        ti.xcom_push(key="{}_jsoncriteria".format(sname), value=default_args['jsoncriteria'])
+       ti.xcom_push(key="{}_maxrows".format(sname), value="_{}".format(default_args['maxrows']))
         
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
