@@ -208,3 +208,4 @@ if __name__ == '__main__':
            tsslogging.locallogs("ERROR", "STEP 4b: Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e))
            tsslogging.tsslogit("Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+           break
