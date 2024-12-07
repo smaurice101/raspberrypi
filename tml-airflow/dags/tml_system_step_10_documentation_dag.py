@@ -671,12 +671,12 @@ def generatedoc(**context):
             kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
 
-    step4maxrows=""
-    step4bmaxrows=""
-    step5rollbackoffsets=""
-    step6maxrows=""
-    step1solutiontitle=""
-    step1description=""
+    step4maxrows=maxrows4[1:]
+    step4bmaxrows=maxrows4b[1:]
+    step5rollbackoffsets=rollbackoffsets[1:]
+    step6maxrows=maxrows[1:]
+    step1solutiontitle=stitle
+    step1description=sdesc
 
     kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
