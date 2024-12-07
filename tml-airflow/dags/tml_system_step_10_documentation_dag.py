@@ -670,11 +670,26 @@ def generatedoc(**context):
     else:
             kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
+    if maxrows4:
+      step4maxrows=maxrows4[1:]
+    else:
+      step4maxrows=-1
 
-    step4maxrows=maxrows4[1:]
-    step4bmaxrows=maxrows4b[1:]
-    step5rollbackoffsets=rollbackoffsets[1:]
-    step6maxrows=maxrows[1:]
+    if maxrows4b: 
+      step4bmaxrows=maxrows4b[1:]
+    else: 
+      step4bmaxrows=-1 
+
+    if rollbackoffsets:
+      step5rollbackoffsets=rollbackoffsets[1:]
+    else:
+      step5rollbackoffsets=-1
+
+    if maxrows:
+      step6maxrows=maxrows[1:]
+    else:
+      step6maxrows=-1
+     
     step1solutiontitle=stitle
     step1description=sdesc
 
