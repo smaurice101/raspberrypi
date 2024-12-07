@@ -152,7 +152,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
-             - name: step1description # STEP 1 solutiontitle field can be adjusted here. 
+             - name: step1description # STEP 1 description field can be adjusted here. 
                value: '{}'                                             
            volumes: 
            - name: dockerpath
