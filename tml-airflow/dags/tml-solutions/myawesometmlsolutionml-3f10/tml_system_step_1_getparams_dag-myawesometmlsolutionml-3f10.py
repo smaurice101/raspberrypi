@@ -139,6 +139,9 @@ def updateviperenv():
     if '127.0.0.1' in default_args['brokerhost']:
       cloudusername = ""
       cloudpassword = ""
+      if 'KUBE' in os.environ:
+         if os.environ['KUBE'] == "1":
+           default_args['brokerhost']='kafka-service'
         
     filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess-pgpt/viper.env','/Viper-preprocess2/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
