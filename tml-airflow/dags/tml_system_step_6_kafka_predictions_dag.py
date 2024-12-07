@@ -114,7 +114,11 @@ def performPrediction():
       # Network timeout
       networktimeout=int(default_args['networktimeout'])
       # maxrows - this is percentage to rollback stream
-      maxrows=int(default_args['maxrows'])
+
+      if 'step6maxrows' in os.environ:
+        maxrows=int(os.environ['step6maxrows'])
+      else:
+        maxrows=int(default_args['maxrows'])
       #Start predicting with new data streams
       produceridhyperprediction=default_args['produceridhyperprediction']
       consumeridtraininedparams=default_args['consumeridtraininedparams']
