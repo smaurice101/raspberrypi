@@ -342,21 +342,57 @@ def getparams(**context):
            vipervizport=tsslogging.getfreeport()
   else:
            vipervizport=tsslogging.getfreeport()
-        
-  if default_args['solutionairflowport'] != '-1':
-           solutionairflowport = int(default_args['solutionairflowport'])
-  else:
-           solutionairflowport=tsslogging.getfreeport()
 
-  if default_args['solutionexternalport'] != '-1':
-           solutionexternalport = int(default_args['solutionexternalport'])
+  #   Check the solution airflow port and see if user modfifed port in kubernetes 
+  if default_args['solutionairflowport'] != '-1':
+          solutionairflowport = int(default_args['solutionairflowport'])
+          if 'KUBE' in os.environ:
+            if os.environ['KUBE'] == '1' and int(os.environ['SOLUTIONAIRFLOWPORT']) != '-1':
+              solutionairflowport = int(os.environ['SOLUTIONAIRFLOWPORT'])
   else:
-           solutionexternalport=tsslogging.getfreeport()
-        
+     if 'KUBE' in os.environ:
+        if os.environ['KUBE'] == "0":
+          solutionairflowport=tsslogging.getfreeport()
+        elif int(os.environ['SOLUTIONAIRFLOWPORT']) != '-1':
+         solutionairflowport=int(os.environ['SOLUTIONAIRFLOWPORT']))
+        else:
+          solutionairflowport=tsslogging.getfreeport()
+     else:    
+      solutionairflowport=tsslogging.getfreeport()
+
+  #   Check the solution external port and see if user modfifed port in kubernetes 
+  if default_args['solutionexternalport'] != '-1':
+          solutionexternalport = int(default_args['solutionexternalport'])
+          if 'KUBE' in os.environ:
+            if os.environ['KUBE'] == '1' and int(os.environ['SOLUTIONEXTERNALPORT']) != '-1':
+              solutionexternalport = int(os.environ['SOLUTIONEXTERNALPORT'])
+  else:
+     if 'KUBE' in os.environ:
+        if os.environ['KUBE'] == "0":
+          solutionexternalport=tsslogging.getfreeport()
+        elif int(os.environ['SOLUTIONEXTERNALPORT']) != '-1':
+         solutionexternalport=int(os.environ['SOLUTIONEXTERNALPORT']))
+        else:
+          solutionexternalport=tsslogging.getfreeport()
+     else:    
+      solutionexternalport=tsslogging.getfreeport()
+
+  #   Check the solution visualization port and see if user modfifed port in kubernetes
   if default_args['solutionvipervizport'] != '-1':
           solutionvipervizport = int(default_args['solutionvipervizport'])
+          if 'KUBE' in os.environ:
+            if os.environ['KUBE'] == '1' and int(os.environ['SOLUTIONVIPERVIZPORT']) != '-1':
+              solutionvipervizport = int(os.environ['SOLUTIONVIPERVIZPORT'])
   else:
-           solutionvipervizport=tsslogging.getfreeport()
+     if 'KUBE' in os.environ:
+        if os.environ['KUBE'] == "0":
+          solutionvipervizport=tsslogging.getfreeport()
+        elif int(os.environ['SOLUTIONVIPERVIZPORT']) != '-1':
+         solutionvipervizport=int(os.environ['SOLUTIONVIPERVIZPORT']))
+        else:
+          solutionvipervizport=tsslogging.getfreeport()
+     else:    
+      solutionvipervizport=tsslogging.getfreeport()
 
   if 'AIRFLOWPORT' in  os.environ:
       airflowport = os.environ['AIRFLOWPORT']
