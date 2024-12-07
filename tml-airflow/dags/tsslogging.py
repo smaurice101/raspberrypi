@@ -14,6 +14,13 @@ import time
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport):
     cp = ""
     cpp = ""
+    step4maxrows=""
+    step4bmaxrows=""
+    step5rollbackoffsets=""
+    step6maxrows=""
+    step1solutiontitle=""
+    step1description=""
+    
     if len(clientport) > 1:
         cp = """    - containerPort: {}
              - containerPort: {}
@@ -135,6 +142,18 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: 'privategpt-service' # This is private GPT service in kubernetes
              - name: KUBE
                value: '1'
+             - name: step4maxrows # STEP 4 maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'
+             - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'               
+             - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
+               value: '{}'                              
+             - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
+               value: '{}'                              
+             - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
+               value: '{}'                              
+             - name: step1description # STEP 1 solutiontitle field can be adjusted here. 
+               value: '{}'                                             
            volumes: 
            - name: dockerpath
              hostPath:
@@ -151,7 +170,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
        ports:
      {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,sname,sname,cs,sname)  
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,sname,sname,cs,sname)  
 
     return kcmd
 
