@@ -172,7 +172,10 @@ def startpredictions(**context):
        ti.xcom_push(key="{}_delay".format(sname),value="_{}".format(default_args['delay']))
        ti.xcom_push(key="{}_usedeploy".format(sname),value="_{}".format(default_args['usedeploy']))
        ti.xcom_push(key="{}_networktimeout".format(sname),value="_{}".format(default_args['networktimeout']))
-       ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(default_args['maxrows']))
+       if 'step6maxrows' in os.environ:
+          ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(os.environ['step6maxrows']))
+       else:  
+         ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(default_args['maxrows']))
        ti.xcom_push(key="{}_topicid".format(sname),value="_{}".format(default_args['topicid']))
        ti.xcom_push(key="{}_pathtoalgos".format(sname),value=default_args['pathtoalgos'])
        ti.xcom_push(key="{}_HPDEADDR".format(sname), value=HPDEADDR)
