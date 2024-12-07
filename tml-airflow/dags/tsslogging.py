@@ -148,7 +148,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'               
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                              
-             - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
+             - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more predictions to make, BUT more memory needed.
                value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
