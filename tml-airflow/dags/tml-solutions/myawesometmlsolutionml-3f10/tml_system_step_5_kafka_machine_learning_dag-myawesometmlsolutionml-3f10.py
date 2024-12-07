@@ -181,7 +181,11 @@ def startml(**context):
        ti.xcom_push(key="{}_modelsearchtuner".format(sname), value="_{}".format(default_args['modelsearchtuner']))
        ti.xcom_push(key="{}_dependentvariable".format(sname), value=default_args['dependentvariable'])
        ti.xcom_push(key="{}_independentvariables".format(sname), value=default_args['independentvariables'])
-       ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(default_args['rollbackoffsets']))
+   
+       if 'step5rollbackoffsets' in os.environ:
+         ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(os.environ['step5rollbackoffsets']))
+       else:  
+         ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(default_args['rollbackoffsets']))
        ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
        ti.xcom_push(key="{}_consumefrom".format(sname), value=default_args['consumefrom'])
        ti.xcom_push(key="{}_fullpathtotrainingdata".format(sname), value=default_args['fullpathtotrainingdata'])
@@ -191,7 +195,6 @@ def startml(**context):
        ti.xcom_push(key="{}_coefsubtopicnames".format(sname), value=default_args['coefsubtopicnames'])
        ti.xcom_push(key="{}_HPDEADDR".format(sname), value=HPDEADDR)
        ti.xcom_push(key="{}_processlogic".format(sname), value=default_args['processlogic'])
-
 
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
