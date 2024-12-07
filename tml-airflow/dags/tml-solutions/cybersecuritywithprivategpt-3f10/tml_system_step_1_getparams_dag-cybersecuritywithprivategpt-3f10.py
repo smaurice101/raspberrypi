@@ -354,7 +354,7 @@ def getparams(**context):
         if os.environ['KUBE'] == "0":
           solutionairflowport=tsslogging.getfreeport()
         elif int(os.environ['SOLUTIONAIRFLOWPORT']) != '-1':
-         solutionairflowport=int(os.environ['SOLUTIONAIRFLOWPORT']))
+         solutionairflowport=int(os.environ['SOLUTIONAIRFLOWPORT'])
         else:
           solutionairflowport=tsslogging.getfreeport()
      else:    
@@ -371,7 +371,7 @@ def getparams(**context):
         if os.environ['KUBE'] == "0":
           solutionexternalport=tsslogging.getfreeport()
         elif int(os.environ['SOLUTIONEXTERNALPORT']) != '-1':
-         solutionexternalport=int(os.environ['SOLUTIONEXTERNALPORT']))
+         solutionexternalport=int(os.environ['SOLUTIONEXTERNALPORT'])
         else:
           solutionexternalport=tsslogging.getfreeport()
      else:    
@@ -388,7 +388,7 @@ def getparams(**context):
         if os.environ['KUBE'] == "0":
           solutionvipervizport=tsslogging.getfreeport()
         elif int(os.environ['SOLUTIONVIPERVIZPORT']) != '-1':
-         solutionvipervizport=int(os.environ['SOLUTIONVIPERVIZPORT']))
+         solutionvipervizport=int(os.environ['SOLUTIONVIPERVIZPORT'])
         else:
           solutionvipervizport=tsslogging.getfreeport()
      else:    
