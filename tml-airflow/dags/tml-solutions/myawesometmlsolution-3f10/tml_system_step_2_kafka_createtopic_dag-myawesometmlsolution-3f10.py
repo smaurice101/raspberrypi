@@ -42,6 +42,9 @@ def startkafkasetup():
 dag = startkafkasetup()
 
 def deletetopics(topic):
+    if 'KUBE' in os.environ:
+       if os.environ['KUBE'] == "1":
+         return
     
     buf = "/Kafka/kafka_2.13-3.0.0/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic {} --delete".format(topic)
     res=subprocess.call(buf, shell=True)
