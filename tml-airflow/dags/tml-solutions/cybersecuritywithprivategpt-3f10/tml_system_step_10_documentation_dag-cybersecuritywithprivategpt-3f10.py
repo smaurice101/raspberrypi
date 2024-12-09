@@ -699,10 +699,13 @@ def generatedoc(**context):
       step6maxrows=maxrows[1:]
     else:
       step6maxrows=-1
-     
+
     kubebroker='kafka-service:9092' 
     if 'KUBEBROKERHOST' in os.environ:
        kubebroker = os.environ['KUBEBROKERHOST']
+    kafkabroker='127.0.0.1:9092' 
+    if 'KAFKABROKERHOST' in os.environ:
+       kafkabroker = os.environ['KAFKABROKERHOST']
      
     step1solutiontitle=stitle
     step1description=sdesc
@@ -710,7 +713,7 @@ def generatedoc(**context):
     kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
                        externalport[1:],kafkacloudusername,mqttusername,airflowport[1:],vipervizport[1:],
-                       step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset,kubebroker)
+                       step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset,kubebroker,kafkabroker)
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
