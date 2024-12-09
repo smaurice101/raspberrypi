@@ -141,6 +141,9 @@ def updateviperenv():
       cloudpassword = ""
       if 'KUBE' in os.environ:
          if os.environ['KUBE'] == "1":
+          if 'KAFKABROKERHOST' in os.environ:
+              default_args['brokerhost'] = os.environ['KAFKABROKERHOST']
+              default_args['brokerport']=''
           if "KUBEBROKERHOST" in os.environ:
               buf = os.environ['KUBEBROKERHOST'] 
               sp = buf.split(":")
