@@ -13,7 +13,8 @@ import time
 
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
-               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset):
+               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
+               step9rollbackoffset,kubebroker):
     cp = ""
     cpp = ""
     
@@ -151,7 +152,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
-               value: '{}'                                             
+               value: '{}'                                          
+             - name: KUBEBROKERHOST
+               value: '{}'               
            volumes: 
            - name: dockerpath
              hostPath:
@@ -168,7 +171,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
        ports:
      {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,sname,sname,cs,sname)  
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,sname,sname,cs,sname)  
 
     return kcmd
 
