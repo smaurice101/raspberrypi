@@ -698,6 +698,10 @@ def generatedoc(**context):
       step6maxrows=maxrows[1:]
     else:
       step6maxrows=-1
+
+    kubebroker='kafka-service:9092' 
+    if 'KUBEBROKERHOST' in os.environ:
+       kubebroker = os.environ['KUBEBROKERHOST']
      
     step1solutiontitle=stitle
     step1description=sdesc
