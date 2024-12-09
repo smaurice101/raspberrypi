@@ -1,4 +1,7 @@
 # TSS Logging
+
+# TSS Logging
+
 import datetime
 from datetime import timezone 
 from git import Repo
@@ -8,14 +11,18 @@ import os
 import socket
 import time
 
-def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport):
+def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
+                guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
+               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
+               step9rollbackoffset,kubebroker,kafkabroker):
     cp = ""
     cpp = ""
+    
     if len(clientport) > 1:
         cp = """    - containerPort: {}
-            - containerPort: {}
-            - containerPort: {}
-            - containerPort: {}""".format(clientport,solutionairflowport,solutionvipervizport,solutionexternalport)
+             - containerPort: {}
+             - containerPort: {}
+             - containerPort: {}""".format(clientport,solutionairflowport,solutionvipervizport,solutionexternalport)
         cpp = clientport
         cs="""  - port: {}
          name: p1
@@ -35,9 +42,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          targetPort: {}""".format(clientport,clientport,solutionairflowport,solutionairflowport,solutionvipervizport,solutionvipervizport,solutionexternalport,solutionexternalport)
         
     else:    
-        cp = """   - containerPort: {}
-            - containerPort: {}
-            - containerPort: {}""".format(solutionexternalport,solutionairflowport,solutionvipervizport)
+        cp = """    - containerPort: {}
+             - containerPort: {}
+             - containerPort: {}""".format(solutionexternalport,solutionairflowport,solutionvipervizport)
         cpp = "0"
         cs="""  - port: {}
          name: p2
@@ -69,74 +76,104 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          spec:
            containers:
            - name: {}
-             image: {}
-            volumeMounts:
-            - name: dockerpath
-              mountPath: /var/run/docker.sock
-            ports:
-        {}
-            env:
-            - name: TSS
-              value: '0'
-            - name: SOLUTIONNAME
-              value: '{}'
-            - name: SOLUTIONDAG
-              value: '{}'
-            - name: GITUSERNAME
-              value: '{}'
-            - name: GITREPOURL
-              value: '{}'
-            - name: SOLUTIONEXTERNALPORT
-              value: '{}'
-            - name: CHIP
-              value: '{}'
-            - name: SOLUTIONAIRFLOWPORT
-              value: '{}'
-            - name: SOLUTIONVIPERVIZPORT
-              value: '{}'
-            - name: DOCKERUSERNAME
-              value: '{}'
-            - name: CLIENTPORT
-              value: '{}
-            - name: EXTERNALPORT
-              value: '{}'
-            - name: KAFKACLOUDUSERNAME
-              value: '{}'
-            - name: VIPERVIZPORT
-              value: '{}'
-            - name: MQTTUSERNAME
-              value: '{}'
-            - name: AIRFLOWPORT
-              value: '{}'
-            - name: GITPASSWORD
-              value: '<ENTER GITHUB PASSWORD>'
-            - name: KAFKACLOUDPASSWORD
-              value: '<Enter API secret>'
-            - name: MQTTPASSWORD
-              value: '<ENTER MQTT PASSWORD>'
-            - name: READTHEDOCS
-              value: '<ENTER READTHEDOCS TOKEN>'
-            - name: qip 
-              value: 'privategpt-service' # This is private GPT service in kubernetes              
-            - name: KUBE
-              value: '1'
-          volumes: 
-          - name: dockerpath
-            hostPath:
-              path: /var/run/docker.sock
-     ---
+             image: {}:latest
+             volumeMounts:
+             - name: dockerpath
+               mountPath: /var/run/docker.sock
+             ports:
+         {}
+             env:
+             - name: TSS
+               value: '0'
+             - name: SOLUTIONNAME
+               value: '{}'
+             - name: SOLUTIONDAG
+               value: '{}'
+             - name: GITUSERNAME
+               value: '{}'
+             - name: GITREPOURL
+               value: '{}'
+             - name: SOLUTIONEXTERNALPORT
+               value: '{}'
+             - name: CHIP
+               value: '{}'
+             - name: SOLUTIONAIRFLOWPORT
+               value: '{}'
+             - name: SOLUTIONVIPERVIZPORT
+               value: '{}'
+             - name: DOCKERUSERNAME
+               value: '{}'
+             - name: CLIENTPORT
+               value: '{}'
+             - name: EXTERNALPORT
+               value: '{}'
+             - name: KAFKACLOUDUSERNAME
+               value: '{}'
+             - name: VIPERVIZPORT
+               value: '{}'
+             - name: MQTTUSERNAME
+               value: '{}'
+             - name: AIRFLOWPORT
+               value: '{}'
+             - name: GITPASSWORD
+               valueFrom:
+                 secretKeyRef:
+                  name: tmlsecrets 
+                  key: githubtoken                       
+             - name: KAFKACLOUDPASSWORD
+               valueFrom:
+                 secretKeyRef:
+                  name: tmlsecrets 
+                  key: kafkacloudpassword                      
+             - name: MQTTPASSWORD
+               valueFrom: 
+                 secretKeyRef:
+                   name: tmlsecrets 
+                   key: mqttpass                        
+             - name: READTHEDOCS
+               valueFrom:
+                 secretKeyRef:
+                   name: tmlsecrets 
+                   key: readthedocs          
+             - name: qip 
+               value: 'privategpt-service' # This is private GPT service in kubernetes
+             - name: KUBE
+               value: '1'
+             - name: step4maxrows # STEP 4 maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'
+             - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'               
+             - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
+               value: '{}'                              
+             - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more predictions to make, BUT more memory needed.
+               value: '{}'                              
+             - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
+               value: '{}'                                             
+             - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
+               value: '{}'                              
+             - name: step1description # STEP 1 description field can be adjusted here. 
+               value: '{}'                                          
+             - name: KUBEBROKERHOST
+               value: '{}'         
+             - name: KAFKABROKERHOST
+               value: '{}'                              
+           volumes: 
+           - name: dockerpath
+             hostPath:
+               path: /var/run/docker.sock
+   ---
      apiVersion: v1
      kind: Service
      metadata:
-       name: {}
+       name: {}-service
        labels:
-         app: {}
+         app: {}-service
      spec:
        type: NodePort #Exposes the service as a node ports
        ports:
      {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,sname,sname,cs,sname)  
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,sname,sname,cs,sname)  
 
     return kcmd
 
@@ -149,6 +186,7 @@ def getqip():
      qip=qip.rstrip()
      os.environ['qip']=qip  
         
+    
 def testvizconnection(portnum):
    good = 1
    #subprocess.call("curl localhost:{} &> /tmux/c.txt".format(portnum), shell=True)
