@@ -717,7 +717,7 @@ def generatedoc(**context):
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
-    kpfwd="kubectl port-forward deployment/{} {}:{}".format(sname,solutionvipervizport[1:],solutionvipervizport[1:])
+    kpfwd="kubectl port-forward service/{}-service {}:{}".format(sname,solutionvipervizport[1:],solutionvipervizport[1:])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--kube-portforward--;{}".format(kpfwd)])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--visualizationurl--;{}".format(vizurlkube)])
         
