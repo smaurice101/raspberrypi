@@ -165,15 +165,53 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
      apiVersion: v1
      kind: Service
      metadata:
-       name: {}-service
+       name: {}-visualization-service
        labels:
-         app: {}-service
+         app: {}-visualization-service
      spec:
        type: NodePort #Exposes the service as a node ports
        ports:
-     {}
+       - port: {}
+         name: p1
+         protocol: TCP
+         targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,sname,sname,cs,sname)  
+         app: {}
+   ---
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: {}-external-service
+       labels:
+         app: {}-external-service
+     spec:
+       type: NodePort #Exposes the service as a node ports
+       ports:
+       - port: {}
+         name: p2
+         protocol: TCP
+         targetPort: {}
+       selector:
+         app: {}
+   ---
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: {}-airflow-service
+       labels:
+         app: {}-airflow-service
+     spec:
+       type: NodePort #Exposes the service as a node ports
+       ports:
+       - port: {}
+         name: p3
+         protocol: TCP
+         targetPort: {}      
+       selector:
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                      sname,sname,solutionvipervizport,solutionvipervizport,sname,
+                      sname,sname,solutionexternalport,solutionexternalport,sname,
+                      sname,sname,solutionairflowport,solutionairflowport,sname)  
 
     return kcmd
 
