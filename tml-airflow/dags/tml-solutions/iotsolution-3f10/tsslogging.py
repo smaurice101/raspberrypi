@@ -169,9 +169,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
        labels:
          app: {}-visualization-service
      spec:
-       type: NodePort #Exposes the service as a node ports
+       type: ClusterIP
        ports:
-       - port: {}
+       - port: 80 # Ingress port, if using port 443 will need to setup TLS certs
          name: p1
          protocol: TCP
          targetPort: {}
@@ -185,84 +185,16 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
        labels:
          app: {}-external-service
      spec:
-       type: NodePort #Exposes the service as a node ports
+       type: ClusterIP
        ports:
-       - port: {}
+       - port: 80 # Ingress port, if using port 443 will need to setup TLS certs
          name: p2
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}
-   ---
-     apiVersion: v1
-     kind: Service
-     metadata:
-       name: {}-airflow-service
-       labels:
-         app: {}-airflow-service
-     spec:
-       type: NodePort #Exposes the service as a node ports
-       ports:
-       - port: {}
-         name: p3
-         protocol: TCP
-         targetPort: {}      
-       selector:
-         app: {}
-   ---
-     apiVersion: v1
-     kind: Service
-     metadata:
-       name: {}-visualization-service-ingress
-       labels:
-         app: {}-visualization-service-ingress
-     spec:
-       type: ClusterIP
-       ports:
-       - port: 80
-         name: p1i
-         protocol: TCP
-         targetPort: {}
-       selector:
-         app: {}
-   ---
-     apiVersion: v1
-     kind: Service
-     metadata:
-       name: {}-external-service-ingress
-       labels:
-         app: {}-external-service-ingress
-     spec:
-       type: ClusterIP
-       ports:
-       - port: 80
-         name: p2i
-         protocol: TCP
-         targetPort: {}
-       selector:
-         app: {}
-   ---
-     apiVersion: v1
-     kind: Service
-     metadata:
-       name: {}-airflow-service-ingress
-       labels:
-         app: {}-airflow-service-ingress
-     spec:
-       type: ClusterIP
-       ports:
-       - port: 80
-         name: p3i
-         protocol: TCP
-         targetPort: {}      
-       selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
-                      sname,sname,solutionvipervizport,solutionvipervizport,sname,
-                      sname,sname,solutionexternalport,solutionexternalport,sname,
-                      sname,sname,solutionairflowport,solutionairflowport,sname,
                       sname,sname,solutionvipervizport,sname,
-                      sname,sname,solutionexternalport,sname,
-                      sname,sname,solutionairflowport,sname)  
+                      sname,sname,solutionexternalport,sname)
                     
     return kcmd
 
