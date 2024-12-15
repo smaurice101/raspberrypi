@@ -1,7 +1,5 @@
 # TSS Logging
 
-# TSS Logging
-
 import datetime
 from datetime import timezone 
 from git import Repo
