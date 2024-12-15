@@ -25,7 +25,7 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_10_documentation_dag_iotsolution-3f10", default_args=default_args, tags=["tml_system_step_10_documentation_dag_iotsolution-3f10"], schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_10_documentation_dag", default_args=default_args, tags=["tml_system_step_10_documentation_dag"], schedule=None,  catchup=False)
 def startdocumentation():
     # Define tasks
     def empty():
@@ -554,6 +554,7 @@ def generatedoc(**context):
     
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(solutionvipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     vizurlkube = "http://localhost:{}/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(solutionvipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
+    vizurlkubeing = "http://tml.tss/viz/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(solutionvipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
 
     if istss1==0:
       subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
@@ -719,7 +720,11 @@ def generatedoc(**context):
     kpfwd="kubectl port-forward deployment/{}-visualization {}:{}".format(sname,solutionvipervizport[1:],solutionvipervizport[1:])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--kube-portforward--;{}".format(kpfwd)])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--visualizationurl--;{}".format(vizurlkube)])
-        
+    doparse("/{}/docs/source/kube.rst".format(sname), ["--visualizationurling--;{}".format(vizurlkubeing)])
+
+    kcmd3=tsslogging.ingress(sname):
+    doparse("/{}/docs/source/kube.rst".format(sname), ["--ingress--;{}".format(kcmd3)])
+
     ###########################
     try:
       tmuxwindows = "None"  
@@ -791,5 +796,3 @@ def generatedoc(**context):
      ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
     except Exception as e:
      print("ERROR=",e)
-
-
