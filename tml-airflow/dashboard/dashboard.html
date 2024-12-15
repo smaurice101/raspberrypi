@@ -2,13 +2,14 @@
 <html lang="en">
 
 <head>
+<base target="/" />    
     <meta charset="UTF-8" />
-	<link rel="shortcut icon" type="image/x-icon" href="/oticsico.png" />
-    <title>IoT Processing Dashboard</title>                             <!-- CHANGE TITLE HERE -->
+  <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+   <title>IoT Device Failure Surveillance Dashboard</title>                             <!-- CHANGE TITLE HERE -->
 
-<!-- ************************************** START OF STYLE *************************************  -->    
+<!-- ************************************** START OF STYLE *************************************  -->
   <style>
-	.loader {
+  .loader {
      border: 7px solid #f3f3f3;
      border-radius: 50%;
      border-top: 7px solid blue;
@@ -16,7 +17,7 @@
      width: 70px;
      height: 70px;
      -webkit-animation: spin 2s linear infinite;
-     animation: spin 2s linear infinite;   
+     animation: spin 2s linear infinite;
     }
 
     @-webkit-keyframes spin {
@@ -36,7 +37,7 @@
   .b {
          background: linear-gradient(to top left, #ffffff 0%, #ccffff 100%);
    }
- 
+
    #gauge_avgrisk {
      width:370px; height:380px;
    }
@@ -49,9 +50,9 @@
    #chart_div {
           float: left;
    }
-        
+
     body {
-            
+
       justify-content: center;
        align-items: center;
     }
@@ -65,20 +66,20 @@
 
    .beige-background {
      background-color: beige;
-    }		
+    }
     .columnTitle {
           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          font-size: 14px; 
+          font-size: 14px;
           color:white;
           background-color: #607A75
-    } 
+    }
    .grid {
      display: grid;
      grid-gap: var(--card-padding);
      margin: 0 auto;
      max-width: 60em;
      padding: 0;
- 
+
     @media (min-width: 42em) {
      grid-template-columns: repeat(3, 1fr);
     }
@@ -91,7 +92,7 @@
     background-color: #fff;
     border-radius: var(--card-radius);
     position: relative;
-  
+
    &:hover {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
    }
@@ -105,75 +106,73 @@
   }
  .btnsave{
        width: 50px;
-	   height: 25px;
-	   background: linear-gradient(to bottom right, #609931, #87bc27);
-	   color: white;
-	   align: top;
+     height: 25px;
+     background: linear-gradient(to bottom right, #609931, #87bc27);
+     color: white;
+     align: top;
     }
-	
+
    .padding
    {
     padding: 4px 5px 2px 2px;
-   }	  
+   }
 
   #map {
         position: relative;
         width: 100%;
         height: 500px;
       }
-
 </style>
 
 <!-- ************************************** END OF STYLE *************************************  -->
 
 <!-- ************************************** START SCRIPTS *************************************  -->
-
-<script type="text/javascript" src="/js/attention.js"></script>   
-<script type="text/javascript" src="/js/r.min.js"></script>   
-<script type="text/javascript" src="/js/justgage.js"></script>   
-<script type="text/javascript" src="/js/justgage.min.js"></script>   
-<script src="/js/d3.min.js"></script>
-<script src="/js/d3pie.js"></script>
+<script type="text/javascript" src="./js/attention.js"></script>
+<script type="text/javascript" src="./js/r.min.js"></script>
+<script type="text/javascript" src="./js/justgage.js"></script>
+<script type="text/javascript" src="./js/justgage.min.js"></script>
+<script src="./js/d3.min.js"></script>
+<script src="./js/d3pie.js"></script>
 
 <script>
 
 <!-- ********************** HELP TEXT ********************************************** -->
 function image(thetype,mess) {
-        
-		var titletext="";
-		var helptext="";
-		
-		if (thetype=="barchart"){
+
+          var titletext="";
+          var helptext="";
+
+          if (thetype=="barchart"){
            titletext="Failure Monitoring Bar Chart";
-		    helptext="The Failure Monitoring Bar Chart shows the count of Total Failure records in the data stream (GREY Bar), against the Failure that are above the upper bound (BLUE Bar)."; 
-		
-		}else if (thetype=="table"){
-		  titletext="Table Data";
-		    helptext="The data in the table shows the preprocessed values for every device used in the preprocessing of IoT Device data.  KAFKAKEY is a unique hash key for the Kafka message.   OFFSET/PARTITION show the actual location of the PROCESSED message in Kafka.  By PROCESSED we mean the MAX and AVG value process.  Time Window Start and End are the start and end of the Time Sliding Window in the data stream that is processed to compute MAX and AVG fo devices.  Date/Time is when this processing took place by VIPER."; 
-		
-		}else if (thetype=="ml"){
-		  titletext="Transactional Machine Learning Models";
-		    helptext="These are the ML models TML has built for every device.  They are Failure Probability predictions.  TML creates a logistic regression model for each device."; 
-		
-		}
-				
+              helptext="The Failure Monitoring Bar Chart shows the count of Total Failure records in the data stream (GREY Bar), against the Failure that are above the upper bound (BLUE Bar).";
+
+          }else if (thetype=="table"){
+            titletext="Table Data";
+              helptext="The data in the table shows the preprocessed values for every device used in the preprocessing of IoT Device data.  KAFKAKEY is a unique hash key for the Kafka message.   OFFSET/PARTITION show the actual location of the PROCESSED message in Kafka.  By PROCESSED we mean the MAX and AVG value process.  Time Window Start and End are the start and end of the Time Sliding Window in the data stream that is processed to compute MAX and AVG fo devices.  Date/Time is when this processing took place by VIPER.";
+
+          }else if (thetype=="ml"){
+            titletext="Transactional Machine Learning Models";
+              helptext="These are the ML models TML has built for every device.  They are Failure Probability predictions.  TML creates a logistic regression model for each device.";
+
+          }
+
        new Attention.Prompt({
                     title: titletext,
                     content: helptext,
                 });
-		}
-</script>	
+          }
+</script>
 <!-- ************************************** END SCRIPTS ************************************************************  -->
 
-<link rel="stylesheet" href="/leaflet/leaflet.css" />
+<link rel="stylesheet" href="./leaflet/leaflet.css" />
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link href="/css/tilesblockchain.css" rel="stylesheet">
-<link href="/css/attention.css" rel="stylesheet">
-<link href="/css/button.css" rel="stylesheet">
-<link href="/css/textbox.css" rel="stylesheet">
-<link href="/css/table3d.css" rel="stylesheet">
-<link href="/css/dropdown.css" rel="stylesheet">
-<link href="/css/component-custom-switch.css" rel="stylesheet">
+<link href="./css/tilesblockchain.css" rel="stylesheet">
+<link href="./css/attention.css" rel="stylesheet">
+<link href="./css/button.css" rel="stylesheet">
+<link href="./css/textbox.css" rel="stylesheet">
+<link href="./css/table3d.css" rel="stylesheet">
+<link href="./css/dropdown.css" rel="stylesheet">
+<link href="./css/component-custom-switch.css" rel="stylesheet">
 
 </head>
 
@@ -182,10 +181,7 @@ function image(thetype,mess) {
 <!-- ******************************************************* START WEBSITE BODY  ******************************************* -->
 
 <body>
-<center><img src='./senecalogo.png' width=150 height=70></center>
-
 <!-- ********************************************************* DASHBOARD HEADER ******************************************** -->
-
 <table style="width: 100%;height: 80px;    background: linear-gradient(135deg,  rgba(102, 255, 217,1) 0%,rgba(0, 128, 255,1) 50%,rgba(0, 128, 255,1) 51%,rgba(0, 255, 128,1) 100%);">
 <tr>
  <td>
@@ -200,65 +196,64 @@ function image(thetype,mess) {
   <div class="row justify-content-md-center">
   <div class="col-12">
   <div id="selectSymbol">
-      <form id="idForm">						
-		<h6>
-			 <b><font color='black'>Last Kafka Access Time:</font></b></b> <label id="accesstime"></label><br>
-			 <b><font color='black'>Kafka Cluster:</font></b> <label id="kafkacluster"></label><br>			
-	    </h6>
-		 
-       <div class="loader" id="loaderdiv" style="display:none;float: left"></div>      
-	      <button id="start" class="btn btn1" name="submit">Start Streaming</button>   
-		  <label id="statustext"></label>
-	      <div style="float: right;display:block;" class="custom-switch custom-switch-label-io">
+      <form id="idForm">
+          <h6>
+                   <b><font color='black'>Last Kafka Access Time:</font></b></b> <label id="accesstime"></label><br>
+                   <b><font color='black'>Kafka Cluster:</font></b> <label id="kafkacluster"></label><br>
+      </h6>
+
+       <div class="loader" id="loaderdiv" style="display:none;float: left"></div>
+        <button id="start" class="btn btn1" name="submit">Start Streaming</button>
+            <label id="statustext"></label>
+        <div style="float: right;display:block;" class="custom-switch custom-switch-label-io">
           <label class="custom-switch-btn" for="example_1"></label>
-       </div>	
-		
+       </div>
+
  </td>
 </tr>
-</table>											
+</table>
 <!-- ********************************************************* DASHBOARD HEADER ******************************************** -->
 
-		
 <table border=0 style='width: 100%;height: 400px; vertical-align: top;'>
-  <tr>					   			   
-	<td  >	
-		<center>
-			<div class="tile wide job" style="width: 320px; height: 400">
+  <tr>
+  <td  >
+          <center>
+                  <div class="tile wide job" style="width: 320px; height: 400">
             <div class="header" style="width: 320px; height: 100%" >
              <div id="totrecs" class="count">0</div>
                 <div class="title">Total Kafka Messages Processed</div>
             </div>
             </div>
-			<div class="tile wide job" style="width: 320px; height: 400">
+                  <div class="tile wide job" style="width: 320px; height: 400">
             <div class="header" style="width: 320px; height: 100%" >
             <div id="tottime" class="counttimewindow"><br><br></div>
             <div class="title">Kafka Time Window Analysed</div>
             </div>
             </div>
             </center>
-	</td>
-	</tr>
-				 
+  </td>
+  </tr>
+
 <!-- *************************************** MAIN TABLE ****************************** -->
-	 <tr>				 
-	 <td colspan=4>
-	 <table style="width: 100%;">
+   <tr>
+   <td colspan=4>
+   <table style="width: 100%;">
       <tr>
-	    <td>
-	     <img src='./help.png' width=30 height=27 class="padding" style="float: top;" onclick="image('table','')">	
-	     <center><a id="Export" href="#"> Download as CSV </a> </center>
- 	     <div id="table_div"></div>
-	    </td>
-	  </tr>
-	 </table>
+      <td>
+       <img src='./help.png' width=30 height=27 class="padding" style="float: top;" onclick="image('table','')">
+       <center><a id="Export" href="#"> Download as CSV </a> </center>
+       <div id="table_div"></div>
+      </td>
+    </tr>
+   </table>
      </td>
-	 </tr>
-     </table>				 
+   </tr>
+     </table>
    </form>
    </div>
     </div>
-	
-	<i><b>Powered by:</b> Transactional Machine Learning, Kafka, Viper, Viperviz<br><b>Developed by:</b> OTICS Advanced Analytics, Inc.</i>
+
+  <i><b>Powered by:</b> Transactional Machine Learning, Kafka, Viper, Viperviz<br><b>Developed by:</b> OTICS Advanced Analytics, Inc.</i>
 
     </div>
 
@@ -273,13 +268,11 @@ function image(thetype,mess) {
            packages: ["corechart", "line"]
      });
 
-      google.charts.setOnLoadCallback(drawChart);
-	  google.charts.load('current', {'packages':['table','annotatedtimeline','gauge','bar','sankey']});
-	  google.charts.setOnLoadCallback(drawTable2);  
-		   
-   	  document.documentElement.style.overflowX = 'hidden';
+     google.charts.setOnLoadCallback(drawChart);
+    google.charts.load('current', {'packages':['table','annotatedtimeline','gauge','bar','sankey']});
+    google.charts.setOnLoadCallback(drawTable2);
 
-
+          document.documentElement.style.overflowX = 'hidden';
       var START = 0;
       var ws;
       var topic = "";
@@ -331,9 +324,7 @@ function image(thetype,mess) {
 
           issues = "";
           issuecount = 0;
-
           if (jsondata) {
-
               var text;
               var val;
               var createdon;
@@ -432,10 +423,8 @@ function image(thetype,mess) {
           createdon = null;
           winstart = null;
           winend = null;
-
           symptom = null;
           processtype = null;
-
           identifier = null;
           idarr = null;
           symptomcode = null;
@@ -486,7 +475,7 @@ function image(thetype,mess) {
               datatbl.addColumn('string', 'Time Window Start');
               datatbl.addColumn('string', 'Time Window End');
               datatbl.addColumn('string', 'Subject Information');
-              //	datatbl.addColumn('string', 'Symptomcode');
+              //  datatbl.addColumn('string', 'Symptomcode');
 
               datatbl.addColumn('string', 'ProcessVariable');
 
@@ -521,8 +510,6 @@ function image(thetype,mess) {
           } else {
 
               //console.log("datatbl=",datatbl);
-
-
               formatter.format(datatbl, 1);
               formatter2.format(datatbl, 2);
               datatbl.sort({
@@ -557,7 +544,6 @@ function image(thetype,mess) {
 
  <!-- ******************************************** DRAW TABLE ********************************************* -->
 
-
  <!--   ***************************************** START MAIN STREAMING FUNCTION ************************************************ -->
       function streamLiveKafkaData() {
 
@@ -567,7 +553,7 @@ function image(thetype,mess) {
               mainport = url.split(":")[1];
               //console.log(mainport);
 
-              <!-- ******************************* GRAB PARAMETERS FROM URL *************************** --> 
+              <!-- ******************************* GRAB PARAMETERS FROM URL *************************** -->
               var urlParams = new URLSearchParams(window.location.search);
               var keys = urlParams.keys();
               var entries = urlParams.entries();
@@ -606,15 +592,25 @@ function image(thetype,mess) {
               }
 
  <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
-              if (window.location.href.indexOf("http://") != -1) {
-                  ws = new WebSocket("ws://" + url + "/ws");
-              } else {
-                  ws = new WebSocket("wss://" + url + "/ws");
-              }
- <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
-			  
+            if (window.location.href.indexOf("http://")!=-1){
+		     if (window.location.href.indexOf("/viz/")!=-1){
+                ws = new WebSocket("ws://"+url+"/viz/ws");
+             }else{
+                  ws = new WebSocket("ws://"+url+"/ws");
+             } 
+        }else{
+             if (window.location.href.indexOf("/viz/")!=-1){                                                                            
+                 ws = new WebSocket("wss://"+url+"/viz/ws");
+             }else{
+               ws = new WebSocket("wss://"+url+"/ws");
+             }
+           }
 
- <!-- ************************************* CREATE WEBSOCKET EVENTS **************************** -->			  
+
+ <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
+
+
+ <!-- ************************************* CREATE WEBSOCKET EVENTS **************************** -->
 
               ws.onmessage = function (event) {  <!-- ON MESSAGE SOCKET EVENT ****************** -->
                   curTime = new Date();
@@ -660,14 +656,13 @@ function image(thetype,mess) {
 
                   kafkacluster = obj.Webkafkacluster
                   mainkafkatopic = obj.Webtopic
-
                   document.getElementById('accesstime').innerHTML = curTime;
                   document.getElementById('kafkacluster').innerHTML = kafkacluster + ", Kafka Topic: " + obj.Webtopic;
                   mainusertopic = topic;
-                  
- <!-- ****************************************  START THE VISUALIZATION **************************** -->				  
+
+ <!-- ****************************************  START THE VISUALIZATION **************************** -->
                   drawChart(obj, mainkafkatopic);
- <!-- ****************************************  START THE VISUALIZATION **************************** -->				  
+ <!-- ****************************************  START THE VISUALIZATION **************************** -->
 
                   obj = null;
                   maindata = null;
@@ -701,7 +696,7 @@ function image(thetype,mess) {
 <!-- ****************************************** ON CLOSE SOCKET EVENT ****************** -->
 
 <!-- ****************************************** ON OPEN SOCKET EVENT ****************** -->
-			  
+
               ws.onopen = function (error) {
                   var password = ""
 
@@ -716,13 +711,12 @@ function image(thetype,mess) {
 <!-- ****************************************** ON OPEN SOCKET EVENT ****************** -->
 
 <!-- ****************************************** ON ERROR SOCKET EVENT ****************** -->
-
               ws.onerror = function (error) {
                   if (ws) {
                       ws.close(1000);
                   }
                   console.log(`[error] ${error.message}`);
-                  //	$("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
+                  //      $("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
                   document.getElementById('statustext').innerHTML = "WEBSOCKET ERROR.." + `[error] ${error.message}`;
 
               };
@@ -761,23 +755,17 @@ function image(thetype,mess) {
               START = 0;
               $("#start").html("Start Streaming");
               $("#start").attr("disabled", true);
-              //	    $("#statustext").val("WEBSOCKET CLOSING...");
+              //      $("#statustext").val("WEBSOCKET CLOSING...");
               document.getElementById('statustext').innerHTML = "WEBSOCKET CLOSING...";
-
           } else {
               e.preventDefault(); // avoid to execute the actual submit of the form.
               START = 1;
               //   $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka Msgs...");
               document.getElementById('statustext').innerHTML = "WEBSOCKET OPEN..Receiving Kafka Msgs...";
-
               $("#start").html("Stop Streaming");
               streamLiveKafkaData();
-
           }
-
       });
     </script>
-
 </body>
-
 </html>

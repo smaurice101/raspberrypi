@@ -5,6 +5,7 @@
 Developed by: Sebastian Maurice, PhD
 =========================================-->
 <head>
+<base target="/" />   
 <meta charset="UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
 <title>Real-Time Cyber Threats and Network Monitoring Dashboard</title>
@@ -129,11 +130,11 @@ padding: 4px 5px 2px 2px;
 }
 
 </style>
-<script type="text/javascript" src="/js/attention.js"></script>   
+<script type="text/javascript" src="./js/attention.js"></script>   
 
-<script type="text/javascript" src="/js/r.min.js"></script>   
-<script type="text/javascript" src="/js/justgage.js"></script>   
-<script type="text/javascript" src="/js/justgage.min.js"></script>   
+<script type="text/javascript" src="./js/r.min.js"></script>   
+<script type="text/javascript" src="./js/justgage.js"></script>   
+<script type="text/javascript" src="./js/justgage.min.js"></script>   
 
 <script>
   window.Promise ||
@@ -149,23 +150,23 @@ padding: 4px 5px 2px 2px;
 	  '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
 	)
 </script>
-<script src="/js/d3.min.js"></script>
-<script src="/js/d3pie.js"></script>
+<script src="./js/d3.min.js"></script>
+<script src="./js/d3pie.js"></script>
 
     
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<link rel="stylesheet" href="/leaflet/leaflet.css" />
+<link rel="stylesheet" href="./leaflet/leaflet.css" />
 
 </head>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link href="/css/tilescrypto.css" rel="stylesheet">
-<link href="/css/attention.css" rel="stylesheet">
-<link href="/css/button.css" rel="stylesheet">
-<link href="/css/textbox.css" rel="stylesheet">
-<link href="/css/table3d.css" rel="stylesheet">
-<link href="/css/dropdown.css" rel="stylesheet">
-<link href="/css/component-custom-switch.css" rel="stylesheet">
+<link href="./css/tilescrypto.css" rel="stylesheet">
+<link href="./css/attention.css" rel="stylesheet">
+<link href="./css/button.css" rel="stylesheet">
+<link href="./css/textbox.css" rel="stylesheet">
+<link href="./css/table3d.css" rel="stylesheet">
+<link href="./css/dropdown.css" rel="stylesheet">
+<link href="./css/component-custom-switch.css" rel="stylesheet">
 
 <body>
 <!-- <center><img src='./senecalogo.png' width=150 height=70> | <img src='./OTICS-New-Logo-Black.png' width=150 height=70></center> -->
@@ -781,17 +782,11 @@ var div = document.getElementById('gpt');
  
 		document.getElementById("gpt").style.display = "block";
  
- gptmess = "<br><font size=5><b>[CONNECTED TO PRIVATEGPT] Hi there, I am your AI Cybersecurity analyst.  I am currently analysing the output from TML to see if there is any abnormality in the packet data.</b></font><br>";
-                                  
-                                       
 	for (j in jsondata.TopicReads) {
 
 		message = jsondata.TopicReads[j].choices[0].message.content;		
-		details = jsondata.TopicReads[j].identifier;
-        
-       //console.log("message=",message);
-                                       
-		if (message){
+		details = jsondata.TopicReads[j].responsedetails;
+		if (details){
 			  message=message.replaceAll("Question", "<br>Answer");
 			  message=message.replace("\\n", "");
               message=message.replace("\\n", "");
@@ -803,16 +798,26 @@ var div = document.getElementById('gpt');
 	let uniquemessages = [...new Set(mainmessages)];
 	  for (j in uniquemessages) {
 	  message=uniquemessages[j];
-                               
-		if (message[0].includes("is above the threshold")){
-            highmess += "<font size=5 color='red'><b>(" + details + "):</b> " + message[0] + "</font><br><br>";			
-			}			
+	    //console.log("j=",uniquemessages[j]);
+		//it is not possible for me to determine
+		//there is no definitive reason to investigate
+		//it is not clear if this machine should be investigated
+		//not possible for me to determine if this machine should be investigated
+		if (message[0].includes("should be investigate") && !message[0].includes("it is not clear if this machine should be investigated") &&
+      		!message[0].includes("not possible for me to determine if this machine should be investigated")){
+            highmess += "<font size=5 color='red'><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";			
+			let parr = message[1].split("-");
+			//console.log(parr[1]);
+			}else{
+              lowmess += "<font size=4><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";
+            }			
+        } 
        
 	   
-	   if (highmess!=""){
-            div.innerHTML = gptmess + highmess;
+	   if (lowmess!="" || highmess!=""){
+            div.innerHTML = highmess + lowmess;
 	   }		
-  }
+
 }
 
 var mainheattablemap = new Map();
@@ -1521,20 +1526,29 @@ function streamLiveKafkaData() {
 			}
 		}
 
-		///////////////////////////////////////////////////////////////////////  CREATE WEBSOCKET OBJECT ///////////////////
-		if (window.location.href.indexOf("http://") != -1) {
-			ws = new WebSocket("ws://" + url + "/ws");
-		} else {
-			ws = new WebSocket("wss://" + url + "/ws");
-		}
+ <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
+            if (window.location.href.indexOf("http://")!=-1){
+		     if (window.location.href.indexOf("/viz/")!=-1){
+                ws = new WebSocket("ws://"+url+"/viz/ws");
+             }else{
+                  ws = new WebSocket("ws://"+url+"/ws");
+             } 
+        }else{
+             if (window.location.href.indexOf("/viz/")!=-1){                                                                            
+                 ws = new WebSocket("wss://"+url+"/viz/ws");
+             }else{
+               ws = new WebSocket("wss://"+url+"/ws");
+             }
+           }
+
+
+ <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
+		
 		ws.onmessage = function (event) {
 			curTime = new Date();
 			var eventdata = `${event.data}`;
 
 			var maindata = eventdata.replace(/\\"/g, '"');
-    	  //  maindata = maindata.replace('\\"','');
-          //  maindata = maindata.replace(/\\n/g,"n");
-    
 			maindata = maindata.substr(1, maindata.length - 3);
 			if (maindata == "") {
 				return
@@ -1546,7 +1560,7 @@ function streamLiveKafkaData() {
 			try {
 				obj = JSON.parse(maindata);
 			} catch (e) {
-			console.log("-------------maindata=",maindata);
+			//console.log("-------------maindata=",maindata);
 				console.log("Json parse issue=", e.message);
 				return;
 			}

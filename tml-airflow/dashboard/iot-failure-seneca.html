@@ -9,8 +9,9 @@ For help email: support@otics.ca
 Website: http://www.otics.ca
 =========================================-->
 <head>
+<base target="/" />    
     <meta charset="UTF-8" />
-	   <link rel="shortcut icon" type="image/x-icon" href="/oticsico.png" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
     <title>IoT Device Failure Surveillance Dashboard</title>
     <style>
 	.loader {
@@ -126,14 +127,14 @@ th, td {
 padding: 4px 5px 2px 2px;
 }	  
     </style>
-<script type="text/javascript" src="/js/attention.js"></script>   
+<script type="text/javascript" src="./js/attention.js"></script>   
 
-<script type="text/javascript" src="/js/r.min.js"></script>   
+<script type="text/javascript" src="./js/r.min.js"></script>   
 
-<script type="text/javascript" src="/js/justgage.js"></script>   
-<script type="text/javascript" src="/js/justgage.min.js"></script>   
-<script src="/js/d3.min.js"></script>
-<script src="/js/d3pie.js"></script>
+<script type="text/javascript" src="./js/justgage.js"></script>   
+<script type="text/javascript" src="./js/justgage.min.js"></script>   
+<script src="./js/d3.min.js"></script>
+<script src="./js/d3pie.js"></script>
 
 <script>
 
@@ -179,19 +180,19 @@ function image(thetype,mess) {
                 });
 			}
 </script>	
-<link rel="stylesheet" href="/leaflet/leaflet.css" />
+<link rel="stylesheet" href="./leaflet/leaflet.css" />
 
 </head>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 
-<link href="/css/tilesblockchain.css" rel="stylesheet">
-<link href="/css/attention.css" rel="stylesheet">
-<link href="/css/button.css" rel="stylesheet">
-<link href="/css/textbox.css" rel="stylesheet">
-<link href="/css/table3d.css" rel="stylesheet">
-<link href="/css/dropdown.css" rel="stylesheet">
-<link href="/css/component-custom-switch.css" rel="stylesheet">
+<link href="./css/tilesblockchain.css" rel="stylesheet">
+<link href="./css/attention.css" rel="stylesheet">
+<link href="./css/button.css" rel="stylesheet">
+<link href="./css/textbox.css" rel="stylesheet">
+<link href="./css/table3d.css" rel="stylesheet">
+<link href="./css/dropdown.css" rel="stylesheet">
+<link href="./css/component-custom-switch.css" rel="stylesheet">
 
 <style>
 
@@ -254,7 +255,7 @@ function image(thetype,mess) {
                <div id="totsymptoms" class="count">0</div>
                <div class="title">Avg. Anomaly % Per Device</div>
 			   <br>
-			   <img src='/help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('ml','')">	
+			   <img src='./help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('ml','')">	
     			<center>
 				<br>
 			 <div id="barchart_div" style="text-align: top; vertical-align: top;width:100%;height: 370px" ></div>	
@@ -393,7 +394,7 @@ function image(thetype,mess) {
           <option value=90>90%</option>
           <option value=95>95%</option>
 		  
-      </select> </label><label>&nbsp;&nbsp;<input type="input" class="form__field" width=70 placeholder="Enter Emails to Send Data File (Separate with Comma)"
+      </select> </label><label>&nbsp;&nbsp;<input type="input" class="form__field" width=70 placeholder="Then Enter Emails to Send Patient Data File (Separate with Comma)"
 	  name="Email" id='riskemails'  /> | <input type="input" class="form__field" width=50 placeholder="Enter Kafka Topic To Save Results" name="Kafka" id='kafkatopic'  />
 	  <input type='button' id="emailsave"  class="btnsave" value="Save" name="Save" onclick="saveEmails(riskemails.value);">&nbsp;&nbsp;<input type='checkbox' id='backcheck' onchange="saveCheckbox(this,'background');"> Background
 </label>
@@ -480,8 +481,8 @@ function image(thetype,mess) {
 				
                  <div id="map" ></div>
 				 
-				 <script type="text/javascript" src="/leaflet/leaflet.js"></script>   
-				         <script src="/leaflet/leaflet-div-heatmap.js"></script>
+				 <script type="text/javascript" src="./leaflet/leaflet.js"></script>   
+				         <script src="./leaflet/leaflet-div-heatmap.js"></script>
 
 				 
                   <script>
@@ -2864,12 +2865,19 @@ datetime:timestamp,:allrecords,Joinedidentifiers:~oem:n/a~lat:42.58942256332994~
 				}	
 			}
 			
-			
-		  if (window.location.href.indexOf("http://")!=-1){
-             ws = new WebSocket("ws://"+url+"/ws");
-            }else{
-			    ws = new WebSocket("wss://"+url+"/ws");
-			}
+           if (window.location.href.indexOf("http://")!=-1){
+		     if (window.location.href.indexOf("/viz/")!=-1){
+                ws = new WebSocket("ws://"+url+"/viz/ws");
+             }else{
+                  ws = new WebSocket("ws://"+url+"/ws");
+             } 
+        }else{
+             if (window.location.href.indexOf("/viz/")!=-1){                                                                            
+                 ws = new WebSocket("wss://"+url+"/viz/ws");
+             }else{
+               ws = new WebSocket("wss://"+url+"/ws");
+             }
+           }
             ws.onmessage = function(event) {
                 curTime = new Date();
 				var eventdata=`${event.data}`;

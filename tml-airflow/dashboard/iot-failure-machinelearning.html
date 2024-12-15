@@ -9,8 +9,9 @@ For help email: support@otics.ca
 Website: http://www.otics.ca
 =========================================-->
 <head>
+<base target="/" />   
     <meta charset="UTF-8" />
-	   <link rel="shortcut icon" type="image/x-icon" href="/oticsico.png" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
     <title>IoT Device Failure Surveillance Dashboard</title>
     <style>
 	.loader {
@@ -126,12 +127,12 @@ th, td {
 padding: 4px 5px 2px 2px;
 }	  
     </style>
-<script type="text/javascript" src="/js/attention.js"></script>   
+<script type="text/javascript" src="./js/attention.js"></script>   
 
-<script type="text/javascript" src="/js/r.min.js"></script>   
+<script type="text/javascript" src="./js/r.min.js"></script>   
 
-<script type="text/javascript" src="/js/justgage.js"></script>   
-<script type="text/javascript" src="/js/justgage.min.js"></script>   
+<script type="text/javascript" src="./js/justgage.js"></script>   
+<script type="text/javascript" src="./js/justgage.min.js"></script>   
 
 <script>
 
@@ -177,19 +178,19 @@ function image(thetype,mess) {
                 });
 			}
 </script>	
-<link rel="stylesheet" href="/leaflet/leaflet.css" />
+<link rel="stylesheet" href="./leaflet/leaflet.css" />
 
 </head>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 
-<link href="/css/tilesblockchain.css" rel="stylesheet">
-<link href="/css/attention.css" rel="stylesheet">
-<link href="/css/button.css" rel="stylesheet">
-<link href="/css/textbox.css" rel="stylesheet">
-<link href="/css/table3d.css" rel="stylesheet">
-<link href="/css/dropdown.css" rel="stylesheet">
-<link href="/css/component-custom-switch.css" rel="stylesheet">
+<link href="./css/tilesblockchain.css" rel="stylesheet">
+<link href="./css/attention.css" rel="stylesheet">
+<link href="./css/button.css" rel="stylesheet">
+<link href="./css/textbox.css" rel="stylesheet">
+<link href="./css/table3d.css" rel="stylesheet">
+<link href="./css/dropdown.css" rel="stylesheet">
+<link href="./css/component-custom-switch.css" rel="stylesheet">
 
 <style>
 
@@ -200,7 +201,7 @@ function image(thetype,mess) {
       }
 </style>
 <body>
-<center><a href='http://www.otics.ca/' target=new><img src='/OTICS-New-Logo-Black.png' width=150 height=70></a></center>
+<center><a href='http://www.otics.ca/' target=new><img src='./OTICS-New-Logo-Black.png' width=150 height=70></a></center>
 <table style="width: 100%;height: 80px;    background: linear-gradient(135deg,  rgba(102, 255, 217,1) 0%,rgba(0, 128, 255,1) 50%,rgba(0, 128, 255,1) 51%,rgba(0, 255, 128,1) 100%);">
 <tr>
 <td>
@@ -252,7 +253,7 @@ function image(thetype,mess) {
                <div id="totsymptoms" class="count">0</div>
                <div class="title">Machine Learning Models Auto-Created</div>
 			   <br>
-			   <img src='/help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('ml','')">	
+			   <img src='./help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('ml','')">	
     			<center>
 				<br>
 			 <div id="barchart_div" style="text-align: top; vertical-align: top;width:100%;height: 370px" ></div>	
@@ -286,7 +287,7 @@ function image(thetype,mess) {
       <div id="blockcount" class="count"  >TBD</div>
       <div class="title" >Failure Prediction Blocks Created in XENESE</div>
 	  <br>
-<img src='/help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('block','')">				
+<img src='./help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('block','')">				
 	 <center><a id="Exportblockchain" href="#"> Download Blockchain Data </a> </center>
 
     </div>
@@ -313,7 +314,7 @@ function image(thetype,mess) {
     </div>
   </div>
 				 
-<img src='/help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('gauge','')">				
+<img src='./help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('gauge','')">				
 
 				  <div id="gauge_avgrisk" ></div><br><br><br>
 						  <label id="currentfraud"><font size=2><b>High Risk Failure Risk Avg.</b></font></label><br>
@@ -435,8 +436,8 @@ function image(thetype,mess) {
 				
                  <div id="map" ></div>
 				 
-				 <script type="text/javascript" src="/leaflet/leaflet.js"></script>   
-				         <script src="/leaflet/leaflet-div-heatmap.js"></script>
+				 <script type="text/javascript" src="./leaflet/leaflet.js"></script>   
+				         <script src="./leaflet/leaflet-div-heatmap.js"></script>
 
 				 
                   <script>
@@ -476,7 +477,7 @@ function image(thetype,mess) {
 				 
 				 <tr>
 				 <td>
-				 <img src='/help.png' width=30 height=27 class="padding" style="float: top;" onclick="image('table','')">	
+				 <img src='./help.png' width=30 height=27 class="padding" style="float: top;" onclick="image('table','')">	
 				 <center><a id="Export" href="#"> Download as CSV </a> </center>
  				  <div id="table_div"></div>
 				  </td>
@@ -2664,11 +2665,23 @@ datetime:timestamp,:allrecords,Joinedidentifiers:~oem:n/a~lat:42.58942256332994~
 			
 			//url="www.otics.ca:543/iot_external";
 	
-		  if (window.location.href.indexOf("http://")!=-1){
-             ws = new WebSocket("ws://"+url+"/ws");
-            }else{
-			    ws = new WebSocket("wss://"+url+"/ws");
-			}
+ <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
+            if (window.location.href.indexOf("http://")!=-1){
+		     if (window.location.href.indexOf("/viz/")!=-1){
+                ws = new WebSocket("ws://"+url+"/viz/ws");
+             }else{
+                  ws = new WebSocket("ws://"+url+"/ws");
+             } 
+        }else{
+             if (window.location.href.indexOf("/viz/")!=-1){                                                                            
+                 ws = new WebSocket("wss://"+url+"/viz/ws");
+             }else{
+               ws = new WebSocket("wss://"+url+"/ws");
+             }
+           }
+
+
+ <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
             ws.onmessage = function(event) {
                 curTime = new Date();
 				var eventdata=`${event.data}`;
