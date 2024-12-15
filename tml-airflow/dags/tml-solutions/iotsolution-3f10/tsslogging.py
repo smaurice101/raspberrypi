@@ -208,11 +208,62 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          protocol: TCP
          targetPort: {}      
        selector:
+         app: {}
+   ---
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: {}-visualization-service-ingress
+       labels:
+         app: {}-visualization-service-ingress
+     spec:
+       type: ClusterIP
+       ports:
+       - port: 80
+         name: p1i
+         protocol: TCP
+         targetPort: {}
+       selector:
+         app: {}
+   ---
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: {}-external-service-ingress
+       labels:
+         app: {}-external-service-ingress
+     spec:
+       type: ClusterIP
+       ports:
+       - port: 80
+         name: p2i
+         protocol: TCP
+         targetPort: {}
+       selector:
+         app: {}
+   ---
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: {}-airflow-service-ingress
+       labels:
+         app: {}-airflow-service-ingress
+     spec:
+       type: ClusterIP
+       ports:
+       - port: 80
+         name: p3i
+         protocol: TCP
+         targetPort: {}      
+       selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
                       sname,sname,solutionvipervizport,solutionvipervizport,sname,
                       sname,sname,solutionexternalport,solutionexternalport,sname,
-                      sname,sname,solutionairflowport,solutionairflowport,sname)  
-
+                      sname,sname,solutionairflowport,solutionairflowport,sname,
+                      sname,sname,solutionvipervizport,sname,
+                      sname,sname,solutionexternalport,sname,
+                      sname,sname,solutionairflowport,sname)  
+                    
     return kcmd
 
 def getqip():
