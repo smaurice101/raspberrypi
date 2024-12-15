@@ -1,7 +1,5 @@
 # TSS Logging
 
-# TSS Logging
-
 import datetime
 from datetime import timezone 
 from git import Repo
@@ -11,6 +9,49 @@ import os
 import socket
 import time
 
+def ingress(sname):
+  ing = """
+    ############# nginx-ingress.yml
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: tml-ingress
+      annotations:
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: tml.tss
+          http:
+            paths:
+              - path: /viz(/|$)(.*)
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: {}-visualization-service
+                    port:
+                      number: 80
+              - path: /ext(/|$)(.*)
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: {}-external-service
+                    port:
+                      number: 80                  
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ingress-nginx-controller
+      namespace: ingress-nginx
+    data:
+      allow-snippet-annotations: "true"
+  """.format(sname,sname)
+
+  return ing
+  
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
