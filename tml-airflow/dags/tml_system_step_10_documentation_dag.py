@@ -719,7 +719,10 @@ def generatedoc(**context):
     kpfwd="kubectl port-forward deployment/{}-visualization {}:{}".format(sname,solutionvipervizport[1:],solutionvipervizport[1:])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--kube-portforward--;{}".format(kpfwd)])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--visualizationurl--;{}".format(vizurlkube)])
-        
+
+    kcmd3=tsslogging.ingress(sname):
+    doparse("/{}/docs/source/kube.rst".format(sname), ["--ingress--;{}".format(kcmd3)])
+
     ###########################
     try:
       tmuxwindows = "None"  
