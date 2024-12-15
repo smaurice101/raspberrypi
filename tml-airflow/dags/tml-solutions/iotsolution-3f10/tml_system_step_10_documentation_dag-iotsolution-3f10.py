@@ -722,7 +722,7 @@ def generatedoc(**context):
     doparse("/{}/docs/source/kube.rst".format(sname), ["--visualizationurl--;{}".format(vizurlkube)])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--visualizationurling--;{}".format(vizurlkubeing)])
 
-    kcmd3=tsslogging.ingress(sname):
+    kcmd3=tsslogging.ingress(sname)
     doparse("/{}/docs/source/kube.rst".format(sname), ["--ingress--;{}".format(kcmd3)])
 
     ###########################
