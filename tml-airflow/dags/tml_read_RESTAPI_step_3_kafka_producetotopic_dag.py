@@ -172,7 +172,13 @@ def startproducing(**context):
     
        ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
        ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
-    
+        
+       repo=tsslogging.getrepo() 
+       if sname != '_mysolution_':
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+       else:
+         fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
+         
        wn = windowname('produce',sname,sd)      
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
