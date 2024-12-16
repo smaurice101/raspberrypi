@@ -7,12 +7,12 @@ import json
 sys.dont_write_bytecode = True
  
 # defining the api-endpoint
-rest_port = "9001"  # <<< ***** Change Port to match the Server Rest_PORT
+rest_port = "9001"  # <<< ***** Change Port to match the Server rest_port or tss_rest_port in tml_read_RESTAPI_step_3_kafka_producetotopic_dag.py
 httpaddr = "http:" # << Change to https or http
 
 # Modify the apiroute: jsondataline, or jsondataarray
 # 1. jsondataline: You can send One Json message at a time
-# 1. jsondatarray: You can send a Json array 
+# 2. jsondatarray: You can send a Json array 
 
 apiroute = "jsondataline"
 
