@@ -11,7 +11,7 @@ import time
 
 def ingress(sname):
   ing = """
-    ############# nginx-ingress.yml
+    ############# nginx-ingress-{}.yml
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
@@ -48,7 +48,7 @@ def ingress(sname):
       namespace: ingress-nginx
     data:
       allow-snippet-annotations: "true"
-  """.format(sname,sname)
+  """.format(sname,sname,sname)
 
   return ing
   
