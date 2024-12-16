@@ -14,7 +14,7 @@ class TmlgrpcClient(object):
 
     def __init__(self):
         self.host = 'localhost'
-        self.server_port = 9002 # <<<<*********** Change to gRPC server tss_grpc_port or grpc_port in tml_read_gRPC_step_3_kafka_producetotopic_dag.py
+        self.server_port = 9002 # <<<<*********** Change to gRPC server port to match tss_gRPC_port or gRPC_port in tml_read_gRPC_step_3_kafka_producetotopic_dag.py
 
         # instantiate a channel
         self.channel = grpc.insecure_channel(
