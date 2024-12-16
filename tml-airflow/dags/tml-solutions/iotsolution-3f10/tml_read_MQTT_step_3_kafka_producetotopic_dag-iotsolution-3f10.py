@@ -164,7 +164,7 @@ def startproducing(**context):
        ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='MQTT')
        ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
        buf = default_args['mqtt_broker'] + ":" + default_args['mqtt_port']   
-       ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
+       ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="")  
        buf="MQTT Subscription Topic: " + default_args['mqtt_subscribe_topic']   
        ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=buf)
        ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
