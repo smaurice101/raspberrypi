@@ -235,7 +235,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
                       sname,sname,solutionvipervizport,sname,
-                      sname,sname,solutionexternalport,sname)
+                      sname,sname,cpp,sname)
                     
     return kcmd
 
