@@ -6,6 +6,7 @@ from datetime import datetime
 import time
 
 sys.dont_write_bytecode = True
+kubernetes=0
 
 class TmlgrpcClient(object):
     """
@@ -13,11 +14,18 @@ class TmlgrpcClient(object):
     """
 
     def __init__(self):
-        self.host = 'localhost'
+        if kubernetes:
+          self.host = 'tml.tss/ext'  
+        else:    
+          self.host = 'localhost'
         self.server_port = 9002 # <<<<*********** Change to gRPC server port to match tss_gRPC_port or gRPC_port in tml_read_gRPC_step_3_kafka_producetotopic_dag.py
 
         # instantiate a channel
-        self.channel = grpc.insecure_channel(
+        if kubernetes:
+          self.channel = grpc.insecure_channel(
+            '{}'.format(self.host))            
+        else:
+          self.channel = grpc.insecure_channel(
             '{}:{}'.format(self.host, self.server_port))
 
         # bind the client and the server
