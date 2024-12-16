@@ -139,7 +139,7 @@ def startproducing(**context):
   ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="")
   ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="")
     
-  ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+  ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
   ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
         
   chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))   
