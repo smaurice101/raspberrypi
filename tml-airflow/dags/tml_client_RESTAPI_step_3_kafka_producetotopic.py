@@ -16,7 +16,14 @@ httpaddr = "http:" # << Change to https or http
 
 apiroute = "jsondataline"
 
+# USE THIS ENDPOINT IF TML RUNNING IN DOCKER CONTAINER
+# DOCKER CONTAINER ENDPOINT
 API_ENDPOINT = "{}//localhost:{}/{}".format(httpaddr,rest_port,apiroute)
+
+# USE THIS ENDPOINT IF TML RUNNING IN KUBERNETES
+# KUBERNETES ENDPOINT
+#API_ENDPOINT = "{}//tml.tss/ext/{}".format(httpaddr,apiroute)
+
  
 def send_tml_data(data): 
   # data to be sent to api
