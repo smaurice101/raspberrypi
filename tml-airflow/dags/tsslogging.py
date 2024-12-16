@@ -51,7 +51,43 @@ def ingress(sname):
   """.format(sname,sname,sname)
 
   return ing
-  
+
+def ingressnoext(sname): # Localfile being accessed
+  ing = """
+    ############# nginx-ingress-{}.yml
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: tml-ingress
+      annotations:
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: tml.tss
+          http:
+            paths:
+              - path: /viz(/|$)(.*)
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: {}-visualization-service
+                    port:
+                      number: 80
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ingress-nginx-controller
+      namespace: ingress-nginx
+    data:
+      allow-snippet-annotations: "true"
+  """.format(sname,sname,sname)
+
+  return ing
+
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
@@ -236,6 +272,176 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
                       sname,sname,solutionvipervizport,sname,
                       sname,sname,cpp,sname)
+                    
+    return kcmd
+
+def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
+                guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
+               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
+               step9rollbackoffset,kubebroker,kafkabroker):
+    cp = ""
+    cpp = ""
+    
+    if len(clientport) > 1:
+        cp = """    - containerPort: {}
+             - containerPort: {}
+             - containerPort: {}
+             - containerPort: {}""".format(clientport,solutionairflowport,solutionvipervizport,solutionexternalport)
+        cpp = clientport
+        cs="""  - port: {}
+         name: p1
+         protocol: TCP
+         targetPort: {}
+       - port: {}
+         name: p2
+         protocol: TCP
+         targetPort: {}
+       - port: {}
+         name: p3
+         protocol: TCP
+         targetPort: {}
+       - port: {}
+         name: p4
+         protocol: TCP
+         targetPort: {}""".format(clientport,clientport,solutionairflowport,solutionairflowport,solutionvipervizport,solutionvipervizport,solutionexternalport,solutionexternalport)
+        
+    else:    
+        cp = """    - containerPort: {}
+             - containerPort: {}
+             - containerPort: {}""".format(solutionexternalport,solutionairflowport,solutionvipervizport)
+        cpp = "0"
+        cs="""  - port: {}
+         name: p2
+         protocol: TCP
+         targetPort: {}
+       - port: {}
+         name: p3
+         protocol: TCP
+         targetPort: {}
+       - port: {}
+         name: p4
+         protocol: TCP
+         targetPort: {}""".format(solutionairflowport,solutionairflowport,solutionvipervizport,solutionvipervizport,solutionexternalport,solutionexternalport)
+        
+    kcmd="""
+     apiVersion: apps/v1
+     kind: Deployment
+     metadata:
+       name: {}
+     spec:
+       selector:
+         matchLabels:
+           app: {}
+       replicas: 3 # tells deployment to run 1 pods matching the template
+       template:
+         metadata:
+           labels:
+             app: {}
+         spec:
+           containers:
+           - name: {}
+             image: {}:latest
+             volumeMounts:
+             - name: dockerpath
+               mountPath: /var/run/docker.sock
+             ports:
+         {}
+             env:
+             - name: TSS
+               value: '0'
+             - name: SOLUTIONNAME
+               value: '{}'
+             - name: SOLUTIONDAG
+               value: '{}'
+             - name: GITUSERNAME
+               value: '{}'
+             - name: GITREPOURL
+               value: '{}'
+             - name: SOLUTIONEXTERNALPORT
+               value: '{}'
+             - name: CHIP
+               value: '{}'
+             - name: SOLUTIONAIRFLOWPORT
+               value: '{}'
+             - name: SOLUTIONVIPERVIZPORT
+               value: '{}'
+             - name: DOCKERUSERNAME
+               value: '{}'
+             - name: CLIENTPORT
+               value: '{}'
+             - name: EXTERNALPORT
+               value: '{}'
+             - name: KAFKACLOUDUSERNAME
+               value: '{}'
+             - name: VIPERVIZPORT
+               value: '{}'
+             - name: MQTTUSERNAME
+               value: '{}'
+             - name: AIRFLOWPORT
+               value: '{}'
+             - name: GITPASSWORD
+               valueFrom:
+                 secretKeyRef:
+                  name: tmlsecrets 
+                  key: githubtoken                       
+             - name: KAFKACLOUDPASSWORD
+               valueFrom:
+                 secretKeyRef:
+                  name: tmlsecrets 
+                  key: kafkacloudpassword                      
+             - name: MQTTPASSWORD
+               valueFrom: 
+                 secretKeyRef:
+                   name: tmlsecrets 
+                   key: mqttpass                        
+             - name: READTHEDOCS
+               valueFrom:
+                 secretKeyRef:
+                   name: tmlsecrets 
+                   key: readthedocs          
+             - name: qip 
+               value: 'privategpt-service' # This is private GPT service in kubernetes
+             - name: KUBE
+               value: '1'
+             - name: step4maxrows # STEP 4 maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'
+             - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'               
+             - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
+               value: '{}'                              
+             - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more predictions to make, BUT more memory needed.
+               value: '{}'                              
+             - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
+               value: '{}'                                             
+             - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
+               value: '{}'                              
+             - name: step1description # STEP 1 description field can be adjusted here. 
+               value: '{}'                                          
+             - name: KUBEBROKERHOST
+               value: '{}'         
+             - name: KAFKABROKERHOST
+               value: '{}'                              
+           volumes: 
+           - name: dockerpath
+             hostPath:
+               path: /var/run/docker.sock
+   ---
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: {}-visualization-service
+       labels:
+         app: {}-visualization-service
+     spec:
+       type: ClusterIP
+       ports:
+       - port: 80 # Ingress port, if using port 443 will need to setup TLS certs
+         name: p1
+         protocol: TCP
+         targetPort: {}
+       selector:
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                      sname,sname,solutionvipervizport,sname)
                     
     return kcmd
 
