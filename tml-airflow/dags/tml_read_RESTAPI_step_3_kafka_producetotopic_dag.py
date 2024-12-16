@@ -170,7 +170,7 @@ def startproducing(**context):
        ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
        ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
     
-       ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+       ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
        ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
     
        wn = windowname('produce',sname,sd)      
