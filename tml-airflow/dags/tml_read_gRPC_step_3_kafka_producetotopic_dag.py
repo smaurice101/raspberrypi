@@ -80,9 +80,9 @@ def serve():
            server_cert = f.read()
           server_creds = grpc.ssl_server_credentials( ( (server_key, server_cert), ) )
           mainport=int(default_args['gRPC_Port'])
-          server.add_secure_port("[::]:{}".format(int(default_args['gRPC_Port'])), server_creds)
+          server.add_secure_port("*:{}".format(int(default_args['gRPC_Port'])), server_creds)
         else:
-          server.add_insecure_port("[::]:{}".format(int(default_args['tss_gRPC_Port'])))
+          server.add_insecure_port("*:{}".format(int(default_args['tss_gRPC_Port'])))
           mainport=int(default_args['tss_gRPC_Port'])
     except Exception as e:
            tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e))
