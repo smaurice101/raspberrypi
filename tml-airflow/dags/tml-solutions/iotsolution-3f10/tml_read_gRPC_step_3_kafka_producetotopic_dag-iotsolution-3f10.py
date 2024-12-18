@@ -91,9 +91,9 @@ def serve():
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
         if os.environ['TSS']=="0":
-          server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
+          server.add_insecure_port("*:{}".format(default_args['gRPC_Port']))
         else:
-          server.add_insecure_port("[::]:{}".format(default_args['tss_gRPC_Port']))
+          server.add_insecure_port("*:{}".format(default_args['tss_gRPC_Port']))
     except Exception as e:
            tsslogging.tsslogit("ERROR: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
