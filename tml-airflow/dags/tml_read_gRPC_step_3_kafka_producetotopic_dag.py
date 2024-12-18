@@ -1,32 +1,3 @@
-import maadstml
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
-from datetime import datetime
-from airflow.decorators import dag, task
-import grpc
-from concurrent import futures
-import time
-import tml_grpc_pb2_grpc as pb2_grpc
-import tml_grpc_pb2 as pb2
-import tsslogging
-import sys
-import os
-import subprocess
-import random
-
-sys.dont_write_bytecode = True
-##################################################  gRPC SERVER ###############################################
-# This is a gRPCserver that will handle connections from a client
-# There are two endpoints you can use to stream data to this server:
-# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
-# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
-
-######################################## USER CHOOSEN PARAMETERS ########################################
-default_args = {
-  'owner' : 'Sebastian Maurice', # <<< *** Change as needed
-  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
-  'microserviceid' : '', # <<< ***** leave blank
   'producerid' : 'iotsolution',  # <<< *** Change as needed
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  # <<< *** Change as needed
@@ -41,7 +12,6 @@ default_args = {
 # Instantiate your DAG
 @dag(dag_id="tml_read_gRPC_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_gRPC_step_3_kafka_producetotopic_dag"], schedule=None,catchup=False)
 def startproducingtotopic():
-  # This sets the lat/longs for the IoT devices so it can be map
   def empty():
       pass
 
@@ -87,25 +57,46 @@ def serve():
     repo=tsslogging.getrepo()
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+    mainport=0
+    server_options = [
+        ("grpc.keepalive_time_ms", 20000),
+        ("grpc.keepalive_timeout_ms", 10000),
+        ("grpc.http2.min_ping_interval_without_data_ms", 5000),
+        ("grpc.max_connection_idle_ms", 10000),
+        ("grpc.max_connection_age_ms", 30000),
+        ("grpc.max_connection_age_grace_ms", 5000),
+        ("grpc.http2.max_pings_without_data", 5),
+        ("grpc.keepalive_permit_without_calls", 1),
+    ]
 
     try:
-        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        server = grpc.server(futures.ThreadPoolExecutor(),options=server_options)
         pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
         if os.environ['TSS']=="0":
-          server.add_insecure_port("[::]:{}".format(default_args['gRPC_Port']))
+#          server_creds = grpc.alts_server_credentials()
+          with open('/{}/tml-airflow/certs/server.key'.format(repo), 'rb') as f:
+            server_key = f.read()
+          with open('/{}/tml-airflow/certs/server.crt'.format(repo), 'rb') as f:
+           server_cert = f.read()
+          server_creds = grpc.ssl_server_credentials( ( (server_key, server_cert), ) )
+          mainport=int(default_args['gRPC_Port'])
+          server.add_secure_port("[::]:{}".format(int(default_args['gRPC_Port'])), server_creds)
         else:
-          server.add_insecure_port("[::]:{}".format(default_args['tss_gRPC_Port']))
+          server.add_insecure_port("[::]:{}".format(int(default_args['tss_gRPC_Port'])))
+          mainport=int(default_args['tss_gRPC_Port'])
     except Exception as e:
            tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e))
-        
-           tsslogging.tsslogit("ERROR: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e), "ERROR" )                     
-           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
-           print("ERROR: Cannot connect to gRPC server in") 
-           return             
-        
-    tsslogging.locallogs("INFO", "STEP 3: gRPC server started .. waiting for connections")        
+
+           tsslogging.tsslogit("ERROR: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e), "ERROR" )
+           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+           print("ERROR: Cannot connect to gRPC server in:",e)
+           return
+
+    tsslogging.locallogs("INFO", "STEP 3: gRPC server started .. waiting for connections")
     server.start()
+    print("gRPC server started - listening on port ",mainport)
     server.wait_for_termination()
+
 
 
 def windowname(wtype,sname,dagname):
@@ -124,7 +115,7 @@ def startproducing(**context):
        global VIPERHOSTFROM
 
        tsslogging.locallogs("INFO", "STEP 3: producing data started")
-            
+
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
@@ -159,7 +150,7 @@ def startproducing(**context):
        ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
        ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
 
-       ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
+       ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
        ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
 
        wn = windowname('produce',sname,sd)
@@ -177,3 +168,10 @@ if __name__ == '__main__':
          VIPERHOST = sys.argv[3]
          VIPERPORT = sys.argv[4]
          serve()
+
+
+
+
+
+
+
