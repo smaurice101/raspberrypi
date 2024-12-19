@@ -25,7 +25,7 @@ default_args = {
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 # Instantiate your DAG
-@dag(dag_id="tml_system_step_10_documentation_dag_cybersecuritywithprivategpt-3f10", default_args=default_args, tags=["tml_system_step_10_documentation_dag_cybersecuritywithprivategpt-3f10"], schedule=None,  catchup=False)
+@dag(dag_id="tml_system_step_10_documentation_dag", default_args=default_args, tags=["tml_system_step_10_documentation_dag"], schedule=None,  catchup=False)
 def startdocumentation():
     # Define tasks
     def empty():
@@ -730,7 +730,10 @@ def generatedoc(**context):
     doparse("/{}/docs/source/kube.rst".format(sname), ["--nginxname--;{}".format(sname)])
 
     if len(CLIENTPORT) > 1:
-      kcmd3=tsslogging.ingress(sname)
+      if 'gRPC' in PRODUCETYPE:
+        kcmd3=tsslogging.ingressgrpc(sname) 
+      else: 
+        kcmd3=tsslogging.ingress(sname) 
     else:   # localfile being processed
       kcmd3=tsslogging.ingressnoext(sname)
      
