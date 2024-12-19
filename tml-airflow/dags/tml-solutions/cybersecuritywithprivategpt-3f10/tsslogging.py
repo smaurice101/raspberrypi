@@ -10,6 +10,7 @@ import socket
 import time
 
 def ingress(sname):
+    
   ing = """
     ############# nginx-ingress-{}.yml
     apiVersion: networking.k8s.io/v1
@@ -48,6 +49,72 @@ def ingress(sname):
       namespace: ingress-nginx
     data:
       allow-snippet-annotations: "true"
+  """.format(sname,sname,sname)
+
+  return ing
+
+def ingressgrpc(sname):
+    
+  ing = """
+    ############# nginx-ingress-{}-grpc.yml
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: tml-ingress
+      annotations:
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: tml.tss
+          http:
+            paths:
+              - path: /viz(/|$)(.*)
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: {}-visualization-service
+                    port:
+                      number: 80
+    ---
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: tml-ingress-grpc
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
+        nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    spec:
+      ingressClassName: nginx
+      tls:
+      - hosts:
+        - tml.tss
+        secretName: self-tls    
+      rules:
+        - host: tml.tss
+          http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: {}-external-service
+                    port:
+                      number: 443
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ingress-nginx-controller
+      namespace: ingress-nginx
+    data:
+      allow-snippet-annotations: "true"
+      http2: "True"
+      use-forwarded-headers: "true"     
   """.format(sname,sname,sname)
 
   return ing
@@ -91,10 +158,14 @@ def ingressnoext(sname): # Localfile being accessed
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker):
+               step9rollbackoffset,kubebroker,kafkabroker,producetype):
     cp = ""
     cpp = ""
-    
+    if 'gRPC' in producetype:
+        mport='443'
+    else:
+        mport='80'
+      
     if len(clientport) > 1:
         cp = """    - containerPort: {}
              - containerPort: {}
@@ -264,14 +335,14 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
      spec:
        type: ClusterIP
        ports:
-       - port: 80 # Ingress port, if using port 443 will need to setup TLS certs
+       - port: {} # Ingress port, if using port 443 will need to setup TLS certs
          name: p2
          protocol: TCP
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
                       sname,sname,solutionvipervizport,sname,
-                      sname,sname,cpp,sname)
+                      sname,sname,mport,cpp,sname)
                     
     return kcmd
 
