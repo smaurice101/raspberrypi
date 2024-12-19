@@ -106,6 +106,12 @@ async def serve() -> None:
     try:
         server = grpc.aio.server(futures.ThreadPoolExecutor(),options=server_options)
         pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
+        SERVICE_NAMES = (
+          pb2.DESCRIPTOR.services_by_name["Tmlproto"].full_name,
+          reflection.SERVICE_NAME,
+        )
+        reflection.enable_server_reflection(SERVICE_NAMES, server)
+      
         if os.environ['TSS']=="0":
 #          server_creds = grpc.alts_server_credentials()
           with open('/{}/tml-airflow/certs/server.key'.format(repo), 'rb') as f:
@@ -129,11 +135,6 @@ async def serve() -> None:
            return
 
     tsslogging.locallogs("INFO", "STEP 3: gRPC server started .. waiting for connections")
-    SERVICE_NAMES = (
-        pb2.DESCRIPTOR.services_by_name["Tmlproto"].full_name,
-        reflection.SERVICE_NAME,
-    )
-    reflection.enable_server_reflection(SERVICE_NAMES, server)
     await server.start()
     print("gRPC server started - listening on port ",mainport)
     await server.wait_for_termination()
