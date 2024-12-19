@@ -730,7 +730,10 @@ def generatedoc(**context):
     doparse("/{}/docs/source/kube.rst".format(sname), ["--nginxname--;{}".format(sname)])
 
     if len(CLIENTPORT) > 1:
-      kcmd3=tsslogging.ingress(sname)
+      if 'gRPC' in PRODUCETYPE:
+        kcmd3=tsslogging.ingressgrpc(sname) 
+      else: 
+        kcmd3=tsslogging.ingress(sname) 
     else:   # localfile being processed
       kcmd3=tsslogging.ingressnoext(sname)
      
