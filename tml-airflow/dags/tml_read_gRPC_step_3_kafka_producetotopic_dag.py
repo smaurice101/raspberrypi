@@ -1,3 +1,36 @@
+import asyncio
+import signal
+from google.protobuf.json_format import MessageToJson
+from grpc_reflection.v1alpha import reflection
+import maadstml
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+from airflow.decorators import dag, task
+import grpc
+from concurrent import futures
+import time
+import tml_grpc_pb2_grpc as pb2_grpc
+import tml_grpc_pb2 as pb2
+import tsslogging
+import sys
+import os
+import subprocess
+import random
+
+sys.dont_write_bytecode = True
+##################################################  gRPC SERVER ###############################################
+# This is a gRPCserver that will handle connections from a client
+# There are two endpoints you can use to stream data to this server:
+# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
+# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
+
+######################################## USER CHOOSEN PARAMETERS ########################################
+default_args = {
+  'owner' : 'Sebastian Maurice', # <<< *** Change as needed
+  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
+  'microserviceid' : '', # <<< ***** leave blank
   'producerid' : 'iotsolution',  # <<< *** Change as needed
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  # <<< *** Change as needed
@@ -12,6 +45,7 @@
 # Instantiate your DAG
 @dag(dag_id="tml_read_gRPC_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_read_gRPC_step_3_kafka_producetotopic_dag"], schedule=None,catchup=False)
 def startproducingtotopic():
+  # This sets the lat/longs for the IoT devices so it can be map
   def empty():
       pass
 
@@ -28,11 +62,11 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
   def __init__(self, *args, **kwargs):
     pass
 
-  def GetServerResponse(self, request, context):
+  async def GetServerResponse(self, request, context):
     maintopic = default_args['topics']
     producerid = default_args['producerid']
 
-    message = request.message
+    message = MessageToJson(request.message)
     try:
       inputbuf=f"{message}"
       print("inputbuf=",inputbuf)
@@ -52,7 +86,7 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
      pass
 
 
-def serve():
+async def serve() -> None:
     tsslogging.locallogs("INFO", "STEP 3: producing data started")
     repo=tsslogging.getrepo()
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )
@@ -70,7 +104,7 @@ def serve():
     ]
 
     try:
-        server = grpc.server(futures.ThreadPoolExecutor(),options=server_options)
+        server = grpc.aio.server(futures.ThreadPoolExecutor(),options=server_options)
         pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
         if os.environ['TSS']=="0":
 #          server_creds = grpc.alts_server_credentials()
@@ -78,11 +112,13 @@ def serve():
             server_key = f.read()
           with open('/{}/tml-airflow/certs/server.crt'.format(repo), 'rb') as f:
            server_cert = f.read()
-          server_creds = grpc.ssl_server_credentials( ( (server_key, server_cert), ) )
+          server_creds = grpc.ssl_server_credentials( [(server_key, server_cert)] )
           mainport=int(default_args['gRPC_Port'])
-          server.add_secure_port("*:{}".format(int(default_args['gRPC_Port'])), server_creds)
+          server.add_secure_port("[::]:{}".format(int(default_args['gRPC_Port'])), server_creds)
+
+#          server.add_insecure_port("0.0.0.0:{}".format(int(default_args['gRPC_Port'])))
         else:
-          server.add_insecure_port("*:{}".format(int(default_args['tss_gRPC_Port'])))
+          server.add_insecure_port("[::]:{}".format(int(default_args['tss_gRPC_Port'])))
           mainport=int(default_args['tss_gRPC_Port'])
     except Exception as e:
            tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e))
@@ -93,11 +129,26 @@ def serve():
            return
 
     tsslogging.locallogs("INFO", "STEP 3: gRPC server started .. waiting for connections")
-    server.start()
+    SERVICE_NAMES = (
+        pb2.DESCRIPTOR.services_by_name["Tmlproto"].full_name,
+        reflection.SERVICE_NAME,
+    )
+    reflection.enable_server_reflection(SERVICE_NAMES, server)
+    await server.start()
     print("gRPC server started - listening on port ",mainport)
-    server.wait_for_termination()
+    await server.wait_for_termination()
 
+async def shutdown_server(server) -> None:
+#    http://logging.info ("Shutting down server...")
+    await server.stop(None)
 
+def handle_sigterm(sig, frame) -> None:
+    asyncio.create_task(shutdown_server(server))
+
+async def handle_sigint() -> None:
+    loop = asyncio.get_running_loop()
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, loop.stop)
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
@@ -167,11 +218,13 @@ if __name__ == '__main__':
          VIPERTOKEN = sys.argv[2]
          VIPERHOST = sys.argv[3]
          VIPERPORT = sys.argv[4]
-         serve()
+#         serve()
 
-
-
-
-
-
+         server = None
+         signal.signal(signal.SIGTERM, handle_sigterm)
+         try:
+            print("Starting asyncio event loop")
+            asyncio.get_event_loop().run_until_complete(serve())
+         except KeyboardInterrupt:
+           pass
 
