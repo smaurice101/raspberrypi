@@ -105,12 +105,13 @@ async def serve() -> None:
 
     try:
         server = grpc.aio.server(futures.ThreadPoolExecutor(),options=server_options)
-        pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
         SERVICE_NAMES = (
           pb2.DESCRIPTOR.services_by_name["Tmlproto"].full_name,
           reflection.SERVICE_NAME,
         )
         reflection.enable_server_reflection(SERVICE_NAMES, server)
+      
+        pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
       
         if os.environ['TSS']=="0":
 #          server_creds = grpc.alts_server_credentials()
