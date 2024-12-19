@@ -2,7 +2,7 @@
 openssl genrsa  -out cakey.pem 4096
 
 ## generate rootCA certificate
-openssl req -new -x509 -days 3650  -config openssl.cnf  -key cakey.pem -out cacert.pem
+openssl req -new -x509 -days 3650  -config san.cnf  -key cakey.pem -out cacert.pem
 
 ## Verify the rootCA certificate content and X.509 extensions
 openssl x509 -noout -text -in cacert.pem
