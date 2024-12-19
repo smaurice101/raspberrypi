@@ -56,7 +56,7 @@ def ingress(sname):
 def ingressgrpc(sname):
     
   ing = """
-    ############# nginx-ingress-{}.yml
+    ############# nginx-ingress-{}-grpc.yml
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
