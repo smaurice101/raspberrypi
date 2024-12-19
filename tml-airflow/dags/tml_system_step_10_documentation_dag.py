@@ -671,13 +671,21 @@ def generatedoc(**context):
               kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
             else: 
               kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
-
+            if 'REST' in PRODUCETYPE:
+              kcmd = kcmd + " nginx-ingress-{}.yml".format(sname) 
+            elif 'gRPC' in PRODUCETYPE:
+              kcmd = kcmd + " nginx-ingress-{}.yml secret-tls.yml".format(sname)               
+            
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
     else:
             if '127.0.0.1' in brokerhost:            
               kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
             else:
               kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
+            if 'REST' in PRODUCETYPE:
+              kcmd = kcmd + " nginx-ingress-{}.yml".format(sname) 
+            elif 'gRPC' in PRODUCETYPE:
+              kcmd = kcmd + " nginx-ingress-{}.yml secret-tls.yml".format(sname)               
              
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
     if maxrows4:
