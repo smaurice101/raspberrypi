@@ -24,3 +24,10 @@ openssl x509 -req -days 3650 -in server.csr -CA cacert.pem -CAkey cakey.pem -CAc
 
 # View SAN certificate
 openssl x509 -text -noout -in server.crt | grep -A 1 "Subject Alternative Name"
+
+#------------------------------------------------------------------------------
+# Create Client key
+openssl req -new -newkey rsa:4096 -keyout client.key -out client.csr -nodes -subj '/CN=TML Client'
+
+## sign the client key
+openssl x509 -req -days 36500 -in client.csr -CA cacert.pem -CAkey cakey.pem -CAcreateserial -out client.crt
