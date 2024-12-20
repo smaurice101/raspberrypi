@@ -67,7 +67,7 @@ def ingressgrpc(sname):
     spec:
       ingressClassName: nginx
       rules:
-        - host: tml.tss
+        - host: tml.tss2
           http:
             paths:
               - path: /viz(/|$)(.*)
