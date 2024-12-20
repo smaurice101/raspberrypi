@@ -672,9 +672,9 @@ def generatedoc(**context):
             else: 
               kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
             if 'REST' in PRODUCETYPE:
-              kcmd = kcmd + " nginx-ingress-{}.yml".format(sname) 
+              kcmd = kcmd + " -f nginx-ingress-{}.yml".format(sname) 
             elif 'gRPC' in PRODUCETYPE:
-              kcmd = kcmd + " nginx-ingress-{}.yml secret-tls.yml".format(sname)               
+              kcmd = kcmd + " -f nginx-ingress-{}.yml -f secret-tls.yml".format(sname)               
             
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
     else:
@@ -683,9 +683,9 @@ def generatedoc(**context):
             else:
               kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
             if 'REST' in PRODUCETYPE:
-              kcmd = kcmd + " nginx-ingress-{}.yml".format(sname) 
+              kcmd = kcmd + " -f nginx-ingress-{}.yml".format(sname) 
             elif 'gRPC' in PRODUCETYPE:
-              kcmd = kcmd + " nginx-ingress-{}.yml secret-tls.yml".format(sname)               
+              kcmd = kcmd + " -f nginx-ingress-{}.yml -f secret-tls.yml".format(sname)               
              
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
     if maxrows4:
