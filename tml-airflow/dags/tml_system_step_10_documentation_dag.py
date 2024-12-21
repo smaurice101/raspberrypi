@@ -554,9 +554,11 @@ def generatedoc(**context):
     
     vizurl = "http:\/\/localhost:{}\/{}?topic={}\&offset={}\&groupid=\&rollbackoffset={}\&topictype=prediction\&append={}\&secure={}".format(solutionvipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
     vizurlkube = "http://localhost:{}/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(solutionvipervizport[1:],dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
-    vizurlkubeing = "http://tml.tss/viz/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
-    vizurlkubeing2 = "http://tml.tss2/viz/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
-
+    if 'gRPC' in PRODUCETPE:
+      vizurlkubeing = "http://tml.tss2/viz/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
+    else:
+      vizurlkubeing = "http://tml.tss/viz/{}?topic={}&offset={}&groupid=&rollbackoffset={}&topictype=prediction&append={}&secure={}".format(dashboardhtml,topic,offset[1:],rollbackoffset[1:],append[1:],secure[1:])
+ 
     if istss1==0:
       subprocess.call(["sed", "-i", "-e",  "s/--visualizationurl--/{}/g".format(vizurl), "/{}/docs/source/operating.rst".format(sname)])
     else: 
