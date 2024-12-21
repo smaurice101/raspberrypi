@@ -525,6 +525,9 @@ def getqip():
      qip=qip.rstrip()
      os.environ['qip']=qip  
         
+def optimizecontainer(cname):
+    subprocess.call("docker run -d --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
+                        os.environ['SOLUTIONNAME'], os.environ['READTHEDOCS'],cname ), shell=True)
     
 def testvizconnection(portnum):
    good = 1
