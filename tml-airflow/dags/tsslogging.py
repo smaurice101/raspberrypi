@@ -525,17 +525,26 @@ def getqip():
      qip=qip.rstrip()
      os.environ['qip']=qip  
         
-def optimizecontainer(cname):
-    subprocess.call("docker run -d --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
-                        os.environ['SOLUTIONNAME'], os.environ['READTHEDOCS'],cname ), shell=True)
+def optimizecontainer(cname,sname):
+    buf="docker run -d --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
+                        sname, os.environ['READTHEDOCS'],cname )
+    
+    print("Container optimizing: {}".format(buf))
+    
+    subprocess.call(buf, shell=True)
+    
     while True:
-      cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], os.environ['SOLUTIONNAME'])  
+      cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], sname)  
       ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))
       time.sleep(1)  
       if ret > 0:
           exists=1
       if exists and ret==0:
          break 
+            
+     buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname))
+     subprocess.call(buf, shell=True)
+     time.sleep(7)   
 
 def testvizconnection(portnum):
    good = 1
