@@ -528,7 +528,15 @@ def getqip():
 def optimizecontainer(cname):
     subprocess.call("docker run -d --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
                         os.environ['SOLUTIONNAME'], os.environ['READTHEDOCS'],cname ), shell=True)
-    
+    while True:
+      cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], os.environ['SOLUTIONNAME'])  
+      ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))
+      time.sleep(1)  
+      if ret > 0:
+          exists=1
+      if exists and ret==0:
+         break 
+
 def testvizconnection(portnum):
    good = 1
    #subprocess.call("curl localhost:{} &> /tmux/c.txt".format(portnum), shell=True)
