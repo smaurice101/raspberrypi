@@ -526,7 +526,7 @@ def getqip():
      os.environ['qip']=qip  
         
 def optimizecontainer(cname,sname):
-    buf="docker run -d --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
+    buf="docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
                         sname, os.environ['READTHEDOCS'],cname )
     
     print("Container optimizing: {}".format(buf))
