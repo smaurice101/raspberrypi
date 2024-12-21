@@ -545,7 +545,7 @@ def optimizecontainer(cname,sname):
       except Exception as e:
          continue
             
-    buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname))
+    buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname)
     subprocess.call(buf, shell=True)
     time.sleep(7)   
 
