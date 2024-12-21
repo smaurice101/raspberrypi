@@ -530,8 +530,8 @@ def optimizecontainer(cname,sname):
                         sname, os.environ['READTHEDOCS'],cname )
     
     print("Container optimizing: {}".format(buf))
-    
     subprocess.call(buf, shell=True)
+
     i=0
     while True:
       try:  
@@ -552,6 +552,13 @@ def optimizecontainer(cname,sname):
     buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname)
     subprocess.call(buf, shell=True)
     time.sleep(7)   
+
+    buf="docker image tag  {}sq:latest  {}".format(cname,cname)
+    subprocess.call(buf, shell=True)
+    time.sleep(2)
+    buf="docker rmi {}sq:latest --force".format(cname)
+    subprocess.call(buf, shell=True)
+    time.sleep(2)
 
 def testvizconnection(portnum):
    good = 1
