@@ -534,17 +534,20 @@ def optimizecontainer(cname,sname):
     subprocess.call(buf, shell=True)
     
     while True:
-      cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], sname)  
-      ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))
-      time.sleep(1)  
-      if ret > 0:
+      try:  
+        cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], sname)  
+        ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))
+        time.sleep(1)  
+        if ret > 0:
           exists=1
-      if exists and ret==0:
-         break 
+        if exists and ret==0:
+          break
+      except Exception as e:
+         continue
             
-     buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname))
-     subprocess.call(buf, shell=True)
-     time.sleep(7)   
+    buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname))
+    subprocess.call(buf, shell=True)
+    time.sleep(7)   
 
 def testvizconnection(portnum):
    good = 1
