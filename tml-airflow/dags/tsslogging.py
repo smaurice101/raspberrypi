@@ -565,7 +565,7 @@ def optimizecontainer(cname,sname):
     print("Docker image rmi: {}".format(buf))
         
     subprocess.call(buf, shell=True)
-    time.sleep(2)
+    subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
     
 def testvizconnection(portnum):
    good = 1
