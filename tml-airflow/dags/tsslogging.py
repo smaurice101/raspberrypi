@@ -533,10 +533,12 @@ def optimizecontainer(cname,sname):
     subprocess.call(buf, shell=True)
 
     i=0
+    exists=0
     while True:
       i = i + 1  
-      time.sleep(1)     
-      if i > 90:
+      time.sleep(5)          
+    
+      if i > 18:
          print("WARN: Unable to optimize container")
          break
         
@@ -546,6 +548,7 @@ def optimizecontainer(cname,sname):
         if ret > 0:
           exists=1
         if (exists and ret==0):
+          print("INFO: Container optimized")  
           break
 
       except Exception as e:
