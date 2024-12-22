@@ -544,15 +544,15 @@ def optimizecontainer(cname,sname):
          break
         
       try:  
-        cname2="{}/{}-temp2:squashed".format(os.environ['DOCKERUSERNAME'], sname)  
-        ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2), shell=True)        
+        cname2="{}/{}sq:latest".format(os.environ['DOCKERUSERNAME'], cname)  
+        greps="docker ps -a | grep '{}' | wc -l".format(cname2)
+        print("greps=",greps)
+
+        ret=subprocess.check_output(greps, shell=True)        
         ret=ret.decode("utf-8")
         ret=ret.strip()
         ret=int(ret)            
         if ret > 0:
-          exists=1
-        if (exists and ret==0):
-          print("INFO: Container optimized")  
           break
         
         print("IN ret={},exists={}".format(ret,exists)) 
