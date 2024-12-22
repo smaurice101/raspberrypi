@@ -535,11 +535,10 @@ def optimizecontainer(cname,sname):
     i=0
     while True:
       i = i + 1  
+      time.sleep(1)     
       try:  
         cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], sname)  
-        ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))
-        time.sleep(1)       
-        print("i=",i)
+        ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))        
         if ret > 0:
           exists=1
         if (exists and ret==0):
