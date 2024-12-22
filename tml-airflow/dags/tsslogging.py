@@ -544,7 +544,7 @@ def optimizecontainer(cname,sname):
          break
         
       try:  
-        cname2="{}/{}sq:latest".format(os.environ['DOCKERUSERNAME'], cname)  
+        cname2="{}sq".format(cname)  
         greps="docker ps -a | grep '{}' | wc -l".format(cname2)
         print("greps=",greps)
 
