@@ -21,9 +21,9 @@ default_args = {
  'cloudpassword' : '',  # <<<< --THIS WILL BE UPDATED FOR YOU IF USING KAFKA CLOUD WITH API SECRET - LEAVE BLANK   
  'solutionname': '_mysolution_',   # <<< *** DO NOT MODIFY - THIS WILL BE AUTOMATICALLY UPDATED
  'solutiontitle': 'My Solution Title', # <<< *** Provide a descriptive title for your solution
- 'solutionairflowport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
- 'solutionexternalport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
- 'solutionvipervizport' : '-1', # << If -1, TSS will choose a free port randonly, or set this to a fixed number   
+ 'solutionairflowport' : '4040', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
+ 'solutionexternalport' : '5050', # << If -1, TSS will choose a free port randonly, or set this to a fixed number
+ 'solutionvipervizport' : '6060', # << If -1, TSS will choose a free port randonly, or set this to a fixed number   
  'description': 'This is an awesome real-time solution built by TSS',   # <<< *** Provide a description of your solution
  'HTTPADDR' : 'https://',
  'COMPANYNAME' : 'My company',       
