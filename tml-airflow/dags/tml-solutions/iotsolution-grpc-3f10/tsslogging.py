@@ -525,6 +525,45 @@ def getqip():
      qip=qip.rstrip()
      os.environ['qip']=qip  
         
+def optimizecontainer(cname,sname):
+    buf="docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
+                        sname, os.environ['READTHEDOCS'],cname )
+    
+    print("Container optimizing: {}".format(buf))
+    subprocess.call(buf, shell=True)
+
+    i=0
+    while True:
+      i = i + 1  
+      time.sleep(1)     
+      try:  
+        cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], sname)  
+        ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))        
+        if ret > 0:
+          exists=1
+        if (exists and ret==0):
+          break
+        if i > 90:
+            print("WARN: Unable to optimize container")
+            break
+      except Exception as e:
+         continue
+            
+    buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname)
+    print("Docker stop: {}".format(buf))
+    subprocess.call(buf, shell=True)
+    time.sleep(8)   
+
+    buf="docker image tag  {}sq:latest  {}".format(cname,cname)
+    print("Docker image tag: {}".format(buf))
+    
+    subprocess.call(buf, shell=True)
+    time.sleep(2)
+    buf="docker rmi {}sq:latest --force".format(cname)
+    print("Docker image rmi: {}".format(buf))
+        
+    subprocess.call(buf, shell=True)
+    time.sleep(2)
     
 def testvizconnection(portnum):
    good = 1
