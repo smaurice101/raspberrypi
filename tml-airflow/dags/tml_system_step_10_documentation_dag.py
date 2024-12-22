@@ -97,7 +97,6 @@ def generatedoc(**context):
     if 'tssdoc' in os.environ:
         if os.environ['tssdoc']=="1":
             return
-    tsslogging.locallogs("INFO", "STEP 10: Started to build the documentation")
     
     sd = context['dag'].dag_id
     sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
@@ -106,8 +105,10 @@ def generatedoc(**context):
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
              kube=1
+             tsslogging.locallogs("INFO", "STEP 10: In Kubernetes documentation done")
              return
-           
+    
+    tsslogging.locallogs("INFO", "STEP 10: Started to build the documentation")
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODCE".format(sname))
     producingport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
     preprocesshost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESS".format(sname))
