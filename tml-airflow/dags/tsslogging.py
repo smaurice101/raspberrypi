@@ -551,16 +551,10 @@ def optimizecontainer(cname,sname):
       except Exception as e:
          continue
             
-    buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname)
-    print("Docker stop: {}".format(buf))
-    subprocess.call(buf, shell=True)
-    time.sleep(15)   
-
     buf="docker image tag  {}sq:latest  {}".format(cname,cname)
     print("Docker image tag: {}".format(buf))
-    
     subprocess.call(buf, shell=True)
-    time.sleep(7)
+    time.sleep(3)
     buf="docker rmi {}sq:latest --force".format(cname)
     print("Docker image rmi: {}".format(buf))
         
