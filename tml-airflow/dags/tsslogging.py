@@ -534,11 +534,12 @@ def optimizecontainer(cname,sname):
 
     i=0
     while True:
+      i = i + 1  
       try:  
         cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], sname)  
         ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))
-        time.sleep(1)  
-        i = i + 1  
+        time.sleep(1)       
+        print("i=",i)
         if ret > 0:
           exists=1
         if (exists and ret==0):
@@ -552,7 +553,7 @@ def optimizecontainer(cname,sname):
     buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname)
     print("Docker stop: {}".format(buf))
     subprocess.call(buf, shell=True)
-    time.sleep(13)   
+    time.sleep(8)   
 
     buf="docker image tag  {}sq:latest  {}".format(cname,cname)
     print("Docker image tag: {}".format(buf))
@@ -564,7 +565,7 @@ def optimizecontainer(cname,sname):
         
     subprocess.call(buf, shell=True)
     time.sleep(2)
-
+    
 def testvizconnection(portnum):
    good = 1
    #subprocess.call("curl localhost:{} &> /tmux/c.txt".format(portnum), shell=True)
