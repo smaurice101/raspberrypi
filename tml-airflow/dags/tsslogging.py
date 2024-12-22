@@ -550,6 +550,7 @@ def optimizecontainer(cname,sname):
         ret=ret.decode("utf-8")
         ret=ret.strip()
         if cname not in ret:
+          print("INFO: Container optimized")  
           break
         
       except Exception as e:
