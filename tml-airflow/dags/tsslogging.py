@@ -560,7 +560,7 @@ def optimizecontainer(cname,sname):
     print("Docker image tag: {}".format(buf))
     
     subprocess.call(buf, shell=True)
-    time.sleep(2)
+    time.sleep(7)
     buf="docker rmi {}sq:latest --force".format(cname)
     print("Docker image rmi: {}".format(buf))
         
