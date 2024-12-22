@@ -554,7 +554,7 @@ def optimizecontainer(cname,sname):
     buf="docker stop $(docker ps -q --filter ancestor={} )".format(cname)
     print("Docker stop: {}".format(buf))
     subprocess.call(buf, shell=True)
-    time.sleep(8)   
+    time.sleep(15)   
 
     buf="docker image tag  {}sq:latest  {}".format(cname,cname)
     print("Docker image tag: {}".format(buf))
