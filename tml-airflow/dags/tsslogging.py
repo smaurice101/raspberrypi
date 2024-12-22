@@ -536,6 +536,10 @@ def optimizecontainer(cname,sname):
     while True:
       i = i + 1  
       time.sleep(1)     
+      if i > 90:
+         print("WARN: Unable to optimize container")
+         break
+        
       try:  
         cname2="{}/{}-temp2".format(os.environ['DOCKERUSERNAME'], sname)  
         ret=subprocess.check_output("docker ps -a | grep '{}' | wc -l".format(cname2))        
@@ -543,9 +547,7 @@ def optimizecontainer(cname,sname):
           exists=1
         if (exists and ret==0):
           break
-        if i > 90:
-            print("WARN: Unable to optimize container")
-            break
+
       except Exception as e:
          continue
             
