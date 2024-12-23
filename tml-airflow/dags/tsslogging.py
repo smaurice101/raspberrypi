@@ -525,9 +525,9 @@ def getqip():
      qip=qip.rstrip()
      os.environ['qip']=qip  
         
-def optimizecontainer(cname,sname):
+def optimizecontainer(cname,sname,sd):
     buf="docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env SOLUTIONDAG={} --env TSS=-9  --env READTHEDOCS='{}' {}".format(os.environ['DOCKERUSERNAME'], 
-                        sname, os.environ['SOLUTIONDAG'], os.environ['READTHEDOCS'],cname )
+                        sname, sd, os.environ['READTHEDOCS'],cname )
     
     print("Container optimizing: {}".format(buf))
     subprocess.call(buf, shell=True)
