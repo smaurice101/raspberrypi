@@ -527,10 +527,7 @@ def getqip():
         
 def optimizecontainer(cname,sname,sd):
     rbuf=os.environ['READTHEDOCS']
-    buf="""docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env SOLUTIONDAG={} --env TSS=-9  --env READTHEDOCS='{}' --env MQTTPASSWORD=
-                        --env DOCKERPASSWORD=  --env  GITPASSWORD= --env GPG_KEY= --env KAFKACLOUDPASSWORD= --env PYTHON_SHA256=
-                        {}""".format(os.environ['DOCKERUSERNAME'], 
-                        sname, sd, rbuf[:4],cname )
+    buf="docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env SOLUTIONDAG={} --env TSS=-9  --env READTHEDOCS='{}' --env MQTTPASSWORD='' --env DOCKERPASSWORD=''  --env  GITPASSWORD='' --env KAFKACLOUDPASSWORD='' {}".format(os.environ['DOCKERUSERNAME'], sname, sd, rbuf[:4],cname )
     
     print("Container optimizing: {}".format(buf))
     subprocess.call(buf, shell=True)
