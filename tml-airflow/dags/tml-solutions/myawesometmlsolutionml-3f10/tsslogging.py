@@ -535,6 +535,7 @@ def optimizecontainer(cname,sname,sd):
     i=0
     exists=0
     ret=-1
+    status=""
     while True:
       i = i + 1  
       time.sleep(5)          
@@ -551,6 +552,7 @@ def optimizecontainer(cname,sname,sd):
         ret=ret.strip()
         if cname not in ret:
           print("INFO: Container optimized")  
+          status="good"
           break
         
       except Exception as e:
@@ -566,6 +568,7 @@ def optimizecontainer(cname,sname,sd):
         
     subprocess.call(buf, shell=True)
     subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
+    return status
     
 def testvizconnection(portnum):
    good = 1
