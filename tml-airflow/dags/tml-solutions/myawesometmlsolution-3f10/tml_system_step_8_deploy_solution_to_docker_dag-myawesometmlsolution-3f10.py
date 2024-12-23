@@ -70,7 +70,7 @@ def dockerit(**context):
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
          time.sleep(5)    
-         tsslogging.optimizecontainer(cname,sname) 
+         tsslogging.optimizecontainer(cname,sname,sd) 
          if v != 0:   
            tsslogging.locallogs("WARN", "STEP 8: There seems to be an issue creating the container.  Here is the commit command: {} - message={}.  Container may NOT pushed.".format(cbuf,v)) 
          else:
