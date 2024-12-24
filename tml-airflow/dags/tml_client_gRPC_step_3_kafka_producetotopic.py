@@ -78,10 +78,12 @@ class TmlgrpcClient(object):
 
 
 if __name__ == '__main__':
-    try:
-      client = TmlgrpcClient()
-      inputfile = "IoTDatasample.txt"
-      result = client.readdata(inputfile)
-      print(f'{result}')
-    except Exception as e:
-      print("ERROR: ",e)
+    print("gRPC client file")
+    #UNCOMMENT TO make gRPC client connection
+    #try:
+    #  client = TmlgrpcClient()
+    #  inputfile = "IoTDatasample.txt"
+    #  result = client.readdata(inputfile)
+    #  print(f'{result}')
+    #except Exception as e:
+     # print("ERROR: ",e)
