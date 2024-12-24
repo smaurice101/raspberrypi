@@ -79,6 +79,7 @@ def readdatafile(client,inputfile):
       time.sleep(.15)
       pass
 
-client=mqttconnection()
-inputfile = "IoTDatasample.txt"
-readdatafile(client,inputfile)
+# UNCOMMENT TO Make client connection to TML server
+#client=mqttconnection()
+#inputfile = "IoTDatasample.txt"
+#readdatafile(client,inputfile)
