@@ -38,14 +38,6 @@ default_args = {
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-# Instantiate your DAG
-@dag(dag_id="tml_read_RESTAPI_step_3_kafka_producetotopic_dag_iotsolution-3f10", default_args=default_args, tags=["tml_read_RESTAPI_step_3_kafka_producetotopic_dag_iotsolution-3f10"],schedule=None,catchup=False)
-def startproducingtotopic():
-   def empty():
-     pass
-    
-dag = startproducingtotopic()
-
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,VIPERTOKEN, VIPERHOST, VIPERPORT):
      inputbuf=value     
      topicid=int(args['topicid'])
