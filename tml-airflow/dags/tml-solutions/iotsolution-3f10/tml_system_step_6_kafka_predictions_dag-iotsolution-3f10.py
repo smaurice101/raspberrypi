@@ -46,13 +46,6 @@ default_args = {
 }
 ######################################## DO NOT MODIFY BELOW #############################################
 
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_6_kafka_predictions_dag_iotsolution-3f10", default_args=default_args, tags=["tml_system_step_6_kafka_predictions_dag_iotsolution-3f10"], schedule=None,catchup=False)
-def startpredictions():
-  def empty():
-     pass
-dag = startpredictions()
-
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
