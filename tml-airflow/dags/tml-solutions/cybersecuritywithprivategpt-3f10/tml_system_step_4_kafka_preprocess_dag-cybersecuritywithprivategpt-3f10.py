@@ -50,13 +50,6 @@ latlong=', # <<< **** Specify your json criteria. Here is an example of a multil
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_4_kafka_preprocess_dag_cybersecuritywithprivategpt-3f10", default_args=default_args, tags=["tml_system_step_4_kafka_preprocess_dag_cybersecuritywithprivategpt-3f10"], start_date=datetime(2023, 1, 1),schedule=None,catchup=False)
-def startprocessing():
-  def empty():
-     pass
-dag = startprocessing()
-
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
