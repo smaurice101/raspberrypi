@@ -75,14 +75,6 @@ default_args = {
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_1_getparams_dag_cybersecuritywithprivategpt-3f10", default_args=default_args, tags=["tml_system_step_1_getparams_dag_cybersecuritywithprivategpt-3f10"], schedule=None, catchup=False)
-def tmlparams():
-    # Define tasks
-    def empty():
-        pass
-dag = tmlparams()
-
     
 def reinitbinaries(sname):  
     pywindowfiles=glob.glob("/tmux/pythonwindows_*") 
