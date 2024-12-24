@@ -806,6 +806,6 @@ def generatedoc(**context):
      triggerbuild(sname)
      ti = context['task_instance']
      ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
-     print("INFO: Your Documentation will be found here: https://{}.readthedocs.io".format(sname))     
+     print("INFO: Your Documentation will be found here: https://{}.readthedocs.io/en/latest".format(sname))
     except Exception as e:
      print("ERROR=",e)
