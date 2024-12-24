@@ -61,14 +61,19 @@ def dockerit(**context):
          subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
-         time.sleep(5)    
-         tsslogging.optimizecontainer(cname,sname,sd) 
-         if v != 0:   
-           tsslogging.locallogs("WARN", "STEP 8: There seems to be an issue creating the container.  Here is the commit command: {} - message={}.  Container may NOT pushed.".format(cbuf,v)) 
+       
+         status=tsslogging.optimizecontainer(cname,sname,sd) 
+         if status=="":   
+           tsslogging.locallogs("WARN", "STEP 8: There seems to be an issue optimizing the container.  Here is the commit command: {} - message={}.  Container may NOT pushed.".format(cbuf,v)) 
          else:
-           tsslogging.locallogs("INFO", "STEP 8: Docker Container created.  Will push it now.  Here is the commit command: {} - message={}".format(cbuf,v))         
+           tsslogging.locallogs("INFO", "STEP 8: Docker Container created and optimized.  Will push it now.  Here is the commit command: {} - message={}".format(cbuf,v))         
            
-         v=subprocess.call("docker push {}".format(cname), shell=True)  
+         #v=subprocess.call("docker push {}".format(cname), shell=True) 
+         proc=subprocess.Popen("docker push {}".format(cname), shell=True)
+         time.sleep(3)   
+         proc.terminate()
+         proc.wait()
+
        elif len(cid) <= 1:
               tsslogging.locallogs("ERROR", "STEP 8: There seems to be an issue with docker commit. Here is the command: docker commit {} {}".format(cid,cname)) 
               tsslogging.tsslogit("Deploying to Docker in {}".format(os.path.basename(__file__)), "ERROR" )             
