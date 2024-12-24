@@ -69,4 +69,6 @@ def start():
       readdatafile(inputfile)
         
 if __name__ == '__main__':
-    start()
+   print("RestAPI client connection")
+   #UNCOMMENT to make RestAPI connection
+   #start()
