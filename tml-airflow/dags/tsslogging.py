@@ -540,7 +540,7 @@ def optimizecontainer(cname,sname,sd):
       i = i + 1  
       time.sleep(5)          
     
-      if i > 18:
+      if i > 90:
          print("WARN: Unable to optimize container")
          break
         
