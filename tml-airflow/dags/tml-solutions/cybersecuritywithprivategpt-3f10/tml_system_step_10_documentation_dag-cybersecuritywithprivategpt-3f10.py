@@ -24,13 +24,6 @@ default_args = {
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_10_documentation_dag_cybersecuritywithprivategpt-3f10", default_args=default_args, tags=["tml_system_step_10_documentation_dag_cybersecuritywithprivategpt-3f10"], schedule=None,  catchup=False)
-def startdocumentation():
-    # Define tasks
-    def empty():
-        pass
-dag = startdocumentation()
 
 def triggerbuild(sname):
 
