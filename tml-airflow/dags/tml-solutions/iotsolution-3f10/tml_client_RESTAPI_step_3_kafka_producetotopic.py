@@ -69,4 +69,6 @@ def start():
       readdatafile(inputfile)
         
 if __name__ == '__main__':
-    start()
+    print("RestApi client connection")
+    #uncomment for Restapi client connection
+    #start()
