@@ -78,7 +78,7 @@ def readdatafile(client,inputfile):
       print(e)
       time.sleep(.15)
       pass
-
-client=mqttconnection()
-inputfile = "IoTDatasample.txt"
-readdatafile(client,inputfile)
+#uncomment for MQTT client connection
+#client=mqttconnection()
+#inputfile = "IoTDatasample.txt"
+#readdatafile(client,inputfile)
