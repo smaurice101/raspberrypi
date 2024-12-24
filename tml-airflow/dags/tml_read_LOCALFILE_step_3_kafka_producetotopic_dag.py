@@ -29,13 +29,6 @@ default_args = {
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-# Instantiate your DAG
-@dag(dag_id="tml_localfile_step_3_kafka_producetotopic_dag", default_args=default_args, tags=["tml_localfile_step_3_kafka_producetotopic_dag"], start_date=datetime(2023, 1, 1),  schedule=None,catchup=False)
-def startproducingtotopic():
-  def empty():
-    pass
-dag = startproducingtotopic()
-
 # This sets the lat/longs for the IoT devices so it can be map
 VIPERTOKEN=""
 VIPERHOST=""
