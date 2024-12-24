@@ -49,13 +49,6 @@ probabilities are low, it is likely the device is not working properly.', # what
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_9_privategpt_qdrant_dag", default_args=default_args, tags=["tml_system_step_9_privategpt_qdrant_dag"], schedule=None,  catchup=False)
-def startaiprocess():
-    # Define tasks
-    def empty():
-        pass
-dag = startaiprocess()
 
 VIPERTOKEN=""
 VIPERHOST=""
