@@ -24,12 +24,6 @@ default_args = {
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_7_kafka_visualization_dag_iotsolution-3f10", default_args=default_args, tags=["tml_system_step_7_kafka_visualization_dag_iotsolution-3f10"], schedule=None,catchup=False)
-def startstreaming():    
-  def empty():
-      pass
-dag = startstreaming()
 
 def windowname(wtype,vipervizport,sname,dagname):
     randomNumber = random.randrange(10, 9999)
