@@ -13,14 +13,6 @@ import sys
 sys.dont_write_bytecode = True
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
-# Instantiate your DAG
-@dag(dag_id="tml_system_step_8_deploy_solution_to_docker_dag_iotsolution-restapi-3f10", tags=["tml_system_step_8_deploy_solution_to_docker_dag_iotsolution-restapi-3f10"], schedule=None,  catchup=False)
-def starttmldeploymentprocess():
-    # Define tasks
-    def empty():
-        pass
-dag = starttmldeploymentprocess()
-    
 
 def doparse(fname,farr):
       data = ''
