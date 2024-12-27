@@ -18,7 +18,8 @@ import sys
 import os
 import subprocess
 import random
-
+import nest_asyncio
+nest_asyncio.apply()
 sys.dont_write_bytecode = True
 ##################################################  gRPC SERVER ###############################################
 # This is a gRPCserver that will handle connections from a client
