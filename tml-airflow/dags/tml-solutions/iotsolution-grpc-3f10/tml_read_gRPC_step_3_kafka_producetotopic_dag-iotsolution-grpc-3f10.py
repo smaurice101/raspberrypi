@@ -58,7 +58,6 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
   async def GetServerResponse(self, request, context):
 
-    mresponse=""
     maintopic = default_args['topics']
     producerid = default_args['producerid']
 
