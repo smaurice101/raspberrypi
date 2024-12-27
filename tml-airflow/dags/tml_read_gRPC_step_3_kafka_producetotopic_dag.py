@@ -18,6 +18,7 @@ import sys
 import os
 import subprocess
 import random
+import json
 import nest_asyncio
 nest_asyncio.apply()
 sys.dont_write_bytecode = True
@@ -58,7 +59,8 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
     maintopic = default_args['topics']
     producerid = default_args['producerid']
 
-    message = MessageToJson(request.message)
+#    message = MessageToJson(request.message)
+    message = json.dumps(json.loads(request.message))
     try:
       inputbuf=f"{message}"
       print("inputbuf=",inputbuf)
