@@ -57,12 +57,16 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
     pass
 
   async def GetServerResponse(self, request, context):
+
+    mresponse=""
     maintopic = default_args['topics']
     producerid = default_args['producerid']
 
+
     message = json.dumps(json.loads(request.message))
 
-    try:
+    if message != None:
+     try:
       inputbuf=f"{message}"
       print("inputbuf=",inputbuf)
 
@@ -75,10 +79,15 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
       try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,'',
                                             topicid,identifier)
+        return pb2.MessageResponse(message="Success producing message",received=True)
       except Exception as e:
+        pb2.MessageResponse(message="Failed to produce message, err={}".format(e),received=False)
         print("ERROR:",e)
-    except Exception as e:
-     pass
+     except Exception as e:
+      pb2.MessageResponse(message="Failed to produce message, err={}".format(e),received=False)
+      pass
+
+    return pb2.MessageResponse(message="Failed to produce message",received=False)
 
 
 async def serve() -> None:
