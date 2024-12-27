@@ -74,11 +74,13 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
       try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,'',
                                             topicid,identifier)
+        return pb2.MessageResponse(message="Success producing message",received=True)
       except Exception as e:
         print("ERROR:",e)
+        return pb2.MessageResponse(message="Failed producing message",received=False)
     except Exception as e:
      pass
-
+    return pb2.MessageResponse(message="Failed producing message",received=False)
 
 async def serve() -> None:
     tsslogging.locallogs("INFO", "STEP 3: producing data started")
