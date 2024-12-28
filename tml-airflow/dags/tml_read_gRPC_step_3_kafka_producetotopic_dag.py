@@ -1,4 +1,4 @@
-2                                                                                                                                                                                                                                                                                                                                                                                                     /raspberrypitss/tml-airflow/dags/tml-solutions/iotsolution-grpc-3f10/tml_read_gRPC_step_3_kafka_producetotopic_dag-iotsolution-grpc-3f10.py                                                                                                                                                                                                                                                                                                                                                                                                              import asyncio
+import asyncio
 import signal
 from google.protobuf.json_format import MessageToJson
 from grpc_reflection.v1alpha import reflection
