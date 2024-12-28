@@ -1,4 +1,4 @@
-import asyncio
+2                                                                                                                                                                                                                                                                                                                                                                                                     /raspberrypitss/tml-airflow/dags/tml-solutions/iotsolution-grpc-3f10/tml_read_gRPC_step_3_kafka_producetotopic_dag-iotsolution-grpc-3f10.py                                                                                                                                                                                                                                                                                                                                                                                                              import asyncio
 import signal
 from google.protobuf.json_format import MessageToJson
 from grpc_reflection.v1alpha import reflection
@@ -13,12 +13,16 @@ from concurrent import futures
 import time
 import tml_grpc_pb2_grpc as pb2_grpc
 import tml_grpc_pb2 as pb2
+
 import tsslogging
 import sys
 import os
 import subprocess
 import random
-
+import json
+import nest_asyncio
+nest_asyncio.apply()
+#from grpc.experimental import aio
 sys.dont_write_bytecode = True
 ##################################################  gRPC SERVER ###############################################
 # This is a gRPCserver that will handle connections from a client
@@ -49,17 +53,21 @@ VIPERPORT=""
 HTTPADDR=""
 VIPERHOSTFROM=""
 
+
 class TmlprotoService(pb2_grpc.TmlprotoServicer):
 
   def __init__(self, *args, **kwargs):
     pass
 
   async def GetServerResponse(self, request, context):
+
     maintopic = default_args['topics']
     producerid = default_args['producerid']
 
-    message = MessageToJson(request.message)
-    try:
+
+    if request != None:
+     try:
+      message = json.dumps(json.loads(request.message))
       inputbuf=f"{message}"
       print("inputbuf=",inputbuf)
 
@@ -72,13 +80,18 @@ class TmlprotoService(pb2_grpc.TmlprotoServicer):
       try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,'',
                                             topicid,identifier)
+        return pb2.MessageResponse(message="Success producing message",received=True)
       except Exception as e:
-        print("ERROR:",e)
-    except Exception as e:
-     pass
+        return pb2.MessageResponse(message="Failed to produce message, err={} message={}".format(e,inputbuf),received=False)
+     except Exception as e:
+      return pb2.MessageResponse(message="Failed to produce message, err={} message={}".format(e,inputbuf),received=False)
 
 
-async def serve() -> None:
+    return pb2.MessageResponse(message="Failed to produce message",received=False)
+
+async def serve():
+
+
     tsslogging.locallogs("INFO", "STEP 3: producing data started")
     repo=tsslogging.getrepo()
     tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )
@@ -97,12 +110,13 @@ async def serve() -> None:
 
     try:
         server = grpc.aio.server(futures.ThreadPoolExecutor(),options=server_options)
+#        server = grpc.server(futures.ThreadPoolExecutor(max_workers=100))
         SERVICE_NAMES = (
           pb2.DESCRIPTOR.services_by_name["Tmlproto"].full_name,
           reflection.SERVICE_NAME,
         )
         reflection.enable_server_reflection(SERVICE_NAMES, server)
-      
+
         pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
         if os.environ['TSS']=="0":
 #          server_creds = grpc.alts_server_credentials()
@@ -114,7 +128,6 @@ async def serve() -> None:
           mainport=int(default_args['gRPC_Port'])
           server.add_secure_port("[::]:{}".format(int(default_args['gRPC_Port'])), server_creds)
 
-#          server.add_insecure_port("0.0.0.0:{}".format(int(default_args['gRPC_Port'])))
         else:
           server.add_insecure_port("[::]:{}".format(int(default_args['tss_gRPC_Port'])))
           mainport=int(default_args['tss_gRPC_Port'])
@@ -132,7 +145,7 @@ async def serve() -> None:
     await server.wait_for_termination()
 
 async def shutdown_server(server) -> None:
-#    http://logging.info ("Shutting down server...")
+    #logging.info ("Shutting down server...")
     await server.stop(None)
 
 def handle_sigterm(sig, frame) -> None:
@@ -163,8 +176,7 @@ def startproducing(**context):
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
-       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
-       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
+       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
@@ -220,4 +232,5 @@ if __name__ == '__main__':
             asyncio.get_event_loop().run_until_complete(serve())
          except KeyboardInterrupt:
            pass
+
 
