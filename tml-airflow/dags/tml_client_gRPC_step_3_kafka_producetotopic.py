@@ -4,42 +4,45 @@ import tml_grpc_pb2 as pb2
 import sys
 from datetime import datetime
 import time
+import os
+import subprocess
+import base64
+import json
+# Set kubernetes = 1 if TML solution running in kubernetes
+# Set kubernetes = 0 if TML solution running in docker
+import warnings
+#warnings.filterwarnings("error")
+host='tml.tss:443' 
 
 sys.dont_write_bytecode = True
-kubernetes=0
 
-class TmlgrpcClient(object):
-    """
-    Client for gRPC functionality
-    """
+# NOTE YOU WILL NEED TO INSTALL grpcurl in Linux         
+      
+def sendgrpcurl(mjson):
+    #first encode the json
+    mainjson = '{"message":' + json.dumps(mjson) + '}' 
+    
+   # mainjson=pb2.Message(message=mjson)
+    sent=0
+    while sent==0:
+            cmd="grpcurl -insecure -keepalive-time 10 -import-path . -proto tml_grpc.proto -d '{}' {} tmlproto.Tmlproto/GetServerResponse 2>/dev/null".format(mainjson,host)
+           # print("CMD=",cmd.replace("\n",""))
+            cmd=cmd.replace("\n","")
+            print(cmd)
+            proc = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
+            out, err = proc.communicate()
+            proc.terminate()
+            proc.wait()
+            
+            if out.decode('utf-8')=="":
+               sent=0
+            else:
+               print(out.decode('utf-8'))     
+               sent=1
+               break
 
-    def __init__(self):
-        if kubernetes:
-          self.host = 'tml.tss/ext'  
-        else:    
-          self.host = 'localhost'
-        self.server_port = 9002 # <<<<*********** Change to gRPC server port to match tss_gRPC_port or gRPC_port in tml_read_gRPC_step_3_kafka_producetotopic_dag.py
 
-        # instantiate a channel
-        if kubernetes:
-          self.channel = grpc.insecure_channel(
-            '{}'.format(self.host))            
-        else:
-          self.channel = grpc.insecure_channel(
-            '{}:{}'.format(self.host, self.server_port))
-
-        # bind the client and the server
-        self.stub = pb2_grpc.TmlprotoStub(self.channel)
-
-    def sendtotmlgrpcserver(self, message):
-        """
-        Client function to call the rpc for GetServerResponse
-        """
-        message = pb2.Message(message=message)
-        print(f'{message}')
-        return self.stub.GetServerResponse(message)
-
-    def readdata(self, inputfile):
+def readdata(inputfile):
         
       ##############################################################
       # NOTE: You can send any "EXTERNAL" data through this API
@@ -56,7 +59,7 @@ class TmlgrpcClient(object):
       while True:
         line = file1.readline()
         line = line.replace(";", " ")
-        print("line2=",line)
+    #    print("line2=",line)
         # add lat/long/identifier
         k = k + 1
         try:
@@ -67,23 +70,21 @@ class TmlgrpcClient(object):
             print("Reached End of File - Restarting")
             print("Read End:",datetime.now())
             continue
-          ret = self.sendtotmlgrpcserver(line)
-          print(ret)
-          # change time to speed up or slow down data   
-          time.sleep(.5)
+          #ret = sendtotmlgrpcserver(line)
+          sendgrpcurl(line.rstrip())
+          time.sleep(.0)
         except Exception as e:
-          print(e)
+          print("Main loop error=",e)
           time.sleep(.5)
           pass
 
 
 if __name__ == '__main__':
-    print("gRPC client file")
-    #UNCOMMENT TO make gRPC client connection
-    #try:
-    #  client = TmlgrpcClient()
-    #  inputfile = "IoTDatasample.txt"
-    #  result = client.readdata(inputfile)
-    #  print(f'{result}')
-    #except Exception as e:
-     # print("ERROR: ",e)
+    try:
+      
+      inputfile = "IoTData.txt"
+      #result = readdata(inputfile) ##### UNCOMMENT TO READ FILE
+      print(f'{result}')
+    except Exception as e:
+      print("ERROR: ",e)
+
