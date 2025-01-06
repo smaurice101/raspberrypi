@@ -27,7 +27,7 @@ step10 = importlib.import_module("tml_system_step_10_documentation_dag")
 
 
 with DAG(
-    dag_id="solution_preprocessing_ml_grpc_dag",
+    dag_id="solution_preprocessing_ml_grpc_dag_TEMPLATE_DO_NOT_USE",
     start_date=datetime(2023, 1, 1),
     schedule=None,
 ) as dag:
