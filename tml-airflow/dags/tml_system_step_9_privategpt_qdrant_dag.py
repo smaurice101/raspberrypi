@@ -155,23 +155,36 @@ def gatherdataforprivategpt(result):
 
    privategptmessage = []
    if 'step9prompt' in os.environ:
-      prompt = os.environ['step9prompt']
+      if os.environ['step9prompt'] != '':
+        prompt = os.environ['step9prompt']
+      else:
+       prompt = default_args['prompt']
    else: 
       prompt = default_args['prompt']
 
    if 'step9context' in os.environ:
-      context = os.environ['step9context']
+      if os.environ['step9context'] != '':
+        context = os.environ['step9context']
+      else:
+        context = default_args['context']  
    else: 
      context = default_args['context']
+
    jsonkeytogather = default_args['jsonkeytogather']
 
    if 'step9keyattribute' in os.environ:
-    attribute = os.environ['step9keyattribute']
+     if os.environ['step9keyattribute'] != '':
+       attribute = os.environ['step9keyattribute']
+     else: 
+       attribute = default_args['keyattribute']      
    else:
     attribute = default_args['keyattribute']
 
    if 'step9keyprocesstype' in os.environ:
-     processtype = os.environ['step9keyprocesstype']
+     if os.environ['step9keyprocesstype'] != '':
+        processtype = os.environ['step9keyprocesstype']
+     else: 
+       processtype = default_args['keyprocesstype']    
    else: 
      processtype = default_args['keyprocesstype']
 
