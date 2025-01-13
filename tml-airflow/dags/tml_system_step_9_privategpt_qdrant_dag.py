@@ -161,11 +161,19 @@ def gatherdataforprivategpt(result):
 
    if 'step9context' in os.environ:
       context = os.environ['step9context']
-   else 
+   else: 
      context = default_args['context']
    jsonkeytogather = default_args['jsonkeytogather']
-   attribute = default_args['keyattribute']
-   processtype = default_args['keyprocesstype']
+
+   if 'step9keyattribute' in os.environ:
+    attribute = os.environ['step9keyattribute']
+   else:
+    attribute = default_args['keyattribute']
+
+   if 'step9keyprocesstype' in os.environ:
+     processtype = os.environ['step9keyprocesstype']
+   else: 
+     processtype = default_args['keyprocesstype']
 
    res=json.loads(result,strict='False')
    message = ""
