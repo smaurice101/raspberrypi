@@ -89,7 +89,7 @@ def startpgptcontainer():
           buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
-      tsslogging.locallogs("INFO", "STEP 9: PrivateGPT container.  Here is the run command: {}".format(buf))
+      tsslogging.locallogs("INFO", "STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
 
       return v,buf
  
@@ -105,7 +105,7 @@ def qdrantcontainer():
        buf = "docker run -d --network=bridge -v /var/run/docker.sock:/var/run/docker.sock:z -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
 
     v=subprocess.call(buf, shell=True)
-    tsslogging.locallogs("INFO", "STEP 9: PrivateGPT container.  Here is the run command: {}".format(buf))
+    tsslogging.locallogs("INFO", "STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
 
     return v,buf
 
