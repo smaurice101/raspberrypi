@@ -154,8 +154,15 @@ def consumetopicdata():
 def gatherdataforprivategpt(result):
 
    privategptmessage = []
-   prompt = default_args['prompt']
-   context = default_args['context']
+   if 'step9prompt' in os.environ:
+      prompt = os.environ['step9prompt']
+   else: 
+      prompt = default_args['prompt']
+
+   if 'step9context' in os.environ:
+      context = os.environ['step9context']
+   else 
+     context = default_args['context']
    jsonkeytogather = default_args['jsonkeytogather']
    attribute = default_args['keyattribute']
    processtype = default_args['keyprocesstype']
