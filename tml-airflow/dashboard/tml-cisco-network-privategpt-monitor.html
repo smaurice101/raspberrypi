@@ -780,13 +780,18 @@ var div = document.getElementById('gpt');
  var highmess = "";
  var mainmessages = [];
  
+  //console.log(jsondata);
+                                       
+                                       
 		document.getElementById("gpt").style.display = "block";
  
 	for (j in jsondata.TopicReads) {
 
 		message = jsondata.TopicReads[j].choices[0].message.content;		
-		details = jsondata.TopicReads[j].responsedetails;
-		if (details){
+		details = jsondata.TopicReads[j].identifier;
+		prompt = jsondata.TopicReads[j].prompt;
+                                       
+		if (message){
 			  message=message.replaceAll("Question", "<br>Answer");
 			  message=message.replace("\\n", "");
               message=message.replace("\\n", "");
@@ -795,9 +800,13 @@ var div = document.getElementById('gpt');
 		   mainmessages.push([message,details]);
 		}
 	}	
+                                       
+                                       
 	let uniquemessages = [...new Set(mainmessages)];
 	  for (j in uniquemessages) {
 	  message=uniquemessages[j];
+    //  console.log(message);
+                                       
 	    //console.log("j=",uniquemessages[j]);
 		//it is not possible for me to determine
 		//there is no definitive reason to investigate
@@ -815,7 +824,7 @@ var div = document.getElementById('gpt');
        
 	   
 	   if (lowmess!="" || highmess!=""){
-            div.innerHTML = highmess + lowmess;
+            div.innerHTML = "  <b>PROMPT: " + prompt + "</b><br>" + highmess + lowmess + "<br>---------------------------";
 	   }		
 
 }
@@ -1014,6 +1023,7 @@ function addHeatdata(jsondata) {
 	mainheatmapdata(uniquehosts, mainheattablemap, xaxis);
 
 	processpiedata(uniquepiehosts, piechartdata, xaxis);
+                                           
 }
 
 var inboundpacketsmax = new Map();
@@ -1616,7 +1626,8 @@ function streamLiveKafkaData() {
     		if (mainkafkatopic!="cisco-network-privategpt"){
 		    	addHeatdata(obj);
 			}else{
-//			 console.log("-------------maindata=",maindata);
+//			 console.log("-------------maindata=",maindata);  // <---------------------PrivateGPT Data
+
 		    	addGptdata(obj);			
 			}
 	        
