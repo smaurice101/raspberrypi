@@ -27,7 +27,7 @@ default_args = {
  'delay' : '100', # change as needed
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
- 'consumefrom' : 'iot-preprocess',    # <<< *** Change as needed
+ 'consumefrom' : 'cisco-network-preprocess',    # <<< *** Change as needed
  'pgpt_data_topic' : 'cisco-network-privategpt',
  'producerid' : 'private-gpt',   # <<< *** Leave as is
  'identifier' : 'This is analysing TML output with privategpt',
@@ -40,7 +40,7 @@ default_args = {
 anomaly probabilities for each IoT device. If voltage or current \
 probabilities are low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
- 'keyattribute' : 'Voltage,current', # change as needed  
+ 'keyattribute' : 'inboundpackets,outboundpackets', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
  'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
