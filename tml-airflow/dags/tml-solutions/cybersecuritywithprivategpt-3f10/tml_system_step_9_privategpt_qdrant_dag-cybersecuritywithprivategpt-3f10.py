@@ -35,10 +35,10 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
- 'prompt': 'Do the device data show any malfunction or defects?', # Enter your prompt here
- 'context' : 'This is IoT data from devices. The data are \
-anomaly probabilities for each IoT device. If voltage or current \
-probabilities are low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT
+ 'prompt': 'Do the anaomaly probabilites show any risk of a cyber attack?', # Enter your prompt here
+ 'context' : 'This is network data from inbound and outbound packets. The data are \
+anomaly probabilities for cyber threats from analysis of inbound and outbound packets. If inbound or outbound \
+anomaly probabilities are low, it is likely the risk of a cyber attack is also low.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'inboundpackets,outboundpackets', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
