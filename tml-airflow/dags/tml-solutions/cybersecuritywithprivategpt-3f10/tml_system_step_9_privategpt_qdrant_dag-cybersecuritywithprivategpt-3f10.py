@@ -297,6 +297,13 @@ def sendtoprivategpt(maindata):
      mainip = "http://" + os.environ['qip']
 
    mainport = default_args['pgptport']
+   if 'step9keyattribute' in os.environ:
+     if os.environ['step9keyattribute'] != '':
+       attribute = os.environ['step9keyattribute']
+     else: 
+       attribute = default_args['keyattribute']      
+   else:
+    attribute = default_args['keyattribute']
 
    for mess in maindata:
         if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']=="0":
@@ -304,7 +311,7 @@ def sendtoprivategpt(maindata):
            m1 = mess[1]
         else:
            m = mess
-           m1 = default_args['keyattribute']
+           m1 = attribute
             
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
