@@ -38,7 +38,7 @@ default_args = {
  'prompt': 'Do the anomaly probabilites show any risk of a cyber attack?', # Enter your prompt here
  'context' : 'This is network data from inbound and outbound packets. The data are \
 anomaly probabilities for cyber threats from analysis of inbound and outbound packets. If inbound or outbound \
-anomaly probabilities are less than 0.60, it is likely the risk of a cyber attack is also low.', # what is this data about? Provide context to PrivateGPT
+anomaly probabilities are less than 0.60, it is likely the risk of a cyber attack is also low. If its above 0.60, then risk is mid to high.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
  'keyattribute' : 'inboundpackets,outboundpackets', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
