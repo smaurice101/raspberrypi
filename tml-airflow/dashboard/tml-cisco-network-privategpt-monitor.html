@@ -170,7 +170,7 @@ padding: 4px 5px 2px 2px;
 
 <body>
 <!-- <center><img src='./senecalogo.png' width=150 height=70> | <img src='./OTICS-New-Logo-Black.png' width=150 height=70></center> -->
-<center><img src='./senecalogo.png' width=150 height=70></center> 
+<center><img src='./OTICS-New-Logo-Black.png' width=150 height=70></center> 
 
 <table style="width: 100%;height: 80px;    background: linear-gradient(135deg,  rgba(51, 0, 0,1) 0%,rgba(100, 28, 255,1) 50%,rgba(100, 128, 255,1) 51%,rgba(51, 0, 0,1) 100%);">
 <tr>
@@ -178,7 +178,7 @@ padding: 4px 5px 2px 2px;
 <div class="row justify-content-md-center">
 <center>
 <div class="col-12" style="padding-top: 1px">
-<label id="maintitle"><b><h1><i><font color='white'><b>Real-Time Cyber Threats and Network Monitoring with Artificial Intelligence</b></h1><h3><i>Integrated with Cisco Packet Tracer, PrivateGPT and Transactional Machine Learning Using Apache Kafka</font></i></h3></b></label>
+<label id="maintitle"><b><h1><i><font color='white'><b>Real-Time Cyber Threats and Network Monitoring with Artificial Intelligence</b></h1><h3><i>Integrated with MQTT/HiveMQ, PrivateGPT and Transactional Machine Learning Using Apache Kafka</font></i></h3></b></label>
 </div>
 </center>
 </div>
@@ -781,7 +781,8 @@ var div = document.getElementById('gpt');
  var mainmessages = [];
  
   //console.log(jsondata);
-                                       
+        
+        intro="<b><font color='red' size=5>&nbsp;&nbsp;&nbsp;Hi, there, I am CYBER!  I am your GenAI Cyber security analyst.  I will do my best to perform post-analysis of your data.</font></b><br>"
                                        
 		document.getElementById("gpt").style.display = "block";
  
@@ -814,17 +815,17 @@ var div = document.getElementById('gpt');
 		//not possible for me to determine if this machine should be investigated
 		if (message[0].includes("should be investigate") && !message[0].includes("it is not clear if this machine should be investigated") &&
       		!message[0].includes("not possible for me to determine if this machine should be investigated")){
-                                       highmess += "<font size=5 color='red'><b>PROMPT: " + message[2] + "<br>(" + message[1] + "):</b> " + message[0] + "</font><br>-------------------<br>";			
+                                       highmess += "<font size=5 color='red'><b>PROMPT: " + message[2] + "<br><br>CYBER RESPONSE:: (" + message[1] + "): " + message[0] + "</font></b><br>-------------------<br>";			
 			let parr = message[1].split("-");
 			//console.log(parr[1]);
 			}else{
-              lowmess += "<font size=4><b>PROMPT: " + message[2] + "<br>(" + message[1] + "):</b> " + message[0] + "</font><br>-----------------------<br>";
+              lowmess += "<font size=4><b>PROMPT: " + message[2] + "<br><br>CYBER RESPONSE (" + message[1] + "): " + message[0] + "</font></b><br>-----------------------<br>";
             }			
         } 
        
 	   
 	   if (lowmess!="" || highmess!=""){
-            div.innerHTML = highmess + lowmess + "<br>---------------------------";
+            div.innerHTML = intro + highmess + lowmess + "<br>---------------------------";
 	   }		
 
 }
