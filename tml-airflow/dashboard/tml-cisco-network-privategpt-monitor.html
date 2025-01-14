@@ -797,7 +797,7 @@ var div = document.getElementById('gpt');
               message=message.replace("\\n", "");
 
 			  
-		   mainmessages.push([message,details]);
+		   mainmessages.push([message,details,prompt]);
 		}
 	}	
                                        
@@ -805,7 +805,7 @@ var div = document.getElementById('gpt');
 	let uniquemessages = [...new Set(mainmessages)];
 	  for (j in uniquemessages) {
 	  message=uniquemessages[j];
-    //  console.log(message);
+//      console.log(message);
                                        
 	    //console.log("j=",uniquemessages[j]);
 		//it is not possible for me to determine
@@ -814,17 +814,17 @@ var div = document.getElementById('gpt');
 		//not possible for me to determine if this machine should be investigated
 		if (message[0].includes("should be investigate") && !message[0].includes("it is not clear if this machine should be investigated") &&
       		!message[0].includes("not possible for me to determine if this machine should be investigated")){
-            highmess += "<font size=5 color='red'><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";			
+                                       highmess += "<font size=5 color='red'><b>PROMPT: " + message[2] + "<br>(" + message[1] + "):</b> " + message[0] + "</font><br>-------------------<br>";			
 			let parr = message[1].split("-");
 			//console.log(parr[1]);
 			}else{
-              lowmess += "<font size=4><b>(" + message[1] + "):</b> " + message[0] + "</font><br><br>";
+              lowmess += "<font size=4><b>PROMPT: " + message[2] + "<br>(" + message[1] + "):</b> " + message[0] + "</font><br>-----------------------<br>";
             }			
         } 
        
 	   
 	   if (lowmess!="" || highmess!=""){
-            div.innerHTML = "  <b>PROMPT: " + prompt + "</b><br>" + highmess + lowmess + "<br>---------------------------";
+            div.innerHTML = highmess + lowmess + "<br>---------------------------";
 	   }		
 
 }
