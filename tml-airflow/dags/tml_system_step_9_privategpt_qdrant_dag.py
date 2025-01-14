@@ -17,7 +17,7 @@ sys.dont_write_bytecode = True
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
  'pgptcontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
- 'rollbackoffset' : '2',  # <<< *** Change as needed
+ 'rollbackoffset' : '5',  # <<< *** Change as needed
  'offset' : '-1', # leave as is
  'enabletls' : '1', # change as needed
  'brokerhost' : '', # <<< *** Leave as is
@@ -27,7 +27,7 @@ default_args = {
  'delay' : '100', # change as needed
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
- 'consumefrom' : 'iot-preprocess',    # <<< *** Change as needed
+ 'consumefrom' : 'cisco-network-preprocess',    # <<< *** Change as needed
  'pgpt_data_topic' : 'cisco-network-privategpt',
  'producerid' : 'private-gpt',   # <<< *** Leave as is
  'identifier' : 'This is analysing TML output with privategpt',
@@ -35,12 +35,12 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
- 'prompt': 'Do the device data show any malfunction or defects?', # Enter your prompt here
- 'context' : 'This is IoT data from devices. The data are \
-anomaly probabilities for each IoT device. If voltage or current \
-probabilities are low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT
+ 'prompt': 'Do the anomaly probabilites show any risk of a cyber attack?', # Enter your prompt here
+ 'context' : 'This is network data from inbound and outbound packets. The data are \
+anomaly probabilities for cyber threats from analysis of inbound and outbound packets. If inbound or outbound \
+anomaly probabilities are less than 0.60, it is likely the risk of a cyber attack is also low. If its above 0.60, then risk is mid to high.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
- 'keyattribute' : 'Voltage,current', # change as needed  
+ 'keyattribute' : 'inboundpackets,outboundpackets', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
  'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
@@ -89,8 +89,7 @@ def startpgptcontainer():
           buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
-      print("[INFO] STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
- 
+      print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
       tsslogging.locallogs("INFO", "STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
 
       return v,buf
@@ -107,9 +106,10 @@ def qdrantcontainer():
        buf = "docker run -d --network=bridge -v /var/run/docker.sock:/var/run/docker.sock:z -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
 
     v=subprocess.call(buf, shell=True)
-    print("[INFO] STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
+    print("INFO STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
+    
     tsslogging.locallogs("INFO", "STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
- 
+    
     return v,buf
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
@@ -296,6 +296,7 @@ def sendtoprivategpt(maindata):
      mainip = "http://" + os.environ['qip']
 
    mainport = default_args['pgptport']
+
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
        attribute = os.environ['step9keyattribute']
@@ -310,8 +311,8 @@ def sendtoprivategpt(maindata):
            m1 = mess[1]
         else:
            m = mess
-           m1 = attribute
-           
+           m1 = attribute #default_args['keyattribute']
+            
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
