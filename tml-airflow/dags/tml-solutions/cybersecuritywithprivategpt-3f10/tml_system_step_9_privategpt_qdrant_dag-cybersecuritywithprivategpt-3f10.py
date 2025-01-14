@@ -17,7 +17,7 @@ sys.dont_write_bytecode = True
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
  'pgptcontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
- 'rollbackoffset' : '2',  # <<< *** Change as needed
+ 'rollbackoffset' : '5',  # <<< *** Change as needed
  'offset' : '-1', # leave as is
  'enabletls' : '1', # change as needed
  'brokerhost' : '', # <<< *** Leave as is
@@ -89,8 +89,7 @@ def startpgptcontainer():
           buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
-      print("[INFO] STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
- 
+      print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
       tsslogging.locallogs("INFO", "STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
 
       return v,buf
@@ -107,10 +106,10 @@ def qdrantcontainer():
        buf = "docker run -d --network=bridge -v /var/run/docker.sock:/var/run/docker.sock:z -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
 
     v=subprocess.call(buf, shell=True)
-    print("[INFO] STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
- 
+    print("INFO STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
+    
     tsslogging.locallogs("INFO", "STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
-
+    
     return v,buf
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
@@ -297,6 +296,7 @@ def sendtoprivategpt(maindata):
      mainip = "http://" + os.environ['qip']
 
    mainport = default_args['pgptport']
+
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
        attribute = os.environ['step9keyattribute']
@@ -311,7 +311,7 @@ def sendtoprivategpt(maindata):
            m1 = mess[1]
         else:
            m = mess
-           m1 = attribute
+           m1 = attribute #default_args['keyattribute']
             
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
