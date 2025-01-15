@@ -158,7 +158,8 @@ def ingressnoext(sname): # Localfile being accessed
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker,producetype):
+               step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt,step9context,step9keyattribute,step9keyprocesstype):
+               
     cp = ""
     cpp = ""
     if 'gRPC' in producetype:
@@ -298,13 +299,13 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
                value: '{}'                                             
              - name: step9prompt # STEP 9 Enter PGPT prompt
-               value: ''                  
+               value: '{}'                  
              - name: step9context # STEP 9 Enter PGPT context
-               value: ''             
+               value: '{}'             
              - name: step9keyattribute
-               value: '' # Step 9 key attribtes change as needed  
+               value: '{}' # Step 9 key attribtes change as needed  
              - name: step9keyprocesstype
-               value: '' # Step 9 key processtypes change as needed                                
+               value: '{}' # Step 9 key processtypes change as needed                                
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -348,16 +349,16 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
-                      sname,sname,solutionvipervizport,sname,
-                      sname,sname,mport,cpp,sname)
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,
+                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
 
 def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
-                guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
-               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker):
+                     guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
+                     step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
+                     step9rollbackoffset,kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype):
     cp = ""
     cpp = ""
     
@@ -493,13 +494,13 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
                value: '{}'                  
              - name: step9prompt # STEP 9 Enter PGPT prompt
-               value: ''                  
+               value: '{}'                  
              - name: step9context # STEP 9 Enter PGPT context
-               value: ''                                 
+               value: '{}'                                 
              - name: step9keyattribute
-               value: '' # Step 9 key attribtes change as needed  
+               value: '{}' # Step 9 key attribtes change as needed  
              - name: step9keyprocesstype
-               value: '' # Step 9 key processtypes change as needed                                               
+               value: '{}' # Step 9 key processtypes change as needed                                               
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -527,8 +528,9 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
-                      sname,sname,solutionvipervizport,sname)
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,
+                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           sname,sname,solutionvipervizport,sname)
                     
     return kcmd
 
