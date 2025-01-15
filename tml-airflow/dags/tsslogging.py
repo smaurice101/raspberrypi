@@ -158,7 +158,8 @@ def ingressnoext(sname): # Localfile being accessed
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt,step9context,step9keyattribute,step9keyprocesstype):
+               step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
+               step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices):
                
     cp = ""
     cpp = ""
@@ -306,6 +307,14 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}' # Step 9 key attribtes change as needed  
              - name: step9keyprocesstype
                value: '{}' # Step 9 key processtypes change as needed                                
+             - name: step9hyperbatch
+               value: '{}' # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
+             - name: step9vectordbcollectionname
+               value: '{}'   # collection name in Qdrant
+             - name: step9concurrency # privateGPT concurency, if greater than 1, multiple PGPT will run
+               value: '{}'
+             - name: CUDA_VISIBLE_DEVICES
+               value:'{}' # 0 for any device or specify specific number 
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -350,7 +359,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,
-                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
@@ -358,7 +368,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
 def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                      guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                      step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-                     step9rollbackoffset,kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype):
+                     step9rollbackoffset,kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
+                     step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices):
     cp = ""
     cpp = ""
     
@@ -501,6 +512,14 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}' # Step 9 key attribtes change as needed  
              - name: step9keyprocesstype
                value: '{}' # Step 9 key processtypes change as needed                                               
+             - name: step9hyperbatch
+               value: '{}' # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
+             - name: step9vectordbcollectionname
+               value: '{}'   # collection name in Qdrant
+             - name: step9concurrency # privateGPT concurency, if greater than 1, multiple PGPT will run
+               value: '{}'
+             - name: CUDA_VISIBLE_DEVICES
+               value:'{}' # 0 for any device or specify specific number                
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -529,7 +548,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,
-                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
     return kcmd
