@@ -99,7 +99,11 @@ def generatedoc(**context):
     step9context=''
     step9keyattribute=''
     step9keyprocesstype=''
- 
+    step9hyperbatch=''
+    step9vectordbcollectionname=''
+    step9concurrency=''
+    cudavisibledevices=''
+
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
              kube=1
@@ -446,16 +450,23 @@ def generatedoc(**context):
     if pkeyattribute:
       step9keyattribute=pkeyattribute
     pconcurrency = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_concurrency".format(sname))
+    if pconcurrency:
+      step9concurrency=pconcurrency     
     pcuda = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_cuda".format(sname))
+    if pcuda:
+     cudavisibledevices=pcuda     
     pcollection = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordbcollectionname".format(sname))    
+    if pcollection:
+      step9vectordbcollectionname=pcollection     
     pgpthost = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgpthost".format(sname))
     pgptport = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgptport".format(sname))
     pprocesstype = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_keyprocesstype".format(sname))
     if pprocesstype:
-      step9keyprocesstype=pprocesstype
- 
+      step9keyprocesstype=pprocesstype 
     hyperbatch = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_hyperbatch".format(sname))
-          
+    if hyperbatch:
+      step9hyperbatch=hyperbatch
+     
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
       dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \\
@@ -727,13 +738,15 @@ def generatedoc(**context):
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
                        externalport[1:],kafkacloudusername,mqttusername,airflowport[1:],vipervizport[1:],
                        step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-                       step9rollbackoffset,kubebroker,kafkabroker,PRODUCETYPE,step9prompt,step9context,step9keyattribute,step9keyprocesstype)
+                       step9rollbackoffset,kubebroker,kafkabroker,PRODUCETYPE,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
+                       step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
                        externalport[1:],kafkacloudusername,mqttusername,airflowport[1:],vipervizport[1:],
                        step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset,
-                       kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype)
+                       kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
+                       step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices)
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
