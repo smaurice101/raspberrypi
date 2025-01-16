@@ -49,7 +49,6 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'docfolder': '',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
                    # if this field in NON-EMPTY, privateGPT will query these documents to answer your prompt
  'docfolderingestinterval': '', # this is a number in SECONDS, you want TML to RE-LOAD the files in docfolder
- 'reloadfrom': '0', # this is the position to load from.  If 0, files in docfolder are loaded from the beginning, if -1, files are loaded from last previous line 
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
