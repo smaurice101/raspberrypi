@@ -205,7 +205,7 @@ if __name__ == '__main__':
        if sys.argv[1] == "1":          
         repo=tsslogging.getrepo()
         if 'step5rollbackoffsets' in os.environ:
-          if os.environ['step5rollbackoffsets'] != '' && os.environ['step5rollbackoffsets'] != '-1':
+          if os.environ['step5rollbackoffsets'] != '' and os.environ['step5rollbackoffsets'] != '-1':
             default_args['rollbackoffsets'] = os.environ['step5rollbackoffsets']
         try:
           tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
