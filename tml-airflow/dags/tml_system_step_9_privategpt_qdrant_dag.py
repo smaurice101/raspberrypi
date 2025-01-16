@@ -199,7 +199,7 @@ def gatherdataforprivategpt(result):
    else: 
      processtype = default_args['keyprocesstype']
 
-    if 'step9hyperbatch' in os.environ:
+   if 'step9hyperbatch' in os.environ:
      if os.environ['step9hyperbatch'] != '':
         hyperbatch = os.environ['step9hyperbatch']
         default_args['hyperbatch'] = hyperbatch
