@@ -417,6 +417,16 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
         repo=tsslogging.getrepo()
+        if 'step9vectordbcollectionname' in os.environ:
+          if os.environ['step9vectordbcollectionname'] != '':
+            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
+        if 'step9concurrency' in os.environ:
+          if os.environ['step9concurrency'] != '':
+            default_args['concurrency'] = os.environ['step9concurrency']
+        if 'CUDA_VISIBLE_DEVICES' in os.environ:
+          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
+            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
+      
         try:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
