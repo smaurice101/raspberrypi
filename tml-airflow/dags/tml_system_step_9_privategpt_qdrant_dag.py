@@ -164,6 +164,7 @@ def gatherdataforprivategpt(result):
    if 'step9prompt' in os.environ:
       if os.environ['step9prompt'] != '':
         prompt = os.environ['step9prompt']
+        default_args['prompt'] = prompt
       else:
        prompt = default_args['prompt']
    else: 
@@ -172,6 +173,7 @@ def gatherdataforprivategpt(result):
    if 'step9context' in os.environ:
       if os.environ['step9context'] != '':
         context = os.environ['step9context']
+        default_args['context'] = context
       else:
         context = default_args['context']  
    else: 
@@ -182,6 +184,7 @@ def gatherdataforprivategpt(result):
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
        attribute = os.environ['step9keyattribute']
+       default_args['keyattribute'] = attribute
      else: 
        attribute = default_args['keyattribute']      
    else:
@@ -190,6 +193,7 @@ def gatherdataforprivategpt(result):
    if 'step9keyprocesstype' in os.environ:
      if os.environ['step9keyprocesstype'] != '':
         processtype = os.environ['step9keyprocesstype']
+        default_args['keyprocesstype'] = processtype
      else: 
        processtype = default_args['keyprocesstype']    
    else: 
@@ -198,6 +202,7 @@ def gatherdataforprivategpt(result):
     if 'step9hyperbatch' in os.environ:
      if os.environ['step9hyperbatch'] != '':
         hyperbatch = os.environ['step9hyperbatch']
+        default_args['hyperbatch'] = hyperbatch
      else: 
        hyperbatch = default_args['hyperbatch']    
    else: 
@@ -308,6 +313,7 @@ def sendtoprivategpt(maindata):
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
        attribute = os.environ['step9keyattribute']
+       default_args['keyattribute'] = attribute
      else: 
        attribute = default_args['keyattribute']      
    else:
@@ -316,6 +322,7 @@ def sendtoprivategpt(maindata):
    if 'step9hyperbatch' in os.environ:
      if os.environ['step9hyperbatch'] != '':
         hyperbatch = os.environ['step9hyperbatch']
+        default_args['hyperbatch'] = hyperbatch
      else: 
        hyperbatch = default_args['hyperbatch']    
    else: 
