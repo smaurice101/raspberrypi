@@ -17,7 +17,7 @@ sys.dont_write_bytecode = True
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
  'pgptcontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
- 'rollbackoffset' : '2',  # <<< *** Change as needed
+ 'rollbackoffset' : '5',  # <<< *** Change as needed
  'offset' : '-1', # leave as is
  'enabletls' : '1', # change as needed
  'brokerhost' : '', # <<< *** Leave as is
@@ -27,7 +27,7 @@ default_args = {
  'delay' : '100', # change as needed
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
- 'consumefrom' : 'iot-preprocess',    # <<< *** Change as needed
+ 'consumefrom' : 'cisco-network-preprocess',    # <<< *** Change as needed
  'pgpt_data_topic' : 'cisco-network-privategpt',
  'producerid' : 'private-gpt',   # <<< *** Leave as is
  'identifier' : 'This is analysing TML output with privategpt',
@@ -35,12 +35,12 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
- 'prompt': 'Do the device data show any malfunction or defects?', # Enter your prompt here
- 'context' : 'This is IoT data from devices. The data are \
-anomaly probabilities for each IoT device. If voltage or current \
-probabilities are low, it is likely the device is not working properly.', # what is this data about? Provide context to PrivateGPT
+ 'prompt': 'Do the anomaly probabilites show any risk of a cyber attack?', # Enter your prompt here
+ 'context' : 'This is network data from inbound and outbound packets. The data are \
+anomaly probabilities for cyber threats from analysis of inbound and outbound packets. If inbound or outbound \
+anomaly probabilities are less than 0.60, it is likely the risk of a cyber attack is also low. If its above 0.60, then risk is mid to high.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
- 'keyattribute' : 'Voltage,current', # change as needed  
+ 'keyattribute' : 'inboundpackets,outboundpackets', # change as needed  
  'keyprocesstype' : 'anomprob',  # change as needed
  'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
@@ -89,6 +89,9 @@ def startpgptcontainer():
           buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
+      print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
+      tsslogging.locallogs("INFO", "STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
+
       return v,buf
  
 def qdrantcontainer():
@@ -103,6 +106,10 @@ def qdrantcontainer():
        buf = "docker run -d --network=bridge -v /var/run/docker.sock:/var/run/docker.sock:z -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant"
 
     v=subprocess.call(buf, shell=True)
+    print("INFO STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
+    
+    tsslogging.locallogs("INFO", "STEP 9: Qdrant container.  Here is the run command: {}, v={}".format(buf,v))
+    
     return v,buf
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
@@ -154,11 +161,52 @@ def consumetopicdata():
 def gatherdataforprivategpt(result):
 
    privategptmessage = []
-   prompt = default_args['prompt']
-   context = default_args['context']
+   if 'step9prompt' in os.environ:
+      if os.environ['step9prompt'] != '':
+        prompt = os.environ['step9prompt']
+        default_args['prompt'] = prompt
+      else:
+       prompt = default_args['prompt']
+   else: 
+      prompt = default_args['prompt']
+
+   if 'step9context' in os.environ:
+      if os.environ['step9context'] != '':
+        context = os.environ['step9context']
+        default_args['context'] = context
+      else:
+        context = default_args['context']  
+   else: 
+     context = default_args['context']
+
    jsonkeytogather = default_args['jsonkeytogather']
-   attribute = default_args['keyattribute']
-   processtype = default_args['keyprocesstype']
+
+   if 'step9keyattribute' in os.environ:
+     if os.environ['step9keyattribute'] != '':
+       attribute = os.environ['step9keyattribute']
+       default_args['keyattribute'] = attribute
+     else: 
+       attribute = default_args['keyattribute']      
+   else:
+    attribute = default_args['keyattribute']
+
+   if 'step9keyprocesstype' in os.environ:
+     if os.environ['step9keyprocesstype'] != '':
+        processtype = os.environ['step9keyprocesstype']
+        default_args['keyprocesstype'] = processtype
+     else: 
+       processtype = default_args['keyprocesstype']    
+   else: 
+     processtype = default_args['keyprocesstype']
+
+   if 'step9hyperbatch' in os.environ:
+     if os.environ['step9hyperbatch'] != '':
+        hyperbatch = os.environ['step9hyperbatch']
+        default_args['hyperbatch'] = hyperbatch
+     else: 
+       hyperbatch = default_args['hyperbatch']    
+   else: 
+     hyperbatch = default_args['hyperbatch']
 
    res=json.loads(result,strict='False')
    message = ""
@@ -234,12 +282,12 @@ def gatherdataforprivategpt(result):
              found=1
              message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          
-         if found and default_args['hyperbatch']=="0":
+         if found and hyperbatch=="0":
               message = "{}.  Data: {}.  {}".format(context,message,prompt)
               privategptmessage.append([message,identarr[0]])
 
                 
-   if jsonkeytogather != 'Identifier' and found and default_args['hyperbatch']=="1":
+   if jsonkeytogather != 'Identifier' and found and hyperbatch=="1":
      message = "{}.  Data: {}.  {}".format(context,message,prompt)
      privategptmessage.append(message)
 
@@ -262,13 +310,31 @@ def sendtoprivategpt(maindata):
 
    mainport = default_args['pgptport']
 
+   if 'step9keyattribute' in os.environ:
+     if os.environ['step9keyattribute'] != '':
+       attribute = os.environ['step9keyattribute']
+       default_args['keyattribute'] = attribute
+     else: 
+       attribute = default_args['keyattribute']      
+   else:
+    attribute = default_args['keyattribute']
+
+   if 'step9hyperbatch' in os.environ:
+     if os.environ['step9hyperbatch'] != '':
+        hyperbatch = os.environ['step9hyperbatch']
+        default_args['hyperbatch'] = hyperbatch
+     else: 
+       hyperbatch = default_args['hyperbatch']    
+   else: 
+     hyperbatch = default_args['hyperbatch']
+ 
    for mess in maindata:
-        if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']=="0":
+        if default_args['jsonkeytogather']=='Identifier' or hyperbatch=="0":
            m = mess[0]
            m1 = mess[1]
         else:
            m = mess
-           m1 = default_args['keyattribute']
+           m1 = attribute #default_args['keyattribute']
             
         response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
@@ -311,7 +377,10 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_pgpt_data_topic".format(sname), value=default_args['pgpt_data_topic'])
        ti.xcom_push(key="{}_pgptcontainername".format(sname), value=default_args['pgptcontainername'])
        ti.xcom_push(key="{}_offset".format(sname), value="_{}".format(default_args['offset']))
-       ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(default_args['rollbackoffset']))
+       if 'step9rollbackoffset' in os.environ:
+          ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(os.environ['step9rollbackoffset']))
+       else: 
+          ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(default_args['rollbackoffset']))
 
        ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
        ti.xcom_push(key="{}_enabletls".format(sname), value="_{}".format(default_args['enabletls']))
@@ -339,8 +408,8 @@ def startprivategpt(**context):
 
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-       if os.environ['TSS']=="0":
-           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "export qip={}".format(os.environ['qip']), "ENTER"])
+#       if os.environ['TSS']=="0":
+ #          subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "export qip={}".format(os.environ['qip']), "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:]), "ENTER"])
 
@@ -348,6 +417,19 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
         repo=tsslogging.getrepo()
+        if 'step9vectordbcollectionname' in os.environ:
+          if os.environ['step9vectordbcollectionname'] != '':
+            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
+        if 'step9concurrency' in os.environ:
+          if os.environ['step9concurrency'] != '':
+            default_args['concurrency'] = os.environ['step9concurrency']
+        if 'CUDA_VISIBLE_DEVICES' in os.environ:
+          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
+            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
+        if 'step9rollbackoffset' in os.environ:
+          if os.environ['step9rollbackoffset'] != '':
+            default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
+      
         try:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
@@ -378,8 +460,7 @@ if __name__ == '__main__':
             tsslogging.locallogs("INFO", "STEP 9: Success starting privateGPT.  Here is the run command: {}".format(buf))
 
           time.sleep(10)  # wait for containers to start
-          tsslogging.getqip() 
-        
+          tsslogging.getqip()          
         elif  os.environ["KUBE"] == "0":
           v,buf=qdrantcontainer()
           if buf != "":
@@ -399,7 +480,6 @@ if __name__ == '__main__':
 
           time.sleep(10)  # wait for containers to start         
           tsslogging.getqip() 
-         
         else:  
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
