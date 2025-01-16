@@ -21,7 +21,7 @@ default_args = {
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'raw_data_topic' : 'iot-preprocess', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'preprocess_data_topic' : 'iot-preprocess2', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'maxrows' : '800', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
+  'maxrows' : '350', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
   'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
   'brokerport' : '-999',  # <<< *** Leave as is   
@@ -44,7 +44,6 @@ default_args = {
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
-
 
 VIPERTOKEN=""
 VIPERHOST=""
@@ -181,6 +180,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1": 
         repo=tsslogging.getrepo()
+        if 'step4bmaxrows' in os.environ:
+           if os.environ['step4bmaxrows'] != '' and os.environ['step4bmaxrows'] != '-1':
+              default_args['maxrows'] = os.environ['step4bmaxrows']
         try:            
           tsslogging.tsslogit("Preprocessing2 DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
