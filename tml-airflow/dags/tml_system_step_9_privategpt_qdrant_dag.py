@@ -277,7 +277,7 @@ def gatherdataforprivategpt(result):
              found=1
              message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          
-         if found and default_args['hyperbatch']=="0":
+         if found and hyperbatch=="0":
               message = "{}.  Data: {}.  {}".format(context,message,prompt)
               privategptmessage.append([message,identarr[0]])
 
