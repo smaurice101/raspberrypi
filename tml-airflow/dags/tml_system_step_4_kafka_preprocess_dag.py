@@ -189,7 +189,7 @@ if __name__ == '__main__':
        if sys.argv[1] == "1": 
         repo=tsslogging.getrepo()
         if 'step4maxrows' in os.environ:
-          if os.environ['step4maxrows'] != '' && os.environ['step4maxrows'] != '-1':
+          if os.environ['step4maxrows'] != '' and os.environ['step4maxrows'] != '-1':
             default_args['maxrows']=os.environ['step4maxrows']
         try:            
           tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
