@@ -48,6 +48,7 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'CUDA_VISIBLE_DEVICES' : '0', # change as needed
  'docfolder': '',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
                    # if this field in NON-EMPTY, privateGPT will query these documents to answer your prompt
+                   # separate multiple folders with a comma
  'docfolderingestinterval': '', # how often you want TML to RE-LOAD the files in docfolder - enter the number of SECONDS
 }
 
