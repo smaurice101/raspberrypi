@@ -50,7 +50,6 @@ latlong=lat:long' # <<< **** Specify your json criteria. Here is an example of a
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
@@ -189,6 +188,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1": 
         repo=tsslogging.getrepo()
+        if 'step4maxrows' in os.environ:
+          if os.environ['step4maxrows'] != '' and os.environ['step4maxrows'] != '-1':
+            default_args['maxrows']=os.environ['step4maxrows']
         try:            
           tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
