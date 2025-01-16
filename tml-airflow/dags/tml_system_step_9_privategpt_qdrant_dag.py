@@ -195,6 +195,14 @@ def gatherdataforprivategpt(result):
    else: 
      processtype = default_args['keyprocesstype']
 
+    if 'step9hyperbatch' in os.environ:
+     if os.environ['step9hyperbatch'] != '':
+        hyperbatch = os.environ['step9hyperbatch']
+     else: 
+       hyperbatch = default_args['hyperbatch']    
+   else: 
+     hyperbatch = default_args['hyperbatch']
+
    res=json.loads(result,strict='False')
    message = ""
    found=0 
@@ -274,7 +282,7 @@ def gatherdataforprivategpt(result):
               privategptmessage.append([message,identarr[0]])
 
                 
-   if jsonkeytogather != 'Identifier' and found and default_args['hyperbatch']=="1":
+   if jsonkeytogather != 'Identifier' and found and hyperbatch=="1":
      message = "{}.  Data: {}.  {}".format(context,message,prompt)
      privategptmessage.append(message)
 
@@ -305,8 +313,16 @@ def sendtoprivategpt(maindata):
    else:
     attribute = default_args['keyattribute']
 
+   if 'step9hyperbatch' in os.environ:
+     if os.environ['step9hyperbatch'] != '':
+        hyperbatch = os.environ['step9hyperbatch']
+     else: 
+       hyperbatch = default_args['hyperbatch']    
+   else: 
+     hyperbatch = default_args['hyperbatch']
+ 
    for mess in maindata:
-        if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']=="0":
+        if default_args['jsonkeytogather']=='Identifier' or hyperbatch=="0":
            m = mess[0]
            m1 = mess[1]
         else:
