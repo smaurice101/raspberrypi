@@ -45,7 +45,9 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
  'concurrency' : '1', # change as needed Leave at 1
- 'CUDA_VISIBLE_DEVICES' : '0' # change as needed
+ 'CUDA_VISIBLE_DEVICES' : '0', # change as needed
+ 'docfolder': '',
+ 'docfolderingestinterval': '',
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
