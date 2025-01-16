@@ -46,7 +46,7 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'vectordbcollectionname' : 'tml', # change as needed
  'concurrency' : '1', # change as needed Leave at 1
  'CUDA_VISIBLE_DEVICES' : '0', # change as needed
- 'docfolder': '',  # You can specify the sub-folder that contains TEXT files..this is a subfolder in the MAIN folder mapped to /rawdata
+ 'docfolder': '',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
                    # if this field in NON-EMPTY, privateGPT will query these documents to answer your prompt
  'docfolderingestinterval': '', # this is a number in SECONDS, you want TML to RE-LOAD the files in docfolder
  'reloadfrom': '0', # this is the position to load from.  If 0, files in docfolder are loaded from the beginning, if -1, files are loaded from last previous line 
