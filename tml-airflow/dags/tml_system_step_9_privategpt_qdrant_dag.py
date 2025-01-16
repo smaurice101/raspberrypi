@@ -426,6 +426,9 @@ if __name__ == '__main__':
         if 'CUDA_VISIBLE_DEVICES' in os.environ:
           if os.environ['CUDA_VISIBLE_DEVICES'] != '':
             default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
+        if 'step9rollbackoffset' in os.environ:
+          if os.environ['step9rollbackoffset'] != '':
+            default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
       
         try:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
