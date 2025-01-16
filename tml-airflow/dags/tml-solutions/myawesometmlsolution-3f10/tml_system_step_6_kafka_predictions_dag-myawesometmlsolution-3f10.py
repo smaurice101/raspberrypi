@@ -19,7 +19,7 @@ default_args = {
   'enabletls': '1',   # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',    # <<< *** Change as needed   
-  'preprocess_data_topic' : 'iot-preprocess-data', # << *** data for the independent variables - You created this in STEP 2
+  'preprocess_data_topic' : 'iot-preprocess', # << *** data for the independent variables - You created this in STEP 2
   'ml_prediction_topic' : 'iot-ml-prediction-results-output', # topic to store the predictions - You created this in STEP 2
   'description' : 'TML solution',    # <<< *** Change as needed   
   'companyname' : 'Your company', # <<< *** Change as needed      
@@ -45,7 +45,6 @@ default_args = {
   'HPDEADDR' : 'http://' # Do not modify
 }
 ######################################## DO NOT MODIFY BELOW #############################################
-
 
 VIPERTOKEN=""
 VIPERHOST=""
@@ -108,7 +107,11 @@ def performPrediction():
       # Network timeout
       networktimeout=int(default_args['networktimeout'])
       # maxrows - this is percentage to rollback stream
-      maxrows=int(default_args['maxrows'])
+
+      if 'step6maxrows' in os.environ:
+        maxrows=int(os.environ['step6maxrows'])
+      else:
+        maxrows=int(default_args['maxrows'])
       #Start predicting with new data streams
       produceridhyperprediction=default_args['produceridhyperprediction']
       consumeridtraininedparams=default_args['consumeridtraininedparams']
@@ -185,6 +188,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
          repo=tsslogging.getrepo()
+         if 'step6maxrows' in os.environ:
+            if os.environ['step6maxrows'] != '' and os.environ['step6maxrows'] != '-1':
+              default_args['maxrows'] = os.environ['step6maxrows']
          try:   
            tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
