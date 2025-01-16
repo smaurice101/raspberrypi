@@ -30,18 +30,18 @@ default_args = {
   'deploy' : '1', # <<< *** do not modofy
   'modelruns': '100', # <<< *** Change as needed      
   'offset' : '-1', # <<< *** Do not modify
-  'islogistic' : '1',  # <<< *** Change as needed, 1=logistic, 0=not logistic
+  'islogistic' : '0',  # <<< *** Change as needed, 1=logistic, 0=not logistic
   'networktimeout' : '600', # <<< *** Change as needed      
   'modelsearchtuner' : '90', # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
-  'dependentvariable' : 'failure', # <<< *** Change as needed, 
-  'independentvariables': 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # <<< *** Change as needed, 
+  'dependentvariable' : '', # <<< *** Change as needed, 
+  'independentvariables': '', # <<< *** Change as needed, 
   'rollbackoffsets' : '300', # <<< *** Change as needed, 
   'consumeridtrainingdata2': '', # leave blank
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
   'topicid' : '-1',  # leave as is
-  'fullpathtotrainingdata' : '/Viper-ml/viperlogs/iotlogistic',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
-  'processlogic' : 'classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
+  'fullpathtotrainingdata' : '/Viper-ml/viperlogs/<choose foldername>',  #  # <<< *** Change as needed - add name for foldername that stores the training datasets
+  'processlogic' : '',  # <<< *** Change as needed, i.e. classification_name=failure_prob:Voltage_preprocessed_AnomProb=55,n:Current_preprocessed_AnomProb=55,n
   'array' : '0',  # leave as is
   'transformtype' : '', # Sets the model to: log-lin,lin-log,log-log
   'sendcoefto' : '',  # you can send coefficients to another topic for further processing -- MUST BE SET IN STEP 2
@@ -52,7 +52,6 @@ default_args = {
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
-
 
 # This sets the lat/longs for the IoT devices so it can be map
 VIPERTOKEN=""
@@ -205,6 +204,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
         repo=tsslogging.getrepo()
+        if 'step5rollbackoffsets' in os.environ:
+          if os.environ['step5rollbackoffsets'] != '' and os.environ['step5rollbackoffsets'] != '-1':
+            default_args['rollbackoffsets'] = os.environ['step5rollbackoffsets']
         try:
           tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
