@@ -29,7 +29,7 @@ default_args = {
   'brokerport' : '-999', # <<< *** Leave as is
   'streamstojoin' : 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # << ** These are the streams in the preprocess_data_topic for these independent variables
   'inputdata' : '', # << ** You can specify independent variables manually - rather than consuming from the preprocess_data_topic stream
-  'consumefrom' : 'ml-data', # << This is ml_data_topic in STEP 5 that contains the estimated parameters
+  'consumefrom' : '', # << This is ml_data_topic in STEP 5 that contains the estimated parameters
   'mainalgokey' : '', # leave blank
   'offset' : '-1', # << ** input data will start from the end of the preprocess_data_topic and rollback maxrows
   'delay' : '60', # << network delay parameter 
@@ -40,12 +40,11 @@ default_args = {
   'consumeridtraininedparams' : '',  # << leave blank
   'groupid' : '',  # << leave blank
   'topicid' : '-1',   # << leave as is
-  'pathtoalgos' : '/Viper-ml/viperlogs/iotlogistic', # << this is specified in fullpathtotrainingdata in STEP 5
+  'pathtoalgos' : '', # << this is specified in fullpathtotrainingdata in STEP 5
   'array' : '0', # 0=do not save as array, 1=save as array   
   'HPDEADDR' : 'http://' # Do not modify
 }
 ######################################## DO NOT MODIFY BELOW #############################################
-
 
 VIPERTOKEN=""
 VIPERHOST=""
@@ -108,7 +107,11 @@ def performPrediction():
       # Network timeout
       networktimeout=int(default_args['networktimeout'])
       # maxrows - this is percentage to rollback stream
-      maxrows=int(default_args['maxrows'])
+
+      if 'step6maxrows' in os.environ:
+        maxrows=int(os.environ['step6maxrows'])
+      else:
+        maxrows=int(default_args['maxrows'])
       #Start predicting with new data streams
       produceridhyperprediction=default_args['produceridhyperprediction']
       consumeridtraininedparams=default_args['consumeridtraininedparams']
@@ -185,6 +188,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
          repo=tsslogging.getrepo()
+         if 'step6maxrows' in os.environ:
+            if os.environ['step6maxrows'] != '' and os.environ['step6maxrows'] != '-1':
+              default_args['maxrows'] = os.environ['step6maxrows']
          try:   
            tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
