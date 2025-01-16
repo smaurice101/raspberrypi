@@ -314,7 +314,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9concurrency # privateGPT concurency, if greater than 1, multiple PGPT will run
                value: '{}'
              - name: CUDA_VISIBLE_DEVICES
-               value:'{}' # 0 for any device or specify specific number 
+               value: '{}' # 0 for any device or specify specific number 
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -519,7 +519,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step9concurrency # privateGPT concurency, if greater than 1, multiple PGPT will run
                value: '{}'
              - name: CUDA_VISIBLE_DEVICES
-               value:'{}' # 0 for any device or specify specific number                
+               value: '{}' # 0 for any device or specify specific number                
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
