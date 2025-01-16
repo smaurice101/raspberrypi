@@ -53,7 +53,6 @@ default_args = {
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-
 # This sets the lat/longs for the IoT devices so it can be map
 VIPERTOKEN=""
 VIPERHOST=""
@@ -205,6 +204,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
         repo=tsslogging.getrepo()
+        if 'step5rollbackoffsets' in os.environ:
+          if os.environ['step5rollbackoffsets'] != '' and os.environ['step5rollbackoffsets'] != '-1':
+            default_args['rollbackoffsets'] = os.environ['step5rollbackoffsets']
         try:
           tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
