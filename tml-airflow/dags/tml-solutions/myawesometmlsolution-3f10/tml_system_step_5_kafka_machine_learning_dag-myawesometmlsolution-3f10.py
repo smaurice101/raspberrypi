@@ -35,7 +35,7 @@ default_args = {
   'modelsearchtuner' : '90', # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
   'dependentvariable' : '', # <<< *** Change as needed, 
   'independentvariables': '', # <<< *** Change as needed, 
-  'rollbackoffsets' : '500', # <<< *** Change as needed, 
+  'rollbackoffsets' : '300', # <<< *** Change as needed, 
   'consumeridtrainingdata2': '', # leave blank
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
@@ -204,6 +204,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
         repo=tsslogging.getrepo()
+        if 'step5rollbackoffsets' in os.environ:
+          if os.environ['step5rollbackoffsets'] != '' and os.environ['step5rollbackoffsets'] != '-1':
+            default_args['rollbackoffsets'] = os.environ['step5rollbackoffsets']
         try:
           tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
