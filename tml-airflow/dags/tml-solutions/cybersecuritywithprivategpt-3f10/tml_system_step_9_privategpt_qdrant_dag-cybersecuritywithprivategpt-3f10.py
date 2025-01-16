@@ -164,6 +164,7 @@ def gatherdataforprivategpt(result):
    if 'step9prompt' in os.environ:
       if os.environ['step9prompt'] != '':
         prompt = os.environ['step9prompt']
+        default_args['prompt'] = prompt
       else:
        prompt = default_args['prompt']
    else: 
@@ -172,6 +173,7 @@ def gatherdataforprivategpt(result):
    if 'step9context' in os.environ:
       if os.environ['step9context'] != '':
         context = os.environ['step9context']
+        default_args['context'] = context
       else:
         context = default_args['context']  
    else: 
@@ -182,6 +184,7 @@ def gatherdataforprivategpt(result):
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
        attribute = os.environ['step9keyattribute']
+       default_args['keyattribute'] = attribute
      else: 
        attribute = default_args['keyattribute']      
    else:
@@ -190,10 +193,20 @@ def gatherdataforprivategpt(result):
    if 'step9keyprocesstype' in os.environ:
      if os.environ['step9keyprocesstype'] != '':
         processtype = os.environ['step9keyprocesstype']
+        default_args['keyprocesstype'] = processtype
      else: 
        processtype = default_args['keyprocesstype']    
    else: 
      processtype = default_args['keyprocesstype']
+
+   if 'step9hyperbatch' in os.environ:
+     if os.environ['step9hyperbatch'] != '':
+        hyperbatch = os.environ['step9hyperbatch']
+        default_args['hyperbatch'] = hyperbatch
+     else: 
+       hyperbatch = default_args['hyperbatch']    
+   else: 
+     hyperbatch = default_args['hyperbatch']
 
    res=json.loads(result,strict='False')
    message = ""
@@ -269,12 +282,12 @@ def gatherdataforprivategpt(result):
              found=1
              message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          
-         if found and default_args['hyperbatch']=="0":
+         if found and hyperbatch=="0":
               message = "{}.  Data: {}.  {}".format(context,message,prompt)
               privategptmessage.append([message,identarr[0]])
 
                 
-   if jsonkeytogather != 'Identifier' and found and default_args['hyperbatch']=="1":
+   if jsonkeytogather != 'Identifier' and found and hyperbatch=="1":
      message = "{}.  Data: {}.  {}".format(context,message,prompt)
      privategptmessage.append(message)
 
@@ -300,13 +313,23 @@ def sendtoprivategpt(maindata):
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
        attribute = os.environ['step9keyattribute']
+       default_args['keyattribute'] = attribute
      else: 
        attribute = default_args['keyattribute']      
    else:
     attribute = default_args['keyattribute']
 
+   if 'step9hyperbatch' in os.environ:
+     if os.environ['step9hyperbatch'] != '':
+        hyperbatch = os.environ['step9hyperbatch']
+        default_args['hyperbatch'] = hyperbatch
+     else: 
+       hyperbatch = default_args['hyperbatch']    
+   else: 
+     hyperbatch = default_args['hyperbatch']
+ 
    for mess in maindata:
-        if default_args['jsonkeytogather']=='Identifier' or default_args['hyperbatch']=="0":
+        if default_args['jsonkeytogather']=='Identifier' or hyperbatch=="0":
            m = mess[0]
            m1 = mess[1]
         else:
@@ -394,6 +417,19 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
         repo=tsslogging.getrepo()
+        if 'step9vectordbcollectionname' in os.environ:
+          if os.environ['step9vectordbcollectionname'] != '':
+            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
+        if 'step9concurrency' in os.environ:
+          if os.environ['step9concurrency'] != '':
+            default_args['concurrency'] = os.environ['step9concurrency']
+        if 'CUDA_VISIBLE_DEVICES' in os.environ:
+          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
+            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
+        if 'step9rollbackoffset' in os.environ:
+          if os.environ['step9rollbackoffset'] != '':
+            default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
+      
         try:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
