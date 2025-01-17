@@ -508,8 +508,6 @@ def startprivategpt(**context):
 
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-#       if os.environ['TSS']=="0":
- #          subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "export qip={}".format(os.environ['qip']), "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],context), "ENTER"])
 
@@ -530,6 +528,7 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]
         context =  sys.argv[5]
         sd = context['dag'].dag_id
+        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))         
 
         if "KUBE" not in os.environ:          
           v,buf=qdrantcontainer()
