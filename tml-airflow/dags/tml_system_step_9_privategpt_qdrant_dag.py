@@ -10,6 +10,8 @@ import maadstml
 import subprocess
 import random
 import json
+import threading
+from binaryornot.check import is_binary
 
 sys.dont_write_bytecode = True
 
@@ -300,6 +302,9 @@ def gatherdataforprivategpt(result):
 #   print("privategptmessage=",privategptmessage)
    return privategptmessage
 
+def startdirread():
+  t = threading.Thread(name='child procs', target=ingestfiles)
+  t.start()
 
 def sendtoprivategpt(maindata):
 
