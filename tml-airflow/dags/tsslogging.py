@@ -8,6 +8,25 @@ import subprocess
 import os
 import socket
 import time
+import fcntl
+
+class LockDirectory(object):
+    def __init__(self, directory):
+        assert os.path.exists(directory)
+        self.directory = directory
+        print(self.directory)
+
+    def __enter__(self):
+        self.dir_fd = os.open(self.directory, os.O_RDONLY)
+        try:
+            fcntl.flock(self.dir_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError as ex:             
+            raise Exception('Somebody else is locking %r - quitting.' % self.directory)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):       
+        fcntl.flock(self.dir_fd,fcntl.LOCK_UN)
+        os.close(self.dir_fd)
 
 def ingress(sname):
     
