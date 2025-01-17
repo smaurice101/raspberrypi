@@ -427,6 +427,33 @@ def startprivategpt(**context):
           if os.environ['step9rollbackoffset'] != '':
             default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
 
+       if 'step9prompt' in os.environ:
+          if os.environ['step9prompt'] != '':
+            default_args['prompt'] = os.environ['step9prompt']
+       if 'step9context' in os.environ:
+          if os.environ['step9context'] != '':
+            default_args['context'] = os.environ['step9context']
+
+       if 'step9keyattribute' in os.environ:
+          if os.environ['step9keyattribute'] != '':
+            default_args['keyattribute'] = os.environ['step9keyattribute']
+       if 'step9keyprocesstype' in os.environ:
+          if os.environ['step9keyprocesstype'] != '':
+            default_args['keyprocesstype'] = os.environ['step9keyprocesstype']
+       if 'step9hyperbatch' in os.environ:
+          if os.environ['step9hyperbatch'] != '':
+            default_args['hyperbatch'] = os.environ['step9hyperbatch']
+       if 'step9vectordbcollectionname' in os.environ:
+          if os.environ['step9vectordbcollectionname'] != '':
+            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
+       if 'step9concurrency' in os.environ:
+          if os.environ['step9concurrency'] != '':
+            default_args['concurrency'] = os.environ['step9concurrency']
+       if 'CUDA_VISIBLE_DEVICES' in os.environ:
+          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
+            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
+           
+
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESSPGPT".format(sname))
