@@ -453,6 +453,15 @@ def startprivategpt(**context):
           if os.environ['CUDA_VISIBLE_DEVICES'] != '':
             default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
            
+       if 'step9docfolder' in os.environ:
+          if os.environ['step9docfolder'] != '':
+            default_args['docfolder'] = os.environ['step9docfolder']
+       if 'step9docfolderingestinterval' in os.environ:
+          if os.environ['step9docfolderingestinterval'] != '':
+            default_args['docfolderingestinterval'] = os.environ['step9docfolderingestinterval']
+       if 'step9useidentifierinprompt' in os.environ:
+          if os.environ['step9useidentifierinprompt'] != '':
+            default_args['useidentifierinprompt'] = os.environ['step9useidentifierinprompt']
 
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
