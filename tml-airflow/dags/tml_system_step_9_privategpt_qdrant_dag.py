@@ -306,6 +306,43 @@ def startdirread():
   t = threading.Thread(name='child procs', target=ingestfiles)
   t.start()
 
+def deleteembeddings(docids):
+  pgptendpoint="/v1/ingest/"
+  maadstml.pgptdeleteembeddings(docids,pgptip,pgptport,pgptendpoint)   
+
+
+def getingested(docname):
+  pgptendpoint="/v1/ingest/list"
+  docids,docstr,docidsstr=maadstml.pgptgetingestedembeddings(docname,pgptip,pgptport,pgptendpoint)
+  return docids,docstr,docidsstr
+
+def ingestfiles():
+    global docidstrarr
+    pgptendpoint="/v1/ingest"
+    docidstrarr = []
+
+    buf="/mnt/c/maads/tml-airflow/rawdata/mylogs,/mnt/c/maads/tml-airflow/rawdata/mylogs2"
+    bufarr=buf.split(",")
+    while True:
+     docidstrarr = []
+     for dirp in bufarr:
+        # lock the directory
+        with tsslogging.LockDirectory(dirp) as lock:
+          newfd = os.dup(lock.dir_fd)
+          files = [ os.path.join(dirp,f) for f in os.listdir(dirp) if os.path.isfile(os.path.join(dirp,f)) ]
+          for mf in files:
+             docids,docstr,docidstr=getingested(mf)
+             deleteembeddings(docids)
+             if is_binary(mf):
+               maadstml.pgptingestdocs(mf,'binary',pgptip,pgptport,pgptendpoint)
+             else:
+               maadstml.pgptingestdocs(mf,'text',pgptip,pgptport,pgptendpoint)
+
+             docids,docstr,docidstr=getingested(mf)
+             docidstrarr.append(docidstr[0])
+     time.sleep(100)
+     print("docidsstr=",docidstrarr)
+
 def sendtoprivategpt(maindata):
 
    counter = 0   
