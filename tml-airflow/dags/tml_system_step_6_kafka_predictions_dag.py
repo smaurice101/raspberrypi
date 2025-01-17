@@ -188,9 +188,6 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
          repo=tsslogging.getrepo()
-         if 'step6maxrows' in os.environ:
-            if os.environ['step6maxrows'] != '' and os.environ['step6maxrows'] != '-1':
-              default_args['maxrows'] = os.environ['step6maxrows']
          try:   
            tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
