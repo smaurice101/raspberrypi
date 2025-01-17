@@ -529,7 +529,18 @@ if __name__ == '__main__':
         context =  sys.argv[5]
         sd = context['dag'].dag_id
         sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))         
+        prompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_prompt".format(sname))
+        default_args['prompt'] = prompt
+        context = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
+        default_args['context'] = context
 
+        docfolder = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolder".format(sname))
+        default_args['docfolder'] = docfolder
+        docfolderingestinterval = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolderingestinterval".format(sname))
+        default_args['docfolderingestinterval'] = docfolderingestinterval[1:]
+        useidentifierinprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_useidentifierinprompt".format(sname))
+        default_args['useidentifierinprompt'] = useidentifierinprompt[1:]
+ 
         if "KUBE" not in os.environ:          
           v,buf=qdrantcontainer()
           if buf != "":
