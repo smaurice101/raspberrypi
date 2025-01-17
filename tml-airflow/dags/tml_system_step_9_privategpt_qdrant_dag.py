@@ -414,6 +414,19 @@ def startprivategpt(**context):
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
 
+       if 'step9vectordbcollectionname' in os.environ:
+          if os.environ['step9vectordbcollectionname'] != '':
+            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
+       if 'step9concurrency' in os.environ:
+          if os.environ['step9concurrency'] != '':
+            default_args['concurrency'] = os.environ['step9concurrency']
+       if 'CUDA_VISIBLE_DEVICES' in os.environ:
+          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
+            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
+       if 'step9rollbackoffset' in os.environ:
+          if os.environ['step9rollbackoffset'] != '':
+            default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
+
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESSPGPT".format(sname))
@@ -447,6 +460,10 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_pgptport".format(sname), value="_{}".format(default_args['pgptport']))
        ti.xcom_push(key="{}_hyperbatch".format(sname), value="_{}".format(default_args['hyperbatch']))
 
+       ti.xcom_push(key="{}_docfolder".format(sname), value="{}".format(default_args['docfolder']))
+       ti.xcom_push(key="{}_docfolderingestinterval".format(sname), value="_{}".format(default_args['docfolderingestinterval']))
+       ti.xcom_push(key="{}_useidentifierinprompt".format(sname), value="_{}".format(default_args['useidentifierinprompt']))
+
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))
@@ -463,20 +480,7 @@ def startprivategpt(**context):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
-        repo=tsslogging.getrepo()
-        if 'step9vectordbcollectionname' in os.environ:
-          if os.environ['step9vectordbcollectionname'] != '':
-            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
-        if 'step9concurrency' in os.environ:
-          if os.environ['step9concurrency'] != '':
-            default_args['concurrency'] = os.environ['step9concurrency']
-        if 'CUDA_VISIBLE_DEVICES' in os.environ:
-          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
-            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
-        if 'step9rollbackoffset' in os.environ:
-          if os.environ['step9rollbackoffset'] != '':
-            default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
-      
+        repo=tsslogging.getrepo()      
         try:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
