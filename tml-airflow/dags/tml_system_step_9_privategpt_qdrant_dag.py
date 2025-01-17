@@ -47,9 +47,10 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'concurrency' : '1', # change as needed Leave at 1
  'CUDA_VISIBLE_DEVICES' : '0', # change as needed
  'docfolder': '',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
-                   # if this field in NON-EMPTY, privateGPT will query these documents to answer your prompt
+                   # if this field in NON-EMPTY, privateGPT will query these documents as the CONTEXT to answer your prompt
                    # separate multiple folders with a comma
  'docfolderingestinterval': '', # how often you want TML to RE-LOAD the files in docfolder - enter the number of SECONDS
+ 'useidentifierinprompt': '1', # If 1, this uses the identifier in the TML json output and appends it to prompt, If 0, it uses the prompt only
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
