@@ -200,6 +200,8 @@ if __name__ == '__main__':
         VIPERHOST = sys.argv[3] 
         VIPERPORT = sys.argv[4]                  
         context =  sys.argv[5]
+        sd = context['dag'].dag_id
+        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))         
         maxrows = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_maxrows".format(sname))
         default_args['maxrows'] = maxrows[1:]
          
