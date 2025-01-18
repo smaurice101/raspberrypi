@@ -534,6 +534,20 @@ if __name__ == '__main__':
         context = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
         default_args['context'] = context
 
+        context = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
+        default_args['context'] = context
+
+        keyattribute = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_keyattribute".format(sname))
+        default_args['keyattribute'] = keyattribute
+        keyprocesstype = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_keyprocesstype".format(sname))
+        default_args['keyprocesstype'] = keyprocesstype
+        hyperbatch = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_hyperbatch".format(sname))
+        default_args['hyperbatch'] = hyperbatch
+        vectordbcollectionname = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordbcollectionname".format(sname))
+        default_args['vectordbcollectionname'] = vectordbcollectionname
+        concurrency = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_concurrency".format(sname))
+        default_args['concurrency'] = concurrency
+        
         docfolder = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolder".format(sname))
         default_args['docfolder'] = docfolder
         docfolderingestinterval = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolderingestinterval".format(sname))
