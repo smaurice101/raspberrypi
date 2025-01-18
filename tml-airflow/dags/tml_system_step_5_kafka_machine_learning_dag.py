@@ -174,9 +174,11 @@ def startml(**context):
        ti.xcom_push(key="{}_modelsearchtuner".format(sname), value="_{}".format(default_args['modelsearchtuner']))
        ti.xcom_push(key="{}_dependentvariable".format(sname), value=default_args['dependentvariable'])
        ti.xcom_push(key="{}_independentvariables".format(sname), value=default_args['independentvariables'])
-   
+
+       rollback=default_args['rollbackoffsets']
        if 'step5rollbackoffsets' in os.environ:
          ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(os.environ['step5rollbackoffsets']))
+         rollback=os.environ['step5rollbackoffsets']
        else:  
          ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(default_args['rollbackoffsets']))
        ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
@@ -198,7 +200,7 @@ def startml(**context):
        wn = windowname('ml',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:],context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:],rollback), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -217,11 +219,8 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]
         HPDEHOST = sys.argv[5]
         HPDEPORT = sys.argv[6]
-        context =  sys.argv[7]
-        sd = context['dag'].dag_id
-        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))         
-        rollbackoffsets = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_rollbackoffsets".format(sname))
-        default_args['rollbackoffsets'] = rollbackoffsets[1:]
+        rollbackoffsets =  sys.argv[7]
+        default_args['rollbackoffsets'] = rollbackoffsets
         
         tsslogging.locallogs("INFO", "STEP 5: Machine learning started")
     
