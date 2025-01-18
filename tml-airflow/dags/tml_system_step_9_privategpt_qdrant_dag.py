@@ -547,6 +547,8 @@ if __name__ == '__main__':
         default_args['vectordbcollectionname'] = vectordbcollectionname
         concurrency = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_concurrency".format(sname))
         default_args['concurrency'] = concurrency
+        cuda = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_cuda".format(sname))
+        default_args['CUDA_VISIBLE_DEVICES'] = cuda
         
         docfolder = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolder".format(sname))
         default_args['docfolder'] = docfolder
