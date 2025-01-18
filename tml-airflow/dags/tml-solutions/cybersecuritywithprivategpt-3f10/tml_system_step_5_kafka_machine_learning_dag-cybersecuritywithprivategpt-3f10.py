@@ -35,7 +35,7 @@ default_args = {
   'modelsearchtuner' : '90', # <<< *This parameter will attempt to fine tune the model search space - A number close to 100 means you will have fewer models but their predictive quality will be higher.      
   'dependentvariable' : '', # <<< *** Change as needed, 
   'independentvariables': '', # <<< *** Change as needed, 
-  'rollbackoffsets' : '500', # <<< *** Change as needed, 
+  'rollbackoffsets' : '300', # <<< *** Change as needed, 
   'consumeridtrainingdata2': '', # leave blank
   'partition_training' : '',  # leave blank
   'consumefrom' : '',  # leave blank
@@ -174,9 +174,11 @@ def startml(**context):
        ti.xcom_push(key="{}_modelsearchtuner".format(sname), value="_{}".format(default_args['modelsearchtuner']))
        ti.xcom_push(key="{}_dependentvariable".format(sname), value=default_args['dependentvariable'])
        ti.xcom_push(key="{}_independentvariables".format(sname), value=default_args['independentvariables'])
-   
+
+       rollback=default_args['rollbackoffsets']
        if 'step5rollbackoffsets' in os.environ:
          ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(os.environ['step5rollbackoffsets']))
+         rollback=os.environ['step5rollbackoffsets']
        else:  
          ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(default_args['rollbackoffsets']))
        ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
@@ -198,7 +200,7 @@ def startml(**context):
        wn = windowname('ml',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:],rollback), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -217,6 +219,8 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]
         HPDEHOST = sys.argv[5]
         HPDEPORT = sys.argv[6]
+        rollbackoffsets =  sys.argv[7]
+        default_args['rollbackoffsets'] = rollbackoffsets
         
         tsslogging.locallogs("INFO", "STEP 5: Machine learning started")
     
