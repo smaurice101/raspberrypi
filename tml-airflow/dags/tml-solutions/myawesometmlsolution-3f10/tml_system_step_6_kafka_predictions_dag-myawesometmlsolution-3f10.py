@@ -165,8 +165,11 @@ def startpredictions(**context):
        ti.xcom_push(key="{}_delay".format(sname),value="_{}".format(default_args['delay']))
        ti.xcom_push(key="{}_usedeploy".format(sname),value="_{}".format(default_args['usedeploy']))
        ti.xcom_push(key="{}_networktimeout".format(sname),value="_{}".format(default_args['networktimeout']))
+
+       maxrows=default_args['maxrows']
        if 'step6maxrows' in os.environ:
           ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(os.environ['step6maxrows']))
+          maxrows=os.environ['step6maxrows']
        else:  
          ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(default_args['maxrows']))
        ti.xcom_push(key="{}_topicid".format(sname),value="_{}".format(default_args['topicid']))
@@ -182,15 +185,12 @@ def startpredictions(**context):
        wn = windowname('predict',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-predict", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,HPDEHOSTPREDICT,HPDEPORTPREDICT[1:]), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,HPDEHOSTPREDICT,HPDEPORTPREDICT[1:],maxrows), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
          repo=tsslogging.getrepo()
-         if 'step6maxrows' in os.environ:
-            if os.environ['step6maxrows'] != '' and os.environ['step6maxrows'] != '-1':
-              default_args['maxrows'] = os.environ['step6maxrows']
          try:   
            tsslogging.tsslogit("Predictions DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
@@ -204,6 +204,9 @@ if __name__ == '__main__':
          VIPERPORT=sys.argv[4]
          HPDEHOSTPREDICT=sys.argv[5]
          HPDEPORTPREDICT=sys.argv[6]    
+         maxrows =  sys.argv[7]
+         default_args['maxrows'] = maxrows
+         
          tsslogging.locallogs("INFO", "STEP 6: Predictions started")
          while True:
           try:              
