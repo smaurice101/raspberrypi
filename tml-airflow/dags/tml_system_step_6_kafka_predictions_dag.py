@@ -165,8 +165,11 @@ def startpredictions(**context):
        ti.xcom_push(key="{}_delay".format(sname),value="_{}".format(default_args['delay']))
        ti.xcom_push(key="{}_usedeploy".format(sname),value="_{}".format(default_args['usedeploy']))
        ti.xcom_push(key="{}_networktimeout".format(sname),value="_{}".format(default_args['networktimeout']))
+
+       maxrows=default_args['maxrows']
        if 'step6maxrows' in os.environ:
           ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(os.environ['step6maxrows']))
+          maxrows=os.environ['step6maxrows']
        else:  
          ti.xcom_push(key="{}_maxrows".format(sname),value="_{}".format(default_args['maxrows']))
        ti.xcom_push(key="{}_topicid".format(sname),value="_{}".format(default_args['topicid']))
@@ -182,7 +185,7 @@ def startpredictions(**context):
        wn = windowname('predict',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-predict", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,HPDEHOSTPREDICT,HPDEPORTPREDICT[1:],context), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,HPDEHOSTPREDICT,HPDEPORTPREDICT[1:],maxrows), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -201,11 +204,8 @@ if __name__ == '__main__':
          VIPERPORT=sys.argv[4]
          HPDEHOSTPREDICT=sys.argv[5]
          HPDEPORTPREDICT=sys.argv[6]    
-         context =  sys.argv[7]
-         sd = context['dag'].dag_id
-         sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))         
-         maxrows = context['ti'].xcom_pull(task_ids='step_6_solution_task_prediction',key="{}_maxrows".format(sname))
-         default_args['maxrows'] = maxrows[1:]
+         maxrows =  sys.argv[7]
+         default_args['maxrows'] = maxrows
          
          tsslogging.locallogs("INFO", "STEP 6: Predictions started")
          while True:
