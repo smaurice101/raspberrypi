@@ -187,6 +187,10 @@ def gatherdataforprivategpt(result):
      context = default_args['context']
 
    jsonkeytogather = default_args['jsonkeytogather']
+   if default_args['docfolder'] != '':
+       context = ''
+       if default_args['useidentifierinprompt'] == "1":
+          jsonkeytogather = "Identifier"
 
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
@@ -225,7 +229,7 @@ def gatherdataforprivategpt(result):
      return
 
    for r in res['StreamTopicDetails']['TopicReads']:
-       if jsonkeytogather == 'Identifier':
+       if jsonkeytogather == 'Identifier' or jsonkeytogather == 'identifier':
          identarr=r['Identifier'].split("~")
          try:
            #print(r['Identifier'], " attribute=",attribute)
@@ -238,7 +242,13 @@ def gatherdataforprivategpt(result):
                 found=1
                 message = message  + str(d) + ', '
              if found:
-               message = "{}.  Data: {}. {}".format(context,message,prompt)
+               if context != '':
+                  message = "{}.  Data: {}. {}".format(context,message,prompt)
+               elif '--identifier--' in prompt:
+                  prompt2 = prompt.replace('--identifier--',identarr[0])
+                  message = "{}".format(prompt2)
+               else: 
+                 message = "{}".format(prompt)
                privategptmessage.append([message,identarr[0]])
              message = ""
          except Excepption as e:
@@ -354,8 +364,10 @@ def sendtoprivategpt(maindata,docfolder):
    pgptendpoint="/v1/completions"
 
    mcontext = False
+   usingqdrant = ''
    if docfolder != '':
      mcontext = True
+     usingqdrant = 'Using documents in Qdrant VectorDB for context.' 
     
    maintopic = default_args['pgpt_data_topic']
    if os.environ['TSS']=="1":
@@ -390,9 +402,11 @@ def sendtoprivategpt(maindata,docfolder):
         else:
            m = mess
            m1 = attribute #default_args['keyattribute']
-            
+        
         response=pgptchat(m,mcontext,docidstrarr,mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
+        if usingqdrant != '':
+           m = m + ' (' + usingqdrant + ')'
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
         print("PGPT response=",response)
         if 'ERROR:' not in response:         
