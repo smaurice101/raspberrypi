@@ -539,13 +539,13 @@ if __name__ == '__main__':
         keyprocesstype = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_keyprocesstype".format(sname))
         default_args['keyprocesstype'] = keyprocesstype
         hyperbatch = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_hyperbatch".format(sname))
-        default_args['hyperbatch'] = hyperbatch
+        default_args['hyperbatch'] = hyperbatch[1:]
         vectordbcollectionname = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordbcollectionname".format(sname))
         default_args['vectordbcollectionname'] = vectordbcollectionname
         concurrency = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_concurrency".format(sname))
-        default_args['concurrency'] = concurrency
+        default_args['concurrency'] = concurrency[1:]
         cuda = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_cuda".format(sname))
-        default_args['CUDA_VISIBLE_DEVICES'] = cuda
+        default_args['CUDA_VISIBLE_DEVICES'] = cuda[1:]
         
         docfolder = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolder".format(sname))
         default_args['docfolder'] = docfolder
