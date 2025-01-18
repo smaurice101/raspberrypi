@@ -10,6 +10,9 @@ import maadstml
 import subprocess
 import random
 import json
+import threading
+from binaryornot.check import is_binary
+docidstrarr = []
 
 sys.dont_write_bytecode = True
 
@@ -45,7 +48,12 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml', # change as needed
  'concurrency' : '1', # change as needed Leave at 1
- 'CUDA_VISIBLE_DEVICES' : '0' # change as needed
+ 'CUDA_VISIBLE_DEVICES' : '0', # change as needed
+ 'docfolder': '',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
+                   # if this field in NON-EMPTY, privateGPT will query these documents as the CONTEXT to answer your prompt
+                   # separate multiple folders with a comma
+ 'docfolderingestinterval': '', # how often you want TML to RE-LOAD the files in docfolder - enter the number of SECONDS
+ 'useidentifierinprompt': '1', # If 1, this uses the identifier in the TML json output and appends it to prompt, If 0, it uses the prompt only    
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -180,6 +188,10 @@ def gatherdataforprivategpt(result):
      context = default_args['context']
 
    jsonkeytogather = default_args['jsonkeytogather']
+   if default_args['docfolder'] != '':
+       context = ''
+       if default_args['useidentifierinprompt'] == "1":
+          jsonkeytogather = "Identifier"
 
    if 'step9keyattribute' in os.environ:
      if os.environ['step9keyattribute'] != '':
@@ -218,7 +230,7 @@ def gatherdataforprivategpt(result):
      return
 
    for r in res['StreamTopicDetails']['TopicReads']:
-       if jsonkeytogather == 'Identifier':
+       if jsonkeytogather == 'Identifier' or jsonkeytogather == 'identifier':
          identarr=r['Identifier'].split("~")
          try:
            #print(r['Identifier'], " attribute=",attribute)
@@ -231,7 +243,13 @@ def gatherdataforprivategpt(result):
                 found=1
                 message = message  + str(d) + ', '
              if found:
-               message = "{}.  Data: {}. {}".format(context,message,prompt)
+               if context != '':
+                  message = "{}.  Data: {}. {}".format(context,message,prompt)
+               elif '--identifier--' in prompt:
+                  prompt2 = prompt.replace('--identifier--',identarr[0])
+                  message = "{}".format(prompt2)
+               else: 
+                 message = "{}".format(prompt)
                privategptmessage.append([message,identarr[0]])
              message = ""
          except Excepption as e:
@@ -283,7 +301,11 @@ def gatherdataforprivategpt(result):
              message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          
          if found and hyperbatch=="0":
-              message = "{}.  Data: {}.  {}".format(context,message,prompt)
+              if '--identifier--' in prompt:
+                  prompt2 = prompt.replace('--identifier--',identarr[0])
+                  message = "{}.  Data: {}.  {}".format(context,message,prompt2)
+              else: 
+                  message = "{}.  Data: {}.  {}".format(context,message,prompt)
               privategptmessage.append([message,identarr[0]])
 
                 
@@ -295,13 +317,67 @@ def gatherdataforprivategpt(result):
 #   print("privategptmessage=",privategptmessage)
    return privategptmessage
 
+def startdirread():
+  t = threading.Thread(name='child procs', target=ingestfiles)
+  t.start()
 
-def sendtoprivategpt(maindata):
+def deleteembeddings(docids):
+  pgptendpoint="/v1/ingest/"
+  maadstml.pgptdeleteembeddings(docids,pgptip,pgptport,pgptendpoint)   
 
+
+def getingested(docname):
+  pgptendpoint="/v1/ingest/list"
+  docids,docstr,docidsstr=maadstml.pgptgetingestedembeddings(docname,pgptip,pgptport,pgptendpoint)
+  return docids,docstr,docidsstr
+
+def ingestfiles():
+    global docidstrarr
+    pgptendpoint="/v1/ingest"
+    docidstrarr = []
+    basefolder='/rawdata/'
+
+ #   buf="/mnt/c/maads/tml-airflow/rawdata/mylogs,/mnt/c/maads/tml-airflow/rawdata/mylogs2"
+    buf = default_args['docfolder']
+ 
+    bufarr=buf.split(",")
+    while True:
+     docidstrarr = []
+     for dirp in bufarr:
+        # lock the directory
+        dirp = basefolder + dirp
+        if os.path.exists(dirp):
+          with tsslogging.LockDirectory(dirp) as lock:
+            newfd = os.dup(lock.dir_fd)
+            files = [ os.path.join(dirp,f) for f in os.listdir(dirp) if os.path.isfile(os.path.join(dirp,f)) ]
+            for mf in files:
+               docids,docstr,docidstr=getingested(mf)
+               deleteembeddings(docids)
+               if is_binary(mf):
+                 maadstml.pgptingestdocs(mf,'binary',pgptip,pgptport,pgptendpoint)
+               else:
+                 maadstml.pgptingestdocs(mf,'text',pgptip,pgptport,pgptendpoint)
+
+               docids,docstr,docidstr=getingested(mf)
+               docidstrarr.append(docidstr[0])
+        else:
+          print("WARN Directory Path: {} does not exist".format(dirp))
+         
+     time.sleep(int(default_args['docfolderingestinterval']))
+     print("docidsstr=",docidstrarr)
+
+def sendtoprivategpt(maindata,docfolder):
+   global docidstrarr
    counter = 0   
    maxc = 300
    pgptendpoint="/v1/completions"
-   
+
+   mcontext = False
+   usingqdrant = ''
+   if docfolder != '':
+     mcontext = True
+     usingqdrant = 'Using documents in Qdrant VectorDB for context.' 
+    
    maintopic = default_args['pgpt_data_topic']
    if os.environ['TSS']=="1":
      mainip = default_args['pgpthost']
@@ -335,9 +411,11 @@ def sendtoprivategpt(maindata):
         else:
            m = mess
            m1 = attribute #default_args['keyattribute']
-            
-        response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
+        
+        response=pgptchat(m,mcontext,docidstrarr,mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
+        if usingqdrant != '':
+           m = m + ' (' + usingqdrant + ')'
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
         print("PGPT response=",response)
         if 'ERROR:' not in response:         
@@ -366,6 +444,46 @@ def windowname(wtype,sname,dagname):
 def startprivategpt(**context):
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+
+       if 'step9rollbackoffset' in os.environ:
+          if os.environ['step9rollbackoffset'] != '':
+            default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
+
+       if 'step9prompt' in os.environ:
+          if os.environ['step9prompt'] != '':
+            default_args['prompt'] = os.environ['step9prompt']
+       if 'step9context' in os.environ:
+          if os.environ['step9context'] != '':
+            default_args['context'] = os.environ['step9context']
+
+       if 'step9keyattribute' in os.environ:
+          if os.environ['step9keyattribute'] != '':
+            default_args['keyattribute'] = os.environ['step9keyattribute']
+       if 'step9keyprocesstype' in os.environ:
+          if os.environ['step9keyprocesstype'] != '':
+            default_args['keyprocesstype'] = os.environ['step9keyprocesstype']
+       if 'step9hyperbatch' in os.environ:
+          if os.environ['step9hyperbatch'] != '':
+            default_args['hyperbatch'] = os.environ['step9hyperbatch']
+       if 'step9vectordbcollectionname' in os.environ:
+          if os.environ['step9vectordbcollectionname'] != '':
+            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
+       if 'step9concurrency' in os.environ:
+          if os.environ['step9concurrency'] != '':
+            default_args['concurrency'] = os.environ['step9concurrency']
+       if 'CUDA_VISIBLE_DEVICES' in os.environ:
+          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
+            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
+           
+       if 'step9docfolder' in os.environ:
+          if os.environ['step9docfolder'] != '':
+            default_args['docfolder'] = os.environ['step9docfolder']
+       if 'step9docfolderingestinterval' in os.environ:
+          if os.environ['step9docfolderingestinterval'] != '':
+            default_args['docfolderingestinterval'] = os.environ['step9docfolderingestinterval']
+       if 'step9useidentifierinprompt' in os.environ:
+          if os.environ['step9useidentifierinprompt'] != '':
+            default_args['useidentifierinprompt'] = os.environ['step9useidentifierinprompt']
 
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
@@ -400,6 +518,10 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_pgptport".format(sname), value="_{}".format(default_args['pgptport']))
        ti.xcom_push(key="{}_hyperbatch".format(sname), value="_{}".format(default_args['hyperbatch']))
 
+       ti.xcom_push(key="{}_docfolder".format(sname), value="{}".format(default_args['docfolder']))
+       ti.xcom_push(key="{}_docfolderingestinterval".format(sname), value="_{}".format(default_args['docfolderingestinterval']))
+       ti.xcom_push(key="{}_useidentifierinprompt".format(sname), value="_{}".format(default_args['useidentifierinprompt']))
+
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))
@@ -408,28 +530,16 @@ def startprivategpt(**context):
 
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-#       if os.environ['TSS']=="0":
- #          subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "export qip={}".format(os.environ['qip']), "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:]), "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+                       default_args['vectordbcollectionname'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
+                       default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
+                       default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],default_args['useidentifierinprompt']), "ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
-        repo=tsslogging.getrepo()
-        if 'step9vectordbcollectionname' in os.environ:
-          if os.environ['step9vectordbcollectionname'] != '':
-            default_args['vectordbcollectionname'] = os.environ['step9vectordbcollectionname']
-        if 'step9concurrency' in os.environ:
-          if os.environ['step9concurrency'] != '':
-            default_args['concurrency'] = os.environ['step9concurrency']
-        if 'CUDA_VISIBLE_DEVICES' in os.environ:
-          if os.environ['CUDA_VISIBLE_DEVICES'] != '':
-            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['CUDA_VISIBLE_DEVICES']
-        if 'step9rollbackoffset' in os.environ:
-          if os.environ['step9rollbackoffset'] != '':
-            default_args['rollbackoffset'] = os.environ['step9rollbackoffset']
-      
+        repo=tsslogging.getrepo()      
         try:
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
@@ -441,7 +551,35 @@ if __name__ == '__main__':
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3]
         VIPERPORT = sys.argv[4]
+        vectordbcollectionname =  sys.argv[5]
+        concurrency =  sys.argv[6]
 
+        cuda =  sys.argv[7]
+        rollbackoffset =  sys.argv[8]
+        prompt =  sys.argv[9]
+        context =  sys.argv[10]
+        keyattribute =  sys.argv[11]
+        keyprocesstype =  sys.argv[12]
+        hyperbatch =  sys.argv[13]
+        docfolder =  sys.argv[14]
+        docfolderingestinterval =  sys.argv[15]
+        useidentifierinprompt =  sys.argv[16]
+        
+        default_args['rollbackoffset']=rollbackoffset
+        default_args['prompt'] = prompt
+        default_args['context'] = context
+
+        default_args['keyattribute'] = keyattribute
+        default_args['keyprocesstype'] = keyprocesstype
+        default_args['hyperbatch'] = hyperbatch
+        default_args['vectordbcollectionname'] = vectordbcollectionname
+        default_args['concurrency'] = concurrency
+        default_args['CUDA_VISIBLE_DEVICES'] = cuda
+        
+        default_args['docfolder'] = docfolder
+        default_args['docfolderingestinterval'] = docfolderingestinterval
+        default_args['useidentifierinprompt'] = useidentifierinprompt
+ 
         if "KUBE" not in os.environ:          
           v,buf=qdrantcontainer()
           if buf != "":
@@ -484,6 +622,9 @@ if __name__ == '__main__':
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
 
+        if docfolder != '':
+          startdirread()
+                   
         while True:
          try:
              # Get preprocessed data from Kafka
@@ -494,9 +635,10 @@ if __name__ == '__main__':
 
              # Send the data to PrivateGPT and produce to Kafka
              if len(maindata) > 0:
-              sendtoprivategpt(maindata)                      
+              sendtoprivategpt(maindata,docfolder)                      
              time.sleep(2)
          except Exception as e:
+            
           tsslogging.locallogs("ERROR", "STEP 9: PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e))
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
