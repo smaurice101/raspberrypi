@@ -300,7 +300,11 @@ def gatherdataforprivategpt(result):
              message = message  + "{} (Identifier={})".format(buf,identarr[0]) + ', '
          
          if found and hyperbatch=="0":
-              message = "{}.  Data: {}.  {}".format(context,message,prompt)
+              if '--identifier--' in prompt:
+                  prompt2 = prompt.replace('--identifier--',identarr[0])
+                  message = "{}.  Data: {}.  {}".format(context,message,prompt2)
+              else: 
+                  message = "{}.  Data: {}.  {}".format(context,message,prompt)
               privategptmessage.append([message,identarr[0]])
 
                 
