@@ -531,11 +531,8 @@ if __name__ == '__main__':
         sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))         
         prompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_prompt".format(sname))
         default_args['prompt'] = prompt
-        context = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
-        default_args['context'] = context
-
-        context = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
-        default_args['context'] = context
+        context9 = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
+        default_args['context'] = context9
 
         keyattribute = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_keyattribute".format(sname))
         default_args['keyattribute'] = keyattribute
