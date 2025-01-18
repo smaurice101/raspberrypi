@@ -12,7 +12,7 @@ import fcntl
 
 class LockDirectory(object):
     def __init__(self, directory):
-        assert os.path.exists(directory)
+        #assert os.path.exists(directory)
         self.directory = directory
         print(self.directory)
 
