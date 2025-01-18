@@ -341,19 +341,23 @@ def ingestfiles():
      for dirp in bufarr:
         # lock the directory
         dirp = basefolder + dirp
-        with tsslogging.LockDirectory(dirp) as lock:
-          newfd = os.dup(lock.dir_fd)
-          files = [ os.path.join(dirp,f) for f in os.listdir(dirp) if os.path.isfile(os.path.join(dirp,f)) ]
-          for mf in files:
-             docids,docstr,docidstr=getingested(mf)
-             deleteembeddings(docids)
-             if is_binary(mf):
-               maadstml.pgptingestdocs(mf,'binary',pgptip,pgptport,pgptendpoint)
-             else:
-               maadstml.pgptingestdocs(mf,'text',pgptip,pgptport,pgptendpoint)
+        if os.path.exists(dirp):
+          with tsslogging.LockDirectory(dirp) as lock:
+            newfd = os.dup(lock.dir_fd)
+            files = [ os.path.join(dirp,f) for f in os.listdir(dirp) if os.path.isfile(os.path.join(dirp,f)) ]
+            for mf in files:
+               docids,docstr,docidstr=getingested(mf)
+               deleteembeddings(docids)
+               if is_binary(mf):
+                 maadstml.pgptingestdocs(mf,'binary',pgptip,pgptport,pgptendpoint)
+               else:
+                 maadstml.pgptingestdocs(mf,'text',pgptip,pgptport,pgptendpoint)
 
-             docids,docstr,docidstr=getingested(mf)
-             docidstrarr.append(docidstr[0])
+               docids,docstr,docidstr=getingested(mf)
+               docidstrarr.append(docidstr[0])
+        else:
+          print("WARN Directory Path: {} does not exist".format(dirp))
+         
      time.sleep(int(default_args['docfolderingestinterval']))
      print("docidsstr=",docidstrarr)
 
