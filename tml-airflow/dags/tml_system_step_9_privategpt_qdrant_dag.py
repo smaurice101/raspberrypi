@@ -12,7 +12,7 @@ import random
 import json
 import threading
 from binaryornot.check import is_binary
-
+docidstrarr = []
 sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
@@ -320,13 +320,17 @@ def ingestfiles():
     global docidstrarr
     pgptendpoint="/v1/ingest"
     docidstrarr = []
+    basefolder='/rawdata/'
 
-    buf="/mnt/c/maads/tml-airflow/rawdata/mylogs,/mnt/c/maads/tml-airflow/rawdata/mylogs2"
+ #   buf="/mnt/c/maads/tml-airflow/rawdata/mylogs,/mnt/c/maads/tml-airflow/rawdata/mylogs2"
+    buf = default_args['docfolder']
+ 
     bufarr=buf.split(",")
     while True:
      docidstrarr = []
      for dirp in bufarr:
         # lock the directory
+        dirp = basefolder + dirp
         with tsslogging.LockDirectory(dirp) as lock:
           newfd = os.dup(lock.dir_fd)
           files = [ os.path.join(dirp,f) for f in os.listdir(dirp) if os.path.isfile(os.path.join(dirp,f)) ]
@@ -340,15 +344,19 @@ def ingestfiles():
 
              docids,docstr,docidstr=getingested(mf)
              docidstrarr.append(docidstr[0])
-     time.sleep(100)
+     time.sleep(int(default_args['docfolderingestinterval']))
      print("docidsstr=",docidstrarr)
 
-def sendtoprivategpt(maindata):
-
+def sendtoprivategpt(maindata,docfolder):
+   global docidstrarr
    counter = 0   
    maxc = 300
    pgptendpoint="/v1/completions"
-   
+
+   mcontext = False
+   if docfolder != '':
+     mcontext = True
+    
    maintopic = default_args['pgpt_data_topic']
    if os.environ['TSS']=="1":
      mainip = default_args['pgpthost']
@@ -383,7 +391,7 @@ def sendtoprivategpt(maindata):
            m = mess
            m1 = attribute #default_args['keyattribute']
             
-        response=pgptchat(m,False,"",mainport,False,mainip,pgptendpoint)
+        response=pgptchat(m,mcontext,docidstrarr,mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
         print("PGPT response=",response)
@@ -596,6 +604,9 @@ if __name__ == '__main__':
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
 
+        if docfolder != '':
+          startdirread()
+                   
         while True:
          try:
              # Get preprocessed data from Kafka
@@ -606,7 +617,7 @@ if __name__ == '__main__':
 
              # Send the data to PrivateGPT and produce to Kafka
              if len(maindata) > 0:
-              sendtoprivategpt(maindata)                      
+              sendtoprivategpt(maindata,docfolder)                      
              time.sleep(2)
          except Exception as e:
           tsslogging.locallogs("ERROR", "STEP 9: PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e))
