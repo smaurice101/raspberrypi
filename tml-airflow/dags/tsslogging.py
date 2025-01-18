@@ -177,9 +177,9 @@ def ingressnoext(sname): # Localfile being accessed
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
-               step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,step9docfolder,
-               step9docfolderingestinterval,step9useidentifierinprompt):
+               step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
+               step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
+               step9docfolderingestinterval='',step9useidentifierinprompt=''):
                
     cp = ""
     cpp = ""
@@ -394,9 +394,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
 def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                      guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                      step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-                     step9rollbackoffset,kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
-                     step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,step9docfolder,
-                     step9docfolderingestinterval,step9useidentifierinprompt,):
+                     step9rollbackoffset,kubebroker,kafkabroker,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
+                     step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
+                     step9docfolderingestinterval='',step9useidentifierinprompt=''):
     cp = ""
     cpp = ""
     
