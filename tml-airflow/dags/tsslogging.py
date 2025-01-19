@@ -179,7 +179,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
                step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
                step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
-               step9docfolderingestinterval='',step9useidentifierinprompt=''):
+               step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic=''):
                
     cp = ""
     cpp = ""
@@ -314,7 +314,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'               
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
-               value: '{}'                              
+               value: '{}'                  
+             - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
+               value: '{}'                                 
              - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more predictions to make, BUT more memory needed.
                value: '{}'                              
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
@@ -384,7 +386,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
+                           airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
@@ -396,7 +399,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
                      step9rollbackoffset,kubebroker,kafkabroker,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
                      step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
-                     step9docfolderingestinterval='',step9useidentifierinprompt=''):
+                     step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic=''):
     cp = ""
     cpp = ""
     
@@ -527,6 +530,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'               
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                              
+             - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
+               value: '{}'                                                
              - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more predictions to make, BUT more memory needed.
                value: '{}'                              
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
@@ -580,7 +585,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
+                           mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
