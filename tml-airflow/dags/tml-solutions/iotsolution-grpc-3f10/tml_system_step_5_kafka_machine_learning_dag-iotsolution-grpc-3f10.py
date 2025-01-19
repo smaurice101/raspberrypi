@@ -181,6 +181,22 @@ def startml(**context):
          rollback=os.environ['step5rollbackoffsets']
        else:  
          ti.xcom_push(key="{}_rollbackoffsets".format(sname), value="_{}".format(default_args['rollbackoffsets']))
+
+       processlogic=default_args['processlogic']
+       if 'step5processlogic' in os.environ:
+         ti.xcom_push(key="{}_processlogic".format(sname), value="{}".format(os.environ['step5processlogic']))
+         processlogic=os.environ['step5processlogic']
+       else:  
+         ti.xcom_push(key="{}_processlogic".format(sname), value="{}".format(default_args['processlogic']))
+
+       independentvariables=default_args['independentvariables']
+       if 'step5independentvariables' in os.environ:
+         ti.xcom_push(key="{}_independentvariables".format(sname), value="{}".format(os.environ['step5independentvariables']))
+         independentvariables=os.environ['step5independentvariables']
+       else:  
+         ti.xcom_push(key="{}_independentvariables".format(sname), value="{}".format(default_args['independentvariables']))
+
+  
        ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
        ti.xcom_push(key="{}_consumefrom".format(sname), value=default_args['consumefrom'])
        ti.xcom_push(key="{}_fullpathtotrainingdata".format(sname), value=default_args['fullpathtotrainingdata'])
@@ -189,7 +205,6 @@ def startml(**context):
        ti.xcom_push(key="{}_coeftoprocess".format(sname), value=default_args['coeftoprocess'])
        ti.xcom_push(key="{}_coefsubtopicnames".format(sname), value=default_args['coefsubtopicnames'])
        ti.xcom_push(key="{}_HPDEADDR".format(sname), value=HPDEADDR)
-       ti.xcom_push(key="{}_processlogic".format(sname), value=default_args['processlogic'])
 
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
@@ -200,7 +215,7 @@ def startml(**context):
        wn = windowname('ml',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:],rollback), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {} \"{}\" \"{}\"".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:],rollback,processlogic,independentvariables), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -221,6 +236,10 @@ if __name__ == '__main__':
         HPDEPORT = sys.argv[6]
         rollbackoffsets =  sys.argv[7]
         default_args['rollbackoffsets'] = rollbackoffsets
+        processlogic =  sys.argv[8]
+        default_args['processlogic'] = processlogic
+        independentvariables =  sys.argv[9]
+        default_args['independentvariables'] = independentvariables
         
         tsslogging.locallogs("INFO", "STEP 5: Machine learning started")
     
