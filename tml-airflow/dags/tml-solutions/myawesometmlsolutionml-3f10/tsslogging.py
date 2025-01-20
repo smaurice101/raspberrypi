@@ -8,6 +8,25 @@ import subprocess
 import os
 import socket
 import time
+import fcntl
+
+class LockDirectory(object):
+    def __init__(self, directory):
+        #assert os.path.exists(directory)
+        self.directory = directory
+        print(self.directory)
+
+    def __enter__(self):
+        self.dir_fd = os.open(self.directory, os.O_RDONLY)
+        try:
+            fcntl.flock(self.dir_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError as ex:             
+            raise Exception('Somebody else is locking %r - quitting.' % self.directory)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):       
+        fcntl.flock(self.dir_fd,fcntl.LOCK_UN)
+        os.close(self.dir_fd)
 
 def ingress(sname):
     
@@ -158,7 +177,10 @@ def ingressnoext(sname): # Localfile being accessed
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker,producetype):
+               step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
+               step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
+               step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables=''):
+               
     cp = ""
     cpp = ""
     if 'gRPC' in producetype:
@@ -292,11 +314,37 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'               
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
-               value: '{}'                              
+               value: '{}'                  
+             - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
+               value: '{}'                                 
+             - name: step5independentvariables # STEP 5 independent variables can be adjusted here.  
+               value: '{}'                                                               
              - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more predictions to make, BUT more memory needed.
                value: '{}'                              
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
                value: '{}'                                             
+             - name: step9prompt # STEP 9 Enter PGPT prompt
+               value: '{}'                  
+             - name: step9context # STEP 9 Enter PGPT context
+               value: '{}'             
+             - name: step9keyattribute
+               value: '{}' # Step 9 key attribtes change as needed  
+             - name: step9keyprocesstype
+               value: '{}' # Step 9 key processtypes change as needed                                
+             - name: step9hyperbatch
+               value: '{}' # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
+             - name: step9vectordbcollectionname
+               value: '{}'   # collection name in Qdrant
+             - name: step9concurrency # privateGPT concurency, if greater than 1, multiple PGPT will run
+               value: '{}'
+             - name: CUDA_VISIBLE_DEVICES
+               value: '{}' # 0 for any device or specify specific number 
+             - name: step9docfolder # privateGPT docfolder to load files in Qdrant vectorDB local context
+               value: '{}'
+             - name: step9docfolderingestinterval # privateGPT docfolderingestinterval, number of seconds to wait before reloading files in docfolder
+               value: '{}'
+             - name: step9useidentifierinprompt # privateGPT useidentifierinprompt, if 1, add TML output json field Identifier, if 0 use prompt
+               value: '{}'               
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -340,16 +388,20 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
-                      sname,sname,solutionvipervizport,sname,
-                      sname,sname,mport,cpp,sname)
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
+                           airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
+                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
+                           step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
 
 def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
-                guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
-               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker):
+                     guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
+                     step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
+                     step9rollbackoffset,kubebroker,kafkabroker,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
+                     step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
+                     step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables=''):
     cp = ""
     cpp = ""
     
@@ -480,10 +532,36 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'               
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                              
+             - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
+               value: '{}'                                                
+             - name: step5independentvariables # STEP 5 independent variables can be adjusted here.  
+               value: '{}'                                                                              
              - name: step6maxrows # STEP 6 maxrows field can be adjusted here.  Higher the number more predictions to make, BUT more memory needed.
                value: '{}'                              
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
-               value: '{}'                                             
+               value: '{}'                  
+             - name: step9prompt # STEP 9 Enter PGPT prompt
+               value: '{}'                  
+             - name: step9context # STEP 9 Enter PGPT context
+               value: '{}'                                 
+             - name: step9keyattribute
+               value: '{}' # Step 9 key attribtes change as needed  
+             - name: step9keyprocesstype
+               value: '{}' # Step 9 key processtypes change as needed                                               
+             - name: step9hyperbatch
+               value: '{}' # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
+             - name: step9vectordbcollectionname
+               value: '{}'   # collection name in Qdrant
+             - name: step9concurrency # privateGPT concurency, if greater than 1, multiple PGPT will run
+               value: '{}'
+             - name: CUDA_VISIBLE_DEVICES
+               value: '{}' # 0 for any device or specify specific number                
+             - name: step9docfolder # privateGPT docfolder to load files in Qdrant vectorDB local context
+               value: '{}'
+             - name: step9docfolderingestinterval # privateGPT docfolderingestinterval, number of seconds to wait before reloading files in docfolder
+               value: '{}'
+             - name: step9useidentifierinprompt # privateGPT useidentifierinprompt, if 1, add TML output json field Identifier, if 0 use prompt
+               value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -511,8 +589,11 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step9rollbackoffset,step1solutiontitle,step1description,kubebroker,kafkabroker,
-                      sname,sname,solutionvipervizport,sname)
+         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
+                           mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
+                           step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
+                           step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           sname,sname,solutionvipervizport,sname)
                     
     return kcmd
 
@@ -540,7 +621,7 @@ def optimizecontainer(cname,sname,sd):
       i = i + 1  
       time.sleep(5)          
     
-      if i > 18:
+      if i > 90:
          print("WARN: Unable to optimize container")
          break
         
