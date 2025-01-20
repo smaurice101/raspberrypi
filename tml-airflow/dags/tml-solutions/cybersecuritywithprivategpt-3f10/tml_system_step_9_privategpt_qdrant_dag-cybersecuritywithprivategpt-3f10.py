@@ -52,7 +52,7 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'docfolder': '',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
                    # if this field in NON-EMPTY, privateGPT will query these documents as the CONTEXT to answer your prompt
                    # separate multiple folders with a comma
- 'docfolderingestinterval': '', # how often you want TML to RE-LOAD the files in docfolder - enter the number of SECONDS
+ 'docfolderingestinterval': '300', # how often you want TML to RE-LOAD the files in docfolder - enter the number of SECONDS
  'useidentifierinprompt': '1', # If 1, this uses the identifier in the TML json output and appends it to prompt, If 0, it uses the prompt only    
 }
 
@@ -323,17 +323,25 @@ def startdirread():
 
 def deleteembeddings(docids):
   pgptendpoint="/v1/ingest/"
+  pgptip = default_args['pgpthost']
+  pgptport = default_args['pgptport'] 
   maadstml.pgptdeleteembeddings(docids,pgptip,pgptport,pgptendpoint)   
 
 
 def getingested(docname):
   pgptendpoint="/v1/ingest/list"
+  pgptip = default_args['pgpthost']
+  pgptport = default_args['pgptport']
+ 
   docids,docstr,docidsstr=maadstml.pgptgetingestedembeddings(docname,pgptip,pgptport,pgptendpoint)
   return docids,docstr,docidsstr
 
 def ingestfiles():
     global docidstrarr
     pgptendpoint="/v1/ingest"
+    pgptip = default_args['pgpthost']
+    pgptport = default_args['pgptport']
+ 
     docidstrarr = []
     basefolder='/rawdata/'
 
@@ -359,7 +367,8 @@ def ingestfiles():
                  maadstml.pgptingestdocs(mf,'text',pgptip,pgptport,pgptendpoint)
 
                docids,docstr,docidstr=getingested(mf)
-               docidstrarr.append(docidstr[0])
+               if len(docidstr)>=1:
+                 docidstrarr.append(docidstr[0])
         else:
           print("WARN Directory Path: {} does not exist".format(dirp))
          
