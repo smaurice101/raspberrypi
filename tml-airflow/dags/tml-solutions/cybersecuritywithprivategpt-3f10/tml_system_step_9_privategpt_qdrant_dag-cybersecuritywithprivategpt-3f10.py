@@ -622,7 +622,7 @@ if __name__ == '__main__':
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
 
-        if default_args['docfolder'] != '':
+        if docfolder != '':
           startdirread()
                    
         while True:
