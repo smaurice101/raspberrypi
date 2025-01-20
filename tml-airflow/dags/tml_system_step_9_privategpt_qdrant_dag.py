@@ -322,17 +322,23 @@ def startdirread():
 
 def deleteembeddings(docids):
   pgptendpoint="/v1/ingest/"
+  pgptip = default_args['pgpthost']
+  pgptport = default_args['pgptport'] 
   maadstml.pgptdeleteembeddings(docids,pgptip,pgptport,pgptendpoint)   
 
 
 def getingested(docname):
   pgptendpoint="/v1/ingest/list"
+  pgptip = default_args['pgpthost']
+  pgptport = default_args['pgptport'] 
   docids,docstr,docidsstr=maadstml.pgptgetingestedembeddings(docname,pgptip,pgptport,pgptendpoint)
   return docids,docstr,docidsstr
 
 def ingestfiles():
     global docidstrarr
     pgptendpoint="/v1/ingest"
+    pgptip = default_args['pgpthost']
+    pgptport = default_args['pgptport'] 
     docidstrarr = []
     basefolder='/rawdata/'
 
@@ -358,7 +364,8 @@ def ingestfiles():
                  maadstml.pgptingestdocs(mf,'text',pgptip,pgptport,pgptendpoint)
 
                docids,docstr,docidstr=getingested(mf)
-               docidstrarr.append(docidstr[0])
+               if len(docidstr)>=1:
+                 docidstrarr.append(docidstr[0])
         else:
           print("WARN Directory Path: {} does not exist".format(dirp))
          
@@ -621,7 +628,7 @@ if __name__ == '__main__':
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
 
-        if default_args['docfolder'] != '':
+        if docfolder != '':
           startdirread()
                    
         while True:
