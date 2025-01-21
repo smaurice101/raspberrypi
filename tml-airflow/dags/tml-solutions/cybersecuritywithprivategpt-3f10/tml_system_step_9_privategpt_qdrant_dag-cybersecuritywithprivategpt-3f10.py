@@ -65,6 +65,22 @@ HTTPADDR=""
 maintopic =  default_args['consumefrom']
 mainproducerid = default_args['producerid']
 
+def checkresponse(response):
+    print("Checkresponse")
+    if "ERROR:" in response:
+         return response
+
+    response = response.replace("null","-1").replace("\n","")
+    r1=json.loads(response)
+    c1=r1['choices'][0]['message']['content']
+    if 'Let ' in c1 and '=' in c1 and '(' in c1 and ')' in c1:
+      r1['choices'][0]['message']['content'] = "The analysis of the document(s) did not find a proper result."
+      response = json.dumps(r1)
+      return response  
+        
+    
+    return response
+
 def stopcontainers():
 
    subprocess.call("docker image ls > gptfiles.txt", shell=True)
@@ -318,13 +334,17 @@ def gatherdataforprivategpt(result):
    return privategptmessage
 
 def startdirread():
-  t = threading.Thread(name='child procs', target=ingestfiles)
-  t.start()
+  print("INFO startdirread")  
+  try:  
+    t = threading.Thread(name='child procs', target=ingestfiles)
+    t.start()
+  except Exception as e:
+    print(e)
 
 def deleteembeddings(docids):
   pgptendpoint="/v1/ingest/"
   pgptip = default_args['pgpthost']
-  pgptport = default_args['pgptport'] 
+  pgptport = default_args['pgptport']
   maadstml.pgptdeleteembeddings(docids,pgptip,pgptport,pgptendpoint)   
 
 
@@ -332,19 +352,16 @@ def getingested(docname):
   pgptendpoint="/v1/ingest/list"
   pgptip = default_args['pgpthost']
   pgptport = default_args['pgptport']
- 
   docids,docstr,docidsstr=maadstml.pgptgetingestedembeddings(docname,pgptip,pgptport,pgptendpoint)
   return docids,docstr,docidsstr
 
 def ingestfiles():
     global docidstrarr
     pgptendpoint="/v1/ingest"
-    pgptip = default_args['pgpthost']
-    pgptport = default_args['pgptport']
- 
     docidstrarr = []
     basefolder='/rawdata/'
-
+    pgptip = default_args['pgpthost']
+    pgptport = default_args['pgptport']
  #   buf="/mnt/c/maads/tml-airflow/rawdata/mylogs,/mnt/c/maads/tml-airflow/rawdata/mylogs2"
     buf = default_args['docfolder']
  
@@ -361,13 +378,15 @@ def ingestfiles():
             for mf in files:
                docids,docstr,docidstr=getingested(mf)
                deleteembeddings(docids)
+               print("INFO Ingestfiles:",mf)  
+ 
                if is_binary(mf):
                  maadstml.pgptingestdocs(mf,'binary',pgptip,pgptport,pgptendpoint)
                else:
                  maadstml.pgptingestdocs(mf,'text',pgptip,pgptport,pgptendpoint)
 
                docids,docstr,docidstr=getingested(mf)
-               if len(docidstr)>=1:
+               if len(docidstr) >=1:
                  docidstrarr.append(docidstr[0])
         else:
           print("WARN Directory Path: {} does not exist".format(dirp))
@@ -424,6 +443,7 @@ def sendtoprivategpt(maindata,docfolder):
         response=pgptchat(m,mcontext,docidstrarr,mainport,False,mainip,pgptendpoint)
         # Produce data to Kafka
         if usingqdrant != '':
+           response=checkresponse(response) 
            m = m + ' (' + usingqdrant + ')'
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"
         print("PGPT response=",response)
@@ -631,6 +651,7 @@ if __name__ == '__main__':
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
 
+        print("Docfolder=",docfolder)
         if docfolder != '':
           startdirread()
                    
