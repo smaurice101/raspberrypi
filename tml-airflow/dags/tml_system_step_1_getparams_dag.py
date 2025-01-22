@@ -30,7 +30,7 @@ default_args = {
  'WRITELASTCOMMIT' : '0',   ## <<<<<<<<< ******************** FOR DETAILS ON BELOW PARAMETER SEE: https://tml.readthedocs.io/en/latest/viper.html
  'NOWINDOWOVERLAP' : '0',
  'NUMWINDOWSFORDUPLICATECHECK' : '5',
- 'DATARETENTIONINMINUTES' : '30',
+ 'DATARETENTIONINMINUTES' : '1440',
  'USEHTTP' : '0',
  'ONPREM' : '0',
  'WRITETOVIPERDB' : '0',
