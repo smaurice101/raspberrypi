@@ -462,13 +462,13 @@ def generatedoc(**context):
  
     pdocfolderingestinterval = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolderingestinterval".format(sname))
     if pdocfolderingestinterval:
-      step9docfolderingestinterval=pdocfolderingestinterval[1:]
-      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolderingestinterval--;{}".format(step9docfolderingestinterval)])
+      step9docfolderingestinterval=pdocfolderingestinterval
+      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolderingestinterval--;{}".format(pdocfolderingestinterval[1:])])
  
     puseidentifierinprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_useidentifierinprompt".format(sname))
     if puseidentifierinprompt:
-      step9useidentifierinprompt=puseidentifierinprompt[1:]
-      doparse("/{}/docs/source/details.rst".format(sname), ["--useidentifierinprompt--;{}".format(step9useidentifierinprompt)])
+      step9useidentifierinprompt=puseidentifierinprompt
+      doparse("/{}/docs/source/details.rst".format(sname), ["--useidentifierinprompt--;{}".format(puseidentifierinprompt[1:])])
  
     pcontext = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
     if pcontext:
@@ -479,10 +479,10 @@ def generatedoc(**context):
       step9keyattribute=pkeyattribute
     pconcurrency = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_concurrency".format(sname))
     if pconcurrency:
-      step9concurrency=pconcurrency[1:]     
+      step9concurrency=pconcurrency     
     pcuda = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_cuda".format(sname))
     if pcuda:
-     cudavisibledevices=pcuda[1:]     
+     cudavisibledevices=pcuda     
     pcollection = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordbcollectionname".format(sname))    
     if pcollection:
       step9vectordbcollectionname=pcollection     
@@ -493,15 +493,15 @@ def generatedoc(**context):
       step9keyprocesstype=pprocesstype 
     hyperbatch = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_hyperbatch".format(sname))
     if hyperbatch:
-      step9hyperbatch=hyperbatch[1:]
+      step9hyperbatch=hyperbatch
     psearchterms = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_searchterms".format(sname))
     if psearchterms:
       step9searchterms=psearchterms
       doparse("/{}/docs/source/details.rst".format(sname), ["--searchterms--;{}".format(psearchterms)])
     pstreamall = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_streamall".format(sname))
     if pstreamall:
-      step9streamall=pstreamall[1:]
-      doparse("/{}/docs/source/details.rst".format(sname), ["--streamall--;{}".format(step9streamall)])
+      step9streamall=pstreamall
+      doparse("/{}/docs/source/details.rst".format(sname), ["--streamall--;{}".format(pstreamall[1:])])
      
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
@@ -776,7 +776,7 @@ def generatedoc(**context):
                        step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
                        step9rollbackoffset,kubebroker,kafkabroker,PRODUCETYPE,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
-                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,step5independentvariables,step9searchterms,step9streamall)
+                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,step5independentvariables,step9searchterms,step9streamall[1:])
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -784,7 +784,7 @@ def generatedoc(**context):
                        step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset,
                        kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
-                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,step5independentvariables,step9searchterms,step9streamall)                 
+                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,step5independentvariables,step9searchterms,step9streamall[1:])                 
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
