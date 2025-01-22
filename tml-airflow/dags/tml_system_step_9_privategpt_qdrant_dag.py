@@ -107,9 +107,9 @@ def startpgptcontainer():
           buf = "docker run -d -p {}:{} --net=host --env PORT={} --env GPU=0 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)       
       else: 
         if os.environ['TSS'] == "1":       
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=true {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
         else:
-          buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=true {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
       print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
