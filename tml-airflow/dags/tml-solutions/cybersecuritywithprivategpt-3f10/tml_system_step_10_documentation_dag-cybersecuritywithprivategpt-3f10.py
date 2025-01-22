@@ -461,13 +461,13 @@ def generatedoc(**context):
  
     pdocfolderingestinterval = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolderingestinterval".format(sname))
     if pdocfolderingestinterval:
-      step9docfolderingestinterval=pdocfolderingestinterval
-      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolderingestinterval--;{}".format(pdocfolderingestinterval)])
+      step9docfolderingestinterval=pdocfolderingestinterval[1:]
+      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolderingestinterval--;{}".format(step9docfolderingestinterval)])
  
     puseidentifierinprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_useidentifierinprompt".format(sname))
     if puseidentifierinprompt:
-      step9useidentifierinprompt=puseidentifierinprompt
-      doparse("/{}/docs/source/details.rst".format(sname), ["--useidentifierinprompt--;{}".format(puseidentifierinprompt)])
+      step9useidentifierinprompt=puseidentifierinprompt[1:]
+      doparse("/{}/docs/source/details.rst".format(sname), ["--useidentifierinprompt--;{}".format(step9useidentifierinprompt)])
  
     pcontext = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
     if pcontext:
@@ -478,10 +478,10 @@ def generatedoc(**context):
       step9keyattribute=pkeyattribute
     pconcurrency = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_concurrency".format(sname))
     if pconcurrency:
-      step9concurrency=pconcurrency     
+      step9concurrency=pconcurrency[1:]     
     pcuda = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_cuda".format(sname))
     if pcuda:
-     cudavisibledevices=pcuda     
+     cudavisibledevices=pcuda[1:]     
     pcollection = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordbcollectionname".format(sname))    
     if pcollection:
       step9vectordbcollectionname=pcollection     
@@ -492,7 +492,7 @@ def generatedoc(**context):
       step9keyprocesstype=pprocesstype 
     hyperbatch = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_hyperbatch".format(sname))
     if hyperbatch:
-      step9hyperbatch=hyperbatch
+      step9hyperbatch=hyperbatch[1:]
     psearchterms = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_searchterms".format(sname))
     if psearchterms:
       step9searchterms=psearchterms
