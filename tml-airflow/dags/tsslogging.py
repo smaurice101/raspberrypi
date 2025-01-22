@@ -179,7 +179,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
                step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
                step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
-               step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',step9searchterms=''):
+               step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',step9searchterms='',step9streamall=''):
                
     cp = ""
     cpp = ""
@@ -347,6 +347,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'               
              - name: step9searchterms # privateGPT searchterms, terms to search for in the chat response
                value: '{}'                              
+             - name: step9streamall # privateGPT streamall, if 1, stream all responses, even if search terms are missing, 0, if response contains search terms
+               value: '{}'                                             
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -393,7 +395,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
                            airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
-                           step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
@@ -403,7 +405,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
                      step9rollbackoffset,kubebroker,kafkabroker,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
                      step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
-                     step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',step9searchterms=''):
+                     step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',step9searchterms='',step9streamall=''):
     cp = ""
     cpp = ""
     
@@ -566,6 +568,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                              
              - name: step9searchterms # privateGPT searchterms, terms to search for in the chat response
                value: '{}'                                             
+             - name: step9streamall # privateGPT streamall, if 1, stream all responses, even if search terms are missing, 0, if response contains search terms
+               value: '{}'                                                            
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -596,7 +600,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
                            mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
-                           step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
     return kcmd
