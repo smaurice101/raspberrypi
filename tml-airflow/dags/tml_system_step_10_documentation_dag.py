@@ -457,14 +457,17 @@ def generatedoc(**context):
     pdocfolder = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolder".format(sname))
     if pdocfolder:
       step9docfolder=pdocfolder
+      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolder--;{}".format(pdocfolder)])
  
     pdocfolderingestinterval = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolderingestinterval".format(sname))
     if pdocfolderingestinterval:
       step9docfolderingestinterval=pdocfolderingestinterval
+      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolderingestinterval--;{}".format(pdocfolderingestinterval)])
  
     puseidentifierinprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_useidentifierinprompt".format(sname))
     if puseidentifierinprompt:
       step9useidentifierinprompt=puseidentifierinprompt
+      doparse("/{}/docs/source/details.rst".format(sname), ["--useidentifierinprompt--;{}".format(puseidentifierinprompt)])
  
     pcontext = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_context".format(sname))
     if pcontext:
@@ -493,6 +496,7 @@ def generatedoc(**context):
     psearchterms = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_searchterms".format(sname))
     if psearchterms:
       step9searchterms=psearchterms
+      doparse("/{}/docs/source/details.rst".format(sname), ["--searchterms--;{}".format(psearchterms)])
      
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
