@@ -461,8 +461,8 @@ def generatedoc(**context):
  
     pdocfolderingestinterval = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolderingestinterval".format(sname))
     if pdocfolderingestinterval:
-      step9docfolderingestinterval=pdocfolderingestinterval
-      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolderingestinterval--;{}".format(pdocfolderingestinterval)])
+      step9docfolderingestinterval=pdocfolderingestinterval[1:]
+      doparse("/{}/docs/source/details.rst".format(sname), ["--docfolderingestinterval--;{}".format(step9docfolderingestinterval)])
  
     puseidentifierinprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_useidentifierinprompt".format(sname))
     if puseidentifierinprompt:
@@ -492,7 +492,7 @@ def generatedoc(**context):
       step9keyprocesstype=pprocesstype 
     hyperbatch = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_hyperbatch".format(sname))
     if hyperbatch:
-      step9hyperbatch=hyperbatch
+      step9hyperbatch=hyperbatch[1:]
     psearchterms = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_searchterms".format(sname))
     if psearchterms:
       step9searchterms=psearchterms
