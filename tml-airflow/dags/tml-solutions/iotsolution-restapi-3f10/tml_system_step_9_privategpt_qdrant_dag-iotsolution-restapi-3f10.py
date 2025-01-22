@@ -54,7 +54,8 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
                    # separate multiple folders with a comma
  'docfolderingestinterval': '900', # how often you want TML to RE-LOAD the files in docfolder - enter the number of SECONDS
  'useidentifierinprompt': '1', # If 1, this uses the identifier in the TML json output and appends it to prompt, If 0, it uses the prompt only    
- 'searchterms': '192.168.--identifier--,authentication failure'
+ 'searchterms': '192.168.--identifier--,authentication failure',
+ 'streamall': '1'
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -467,6 +468,9 @@ def sendtoprivategpt(maindata,docfolder):
         sf="false"
         if usingqdrant != '':
            response,sf=checkresponse(response,m1) 
+           if default_args['streamall']=="0": # Only stream if search terms found in response
+              if sf=="false":
+                 response="ERROR:"
            m = m + ' (' + usingqdrant + ')'
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\",\"searchfound\":\"" + sf + "\"}"
         print("PGPT response=",response)
@@ -577,6 +581,7 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_docfolderingestinterval".format(sname), value="_{}".format(default_args['docfolderingestinterval']))
        ti.xcom_push(key="{}_useidentifierinprompt".format(sname), value="_{}".format(default_args['useidentifierinprompt']))
        ti.xcom_push(key="{}_searchterms".format(sname), value="{}".format(default_args['searchterms']))
+       ti.xcom_push(key="{}_streamall".format(sname), value="_{}".format(default_args['streamall']))
     
 
        repo=tsslogging.getrepo()
@@ -588,10 +593,10 @@ def startprivategpt(**context):
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['vectordbcollectionname'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
                        default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
-                       default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],default_args['useidentifierinprompt'],default_args['searchterms']), "ENTER"])
+                       default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall']), "ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -622,6 +627,7 @@ if __name__ == '__main__':
         docfolderingestinterval =  sys.argv[15]
         useidentifierinprompt =  sys.argv[16]
         searchterms =  sys.argv[17]
+        streamall =  sys.argv[18]
         
         default_args['rollbackoffset']=rollbackoffset
         default_args['prompt'] = prompt
@@ -638,6 +644,7 @@ if __name__ == '__main__':
         default_args['docfolderingestinterval'] = docfolderingestinterval
         default_args['useidentifierinprompt'] = useidentifierinprompt
         default_args['searchterms'] = searchterms
+        default_args['streamall'] = streamall
 
         if "KUBE" not in os.environ:          
           v,buf=qdrantcontainer()
