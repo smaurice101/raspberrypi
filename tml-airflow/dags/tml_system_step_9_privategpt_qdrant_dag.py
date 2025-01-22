@@ -468,6 +468,9 @@ def sendtoprivategpt(maindata,docfolder):
         sf="false"
         if usingqdrant != '':
            response,sf=checkresponse(response,m1) 
+           if default_args['streamall']=="0": # Only stream if search terms found in response
+              if sf=="false":
+                 response="ERROR:"
            m = m + ' (' + usingqdrant + ')'
         response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\",\"searchfound\":\"" + sf + "\"}"
         print("PGPT response=",response)
