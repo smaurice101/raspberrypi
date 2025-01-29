@@ -549,7 +549,7 @@ def startprivategpt(**context):
           if os.environ['searchterms'] != '':
             default_args['searchterms'] = os.environ['searchterms']
 
-        if 'step9temperature' in os.environ:
+       if 'step9temperature' in os.environ:
           if os.environ['temperature'] != '':
             default_args['temperature'] = os.environ['temperature']
        if 'step9vectorsearchtype' in os.environ:
