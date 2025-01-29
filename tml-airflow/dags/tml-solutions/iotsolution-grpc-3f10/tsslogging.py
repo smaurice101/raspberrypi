@@ -350,9 +350,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                              
              - name: step9streamall # privateGPT streamall, if 1, stream all responses, even if search terms are missing, 0, if response contains search terms
                value: '{}'                                             
-             - name: step9temperature # privateGPT LLM temperature, if 0, LLM model is conservative, if 1 it hallucinates
+             - name: step9temperature # privateGPT LLM temperature between 0 and 1 i.e. 0.3, if 0, LLM model is conservative, if 1 it hallucinates
                value: '{}'                                             
-             - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclidean
+             - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclid
                value: '{}'                                                            
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
@@ -576,9 +576,9 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                                             
              - name: step9streamall # privateGPT streamall, if 1, stream all responses, even if search terms are missing, 0, if response contains search terms
                value: '{}'                                                            
-             - name: step9temperature # privateGPT LLM temperature, if 0, LLM model is conservative, if 1 it hallucinates
+             - name: step9temperature # privateGPT LLM temperature between 0 and 1 i.e. 0.3, if 0, LLM model is conservative, if 1 it hallucinates
                value: '{}'                                             
-             - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclidean
+             - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclid
                value: '{}'                                                                           
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
