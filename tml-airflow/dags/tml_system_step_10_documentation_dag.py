@@ -110,6 +110,8 @@ def generatedoc(**context):
     step5independentvariables=''
     step9searchterms=''
     step9streamall=''
+    step9temperature=''
+    step9vectorsearchtype=''
 
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
@@ -502,6 +504,15 @@ def generatedoc(**context):
     if pstreamall:
       step9streamall=pstreamall
       doparse("/{}/docs/source/details.rst".format(sname), ["--streamall--;{}".format(pstreamall[1:])])
+    ptemperature = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_temperature".format(sname))
+    if ptemperature:
+      step9temperature=ptemperature
+      doparse("/{}/docs/source/details.rst".format(sname), ["--temperature--;{}".format(ptemperature[1:])])
+     
+    pvectorsearchtype = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_streamall".format(sname))
+    if pvectorsearchtype:
+      step9vectorsearchtype=pvectorsearchtype
+      doparse("/{}/docs/source/details.rst".format(sname), ["--vectorsearchtype--;{}".format(pvectorsearchtype)])
      
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
