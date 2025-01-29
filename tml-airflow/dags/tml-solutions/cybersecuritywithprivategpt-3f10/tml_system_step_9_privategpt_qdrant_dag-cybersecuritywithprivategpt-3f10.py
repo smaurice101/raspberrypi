@@ -119,17 +119,20 @@ def startpgptcontainer():
       pgptcontainername = default_args['pgptcontainername']
       pgptport = int(default_args['pgptport'])
       cuda = int(default_args['CUDA_VISIBLE_DEVICES'])
+      temp = default_args['temperature']
+      vectorsearchtype = default_args['vectorsearchtype']
+ 
       stopcontainers()
 #      buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
  #     subprocess.call(buf, shell=True)
       time.sleep(10)
       if '-no-gpu-' in pgptcontainername:       
-          buf = "docker run -d -p {}:{} --net=host --env PORT={} --env GPU=0 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)       
+          buf = "docker run -d -p {}:{} --net=host --env PORT={} --env GPU=0 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env temperature={} --env vectorsearchtype={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)       
       else: 
         if os.environ['TSS'] == "1":       
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)
         else:
-          buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
       print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
@@ -547,6 +550,13 @@ def startprivategpt(**context):
           if os.environ['searchterms'] != '':
             default_args['searchterms'] = os.environ['searchterms']
 
+       if 'step9temperature' in os.environ:
+          if os.environ['temperature'] != '':
+            default_args['temperature'] = os.environ['temperature']
+       if 'step9vectorsearchtype' in os.environ:
+          if os.environ['vectorsearchtype'] != '':
+            default_args['vectorsearchtype'] = os.environ['vectorsearchtype']
+
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESSPGPT".format(sname))
@@ -585,6 +595,8 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_useidentifierinprompt".format(sname), value="_{}".format(default_args['useidentifierinprompt']))
        ti.xcom_push(key="{}_searchterms".format(sname), value="{}".format(default_args['searchterms']))
        ti.xcom_push(key="{}_streamall".format(sname), value="_{}".format(default_args['streamall']))
+       ti.xcom_push(key="{}_temperature".format(sname), value="_{}".format(default_args['temperature']))
+       ti.xcom_push(key="{}_vectorsearchtype".format(sname), value="{}".format(default_args['vectorsearchtype']))
     
 
        repo=tsslogging.getrepo()
@@ -596,10 +608,11 @@ def startprivategpt(**context):
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['vectordbcollectionname'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
                        default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
-                       default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall']), "ENTER"])
+                       default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],
+                       default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall'],default_args['temperature'],default_args['vectorsearchtype']), "ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -631,6 +644,8 @@ if __name__ == '__main__':
         useidentifierinprompt =  sys.argv[16]
         searchterms =  sys.argv[17]
         streamall =  sys.argv[18]
+        temperature = sys.argv[19]
+        vectorsearchtype = sys.argv[20]
         
         default_args['rollbackoffset']=rollbackoffset
         default_args['prompt'] = prompt
@@ -648,6 +663,8 @@ if __name__ == '__main__':
         default_args['useidentifierinprompt'] = useidentifierinprompt
         default_args['searchterms'] = searchterms
         default_args['streamall'] = streamall
+        default_args['temperature'] = temperature
+        default_args['vectorsearchtype'] = vectorsearchtype
 
         if "KUBE" not in os.environ:          
           v,buf=qdrantcontainer()
