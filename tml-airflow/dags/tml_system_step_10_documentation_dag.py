@@ -787,7 +787,8 @@ def generatedoc(**context):
                        step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
                        step9rollbackoffset,kubebroker,kafkabroker,PRODUCETYPE,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
-                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,step5independentvariables,step9searchterms,step9streamall[1:])
+                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
+                       step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -795,7 +796,8 @@ def generatedoc(**context):
                        step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset,
                        kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
-                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,step5independentvariables,step9searchterms,step9streamall[1:])                 
+                       step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
+                       step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype)                 
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
