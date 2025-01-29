@@ -57,7 +57,7 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'searchterms': '192.168.--identifier--,authentication failure',
  'streamall': '1',
  'temperature' : '0.1', # This value ranges between 0 and 1, it controls how conservative LLM model will be, if 0 very very, if 1 it will hallucinate
- 'vectorsearchtype' : 'Manhattan', # this is for the Qdrant Search algorithm.  it can be: Cosine, Euclidean, Dot, or Manhattan
+ 'vectorsearchtype' : 'Manhattan', # this is for the Qdrant Search algorithm.  it can be: Cosine, Euclid, Dot, or Manhattan
 
 }
 
