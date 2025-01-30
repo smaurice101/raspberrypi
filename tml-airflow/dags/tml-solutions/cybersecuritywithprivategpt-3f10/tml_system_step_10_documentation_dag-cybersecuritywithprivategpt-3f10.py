@@ -591,8 +591,8 @@ def generatedoc(**context):
          step9vectorsize='384' 
         elif '-v3' in pgptcontainername and '-v3-large' not in pgptcontainername:
          step9llmmodel='Mistral-7B-Instruct-v0.3.Q4_K_M.gguf'
-         step9embedding='BAAI/bge-small-en-v1.5'
-         step9vectorsize='384'          
+         step9embedding='BAAI/bge-base-en-v1.5'
+         step9vectorsize='768'          
         elif '-v3-large' in pgptcontainername:
          step9llmmodel='Mistral-7B-Instruct-v0.3.Q4_K_M.gguf'
          step9embedding='BAAI/bge-m3'
