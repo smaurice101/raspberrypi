@@ -354,12 +354,6 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                                             
              - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclid
                value: '{}'                                                            
-             - name: llmmodel # privateGPT LLM model used
-               value: '{}'                                                            
-             - name: embedding # privateGPT Embedding for LLM model
-               value: '{}'                                                                 
-             - name: embeddingvectorsize # privateGPT Embedding vector size
-               value: '{}'                                                                                          
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -407,7 +401,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step9llmmodel,step9embedding,step9vectorsize,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
@@ -587,12 +581,6 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                                             
              - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclid
                value: '{}'                                                                           
-             - name: llmmodel # privateGPT LLM model used
-               value: '{}'                                                            
-             - name: embedding # privateGPT Embedding for LLM model
-               value: '{}'                                                                 
-             - name: embeddingvectorsize # privateGPT Embedding vector size
-               value: '{}'                                                                                                         
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -624,7 +612,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                            mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step9llmmodel,step9embedding,step9vectorsize,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
     return kcmd
