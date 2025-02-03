@@ -585,22 +585,9 @@ def generatedoc(**context):
     step9vectorsize='' 
     if pgptcontainername != None:
         privategptrun = "docker run -d -p {}:{} --net=host --gpus all --env PORT={} --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport[1:],pgptport[1:],pgptport[1:],pcollection,pconcurrency[1:],pcuda[1:],pgptcontainername)
-        if '-v2' in pgptcontainername:
-         step9llmmodel='mistral-7b-instruct-v0.2.Q4_K_M.gguf'
-         step9embedding='BAAI/bge-small-en-v1.5'
-         step9vectorsize='384' 
-        elif '-v3' in pgptcontainername and '-v3-large' not in pgptcontainername:
-         step9llmmodel='Mistral-7B-Instruct-v0.3.Q4_K_M.gguf'
-         step9embedding='BAAI/bge-base-en-v1.5'
-         step9vectorsize='768'          
-        elif '-v3-large' in pgptcontainername:
-         step9llmmodel='Mistral-7B-Instruct-v0.3.Q4_K_M.gguf'
-         step9embedding='BAAI/bge-m3'
-         step9vectorsize='1024'                   
-        else:  
-         step9llmmodel='mistral-7b-instruct-v0.1.Q4_K_M.gguf'
-         step9embedding='BAAI/bge-small-en-v1.5'
-         step9vectorsize='384'
+        step9llmmodel='Refer to: https://tml.readthedocs.io/en/latest/genai.html'
+        step9embedding='Refer to: https://tml.readthedocs.io/en/latest/genai.html'
+        step9vectorsize='Refer to: https://tml.readthedocs.io/en/latest/genai.html'
 
         doparse("/{}/docs/source/details.rst".format(sname), ["--llmmodel--;{}".format(step9llmmodel)])
         doparse("/{}/docs/source/details.rst".format(sname), ["--embedding--;{}".format(step9embedding)])
