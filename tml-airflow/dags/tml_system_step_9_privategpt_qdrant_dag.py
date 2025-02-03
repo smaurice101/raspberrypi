@@ -100,7 +100,8 @@ def checkresponse(response,ident):
     return response,st
 
 def stopcontainers():
-
+   pgptcontainername = default_args['pgptcontainername']
+   cfound=0
    subprocess.call("docker image ls > gptfiles.txt", shell=True)
    with open('gptfiles.txt', 'r', encoding='utf-8') as file:
         data = file.readlines()
@@ -109,8 +110,13 @@ def stopcontainers():
           darr = d.split(" ")
           if '-privategpt-' in darr[0]:
             buf="docker stop $(docker ps -q --filter ancestor={} )".format(darr[0])
+            if pgptcontainername in darr[0]:
+                cfound=1  
             print(buf)
             subprocess.call(buf, shell=True)
+   if cfound==0:
+      print("INFO STEP 9: PrivateGPT container {} not found.  It may need to be pulled.".format(pgptcontainername))
+      tsslogging.locallogs("WARN", "STEP 9: PrivateGPT container not found. It may need to be pulled if it does not start: docker pull {}".format(pgptcontainername))
 
 def startpgptcontainer():
       collection = default_args['vectordbcollectionname']
