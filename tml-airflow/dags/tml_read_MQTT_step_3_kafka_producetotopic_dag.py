@@ -47,7 +47,7 @@ VIPERHOST=""
 VIPERPORT=""
 HTTPADDR=""  
 VIPERHOSTFROM=""
-    
+# this is change 5    
 # setting callbacks for different events to see if it works, print the message etc.
 def on_connect(client, userdata, flags, rc, properties=None):
   print("CONNACK received with code %s." % rc)
