@@ -53,6 +53,7 @@ HPDEHOSTPREDICT=''
 HPDEPORTPREDICT=''
 HTTPADDR=""    
 
+# that is a change
 # Set Global variable for Viper confifuration file - change the folder path for your computer
 viperconfigfile="/Viper-predict/viper.env"
 
