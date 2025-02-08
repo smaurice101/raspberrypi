@@ -555,7 +555,7 @@ def generatedoc(**context):
           --env GITREPOURL={} \\
           --env SOLUTIONEXTERNALPORT={} \\
           -v /var/run/docker.sock:/var/run/docker.sock:z \\
-          -v /your_localmachine/foldername:/rawdata:z \\          
+          -v /your_localmachine/foldername:/rawdata:z \\
           --env CHIP={} \\
           --env SOLUTIONAIRFLOWPORT={} \\
           --env SOLUTIONVIPERVIZPORT={} \\
@@ -702,8 +702,8 @@ def generatedoc(**context):
                     " \-\-env READTHEDOCS='<Enter your readthedocs token>' " \
                     " \-\-env GITPASSWORD='<Enter personal access token>' " \
                     " \-\-env DOCKERPASSWORD='<Enter your docker hub password>' " \
-                    " \-\-env MQTTPASSWORD='<Enter your mqtt password>' " \    
-                    " \-\-env UPDATE=1 " \ 
+                    " \-\-env MQTTPASSWORD='<Enter your mqtt password>' " \
+                    " \-\-env UPDATE=1 " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport[1:],os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],
                             os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],mqttusername,kafkacloudusername,chip))
