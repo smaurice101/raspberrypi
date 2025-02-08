@@ -524,6 +524,7 @@ def generatedoc(**context):
           --env GITREPOURL={} \\
           --env SOLUTIONEXTERNALPORT={} \\
           -v /var/run/docker.sock:/var/run/docker.sock:z  \\
+          -v /your_localmachine/foldername:/rawdata:z \\
           --env CHIP={} \\
           --env SOLUTIONAIRFLOWPORT={}  \\
           --env SOLUTIONVIPERVIZPORT={} \\
@@ -554,6 +555,7 @@ def generatedoc(**context):
           --env GITREPOURL={} \\
           --env SOLUTIONEXTERNALPORT={} \\
           -v /var/run/docker.sock:/var/run/docker.sock:z \\
+          -v /your_localmachine/foldername:/rawdata:z \\
           --env CHIP={} \\
           --env SOLUTIONAIRFLOWPORT={} \\
           --env SOLUTIONVIPERVIZPORT={} \\
@@ -687,6 +689,7 @@ def generatedoc(**context):
     tssdockerrun = ("docker run -d \-\-net=host \-\-env AIRFLOWPORT={} " \
                     " -v <change to your local folder>:/dagslocalbackup:z " \
                     " -v /var/run/docker.sock:/var/run/docker.sock:z " \
+                    " -v /your_localmachine/foldername:/rawdata:z " \
                     " \-\-env GITREPOURL={} " \
                     " \-\-env CHIP={} \-\-env TSS=1 \-\-env SOLUTIONNAME=TSS " \
                     " \-\-env EXTERNALPORT={} " \
@@ -700,6 +703,7 @@ def generatedoc(**context):
                     " \-\-env GITPASSWORD='<Enter personal access token>' " \
                     " \-\-env DOCKERPASSWORD='<Enter your docker hub password>' " \
                     " \-\-env MQTTPASSWORD='<Enter your mqtt password>' " \
+                    " \-\-env UPDATE=1 " \
                     " maadsdocker/tml-solution-studio-with-airflow-{}".format(airflowport[1:],os.environ['GITREPOURL'],
                             chip,externalport[1:],vipervizport[1:],
                             os.environ['GITUSERNAME'],os.environ['DOCKERUSERNAME'],mqttusername,kafkacloudusername,chip))
