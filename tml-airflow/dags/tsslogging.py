@@ -49,7 +49,7 @@ def rtdsolution(sname,did):
             command="/tmux/rtdprojects.sh {}".format(sname) 
             ret = subprocess.run(command, shell=True)
             time.sleep(5)
-        sname=sname.replace("_","-")
+        #sname=sname.replace("_","-")
         return sname
     
 def ingress(sname):
