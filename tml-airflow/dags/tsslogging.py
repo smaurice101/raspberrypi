@@ -48,7 +48,8 @@ def rtdsolution(sname,did):
         if not os.path.isdir("/{}".format(sname)):     
             command="/tmux/rtdprojects.sh {}".format(sname) 
             ret = subprocess.run(command, shell=True)
-
+            time.sleep(5)
+        sname=sname.replace("_","-")
         return sname
     
 def ingress(sname):
