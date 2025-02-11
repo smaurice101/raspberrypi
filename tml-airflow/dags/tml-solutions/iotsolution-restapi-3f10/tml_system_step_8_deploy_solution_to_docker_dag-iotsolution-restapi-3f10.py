@@ -12,7 +12,7 @@ import sys
 
 sys.dont_write_bytecode = True
 
-############################################################### DO NOT MODIFY BELOW ####################################################
+############################################################### DO NOT MODIFY BELOW ####################################################    
 
 def doparse(fname,farr):
       data = ''
@@ -36,6 +36,7 @@ def dockerit(**context):
      
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
         
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Docker DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
@@ -81,8 +82,8 @@ def dockerit(**context):
            
        os.environ['tssbuild']="1"
     
-       doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,sname,sname), ["--solution-name--;{}".format(sname)])
-       doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,sname,sname), ["--solution-dag--;{}".format(sd)])
+       doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,pname,pname), ["--solution-name--;{}".format(sname)])
+       doparse("/{}/tml-airflow/dags/tml-solutions/{}/docker_run_stop-{}.py".format(repo,pname,pname), ["--solution-dag--;{}".format(sd)])
     
      except Exception as e:
         print("[ERROR] Step 8: ",e)
