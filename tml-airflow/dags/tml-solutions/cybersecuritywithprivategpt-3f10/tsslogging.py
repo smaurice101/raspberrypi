@@ -28,6 +28,30 @@ class LockDirectory(object):
         fcntl.flock(self.dir_fd,fcntl.LOCK_UN)
         os.close(self.dir_fd)
 
+def rtdsolution(pname,did):
+# this is needed if user copies a project from another user to create readthedocs documentation url
+        dTOKEN = os.environ['READTHEDOCS'][:4]
+        sname=pname
+        sd = did
+        sdm=''
+        if 'solution_preprocessing_dag-' not in sd:  #normal dag solution
+             if 'solution_preprocessing_dag_' in sd:
+                 sdm = sd[27:len(sd)-len(sname)]
+                 sname = "{}-{}".format(sname,sdm)
+             else:    
+                 sdm = sd[23:len(sd)-len(sname)-5]
+                 sname = "{}-{}".format(sname,sdm)
+
+        if dTOKEN not in sname:
+             sname = "{}-{}".format(sname,dTOKEN)
+
+        if not os.path.isdir("/{}".format(sname)):     
+            command="/tmux/rtdprojects.sh {}".format(sname) 
+            ret = subprocess.run(command, shell=True)
+            time.sleep(5)
+        #sname=sname.replace("_","-")
+        return sname
+    
 def ingress(sname):
     
   ing = """
