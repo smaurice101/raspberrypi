@@ -280,7 +280,7 @@ def getparams(**context):
 
   sd = context['dag'].dag_id 
   pname = args['solutionname']    
-  sname = args['solutionname']    
+  sname = tsslogging.rtdprojects(pname,sd)
 
   if 'step1description' in os.environ:
     desc = os.environ['step1description']
