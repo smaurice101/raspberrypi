@@ -93,7 +93,7 @@ def generatedoc(**context):
     
     sd = context['dag'].dag_id
     sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
-    rtdsname = tsslogging.rtdprojects(sname,sd)
+#    rtdsname = tsslogging.rtdprojects(sname,sd)
 
     kube=0
     step9prompt=''
