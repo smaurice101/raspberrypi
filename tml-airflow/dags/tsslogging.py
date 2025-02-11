@@ -38,7 +38,7 @@ def rtdsolution(pname,did):
              if 'solution_preprocessing_dag_' in sd:
                  sdm = sd[27:len(sd)-len(sname)]
                  sname = "{}-{}".format(sname,sdm)
-              else:    
+             else:    
                  sdm = sd[23:len(sd)-len(sname)-5]
                  sname = "{}-{}".format(sname,sdm)
 
