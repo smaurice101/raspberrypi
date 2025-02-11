@@ -167,7 +167,7 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/index.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--solutiontitle--/{}/g".format(stitle), "/{}/docs/source/index.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--solutiondescription--/{}/g".format(sdesc), "/{}/docs/source/index.rst".format(sname)])
-    subprocess.call(["sed", "-i", "-e",  "s/--projectname--/{}/g".format(sdesc), "/{}/docs/source/index.rst".format(sname)])
+    subprocess.call(["sed", "-i", "-e",  "s/--projectname--/{}/g".format(projectname), "/{}/docs/source/index.rst".format(sname)])
 
     subprocess.call(["sed", "-i", "-e",  "s/--solutionname--/{}/g".format(sname), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--sname--/{}/g".format(sname), "/{}/docs/source/details.rst".format(sname)])
