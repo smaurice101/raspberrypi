@@ -28,10 +28,10 @@ class LockDirectory(object):
         fcntl.flock(self.dir_fd,fcntl.LOCK_UN)
         os.close(self.dir_fd)
 
-def rtdsolution(sname,did):
+def rtdsolution(pname,did):
 # this is needed if user copies a project from another user to create readthedocs documentation url
         dTOKEN = os.environ['READTHEDOCS'][:4]
-        
+        sname=pname
         sd = did
         sdm=''
         if 'solution_preprocessing_dag-' not in sd:  #normal dag solution
