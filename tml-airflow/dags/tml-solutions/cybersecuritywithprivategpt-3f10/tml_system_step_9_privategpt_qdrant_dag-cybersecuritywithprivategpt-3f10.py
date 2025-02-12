@@ -38,7 +38,7 @@ default_args = {
  'pgptport' : '8001', # PrivateGPT listening on this port
  'preprocesstype' : '', # Leave as is 
  'partition' : '-1', # Leave as is 
- 'prompt': '[INST] Are there any errors in the  logs? Give s detailed response including IP addresses and host machines.[/INST]', # Enter your prompt here
+ 'prompt': '[INST] Are there any errors in the logs associated with rhost=--identifier--? Give a detailed response including IP addresses and host machines.[/INST]', # Enter your prompt here
  'context' : 'This is network data from inbound and outbound packets. The data are \
 anomaly probabilities for cyber threats from analysis of inbound and outbound packets. If inbound or outbound \
 anomaly probabilities are less than 0.60, it is likely the risk of a cyber attack is also low. If its above 0.60, then risk is mid to high.', # what is this data about? Provide context to PrivateGPT
@@ -57,8 +57,7 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'searchterms': '192.168.--identifier--,authentication failure',
  'streamall': '1',
  'temperature' : '0.1', # This value ranges between 0 and 1, it controls how conservative LLM model will be, if 0 very very, if 1 it will hallucinate
- 'vectorsearchtype' : 'Manhattan', # this is for the Qdrant Search algorithm.  it can be: Cosine, Euclid, Dot, or Manhattan
-
+ 'vectorsearchtype' : 'Manhattan', # this is for the Qdrant Search algorithm.  it can be: Cosine, Euclidean, Dot, or Manhattan 
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
