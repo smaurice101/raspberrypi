@@ -511,6 +511,7 @@ def windowname(wtype,sname,dagname):
 def startprivategpt(**context):
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
 
        if 'step9rollbackoffset' in os.environ:
           if os.environ['step9rollbackoffset'] != '':
@@ -606,7 +607,7 @@ def startprivategpt(**context):
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
-        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))
 
