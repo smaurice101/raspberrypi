@@ -53,6 +53,7 @@ HPDEHOSTPREDICT=''
 HPDEPORTPREDICT=''
 HTTPADDR=""    
 
+# that is a change 2
 # Set Global variable for Viper confifuration file - change the folder path for your computer
 viperconfigfile="/Viper-predict/viper.env"
 
@@ -144,6 +145,7 @@ def startpredictions(**context):
     
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
        
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREDICT".format(sname))
@@ -178,7 +180,7 @@ def startpredictions(**context):
     
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
-        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             

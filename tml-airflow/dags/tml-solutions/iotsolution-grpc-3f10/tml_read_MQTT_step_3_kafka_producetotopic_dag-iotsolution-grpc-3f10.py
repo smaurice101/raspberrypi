@@ -39,6 +39,7 @@ default_args = {
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
+
     
 # This sets the lat/longs for the IoT devices so it can be map
 VIPERTOKEN=""
@@ -46,7 +47,7 @@ VIPERHOST=""
 VIPERPORT=""
 HTTPADDR=""  
 VIPERHOSTFROM=""
-    
+# this is change 5    
 # setting callbacks for different events to see if it works, print the message etc.
 def on_connect(client, userdata, flags, rc, properties=None):
   print("CONNACK received with code %s." % rc)
@@ -158,6 +159,7 @@ def startproducing(**context):
         
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
 
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
@@ -178,7 +180,7 @@ def startproducing(**context):
        ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
        ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="_{}".format(default_args['mqtt_port']))
 
-       ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+       ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
        ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
@@ -186,7 +188,7 @@ def startproducing(**context):
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))          
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
-        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             

@@ -29,7 +29,6 @@ default_args = {
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-
 # This sets the lat/longs for the IoT devices so it can be map
 VIPERTOKEN=""
 VIPERHOST=""
@@ -69,9 +68,13 @@ def readdata():
     file1 = open(inputfile, 'r')
     print("Data Producing to Kafka Started:",datetime.now())
   except Exception as e:
+    tsslogging.locallogs("ERROR", "Localfile producing DAG in {} - {}".format(os.path.basename(__file__),e))     
+    
     tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
     return
+
+  tsslogging.locallogs("INFO", "STEP 3: reading local file..successfully")   
 
   while True:
     line = file1.readline()
@@ -106,9 +109,12 @@ def windowname(wtype,sname,dagname):
 
 def startproducing(**context):
 
+  tsslogging.locallogs("INFO", "STEP 3: producing data started")     
+  
   sd = context['dag'].dag_id
 
   sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+  pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
   VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
@@ -127,7 +133,7 @@ def startproducing(**context):
   ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="")
   ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="")
     
-  ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
+  ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
   ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
         
   chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))   
@@ -135,11 +141,10 @@ def startproducing(**context):
   repo=tsslogging.getrepo() 
 
   if sname != '_mysolution_':
-     fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))  
+     fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
   else:
      fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
-  
-
+    
   wn = windowname('produce',sname,sd)  
   subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
   subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])

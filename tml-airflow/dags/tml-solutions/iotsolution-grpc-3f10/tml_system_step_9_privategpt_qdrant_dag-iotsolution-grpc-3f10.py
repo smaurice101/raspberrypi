@@ -100,7 +100,8 @@ def checkresponse(response,ident):
     return response,st
 
 def stopcontainers():
-
+   pgptcontainername = default_args['pgptcontainername']
+   cfound=0
    subprocess.call("docker image ls > gptfiles.txt", shell=True)
    with open('gptfiles.txt', 'r', encoding='utf-8') as file:
         data = file.readlines()
@@ -109,8 +110,13 @@ def stopcontainers():
           darr = d.split(" ")
           if '-privategpt-' in darr[0]:
             buf="docker stop $(docker ps -q --filter ancestor={} )".format(darr[0])
+            if pgptcontainername in darr[0]:
+                cfound=1  
             print(buf)
             subprocess.call(buf, shell=True)
+   if cfound==0:
+      print("INFO STEP 9: PrivateGPT container {} not found.  It may need to be pulled.".format(pgptcontainername))
+      tsslogging.locallogs("WARN", "STEP 9: PrivateGPT container not found. It may need to be pulled if it does not start: docker pull {}".format(pgptcontainername))
 
 def startpgptcontainer():
       collection = default_args['vectordbcollectionname']
@@ -505,6 +511,7 @@ def windowname(wtype,sname,dagname):
 def startprivategpt(**context):
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+       pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
 
        if 'step9rollbackoffset' in os.environ:
           if os.environ['step9rollbackoffset'] != '':
@@ -600,7 +607,7 @@ def startprivategpt(**context):
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
-        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,sname,os.path.basename(__file__))
+        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))
 
