@@ -57,8 +57,8 @@ def startstreamingengine(**context):
         tss = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_TSS".format(sname)) 
 
         if '_ml_ai_' in sd:
-          topic = default_args['topic-ai']
-          dashboardhtml = default_args['dashboardhtml-ai']  
+          topic = default_args['topic-ml-ai']
+          dashboardhtml = default_args['dashboardhtml-ml-ai']  
         elif '_ai_' in sd:
           topic = default_args['topic-ai']
           dashboardhtml = default_args['dashboardhtml-ai']
