@@ -53,13 +53,21 @@ def startstreamingengine(**context):
         vipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERVIZPORT".format(sname)) 
         solutionvipervizport = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_SOLUTIONVIPERVIZPORT".format(sname)) 
         tss = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_TSS".format(sname)) 
-    
-        topic = default_args['topic']
+
+        if '_ai_' in sd:
+          topic = default_args['topic-ai']
+          dashboardhtml = default_args['dashboardhtml-ai']
+        elif '_ml_' in sd:  
+          topic = default_args['topic-ml']
+          dashboardhtml = default_args['dashboardhtml-ml']
+        else:  
+          topic = default_args['topic']
+          dashboardhtml = default_args['dashboardhtml']
+
         secure = default_args['secure']
         offset = default_args['offset']
         append = default_args['append']
         rollbackoffset = default_args['rollbackoffset']
-        dashboardhtml = default_args['dashboardhtml']
                 
         ti = context['task_instance']
         ti.xcom_push(key="{}_topic".format(sname),value=topic)
