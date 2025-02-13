@@ -241,7 +241,7 @@ if __name__ == '__main__':
         default_args['processlogic'] = processlogic
         independentvariables =  sys.argv[9]
         default_args['independentvariables'] = independentvariables
-        
+        subprocess.run("rm -rf {}".format(default_args['fullpathtotrainingdata']), shell=True)                 
         tsslogging.locallogs("INFO", "STEP 5: Machine learning started")
     
         while True:
