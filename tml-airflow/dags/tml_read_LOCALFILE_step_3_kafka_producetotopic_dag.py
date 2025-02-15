@@ -107,7 +107,7 @@ def ingestfiles():
 
       
 def startdirread():
-  if 'docfolder' not in default_args and 'doctopic' not in default_args and 'chunks' not in default_args:
+  if 'docfolder' not in default_args and 'doctopic' not in default_args and 'chunks' not in default_args and 'docingestinterval' not in default_args:
      return
     
   if default_args['docfolder'] != '' and default_args['doctopic'] != '':
