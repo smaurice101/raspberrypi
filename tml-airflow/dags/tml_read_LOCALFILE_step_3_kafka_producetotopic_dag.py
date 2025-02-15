@@ -11,6 +11,10 @@ import subprocess
 import json 
 import time
 import random 
+import threading
+from contextlib import contextmanager
+from contextlib import ExitStack
+import re
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -25,6 +29,8 @@ default_args = {
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify  
   'sleep' : 0.15, # << Control how fast data streams - if 0 - the data will stream as fast as possible - BUT this may cause connecion reset by peer 
+  'docfolder':'', # You can read TEXT files or any file in these folders that are inside the volume mapped to /rawdata
+  'doctopic':'',  # This is the topic that will contain the docfolder file data
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -33,7 +39,67 @@ default_args = {
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-  
+
+def read_in_chunks(file_object, chunk_size=1024):
+    """Lazy function (generator) to read a file piece by piece.
+    Default chunk size: 1k."""
+    while True:
+        try:
+          if chunk_size != 0:
+            data = file_object.read(chunk_size).decode('utf-8')            
+            if len(data)>0 and data[-1] != ' ':
+                 ct=0
+                 for c in reversed(data):
+                   if c == ' ':
+                        break
+                   ct = ct +1
+                 if ct < len(data):
+                   file_object.seek(file_object.tell()-ct)
+                   data = data[:len(data)-ct]
+          else:
+            data = file_object.readline().decode('utf-8')            
+          data=data.replace('"','').replace("'","").replace("\\n"," ").replace('\n'," ").replace("\\r"," ").replace('\r'," ").strip()
+          if not data:
+               break
+          yield data          
+        except Exception as e:
+           break
+
+def readallfiles(fd,cs=1024):
+  fdata = []  
+  #with open(filename,"r") as f:
+  for piece in read_in_chunks(fd,cs):
+        piece=re.sub(' +', ' ', piece)
+        fdata.append(piece)
+  return fdata    
+
+def ingestfiles():
+    buf = default_args['docfolder']
+    #gather files in the folders
+    dirbuf = buf.split(",")
+    filenames = []
+    for dr in dirbuf:
+      if os.path.isdir("/rawdata/{}".format(dr)):
+        a = [os.path.join("/rawdata/{}".format(dr), f) for f in os.listdir("/rawdata/{}".format(dr)) if 
+        os.path.isfile(os.path.join("/rawdata/{}".format(dr), f))]
+        filenames.extend(a)
+
+    if len(filenames) > 0:
+      with ExitStack() as stack:
+        files = [stack.enter_context(open(i, "rb")) for i in filenames]
+        contents = [readallfiles(file,chunks) for file in files]
+        for d in contents:
+            dstr = ','.join(d)
+            print(dstr) # send to Kafka
+      
+def startdirread():
+  if default_args['docfolder'] != '' and default_args['doctopic'] != '':
+    print("INFO startdirread")  
+    try:  
+      t = threading.Thread(name='child procs', target=ingestfiles)
+      t.start()
+    except Exception as e:
+      print(e)
   
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
  inputbuf=value     
