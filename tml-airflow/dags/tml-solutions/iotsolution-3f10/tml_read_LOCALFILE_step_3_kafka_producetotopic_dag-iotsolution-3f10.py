@@ -25,6 +25,10 @@ default_args = {
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify  
   'sleep' : 0.15, # << Control how fast data streams - if 0 - the data will stream as fast as possible - BUT this may cause connecion reset by peer 
+  'docfolder' : '', # You can read TEXT files or any file in these folders that are inside the volume mapped to /rawdata
+  'doctopic' : '',  # This is the topic that will contain the docfolder file data
+  'chunks' : 0, # if 0 the files in docfolder are read line by line, otherwise they are read by chunks i.e. 512
+  
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
