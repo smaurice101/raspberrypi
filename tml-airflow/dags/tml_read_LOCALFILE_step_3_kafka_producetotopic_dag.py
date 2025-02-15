@@ -60,7 +60,7 @@ def read_in_chunks(file_object, chunk_size=1024):
                    data = data[:len(data)-ct]
           else:
             data = file_object.readline().decode('utf-8')            
-          data=data.replace('"','').replace("'","").replace("\\n"," ").replace('\n'," ").replace("\\r"," ").replace('\r'," ").strip()
+          data=data.replace('"','').replace("'","").replace("\\n"," ").replace('\n'," ").replace("\\r"," ").replace('\r'," ").replace('{',"").replace('}',"").strip()
           if not data:
                break
           yield data          
