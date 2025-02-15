@@ -99,7 +99,8 @@ def ingestfiles():
           contents = [readallfiles(file,chunks) for file in files]
           for d in contents:
               dstr = ','.join(d)
-              producetokafka(dstr.strip(), "", "",producerid,maintopic,"",args)
+              jd = '{"message":"' + dstr + '"}'
+              producetokafka(jd, "", "",producerid,maintopic,"",args)
       if interval==0:
         break
       else:  
