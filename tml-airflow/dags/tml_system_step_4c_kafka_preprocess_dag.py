@@ -25,7 +25,6 @@ default_args = {
   'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
   'brokerport' : '-999',  # <<< *** Leave as is   
-  'preprocessconditions' : '', ## <<< Leave blank      
   'delay' : '70', # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
   'array' : '0', # do not modify
   'saveasarray' : '1', # do not modify
