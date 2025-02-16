@@ -35,16 +35,14 @@ default_args = {
   'timedelay' : '0', # <<< connection delay
   'tmlfilepath' : '', # leave blank
   'usemysql' : '1', # do not modify
-  'entitystream' : 'Voltage_preprocessed_AnomProb', # Change as needed - STREAM containing entities to cross-reference for RTMS
+  'rtmsstream' : 'rtms-data', # Change as needed - STREAM containing entities to cross-reference for RTMS
                                                     # If entitystream is empty, TML uses the preprocess type only.
   'identifier' : 'RTMS Past Memory of Events', # <<< ** Change as needed
-  'preprocesstypes' : '&authentication failures,--entity--', # main Search terms, if AND add &, if OR use | s first characters, default OR
+  'searchterms' : '&authentication failures,--entity--', # main Search terms, if AND add &, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
-                                                             # dynamically with the entities found in entitystream
+                                                             # dynamically with the entities found in raw_data_topic
   'rememberpastwindows' : '50', # Past windows to remember
-  'patternscorethreshold' : '20', # check for the number of patterns for the items in preprocesstypes
-  'pathtotmlattrs' : '', # Leave blank
-  'jsoncriteria' : '', #  Leave blank
+  'patternscorethreshold' : '20', # check for the number of patterns for the items in searchterms
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
