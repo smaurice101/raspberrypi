@@ -45,7 +45,6 @@ default_args = {
   'patternscorethreshold' : '20', # check for the number of patterns for the items in preprocesstypes
   'pathtotmlattrs' : '', # Leave blank
   'jsoncriteria' : '', #  Leave blank
-  'identifier' : 'TML solution',   # <<< *** Change as needed   
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
