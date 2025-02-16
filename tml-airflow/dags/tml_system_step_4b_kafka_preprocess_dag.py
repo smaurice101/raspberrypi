@@ -36,11 +36,10 @@ default_args = {
   'tmlfilepath' : '', # leave blank
   'usemysql' : '1', # do not modify
   'streamstojoin' : 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # Change as needed - THESE VARIABLES ARE CREATED BY TML IN tml_system_step_4_kafka_preprocess2_dag.py
-  'identifier' : 'IoT device performance and failures', # <<< ** Change as needed - THIS IS TAKING AVG of variables in streamstojoin
+  'identifier' : 'IoT device performance and failures', # <<< ** Change as needed
   'preprocesstypes' : 'avg,avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'pathtotmlattrs' : 'oem=n/a,lat=n/a,long=n/a,location=n/a,identifier=n/a', # Change as needed     
   'jsoncriteria' : '', # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
-  'identifier' : 'TML solution',   # <<< *** Change as needed   
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
