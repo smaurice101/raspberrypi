@@ -204,7 +204,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
                step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
                step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
-               step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',step9vectorsize=''):
+               step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',
+               step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
+               step4cpatternscorethreshold='',step4crtmsstream=''):
                
     cp = ""
     cpp = ""
@@ -337,7 +339,19 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step4maxrows # STEP 4 maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'
              - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'                                    
+             - name: step4cmaxrows # STEP 4c maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'               
+             - name: step4crawdatatopic # STEP 4c
+               value: '{}'               
+             - name: step4csearchterms # STEP 4c 
+               value: '{}'               
+             - name: step4crememberpastwindows # STEP 4c 
+               value: '{}'               
+             - name: step4cpatternscorethreshold # STEP 4c 
+               value: '{}'               
+             - name: step4crtmsstream # STEP 4c 
+               value: '{}'                              
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                  
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -422,7 +436,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
-                           airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
+                           airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
+                           step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
@@ -436,7 +451,9 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step9rollbackoffset,kubebroker,kafkabroker,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
                      step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
                      step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
-                     step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',step9vectorsize=''):
+                     step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',step9vectorsize='',
+                     step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
+                     step4cpatternscorethreshold='',step4crtmsstream=''):
     cp = ""
     cpp = ""
     
@@ -565,6 +582,18 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'
              - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'               
+             - name: step4cmaxrows # STEP 4c maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
+               value: '{}'               
+             - name: step4crawdatatopic # STEP 4c
+               value: '{}'               
+             - name: step4csearchterms # STEP 4c 
+               value: '{}'               
+             - name: step4crememberpastwindows # STEP 4c 
+               value: '{}'               
+             - name: step4cpatternscorethreshold # STEP 4c 
+               value: '{}'               
+             - name: step4crtmsstream # STEP 4c 
+               value: '{}'                              
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                              
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -633,7 +662,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
-                           mqttuser,airflowport,step4maxrows,step4bmaxrows,step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
+                           mqttuser,airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
+                           step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
