@@ -11,6 +11,10 @@ import subprocess
 import json 
 import time
 import random 
+import threading
+from contextlib import contextmanager
+from contextlib import ExitStack
+import re
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -19,16 +23,16 @@ default_args = {
   'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '', # <<< *** leave blank
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
-  'topics' : 'cisco-network-mainstream', # *************** This is one of the topic you created in SYSTEM STEP 2
+  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',   # <<< *** Change as needed   
-  'inputfile' : '/rawdatademo/cisco_network_data.txt',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'inputfile' : '/rawdatademo/IoTData.txt',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify  
   'sleep' : 0.15, # << Control how fast data streams - if 0 - the data will stream as fast as possible - BUT this may cause connecion reset by peer 
   'docfolder' : '', # You can read TEXT files or any file in these folders that are inside the volume mapped to /rawdata
   'doctopic' : '',  # This is the topic that will contain the docfolder file data
-  'chunks' : 0, # if 0 the files in docfolder are read line by line, otherwise they are read by chunks i.e. 512  
-  'docingestinterval' : 0, # specify the frequency in seconds to read files in docfolder - if 0 the files are read ONCE  
+  'chunks' : 0, # if 0 the files in docfolder are read line by line, otherwise they are read by chunks i.e. 512
+  'docingestinterval' : 0, # specify the frequency in seconds to read files in docfolder - if 0 the files are read ONCE
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -37,7 +41,110 @@ default_args = {
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-  
+
+def read_in_chunks(file_object, chunk_size=1024):
+    """Lazy function (generator) to read a file piece by piece.
+    Default chunk size: 1k."""
+    while True:
+        try:
+          if chunk_size != 0:
+            data = file_object.read(chunk_size).decode('utf-8')            
+            if len(data)>0 and data[-1] != ' ':
+                 ct=0
+                 for c in reversed(data):
+                   if c == ' ':
+                        break
+                   ct = ct +1
+                 if ct < len(data):
+                   file_object.seek(file_object.tell()-ct)
+                   data = data[:len(data)-ct]
+          else:
+            data = file_object.readline().decode('utf-8')            
+          data=data.replace('"','').replace("'","").replace("\\n"," ").replace('\n'," ").replace("\\r"," ").replace('\r'," ").strip()
+          if not data:
+               break
+          yield data          
+        except Exception as e:
+           break
+
+def readallfiles(fd,cs=1024):
+  fdata = []  
+  #with open(filename,"r") as f:
+  for piece in read_in_chunks(fd,cs):
+        piece=re.sub(' +', ' ', piece)
+        fdata.append(piece)
+  return fdata    
+
+def ingestfiles():
+    args = default_args
+    buf = default_args['docfolder']
+    chunks = int(default_args['chunks'])
+    maintopic = default_args['doctopic']
+    producerid='userfilestream'     
+    interval=int(default_args['docingestinterval'])
+
+    #gather files in the folders
+    dirbuf = buf.split(",")
+    # check if user wants to split folders to separate topics
+    maintopicbuf = maintopic.split(",")
+    if len(maintopicbuf) > 1:
+      if len(dirbuf) != len(maintopicbuf):
+        tsslogging.locallogs("ERROR", "STEP 3: Produce LOCALFILE in {} You specified multiple doctopics, then must match docfolder".format(os.path.basename(__file__)))
+        return
+      while True:
+       for dr,tr in zip(dirbuf,maintopicbuf):
+         filenames = []
+         if os.path.isdir("/rawdata/{}".format(dr)):
+           a = [os.path.join("/rawdata/{}".format(dr), f) for f in os.listdir("/rawdata/{}".format(dr)) if 
+           os.path.isfile(os.path.join("/rawdata/{}".format(dr), f))]
+           filenames.extend(a)
+
+           if len(filenames) > 0:
+             with ExitStack() as stack:
+               files = [stack.enter_context(open(i, "rb")) for i in filenames]
+               contents = [readallfiles(file,chunks) for file in files]
+               for d in contents:
+                  dstr = ','.join(d)
+                  #jd = '{"message":"' + dstr + '"}'
+                  producetokafka(dstr, "", "",producerid,tr,"",args)
+       if interval==0:
+         break
+       else:  
+        time.sleep(interval)         
+    else:
+     while True:
+      filenames = []
+      for dr in dirbuf:
+        if os.path.isdir("/rawdata/{}".format(dr)):
+          a = [os.path.join("/rawdata/{}".format(dr), f) for f in os.listdir("/rawdata/{}".format(dr)) if 
+          os.path.isfile(os.path.join("/rawdata/{}".format(dr), f))]
+          filenames.extend(a)
+
+      if len(filenames) > 0:
+        with ExitStack() as stack:
+          files = [stack.enter_context(open(i, "rb")) for i in filenames]
+          contents = [readallfiles(file,chunks) for file in files]
+          for d in contents:
+              dstr = ','.join(d)
+              #jd = '{"message":"' + dstr + '"}'
+              producetokafka(dstr, "", "",producerid,maintopic,"",args)
+      if interval==0:
+        break
+      else:  
+       time.sleep(interval)
+
+      
+def startdirread():
+  if 'docfolder' not in default_args and 'doctopic' not in default_args and 'chunks' not in default_args and 'docingestinterval' not in default_args:
+     return
+    
+  if default_args['docfolder'] != '' and default_args['doctopic'] != '':
+    print("INFO startdirread")  
+    try:  
+      t = threading.Thread(name='child procs', target=ingestfiles)
+      t.start()
+    except Exception as e:
+      print(e)
   
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
  inputbuf=value     
@@ -123,16 +230,6 @@ def startproducing(**context):
   VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
   VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
   HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
-  if 'docfolder' in default_args and 'doctopic' in default_args:
-    ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
-    ti.xcom_push(key="{}_doctopic".format(sname),value=default_args['doctopic'])
-    ti.xcom_push(key="{}_chunks".format(sname),value="_{}".format(default_args['chunks']))
-    ti.xcom_push(key="{}_docingestinterval".format(sname),value="_{}".format(default_args['docingestinterval']))
-  else:  
-    ti.xcom_push(key="{}_docfolder".format(sname),value='')
-    ti.xcom_push(key="{}_doctopic".format(sname),value='')
-    ti.xcom_push(key="{}_chunks".format(sname),value='')
-    ti.xcom_push(key="{}_docingestinterval".format(sname),value='')
 
   VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
   ti = context['task_instance']
@@ -149,6 +246,17 @@ def startproducing(**context):
     
   ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
   ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
+
+  if 'docfolder' in default_args and 'doctopic' in default_args:
+    ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
+    ti.xcom_push(key="{}_doctopic".format(sname),value=default_args['doctopic'])
+    ti.xcom_push(key="{}_chunks".format(sname),value="_{}".format(default_args['chunks']))
+    ti.xcom_push(key="{}_docingestinterval".format(sname),value="_{}".format(default_args['docingestinterval']))
+  else:  
+    ti.xcom_push(key="{}_docfolder".format(sname),value='')
+    ti.xcom_push(key="{}_doctopic".format(sname),value='')
+    ti.xcom_push(key="{}_chunks".format(sname),value='')
+    ti.xcom_push(key="{}_docingestinterval".format(sname),value='')
         
   chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))   
 
