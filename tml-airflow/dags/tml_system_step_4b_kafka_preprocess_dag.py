@@ -112,8 +112,6 @@ def processtransactiondata():
          preprocesstypes=default_args['preprocesstypes']
 
          pathtotmlattrs=default_args['pathtotmlattrs']       
-         raw_data_topic = default_args['raw_data_topic']  
-         preprocess_data_topic = default_args['preprocess_data_topic']  
 
          try:
                 result=maadstml.viperpreprocessproducetotopicstream(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
