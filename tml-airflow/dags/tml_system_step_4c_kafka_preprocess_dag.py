@@ -159,12 +159,12 @@ def dopreprocessing(**context):
        else:  
          ti.xcom_push(key="{}_searchterms".format(sname), value=default_args['searchterms'])
 
-       rawdatatopic=default_args['raw_data_topic']
+       raw_data_topic=default_args['raw_data_topic']
        if 'step4crawdatatopic' in os.environ:
-         ti.xcom_push(key="{}_rawdatatopic".format(sname), value="{}".format(os.environ['step4crawdatatopic']))         
-         rawdatatopic=os.environ['step4crawdatatopic']
+         ti.xcom_push(key="{}_raw_data_topic".format(sname), value="{}".format(os.environ['step4crawdatatopic']))         
+         raw_data_topic=os.environ['step4crawdatatopic']
        else:  
-         ti.xcom_push(key="{}_rawdatatopic".format(sname), value=default_args['raw_data_topic'])
+         ti.xcom_push(key="{}_raw_data_topic".format(sname), value=default_args['raw_data_topic'])
 
        rememberpastwindows=default_args['rememberpastwindows']
        if 'step4crememberpastwindows' in os.environ:
@@ -189,7 +189,7 @@ def dopreprocessing(**context):
        wn = windowname('preprocess2',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess2", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternscorethreshold,rawdatatopic), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternscorethreshold,raw_data_topic), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
