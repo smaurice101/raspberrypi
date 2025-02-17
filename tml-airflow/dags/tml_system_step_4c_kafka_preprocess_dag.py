@@ -102,24 +102,21 @@ def processtransactiondata():
          asynctimeout=int(default_args['asynctimeout'])
          timedelay=int(default_args['timedelay'])
 
-         jsoncriteria = default_args['jsoncriteria']
-
          tmlfilepath=default_args['tmlfilepath']
          usemysql=int(default_args['usemysql'])
 
-         streamstojoin=default_args['streamstojoin']
+         rtmsstream=default_args['rtmsstream']
          identifier = default_args['identifier']
 
-         # if dataage - use:dataage_utcoffset_timetype
-         preprocesstypes=default_args['preprocesstypes']
+         searchterms=default_args['searchterms']
 
-         pathtotmlattrs=default_args['pathtotmlattrs']       
-         raw_data_topic = default_args['raw_data_topic']  
-         preprocess_data_topic = default_args['preprocess_data_topic']  
+         rememberpastwindows = default_args['rememberpastwindows']  
+         patternscorethreshold = default_args['patternscorethreshold']  
 
          try:
-                result=maadstml.viperpreprocessproducetotopicstream(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
-                                                  brokerport,microserviceid,topicid,streamstojoin,preprocesstypes,preprocessconditions,identifier,preprocesstopic)
+                result=maadstml.viperpreprocessrtms(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
+                                                  brokerport,microserviceid,topicid,rtmsstream,searchterms,rememberpastwindows,identifier,
+                                                  preprocesstopic,patternscorethreshold)
                 #print(result)
          except Exception as e:
                 print("ERROR:",e)
