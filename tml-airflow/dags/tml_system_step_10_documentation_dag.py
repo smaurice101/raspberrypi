@@ -113,6 +113,11 @@ def generatedoc(**context):
     step9streamall=''
     step9temperature=''
     step9vectorsearchtype=''
+    step4crawdatatopic=''
+    step4csearchterms=''
+    step4crememberpastwindows=''
+    step4cpatternscorethreshold=''
+    step4crtmsstream=''
 
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
@@ -368,6 +373,11 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--identifier3--/{}/g".format(identifier), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--maxrows3--/{}/g".format(maxrows4c[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--searchterms--/{}/g".format(searchterms), "/{}/docs/source/details.rst".format(sname)])
+        step4crawdatatopic=raw_data_topic
+        step4csearchterms=searchterms
+        step4crememberpastwindows=rememberpastwindows
+        step4cpatternscorethreshold=patternscorethreshold
+        step4crtmsstream=rtmsstream
 
     preprocess_data_topic = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_preprocess_data_topic".format(sname))
     ml_data_topic = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_ml_data_topic".format(sname))
@@ -826,6 +836,11 @@ def generatedoc(**context):
     else: 
       step4bmaxrows=-1 
 
+    if maxrows4c: 
+      step4cmaxrows=maxrows4c[1:]
+    else: 
+      step4cmaxrows=-1 
+
     if rollbackoffsets:
       step5rollbackoffsets=rollbackoffsets[1:]
     else:
@@ -855,7 +870,8 @@ def generatedoc(**context):
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
                        step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
                        step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype,
-                       step9llmmodel,step9embedding,step9vectorsize)
+                       step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
+                       step4cpatternscorethreshold[1:],step4crtmsstream)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -865,7 +881,8 @@ def generatedoc(**context):
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
                        step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
                        step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype,
-                       step9llmmodel,step9embedding,step9vectorsize)
+                       step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
+                       step4cpatternscorethreshold[1:],step4crtmsstream)
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
