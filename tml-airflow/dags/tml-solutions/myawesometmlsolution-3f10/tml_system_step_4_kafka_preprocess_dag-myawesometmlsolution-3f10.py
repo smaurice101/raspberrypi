@@ -116,10 +116,7 @@ def processtransactiondata():
 
  # if dataage - use:dataage_utcoffset_timetype
  preprocesstypes=default_args['preprocesstypes']
-
  pathtotmlattrs=default_args['pathtotmlattrs']       
- raw_data_topic = default_args['raw_data_topic']  
- preprocess_data_topic = default_args['preprocess_data_topic']  
     
  try:
     result=maadstml.viperpreprocesscustomjson(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,jsoncriteria,rawdataoutput,maxrows,enabletls,delay,brokerhost,
