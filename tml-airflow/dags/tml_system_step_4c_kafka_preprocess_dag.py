@@ -34,7 +34,7 @@ default_args = {
   'timedelay' : '0', # <<< connection delay
   'tmlfilepath' : '', # leave blank
   'usemysql' : '1', # do not modify
-  'rtmsstream' : 'rtms-data', # Change as needed - STREAM containing entities to cross-reference for RTMS
+  'rtmsstream' : 'rtms-data', # Change as needed - STREAM containing log file data (or other data) for RTMS
                                                     # If entitystream is empty, TML uses the preprocess type only.
   'identifier' : 'RTMS Past Memory of Events', # <<< ** Change as needed
   'searchterms' : '&authentication failures,--entity--', # main Search terms, if AND add &, if OR use | s first characters, default OR
