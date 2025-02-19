@@ -72,6 +72,7 @@ default_args = {
  'SSL_CLIENT_KEY_FILE' : 'client.key.pem', 
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
  'KUBERNETES' : '0',
+ 'RTMSMAXWINDOWS' : '10000', 
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
