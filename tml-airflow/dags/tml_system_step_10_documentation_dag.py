@@ -372,7 +372,7 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--patternscorethreshold--/{}/g".format(patternscorethreshold[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--identifier3--/{}/g".format(identifier), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--maxrows3--/{}/g".format(maxrows4c[1:]), "/{}/docs/source/details.rst".format(sname)])
-        subprocess.call(["sed", "-i", "-e",  "s/--searchterms--/{}/g".format(searchterms), "/{}/docs/source/details.rst".format(sname)])
+        subprocess.call(["sed", "-i", "-e",  "s/--rtmssearchterms--/{}/g".format(searchterms), "/{}/docs/source/details.rst".format(sname)])
         step4crawdatatopic=raw_data_topic
         step4csearchterms=searchterms
         step4crememberpastwindows=rememberpastwindows
