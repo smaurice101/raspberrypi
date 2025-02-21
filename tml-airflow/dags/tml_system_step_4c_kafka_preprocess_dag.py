@@ -195,8 +195,8 @@ def dopreprocessing(**context):
             
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess2", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternscorethreshold,raw_data_topic,rtmsstream), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess3", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} {} \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternscorethreshold,raw_data_topic,rtmsstream), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -234,7 +234,7 @@ if __name__ == '__main__':
             processtransactiondata()
             time.sleep(1)
           except Exception as e:     
-           tsslogging.locallogs("ERROR", "STEP 4c: Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e))
+           tsslogging.locallogs("ERROR", "STEP 4c: Preprocessing3 DAG in {} {}".format(os.path.basename(__file__),e))
            tsslogging.tsslogit("Preprocessing3 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
            break
