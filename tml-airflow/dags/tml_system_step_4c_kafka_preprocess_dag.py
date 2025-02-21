@@ -145,12 +145,12 @@ def dopreprocessing(**context):
        ti.xcom_push(key="{}_usemysql".format(sname), value="_{}".format(default_args['usemysql']))
        ti.xcom_push(key="{}_identifier".format(sname), value=default_args['identifier'])
 
-       rtmstream=default_args['rtmstream']
+       rtmsstream=default_args['rtmsstream']
        if 'step4crtmsstream' in os.environ:
          ti.xcom_push(key="{}_rtmsstream".format(sname), value=os.environ['step4crtmsstream'])
-         rtmstream=os.environ['step4crtmsstream']
+         rtmsstream=os.environ['step4crtmsstream']
        else:  
-         ti.xcom_push(key="{}_rtmsstream".format(sname), value=default_args['rtmstream'])
+         ti.xcom_push(key="{}_rtmsstream".format(sname), value=default_args['rtmsstream'])
 
        maxrows=default_args['maxrows']
        if 'step4cmaxrows' in os.environ:
@@ -196,7 +196,7 @@ def dopreprocessing(**context):
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess2", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternscorethreshold,raw_data_topic), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternscorethreshold,raw_data_topic,rtmsstream), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -224,6 +224,8 @@ if __name__ == '__main__':
         default_args['patternscorethreshold'] = patternscorethreshold
         rawdatatopic =  sys.argv[9]
         default_args['raw_data_topic'] = rawdatatopic
+        rtmsstream =  sys.argv[10]
+        default_args['rtmsstream'] = rtmsstream
          
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
 
