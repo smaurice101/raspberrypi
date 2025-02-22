@@ -173,7 +173,7 @@ def readdata():
   # MAin Kafka topic to store the real-time data
   maintopic = args['topics']
   producerid = args['producerid']
-  if maintopic=='':
+  if maintopic=='' or inputfile=='':
      return
   k=0
   try:
