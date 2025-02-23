@@ -70,10 +70,12 @@ def read_in_chunks(file_object, chunk_size=1024):
 def readallfiles(fd,tr,cs=1024):
   args=default_args
   producerid='userfilestream'
-  print("fd===",fd.name)
+  print("fd=",fd.name)
   for piece in read_in_chunks(fd,cs):
         piece=re.sub(' +', ' ', piece)
-        producetokafka(piece, "", "",producerid,tr,"",args)
+        pj='{"RTMSMessage":"' + piece + '"}'
+        
+        producetokafka(pj, "", "",producerid,tr,"",args)
   return []    
 
 def ingestfiles():
