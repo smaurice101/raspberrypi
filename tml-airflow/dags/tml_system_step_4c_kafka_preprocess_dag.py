@@ -21,28 +21,27 @@ default_args = {
   'producerid' : 'rtmssolution',   # <<< *** Change as needed   
   'raw_data_topic' : 'iot-preprocess', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
   'preprocess_data_topic' : 'iot-preprocess2', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'maxrows' : '350', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
+  'maxrows' : '50', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
   'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
   'brokerport' : '-999',  # <<< *** Leave as is   
   'delay' : '70', # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
   'array' : '0', # do not modify
   'saveasarray' : '1', # do not modify
-  'topicid' : '-1', # do not modify
+  'topicid' : '-999', # do not modify
   'rawdataoutput' : '1', # <<< 1 to output raw data used in the preprocessing, 0 do not output
   'asynctimeout' : '120', # <<< 120 seconds for connection timeout 
   'timedelay' : '0', # <<< connection delay
   'tmlfilepath' : '', # leave blank
   'usemysql' : '1', # do not modify
-  'rtmsstream' : 'rtms-data', # Change as needed - STREAM containing log file data (or other data) for RTMS
+  'rtmsstream' : 'rtms-stream-mylogs,rtms-stream-mylogs2', # Change as needed - STREAM containing log file data (or other data) for RTMS
                                                     # If entitystream is empty, TML uses the preprocess type only.
   'identifier' : 'RTMS Past Memory of Events', # <<< ** Change as needed
-  'searchterms' : '$authentication failures,--entity--', # main Search terms, if AND add $, if OR use | s first characters, default OR
+  'searchterms' : '$authentication failures,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add $, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
                                                              # dynamically with the entities found in raw_data_topic
-                                                             # use ~ to separate search terms for difference rtmsstreams topics
-  'rememberpastwindows' : '50', # Past windows to remember
-  'patternscorethreshold' : '20', # check for the number of patterns for the items in searchterms
+  'rememberpastwindows' : '500', # Past windows to remember
+  'patternscorethreshold' : '30', # check for the number of patterns for the items in searchterms
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -108,7 +107,7 @@ def processtransactiondata():
                 result=maadstml.viperpreprocessrtms(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
                                                   brokerport,microserviceid,topicid,rtmsstream,searchterms,rememberpastwindows,identifier,
                                                   preprocesstopic,patternscorethreshold,array,saveasarray,rawdataoutput)
-                #print(result)
+#                print(result)
          except Exception as e:
                 print("ERROR:",e)
 
