@@ -61,20 +61,20 @@ def updatebranch(sname,branch):
             headers=HEADERS,
         )
     
-def setupurls(projectname,producetype):
+def setupurls(projectname,producetype,sname):
 
-  ptype=""
-  if producetype=="LOCALFILE":
-    ptype=producetype
-  elif producetype=="REST":
-    ptype="RESTAPI"
-  elif producetype=="MQTT":
-    ptype=producetype
-  elif producetype=="gRPC":
-    ptype=producetype
+    ptype=""
+    if producetype=="LOCALFILE":
+      ptype=producetype
+    elif producetype=="REST":
+      ptype="RESTAPI"
+    elif producetype=="MQTT":
+      ptype=producetype
+    elif producetype=="gRPC":
+      ptype=producetype
 
     
-    stepurll="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_1_getparams_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
+    stepurl1="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_1_getparams_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl2="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_2_kafka_createtopic_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl3="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_read_{}_step_3_kafka_producetotopic_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,ptype,projectname)
     stepurl4="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_4_kafka_preprocess_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
@@ -87,7 +87,9 @@ def setupurls(projectname,producetype):
     stepurl9="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_9_privategpt_qdrant_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl10="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_10_documentation_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
 
-    doparse("/{}/docs/source/details.rst".format(sname), ["--step1url--;{}".format(stepurll)])
+    print("stepurl1=",stepurl1)
+    
+    doparse("/{}/docs/source/details.rst".format(sname), ["--step1url--;{}".format(stepurl1)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--step2url--;{}".format(stepurl2)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--step3url--;{}".format(stepurl3)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--step4url--;{}".format(stepurl4)])
@@ -98,7 +100,7 @@ def setupurls(projectname,producetype):
     doparse("/{}/docs/source/details.rst".format(sname), ["--step7url--;{}".format(stepurl7)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--step8url--;{}".format(stepurl8)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--step9url--;{}".format(stepurl9)])
-    doparse("/{}/docs/source/details.rst".format(sname), ["--step10url--;{}".format(stepurll0)])
+    doparse("/{}/docs/source/details.rst".format(sname), ["--step10url--;{}".format(stepurl10)])
     
 def doparse(fname,farr):
       data = ''
@@ -273,6 +275,8 @@ def generatedoc(**context):
     CLIENTPORT = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_CLIENTPORT".format(sname))              
     TSSCLIENTPORT = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_TSSCLIENTPORT".format(sname))              
     TMLCLIENTPORT = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_TMLCLIENTPORT".format(sname))              
+
+    setupurls(projectname,PRODUCETYPE,sname)
 
     if PRODUCETYPE=='LOCALFILE':
       docfolderprocess = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_docfolder".format(sname))
@@ -846,7 +850,6 @@ def generatedoc(**context):
                                                                               hpdehost,hpdeport[1:],hpdepredicthost,hpdepredictport[1:] ))
  
 
-    setupurls(projectname,PRODUCETYPE)
     subprocess.call(["sed", "-i", "-e",  "s/--tmlbinaries--/{}/g".format(tmlbinaries), "/{}/docs/source/operating.rst".format(sname)])
     ########################## Kubernetes
    
@@ -1014,3 +1017,4 @@ def generatedoc(**context):
      print("INFO: Your Documentation will be found here: https://{}.readthedocs.io/en/latest".format(snamertd))
     except Exception as e:
      print("ERROR=",e)
+
