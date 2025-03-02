@@ -285,6 +285,15 @@ def getparams(**context):
   except Exception as e:
     pass
 
+  try: 
+     shutil.rmtree("/rawdata/rtms") 
+  except Exception as e:
+     pass
+  try: 
+    shutil.rmtree("") 
+  exception Exception as e:
+    pass
+ 
   sd = context['dag'].dag_id 
   pname = args['solutionname']    
   sname = tsslogging.rtdsolution(pname,sd)
