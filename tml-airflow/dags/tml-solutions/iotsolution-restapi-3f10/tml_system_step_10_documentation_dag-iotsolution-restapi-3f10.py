@@ -158,7 +158,9 @@ def generatedoc(**context):
     step4crememberpastwindows=''
     step4cpatternscorethreshold=''
     step4crtmsstream=''
-
+    rtmsoutputurl=""
+    mloutputurl=""
+ 
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
              kube=1
@@ -415,6 +417,8 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--identifier3--/{}/g".format(identifier), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--maxrows3--/{}/g".format(maxrows4c[1:]), "/{}/docs/source/details.rst".format(sname)])
         doparse("/{}/docs/source/details.rst".format(sname), ["--rtmssearchterms--;{}".format(searchterms)])
+        rtmsoutputurl="https:\/\/github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/rtms".format(os.environ["GITUSERNAME"], tsslogging.getrepo(),projectname)
+        doparse("/{}/docs/source/details.rst".format(sname), ["--rtmsoutputurl--;{}".format(rtmsoutputurl)])
 
         step4crawdatatopic=raw_data_topic
         step4csearchterms=searchterms
@@ -443,6 +447,12 @@ def generatedoc(**context):
     coeftoprocess = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_coeftoprocess".format(sname))
     coefsubtopicnames = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_coefsubtopicnames".format(sname))
     processlogic = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_processlogic".format(sname))
+    if fullpathtotrainingdata:
+         step5sp=fullpathtotrainingdata.split("/")
+         if len(step5sp)>0:
+           mloutputurl="https:\/\/github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/{}".format(os.environ["GITUSERNAME"], tsslogging.getrepo(),projectname,step5sp[-1])
+           doparse("/{}/docs/source/details.rst".format(sname), ["--mloutputurl--;{}".format(mloutputurl)])
+     
     if processlogic:
       step5processlogic = processlogic
      
@@ -914,7 +924,7 @@ def generatedoc(**context):
                        step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
                        step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype,
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
-                       step4cpatternscorethreshold[1:],step4crtmsstream)
+                       step4cpatternscorethreshold[1:],step4crtmsstream,projectname)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -925,7 +935,7 @@ def generatedoc(**context):
                        step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
                        step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype,
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
-                       step4cpatternscorethreshold[1:],step4crtmsstream)
+                       step4cpatternscorethreshold[1:],step4crtmsstream,projectname)
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
@@ -1017,4 +1027,3 @@ def generatedoc(**context):
      print("INFO: Your Documentation will be found here: https://{}.readthedocs.io/en/latest".format(snamertd))
     except Exception as e:
      print("ERROR=",e)
-
