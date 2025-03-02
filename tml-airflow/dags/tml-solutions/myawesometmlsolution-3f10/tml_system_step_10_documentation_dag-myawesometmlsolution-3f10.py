@@ -450,7 +450,7 @@ def generatedoc(**context):
     if fullpathtotrainingdata:
          step5sp=fullpathtotrainingdata.split("/")
          if len(step5sp)>0:
-           mloutputurl="https:\/\/github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/{}".format(os.environ["GITUSERNAME"], tsslogging.getrepo(),projectname,step5sp[-1])
+           mloutputurl="https:\/\/github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/mldata/{}".format(os.environ["GITUSERNAME"], tsslogging.getrepo(),projectname,step5sp[-1])
            doparse("/{}/docs/source/details.rst".format(sname), ["--mloutputurl--;{}".format(mloutputurl)])
      
     if processlogic:
