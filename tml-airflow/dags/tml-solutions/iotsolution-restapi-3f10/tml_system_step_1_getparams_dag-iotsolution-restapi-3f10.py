@@ -278,6 +278,12 @@ def getparams(**context):
   HPDEPORTPREDICT = ""
 
   tsslogging.locallogs("INFO", "STEP 1: Build started") 
+  try: 
+    f = open("/tmux/step1solution.txt", "w")
+    f.write(default_args['solutionname'])
+    f.close()
+  except Exception as e:
+    pass
 
   sd = context['dag'].dag_id 
   pname = args['solutionname']    
