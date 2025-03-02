@@ -206,7 +206,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
                step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',
                step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
-               step4cpatternscorethreshold='',step4crtmsstream=''):
+               step4cpatternscorethreshold='',step4crtmsstream='',projectname=''):
                
     cp = ""
     cpp = ""
@@ -282,6 +282,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              env:
              - name: TSS
                value: '0'
+             - name: PROJECTNAME
+               value: '{}'               
              - name: SOLUTIONNAME
                value: '{}'
              - name: SOLUTIONDAG
@@ -435,7 +437,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
+         app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
                            airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
@@ -453,7 +455,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
                      step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',step9vectorsize='',
                      step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
-                     step4cpatternscorethreshold='',step4crtmsstream=''):
+                     step4cpatternscorethreshold='',step4crtmsstream='',projectname=''):
     cp = ""
     cpp = ""
     
@@ -524,6 +526,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              env:
              - name: TSS
                value: '0'
+             - name: PROJECTNAME
+               value: '{}'                              
              - name: SOLUTIONNAME
                value: '{}'
              - name: SOLUTIONDAG
@@ -661,7 +665,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          protocol: TCP
          targetPort: {}
        selector:
-         app: {}""".format(sname,sname,sname,sname,containername,cp,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
+         app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
                            mqttuser,airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
