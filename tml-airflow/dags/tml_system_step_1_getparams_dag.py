@@ -290,8 +290,10 @@ def getparams(**context):
   except Exception as e:
      pass
   try: 
-    shutil.rmtree("") 
-  exception Exception as e:
+     with open("/tmux/step5.txt", "r") as f:
+         dirbuf=f.read()
+         shutil.rmtree(dirbuf) 
+  except Exception as e:
     pass
  
   sd = context['dag'].dag_id 
