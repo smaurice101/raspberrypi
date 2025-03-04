@@ -166,41 +166,43 @@ def ingestfiles():
         tsslogging.locallogs("ERROR", "STEP 4c:Preprocess in {} You specified multiple doctopics, they must match localsearchtermfolder".format(os.path.basename(__file__)))
         return
 
-  #myset = set(mylist)
     while True:  
-      filenames = []
-      logics = []
+      lg=""
+      searchtermsfile=""
       for dr in dirbuf:        
+         filenames = []
+         linebuf="" 
          if dr != "":
             if dr[0]=='@':
               dr = dr[1:]
-              logics.append("@")
+              lg="@"
             elif dr[0]=='|':
               dr = dr[1:]
-              logics.append("|")
+              lg="|"
             else:  
-              logics.append("|")
+              lg="|"
 
          if os.path.isdir("/rawdata/{}".format(dr)):            
            a = [os.path.join("/rawdata/{}".format(dr), f) for f in os.listdir("/rawdata/{}".format(dr)) if 
            os.path.isfile(os.path.join("/rawdata/{}".format(dr), f))]
            filenames.extend(a)
-#s = s.strip()      
-      if len(filenames) > 0 and len(filenames)==len(logics):
-         filenames = set(filenames)         
-         logics = set(logics)
-         
-         for fdr,lg in zip(filenames,logics):            
-            with open(fdr) as f:
+
+         if len(filenames) > 0:
+           filenames = set(filenames)
+           
+           for fdr in filenames:            
+             with open(fdr) as f:
               lines = [line.rstrip('\n').strip() for line in f]
               lines = set(lines)
-              linebuf = ','.join(lines)
-              searchtermsfile = searchtermsfile + lg + linebuf +";"
-         searchtermsfile = searchtermsfile[:-1]    
-         searchtermsfile=updatesearchterms(searchtermsfile)
-         default_args['searchterms']=searchtermsfile
-      else:
-             tsslogging.locallogs("WARN", "STEP 4c: The number of search folders do not match the rtms topics")
+              linebuf = linebuf + ','.join(lines) + ","
+
+         if linebuf != "":
+           linebuf = linebuf[:-1]
+           searchtermsfile = searchtermsfile + lg + linebuf +";"
+      if searchtermsfile != "":    
+        searchtermsfile = searchtermsfile[:-1]    
+        searchtermsfile=updatesearchterms(searchtermsfile)
+        default_args['searchterms']=searchtermsfile
 
       if interval==0:
         break
