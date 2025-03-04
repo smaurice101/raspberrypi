@@ -40,13 +40,13 @@ default_args = {
   'searchterms' : '@authentication failure,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
                                                              # dynamically with the entities found in raw_data_topic
-  'localsearchtermfolder': '', # Specify a folder of files containing search terms - each term must be on a new line - use semicolon 
+  'localsearchtermfolder': '', # Specify a folder of files containing search terms - each term must be on a new line - use comma
                                # to apply each folder to the rtmstream topic
                                # Use @ =AND, |=OR to specify whether the terms in the file should be AND, OR
                                # For example, @mysearchfolder1,|mysearchfolder2, means all terms in mysearchfolder1 should be AND
                                # |mysearchfolder2, means all search terms should be OR'ed
-  'localsearchtermfolderinterval': '', # This is the number of seconds between reading the localsearchtermfolder.  For example, if 30, 
-                                       # The files will be read every 30 seconds - and searchterms will be updated
+  'localsearchtermfolderinterval': '60', # This is the number of seconds between reading the localsearchtermfolder.  For example, if 60, 
+                                       # The files will be read every 60 seconds - and searchterms will be updated
   'rememberpastwindows' : '500', # Past windows to remember
   'patternscorethreshold' : '30', # check for the number of patterns for the items in searchterms
 }
@@ -124,9 +124,101 @@ def windowname(wtype,sname,dagname):
     wn = "python-{}-{}-{},{}".format(wtype,randomNumber,sname,dagname)
     with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
       file.writelines("{}\n".format(wn))
-    
+
     return wn
 
+def updatesearchterms(searchtermsfile):
+    # check if search terms exist    
+    stcurr = default_args['searchterms']
+    stcurrfile = default_args['searchtermsfile']  
+    mainsearchterms=""
+  
+    if stcurr != "":
+       stcurrarr = stcurr.split(";")
+       stcurrarrfile = stcurrfile.split(";")
+       if len(stcurrarr) == len(stcurrarrfile):
+           for st,stf in zip(stcurrarr,stcurrarrfile):
+             if st != "":
+                if st[0]=='@' or st[0]=='|':
+                   st=st[1:]
+                starr = st.split(",")
+                stfarr = stf.split(",")               
+                for si in starr:
+                  stfarr.append(si)
+                stfarr = set(stfarr)
+                mainsearchterms = mainsearchterms + ','.join(stfarr) + ";"
+           mainsearchterms = mainsearchterms[:-1]    
+           return mainsearchterms
+
+    return searchtermsfile         
+
+def ingestfiles():
+    buf = default_args['localsearchtermfolder']
+    interval=int(default_args['localsearchtermfolderinterval'])
+    maintopic = default_args['doctopic']
+    searchtermsfile = ""
+
+    dirbuf = buf.split(",")
+    # check if user wants to split folders to separate topics
+    maintopicbuf = maintopic.split(",")
+    if len(maintopicbuf) > 1:
+      if len(dirbuf) != len(maintopicbuf):
+        tsslogging.locallogs("ERROR", "STEP 4c:Preprocess in {} You specified multiple doctopics, they must match localsearchtermfolder".format(os.path.basename(__file__)))
+        return
+
+  #myset = set(mylist)
+    while True:  
+      filenames = []
+      logics = []
+      for dr in dirbuf:        
+         if dr != "":
+            if dr[0]=='@':
+              dr = dr[1:]
+              logics.append("@")
+            elif dr[0]=='|':
+              dr = dr[1:]
+              logics.append("|")
+            else:  
+              logics.append("|")
+
+         if os.path.isdir("/rawdata/{}".format(dr)):            
+           a = [os.path.join("/rawdata/{}".format(dr), f) for f in os.listdir("/rawdata/{}".format(dr)) if 
+           os.path.isfile(os.path.join("/rawdata/{}".format(dr), f))]
+           filenames.extend(a)
+#s = s.strip()      
+      if len(filenames) > 0 and len(filenames)==len(logics):
+         filenames = set(filenames)         
+         logics = set(logics)
+         
+         for fdr,lg in zip(filenames,logics):            
+            with open(fdr) as f:
+              lines = [line.rstrip('\n').strip() for line in f]
+              lines = set(lines)
+              linebuf = ','.join(lines)
+              searchtermsfile = searchtermsfile + lg + linebuf +";"
+         searchtermsfile = searchtermsfile[:-1]    
+         searchtermsfile=updatesearchterms(searchtermsfile)
+         default_args['searchterms']=searchtermsfile
+      else:
+             tsslogging.locallogs("WARN", "STEP 4c: The number of search folders do not match the rtms topics")
+
+      if interval==0:
+        break
+      else:  
+       time.sleep(interval)
+                    
+def startdirread():
+  if 'localsearchtermfolder' not in default_args:
+     return
+    
+  if default_args['localsearchtermfolder'] != '' and default_args['localsearchtermfolderinterval'] != '':
+    print("INFO startdirread")  
+    try:  
+      t = threading.Thread(name='child procs', target=ingestfiles)
+      t.start()
+    except Exception as e:
+      print(e)
+      
 def dopreprocessing(**context):
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
@@ -199,7 +291,7 @@ def dopreprocessing(**context):
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
-            
+
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess3", "ENTER"])
@@ -235,6 +327,8 @@ if __name__ == '__main__':
         default_args['rtmsstream'] = rtmsstream
          
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
+
+        startdirread()
 
         while True:
           try: 
