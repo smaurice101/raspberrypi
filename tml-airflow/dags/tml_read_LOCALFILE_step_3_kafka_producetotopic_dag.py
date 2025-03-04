@@ -100,7 +100,7 @@ def ingestfiles():
     else:
        return
   
-      while True:
+    while True:
        for dr,tr in zip(dirbuf,maintopicbuf):
          filenames = []
          if os.path.isdir("/rawdata/{}".format(dr)):
