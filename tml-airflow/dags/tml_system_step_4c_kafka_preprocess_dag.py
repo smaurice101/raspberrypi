@@ -139,7 +139,7 @@ def updatesearchterms(searchtermsfile):
        if len(stcurrarr) < len(stcurrarrfile) and len(stcurrarr)==1:
           for i in range(len(stcurrarrfile)-1):
             if stcurr[0]=='@' or stcurr[0]=='|':
-               stcurr = stcur[1:]
+               stcurr = stcurr[1:]
             stcurrarr.append(stcurr)
             
        if len(stcurrarr) == len(stcurrarrfile):
