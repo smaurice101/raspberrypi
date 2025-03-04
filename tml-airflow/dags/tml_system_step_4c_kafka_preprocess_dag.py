@@ -247,6 +247,9 @@ def dopreprocessing(**context):
        ti.xcom_push(key="{}_usemysql".format(sname), value="_{}".format(default_args['usemysql']))
        ti.xcom_push(key="{}_identifier".format(sname), value=default_args['identifier'])
 
+       ti.xcom_push(key="{}_localsearchtermfolder".format(sname), value=default_args['localsearchtermfolder'])
+       ti.xcom_push(key="{}_localsearchtermfolderinterval".format(sname), value="_{}".format(default_args['localsearchtermfolderinterval']))
+
        rtmsstream=default_args['rtmsstream']
        if 'step4crtmsstream' in os.environ:
          ti.xcom_push(key="{}_rtmsstream".format(sname), value=os.environ['step4crtmsstream'])
