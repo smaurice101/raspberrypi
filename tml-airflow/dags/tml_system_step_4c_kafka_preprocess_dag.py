@@ -134,8 +134,12 @@ def updatesearchterms(searchtermsfile):
     mainsearchterms=""
   
     if stcurr != "":
-       stcurrarr = stcurr.split(";")
-       stcurrarrfile = stcurrfile.split(";")
+       stcurrarr = stcurr.split("~")
+       stcurrarrfile = stcurrfile.split("~")
+       if len(stcurrarr) < len(stcurrarrfile) and len(stcurrarr)==1:
+          for i in range(len(stcurrarrfile)-1):
+            stcurrarr.append()
+            
        if len(stcurrarr) == len(stcurrarrfile):
            for st,stf in zip(stcurrarr,stcurrarrfile):
              if st != "":
@@ -149,6 +153,10 @@ def updatesearchterms(searchtermsfile):
                 mainsearchterms = mainsearchterms + ','.join(stfarr) + "~"
            mainsearchterms = mainsearchterms[:-1]    
            return mainsearchterms
+       elif len(stcurrarr) > len(stcurrarrfile):
+         
+       elif len(stcurrarr) < len(stcurrarrfile):
+         
 
     return searchtermsfile         
 
