@@ -154,11 +154,7 @@ def updatesearchterms(searchtermsfile):
                 stfarr = set(stfarr)
                 mainsearchterms = mainsearchterms + ','.join(stfarr) + "~"
            mainsearchterms = mainsearchterms[:-1]    
-           return mainsearchterms
-       elif len(stcurrarr) > len(stcurrarrfile):
-         
-       elif len(stcurrarr) < len(stcurrarrfile):
-         
+           return mainsearchterms         
 
     return searchtermsfile         
 
