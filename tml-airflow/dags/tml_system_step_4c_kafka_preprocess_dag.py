@@ -138,7 +138,9 @@ def updatesearchterms(searchtermsfile):
        stcurrarrfile = stcurrfile.split("~")
        if len(stcurrarr) < len(stcurrarrfile) and len(stcurrarr)==1:
           for i in range(len(stcurrarrfile)-1):
-            stcurrarr.append()
+            if stcurr[0]=='@' or stcurr[0]=='|':
+               stcurr = stcur[1:]
+            stcurrarr.append(stcurr)
             
        if len(stcurrarr) == len(stcurrarrfile):
            for st,stf in zip(stcurrarr,stcurrarrfile):
