@@ -155,23 +155,12 @@ def updatesearchterms(searchtermsfile):
 def ingestfiles():
     buf = default_args['localsearchtermfolder']
     interval=int(default_args['localsearchtermfolderinterval'])
-    maintopic = default_args['rtmsstream']
     searchtermsfile = ""
 
     dirbuf = buf.split(",")
-    # check if user wants to split folders to separate topics
-    maintopicbuf = maintopic.split(",")
-    if len(maintopicbuf) > 1:
-      if len(dirbuf) != len(maintopicbuf):
-        tsslogging.locallogs("ERROR", "STEP 4c:Preprocess in {} You specified multiple doctopics, they must match localsearchtermfolder".format(os.path.basename(__file__)))
-        return
-    elif len(maintopicbuf) == 1 and len(dirbuf) > 1:
-       for i in range(len(dirbuf)-1):
-         maintopicbuf.append(maintopic)
-    else:
+    if len(dirbuf) == 0:
        return
       
-
     while True:  
       lg=""
       searchtermsfile=""
