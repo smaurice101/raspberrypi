@@ -40,6 +40,13 @@ default_args = {
   'searchterms' : '@authentication failure,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
                                                              # dynamically with the entities found in raw_data_topic
+  'localsearchtermfolder': '', # Specify a folder of files containing search terms - each term must be on a new line - use semicolon 
+                               # to apply each folder to the rtmstream topic
+                               # Use @ =AND, |=OR to specify whether the terms in the file should be AND, OR
+                               # For example, @mysearchfolder1,|mysearchfolder2, means all terms in mysearchfolder1 should be AND
+                               # |mysearchfolder2, means all search terms should be OR'ed
+  'localsearchtermfolderinterval': '', # This is the number of seconds between reading the localsearchtermfolder.  For example, if 30, 
+                                       # The files will be read every 30 seconds - and searchterms will be updated
   'rememberpastwindows' : '500', # Past windows to remember
   'patternscorethreshold' : '30', # check for the number of patterns for the items in searchterms
 }
