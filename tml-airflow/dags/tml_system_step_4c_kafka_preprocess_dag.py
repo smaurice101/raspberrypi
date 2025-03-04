@@ -146,7 +146,7 @@ def updatesearchterms(searchtermsfile):
                 for si in starr:
                   stfarr.append(si)
                 stfarr = set(stfarr)
-                mainsearchterms = mainsearchterms + ','.join(stfarr) + ";"
+                mainsearchterms = mainsearchterms + ','.join(stfarr) + "~"
            mainsearchterms = mainsearchterms[:-1]    
            return mainsearchterms
 
@@ -155,7 +155,7 @@ def updatesearchterms(searchtermsfile):
 def ingestfiles():
     buf = default_args['localsearchtermfolder']
     interval=int(default_args['localsearchtermfolderinterval'])
-    maintopic = default_args['doctopic']
+    maintopic = default_args['rtmsstream']
     searchtermsfile = ""
 
     dirbuf = buf.split(",")
@@ -165,6 +165,12 @@ def ingestfiles():
       if len(dirbuf) != len(maintopicbuf):
         tsslogging.locallogs("ERROR", "STEP 4c:Preprocess in {} You specified multiple doctopics, they must match localsearchtermfolder".format(os.path.basename(__file__)))
         return
+    elif len(maintopicbuf) == 1 and len(dirbuf) > 1:
+       for i in range(len(dirbuf)-1):
+         maintopicbuf.append(maintopic)
+    else:
+       return
+      
 
     while True:  
       lg=""
@@ -198,7 +204,7 @@ def ingestfiles():
 
          if linebuf != "":
            linebuf = linebuf[:-1]
-           searchtermsfile = searchtermsfile + lg + linebuf +";"
+           searchtermsfile = searchtermsfile + lg + linebuf +"~"
       if searchtermsfile != "":    
         searchtermsfile = searchtermsfile[:-1]    
         searchtermsfile=updatesearchterms(searchtermsfile)
