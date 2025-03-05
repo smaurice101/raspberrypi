@@ -38,7 +38,7 @@ default_args = {
   'rtmsstream' : 'rtms-stream-mylogs,rtms-stream-mylogs2', # Change as needed - STREAM containing log file data (or other data) for RTMS
                                                     # If entitystream is empty, TML uses the preprocess type only.
   'identifier' : 'RTMS Past Memory of Events', # <<< ** Change as needed
-  'searchterms' : 'rgx:p([a-z]+)ch,@authentication failure,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
+  'searchterms' : 'rgx:p([a-z]+)ch ~ @authentication failure,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
                                                              # dynamically with the entities found in raw_data_topic
   'localsearchtermfolder': '', # Specify a folder of files containing search terms - each term must be on a new line - use comma
