@@ -46,6 +46,8 @@ default_args = {
                                # Use @ =AND, |=OR to specify whether the terms in the file should be AND, OR
                                # For example, @mysearchfolder1,|mysearchfolder2, means all terms in mysearchfolder1 should be AND
                                # |mysearchfolder2, means all search terms should be OR'ed
+                               # if using RegEX statement, it must be prefixed with 'rgx:' - if it contains a comma
+                               # your Regex must be the only statement separated by ~
   'localsearchtermfolderinterval': '60', # This is the number of seconds between reading the localsearchtermfolder.  For example, if 60, 
                                        # The files will be read every 60 seconds - and searchterms will be updated
   'rememberpastwindows' : '500', # Past windows to remember
