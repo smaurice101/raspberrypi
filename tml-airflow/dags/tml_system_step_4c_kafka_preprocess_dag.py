@@ -1,4 +1,3 @@
-from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
@@ -36,7 +35,7 @@ default_args = {
   'timedelay' : '0', # <<< connection delay
   'tmlfilepath' : '', # leave blank
   'usemysql' : '1', # do not modify
-  'rtmsstream' : 'rtms-stream-mylogs,rtms-stream-mylogs2', # Change as needed - STREAM containing log file data (or other data) for RTMS
+  'rtmsstream' : 'rtms-stream-mylogs', # Change as needed - STREAM containing log file data (or other data) for RTMS
                                                     # If entitystream is empty, TML uses the preprocess type only.
   'identifier' : 'RTMS Past Memory of Events', # <<< ** Change as needed
   'searchterms' : 'rgx:p([a-z]+)ch ~ @authentication failure,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
@@ -112,8 +111,8 @@ def processtransactiondata():
          rememberpastwindows = default_args['rememberpastwindows']  
          patternscorethreshold = default_args['patternscorethreshold']  
 
+         
          searchterms = str(base64.b64encode(searchterms.encode('utf-8')))
-
          try:
                 result=maadstml.viperpreprocessrtms(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
                                                   brokerport,microserviceid,topicid,rtmsstream,searchterms,rememberpastwindows,identifier,
@@ -159,7 +158,6 @@ def updatesearchterms(searchtermsfile,regx):
       
     return  mainsearchterms
 
-
 def ingestfiles():
     buf = default_args['localsearchtermfolder']
     interval=int(default_args['localsearchtermfolderinterval'])
@@ -196,7 +194,7 @@ def ingestfiles():
            
            for fdr in filenames:            
              with open(fdr) as f:
-              lines = [line.rstrip('\n').strip().replace(","," ") for line in f]
+              lines = [line.rstrip('\n').strip() for line in f]
               lines = set(lines)
               # check regex
               for m in lines:
