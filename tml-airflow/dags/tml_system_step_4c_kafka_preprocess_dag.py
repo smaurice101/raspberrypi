@@ -37,6 +37,12 @@ default_args = {
   'usemysql' : '1', # do not modify
   'rtmsstream' : 'rtms-stream-mylogs', # Change as needed - STREAM containing log file data (or other data) for RTMS
                                                     # If entitystream is empty, TML uses the preprocess type only.
+  'rtmstheshold': '',  # choose a number between 0-1
+  'rtmsthesholdtopic': '', # all messages equal and exceed the rtmsthreshold are produced to this kafka topic
+  'attacktheshold': '',  # choose a number between 0-1
+  'attackthesholdtopic': '', # all messages equal and exceed the attackthreshold are produced to this kafka topic
+  'patterntheshold': '', # choose a number between 0-1
+  'patternthesholdtopic': '',  # all messages equal and exceed the patternthreshold are produced to this kafka topic
   'identifier' : 'RTMS Past Memory of Events', # <<< ** Change as needed
   'searchterms' : 'rgx:p([a-z]+)ch ~ @authentication failure,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
