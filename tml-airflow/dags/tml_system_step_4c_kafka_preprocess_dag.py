@@ -37,12 +37,12 @@ default_args = {
   'usemysql' : '1', # do not modify
   'rtmsstream' : 'rtms-stream-mylogs', # Change as needed - STREAM containing log file data (or other data) for RTMS
                                                     # If entitystream is empty, TML uses the preprocess type only.
-  'rtmstheshold': '',  # choose a number between 0-1
-  'rtmsthesholdtopic': '', # all messages equal and exceed the rtmsthreshold are produced to this kafka topic
-  'attacktheshold': '',  # choose a number between 0-1
-  'attackthesholdtopic': '', # all messages equal and exceed the attackthreshold are produced to this kafka topic
-  'patterntheshold': '', # choose a number between 0-1
-  'patternthesholdtopic': '',  # all messages equal and exceed the patternthreshold are produced to this kafka topic
+  'rtmsthreshold': '',  # choose a number between 0-1
+  'rtmsthresholdtopic': '', # all messages equal and exceed the rtmsthreshold are produced to this kafka topic
+  'attackthreshold': '',  # choose a number between 0-1
+  'attackthresholdtopic': '', # all messages equal and exceed the attackthreshold are produced to this kafka topic
+  'patternthreshold': '', # choose a number between 0-1
+  'patternthresholdtopic': '',  # all messages equal and exceed the patternthreshold are produced to this kafka topic
   'identifier' : 'RTMS Past Memory of Events', # <<< ** Change as needed
   'searchterms' : 'rgx:p([a-z]+)ch ~ @authentication failure,--entity-- password failure ~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
@@ -117,12 +117,19 @@ def processtransactiondata():
          rememberpastwindows = default_args['rememberpastwindows']  
          patternscorethreshold = default_args['patternscorethreshold']  
 
-         
+         rtmsthreshold = default_args['rtmsthreshold']  
+         rtmsthresholdtopic = default_args['rtmsthresholdtopic']  
+         attackthreshold = default_args['attackthreshold']  
+         attackthresholdtopic = default_args['attackthresholdtopic']  
+         patternthreshold = default_args['patternthreshold']  
+         patternthresholdtopic = default_args['patternthresholdtopic']  
+  
          searchterms = str(base64.b64encode(searchterms.encode('utf-8')))
          try:
                 result=maadstml.viperpreprocessrtms(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
                                                   brokerport,microserviceid,topicid,rtmsstream,searchterms,rememberpastwindows,identifier,
-                                                  preprocesstopic,patternscorethreshold,array,saveasarray,rawdataoutput)
+                                                  preprocesstopic,patternscorethreshold,rtmsthreshold,rtmsthresholdtopic,attackthreshold,
+                                                  attackthresholdtopic,patternthreshold,patternthresholdtopic,array,saveasarray,rawdataoutput)
 #                print(result)
          except Exception as e:
                 print("ERROR:",e)
