@@ -433,7 +433,7 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--asynctimeout3--/{}/g".format(asynctimeout[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--timedelay3--/{}/g".format(timedelay[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--rememberpastwindows--/{}/g".format(rememberpastwindows[1:]), "/{}/docs/source/details.rst".format(sname)])
-        subprocess.call(["sed", "-i", "-e",  "s/--patternscorethreshold--/{}/g".format(patternscorethreshold[1:]), "/{}/docs/source/details.rst".format(sname)])
+        subprocess.call(["sed", "-i", "-e",  "s/--patternwindowthreshold--/{}/g".format(patternwindowthreshold[1:]), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--identifier3--/{}/g".format(identifier), "/{}/docs/source/details.rst".format(sname)])
         subprocess.call(["sed", "-i", "-e",  "s/--maxrows3--/{}/g".format(maxrows4c[1:]), "/{}/docs/source/details.rst".format(sname)])
         doparse("/{}/docs/source/details.rst".format(sname), ["--rtmssearchterms--;{}".format(searchterms)])
