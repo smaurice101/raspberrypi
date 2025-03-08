@@ -206,7 +206,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
                step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',
                step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
-               step4cpatternscorethreshold='',step4crtmsstream='',projectname=''):
+               step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
+               step4cpatternscorethreshold=''):
                
     cp = ""
     cpp = ""
@@ -350,8 +351,14 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'               
              - name: step4crememberpastwindows # STEP 4c 
                value: '{}'               
+             - name: step4cpatternwindowthreshold # STEP 4c 
+               value: '{}' 
+             - name: step4crtmsscorethreshold # STEP 4c 
+               value: '{}' 
+             - name: step4cattackscorethreshold # STEP 4c 
+               value: '{}' 
              - name: step4cpatternscorethreshold # STEP 4c 
-               value: '{}'               
+               value: '{}' 
              - name: step4crtmsstream # STEP 4c 
                value: '{}'                              
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
@@ -438,7 +445,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
-                           airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
+                           airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
@@ -455,7 +463,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
                      step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',step9vectorsize='',
                      step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
-                     step4cpatternscorethreshold='',step4crtmsstream='',projectname=''):
+                     step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
+                     step4cpatternscorethreshold=''):
     cp = ""
     cpp = ""
     
@@ -594,8 +603,14 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'               
              - name: step4crememberpastwindows # STEP 4c 
                value: '{}'               
-             - name: step4cpatternscorethreshold # STEP 4c 
+             - name: step4cpatternwindowthreshold # STEP 4c 
                value: '{}'               
+             - name: step4crtmsscorethreshold # STEP 4c 
+               value: '{}' 
+             - name: step4cattackscorethreshold # STEP 4c 
+               value: '{}' 
+             - name: step4cpatternscorethreshold # STEP 4c 
+               value: '{}'                
              - name: step4crtmsstream # STEP 4c 
                value: '{}'                              
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
@@ -666,7 +681,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
-                           mqttuser,airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
+                           mqttuser,airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
