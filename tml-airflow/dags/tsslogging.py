@@ -342,21 +342,21 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step4maxrows # STEP 4 maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'
              - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
-               value: '{}'                                    
+               value: '{}'
              - name: step4cmaxrows # STEP 4c maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
-               value: '{}'               
+               value: '{}'
              - name: step4crawdatatopic # STEP 4c
                value: '{}'               
              - name: step4csearchterms # STEP 4c 
-               value: '{}'               
+               value: '{}'
              - name: step4crememberpastwindows # STEP 4c 
-               value: '{}'               
+               value: '{}'
              - name: step4cpatternwindowthreshold # STEP 4c 
-               value: '{}' 
+               value: '{}'
              - name: step4crtmsscorethreshold # STEP 4c 
-               value: '{}' 
+               value: '{}'
              - name: step4cattackscorethreshold # STEP 4c 
-               value: '{}' 
+               value: '{}'
              - name: step4cpatternscorethreshold # STEP 4c 
                value: '{}' 
              - name: step4crtmsstream # STEP 4c 
