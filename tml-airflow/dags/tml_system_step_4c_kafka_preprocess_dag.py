@@ -376,6 +376,7 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]                  
         maxrows =  sys.argv[5]
         default_args['maxrows'] = maxrows
+        subprocess.call("/tmux/rtmstrunc.sh", shell=True)
 
         searchterms =  sys.argv[6]
         default_args['searchterms'] = searchterms
@@ -398,7 +399,6 @@ if __name__ == '__main__':
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
 
         startdirread()
-
         while True:
           try: 
             processtransactiondata()
