@@ -352,7 +352,7 @@ def dopreprocessing(**context):
          if not os.path.exists(directory):
             os.makedirs(directory)
        except Exception as e:
-           tsslogging.locallogs("ERROR", "STEP 4c: Cannot make directory /rawdata/rtms in {}".format(os.path.basename(__file__),e))         
+           tsslogging.locallogs("ERROR", "STEP 4c: Cannot make directory /rawdata/rtms in {} {}".format(os.path.basename(__file__),e))         
     
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
