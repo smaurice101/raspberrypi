@@ -347,6 +347,13 @@ def dopreprocessing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
 
+       try:
+         directory="/rawdata/rtms"
+         if not os.path.exists(directory):
+            os.makedirs(directory)
+       except Exception as e:
+           tsslogging.locallogs("ERROR", "STEP 4c: Cannot make directory /rawdata/rtms in {}".format(os.path.basename(__file__),e))         
+    
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess3", "ENTER"])
