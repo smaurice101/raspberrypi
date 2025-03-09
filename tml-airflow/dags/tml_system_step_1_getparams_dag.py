@@ -285,6 +285,13 @@ def getparams(**context):
   except Exception as e:
     pass
 
+   try: 
+    f = open("/tmux/rtmsmax.txt", "w")
+    f.write(default_args['RTMSMAXWINDOWS'])
+    f.close()
+  except Exception as e:
+    pass
+
   if os.environ['TSS']==1:
     try: 
       shutil.rmtree("/rawdata/rtms") 
