@@ -369,7 +369,7 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]                  
         maxrows =  sys.argv[5]
         default_args['maxrows'] = maxrows
-        subprocess.Popen("/tmux/rtmstrunc.sh", shell=True)
+        #subprocess.Popen("/tmux/rtmstrunc.sh", shell=True)
 
         searchterms =  sys.argv[6]
         default_args['searchterms'] = searchterms
