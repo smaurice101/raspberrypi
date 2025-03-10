@@ -285,7 +285,7 @@ def getparams(**context):
   except Exception as e:
     pass
 
-   try: 
+  try: 
     f = open("/tmux/rtmsmax.txt", "w")
     f.write(default_args['RTMSMAXWINDOWS'])
     f.close()
