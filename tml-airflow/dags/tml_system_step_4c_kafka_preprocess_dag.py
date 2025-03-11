@@ -42,6 +42,7 @@ default_args = {
   'searchterms' : 'rgx:p([a-z]+)ch ~~~ |authentication failure,--entity-- password failure ~~~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
                                                              # dynamically with the entities found in raw_data_topic
+                                                             # Use THREE (3) ~ to separate searches, i.e. ~~~  
   'localsearchtermfolder': '|mysearchfile1', # Specify a folder of files containing search terms - each term must be on a new line - use comma
                                # to apply each folder to the rtmstream topic
                                # Use @ =AND, |=OR to specify whether the terms in the file should be AND, OR
