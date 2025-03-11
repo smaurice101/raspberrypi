@@ -76,8 +76,8 @@ def startstreamingengine(**context):
         rollbackoffset = default_args['rollbackoffset']
                 
         ti = context['task_instance']
-        ti.xcom_push(key="{}_topic".format(sname),value=topic)
-        ti.xcom_push(key="{}_dashboardhtml".format(sname),value=dashboardhtml)        
+        ti.xcom_push(key="{}_topic".format(sname),value="{}".format(topic))
+        ti.xcom_push(key="{}_dashboardhtml".format(sname),value="{}".format(dashboardhtml))        
         ti.xcom_push(key="{}_secure".format(sname),value="_{}".format(secure))
         ti.xcom_push(key="{}_offset".format(sname),value="_{}".format(offset))
         ti.xcom_push(key="{}_append".format(sname),value="_{}".format(append))
