@@ -362,7 +362,7 @@ def dopreprocessing(**context):
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess3", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} \"{}\" \"{}\" {} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternwindowthreshold,raw_data_topic,rtmsstream,rtmsscorethreshold,attackscorethreshold,patternscorethreshold), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} \"{}\" \"{}\" {} {} {} \"{}\" {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternwindowthreshold,raw_data_topic,rtmsstream,rtmsscorethreshold,attackscorethreshold,patternscorethreshold,localsearchtermfolder,localsearchtermfolderinterval), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -400,6 +400,11 @@ if __name__ == '__main__':
         default_args['attackscorethreshold'] = attackscorethreshold
         patternscorethreshold =  sys.argv[13]
         default_args['patternscorethreshold'] = patternscorethreshold
+
+        localsearchtermfolder =  sys.argv[14]
+        default_args['localsearchtermfolder'] = localsearchtermfolder
+        localsearchtermfolderinterval =  sys.argv[15]
+        default_args['localsearchtermfolderinterval'] = localsearchtermfolderinterval
          
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
         try:
