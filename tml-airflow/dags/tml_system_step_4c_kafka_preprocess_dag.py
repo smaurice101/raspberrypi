@@ -42,7 +42,6 @@ default_args = {
   'searchterms' : 'rgx:p([a-z]+)ch ~~~ |authentication failure,--entity-- password failure ~~~ |unknown--entity--', # main Search terms, if AND add @, if OR use | s first characters, default OR
                                                              # Must include --entity-- if correlating with entity - this will be replaced 
                                                              # dynamically with the entities found in raw_data_topic
-                                                             # Use THREE (3) ~ to separate searches, i.e. ~~~  
   'localsearchtermfolder': '|mysearchfile1', # Specify a folder of files containing search terms - each term must be on a new line - use comma
                                # to apply each folder to the rtmstream topic
                                # Use @ =AND, |=OR to specify whether the terms in the file should be AND, OR
@@ -190,7 +189,8 @@ def ingestfiles():
       rgx = []      
       for dr in dirbuf:        
          filenames = []
-         linebuf="" 
+         linebuf=""
+         ibx = []
          if dr != "":
             if dr[0]=='@':
               dr = dr[1:]
@@ -217,14 +217,21 @@ def ingestfiles():
               for m in lines:
                 if 'rgx:' in m:
                   rgx.append(m)
+                elif '~~~' in m:
+                  ibx.append(m)
                 else:  
                   linebuf = linebuf + m + ","
 
          if linebuf != "":
            linebuf = linebuf[:-1]
            searchtermsfile = searchtermsfile + lg + linebuf +"~~~"
+         if len(ibx)>0:
+            ibxs = ''.join(ibx) 
+            ibxs=ibxs[3:]
+            searchtermsfile = searchtermsfile + ibxs +"~~~"
+
       if searchtermsfile != "":    
-        searchtermsfile = searchtermsfile[:-1]    
+        searchtermsfile = searchtermsfile[:-3]    
         searchtermsfile=updatesearchterms(searchtermsfile,rgx)
         default_args['searchterms']=searchtermsfile
         print("INFO:", searchtermsfile)
