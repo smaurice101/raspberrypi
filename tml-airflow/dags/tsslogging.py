@@ -450,7 +450,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
                            airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
-                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsstream,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
@@ -690,7 +690,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
                            mqttuser,airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
-                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsstream,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
