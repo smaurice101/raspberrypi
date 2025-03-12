@@ -271,12 +271,23 @@ def dopreprocessing(**context):
        ti.xcom_push(key="{}_usemysql".format(sname), value="_{}".format(default_args['usemysql']))
        ti.xcom_push(key="{}_identifier".format(sname), value=default_args['identifier'])
 
-       ti.xcom_push(key="{}_localsearchtermfolder".format(sname), value=default_args['localsearchtermfolder'])
-       ti.xcom_push(key="{}_localsearchtermfolderinterval".format(sname), value="_{}".format(default_args['localsearchtermfolderinterval']))
-
        ti.xcom_push(key="{}_rtmsscorethresholdtopic".format(sname), value=default_args['rtmsscorethresholdtopic'])
        ti.xcom_push(key="{}_attackscorethresholdtopic".format(sname), value=default_args['attackscorethresholdtopic'])
        ti.xcom_push(key="{}_patternscorethresholdtopic".format(sname), value=default_args['patternscorethresholdtopic'])
+
+       localsearchtermfolder=default_args['localsearchtermfolder']
+       if 'step4clocalsearchtermfolder' in os.environ:
+         ti.xcom_push(key="{}_localsearchtermfolder".format(sname), value=os.environ['step4clocalsearchtermfolder'])
+         localsearchtermfolder=os.environ['step4clocalsearchtermfolder']         
+       else:  
+        ti.xcom_push(key="{}_localsearchtermfolder".format(sname), value=default_args['localsearchtermfolder']) 
+
+       localsearchtermfolderinterval=default_args['localsearchtermfolderinterval']
+       if 'step4clocalsearchtermfolderinterval' in os.environ:
+         ti.xcom_push(key="{}_localsearchtermfolderinterval".format(sname), value=os.environ['step4clocalsearchtermfolderinterval'])
+         localsearchtermfolderinterval=os.environ['step4clocalsearchtermfolderinterval']         
+       else:  
+        ti.xcom_push(key="{}_localsearchtermfolderinterval".format(sname), value="_{}".format(default_args['localsearchtermfolderinterval']))
 
        rtmsstream=default_args['rtmsstream']
        if 'step4crtmsstream' in os.environ:
