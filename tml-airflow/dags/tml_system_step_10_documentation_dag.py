@@ -161,6 +161,8 @@ def generatedoc(**context):
     step4crtmsscorethreshold=''
     step4cattackscorethreshold=''
     step4cpatternscorethreshold=''
+    step4clocalsearchtermfolder=''
+    step4clocalsearchtermfolderinterval=''
  
     rtmsoutputurl=""
     mloutputurl=""
@@ -450,6 +452,8 @@ def generatedoc(**context):
         step4crtmsscorethreshold=rtmsscorethreshold
         step4cattackscorethreshold=attackscorethreshold
         step4cpatternscorethreshold=patternscorethreshold
+        step4clocalsearchtermfolder=localsearchtermfolder
+        step4clocalsearchtermfolderinterval=localsearchtermfolderinterval
 
     preprocess_data_topic = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_preprocess_data_topic".format(sname))
     ml_data_topic = context['ti'].xcom_pull(task_ids='step_5_solution_task_ml',key="{}_ml_data_topic".format(sname))
@@ -950,7 +954,7 @@ def generatedoc(**context):
                        step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype,
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
-                       step4cpatternscorethreshold[1:])
+                       step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:])
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -962,7 +966,7 @@ def generatedoc(**context):
                        step5independentvariables,step9searchterms,step9streamall[1:],step9temperature[1:],step9vectorsearchtype,
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
-                       step4cpatternscorethreshold[1:])
+                       step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:])
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
