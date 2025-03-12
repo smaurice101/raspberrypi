@@ -185,7 +185,9 @@ def ingestfiles():
       
     while True:  
       lg=""
-      searchtermsfile=""
+      buf = default_args['localsearchtermfolder']
+      interval=int(default_args['localsearchtermfolderinterval'])
+      searchtermsfile = ""
       rgx = []      
       for dr in dirbuf:        
          filenames = []
@@ -217,9 +219,10 @@ def ingestfiles():
               for m in lines:
                 if 'rgx:' in m:
                   rgx.append(m)
-                elif '~~~' in m:
+                elif '~~~' in m:                  
                   ibx.append(m)
                 else:  
+                  m=m.replace(","," ")
                   linebuf = linebuf + m + ","
 
          if linebuf != "":
