@@ -220,7 +220,7 @@ def ingestfiles():
                 elif '~~~' in m:
                   ibx.append(m)
                 else:  
-                  m=m.replace(m,","," ")
+                  m=m.replace(","," ")
                   linebuf = linebuf + m + ","
 
          if linebuf != "":
