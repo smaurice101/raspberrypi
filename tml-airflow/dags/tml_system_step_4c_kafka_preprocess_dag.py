@@ -188,6 +188,7 @@ def ingestfiles():
       buf = default_args['localsearchtermfolder']
       interval=int(default_args['localsearchtermfolderinterval'])
       searchtermsfile = ""
+      dirbuf = buf.split(",")      
       rgx = []      
       for dr in dirbuf:        
          filenames = []
