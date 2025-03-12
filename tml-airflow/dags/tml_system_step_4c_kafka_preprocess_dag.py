@@ -218,6 +218,7 @@ def ingestfiles():
                 if 'rgx:' in m:
                   rgx.append(m)
                 elif '~~~' in m:
+                  m=m.replace(","," ")                  
                   ibx.append(m)
                 else:  
                   m=m.replace(","," ")
