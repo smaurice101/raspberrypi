@@ -218,12 +218,13 @@ def ingestfiles():
               lines = set(lines)
               # check regex
               for m in lines:
-                if 'rgx:' in m:
-                  rgx.append(m)
-                elif '~~~' in m:                  
-                  ibx.append(m)
-                else:  
-                  linebuf = linebuf + m + ","
+                if len(m) > 0:
+                  if 'rgx:' in m:
+                    rgx.append(m)
+                  elif '~~~' in m:                  
+                    ibx.append(m)
+                  else:  
+                    linebuf = linebuf + m + ","
 
          if linebuf != "":
            linebuf = linebuf[:-1]
