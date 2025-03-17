@@ -667,7 +667,12 @@ def generatedoc(**context):
        for d in darr:
           v=d.split("=")[1]
           ebuf = ebuf + ' --env ' + d.strip() + '=' + v.strip()
-                
+
+    if default_args['dockerinstructions'] != '':
+       doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerinstructions--;{}".format(default_args['dockerinstructions'])])     
+    else:
+       doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerinstructions--;{}".format("Please ask the developer of this solution.")])     
+     
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
       dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \\
