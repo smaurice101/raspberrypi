@@ -668,9 +668,9 @@ def generatedoc(**context):
        for d in darr:          
           v=d.split("=")
           if len(v)>1:
-            ebuf = ebuf + ' --env ' + d.strip() + '=' + v[1].strip()
+            ebuf = ebuf + ' --env ' + v[0].strip() + '=' + v[1].strip()
           else: 
-            ebuf = ebuf + ' --env ' + d.strip() + '='
+            ebuf = ebuf + ' --env ' + v[0].strip() + '='
 
      if default_args['dockerinstructions'] != '':
        doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerinstructions--;{}".format(default_args['dockerinstructions'])])     
