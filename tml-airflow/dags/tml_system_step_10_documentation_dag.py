@@ -661,7 +661,7 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--vectorsearchtype--;{}".format(pvectorsearchtype)])
 
     ebuf=""
-    if 'dockerenv' in default_args"
+    if 'dockerenv' in default_args:
      if default_args['dockerenv'] != '':
        buf=default_args['dockerenv']
        darr = buf.split(",")
