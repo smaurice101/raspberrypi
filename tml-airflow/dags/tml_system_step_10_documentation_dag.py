@@ -664,7 +664,7 @@ def generatedoc(**context):
     if 'dockerenv' in default_args:
      if default_args['dockerenv'] != '':
        buf=default_args['dockerenv']
-       darr = buf.split(",")
+       darr = buf.split("***")
        for d in darr:          
           v=d.split("=")
           if len(v)>1:
