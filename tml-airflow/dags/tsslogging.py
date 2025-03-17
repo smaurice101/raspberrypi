@@ -36,7 +36,7 @@ def rtdsolution(pname,did):
         sdm=''
         if 'solution_preprocessing_dag-' not in sd:  #normal dag solution
              if 'solution_preprocessing_dag_' in sd:
-                 sdm = sd[27:len(sd)-len(sname)]
+                 sdm = sd[27:len(sd)-len(sname)-1]
                  sname = "{}-{}".format(sname,sdm)
              else:    
                  sdm = sd[23:len(sd)-len(sname)-5]
