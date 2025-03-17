@@ -20,7 +20,9 @@ default_args = {
  'conf_copyright' : '2024, Otics Advanced Analytics, Incorporated - For Support email support@otics.ca',
  'conf_author' : 'Sebastian Maurice',
  'conf_release' : '0.1',
- 'conf_version' : '0.1.0'
+ 'conf_version' : '0.1.0',
+ 'dockerenv': '', # add any environmental variables for docker must be: variable1=value1, variable2=value2
+ 'dockerinstructions': '', # add instructions on how to run the docker container  
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
