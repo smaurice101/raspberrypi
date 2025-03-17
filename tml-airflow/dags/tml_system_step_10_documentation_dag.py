@@ -21,8 +21,8 @@ default_args = {
  'conf_author' : 'Sebastian Maurice',
  'conf_release' : '0.1',
  'conf_version' : '0.1.0',
- 'dockerenv': '',
- 'dockerinstructions': '',
+ 'dockerenv': '', # add any environmental variables for docker must be: variable1=value1, variable2=value2
+ 'dockerinstructions': '', # add instructions on how to run the docker container
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -666,7 +666,7 @@ def generatedoc(**context):
        darr = buf.split(",")
        for d in darr:
           v=d.split("=")[1]
-          ebuf = ebuf + ' --env ' + d + '=' + v
+          ebuf = ebuf + ' --env ' + d.strip() + '=' + v.strip()
                 
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
