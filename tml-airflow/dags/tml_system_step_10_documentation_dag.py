@@ -661,7 +661,8 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--vectorsearchtype--;{}".format(pvectorsearchtype)])
 
     ebuf=""
-    if default_args['dockerenv'] != '':
+    if 'dockerenv' in default_args"
+     if default_args['dockerenv'] != '':
        buf=default_args['dockerenv']
        darr = buf.split(",")
        for d in darr:          
@@ -671,9 +672,9 @@ def generatedoc(**context):
           else: 
             ebuf = ebuf + ' --env ' + d.strip() + '='
 
-    if default_args['dockerinstructions'] != '':
+     if default_args['dockerinstructions'] != '':
        doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerinstructions--;{}".format(default_args['dockerinstructions'])])     
-    else:
+     else:
        doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerinstructions--;{}".format("Please ask the developer of this solution.")])     
      
     if len(CLIENTPORT) > 1:
