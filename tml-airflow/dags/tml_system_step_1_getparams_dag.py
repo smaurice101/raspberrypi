@@ -131,7 +131,9 @@ def updateviperenv():
     if 'KAFKABROKERHOST' in os.environ:
           default_args['brokerhost'] = os.environ['KAFKABROKERHOST']
           default_args['brokerport']=''
-
+    if 'step1rtmsmaxwindows' in os.environ:
+       default_args['RTMSMAXWINDOWS']=os.environ['step1rtmsmaxwindows']
+     
     if '127.0.0.1' in default_args['brokerhost']:
       cloudusername = ""
       cloudpassword = ""
