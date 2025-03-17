@@ -409,7 +409,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
                value: '{}'        
-             - name: step1rtmsmaxwindows # STEP 1 description field can be adjusted here. 
+             - name: step1rtmsmaxwindows # STEP 1 adjust RTMSMAXWINDOWS for Step 4c
                value: '10000'                        
              - name: KUBEBROKERHOST
                value: '{}'         
@@ -667,6 +667,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
                value: '{}'                                          
+             - name: step1rtmsmaxwindows # STEP 1 adjust RTMSMAXWINDOWS for Step 4c
+               value: '10000'                                       
              - name: KUBEBROKERHOST
                value: '{}'         
              - name: KAFKABROKERHOST
