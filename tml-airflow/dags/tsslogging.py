@@ -408,7 +408,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
-               value: '{}'                                          
+               value: '{}'        
+             - name: step1rtmsmaxwindows # STEP 1 description field can be adjusted here. 
+               value: '10000'                        
              - name: KUBEBROKERHOST
                value: '{}'         
              - name: KAFKABROKERHOST
