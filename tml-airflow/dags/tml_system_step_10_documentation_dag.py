@@ -702,7 +702,7 @@ def generatedoc(**context):
           --env GITPASSWORD='<Enter Github Password>' \\
           --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
           --env MQTTPASSWORD='<Enter mqtt password>' \\
-          --env READTHEDOCS='<Enter Readthedocs token>' {} 
+          --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
@@ -732,7 +732,7 @@ def generatedoc(**context):
           --env MQTTPASSWORD='<Enter mqtt password>' \\
           --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
           --env GITPASSWORD='<Enter Github Password>' \\
-          --env READTHEDOCS='<Enter Readthedocs token>' {} 
+          --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,os.environ['GITUSERNAME'],
