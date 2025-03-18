@@ -665,13 +665,14 @@ def generatedoc(**context):
      if default_args['dockerenv'] != '':
        buf=default_args['dockerenv']
        darr = buf.split("***")
+       ebuf="\n"
        for d in darr:          
           v=d.split("=")
           if len(v)>1:
-            ebuf = ebuf + ' --env ' + v[0].strip() + '=' + v[1].strip()
+            ebuf = ebuf + '          --env ' + v[0].strip() + '=\"' + v[1].strip() + '\" \\ \n'
           else: 
-            ebuf = ebuf + ' --env ' + v[0].strip() + '='
-
+            ebuf = ebuf + '          --env ' + v[0].strip() + '=' + ' \\ \n'
+       ebuf = ebuf[:-1]
      if default_args['dockerinstructions'] != '':
        doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerinstructions--;{}".format(default_args['dockerinstructions'])])     
      else:
@@ -701,7 +702,7 @@ def generatedoc(**context):
           --env GITPASSWORD='<Enter Github Password>' \\
           --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
           --env MQTTPASSWORD='<Enter mqtt password>' \\
-          --env READTHEDOCS='<Enter Readthedocs token>' {} \\
+          --env READTHEDOCS='<Enter Readthedocs token>' {} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,os.environ['GITUSERNAME'],
@@ -731,7 +732,7 @@ def generatedoc(**context):
           --env MQTTPASSWORD='<Enter mqtt password>' \\
           --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
           --env GITPASSWORD='<Enter Github Password>' \\
-          --env READTHEDOCS='<Enter Readthedocs token>' {} \\
+          --env READTHEDOCS='<Enter Readthedocs token>' {} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,os.environ['GITUSERNAME'],
