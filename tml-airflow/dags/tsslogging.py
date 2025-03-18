@@ -835,9 +835,11 @@ def locallogs(mtype,message):
   
   now = datetime.datetime.now(timezone.utc)
   dbuf = "[{} ".format(mtype) + now.strftime("%Y-%m-%d_%H:%M:%S") + "]"
-
-  with open("/dagslocalbackup/logs.txt", "a") as myfile:
-    myfile.write("  {} {}\n\n".format(dbuf,message))
+  try:
+    with open("/dagslocalbackup/logs.txt", "a") as myfile:
+      myfile.write("  {} {}\n\n".format(dbuf,message))
+  except Exception as e:
+      print("WARN: Cannot write to /dagslocalbackup/logs.txt:",e)
     
     
 def git_push2(solution):
