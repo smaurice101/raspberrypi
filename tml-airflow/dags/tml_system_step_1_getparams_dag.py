@@ -133,6 +133,8 @@ def updateviperenv():
           default_args['brokerport']=''
     if 'step1rtmsmaxwindows' in os.environ:
        default_args['RTMSMAXWINDOWS']=os.environ['step1rtmsmaxwindows']
+    if 'SASLMECHANISM' in os.environ:
+       default_args['SASLMECHANISM']=os.environ['SASLMECHANISM']     
      
     if '127.0.0.1' in default_args['brokerhost']:
       cloudusername = ""
