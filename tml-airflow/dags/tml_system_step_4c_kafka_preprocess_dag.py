@@ -369,8 +369,8 @@ def dopreprocessing(**context):
          rtmsfoldername=os.environ['step4crtmsfoldername']
        else:  
          ti.xcom_push(key="{}_rtmsfoldername".format(sname), value="{}".format(default_args['rtmsfoldername']))
+       os.environ["step4crtmsfoldername"] = rtmsfoldername
 
-  
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
