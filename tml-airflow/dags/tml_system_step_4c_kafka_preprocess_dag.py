@@ -428,11 +428,11 @@ if __name__ == '__main__':
         
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
         try:
-         directory="/rawdata/rtms"
+         directory="/rawdata/{}".format(rtmsfoldername)         
          if not os.path.exists(directory):
             os.makedirs(directory)
         except Exception as e:
-           tsslogging.locallogs("ERROR", "STEP 4c: Cannot make directory /rawdata/rtms in {} {}".format(os.path.basename(__file__),e))         
+           tsslogging.locallogs("ERROR", "STEP 4c: Cannot make directory /rawdata/{} in {} {}".format(rtmsfoldername,os.path.basename(__file__),e))         
 
         startdirread()
         while True:
