@@ -57,7 +57,7 @@ default_args = {
   'attackscorethresholdtopic': 'attacktopic',   # All attack score greater than attackscorethreshold will be streamed to this topic
   'patternscorethreshold': '0.6',   # Pattern score threshold i.e. '0.8'   
   'patternscorethresholdtopic': 'patterntopic',   # All pattern score greater thn patternscorethreshold will be streamed to this topic
-
+  'rtmsfoldername': 'rtms'
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -363,6 +363,13 @@ def dopreprocessing(**context):
        else:  
          ti.xcom_push(key="{}_patternscorethreshold".format(sname), value="_{}".format(default_args['patternscorethreshold']))
 
+       rtmsfoldername=default_args['rtmsfoldername']
+       if 'step4crtmsfoldername' in os.environ:
+         ti.xcom_push(key="{}_rtmsfoldername".format(sname), value="{}".format(os.environ['step4crtmsfoldername']))         
+         rtmsfoldername=os.environ['step4crtmsfoldername']
+       else:  
+         ti.xcom_push(key="{}_rtmsfoldername".format(sname), value="{}".format(default_args['rtmsfoldername']))
+
   
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
@@ -373,7 +380,7 @@ def dopreprocessing(**context):
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess3", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} \"{}\" \"{}\" {} {} {} \"{}\" {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternwindowthreshold,raw_data_topic,rtmsstream,rtmsscorethreshold,attackscorethreshold,patternscorethreshold,localsearchtermfolder,localsearchtermfolderinterval), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} \"{}\" \"{}\" {} {} {} \"{}\" {} \"{}"\".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternwindowthreshold,raw_data_topic,rtmsstream,rtmsscorethreshold,attackscorethreshold,patternscorethreshold,localsearchtermfolder,localsearchtermfolderinterval,rtmsfoldername), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -416,7 +423,9 @@ if __name__ == '__main__':
         default_args['localsearchtermfolder'] = localsearchtermfolder
         localsearchtermfolderinterval =  sys.argv[15]
         default_args['localsearchtermfolderinterval'] = localsearchtermfolderinterval
-         
+        rtmsfoldername =  sys.argv[16]
+        default_args['rtmsfoldername'] = rtmsfoldername
+        
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
         try:
          directory="/rawdata/rtms"
