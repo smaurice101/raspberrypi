@@ -686,7 +686,7 @@ def generatedoc(**context):
           --env SOLUTIONDAG={} \\
           --env GITUSERNAME=<Enter Github Username> \\
           --env GITPASSWORD='<Enter Github Password>' \\          
-          --env GITREPOURL={} \\
+          --env GITREPOURL=<Enter Github Repo URL> \\
           --env SOLUTIONEXTERNALPORT={} \\
           -v /var/run/docker.sock:/var/run/docker.sock:z  \\
           -v /your_localmachine/foldername:/rawdata:z \\
@@ -708,7 +708,7 @@ def generatedoc(**context):
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,
-                          os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
+                          solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],TMLCLIENTPORT[1:],
                           externalport[1:],vipervizport[1:],airflowport[1:],ebuf,containername)       
     else:
@@ -719,7 +719,7 @@ def generatedoc(**context):
           --env SOLUTIONDAG={} \\
           --env GITUSERNAME=<Enter Github Username> \\
           --env GITPASSWORD='<Enter Github Password>' \\          
-          --env GITREPOURL={} \\
+          --env GITREPOURL=<Enter Github Repo URL> \\
           --env SOLUTIONEXTERNALPORT={} \\
           -v /var/run/docker.sock:/var/run/docker.sock:z \\
           -v /your_localmachine/foldername:/rawdata:z \\
@@ -739,8 +739,7 @@ def generatedoc(**context):
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
-                          sname,sd,
-                          os.environ['GITREPOURL'],solutionexternalport[1:],chipmain,
+                          sname,sd,solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],
                           externalport[1:],vipervizport[1:],airflowport[1:],ebuf,containername)
         
