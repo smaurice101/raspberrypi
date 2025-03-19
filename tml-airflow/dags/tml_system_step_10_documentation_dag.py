@@ -696,8 +696,10 @@ def generatedoc(**context):
           --env DOCKERUSERNAME='{}' \\
           --env CLIENTPORT={}  \\
           --env EXTERNALPORT={} \\
+          --env KAFKABROKERHOST=127.0.0.1:9092 \\          
           --env KAFKACLOUDUSERNAME='<Enter API key>' \\
           --env KAFKACLOUDPASSWORD='<Enter API secret>' \\          
+          --env SASLMECHANISM=PLAIN \\          
           --env VIPERVIZPORT={} \\
           --env MQTTUSERNAME='{}' \\
           --env AIRFLOWPORT={}  \\
@@ -726,8 +728,10 @@ def generatedoc(**context):
           --env SOLUTIONVIPERVIZPORT={} \\
           --env DOCKERUSERNAME='{}' \\
           --env EXTERNALPORT={} \\
+          --env KAFKABROKERHOST=127.0.0.1:9092 \\                    
           --env KAFKACLOUDUSERNAME='<Enter API key>' \\
           --env KAFKACLOUDPASSWORD='<Enter API secret>' \\          
+          --env SASLMECHANISM=PLAIN \\                    
           --env VIPERVIZPORT={} \\
           --env MQTTUSERNAME='{}' \\
           --env AIRFLOWPORT={} \\
