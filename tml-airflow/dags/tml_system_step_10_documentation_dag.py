@@ -702,8 +702,8 @@ def generatedoc(**context):
           --env SASLMECHANISM=PLAIN \\          
           --env VIPERVIZPORT={} \\
           --env MQTTUSERNAME='' \\
+          --env MQTTPASSWORD='' \\          
           --env AIRFLOWPORT={}  \\
-          --env MQTTPASSWORD='<Enter mqtt password>' \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
@@ -734,8 +734,8 @@ def generatedoc(**context):
           --env SASLMECHANISM=PLAIN \\                    
           --env VIPERVIZPORT={} \\
           --env MQTTUSERNAME='' \\
+          --env MQTTPASSWORD='' \\          
           --env AIRFLOWPORT={} \\
-          --env MQTTPASSWORD='<Enter mqtt password>' \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
