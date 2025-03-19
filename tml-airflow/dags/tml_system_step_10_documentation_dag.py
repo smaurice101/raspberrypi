@@ -685,6 +685,7 @@ def generatedoc(**context):
           --env SOLUTIONNAME={} \\
           --env SOLUTIONDAG={} \\
           --env GITUSERNAME={} \\
+          --env GITPASSWORD='<Enter Github Password>' \\          
           --env GITREPOURL={} \\
           --env SOLUTIONEXTERNALPORT={} \\
           -v /var/run/docker.sock:/var/run/docker.sock:z  \\
@@ -696,11 +697,10 @@ def generatedoc(**context):
           --env CLIENTPORT={}  \\
           --env EXTERNALPORT={} \\
           --env KAFKACLOUDUSERNAME='{}' \\
+          --env KAFKACLOUDPASSWORD='<Enter API secret>' \\          
           --env VIPERVIZPORT={} \\
           --env MQTTUSERNAME='{}' \\
           --env AIRFLOWPORT={}  \\
-          --env GITPASSWORD='<Enter Github Password>' \\
-          --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
           --env MQTTPASSWORD='<Enter mqtt password>' \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
@@ -716,6 +716,7 @@ def generatedoc(**context):
           --env SOLUTIONNAME={} \\
           --env SOLUTIONDAG={} \\
           --env GITUSERNAME={}  \\
+          --env GITPASSWORD='<Enter Github Password>' \\          
           --env GITREPOURL={} \\
           --env SOLUTIONEXTERNALPORT={} \\
           -v /var/run/docker.sock:/var/run/docker.sock:z \\
@@ -726,12 +727,11 @@ def generatedoc(**context):
           --env DOCKERUSERNAME='{}' \\
           --env EXTERNALPORT={} \\
           --env KAFKACLOUDUSERNAME='{}' \\
+          --env KAFKACLOUDPASSWORD='<Enter API secret>' \\          
           --env VIPERVIZPORT={} \\
           --env MQTTUSERNAME='{}' \\
           --env AIRFLOWPORT={} \\
           --env MQTTPASSWORD='<Enter mqtt password>' \\
-          --env KAFKACLOUDPASSWORD='<Enter API secret>' \\
-          --env GITPASSWORD='<Enter Github Password>' \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
           {}""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
