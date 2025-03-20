@@ -370,6 +370,12 @@ def dopreprocessing(**context):
        else:  
          ti.xcom_push(key="{}_rtmsfoldername".format(sname), value="{}".format(default_args['rtmsfoldername']))
        os.environ["step4crtmsfoldername"] = rtmsfoldername
+       try: 
+         f = open("/tmux/rtmsfoldername.txt", "w")
+         f.write(rtmsfoldername)
+         f.close()
+       except Exception as e:
+         pass
 
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
