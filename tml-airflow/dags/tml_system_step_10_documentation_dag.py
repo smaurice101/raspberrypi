@@ -971,6 +971,8 @@ def generatedoc(**context):
      
     step1solutiontitle=stitle
     step1description=sdesc
+    with open("/tmux/cname.txt", "r") as f:
+      containername=f.read()
 
     if len(CLIENTPORT) > 1:
       kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
