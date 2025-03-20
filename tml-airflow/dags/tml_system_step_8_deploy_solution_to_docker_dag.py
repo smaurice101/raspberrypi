@@ -47,12 +47,13 @@ def dockerit(**context):
       
        print("Containername=",cname)
        tsslogging.locallogs("INFO", "STEP 8: Starting docker push for: {}".format(cname))
-       try: 
-        f = open("/tmux/cname.txt", "w")
-        f.write(cname)
-        f.close()
-       except Exception as e:
-         pass
+       if os.environ['TSS'] == "1":
+         try: 
+           f = open("/tmux/cname.txt", "w")
+           f.write(cname)
+           f.close()
+         except Exception as e:
+           pass
      
        ti = context['task_instance']
        ti.xcom_push(key="{}_containername".format(sname),value=cname)
