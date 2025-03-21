@@ -166,6 +166,8 @@ def generatedoc(**context):
     step4clocalsearchtermfolder=''
     step4clocalsearchtermfolderinterval=''
     step4crtmsfoldername=''
+    step3localfileinputfile=''
+    step3localfiledocfolder=''
 
     rtmsoutputurl=""
     mloutputurl=""
@@ -291,7 +293,9 @@ def generatedoc(**context):
 
     if PRODUCETYPE=='LOCALFILE':
       inputfile = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_inputfile".format(sname))
+      step3localfileinputfile=inputfile
       docfolderprocess = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_docfolder".format(sname))
+      step3localfiledocfolder=docfolderprocess
       doctopic = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_doctopic".format(sname))
       chunks = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_chunks".format(sname))
       docingestinterval = context['ti'].xcom_pull(task_ids='step_3_solution_task_producetotopic',key="{}_docingestinterval".format(sname))
@@ -299,6 +303,7 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--doctopic--;{}".format(doctopic)])
       doparse("/{}/docs/source/details.rst".format(sname), ["--chunks--;{}".format(chunks[1:])])
       doparse("/{}/docs/source/details.rst".format(sname), ["--docingestinterval--;{}".format(docingestinterval[1:])])
+      doparse("/{}/docs/source/details.rst".format(sname), ["--inputfile--;{}".format(inputfile)])
      
     subprocess.call(["sed", "-i", "-e",  "s/--PRODUCETYPE--/{}/g".format(PRODUCETYPE), "/{}/docs/source/details.rst".format(sname)])
     subprocess.call(["sed", "-i", "-e",  "s/--TOPIC--/{}/g".format(TOPIC), "/{}/docs/source/details.rst".format(sname)])
