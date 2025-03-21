@@ -111,11 +111,12 @@ def setupkafkatopics(**context):
 
   topickeys = ['raw_data_topic','preprocess_data_topic','ml_data_topic','prediction_data_topic','pgpt_data_topic'] 
   VIPERHOSTMAIN = "{}{}".format(HTTPADDR,VIPERHOST)    
-
+  ptarr = ""
   for k in topickeys:
     producetotopic=args[k]
     description=args['description']
-
+    if producetotopic != "":
+      ptarr = ptarr + producetotopic.strip() + ","
     topicsarr = producetotopic.split(",")
     for topic in topicsarr:  
         if topic != '' and "127.0.0.1" in mainbroker:
@@ -125,20 +126,20 @@ def setupkafkatopics(**context):
             print("ERROR: ",e)
             continue 
 
-    if '127.0.0.1' in mainbroker:
+  if '127.0.0.1' in mainbroker:
         replication=1
             
-    for topic in topicsarr:  
-      if topic == '':
-          continue
-      print("Creating topic=",topic)  
-      try:
-        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOSTMAIN,VIPERPORT[1:],topic,companyname,
+    #for topic in topicsarr:  
+  if ptarr != '':          
+     ptarr=ptarr[:-1]
+     print("Creating topic=",ptarr)      
+     try:
+        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOSTMAIN,VIPERPORT[1:],ptarr,companyname,
                                  myname,myemail,mylocation,description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,
                                  microserviceid='')
-      except Exception as e:
-       tsslogging.locallogs("ERROR", "STEP 2: Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e)) 
+     except Exception as e:
+       tsslogging.locallogs("ERROR", "STEP 2: Cannot create topic {} in {} - {}".format(ptarr,os.path.basename(__file__),e)) 
     
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e), "ERROR" )                     
