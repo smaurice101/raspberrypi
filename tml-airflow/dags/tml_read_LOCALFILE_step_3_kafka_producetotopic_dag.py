@@ -282,8 +282,6 @@ if __name__ == '__main__':
          VIPERPORT = sys.argv[4]          
          inputfile = sys.argv[5]          
          default_args['inputfile']=inputfile
-         ti.xcom_push(key="{}_inputfile".format(sname),value=default_args['inputfile'])         
          docfolder = sys.argv[6]                   
          default_args['docfolder']=docfolder
-         ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])         
          readdata()
