@@ -236,7 +236,7 @@ def startproducing(**context):
   ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
 
   inputfile=default_args['inputfile']
-  if 'step3localfileinputfile' in os.environ"
+  if 'step3localfileinputfile' in os.environ:
        default_args['inputfile']=os.environ['step3localfileinputfile']
        ti.xcom_push(key="{}_inputfile".format(sname),value=default_args['inputfile'])
   else:
