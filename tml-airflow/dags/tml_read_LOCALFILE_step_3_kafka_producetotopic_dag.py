@@ -235,11 +235,23 @@ def startproducing(**context):
   ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
   ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
 
+  inputfile=default_args['inputfile']
+  if 'step3localfileinputfile' in os.environ"
+       default_args['inputfile']=os.environ['step3localfileinputfile']
+       ti.xcom_push(key="{}_inputfile".format(sname),value=default_args['inputfile'])
+  else:
+       ti.xcom_push(key="{}_inputfile".format(sname),value=default_args['inputfile'])
+  
+  docfolder=''
   if 'docfolder' in default_args and 'doctopic' in default_args:
+    docfolder=default_args['docfolder']
     ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
     ti.xcom_push(key="{}_doctopic".format(sname),value=default_args['doctopic'])
     ti.xcom_push(key="{}_chunks".format(sname),value="_{}".format(default_args['chunks']))
     ti.xcom_push(key="{}_docingestinterval".format(sname),value="_{}".format(default_args['docingestinterval']))
+    if 'step3localfiledocfolder' in os.environ"
+       default_args['docfolder']=os.environ['step3localfiledocfolder']
+       ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
   else:  
     ti.xcom_push(key="{}_docfolder".format(sname),value='')
     ti.xcom_push(key="{}_doctopic".format(sname),value='')
@@ -258,7 +270,7 @@ def startproducing(**context):
   wn = windowname('produce',sname,sd)  
   subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
   subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
-  subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} ".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:]), "ENTER"])        
+  subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],inputfile,docfolder), "ENTER"])        
         
 if __name__ == '__main__':
     
@@ -267,4 +279,10 @@ if __name__ == '__main__':
          VIPERTOKEN = sys.argv[2]
          VIPERHOST = sys.argv[3] 
          VIPERPORT = sys.argv[4]          
+         inputfile = sys.argv[5]          
+         default_args['inputfile']=inputfile
+         ti.xcom_push(key="{}_inputfile".format(sname),value=default_args['inputfile'])         
+         docfolder = sys.argv[6]                   
+         default_args['docfolder']=docfolder
+         ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])         
          readdata()
