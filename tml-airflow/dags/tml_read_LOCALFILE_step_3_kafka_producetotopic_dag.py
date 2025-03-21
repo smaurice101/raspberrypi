@@ -249,14 +249,15 @@ def startproducing(**context):
     ti.xcom_push(key="{}_doctopic".format(sname),value=default_args['doctopic'])
     ti.xcom_push(key="{}_chunks".format(sname),value="_{}".format(default_args['chunks']))
     ti.xcom_push(key="{}_docingestinterval".format(sname),value="_{}".format(default_args['docingestinterval']))
-    if 'step3localfiledocfolder' in os.environ"
-       default_args['docfolder']=os.environ['step3localfiledocfolder']
-       ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
   else:  
     ti.xcom_push(key="{}_docfolder".format(sname),value='')
     ti.xcom_push(key="{}_doctopic".format(sname),value='')
     ti.xcom_push(key="{}_chunks".format(sname),value='')
     ti.xcom_push(key="{}_docingestinterval".format(sname),value='')
+
+  if 'step3localfiledocfolder' in os.environ:
+       default_args['docfolder']=os.environ['step3localfiledocfolder']
+       ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
         
   chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))   
 
