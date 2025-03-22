@@ -320,13 +320,6 @@ def getparams(**context):
   reinitbinaries(sname)
   updateviperenv()
 
-  try: 
-    f = open("/tmux/rtmsmax.txt", "w")
-    f.write(default_args['RTMSMAXWINDOWS'])
-    f.close()
-  except Exception as e:
-    pass
-
   with open("/Viper-produce/admin.tok", "r") as f:
     VIPERTOKEN=f.read()
 
