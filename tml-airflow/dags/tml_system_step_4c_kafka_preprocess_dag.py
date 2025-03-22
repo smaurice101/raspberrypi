@@ -57,7 +57,8 @@ default_args = {
   'attackscorethresholdtopic': 'attacktopic',   # All attack score greater than attackscorethreshold will be streamed to this topic
   'patternscorethreshold': '0.6',   # Pattern score threshold i.e. '0.8'   
   'patternscorethresholdtopic': 'patterntopic',   # All pattern score greater thn patternscorethreshold will be streamed to this topic
-  'rtmsfoldername': 'rtms'
+  'rtmsfoldername': 'rtms',
+  'rtmsmaxwindows': '10000'
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -383,12 +384,16 @@ def dopreprocessing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
 
-       rtmsmaxwindows = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_rtmsmaxwindows".format(sname))
+       if 'step1rtmsmaxwindows' in os.environ:
+          rtmsmaxwindows=os.environ['step1rtmsmaxwindows']
+       else: 
+          rtmsmaxwindows = default_args['rtmsmaxwindows']
+       ti.xcom_push(key="{}_rtmsmaxwindows".format(sname), value="_{}".format(rtmsmaxwindows))         
         
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess3", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} \"{}\" \"{}\" {} {} {} \"{}\" {} \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternwindowthreshold,raw_data_topic,rtmsstream,rtmsscorethreshold,attackscorethreshold,patternscorethreshold,localsearchtermfolder,localsearchtermfolderinterval,rtmsfoldername,rtmsmaxwindows[1:]), "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" {} {} \"{}\" \"{}\" {} {} {} \"{}\" {} \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,searchterms,rememberpastwindows,patternwindowthreshold,raw_data_topic,rtmsstream,rtmsscorethreshold,attackscorethreshold,patternscorethreshold,localsearchtermfolder,localsearchtermfolderinterval,rtmsfoldername,rtmsmaxwindows), "ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
