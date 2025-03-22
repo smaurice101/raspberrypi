@@ -208,7 +208,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
                 step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                 step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
-                step3localfileinputfile='',step3localfiledocfolder='',step1rtmsmaxwindows=''):
+                step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows=''):
                
     cp = ""
     cpp = ""
@@ -372,6 +372,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                                             
              - name: step4crtmsfoldername # STEP 4c 
                value: '{}'                                                                                          
+             - name: step4crtmsmaxwindows # STEP 4c adjust RTMSMAXWINDOWS for Step 4c
+               value: '{}'                                                      
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                  
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -416,8 +418,6 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
                value: '{}'        
-             - name: step1rtmsmaxwindows # STEP 1 adjust RTMSMAXWINDOWS for Step 4c
-               value: '{}'                        
              - name: KUBEBROKERHOST
                value: '{}'         
              - name: KAFKABROKERHOST
@@ -459,11 +459,11 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
                            airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
-                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step1solutiontitle,step1description,step1rtmsmaxwindows,kubebroker,kafkabroker,
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
@@ -478,7 +478,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
                      step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                      step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
-                     step3localfileinputfile='',step3localfiledocfolder='',step1rtmsmaxwindows=''):
+                     step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows=''):
     cp = ""
     cpp = ""
     
@@ -637,6 +637,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                                                            
              - name: step4crtmsfoldername # STEP 4c 
                value: '{}'                                                                           
+             - name: step4crtmsmaxwindows # STEP 4c adjust RTMSMAXWINDOWS for Step 4c
+               value: '{}'                                       
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                              
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -681,8 +683,6 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
                value: '{}'                                          
-             - name: step1rtmsmaxwindows # STEP 1 adjust RTMSMAXWINDOWS for Step 4c
-               value: '{}'                                       
              - name: KUBEBROKERHOST
                value: '{}'         
              - name: KAFKABROKERHOST
@@ -708,11 +708,11 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
                            mqttuser,airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
-                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step1solutiontitle,step1description,step1rtmsmaxwindows,kubebroker,kafkabroker,
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
     return kcmd
