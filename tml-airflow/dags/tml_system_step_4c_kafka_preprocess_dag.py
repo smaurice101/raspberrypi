@@ -126,14 +126,15 @@ def processtransactiondata():
          attackscorethresholdtopic = default_args['attackscorethresholdtopic']  
          patternscorethreshold = default_args['patternscorethreshold']  
          patternscorethresholdtopic = default_args['patternscorethresholdtopic']  
-         
+         rtmsmaxwindows=default_args['rtmsmaxwindows']
+
          searchterms = str(base64.b64encode(searchterms.encode('utf-8')))
          try:
                 result=maadstml.viperpreprocessrtms(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
                                                   brokerport,microserviceid,topicid,rtmsstream,searchterms,rememberpastwindows,identifier,
                                                   preprocesstopic,patternwindowthreshold,array,saveasarray,rawdataoutput,
                                                   rtmsscorethreshold,rtmsscorethresholdtopic,attackscorethreshold,
-                                                  attackscorethresholdtopic,patternscorethreshold,patternscorethresholdtopic)
+                                                  attackscorethresholdtopic,patternscorethreshold,patternscorethresholdtopic,rtmsmaxwindows)
 #                print(result)
          except Exception as e:
                 print("ERROR:",e)
@@ -386,9 +387,16 @@ def dopreprocessing(**context):
 
        if 'step1rtmsmaxwindows' in os.environ:
           rtmsmaxwindows=os.environ['step1rtmsmaxwindows']
+          default_args['rtmsmaxwindows']=rtmsmaxwindows
        else: 
           rtmsmaxwindows = default_args['rtmsmaxwindows']
        ti.xcom_push(key="{}_rtmsmaxwindows".format(sname), value="_{}".format(rtmsmaxwindows))         
+       try: 
+         f = open("/tmux/rtmsmax.txt", "w")
+         f.write(rtmsmaxwindows)
+         f.close()
+       except Exception as e:
+         pass
         
        wn = windowname('preprocess3',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
@@ -438,7 +446,9 @@ if __name__ == '__main__':
         default_args['localsearchtermfolderinterval'] = localsearchtermfolderinterval
         rtmsfoldername =  sys.argv[16]
         default_args['rtmsfoldername'] = rtmsfoldername
-        
+        rtmsmaxwindows =  sys.argv[17]
+        default_args['rtmsmaxwindows'] = rtmsmaxwindows
+
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
         try:
          directory="/rawdata/{}".format(rtmsfoldername)         
