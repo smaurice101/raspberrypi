@@ -168,6 +168,7 @@ def generatedoc(**context):
     step4crtmsfoldername=''
     step3localfileinputfile=''
     step3localfiledocfolder=''
+    step1rtmsmaxwindows=''
 
     rtmsoutputurl=""
     mloutputurl=""
