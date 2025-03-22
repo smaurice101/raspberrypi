@@ -72,7 +72,6 @@ default_args = {
  'SSL_CLIENT_KEY_FILE' : 'client.key.pem', 
  'SSL_SERVER_CERT_FILE' : 'server.cer.pem',  
  'KUBERNETES' : '0',
- 'RTMSMAXWINDOWS' : '100000', 
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -519,6 +518,5 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_brokerhost".format(sname),value=brokerhost)
   task_instance.xcom_push(key="{}_brokerport".format(sname),value="_{}".format(brokerport))
   task_instance.xcom_push(key="{}_chip".format(sname),value=chip)
-  task_instance.xcom_push(key="{}_rtmsmaxwindows".format(sname),value="_{}".format(default_args['RTMSMAXWINDOWS']))
     
   tsslogging.locallogs("INFO", "STEP 1: completed - TML system parameters successfully gathered")
