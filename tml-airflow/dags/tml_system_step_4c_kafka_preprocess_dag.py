@@ -385,8 +385,8 @@ def dopreprocessing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
 
-       if 'step1rtmsmaxwindows' in os.environ:
-          rtmsmaxwindows=os.environ['step1rtmsmaxwindows']
+       if 'step4crtmsmaxwindows' in os.environ:
+          rtmsmaxwindows=os.environ['step4crtmsmaxwindows']
           default_args['rtmsmaxwindows']=rtmsmaxwindows
        else: 
           rtmsmaxwindows = default_args['rtmsmaxwindows']
