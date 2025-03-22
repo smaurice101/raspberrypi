@@ -168,7 +168,7 @@ def generatedoc(**context):
     step4crtmsfoldername=''
     step3localfileinputfile=''
     step3localfiledocfolder=''
-    step1rtmsmaxwindows=''
+    step4crtmsmaxwindows=''
 
     rtmsoutputurl=""
     mloutputurl=""
@@ -424,7 +424,7 @@ def generatedoc(**context):
     attackscorethreshold = context['ti'].xcom_pull(task_ids='step_4c_solution_task_preprocess',key="{}_attackscorethreshold".format(sname))
     patternscorethreshold = context['ti'].xcom_pull(task_ids='step_4c_solution_task_preprocess',key="{}_patternscorethreshold".format(sname))
     rtmsmaxwindows = context['ti'].xcom_pull(task_ids='step_4c_solution_task_preprocess',key="{}_rtmsmaxwindows".format(sname))
-    step1rtmsmaxwindows=rtmsmaxwindows
+    step4crtmsmaxwindows=rtmsmaxwindows
 
     localsearchtermfolder = context['ti'].xcom_pull(task_ids='step_4c_solution_task_preprocess',key="{}_localsearchtermfolder".format(sname))
     localsearchtermfolderinterval = context['ti'].xcom_pull(task_ids='step_4c_solution_task_preprocess',key="{}_localsearchtermfolderinterval".format(sname))
@@ -995,7 +995,7 @@ def generatedoc(**context):
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
-                       step3localfileinputfile,step3localfiledocfolder,step1rtmsmaxwindows[1:])
+                       step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:])
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1008,7 +1008,7 @@ def generatedoc(**context):
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
-                       step3localfileinputfile,step3localfiledocfolder,step1rtmsmaxwindows[1:])
+                       step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:])
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
