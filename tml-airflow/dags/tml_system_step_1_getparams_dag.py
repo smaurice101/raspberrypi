@@ -292,13 +292,6 @@ def getparams(**context):
   except Exception as e:
     pass
 
-  try: 
-    f = open("/tmux/rtmsmax.txt", "w")
-    f.write(default_args['RTMSMAXWINDOWS'])
-    f.close()
-  except Exception as e:
-    pass
-
   if os.environ['TSS']==1:
     try: 
       shutil.rmtree("/rawdata/rtms") 
@@ -329,6 +322,13 @@ def getparams(**context):
   brokerport = args['brokerport'] 
   reinitbinaries(sname)
   updateviperenv()
+
+  try: 
+    f = open("/tmux/rtmsmax.txt", "w")
+    f.write(default_args['RTMSMAXWINDOWS'])
+    f.close()
+  except Exception as e:
+    pass
 
   with open("/Viper-produce/admin.tok", "r") as f:
     VIPERTOKEN=f.read()
@@ -519,5 +519,6 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_brokerhost".format(sname),value=brokerhost)
   task_instance.xcom_push(key="{}_brokerport".format(sname),value="_{}".format(brokerport))
   task_instance.xcom_push(key="{}_chip".format(sname),value=chip)
+  task_instance.xcom_push(key="{}_rtmsmaxwindows".format(sname),value="_{}".format(default_args['RTMSMAXWINDOWS']))
     
   tsslogging.locallogs("INFO", "STEP 1: completed - TML system parameters successfully gathered")
