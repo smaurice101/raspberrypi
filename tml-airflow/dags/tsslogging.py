@@ -208,7 +208,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
                 step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                 step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
-                step3localfileinputfile='',step3localfiledocfolder=''):
+                step3localfileinputfile='',step3localfiledocfolder='',step1rtmsmaxwindows=''):
                
     cp = ""
     cpp = ""
@@ -478,7 +478,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
                      step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                      step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
-                     step3localfileinputfile='',step3localfiledocfolder=''):
+                     step3localfileinputfile='',step3localfiledocfolder='',step1rtmsmaxwindows=''):
     cp = ""
     cpp = ""
     
