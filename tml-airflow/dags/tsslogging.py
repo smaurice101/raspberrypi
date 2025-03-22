@@ -417,7 +417,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step1description # STEP 1 description field can be adjusted here. 
                value: '{}'        
              - name: step1rtmsmaxwindows # STEP 1 adjust RTMSMAXWINDOWS for Step 4c
-               value: '10000'                        
+               value: '{}'                        
              - name: KUBEBROKERHOST
                value: '{}'         
              - name: KAFKABROKERHOST
@@ -463,7 +463,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step1solutiontitle,step1description,step1rtmsmaxwindows,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
@@ -682,7 +682,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step1description # STEP 1 description field can be adjusted here. 
                value: '{}'                                          
              - name: step1rtmsmaxwindows # STEP 1 adjust RTMSMAXWINDOWS for Step 4c
-               value: '10000'                                       
+               value: '{}'                                       
              - name: KUBEBROKERHOST
                value: '{}'         
              - name: KAFKABROKERHOST
@@ -712,7 +712,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step1solutiontitle,step1description,step1rtmsmaxwindows,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
     return kcmd
