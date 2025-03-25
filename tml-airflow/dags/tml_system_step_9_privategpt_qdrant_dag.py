@@ -745,7 +745,8 @@ if __name__ == '__main__':
         print("Docfolder=",docfolder)
         if docfolder != '':
           startdirread()
-                   
+
+        count=0
         while True:
          try:
              # Get preprocessed data from Kafka
@@ -757,9 +758,13 @@ if __name__ == '__main__':
                if len(maindata) > 0:
                 sendtoprivategpt(maindata,docfolder)                      
              time.sleep(2)
+             count=0
          except Exception as e:
-            
-          tsslogging.locallogs("ERROR", "STEP 9: PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e))
-          tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
+          print("Error=",e)
+          tsslogging.locallogs("ERROR", "STEP 9: PrivateGPT Step 9 DAG in {} {}  Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e))
+          tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {} Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e), "ERROR" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
           time.sleep(5)
+          count = count + 1
+          if count > 10:
+            break
