@@ -209,6 +209,17 @@ def consumetopicdata():
 #      print(result)
       return result
 
+def getsearchtext(res,context,prompt):
+   privategptmessage = []  
+   messages = ""
+   mainmessages=""
+   for r in res['StreamTopicDetails']['TopicReads']:
+      for d in r['SearchTextFound']:              
+        messages = messages + str(d) + ". "
+
+   mainmessages = "{}. Here are the messages: {}. {}".format(context,messages,prompt)
+   privategptmessage.append([mainmessages,"SearchTextFound"])
+  
 def gatherdataforprivategpt(result):
 
    privategptmessage = []
@@ -272,6 +283,10 @@ def gatherdataforprivategpt(result):
      tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
      return
 
+   if jsonkeytogather.tolower()=="searchtextfound":
+     privategptmessage=getsearchtext(res,context,prompt)
+     return privategptmessage
+  
    for r in res['StreamTopicDetails']['TopicReads']:
        if jsonkeytogather == 'Identifier' or jsonkeytogather == 'identifier':
          identarr=r['Identifier'].split("~")
@@ -468,7 +483,7 @@ def sendtoprivategpt(maindata,docfolder):
      hyperbatch = default_args['hyperbatch']
  
    for mess in maindata:
-        if default_args['jsonkeytogather']=='Identifier' or hyperbatch=="0":
+        if default_args['jsonkeytogather']=='Identifier' or hyperbatch=="0" or default_args['jsonkeytogather'].tolower()=="searchtextfound":
            m = mess[0]
            m1 = mess[1]
         else:
@@ -723,13 +738,12 @@ if __name__ == '__main__':
          try:
              # Get preprocessed data from Kafka
              result = consumetopicdata()
-             if result!="":
-               # Format the preprocessed data for PrivateGPT
+             if result != "":
+             # Format the preprocessed data for PrivateGPT
                maindata = gatherdataforprivategpt(result)
-
-               # Send the data to PrivateGPT and produce to Kafka
+             # Send the data to PrivateGPT and produce to Kafka
                if len(maindata) > 0:
-                 sendtoprivategpt(maindata,docfolder)                      
+                sendtoprivategpt(maindata,docfolder)                      
              time.sleep(2)
          except Exception as e:
             
