@@ -511,7 +511,7 @@ def sendtoprivategpt(maindata,docfolder):
         if 'ERROR:' not in response:         
           response = response.replace('\\"',"'").replace('\n',' ')  
           if default_args['jsonkeytogather'].tolower()=="searchtextfound":
-             response1 = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"           
+             response1 = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"           
              writetortmslogfile(mess[2],response1)
           else: 
              response1 = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\",\"searchfound\":\"" + sf + "\"}"
