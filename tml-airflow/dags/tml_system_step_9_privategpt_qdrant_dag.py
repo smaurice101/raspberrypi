@@ -723,13 +723,13 @@ if __name__ == '__main__':
          try:
              # Get preprocessed data from Kafka
              result = consumetopicdata()
+             if result!="":
+               # Format the preprocessed data for PrivateGPT
+               maindata = gatherdataforprivategpt(result)
 
-             # Format the preprocessed data for PrivateGPT
-             maindata = gatherdataforprivategpt(result)
-
-             # Send the data to PrivateGPT and produce to Kafka
-             if len(maindata) > 0:
-              sendtoprivategpt(maindata,docfolder)                      
+               # Send the data to PrivateGPT and produce to Kafka
+               if len(maindata) > 0:
+                 sendtoprivategpt(maindata,docfolder)                      
              time.sleep(2)
          except Exception as e:
             
