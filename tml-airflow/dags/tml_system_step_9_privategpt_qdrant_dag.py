@@ -209,16 +209,25 @@ def consumetopicdata():
 #      print(result)
       return result
 
+def writetortmslogfile(fname,jsonbuf):
+       try: 
+         f = open(fname, "w")
+         f.write(jsonbuf +"\n")
+         f.close()
+       except Exception as e:
+         pass
+    
 def getsearchtext(res,context,prompt):
    privategptmessage = []  
    messages = ""
    mainmessages=""
    for r in res['StreamTopicDetails']['TopicReads']:
+      fname=r['Filename']
       for d in r['SearchTextFound']:              
         messages = messages + str(d) + ". "
 
    mainmessages = "{}. Here are the messages: {}. {}".format(context,messages,prompt)
-   privategptmessage.append([mainmessages,"SearchTextFound"])
+   privategptmessage.append([mainmessages,"SearchTextFound",fname])
   
 def gatherdataforprivategpt(result):
 
@@ -499,12 +508,15 @@ def sendtoprivategpt(maindata,docfolder):
               if sf=="false":
                  response="ERROR:"
            m = m + ' (' + usingqdrant + ')'
-        response = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\",\"searchfound\":\"" + sf + "\"}"
-        print("PGPT response=",response)
         if 'ERROR:' not in response:         
           response = response.replace('\\"',"'").replace('\n',' ')  
-          producegpttokafka(response,maintopic)
-        #  time.sleep(1)
+          if default_args['jsonkeytogather'].tolower()=="searchtextfound":
+             response1 = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\"}"           
+             writetortmslogfile(mess[2],response1)
+          else: 
+             response1 = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\",\"searchfound\":\"" + sf + "\"}"
+          print("PGPT response1=",response1)           
+          producegpttokafka(response1,maintopic)           
         else:
           counter += 1
           time.sleep(1)
