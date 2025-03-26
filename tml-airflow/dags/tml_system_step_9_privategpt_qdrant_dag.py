@@ -11,6 +11,7 @@ import subprocess
 import random
 import json
 import threading
+import re
 from binaryornot.check import is_binary
 docidstrarr = []
 
@@ -57,7 +58,8 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'searchterms': '192.168.--identifier--,authentication failure',
  'temperature' : '0.1', # This value ranges between 0 and 1, it controls how conservative LLM model will be, if 0 very very, if 1 it will hallucinate
  'vectorsearchtype' : 'Manhattan', # this is for the Qdrant Search algorithm.  it can be: Cosine, Euclid, Dot, or Manhattan
- 'streamall': '1'
+ 'streamall': '1',
+ 'contextwindowsize': '8192' # Size of the context window.  This controls the number of tokens to process by LLM model
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -72,21 +74,22 @@ GPTONLINE=0
 
 def checkresponse(response,ident):
     global GPTONLINE
-    print("Checkresponse")
     st="false"
     
     if "ERROR:" in response:         
-         return response,st
+         return response,st,""
         
     GPTONLINE=1
                 
-    response = response.replace("null","-1").replace("\n","")
+    response = response.replace("null","-1").replace("\\n"," ")
     r1=json.loads(response)
     c1=r1['choices'][0]['message']['content']
+    c1=c1.replace('"','\\"').replace("'","\'").replace("\\n"," ")
+    c1 = re.sub(' +', ' ', c1)
     if '=' in c1 and ('Answer:' in c1 or 'A:' in c1):
       r1['choices'][0]['message']['content'] = "The analysis of the document(s) did not find a proper result."
       response = json.dumps(r1)
-      return response,st  
+      return response,st,c1.strip()  
         
     if default_args['searchterms'] != '':          
           starr = default_args['searchterms'].split(",")
@@ -97,7 +100,7 @@ def checkresponse(response,ident):
                 st="true"
                 break
 
-    return response,st
+    return response,st,c1.strip()
 
 def stopcontainers():
    pgptcontainername = default_args['pgptcontainername']
@@ -119,6 +122,7 @@ def stopcontainers():
       tsslogging.locallogs("WARN", "STEP 9: PrivateGPT container not found. It may need to be pulled if it does not start: docker pull {}".format(pgptcontainername))
 
 def startpgptcontainer():
+      print("Starting PGPT container: {}".format(default_args['pgptcontainername'])) 
       collection = default_args['vectordbcollectionname']
       concurrency = default_args['concurrency']
       pgptcontainername = default_args['pgptcontainername']
@@ -126,18 +130,17 @@ def startpgptcontainer():
       cuda = int(default_args['CUDA_VISIBLE_DEVICES'])
       temp = default_args['temperature']
       vectorsearchtype = default_args['vectorsearchtype']
+      cw = default_args['contextwindowsize']
  
       stopcontainers()
-#      buf="docker stop $(docker ps -q --filter ancestor={} )".format(pgptcontainername)
- #     subprocess.call(buf, shell=True)
       time.sleep(10)
       if '-no-gpu-' in pgptcontainername:       
           buf = "docker run -d -p {}:{} --net=host --env PORT={} --env GPU=0 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env temperature={} --env vectorsearchtype=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)       
       else: 
         if os.environ['TSS'] == "1":       
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,pgptcontainername)
         else:
-          buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
       print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
@@ -165,6 +168,7 @@ def qdrantcontainer():
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
 
+  print("Pgptchat=",prompt)
   response=maadstml.pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint)
   return response
 
@@ -186,7 +190,6 @@ def producegpttokafka(value,maintopic):
         print("ERROR:",e)
 
 def consumetopicdata():
-
       maintopic = default_args['consumefrom']
       rollbackoffsets = int(default_args['rollbackoffset'])
       enabletls = int(default_args['enabletls'])
@@ -206,29 +209,39 @@ def consumetopicdata():
                   offset, brokerhost,brokerport,microserviceid,
                   topicid,rollbackoffsets,preprocesstype)
 
-#      print(result)
       return result
 
 def writetortmslogfile(fname,jsonbuf):
+       print("fname=",fname)
+       print("jsonbuf=",jsonbuf)
        try: 
          f = open(fname, "w")
          f.write(jsonbuf +"\n")
          f.close()
        except Exception as e:
          pass
-    
+   
 def getsearchtext(res,context,prompt):
    privategptmessage = []  
    messages = ""
    mainmessages=""
+   cw = int(default_args['contextwindowsize'])
+   
    for r in res['StreamTopicDetails']['TopicReads']:
       fname=r['Filename']
+      messages=""
       for d in r['SearchTextFound']:              
-        messages = messages + str(d) + ". "
+        messages = messages + str(d[15:].strip()) + ". "
+        if len(messages) > cw:
+          messages = messages[0:cw-1]
+          break
 
-   mainmessages = "{}. Here are the messages: {}. {}".format(context,messages,prompt)
-   privategptmessage.append([mainmessages,"SearchTextFound",fname])
-  
+      
+      mainmessages = "{}. Here are the messages: {}. {}".format(context,messages,prompt)
+      privategptmessage.append([mainmessages,"SearchTextFound",fname,json.dumps(r)])
+
+   return privategptmessage  
+
 def gatherdataforprivategpt(result):
 
    privategptmessage = []
@@ -283,7 +296,15 @@ def gatherdataforprivategpt(result):
    else: 
      hyperbatch = default_args['hyperbatch']
 
-   res=json.loads(result,strict='False')
+   try:
+     res=json.loads(result,strict='False')
+   except Exception as e:
+     print("Error=",e)
+     tsslogging.tsslogit("PrivateGPT DAG jsonkeytogather is empty in {} {}".format(os.path.basename(__file__),e), "ERROR" )
+     tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+     return 
+
+
    message = ""
    found=0 
 
@@ -292,7 +313,7 @@ def gatherdataforprivategpt(result):
      tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
      return
 
-   if jsonkeytogather.tolower()=="searchtextfound":
+   if jsonkeytogather.lower()=="searchtextfound":
      privategptmessage=getsearchtext(res,context,prompt)
      return privategptmessage
   
@@ -300,7 +321,6 @@ def gatherdataforprivategpt(result):
        if jsonkeytogather == 'Identifier' or jsonkeytogather == 'identifier':
          identarr=r['Identifier'].split("~")
          try:
-           #print(r['Identifier'], " attribute=",attribute)
            attribute = attribute.lower()
            aar = attribute.split(",")
            isin=any(x in r['Identifier'].lower() for x in aar)
@@ -322,7 +342,6 @@ def gatherdataforprivategpt(result):
          except Excepption as e:
            tsslogging.tsslogit("PrivateGPT DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-#           break
        else:
          isin1 = False
          isin2 = False
@@ -381,7 +400,6 @@ def gatherdataforprivategpt(result):
      privategptmessage.append(message)
 
 
-#   print("privategptmessage=",privategptmessage)
    return privategptmessage
 
 def startdirread():
@@ -414,7 +432,6 @@ def ingestfiles():
     basefolder='/rawdata/'
     pgptip = default_args['pgpthost']
     pgptport = default_args['pgptport']
- #   buf="/mnt/c/maads/tml-airflow/rawdata/mylogs,/mnt/c/maads/tml-airflow/rawdata/mylogs2"
     buf = default_args['docfolder']
  
     bufarr=buf.split(",")
@@ -492,30 +509,36 @@ def sendtoprivategpt(maindata,docfolder):
      hyperbatch = default_args['hyperbatch']
  
    for mess in maindata:
-        if default_args['jsonkeytogather']=='Identifier' or hyperbatch=="0" or default_args['jsonkeytogather'].tolower()=="searchtextfound":
+        if default_args['jsonkeytogather']=='Identifier' or hyperbatch=="0" or default_args['jsonkeytogather'].lower()=="searchtextfound":
            m = mess[0]
            m1 = mess[1]
         else:
            m = mess
            m1 = attribute #default_args['keyattribute']
-        
+
         response=pgptchat(m,mcontext,docidstrarr,mainport,False,mainip,pgptendpoint)
+        response=response.strip()
         # Produce data to Kafka
         sf="false"
+        response,sf,contentmessage=checkresponse(response,m1)
         if usingqdrant != '':
-           response,sf=checkresponse(response,m1) 
            if default_args['streamall']=="0": # Only stream if search terms found in response
               if sf=="false":
                  response="ERROR:"
            m = m + ' (' + usingqdrant + ')'
-        if 'ERROR:' not in response:         
-          response = response.replace('\\"',"'").replace('\n',' ')  
-          if default_args['jsonkeytogather'].tolower()=="searchtextfound":
-             response1 = response[:-1] + "," + "\"prompt\":\"" + m + "\"}"           
+        if 'ERROR:' not in response and contentmessage != "":         
+          if default_args['jsonkeytogather'].lower()=="searchtextfound":
+             jmess = mess[3]
+             response1 = jmess[:-1] + ",\"privateGPT_AI_response\":\"" + contentmessage.strip().rstrip().lstrip() + \
+                       "\"," + "\"prompt\":\"" + default_args['prompt'] + "\",\"context\":\""+default_args['context'] + \
+                       "\",\"pgptcontainer\":\"" + default_args['pgptcontainername'] + "\",\"pgpt_consumefrom\":\"" + \
+                        default_args['consumefrom'] + "\", \"pgpt_data_topic\":\"" + default_args['pgpt_data_topic'] + \
+                        "\",\"contextwindowsize\":" + default_args['contextwindowsize'] + ",\"temperature\":\""+default_args['temperature'] + \
+                        "\",\"pgptrollbackoffset\":"+default_args['rollbackoffset'] + "}"           
              writetortmslogfile(mess[2],response1)
           else: 
-             response1 = response[:-1] + "," + "\"prompt\":\"" + m + "\",\"identifier\":\"" + m1 + "\",\"searchfound\":\"" + sf + "\"}"
-          print("PGPT response1=",response1)           
+             response1 = response[:-1] + "," + "\"prompt\":\"" + m.strip() + "\",\"identifier\":\"" + m1.strip() + "\",\"searchfound\":\"" + sf.strip() + "\"}"
+          response1=response1.replace(";",":")
           producegpttokafka(response1,maintopic)           
         else:
           counter += 1
@@ -552,6 +575,14 @@ def startprivategpt(**context):
           if os.environ['step9context'] != '':
             default_args['context'] = os.environ['step9context']
 
+       if 'step9contextwindowsize' in os.environ:
+          if os.environ['step9contextwindowsize'] != '':
+            default_args['contextwindowsize'] = os.environ['step9contextwindowsize']
+
+       if 'step9pgptcontainername' in os.environ:
+          if os.environ['step9pgptcontainername'] != '':
+            default_args['pgptcontainername'] = os.environ['step9pgptcontainername']
+
        if 'step9keyattribute' in os.environ:
           if os.environ['step9keyattribute'] != '':
             default_args['keyattribute'] = os.environ['step9keyattribute']
@@ -580,16 +611,25 @@ def startprivategpt(**context):
        if 'step9useidentifierinprompt' in os.environ:
           if os.environ['step9useidentifierinprompt'] != '':
             default_args['useidentifierinprompt'] = os.environ['step9useidentifierinprompt']
+
        if 'step9searchterms' in os.environ:
-          if os.environ['searchterms'] != '':
-            default_args['searchterms'] = os.environ['searchterms']
+          if os.environ['step9searchterms'] != '':
+            default_args['searchterms'] = os.environ['step9searchterms']
 
        if 'step9temperature' in os.environ:
-          if os.environ['temperature'] != '':
-            default_args['temperature'] = os.environ['temperature']
+          if os.environ['step9temperature'] != '':
+            default_args['temperature'] = os.environ['step9temperature']
        if 'step9vectorsearchtype' in os.environ:
-          if os.environ['vectorsearchtype'] != '':
-            default_args['vectorsearchtype'] = os.environ['vectorsearchtype']
+          if os.environ['step9vectorsearchtype'] != '':
+            default_args['vectorsearchtype'] = os.environ['step9vectorsearchtype']
+
+
+       if 'step9pgpthost' in os.environ:
+          if os.environ['step9pgpthost'] != '':
+            default_args['pgpthost'] = os.environ['step9pgpthost']
+       if 'step9pgptport' in os.environ:
+          if os.environ['step9pgptport'] != '':
+            default_args['pgptport'] = os.environ['step9pgptport']
 
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
@@ -601,10 +641,7 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_pgpt_data_topic".format(sname), value=default_args['pgpt_data_topic'])
        ti.xcom_push(key="{}_pgptcontainername".format(sname), value=default_args['pgptcontainername'])
        ti.xcom_push(key="{}_offset".format(sname), value="_{}".format(default_args['offset']))
-       if 'step9rollbackoffset' in os.environ:
-          ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(os.environ['step9rollbackoffset']))
-       else: 
-          ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(default_args['rollbackoffset']))
+       ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(default_args['rollbackoffset']))
 
        ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
        ti.xcom_push(key="{}_enabletls".format(sname), value="_{}".format(default_args['enabletls']))
@@ -642,23 +679,18 @@ def startprivategpt(**context):
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['vectordbcollectionname'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
                        default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
                        default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],
-                       default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall'],default_args['temperature'],default_args['vectorsearchtype']), "ENTER"])
+                       default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall'],default_args['temperature'],
+                       default_args['vectorsearchtype'], default_args['contextwindowsize'], default_args['pgptcontainername'], 
+                       default_args['pgpthost'],default_args['pgptport']), "ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
         repo=tsslogging.getrepo()      
-        try:
-          tsslogging.tsslogit("PrivateGPT Step 9 DAG in {}".format(os.path.basename(__file__)), "INFO" )
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-        except Exception as e:
-            #git push -f origin main
-            os.chdir("/{}".format(repo))
-            subprocess.call("git push -f origin main", shell=True)
 
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3]
@@ -680,6 +712,12 @@ if __name__ == '__main__':
         streamall =  sys.argv[18]
         temperature = sys.argv[19]
         vectorsearchtype = sys.argv[20]
+
+        contextwindowsize = sys.argv[21]
+        pgptcontainername = sys.argv[22]
+
+        pgpthost = sys.argv[23]
+        pgptport = sys.argv[24]
         
         default_args['rollbackoffset']=rollbackoffset
         default_args['prompt'] = prompt
@@ -699,6 +737,12 @@ if __name__ == '__main__':
         default_args['streamall'] = streamall
         default_args['temperature'] = temperature
         default_args['vectorsearchtype'] = vectorsearchtype
+
+        default_args['contextwindowsize'] = contextwindowsize
+        default_args['pgptcontainername'] = pgptcontainername
+
+        default_args['pgpthost'] = pgpthost
+        default_args['pgptport'] = pgptport
 
         if "KUBE" not in os.environ:          
           v,buf=qdrantcontainer()
@@ -742,29 +786,29 @@ if __name__ == '__main__':
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Starting privateGPT - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9: [KUBERNETES] Make sure you have applied the private GPT YAML files and have the privateGPT Pod running")
 
-        print("Docfolder=",docfolder)
         if docfolder != '':
           startdirread()
-
-        count=0
+        count=0           
         while True:
          try:
              # Get preprocessed data from Kafka
              result = consumetopicdata()
-             if result != "":
+#             print("Result=",result) 
+             if result != "" and result is not None:
              # Format the preprocessed data for PrivateGPT
                maindata = gatherdataforprivategpt(result)
              # Send the data to PrivateGPT and produce to Kafka
                if len(maindata) > 0:
                 sendtoprivategpt(maindata,docfolder)                      
-             time.sleep(2)
+#             time.sleep(2)
              count=0
          except Exception as e:
-          print("Error=",e)
+          print("Error=",e)              
           tsslogging.locallogs("ERROR", "STEP 9: PrivateGPT Step 9 DAG in {} {}  Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e))
           tsslogging.tsslogit("PrivateGPT Step 9 DAG in {} {} Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e), "ERROR" )
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
           time.sleep(5)
           count = count + 1
           if count > 10:
-            break
+            break 
+          
