@@ -668,7 +668,7 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_streamall".format(sname), value="_{}".format(default_args['streamall']))
        ti.xcom_push(key="{}_temperature".format(sname), value="_{}".format(default_args['temperature']))
        ti.xcom_push(key="{}_vectorsearchtype".format(sname), value="{}".format(default_args['vectorsearchtype']))
-    
+       ti.xcom_push(key="{}_contextwindowsize".format(sname), value="_{}".format(default_args['contextwindowsize']))
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
