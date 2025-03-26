@@ -660,10 +660,12 @@ def generatedoc(**context):
     if pcollection:
       step9vectordbcollectionname=pcollection     
     pgpthost = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgpthost".format(sname))
-    step9pgpthost=pgpthost
+    if pgpthost:
+      step9pgpthost=pgpthost
 
     pgptport = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgptport".format(sname))
-    step9pgptport=pgptport
+    if pgptport:
+      step9pgptport=pgptport
  
     pprocesstype = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_keyprocesstype".format(sname))
     if pprocesstype:
@@ -1010,7 +1012,7 @@ def generatedoc(**context):
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
                        step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:],
-                       step9pgptcontainername,step9pgpthost,step9pgptport)
+                       step9pgptcontainername,step9pgpthost,step9pgptport[1:])
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1024,7 +1026,7 @@ def generatedoc(**context):
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
                        step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:],
-                       step9pgptcontainername,step9pgpthost,step9pgptport)
+                       step9pgptcontainername,step9pgpthost,step9pgptport[1:])
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
