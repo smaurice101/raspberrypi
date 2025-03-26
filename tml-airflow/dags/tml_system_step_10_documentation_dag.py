@@ -618,6 +618,7 @@ def generatedoc(**context):
     pcontextwindowsize = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_contextwindowsize".format(sname))
     if pcontextwindowsize:
        step9pcontextwindowsize=pcontextwindowsize
+       doparse("/{}/docs/source/details.rst".format(sname), ["--contextwindowsize--;{}".format(contextwindowsize[1:])])
      
     if pprompt:
       step9prompt=pprompt
