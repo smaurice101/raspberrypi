@@ -208,7 +208,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
                 step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                 step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
-                step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize=''):
+                step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize='',
+                step9pgptcontainername='',step9pgpthost='',step9pgptport=''):
                
     cp = ""
     cpp = ""
@@ -415,7 +416,13 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclid
                value: '{}'               
              - name: step9contextwindowsize # privateGPT for contextwindow size
-               value: '{}'                                                                           
+               value: '{}'                    
+             - name: step9pgptcontainername # privateGPT container name
+               value: '{}'                    
+             - name: step9pgpthost # privateGPT host ip i.e.: http://127.0.0.1
+               value: '{}'                    
+             - name: step9pgptport # privateGPT port i.e. 8001
+               value: '{}'                                   
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -465,7 +472,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step9contextwindowsize,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
@@ -480,7 +487,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
                      step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                      step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
-                     step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize=''):
+                     step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize='',
+                     step9pgptcontainername='',step9pgpthost='',step9pgptport=''):
     cp = ""
     cpp = ""
     
@@ -683,6 +691,12 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                                                                           
              - name: step9contextwindowsize # context window size
                value: '{}'                                                                                          
+             - name: step9pgptcontainername # privateGPT container name
+               value: '{}'                    
+             - name: step9pgpthost # privateGPT host ip i.e.: http://127.0.0.1
+               value: '{}'                    
+             - name: step9pgptport # privateGPT port i.e. 8001
+               value: '{}'                                                  
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -716,7 +730,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step9contextwindowsize,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
     return kcmd
