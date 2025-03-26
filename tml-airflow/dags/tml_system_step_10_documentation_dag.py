@@ -169,7 +169,7 @@ def generatedoc(**context):
     step3localfileinputfile=''
     step3localfiledocfolder=''
     step4crtmsmaxwindows=''
-
+    step9pcontextwindowsize=''
     rtmsoutputurl=""
     mloutputurl=""
  
@@ -615,6 +615,10 @@ def generatedoc(**context):
     penabletls = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_enabletls".format(sname))
     ppartition = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_partition".format(sname))
     pprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_prompt".format(sname))
+    pcontextwindowsize = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_contextwindowsize".format(sname))
+    if pcontextwindowsize:
+       step9pcontextwindowsize=pcontextwindowsize
+     
     if pprompt:
       step9prompt=pprompt
 
@@ -995,7 +999,7 @@ def generatedoc(**context):
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
-                       step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:])
+                       step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:])
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1008,7 +1012,7 @@ def generatedoc(**context):
                        step9llmmodel,step9embedding,step9vectorsize,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows[1:],
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
-                       step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:])
+                       step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:])
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
