@@ -290,7 +290,7 @@ def getparams(**context):
     pass
 
   try: 
-    if os.environ['TSS']==1:
+    if os.environ['TSS']=="1":
      if 'READTHEDOCS' in os.environ:
       if  len(os.environ['READTHEDOCS']) < 4:
         sys.exit()
@@ -303,7 +303,7 @@ def getparams(**context):
   except Exception as e:
     pass
 
-  if os.environ['TSS']==1:
+  if os.environ['TSS']=="1":
     try: 
       shutil.rmtree("/rawdata/rtms") 
     except Exception as e:
