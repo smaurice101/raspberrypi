@@ -288,14 +288,18 @@ def getparams(**context):
     f.close()
   except Exception as e:
     pass
+
   try: 
-    if 'READTHEDOCS' in os.environ:
+    if os.environ['TSS']==1:
+     if 'READTHEDOCS' in os.environ:
       if  len(os.environ['READTHEDOCS']) < 4:
         sys.exit()
       f = open("/tmux/rd4.txt", "w") 
       rd=os.environ['READTHEDOCS']
       f.write(rd[:4])
       f.close()
+     else:
+       sys.exit() 
   except Exception as e:
     pass
 
