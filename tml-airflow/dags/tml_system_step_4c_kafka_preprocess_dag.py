@@ -452,7 +452,7 @@ if __name__ == '__main__':
 
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
         try:
-          shutil.rmtree("/rawdata/{}".format(rtmsfoldername))
+          shutil.rmtree("/rawdata/{}".format(rtmsfoldername),ignore_errors=True)
         except Exception as e:
            pass
           
