@@ -13,6 +13,7 @@ import time
 import random
 import base64
 import threading
+import shutil
 
 sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
@@ -451,7 +452,7 @@ if __name__ == '__main__':
 
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
         try:
-          os.rmdir("/rawdata/{}".format(rtmsfoldername))
+          shutil.rmtree("/rawdata/{}".format(rtmsfoldername))
         except Exception as e:
            pass
           
