@@ -282,12 +282,6 @@ def getparams(**context):
   HPDEPORTPREDICT = ""
 
   tsslogging.locallogs("INFO", "STEP 1: Build started") 
-  try: 
-    f = open("/tmux/step1solution.txt", "w")
-    f.write(default_args['solutionname'])
-    f.close()
-  except Exception as e:
-    pass
 
   try: 
     if os.environ['TSS']=="1":
@@ -318,7 +312,20 @@ def getparams(**context):
   sd = context['dag'].dag_id 
   pname = args['solutionname']    
   sname = tsslogging.rtdsolution(pname,sd)
+  try: 
+    f = open("/tmux/step1projectname.txt", "w")
+    f.write(pname)
+    f.close()
+  except Exception as e:
+    pass
 
+  try: 
+    f = open("/tmux/step1solution.txt", "w")
+    f.write(sname)
+    f.close()
+  except Exception as e:
+    pass
+ 
   if 'step1description' in os.environ:
     desc = os.environ['step1description']
   else: 
