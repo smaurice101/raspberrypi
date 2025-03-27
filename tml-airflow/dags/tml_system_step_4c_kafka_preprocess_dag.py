@@ -451,6 +451,11 @@ if __name__ == '__main__':
 
         tsslogging.locallogs("INFO", "STEP 4c: Preprocessing 3 started")
         try:
+          os.rmdir("/rawdata/{}".format(rtmsfoldername))
+        except Exception as e:
+           pass
+          
+        try:
          directory="/rawdata/{}".format(rtmsfoldername)         
          if not os.path.exists(directory):
             os.makedirs(directory)
