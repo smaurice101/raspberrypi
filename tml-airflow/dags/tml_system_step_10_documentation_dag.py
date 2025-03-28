@@ -159,6 +159,7 @@ def generatedoc(**context):
     step9pgptcontainername=''
     step9pgpthost=''
     step9pgptport=''
+    step9vectordimension
  
     step4crawdatatopic=''
     step4csearchterms=''
@@ -621,9 +622,15 @@ def generatedoc(**context):
     ppartition = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_partition".format(sname))
     pprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_prompt".format(sname))
     pcontextwindowsize = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_contextwindowsize".format(sname))
+    pvectordimension = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordimension".format(sname))
+ 
     if pcontextwindowsize:
        step9pcontextwindowsize=pcontextwindowsize
        doparse("/{}/docs/source/details.rst".format(sname), ["--contextwindowsize--;{}".format(pcontextwindowsize[1:])])
+
+    if pvectordimension:
+       step9vectordimension=pvectordimension
+       doparse("/{}/docs/source/details.rst".format(sname), ["--vectordimension--;{}".format(pvectordimension[1:])])
      
     if pprompt:
       step9prompt=pprompt
@@ -1012,7 +1019,7 @@ def generatedoc(**context):
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
                        step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:],
-                       step9pgptcontainername,step9pgpthost,step9pgptport[1:])
+                       step9pgptcontainername,step9pgpthost,step9pgptport[1:],step9vectordimension[1:])
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1026,7 +1033,7 @@ def generatedoc(**context):
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
                        step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:],
-                       step9pgptcontainername,step9pgpthost,step9pgptport[1:])
+                       step9pgptcontainername,step9pgpthost,step9pgptport[1:],step9vectordimension[1:])
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
