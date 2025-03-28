@@ -132,6 +132,7 @@ def startpgptcontainer():
       temp = default_args['temperature']
       vectorsearchtype = default_args['vectorsearchtype']
       cw = default_args['contextwindowsize']
+      vectordimension=default_args['vectordimension'] 
  
       stopcontainers()
       time.sleep(10)
@@ -139,9 +140,9 @@ def startpgptcontainer():
           buf = "docker run -d -p {}:{} --net=host --env PORT={} --env GPU=0 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env temperature={} --env vectorsearchtype=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)       
       else: 
         if os.environ['TSS'] == "1":       
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,pgptcontainername,vectordimension)
         else:
-          buf = "docker run -d -p {}:{} --net=bridge --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,pgptcontainername,vectordimension)
          
       v=subprocess.call(buf, shell=True)
       print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
@@ -632,6 +633,10 @@ def startprivategpt(**context):
           if os.environ['step9pgptport'] != '':
             default_args['pgptport'] = os.environ['step9pgptport']
 
+       if 'step9vectordimension' in os.environ:
+          if os.environ['step9vectordimension'] != '':
+            default_args['vectordimension'] = os.environ['step9vectordimension']
+
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSPGPT".format(sname))
        VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESSPGPT".format(sname))
@@ -670,6 +675,7 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_temperature".format(sname), value="_{}".format(default_args['temperature']))
        ti.xcom_push(key="{}_vectorsearchtype".format(sname), value="{}".format(default_args['vectorsearchtype']))
        ti.xcom_push(key="{}_contextwindowsize".format(sname), value="_{}".format(default_args['contextwindowsize']))
+       ti.xcom_push(key="{}_vectordimension".format(sname), value="_{}".format(default_args['vectordimension']))
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
@@ -680,13 +686,13 @@ def startprivategpt(**context):
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['vectordbcollectionname'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
                        default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
                        default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],
                        default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall'],default_args['temperature'],
                        default_args['vectorsearchtype'], default_args['contextwindowsize'], default_args['pgptcontainername'], 
-                       default_args['pgpthost'],default_args['pgptport']), "ENTER"])
+                       default_args['pgpthost'],default_args['pgptport'],default_args['vectordimension']), "ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -719,6 +725,9 @@ if __name__ == '__main__':
 
         pgpthost = sys.argv[23]
         pgptport = sys.argv[24]
+        vectordimension=sys.argv[25]
+        
+        default_args['vectordimension']=vectordimension
         
         default_args['rollbackoffset']=rollbackoffset
         default_args['prompt'] = prompt
