@@ -159,7 +159,7 @@ def generatedoc(**context):
     step9pgptcontainername=''
     step9pgpthost=''
     step9pgptport=''
-    step9vectordimension
+    step9vectordimension=''
  
     step4crawdatatopic=''
     step4csearchterms=''
