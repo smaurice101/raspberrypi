@@ -791,7 +791,11 @@ def generatedoc(**context):
     step9embedding=''
     step9vectorsize='' 
     if pgptcontainername != None:
-        privategptrun = "docker run -d -p {}:{} --net=host --gpus all --env PORT={} --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} {}".format(pgptport[1:],pgptport[1:],pgptport[1:],pcollection,pconcurrency[1:],pcuda[1:],pgptcontainername)
+        if os.environ['TSS'] == "1":
+           privategptrun = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} {}".format(pgptport[1:],pgptport[1:],pgptport[1:],pcollection,pconcurrency[1:],pcuda[1:],ptemperature, pvectorsearchtype, pcontextwindowsize, pvectordimension,pgptcontainername)
+        else:
+           privategptrun = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} {}".format(pgptport[1:],pgptport[1:],pgptport[1:],pcollection,pconcurrency[1:],pcuda[1:],ptemperature, pvectorsearchtype, pcontextwindowsize, pvectordimension,pgptcontainername)
+         
         step9llmmodel='Refer to: https://tml.readthedocs.io/en/latest/genai.html'
         step9embedding='Refer to: https://tml.readthedocs.io/en/latest/genai.html'
         step9vectorsize='Refer to: https://tml.readthedocs.io/en/latest/genai.html'
