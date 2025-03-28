@@ -222,12 +222,14 @@ def ingestfiles():
               # check regex
               for m in lines:
                 if len(m) > 0:
-                  if 'rgx:' in m:
+                  if 'rgx:' in m and m[:4]=="rgx:":
                     rgx.append(m)
-                  elif '~~~' in m:                  
+                  elif '~~~' in m and m[:3]=="~~~":                  
                     ibx.append(m)
                   else:  
-                    linebuf = linebuf + m + ","
+                    m=m.replace(",", " ")
+                    if m[0] != "~":
+                      linebuf = linebuf + m + ","
 
          if linebuf != "":
            linebuf = linebuf[:-1]
