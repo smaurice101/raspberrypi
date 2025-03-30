@@ -935,5 +935,18 @@ def getmitre(mess,fname):
            technique = technique[:-1]
            jb=",\"tactic\":\""+tactic+"\",\"technique\":\""+technique+"\""
            return tactic, technique,jb
+
+    if tactic=="": # may be only technique is given - then find associated tactic
+       for key, values in dj.items():
+             for v in values:
+               if v in mess:
+                 v=v.replace(" ","_")  
+                 technique=technique + v + "-"  
+                 tactic=tactic + key + "-"
+       if tactic != "" and technique != "":
+           tactic = tactic[:-1]
+           technique = technique[:-1]
+           jb=",\"tactic\":\""+tactic+"\",\"technique\":\""+technique+"\""
+           return tactic, technique,jb
     
     return "na","na",""
