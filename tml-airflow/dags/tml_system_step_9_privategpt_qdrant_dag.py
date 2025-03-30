@@ -60,7 +60,8 @@ anomaly probabilities are less than 0.60, it is likely the risk of a cyber attac
  'vectorsearchtype' : 'Manhattan', # this is for the Qdrant Search algorithm.  it can be: Cosine, Euclid, Dot, or Manhattan
  'streamall': '1',
  'contextwindowsize': '8192', # Size of the context window.  This controls the number of tokens to process by LLM model
- 'vectordimension': '768'
+ 'vectordimension': '768',
+ 'mitrejson': '/rawdata/mitre.json'
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -523,6 +524,7 @@ def sendtoprivategpt(maindata,docfolder):
         # Produce data to Kafka
         sf="false"
         response,sf,contentmessage=checkresponse(response,m1)
+        tactic,technique=tsslogging.getmitre(m,default_args['mitrejson'])
         if usingqdrant != '':
            if default_args['streamall']=="0": # Only stream if search terms found in response
               if sf=="false":
