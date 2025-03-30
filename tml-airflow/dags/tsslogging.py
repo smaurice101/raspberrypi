@@ -888,20 +888,7 @@ def git_push2(solution):
 def git_push(repopath,message,sname):
     sname=getrepo()
     subprocess.call("/tmux/gitp.sh {} {}".format(sname,message), shell=True)
-    
-#    try:
- #       repo = Repo(repopath)
-  #      repo.git.add(update=True)
-   #     repo.index.commit(message)
-    #    origin = repo.remote(name=sname)
-     #   origin.push()
-   # except:
-    #    print('Some error occured while pushing the code') 
-        #git push -f origin main
-     #   os.chdir("/{}".format(repopath))
-      #  subprocess.call("git push -f {} main".format(sname), shell=True)
-        
-
+            
 def tsslogit(message,mtype="INFO"):
   repo=""    
   now = datetime.datetime.now(timezone.utc)
@@ -914,3 +901,32 @@ def tsslogit(message,mtype="INFO"):
     # Reading from a file
     dbuf = "[{} {}]".format(mtype,now.strftime("%Y-%m-%d_%H:%M:%S"))
     file1.write("{} {}\n".format(dbuf,message))
+
+def loadmitre(fname):
+    d=""
+    try:
+      with open(fname) as f:
+        d = json.load(f)
+        return d
+    except Exception as e:
+       print("Error reading file {} {}".format(fname,e)) 
+       return "" 
+
+def getmitre(mess,dj):
+
+    tactic=""
+    technique=""
+    for key, values in dj.items():
+         #print(f"{key}{values}")
+         if key in mess:
+             key=key.replace(" ","_")
+             tactic=tactic + key + "-"
+             for v in values:
+               if v in mess:
+                 v=v.replace(" ","_")  
+                 technique=technique + v + "-"  
+    if tactic != "" and technique != "":
+           tactic = tactic[:-1]
+           technique = technique[:-1]
+    
+    return tactic,technique
