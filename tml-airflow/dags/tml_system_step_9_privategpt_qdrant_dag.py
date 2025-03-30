@@ -678,6 +678,7 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_vectorsearchtype".format(sname), value="{}".format(default_args['vectorsearchtype']))
        ti.xcom_push(key="{}_contextwindowsize".format(sname), value="_{}".format(default_args['contextwindowsize']))
        ti.xcom_push(key="{}_vectordimension".format(sname), value="_{}".format(default_args['vectordimension']))
+       ti.xcom_push(key="{}_mitrejson".format(sname), value="{}".format(default_args['mitrejson']))
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
