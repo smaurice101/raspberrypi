@@ -9,6 +9,7 @@ import os
 import socket
 import time
 import fcntl
+import json
 
 class LockDirectory(object):
     def __init__(self, directory):
