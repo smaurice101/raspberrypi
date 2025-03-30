@@ -912,10 +912,14 @@ def loadmitre(fname):
        print("Error reading file {} {}".format(fname,e)) 
        return "" 
 
-def getmitre(mess,dj):
+def getmitre(mess,dj,fname):
 
     tactic=""
     technique=""
+    dj=loadmitre(fname)
+    if dj=="":
+        return "",""
+    
     for key, values in dj.items():
          #print(f"{key}{values}")
          if key in mess:
