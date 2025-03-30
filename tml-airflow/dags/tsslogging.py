@@ -912,7 +912,7 @@ def loadmitre(fname):
        print("Error reading file {} {}".format(fname,e)) 
        return "" 
 
-def getmitre(mess,dj,fname):
+def getmitre(mess,fname):
 
     tactic=""
     technique=""
