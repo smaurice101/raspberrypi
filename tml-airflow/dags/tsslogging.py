@@ -917,6 +917,9 @@ def getmitre(mess,fname):
 
     tactic=""
     technique=""
+    tacticarr=[]
+    techniquearr=[]
+    
     dj=loadmitre(fname)
     if dj=="":
         return "na","na",""
@@ -925,28 +928,32 @@ def getmitre(mess,fname):
          #print(f"{key}{values}")
          if key in mess:
              key=key.replace(" ","_")
-             tactic=tactic + key + "-"
+             tacticarr.append(key)
              for v in values:
                if v in mess:
                  v=v.replace(" ","_")  
-                 technique=technique + v + "-"  
-    if tactic != "" and technique != "":
-           tactic = tactic[:-1]
-           technique = technique[:-1]
+                 techniquearr.append(v)
+    if len(tacticarr)>0 and len(techniquearr)>0:
+           tacticarr=set(tacticarr)
+           techniquearr=set(techniquearr)        
+           tactic='-'.join(tacticarr)
+           technique='-'.join(techniquearr)
            jb=",\"tactic\":\""+tactic+"\",\"technique\":\""+technique+"\""
            return tactic, technique,jb
 
-    if tactic=="": # may be only technique is given - then find associated tactic
+    if len(tacticarr)==0: # may be only technique is given - then find associated tactic
        for key, values in dj.items():
-             key=key.replace(" ","_")
+             key=key.replace(" ","_")             
              for v in values:
                if v in mess:
                  v=v.replace(" ","_")  
-                 technique=technique + v + "-"  
-                 tactic=tactic + key + "-"
-       if tactic != "" and technique != "":
-           tactic = tactic[:-1]
-           technique = technique[:-1]
+                 techniquearr.append(v)  
+                 tacticarr.append(key)  
+       if len(tacticarr)>0 and len(techniquearr)>0:
+           tacticarr=set(tacticarr)
+           techniquearr=set(techniquearr)
+           tactic='-'.join(tacticarr)
+           technique='-'.join(techniquearr)
            jb=",\"tactic\":\""+tactic+"\",\"technique\":\""+technique+"\""
            return tactic, technique,jb
     
