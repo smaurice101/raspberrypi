@@ -623,7 +623,11 @@ def generatedoc(**context):
     pprompt = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_prompt".format(sname))
     pcontextwindowsize = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_contextwindowsize".format(sname))
     pvectordimension = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordimension".format(sname))
- 
+    pmitrejson = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_mitrejson".format(sname))
+
+    if pmitrejson:
+       doparse("/{}/docs/source/details.rst".format(sname), ["--mitrejson--;{}".format(pmitrejson)])
+
     if pcontextwindowsize:
        step9pcontextwindowsize=pcontextwindowsize
        doparse("/{}/docs/source/details.rst".format(sname), ["--contextwindowsize--;{}".format(pcontextwindowsize[1:])])
