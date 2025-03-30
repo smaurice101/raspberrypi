@@ -538,7 +538,7 @@ def sendtoprivategpt(maindata,docfolder):
                        "\",\"pgptcontainer\":\"" + default_args['pgptcontainername'] + "\",\"pgpt_consumefrom\":\"" + \
                         default_args['consumefrom'] + "\", \"pgpt_data_topic\":\"" + default_args['pgpt_data_topic'] + \
                         "\",\"contextwindowsize\":" + default_args['contextwindowsize'] + ",\"temperature\":\""+default_args['temperature'] + \
-                        "\",\"pgptrollbackoffset\":"+default_args['rollbackoffset'] + "}"           
+                        "\",\"pgptrollbackoffset\":"+default_args['rollbackoffset'] + jb + "}"           
              writetortmslogfile(mess[2],response1)
           else: 
              response1 = response[:-1] + "," + "\"prompt\":\"" + m.strip() + "\",\"identifier\":\"" + m1.strip() + "\",\"searchfound\":\"" + sf.strip() + "\"}"
