@@ -918,7 +918,7 @@ def getmitre(mess,fname):
     technique=""
     dj=loadmitre(fname)
     if dj=="":
-        return "na","na"
+        return "na","na",""
     
     for key, values in dj.items():
          #print(f"{key}{values}")
@@ -932,6 +932,7 @@ def getmitre(mess,fname):
     if tactic != "" and technique != "":
            tactic = tactic[:-1]
            technique = technique[:-1]
-           return tactic, technique
+           jb=",\"tactic\":\""+tactic+"\",\"technique\":\""+technique+"\""
+           return tactic, technique,jb
     
-    return "na","na"
+    return "na","na",""
