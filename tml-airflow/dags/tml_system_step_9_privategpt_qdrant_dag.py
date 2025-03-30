@@ -487,6 +487,12 @@ def sendtoprivategpt(maindata,docfolder):
    maxc = 300
    pgptendpoint="/v1/completions"
 
+   prompt = default_args['prompt']
+   prompt=prompt.replace("&","and")
+ 
+   context = default_args['context']
+   context=context.replace("&","and")
+ 
    mcontext = False
    usingqdrant = ''
    if docfolder != '':
@@ -526,7 +532,8 @@ def sendtoprivategpt(maindata,docfolder):
         else:
            m = mess
            m1 = attribute #default_args['keyattribute']
-        
+
+        m=m.replace("&","and")
         response=pgptchat(m,mcontext,docidstrarr,mainport,False,mainip,pgptendpoint)
         response=response.strip()
         # Produce data to Kafka
@@ -542,7 +549,7 @@ def sendtoprivategpt(maindata,docfolder):
           if default_args['jsonkeytogather'].lower()=="searchtextfound":
              jmess = mess[3]
              response1 = jmess[:-1] + ",\"privateGPT_AI_response\":\"" + contentmessage.strip().rstrip().lstrip() + \
-                       "\"," + "\"prompt\":\"" + default_args['prompt'] + "\",\"context\":\""+default_args['context'] + \
+                       "\"," + "\"prompt\":\"" + prompt + "\",\"context\":\""+context + \
                        "\",\"pgptcontainer\":\"" + default_args['pgptcontainername'] + "\",\"pgpt_consumefrom\":\"" + \
                         default_args['consumefrom'] + "\", \"pgpt_data_topic\":\"" + default_args['pgpt_data_topic'] + \
                         "\",\"contextwindowsize\":" + default_args['contextwindowsize'] + ",\"temperature\":\""+default_args['temperature'] + \
