@@ -938,6 +938,7 @@ def getmitre(mess,fname):
 
     if tactic=="": # may be only technique is given - then find associated tactic
        for key, values in dj.items():
+             key=key.replace(" ","_")
              for v in values:
                if v in mess:
                  v=v.replace(" ","_")  
