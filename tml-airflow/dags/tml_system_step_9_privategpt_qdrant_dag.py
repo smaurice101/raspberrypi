@@ -86,7 +86,7 @@ def checkresponse(response,ident):
     response = response.replace("null","-1").replace("\\n"," ")
     r1=json.loads(response)
     c1=r1['choices'][0]['message']['content']
-    c1=c1.replace('"','\\"').replace("'","\'").replace("\\n"," ")
+    c1=c1.replace('"','\\"').replace("'","\'").replace("\\n"," ").replace("&","and")
     c1 = re.sub(' +', ' ', c1)
     if '=' in c1 and ('Answer:' in c1 or 'A:' in c1):
       r1['choices'][0]['message']['content'] = "The analysis of the document(s) did not find a proper result."
@@ -251,20 +251,26 @@ def gatherdataforprivategpt(result):
    if 'step9prompt' in os.environ:
       if os.environ['step9prompt'] != '':
         prompt = os.environ['step9prompt']
+        prompt=prompt.replace("&","and")
         default_args['prompt'] = prompt
       else:
        prompt = default_args['prompt']
+       prompt=prompt.replace("&","and")
    else: 
       prompt = default_args['prompt']
+      prompt=prompt.replace("&","and")
 
    if 'step9context' in os.environ:
       if os.environ['step9context'] != '':
         context = os.environ['step9context']
+        context=context.replace("&","and")
         default_args['context'] = context
       else:
         context = default_args['context']  
+        context=context.replace("&","and")
    else: 
      context = default_args['context']
+     context=context.replace("&","and")
 
    jsonkeytogather = default_args['jsonkeytogather']
    if default_args['docfolder'] != '':
@@ -518,13 +524,13 @@ def sendtoprivategpt(maindata,docfolder):
         else:
            m = mess
            m1 = attribute #default_args['keyattribute']
-
+        
         response=pgptchat(m,mcontext,docidstrarr,mainport,False,mainip,pgptendpoint)
         response=response.strip()
         # Produce data to Kafka
         sf="false"
         response,sf,contentmessage=checkresponse(response,m1)
-        tactic,technique,jbm=tsslogging.getmitre(m,default_args['mitrejson'])
+        tactic,technique,jbm=tsslogging.getmitre(response,default_args['mitrejson'])
         if usingqdrant != '':
            if default_args['streamall']=="0": # Only stream if search terms found in response
               if sf=="false":
