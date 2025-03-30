@@ -171,7 +171,6 @@ def qdrantcontainer():
 
 def pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint):
   prompt=prompt.replace("&","and") 
-  context=context.replace("&","and") 
  
   print("Pgptchat=",prompt)
   response=maadstml.pgptchat(prompt,context,docfilter,port,includesources,ip,endpoint)
