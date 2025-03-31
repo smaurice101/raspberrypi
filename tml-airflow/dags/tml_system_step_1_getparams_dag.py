@@ -356,6 +356,10 @@ def getparams(**context):
       output = f.read()
       VIPERHOSTPREPROCESS = output.split(",")[0]
       VIPERPORTPREPROCESS = output.split(",")[1]    
+    with open('/Viper-preprocess1/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTPREPROCESS1 = output.split(",")[0]
+      VIPERPORTPREPROCESS1 = output.split(",")[1]         
     with open('/Viper-preprocess2/viper.txt', 'r') as f:
       output = f.read()
       VIPERHOSTPREPROCESS2 = output.split(",")[0]
@@ -507,6 +511,9 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_VIPERPORTPRODUCE".format(sname),value="_{}".format(VIPERPORT))
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS".format(sname),value=VIPERHOSTPREPROCESS)
   task_instance.xcom_push(key="{}_VIPERPORTPREPROCESS".format(sname),value="_{}".format(VIPERPORTPREPROCESS))
+  task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS1".format(sname),value=VIPERHOSTPREPROCESS1)
+  task_instance.xcom_push(key="{}_VIPERPORTPREPROCESS1".format(sname),value="_{}".format(VIPERPORTPREPROCESS1))
+ 
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS2".format(sname),value=VIPERHOSTPREPROCESS2)
   task_instance.xcom_push(key="{}_VIPERPORTPREPROCESS2".format(sname),value="_{}".format(VIPERPORTPREPROCESS2))
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS3".format(sname),value=VIPERHOSTPREPROCESS3)
