@@ -31,7 +31,18 @@
 		"Replication Through Removable Media",
 		"Supply Chain Compromise",
 		"Trusted Relationship",
-		"Valid Accounts"
+		"Valid Accounts",
+        "Application Versioning",
+        "Exploitation for Initial Access",
+        "Lockscreen Bypass",		
+        "Exploitation of Remote Services",
+        "Internet Accessible Device",
+        "Remote Services",
+        "Replication Through Removable Media",
+        "Rogue Master",
+        "Spearphishing Attachment",
+        "Transient Cyber Asset",
+        "Wireless Compromise"
 	],
 	"Execution": [
 		"Cloud Administration Command",
@@ -47,7 +58,15 @@
 		"Software Deployment Tools",
 		"System Services",
 		"User Execution",
-		"Windows Management Instrumentation"
+		"Windows Management Instrumentation",
+        "Autorun Image",
+        "Change Operating Mode",
+        "Command-Line Interface",
+        "Execution through API",
+        "Graphical User Interface",
+        "Hooking",
+        "Modify Controller Tasking",
+        "Scripting"
 	],
 	"Persistence": [
 		"Account Manipulation",
@@ -69,7 +88,15 @@
 		"Scheduled Task/Job",
 		"Server Software Component",
 		"Traffic Signaling",
-		"Valid Accounts"
+		"Valid Accounts",	
+        "Compromise Application Executable",
+        "Compromise Client Software Binary",
+        "Foreground Persistence",
+        "Hardcoded Credentials",
+        "Modify Program",
+        "Module Firmware",
+        "Project File Infection",
+        "System Firmware"
 	],
 	"Privilege Escalation": [
 		"Abuse Elevation Control Mechanism",
@@ -85,7 +112,8 @@
 		"Hijack Execution Flow",
 		"Process Injection",
 		"Scheduled Task/Job",
-		"Valid Accounts"
+		"Valid Accounts",
+        "Hooking"		
 	],
 	"Defense Evasion": [
 		"Abuse Elevation Control Mechanism",
@@ -131,7 +159,15 @@
 		"Valid Accounts",
 		"Virtualization/Sandbox Evasion",
 		"Weaken Encryption",
-		"XSL Script Processing"
+		"XSL Script Processing",
+        "Application Versioning",
+        "Download New Code at Runtime",
+        "Foreground Persistence",
+        "Hooking",
+        "Indicator Removal on Host",
+        "Input Injection",
+        "Native API",
+        "Proxy Through Victim"
 	],
 	"Credential Access": [
 		"Adversary-in-the-Middle",
@@ -150,7 +186,9 @@
 		"Steal or Forge Authentication Certificates",
 		"Steal or Forge Kerberos Tickets",
 		"Steal Web Session Cookie",
-		"Unsecured Credentials"
+		"Unsecured Credentials",		
+        "Access Notifications",
+        "Clipboard Data"
 	],
 	"Discovery": [
 		"Account Discovery",
@@ -184,7 +222,12 @@
 		"System Owner/User Discovery",
 		"System Service Discovery",
 		"System Time Discovery",
-		"Virtualization/Sandbox Evasion"
+		"Virtualization/Sandbox Evasion",
+        "Location Tracking",
+        "Network Service Scanning",
+        "Network Connection Enumeration",
+        "Remote System Information Discovery",
+        "Wireless Sniffing"
 	],
 	"Lateral Movement": [
 		"Exploitation of Remote Services",
@@ -195,7 +238,11 @@
 		"Replication Through Removable Media",
 		"Software Deployment Tools",
 		"Taint Shared Content",
-		"Use Alternate Authentication Material"
+		"Use Alternate Authentication Material",
+        "Default Credentials",
+        "Hardcoded Credentials",
+        "Program Download",
+        "Valid Accounts"
 	],
 	"Collection": [
 		"Adversary-in-the-Middle",
@@ -214,7 +261,19 @@
 		"Email Collection",
 		"Input Capture",
 		"Screen Capture",
-		"Video Capture"
+		"Video Capture",
+        "Access Notifications",
+        "Call Control",
+        "Data from Local System",
+        "Location Tracking",
+        "Protected User Data",
+        "Stored Application Data",
+        "Detect Operating Mode",
+        "I/O Image",
+        "Monitor Process State",
+        "Point and Tag Identification",
+        "Program Upload",
+        "Wireless Sniffing"
 	],
 	"Command and Control": [
 		"Application Layer Protocol",
@@ -234,7 +293,15 @@
 		"Proxy",
 		"Remote Access Software",
 		"Traffic Signaling",
-		"Web Service"
+		"Web Service",
+		"SSH",
+		"PowerShell",
+        "Call Control",
+        "Ingress Tool Transfer",
+        "Out of Band Data",	
+        "Commonly Used Port",
+        "Connection Proxy",
+        "Standard Application Layer Protocol"
 	],
 	"Exfiltration": [
 		"Automated Exfiltration",
@@ -245,7 +312,7 @@
 		"Exfiltration Over Physical Medium",
 		"Exfiltration Over Web Service",
 		"Scheduled Transfer",
-		"Transfer Data to Cloud Account"
+		"Transfer Data to Cloud Account"		
 	],
 	"Impact": [
 		"Account Access Removal",
@@ -261,6 +328,55 @@
 		"Network Denial of Service",
 		"Resource Hijacking",
 		"Service Stop",
-		"System Shutdown/Reboot"
-	]
+		"System Shutdown/Reboot",
+        "Call Control",
+        "Generate Traffic from Victim",
+        "Input Injection",
+        "SMS Control",
+        "Damage to Property",
+        "Denial of Control",
+        "Denial of View",
+        "Loss of Availability",
+        "Loss of Control",
+        "Loss of Productivity and Revenue",
+        "Loss of Protection",
+        "Loss of Safety",
+        "Loss of View",
+        "Manipulation of Control",
+        "Manipulation of View",
+        "Theft of Operational Information"		
+	],
+	"Evasion": [
+       "Change Operating Mode",
+       "Exploitation for Evasion",
+       "Indicator Removal on Host",
+       "Masquerading",
+       "Rootkit",
+       "Spoof Reporting Message",
+       "System Binary Proxy Execution"		
+	],
+	"Inhibit Response Function": [	
+       "Activate Firmware Update Mode",
+       "Alarm Suppression",
+       "Block Command Message",
+       "Block Reporting Message",
+       "Block Serial COM",
+       "Change Credential",
+       "Data Destruction",
+       "Denial of Service",
+       "Device Restart/Shutdown",
+       "Manipulate I/O Image",
+       "Modify Alarm Settings",
+       "Rootkit",
+       "Service Stop",
+       "System Firmware"	
+	],
+	"Impair Process Control": [	
+      "Brute Force I/O",
+      "Modify Parameter",
+      "Module Firmware",
+      "Spoof Reporting Message",
+      "Unauthorized Command Message"
+	]		
+	
 }
