@@ -83,7 +83,7 @@ def checkresponse(response,ident):
         
     GPTONLINE=1
                 
-    response = response.replace("null","-1").replace("\\n"," ")
+    response = response.replace("null","-1").replace("\\n","").replace("\n","")
     r1=json.loads(response)
     c1=r1['choices'][0]['message']['content']
     c1=c1.replace('"','\\"').replace("'","\'").replace("\\n"," ").replace("&","and")
