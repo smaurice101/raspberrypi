@@ -203,14 +203,14 @@ if __name__ == '__main__':
         maxrows =  sys.argv[5]
         default_args['maxrows'] = maxrows
          
-        tsslogging.locallogs("INFO", "STEP 4: Preprocessing started")
+        tsslogging.locallogs("INFO", "STEP 4a: Preprocessing started")
                      
         while True:
           try: 
             processtransactiondata()
             time.sleep(1)
           except Exception as e:    
-           tsslogging.locallogs("ERROR", "STEP 4: Preprocessing DAG in {} {}".format(os.path.basename(__file__),e))
+           tsslogging.locallogs("ERROR", "STEP 4a: Preprocessing DAG in {} {}".format(os.path.basename(__file__),e))
            tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
            break
