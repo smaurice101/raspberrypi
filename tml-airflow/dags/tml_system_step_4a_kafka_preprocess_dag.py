@@ -137,7 +137,7 @@ def windowname(wtype,sname,dagname):
     return wn
 
 def dopreprocessing(**context):
-       tsslogging.locallogs("INFO", "STEP 4: Preprocessing started")
+       tsslogging.locallogs("INFO", "STEP 4a: Preprocessing started")
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
        pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
