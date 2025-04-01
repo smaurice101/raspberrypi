@@ -120,7 +120,6 @@ def processtransactiondata():
          except Exception as e:
                 print("ERROR:",e)
 
-        
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
     wn = "python-{}-{}-{},{}".format(wtype,randomNumber,sname,dagname)
@@ -130,13 +129,14 @@ def windowname(wtype,sname,dagname):
     return wn
 
 def dopreprocessing(**context):
+       tsslogging.locallogs("INFO", "STEP 4a: Preprocessing started")
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
        pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
-       
+
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
-       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESS2".format(sname))
-       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESS2".format(sname))
+       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESS1".format(sname))
+       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPREPROCESS1".format(sname))
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
@@ -159,11 +159,12 @@ def dopreprocessing(**context):
        ti.xcom_push(key="{}_jsoncriteria".format(sname), value=default_args['jsoncriteria'])
 
        maxrows=default_args['maxrows']
-       if 'step4bmaxrows' in os.environ:
-         ti.xcom_push(key="{}_maxrows".format(sname), value="_{}".format(os.environ['step4bmaxrows']))         
-         maxrows=os.environ['step4bmaxrows']
+       if 'step4maxrows' in os.environ:
+         ti.xcom_push(key="{}_maxrows".format(sname), value="_{}".format(os.environ['step4maxrows']))                
+         maxrows=os.environ['step4maxrows']
        else:  
          ti.xcom_push(key="{}_maxrows".format(sname), value="_{}".format(default_args['maxrows']))
+         
         
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
@@ -171,9 +172,9 @@ def dopreprocessing(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
             
-       wn = windowname('preprocess2',sname,sd)     
+       wn = windowname('preprocess1',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess2", "ENTER"])
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess1", "ENTER"])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows), "ENTER"])        
 
 if __name__ == '__main__':
@@ -181,7 +182,7 @@ if __name__ == '__main__':
        if sys.argv[1] == "1": 
         repo=tsslogging.getrepo()
         try:            
-          tsslogging.tsslogit("Preprocessing2 DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+          tsslogging.tsslogit("Preprocessing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
         except Exception as e:
             #git push -f origin main
@@ -194,14 +195,14 @@ if __name__ == '__main__':
         maxrows =  sys.argv[5]
         default_args['maxrows'] = maxrows
          
-        tsslogging.locallogs("INFO", "STEP 4b: Preprocessing 2 started")
-
+        tsslogging.locallogs("INFO", "STEP 4a: Preprocessing started")
+                     
         while True:
           try: 
             processtransactiondata()
             time.sleep(1)
-          except Exception as e:     
-           tsslogging.locallogs("ERROR", "STEP 4b: Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e))
-           tsslogging.tsslogit("Preprocessing2 DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
+          except Exception as e:    
+           tsslogging.locallogs("ERROR", "STEP 4a: Preprocessing DAG in {} {}".format(os.path.basename(__file__),e))
+           tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
            break
