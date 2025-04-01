@@ -19,9 +19,9 @@ default_args = {
   'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
   'microserviceid' : '',  # <<< *** leave blank
   'producerid' : 'iotsolution',   # <<< *** Change as needed   
-  'raw_data_topic' : 'iot-preprocess', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'preprocess_data_topic' : 'iot-preprocess2', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
-  'maxrows' : '350', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
+  'raw_data_topic' : 'rtms-pgpt-ai', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
+  'preprocess_data_topic' : 'rtms-pgpt-ai-mitre', # *************** INCLUDE ONLY ONE TOPIC - This is one of the topic you created in SYSTEM STEP 2
+  'maxrows' : '50', # <<< ********** Number of offsets to rollback the data stream -i.e. rollback stream by 500 offsets
   'offset' : '-1', # <<< Rollback from the end of the data streams  
   'brokerhost' : '',   # <<< *** Leave as is
   'brokerport' : '-999',  # <<< *** Leave as is   
@@ -29,17 +29,23 @@ default_args = {
   'delay' : '70', # Add a 70 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic     
   'array' : '0', # do not modify
   'saveasarray' : '1', # do not modify
-  'topicid' : '-1', # do not modify
+  'topicid' : '-999', # do not modify
   'rawdataoutput' : '1', # <<< 1 to output raw data used in the preprocessing, 0 do not output
   'asynctimeout' : '120', # <<< 120 seconds for connection timeout 
   'timedelay' : '0', # <<< connection delay
   'tmlfilepath' : '', # leave blank
   'usemysql' : '1', # do not modify
-  'streamstojoin' : 'Voltage_preprocessed_AnomProb,Current_preprocessed_AnomProb', # Change as needed - THESE VARIABLES ARE CREATED BY TML IN tml_system_step_4_kafka_preprocess2_dag.py
-  'identifier' : 'IoT device performance and failures', # <<< ** Change as needed
-  'preprocesstypes' : 'avg,avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
+  'streamstojoin' : '', # Change as needed - THESE VARIABLES ARE CREATED BY TML IN tml_system_step_4_kafka_preprocess2_dag.py
+  'identifier' : 'Mitre ATTCK', # <<< ** Change as needed
+  'preprocesstypes' : 'avg', # <<< **** MAIN PREPROCESS TYPES CHNAGE AS NEEDED refer to https://tml-readthedocs.readthedocs.io/en/latest/
   'pathtotmlattrs' : 'oem=n/a,lat=n/a,long=n/a,location=n/a,identifier=n/a', # Change as needed     
-  'jsoncriteria' : '', # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
+  'jsoncriteria' : 'uid=tactic,filter:allrecords~\
+subtopics=technique,technique,technique~\
+values=FinalAttackScore,FinalPatternScore,RTMSSCORE~\
+identifiers=FinalAttackScore,FinalPatternScore,RTMSSCORE~\
+datetime=TimeStamp~\
+msgid=kafkakey~\
+latlong=' # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
