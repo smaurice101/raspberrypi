@@ -117,8 +117,6 @@ def processtransactiondata():
          # if dataage - use:dataage_utcoffset_timetype
          preprocesstypes=default_args['preprocesstypes']
 
-         pathtotmlattrs=default_args['pathtotmlattrs']       
-
          try:
                 result=maadstml.viperpreprocessproducetotopicstream(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
                                                   brokerport,microserviceid,topicid,streamstojoin,preprocesstypes,preprocessconditions,identifier,
