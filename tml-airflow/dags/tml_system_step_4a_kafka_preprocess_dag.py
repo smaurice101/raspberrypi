@@ -121,7 +121,8 @@ def processtransactiondata():
 
          try:
                 result=maadstml.viperpreprocessproducetotopicstream(VIPERTOKEN,VIPERHOST,VIPERPORT,topic,producerid,offset,maxrows,enabletls,delay,brokerhost,
-                                                  brokerport,microserviceid,topicid,streamstojoin,preprocesstypes,preprocessconditions,identifier,preprocesstopic)
+                                                  brokerport,microserviceid,topicid,streamstojoin,preprocesstypes,preprocessconditions,identifier,
+                                                  preprocesstopic,jsoncriteria)
                 #print(result)
          except Exception as e:
                 print("ERROR:",e)
