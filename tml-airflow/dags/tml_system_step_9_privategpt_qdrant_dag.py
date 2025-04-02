@@ -503,6 +503,8 @@ def sendtoprivategpt(maindata,docfolder):
      mainip = default_args['pgpthost']
    else: 
      mainip = "http://" + os.environ['qip']
+     if os.environ['qip']=="":
+          mainip=default_args['pgpthost']    
 
    mainport = default_args['pgptport']
 
