@@ -796,7 +796,11 @@ def generatedoc(**context):
        for d in darr:          
           v=d.split("=")
           if len(v)>1:
-            ebuf = ebuf + '          --env ' + v[0].strip() + '=\"' + v[1].strip() + '\" \\ \n'
+            if v[0].strip()=='jsoncriteria':
+              d=d[14:]
+              ebuf = ebuf + '          --env ' + v[0].strip() + '=\"' + d + '\" \\ \n'             
+            else:
+              ebuf = ebuf + '          --env ' + v[0].strip() + '=\"' + v[1].strip() + '\" \\ \n'
           else: 
             ebuf = ebuf + '          --env ' + v[0].strip() + '=' + ' \\ \n'
        ebuf = ebuf[:-1]
