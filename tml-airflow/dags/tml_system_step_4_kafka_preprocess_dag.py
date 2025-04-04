@@ -148,7 +148,16 @@ def dopreprocessing(**context):
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
-                
+
+       if 'step4raw_data_topic' in os.environ:
+         default_args['raw_data_topic']=os.environ['step4raw_data_topic']
+       if 'step4preprocesstypes' in os.environ:
+           default_args['preprocesstypes']=os.environ['step4preprocesstypes']
+       if 'step4jsoncriteria' in os.environ:
+           default_args['jsoncriteria']=os.environ['step4jsoncriteria']
+       if 'step4preprocess_data_topic'  in os.environ:
+           default_args['preprocess_data_topic']=os.environ['step4preprocess_data_topic']
+         
        ti = context['task_instance']    
        ti.xcom_push(key="{}_raw_data_topic".format(sname), value=default_args['raw_data_topic'])
        ti.xcom_push(key="{}_preprocess_data_topic".format(sname), value=default_args['preprocess_data_topic'])
@@ -183,7 +192,7 @@ def dopreprocessing(**context):
        wn = windowname('preprocess',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,step4raw_data_topic,step4preprocesstypes,step4jsoncriteria,step4preprocess_data_topic), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -202,6 +211,10 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]                  
         maxrows =  sys.argv[5]
         default_args['maxrows'] = maxrows
+        default_args['raw_data_topic'] =  sys.argv[6]
+        default_args['preprocesstypes'] =  sys.argv[7]
+        default_args['jsoncriteria'] =  sys.argv[8]
+        default_args['preprocess_data_topic'] =  sys.argv[9]
          
         tsslogging.locallogs("INFO", "STEP 4: Preprocessing started")
                      
