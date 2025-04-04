@@ -214,7 +214,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
                 step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
                 step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
-                step4bpreprocess_data_topic=''):
+                step4bpreprocess_data_topic='',step4preprocess_data_topic=''):
                
     cp = ""
     cpp = ""
@@ -386,6 +386,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                           
              - name: step4raw_data_topic # STEP 4
                value: '{}'                           
+             - name: step4preprocess_data_topic # STEP 4
+               value: '{}'                                          
              - name: step4jsoncriteria # STEP 4
                value: '{}'                           
              - name: step4ajsoncriteria # STEP 4a 
@@ -502,7 +504,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
                            airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
                            step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
-                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
+                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocess_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
                            step4amaxrows,step4apreprocesstypes,step4araw_data_topic,step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,
                            step4braw_data_topic,step4bpreprocess_data_topic,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
@@ -528,7 +530,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
                      step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
                      step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
-                     step4bpreprocess_data_topic=''):
+                     step4bpreprocess_data_topic='',step4preprocess_data_topic=''):
                      
     cp = ""
     cpp = ""
@@ -696,6 +698,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                           
              - name: step4raw_data_topic # STEP 4
                value: '{}'                           
+             - name: step4preprocess_data_topic # STEP 4
+               value: '{}'                                                         
              - name: step4jsoncriteria # STEP 4
                value: '{}'                           
              - name: step4ajsoncriteria # STEP 4a 
@@ -796,7 +800,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
                            mqttuser,airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
                            step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
-                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
+                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocess_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
                            step4amaxrows,step4apreprocesstypes,step4araw_data_topic,step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,
                            step4braw_data_topic,step4bpreprocess_data_topic,                           
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
