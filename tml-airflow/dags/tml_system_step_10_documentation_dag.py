@@ -162,7 +162,6 @@ def generatedoc(**context):
     step9pgpthost=''
     step9pgptport=''
     step9vectordimension=''
- 
     step4crawdatatopic=''
     step4csearchterms=''
     step4crememberpastwindows=''
@@ -179,7 +178,23 @@ def generatedoc(**context):
     step4crtmsmaxwindows=''
     rtmsoutputurl=""
     mloutputurl=""
- 
+
+    step2raw_data_topic=""
+    step2preprocess_data_topic=""
+    step4raw_data_topic=""
+    step4preprocesstypes=""
+    step4jsoncriteria=""
+    step4ajsoncriteria=""
+    step4amaxrows=""
+    step4apreprocesstypes=""
+    step4araw_data_topic=""
+    step4apreprocess_data_topic=""
+    step4bpreprocesstypes=""
+    step4bjsoncriteria=""
+    step4bmaxrows=""
+    step4braw_data_topic=""
+    step4bpreprocess_data_topic=""
+
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
              kube=1
@@ -258,7 +273,9 @@ def generatedoc(**context):
     enabletls = context['ti'].xcom_pull(task_ids='step_2_solution_task_createtopic',key="{}_enabletls".format(sname))
     microserviceid = context['ti'].xcom_pull(task_ids='step_2_solution_task_createtopic',key="{}_microserviceid".format(sname))
     raw_data_topic = context['ti'].xcom_pull(task_ids='step_2_solution_task_createtopic',key="{}_raw_data_topic".format(sname))
+    step2raw_data_topic=raw_data_topic
     preprocess_data_topic = context['ti'].xcom_pull(task_ids='step_2_solution_task_createtopic',key="{}_preprocess_data_topic".format(sname))
+    step2preprocess_data_topic=preprocess_data_topic
     ml_data_topic = context['ti'].xcom_pull(task_ids='step_2_solution_task_createtopic',key="{}_ml_data_topic".format(sname))
     prediction_data_topic = context['ti'].xcom_pull(task_ids='step_2_solution_task_createtopic',key="{}_prediction_data_topic".format(sname))
 
@@ -339,7 +356,11 @@ def generatedoc(**context):
     subprocess.call(["sed", "-i", "-e",  "s/--ingestdatamethod--/{}/g".format(PRODUCETYPE), "/{}/docs/source/details.rst".format(sname)])
             
     raw_data_topic = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_raw_data_topic".format(sname))
+    if raw_data_topic:
+      step4raw_data_topic=raw_data_topic
     preprocess_data_topic = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_preprocess_data_topic".format(sname))    
+    if preprocess_data_topic:
+      step4preprocesstypes=preprocess_data_topic
     preprocessconditions = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_preprocessconditions".format(sname))
     delay = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_delay".format(sname))
     array = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_array".format(sname))
@@ -350,10 +371,16 @@ def generatedoc(**context):
     timedelay = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_timedelay".format(sname))
     usemysql = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_usemysql".format(sname))
     preprocesstypes = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_preprocesstypes".format(sname))
+    if preprocesstypes:
+      step4preprocesstypes=preprocesstypes
     pathtotmlattrs = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_pathtotmlattrs".format(sname))
     identifier = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_identifier".format(sname))
     jsoncriteria = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_jsoncriteria".format(sname))
+    if jsoncriteria:
+      step4jsoncriteria=jsoncriteria
     maxrows4 = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_maxrows".format(sname))
+    if maxrows4:
+      step4maxrows=maxrows4
 
     if preprocess_data_topic:
         subprocess.call(["sed", "-i", "-e",  "s/--raw_data_topic--/{}/g".format(raw_data_topic), "/{}/docs/source/details.rst".format(sname)])
@@ -373,7 +400,11 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--maxrows--/{}/g".format(maxrows4[1:]), "/{}/docs/source/details.rst".format(sname)])
 
     raw_data_topic = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_raw_data_topic".format(sname))
+    if raw_data_topic:
+      step4araw_data_topic=raw_data_topic
     preprocess_data_topic = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_preprocess_data_topic".format(sname))    
+    if preprocess_data_topic:
+      step4apreprocess_data_topic=preprocess_data_topic
     preprocessconditions = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_preprocessconditions".format(sname))
     delay = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_delay".format(sname))
     array = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_array".format(sname))
@@ -384,10 +415,16 @@ def generatedoc(**context):
     timedelay = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_timedelay".format(sname))
     usemysql = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_usemysql".format(sname))
     preprocesstypes = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_preprocesstypes".format(sname))
+    if preprocesstypes:
+      step4apreprocesstypes=preprocesstypes
     pathtotmlattrs = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_pathtotmlattrs".format(sname))
     identifier = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_identifier".format(sname))
     jsoncriteria = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_jsoncriteria".format(sname))
+    if jsoncriteria:
+     step4ajsoncriteria=jsoncriteria
     maxrows4 = context['ti'].xcom_pull(task_ids='step_4a_solution_task_preprocess',key="{}_maxrows".format(sname))
+    if maxrows4:
+      step4amaxrows=maxrows4
 
     if preprocess_data_topic:
         subprocess.call(["sed", "-i", "-e",  "s/--raw_data_topic1--/{}/g".format(raw_data_topic), "/{}/docs/source/details.rst".format(sname)])
@@ -407,7 +444,11 @@ def generatedoc(**context):
         subprocess.call(["sed", "-i", "-e",  "s/--maxrows1--/{}/g".format(maxrows4[1:]), "/{}/docs/source/details.rst".format(sname)])
 
     raw_data_topic = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_raw_data_topic".format(sname))
+    if raw_data_topic:
+       step4braw_data_topic=raw_data_topic
     preprocess_data_topic = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_preprocess_data_topic".format(sname))    
+    if preprocess_data_topic:
+        step4bpreprocess_data_topic=preprocess_data_topic
     preprocessconditions = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_preprocessconditions".format(sname))
     delay = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_delay".format(sname))
     array = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_array".format(sname))
@@ -418,10 +459,16 @@ def generatedoc(**context):
     timedelay = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_timedelay".format(sname))
     usemysql = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_usemysql".format(sname))
     preprocesstypes = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_preprocesstypes".format(sname))
+    if preprocesstypes:
+       step4bpreprocesstypes=preprocesstypes
     pathtotmlattrs = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_pathtotmlattrs".format(sname))
     identifier = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_identifier".format(sname))
     jsoncriteria = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_jsoncriteria".format(sname))
+    if jsoncriteria:
+       step4bjsoncriteria=jsoncriteria
     maxrows4b = context['ti'].xcom_pull(task_ids='step_4b_solution_task_preprocess',key="{}_maxrows".format(sname))
+    if maxrows4b:
+       step4bmaxrows=maxrows4b
 
     if preprocess_data_topic:
         subprocess.call(["sed", "-i", "-e",  "s/--raw_data_topic2--/{}/g".format(raw_data_topic), "/{}/docs/source/details.rst".format(sname)])
