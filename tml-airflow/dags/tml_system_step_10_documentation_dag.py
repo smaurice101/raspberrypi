@@ -182,6 +182,7 @@ def generatedoc(**context):
     step2raw_data_topic=""
     step2preprocess_data_topic=""
     step4raw_data_topic=""
+    step4preprocess_data_topic=''
     step4preprocesstypes=""
     step4jsoncriteria=""
     step4ajsoncriteria=""
@@ -360,7 +361,7 @@ def generatedoc(**context):
       step4raw_data_topic=raw_data_topic
     preprocess_data_topic = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_preprocess_data_topic".format(sname))    
     if preprocess_data_topic:
-      step4preprocesstypes=preprocess_data_topic
+      step4preprocess_data_topic=preprocess_data_topic
     preprocessconditions = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_preprocessconditions".format(sname))
     delay = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_delay".format(sname))
     array = context['ti'].xcom_pull(task_ids='step_4_solution_task_preprocess',key="{}_array".format(sname))
@@ -1115,7 +1116,7 @@ def generatedoc(**context):
                        step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,
                        step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
                        step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
-                       step4bpreprocess_data_topic)
+                       step4bpreprocess_data_topic,step4preprocess_data_topic)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1133,7 +1134,7 @@ def generatedoc(**context):
                        step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,
                        step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
                        step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
-                       step4bpreprocess_data_topic)
+                       step4bpreprocess_data_topic,step4preprocess_data_topic)
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
