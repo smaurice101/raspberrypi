@@ -388,6 +388,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'                           
              - name: step4preprocess_data_topic # STEP 4
                value: '{}'                                          
+             - name: step4preprocesstypes # STEP 4
+               value: '{}'                                          
              - name: step4jsoncriteria # STEP 4
                value: '{}'                           
              - name: step4ajsoncriteria # STEP 4a 
@@ -699,6 +701,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step4raw_data_topic # STEP 4
                value: '{}'                           
              - name: step4preprocess_data_topic # STEP 4
+               value: '{}'                                                         
+             - name: step4preprocesstypes # STEP 4
                value: '{}'                                                         
              - name: step4jsoncriteria # STEP 4
                value: '{}'                           
