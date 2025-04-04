@@ -797,7 +797,7 @@ def generatedoc(**context):
           v=d.split("=")
           if len(v)>1:
             if 'jsoncriteria' in v[0].strip():
-              d=d[14:]
+              d=d[d.index("=")+1:]
               ebuf = ebuf + '          --env ' + v[0].strip() + '=\"' + d + '\" \\ \n'             
             else:
               ebuf = ebuf + '          --env ' + v[0].strip() + '=\"' + v[1].strip() + '\" \\ \n'
