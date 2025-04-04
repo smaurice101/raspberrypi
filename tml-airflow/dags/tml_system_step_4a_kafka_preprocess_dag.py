@@ -189,7 +189,7 @@ def dopreprocessing(**context):
        wn = windowname('preprocess1',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess1", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,step4ajsoncriteria,step4apreprocesstypes,step4araw_data_topic,step4apreprocess_data_topic), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,default_args['jsoncriteria'],default_args['preprocesstypes'],default_args['raw_data_topic'],default_args['preprocess_data_topic']), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
