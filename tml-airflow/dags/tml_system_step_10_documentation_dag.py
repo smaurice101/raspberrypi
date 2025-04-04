@@ -1102,7 +1102,7 @@ def generatedoc(**context):
       kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
                        externalport[1:],kafkacloudusername,mqttusername,airflowport[1:],vipervizport[1:],
-                       step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
+                       step4maxrows[1:],step4bmaxrows[1:],step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
                        step9rollbackoffset,kubebroker,kafkabroker,PRODUCETYPE,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
                        step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
@@ -1113,14 +1113,14 @@ def generatedoc(**context):
                        step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:],
                        step9pgptcontainername,step9pgpthost,step9pgptport[1:],step9vectordimension[1:],
                        step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,
-                       step4maxrows[1:],step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
-                       step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4bmaxrows[1:],step4braw_data_topic,
+                       step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
+                       step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
                        step4bpreprocess_data_topic)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
                        externalport[1:],kafkacloudusername,mqttusername,airflowport[1:],vipervizport[1:],
-                       step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset,
+                       step4maxrows[1:],step4bmaxrows[1:],step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,step9rollbackoffset,
                        kubebroker,kafkabroker,step9prompt,step9context,step9keyattribute,step9keyprocesstype,
                        step9hyperbatch[1:],step9vectordbcollectionname,step9concurrency[1:],cudavisibledevices[1:],
                        step9docfolder,step9docfolderingestinterval[1:],step9useidentifierinprompt[1:],step5processlogic,
@@ -1129,7 +1129,11 @@ def generatedoc(**context):
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
                        step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:],
-                       step9pgptcontainername,step9pgpthost,step9pgptport[1:],step9vectordimension[1:])
+                       step9pgptcontainername,step9pgpthost,step9pgptport[1:],step9vectordimension[1:],
+                       step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,
+                       step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
+                       step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
+                       step4bpreprocess_data_topic)
 
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
