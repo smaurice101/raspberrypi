@@ -140,6 +140,18 @@ def dopreprocessing(**context):
        HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname)) 
+
+       if 'step4bpreprocesstypes' in os.environ:
+          default_args['preprocesstypes']=os.environ['step4bpreprocesstypes']
+         
+       if 'step4bjsoncriteria' in os.environ:
+          default_args['jsoncriteria']=os.environ['step4bjsoncriteria']
+         
+       if 'step4braw_data_topic' in os.environ:
+          default_args['raw_data_topic']=os.environ['step4braw_data_topic']
+         
+       if 'step4bpreprocess_data_topic' in os.environ:
+         default_args['preprocess_data_topic']=os.environ['step4bpreprocess_data_topic']
                 
        ti = context['task_instance']    
        ti.xcom_push(key="{}_raw_data_topic".format(sname), value=default_args['raw_data_topic'])
@@ -174,7 +186,7 @@ def dopreprocessing(**context):
        wn = windowname('preprocess2',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess2", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,step4bpreprocess_data_topic), "ENTER"])        
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -193,7 +205,12 @@ if __name__ == '__main__':
         VIPERPORT = sys.argv[4]                  
         maxrows =  sys.argv[5]
         default_args['maxrows'] = maxrows
-         
+
+        default_args['preprocesstypes'] =  sys.argv[6]
+        default_args['jsoncriteria'] =  sys.argv[7]
+        default_args['raw_data_topic'] =  sys.argv[8]
+        default_args['preprocess_data_topic'] =  sys.argv[9]
+               
         tsslogging.locallogs("INFO", "STEP 4b: Preprocessing 2 started")
 
         while True:
