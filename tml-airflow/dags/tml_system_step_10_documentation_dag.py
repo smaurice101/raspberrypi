@@ -1111,7 +1111,11 @@ def generatedoc(**context):
                        step4cpatternwindowthreshold[1:],step4crtmsstream,projectname,step4crtmsscorethreshold[1:],step4cattackscorethreshold[1:],
                        step4cpatternscorethreshold[1:],step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval[1:],step4crtmsfoldername,
                        step3localfileinputfile,step3localfiledocfolder,step4crtmsmaxwindows[1:],step9pcontextwindowsize[1:],
-                       step9pgptcontainername,step9pgpthost,step9pgptport[1:],step9vectordimension[1:])
+                       step9pgptcontainername,step9pgpthost,step9pgptport[1:],step9vectordimension[1:],
+                       step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,
+                       step4maxrows[1:],step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
+                       step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4bmaxrows[1:],step4braw_data_topic,
+                       step4bpreprocess_data_topic)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
