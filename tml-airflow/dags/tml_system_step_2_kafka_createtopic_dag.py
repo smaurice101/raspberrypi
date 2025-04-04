@@ -76,10 +76,11 @@ def setupkafkatopics(**context):
   # empty then no reverse proxy is being used
   microserviceid=args['microserviceid']
 
-  if step2raw_data_topic:
-     args['raw_data_topic']=step2raw_data_topic
-  if step2preprocess_data_topic:
-     args['preprocess_data_topic']=step2preprocess_data_topic
+  if 'step2raw_data_topic' in os.environ:
+     args['raw_data_topic']=os.environ['step2raw_data_topic']
+
+  if 'step2preprocess_data_topic' in os.environ:
+     args['preprocess_data_topic']=os.environ['step2preprocess_data_topic']
 
   raw_data_topic=args['raw_data_topic']
   preprocess_data_topic=args['preprocess_data_topic']
