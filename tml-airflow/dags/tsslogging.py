@@ -210,7 +210,11 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                 step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
                 step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize='',
-                step9pgptcontainername='',step9pgpthost='',step9pgptport='',step9vectordimension=''):
+                step9pgptcontainername='',step9pgpthost='',step9pgptport='',step9vectordimension='',
+                step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
+                step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
+                step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
+                step4bpreprocess_data_topic=''):
                
     cp = ""
     cpp = ""
@@ -375,7 +379,33 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step4crtmsfoldername # STEP 4c 
                value: '{}'                                                                                          
              - name: step4crtmsmaxwindows # STEP 4c adjust RTMSMAXWINDOWS for Step 4c
-               value: '{}'                                                      
+               value: '{}'                           
+             - name: step2raw_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step2preprocess_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step4raw_data_topic # STEP 4
+               value: '{}'                           
+             - name: step4jsoncriteria # STEP 4
+               value: '{}'                           
+             - name: step4ajsoncriteria # STEP 4a 
+               value: '{}'                           
+             - name: step4amaxrows # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocesstypes # STEP 4a
+               value: '{}'                           
+             - name: step4araw_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocess_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4bpreprocesstypes # STEP 4b
+               value: '{}'                           
+             - name: step4bjsoncriteria # STEP 4b
+               value: '{}'                           
+             - name: step4braw_data_topic # STEP 4b 
+               value: '{}'                           
+             - name: step4bpreprocess_data_topic # STEP 4b 
+               value: '{}'                           
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                  
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -472,6 +502,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
                            airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
                            step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
+                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
+                           step4amaxrows,step4apreprocesstypes,step4araw_data_topic,step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,
+                           step4braw_data_topic,step4bpreprocess_data_topic,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
@@ -491,7 +524,12 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
                      step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
                      step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize='',
-                     step9pgptcontainername='',step9pgpthost='',step9pgptport='',step9vectordimension=''):
+                     step9pgptcontainername='',step9pgpthost='',step9pgptport='',step9vectordimension='',
+                     step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
+                     step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
+                     step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
+                     step4bpreprocess_data_topic=''):
+                     
     cp = ""
     cpp = ""
     
@@ -652,6 +690,32 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                                                                           
              - name: step4crtmsmaxwindows # STEP 4c adjust RTMSMAXWINDOWS for Step 4c
                value: '{}'                                       
+             - name: step2raw_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step2preprocess_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step4raw_data_topic # STEP 4
+               value: '{}'                           
+             - name: step4jsoncriteria # STEP 4
+               value: '{}'                           
+             - name: step4ajsoncriteria # STEP 4a 
+               value: '{}'                           
+             - name: step4amaxrows # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocesstypes # STEP 4a
+               value: '{}'                           
+             - name: step4araw_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocess_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4bpreprocesstypes # STEP 4b
+               value: '{}'                           
+             - name: step4bjsoncriteria # STEP 4b
+               value: '{}'                           
+             - name: step4braw_data_topic # STEP 4b 
+               value: '{}'                           
+             - name: step4bpreprocess_data_topic # STEP 4b 
+               value: '{}'                                          
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                              
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -732,6 +796,9 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
                            mqttuser,airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
                            step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
+                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
+                           step4amaxrows,step4apreprocesstypes,step4araw_data_topic,step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,
+                           step4braw_data_topic,step4bpreprocess_data_topic,                           
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
