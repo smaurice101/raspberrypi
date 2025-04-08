@@ -123,6 +123,20 @@ def stopcontainers():
       print("INFO STEP 9: PrivateGPT container {} not found.  It may need to be pulled.".format(pgptcontainername))
       tsslogging.locallogs("WARN", "STEP 9: PrivateGPT container not found. It may need to be pulled if it does not start: docker pull {}".format(pgptcontainername))
 
+def llmattrs(pgptcontainername):
+  if '-deepseek-medium' in pgptcontainername:
+     return "DeepSeek-R1-Distill-Llama-8B-Q5_K_M.gguf","BAAI/bge-base-en-v1.5"
+  elif pgptcontainername=='maadsdocker/tml-privategpt-with-gpu-nvidia-amd64':
+     return "TheBloke/Mistral-7B-Instruct-v0.1-GGUF","BAAI/bge-small-en-v1.5"
+  elif 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v2' == pgptcontainername:
+     return "mistralai/Mistral-7B-Instruct-v0.2","BAAI/bge-small-en-v1.5"
+  elif 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v3' == pgptcontainername:
+     return "mistralai/Mistral-7B-Instruct-v0.3","BAAI/bge-base-en-v1.5"
+  elif 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v3-large' == pgptcontainername:
+     return "mistralai/Mistral-7B-Instruct-v0.3","BAAI/bge-m3"
+  
+  return "",""
+
 def startpgptcontainer():
       print("Starting PGPT container: {}".format(default_args['pgptcontainername'])) 
       collection = default_args['vectordbcollectionname']
@@ -140,10 +154,11 @@ def startpgptcontainer():
       if '-no-gpu-' in pgptcontainername:       
           buf = "docker run -d -p {}:{} --net=host --env PORT={} --env GPU=0 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env temperature={} --env vectorsearchtype=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,pgptcontainername)       
       else: 
+        mainmodel,mainembedding=llmattrs(pgptcontainername)
         if os.environ['TSS'] == "1":       
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,vectordimension,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} --env mainmodel=\"{}\" --env mainembedding=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,vectordimension,mainmodel,mainembedding,pgptcontainername)
         else:
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,vectordimension,pgptcontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={}  --env mainmodel=\"{}\" --env mainembedding=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,vectordimension,mainmodel,mainembedding,pgptcontainername)
          
       v=subprocess.call(buf, shell=True)
       print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
