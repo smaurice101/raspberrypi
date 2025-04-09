@@ -185,8 +185,9 @@ def ingestfiles():
     dirbuf = buf.split(",")
     if len(dirbuf) == 0:
        return
-      
+
     while True:  
+     try: 
       lg=""
       buf = default_args['localsearchtermfolder']
       interval=int(default_args['localsearchtermfolderinterval'])
@@ -249,7 +250,10 @@ def ingestfiles():
         break
       else:  
        time.sleep(interval)
-                    
+     except Exception as e: 
+       continue
+       
+      
 def startdirread():
   if 'localsearchtermfolder' not in default_args:
      return
