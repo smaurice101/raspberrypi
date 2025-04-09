@@ -762,6 +762,8 @@ def generatedoc(**context):
     pcollection = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectordbcollectionname".format(sname))    
     if pcollection:
       step9vectordbcollectionname=pcollection     
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--kubecollection--;{}".format(pcollection)])
+
     pgpthost = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgpthost".format(sname))
     if pgpthost:
       step9pgpthost=pgpthost
