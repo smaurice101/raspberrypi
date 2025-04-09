@@ -44,7 +44,7 @@ subtopics=technique,technique,technique~\
 values=FinalAttackScore,FinalPatternScore,RTMSSCORE~\
 identifiers=FinalAttackScore,FinalPatternScore,RTMSSCORE~\
 datetime=TimeStamp~\
-msgid=kafkakey~\
+msgid=Entity,PartitionOffsetFound,NumAttackWindowsFound,NumPatternWindowsFound,SearchEntity,rtmsfolder,CurrentRTMSMAXWINDOW~\
 latlong=' # <<< **** Specify your json criteria. Here is an example of a multiline json --  refer to https://tml-readthedocs.readthedocs.io/en/latest/
 }
 
