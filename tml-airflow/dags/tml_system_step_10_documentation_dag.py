@@ -699,7 +699,10 @@ def generatedoc(**context):
     pconsumefrom = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_consumefrom".format(sname))
     pgpt_data_topic = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgpt_data_topic".format(sname))
     pgptcontainername = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgptcontainername".format(sname))
-    step9pgptcontainername=pgptcontainername
+    if pgptcontainername:
+      step9pgptcontainername=pgptcontainername
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--kubeprivategpt--;{}".format(pgptcontainername)])
+     
     poffset = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_offset".format(sname))
     prollbackoffset = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_rollbackoffset".format(sname))
     ptopicid = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_topicid".format(sname))
@@ -716,10 +719,12 @@ def generatedoc(**context):
     if pcontextwindowsize:
        step9pcontextwindowsize=pcontextwindowsize
        doparse("/{}/docs/source/details.rst".format(sname), ["--contextwindowsize--;{}".format(pcontextwindowsize[1:])])
+       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubecontextwindowsize--;{}".format(pcontextwindowsize[1:])])
 
     if pvectordimension:
        step9vectordimension=pvectordimension
        doparse("/{}/docs/source/details.rst".format(sname), ["--vectordimension--;{}".format(pvectordimension[1:])])
+       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubevectordimension--;{}".format(pvectordimension[1:])])
      
     if pprompt:
       step9prompt=pprompt
@@ -749,6 +754,8 @@ def generatedoc(**context):
     pconcurrency = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_concurrency".format(sname))
     if pconcurrency:
       step9concurrency=pconcurrency     
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--kubeconcur--;{}".format(pconcurrency[1:])])
+     
     pcuda = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_cuda".format(sname))
     if pcuda:
      cudavisibledevices=pcuda     
@@ -781,11 +788,13 @@ def generatedoc(**context):
     if ptemperature:
       step9temperature=ptemperature
       doparse("/{}/docs/source/details.rst".format(sname), ["--temperature--;{}".format(ptemperature[1:])])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--kubetemperature--;{}".format(ptemperature[1:])])
      
     pvectorsearchtype = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_vectorsearchtype".format(sname))
     if pvectorsearchtype:
       step9vectorsearchtype=pvectorsearchtype
       doparse("/{}/docs/source/details.rst".format(sname), ["--vectorsearchtype--;{}".format(pvectorsearchtype)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--kubevectorsearchtype--;{}".format(pvectorsearchtype)])
 
     ebuf=""
     if 'dockerenv' in default_args:
