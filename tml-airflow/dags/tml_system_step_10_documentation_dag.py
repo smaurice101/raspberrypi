@@ -702,6 +702,10 @@ def generatedoc(**context):
     if pgptcontainername:
       step9pgptcontainername=pgptcontainername
       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubeprivategpt--;{}".format(pgptcontainername)])
+      mainmodel = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_mainmodel".format(sname))
+      mainembedding = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_mainembedding".format(sname))
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--kubemainmodel--;{}".format(mainmodel)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--kubemainembedding--;{}".format(mainembedding)])
      
     poffset = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_offset".format(sname))
     prollbackoffset = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_rollbackoffset".format(sname))
