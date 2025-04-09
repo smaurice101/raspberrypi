@@ -164,7 +164,7 @@ def startpgptcontainer():
       print("INFO STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
       tsslogging.locallogs("INFO", "STEP 9: PrivateGPT container.  Here is the run command: {}, v={}".format(buf,v))
 
-      return v,buf
+      return v,buf,mainmodel,mainembedding
  
 def qdrantcontainer():
     v=0
@@ -717,6 +717,10 @@ def startprivategpt(**context):
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))
 
+       mainmodel,mainembedding=llmattrs(default_args['pgptcontainername'])
+       ti.xcom_push(key="{}_mainmodel".format(sname), value="{}".format(mainmodel))
+       ti.xcom_push(key="{}_mainembedding".format(sname), value="{}".format(mainembedding))
+ 
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
@@ -799,7 +803,7 @@ if __name__ == '__main__':
           time.sleep(5)  # wait for containers to start
          
           tsslogging.locallogs("INFO", "STEP 9: Starting privateGPT")
-          v,buf=startpgptcontainer()
+          v,buf,mainmodel,mainembedding=startpgptcontainer()
           if v==1:
             tsslogging.locallogs("WARN", "STEP 9: There seems to be an issue starting the privateGPT container.  Here is the run command - try to run it nanually for testing: {}".format(buf))
           else:
@@ -818,7 +822,7 @@ if __name__ == '__main__':
           time.sleep(5)  # wait for containers to start         
          
           tsslogging.locallogs("INFO", "STEP 9: Starting privateGPT")
-          v,buf=startpgptcontainer()
+          v,buf,mainmodel,mainembedding=startpgptcontainer()
           if v==1:
             tsslogging.locallogs("WARN", "STEP 9: There seems to be an issue starting the privateGPT container.  Here is the run command - try to run it nanually for testing: {}".format(buf))
           else:
