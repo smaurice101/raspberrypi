@@ -251,6 +251,7 @@ def ingestfiles():
       else:  
        time.sleep(interval)
      except Exception as e: 
+       print("ERROR: ingesting files")
        continue
        
       
