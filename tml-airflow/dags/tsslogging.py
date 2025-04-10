@@ -285,6 +285,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              volumeMounts:
              - name: dockerpath
                mountPath: /var/run/docker.sock
+             - name: rawdata
+               mountPath: /rawdata               
              ports:
          {}
              env:
@@ -472,6 +474,10 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
            - name: dockerpath
              hostPath:
                path: /var/run/docker.sock
+           - name: rawdata
+             hostPath:
+               path: /mnt/c/maads/tml-airflow/rawdata  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER
+               type: Directory
    ---
      apiVersion: v1
      kind: Service
@@ -599,6 +605,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              volumeMounts:
              - name: dockerpath
                mountPath: /var/run/docker.sock
+             - name: rawdata
+               mountPath: /rawdata                              
              ports:
          {}
              env:
@@ -786,6 +794,10 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
            - name: dockerpath
              hostPath:
                path: /var/run/docker.sock
+           - name: rawdata
+             hostPath:
+               path: /mnt/c/maads/tml-airflow/rawdata  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER
+               type: Directory               
    ---
      apiVersion: v1
      kind: Service
