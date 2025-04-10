@@ -196,11 +196,11 @@ def generatedoc(**context):
     step4braw_data_topic=""
     step4bpreprocess_data_topic=""
 
-    if "KUBE" in os.environ:
-          if os.environ["KUBE"] == "1":
-             kube=1
-             tsslogging.locallogs("INFO", "STEP 10: In Kubernetes documentation done")
-             return
+#    if "KUBE" in os.environ:
+#          if os.environ["KUBE"] == "1":
+#             kube=1
+#             tsslogging.locallogs("INFO", "STEP 10: In Kubernetes documentation done")
+#             return
     
     tsslogging.locallogs("INFO", "STEP 10: Started to build the documentation")
     producinghost = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODCE".format(sname))
