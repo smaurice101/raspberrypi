@@ -898,7 +898,7 @@ def generatedoc(**context):
       try:
         with open("/tmux/step1solutionold.txt", "r") as f:
           msname=f.read()
-          mbuf="Refer to the original solution container and documenation here: https://{}.readthedocs.io/en/latest/operating.html#your-solution-docker-container".format(msname)
+          mbuf="Refer to the original solution container and documenation here: https://{}.readthedocs.io/en/latest/operating.html".format(msname.strip())
           doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{}".format(mbuf)])
       except Exception as e:
         pass
