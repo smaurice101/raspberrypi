@@ -476,7 +476,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                path: /var/run/docker.sock
            - name: rawdata
              hostPath:
-               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER the paths will be specify to your environment
+               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER the paths will be specific to your environment
    ---
      apiVersion: v1
      kind: Service
