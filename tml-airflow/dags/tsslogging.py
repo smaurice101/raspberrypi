@@ -286,7 +286,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: dockerpath
                mountPath: /var/run/docker.sock
              - name: rawdata
-               mountPath: /rawdata               
+               mountPath: /rawdata  # container folder where the local folder will be mounted
              ports:
          {}
              env:
@@ -476,7 +476,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                path: /var/run/docker.sock
            - name: rawdata
              hostPath:
-               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER
+               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER the paths will be specify to your environment
    ---
      apiVersion: v1
      kind: Service
@@ -605,7 +605,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: dockerpath
                mountPath: /var/run/docker.sock
              - name: rawdata
-               mountPath: /rawdata                              
+               mountPath: /rawdata   # container folder where the local folder will be mounted                           
              ports:
          {}
              env:
@@ -795,7 +795,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                path: /var/run/docker.sock
            - name: rawdata
              hostPath:
-               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER
+               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER the paths will be specific to your environment
    ---
      apiVersion: v1
      kind: Service
