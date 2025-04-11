@@ -894,8 +894,14 @@ def generatedoc(**context):
     if istss1==1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
       doparse("/{}/docs/source/details.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])   
-    else: 
-      doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{} ({})".format(containername, hurl)])
+    else:
+      try:
+        with open("/tmux/step1solutionold.txt", "r") as f:
+          msname=f.read()
+          mbuf="Refer to the original solution container and documenation here: https://{}.readthedocs.io/en/latest/operating.html#your-solution-docker-container".format(msname)
+          doparse("/{}/docs/source/operating.rst".format(sname), ["--dockerrun--;{}".format(dockerrun),"--dockercontainer--;{}".format(mbuf)])
+      except Exception as e:
+        pass
        
     step9rollbackoffset=-1
     step9llmmodel=''
