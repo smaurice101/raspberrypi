@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+=========================================-->
+<head>
+<base target="/" />    
+<meta charset="UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+<title>Real-Time Cyber Threats and Network Monitoring Dashboard</title>
+<style>
+.clear { clear:both; }
+
+.loader {
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid blue;
+  border-bottom: 7px solid blue;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+h1 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: 100; line-height: 10.4px; } h4 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 1px; font-style: bold; font-variant: normal; font-weight: 400; line-height: .4px; } p { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
+
+.a {
+    background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+}
+.b {
+         background: linear-gradient(to top left, #ffffff 0%, #ccffff 100%);
+
+}
+ 
+ 
+#chart_div {
+	  float: left;
+}
+
+body {
+	
+	justify-content: center;
+	align-items: center;
+}
+.orange-background {
+   background-color: orange;
+  }
+
+ .orchid-background {
+  background-color: orchid;
+ }
+
+.beige-background {
+ background-color: beige;
+  }		
+ .columnTitle {
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-size: 14px; 
+          color:white;
+          background-color: #607A75
+      } 
+.grid {
+  display: grid;
+  grid-gap: var(--card-padding);
+  margin: 0 auto;
+  max-width: 60em;
+  padding: 0;
+ 
+  @media (min-width: 42em) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+th, td {
+  padding: 5px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: var(--card-radius);
+  position: relative;
+  
+  &:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+	
+.padding
+{
+padding: 4px 5px 2px 2px;
+}	  
+
+#map {
+        position: relative;
+        width: 100%;
+        height: 500px;
+}
+
+</style>
+<script type="text/javascript" src="./js/attention.js"></script>   
+
+<script type="text/javascript" src="./js/r.min.js"></script>   
+<script type="text/javascript" src="./js/justgage.js"></script>   
+<script type="text/javascript" src="./js/justgage.min.js"></script>   
+
+<script>
+  window.Promise ||
+	document.write(
+	  '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+	)
+  window.Promise ||
+	document.write(
+	  '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+	)
+  window.Promise ||
+	document.write(
+	  '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+	)
+</script>
+<script src="./js/d3.min.js"></script>
+<script src="./js/d3pie.js"></script>
+
+    
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<link rel="stylesheet" href="./leaflet/leaflet.css" />
+
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="./css/tilescrypto.css" rel="stylesheet">
+<link href="./css/attention.css" rel="stylesheet">
+<link href="./css/button.css" rel="stylesheet">
+<link href="./css/textbox.css" rel="stylesheet">
+<link href="./css/table3d.css" rel="stylesheet">
+<link href="./css/dropdown.css" rel="stylesheet">
+<link href="./css/component-custom-switch.css" rel="stylesheet">
+
+<body style="overflow-x: auto">
+
+<!-- <center><img src='./senecalogo.png' width=150 height=70> | <img src='./OTICS-New-Logo-Black.png' width=150 height=70></center> -->
+<center><img src='./senecalogo.png' width=150 height=70></center> 
+
+<table style="width: 100%;height: 80px;    background: linear-gradient(135deg,  rgba(51, 0, 0,1) 0%,rgba(0, 128, 255,1) 50%,rgba(0, 128, 255,1) 51%,rgba(51, 0, 0,1) 100%);">
+<tr>
+<td>
+<div class="row justify-content-md-center">
+<center>
+<div class="col-12" style="padding-top: 1px">
+<label id="maintitle"><b><h1><i><font color='white'><b>Real-Time Cyber Threats and Network Monitoring</b></h1><h3><i>Integrated with Cisco Packet Tracer Using Apache Kafka and Transactional Machine Learning</font></i></h3></b></label>
+</div>
+</center>
+</div>
+
+<div class="row justify-content-md-center">
+<div class="col-12">
+
+<div id="selectSymbol">
+<form id="idForm">
+		
+
+<h6>
+<b><font color='white'>Last Kafka Access Time:</font></b></b> <label id="accesstime"></label><br>
+<b><font color='white'>Kafka Cluster:</font></b> <label id="kafkacluster"></label><br>			
+</h6>
+
+<div class="loader" id="loaderdiv" style="display:none;float: left"></div>
+
+<button id="start" class="btn btn1" name="submit">Start Streaming</button>  
+
+<label id="statustext"></label>
+<div style="float: right;display:block;" class="custom-switch custom-switch-label-io">
+<input class="custom-switch-input" id="example_1" type="checkbox" onchange="toggleDiv();">
+<label class="custom-switch-btn" for="example_1"></label>
+</div>	
+
+</td>
+</tr>
+</table>				
+
+<table border=0 style='width: 500px;height: 400px; vertical-align: top;'>
+<tr>		
+
+<td style="text-align: left; vertical-align: top;">
+<table valign='top'  id="machinelearning" style="width: 100%; height: 100%;display:none; border-spacing: 10px;">
+<tr>
+<!-- ML models -->	
+<!--       END                        -->
+<td valign='top' >
+<div class="clear"></div>
+<center>
+<div id="downloadpatientdataurllog"></div>
+</center>
+<div class="clear"></div><br>
+<div id="barchartlog_div" style="text-align: top; vertical-align: top;width:300px;height: 370px" ></div>				 
+
+<!--               <table >				
+<tr>
+<td>
+<img src='./help.png' width=30 height=27  style="float: top;" onclick="image('barchart','')">	
+<div id="barchart_div" style="text-align: left; vertical-align: middle;width:300px;height: 450px" ></div>				 
+</td>
+<td>
+<div id="barchartlabel_div" style="text-align: left; vertical-align: left;width:100px;overflow-y:scroll;" ></div>				 
+
+</td>
+</table>
+-->			 
+
+</td>			   
+<!--       END                        -->
+
+
+</tr>
+</table>
+
+</td>
+
+
+<!--------------------------------------- -->
+<td  valign='top' style="width: 420px; height: 100%" >				
+<table id="xenese" valign='top' style="width: 400px; height: 100%;display:none">
+<tr>
+<td valign='top' width=350>
+<center>
+<div class="tile wide block" style="width: 380px; height: 100%">
+<div class="header" >
+<div id="blockcount" class="count"  >TBD</div>
+<div class="title" >Prediction Blocks Created in XENESE</div>
+<br>
+<img src='./help.png' width=30 height=27  class="padding" style="float: left;" onclick="image('block','')">				
+
+</div>
+</div><br>
+
+
+</center>				 
+</td>
+</tr>
+</table>
+</td>
+
+<!-- ================================================================= -->   
+<td  valign='top' >				
+<table valign='top' style="width: 350px; height: 100%; display:none">
+<tr>
+<td valign='top' >
+<center>
+<div class="tile wide resource" style="width: 330px;display:block"">
+</div>
+
+
+</center>				 
+</td>
+</tr>
+</table>
+</td>
+
+<td  >	
+<table>
+<tr>
+<td>
+<table id="maptable" border=0 style="width: 2220px;height: 100%; vertical-align: top;float: left">
+
+<tr>
+
+<td valign='top' >	
+<label><font color=red size=6><b><label id="hostatrisk">Hosts At Risk:</label></b></font> <input type="input"  width=270 size=280 placeholder=""  name="Hosts" id='hostrisk'  /> 
+</label>
+</td>
+</tr>  
+
+<tr>				
+<center>
+<div class="tile wide job" style="width: 320px; height: 400">
+<div class="header" style="width: 320px; height: 100%" >
+<div id="totrecs" class="count">0</div>
+<div class="title">Total Kafka Messages Processed</div>
+</div>
+</div>
+<div class="tile wide job" style="width: 320px; height: 400">
+<div class="header" style="width: 320px; height: 100%" >
+<div id="totissues" class="count">0</div>
+<div class="title"><label id="potential">Hosts At Potential Risk</label></div>
+</div>
+</div>
+<div class="tile wide job" style="width: 320px; height: 400">
+<div class="header" style="width: 320px; height: 100%" >
+<div id="tottime" class="counttimewindow"><br><br></div>
+<div class="title">Kafka Time Window Analysed</div>
+</div>
+
+</div>
+</center>
+</tr>
+<tr>
+<br>
+<img src='./help.png' width=30 height=27  class="padding" style="float: right;" onclick="image('cyber','')">				
+
+<!---------------------------------------PIE -->
+<td >
+
+<table  id="pietable"  align='center' style="width: 100%; height: 380px; display: none;">
+<tr >	
+<td style="padding-left: 1px;padding-right: 1px;">
+<div class="header" >
+<div id="pie" class="count" ></div>
+</div>
+</td>
+
+<td style="padding-right: 1px;">
+<div class="header" >
+<div id="pie1" class="count" ></div>
+</div>
+</td>
+
+<td>
+<div class="header" >
+<div id="pie2" class="count" ></div>
+</div>
+</td>
+
+<td>
+<div class="header" >
+<div id="pie3" class="count" ></div>
+</div>
+</td>
+<td>
+<div class="header" >
+<div id="pie4" class="count" ></div>
+</div>
+</td>
+
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+	
+
+<td  valign='top' style="height:500px;width: 1250px">	
+<!-- <div id="chart_div" style='width: 1250px; height: 170px;vertical-align: top;'></div>	-->
+
+
+<div id="heatmaptablechart" ></div>
+
+
+</td>
+
+</tr>
+
+</table>
+</td>
+</tr>
+</table>
+</td>
+
+</tr>
+<tr>				 
+<td colspan=4>
+<table style="width: 100%;">
+
+
+<tr>
+<td>
+<img src='./help.png' width=30 height=27 class="padding" style="float: top;" onclick="image('table','')">	
+<center><a id="Export" href="#"> Download as CSV </a> </center>
+<div id="table_div"></div>
+</td>
+</tr>
+</table>
+</td>
+
+</tr>
+</table>				 
+<!--  <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea> -->
+</form>
+</div>
+<div id="display"></div>
+</div>
+<!--	
+<i><b>Powered by:</b> Transactional Machine Learning, Kafka, Viper, Viperviz<br><b>Developed by:</b> OTICS Advanced Analytics, Inc.</i>
+<br><b>Enter Dashboard Password:</b> <input type=password id="dashpass"><br><br>
+-->
+
+</div>
+
+<!-- CONTAINER FOR CHART -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+<script>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////// START MAIN SCRIPT /////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// load current chart package
+google.charts.load("current", {
+	packages: ["corechart", "line"]
+});
+
+google.charts.setOnLoadCallback(drawChart);
+google.charts.load('current', {
+	'packages': ['table', 'annotatedtimeline', 'gauge', 'bar', 'sankey']
+});
+
+google.charts.setOnLoadCallback(drawTable2);
+
+//document.documentElement.style.overflowX = 'hidden';
+
+var START = 0;
+var ws;
+var topic = "";
+var offset = -1;
+var groupid = "";
+var append = 0;
+var rollbackoffset = 0;
+var topictype = "";
+var vipertoken = "";
+var consumerid = "";
+var secure = 0;
+var mainport = "";
+var RISKTHRESH = 0.85;
+var INBOUNDTHRESH = 5000000;
+var OUTBOUNDTHRESH = 5000000;
+var MAXTHRESH = 5000000;
+var MINTHRESH = 50000;
+
+var totalhosts = 0;
+var hostsatrisk = 0;
+var maingaugepercentageavg = 0;
+//////////////////////////
+var datatbl;
+var maintable;
+var dataintable = [];
+var kafkakeyarr = [];
+var kafkacluster = "";
+var idkeyarr;
+var pies = [];
+
+var timestart = "";
+var timeend = "";
+var mainkafkatopic = "";
+var maintotalmessages = 0;
+var heatchart = null;
+var vipervizerror = "";
+
+// create options object with titles, colors, etc.
+var cssClassNames = {
+	'headerRow': 'columnTitle',
+	'tableRow': '',
+	'oddTableRow': 'beige-background',
+	'selectedTableRow': 'green-background large-font',
+	'hoverTableRow': '',
+	'headerCell': 'gold-border',
+	'tableCell': '',
+	'rowNumberCell': 'underline-blue-font'
+};
+
+var options = {
+	title: "Network Monitoring Values For " + topic,
+	hAxis: {
+		title: "Interval",
+		format: '0'
+	},
+	vAxis: {
+		title: "Value"
+
+	},
+	tooltip: {
+		isHtml: true
+	},
+	explorer: {
+		actions: ['dragToZoom', 'rightClickToReset'],
+		axis: 'horizontal',
+		keepInBounds: true
+	},
+	displayAnnotations: true,
+	displayRangeSelector: false,
+	allowHtml: true,
+	scaleType: 'maximized',
+	thickness: 3,
+	chartArea: {
+		top: 10,
+		width: "100%",
+		height: "100"
+	}
+};
+
+        // This function toggles the dashboard between pie charts and no pie charts
+function image(thetype, mess) {
+
+    var titletext = "";
+    var helptext = "";
+
+    if (thetype == "mainrisk") {
+        titletext = "Cryber Risk Meter";
+        helptext = "The Cyber risk is an average of the anomaly prediction between the following data streams: Destination Packets, Destination Bytes , Destination Port, Source Bytes, Source Packets, and Duration.  These can be changed based on the customer's specific data.  All data streams are from Log Files across all Host Machines: The hostname of the computer that the event was recorded on. In the case of directed authentication events, the LogHost will correspond to the computer that the authentication event is terminating at destination computer.";
+    } else if (thetype == "cyber") {
+        titletext = "Cyber Risk";
+        helptext = "The Cyber risk is determined by the large amount of inbound and outbound packets and if the device Ping Status is a FAILURE.";
+
+    } else if (thetype == "table") {
+        titletext = "Table Data";
+        helptext = "The data in the table shows the preprocessed values for every host that is being monitored.  These preprocessed values are computed by the VIPER binary.";
+
+    }
+
+    new Attention.Prompt({
+        title: titletext,
+        content: helptext,
+    });
+}
+
+function toggleDiv() {
+	var status = document.getElementById("pietable").style.display;
+
+	if (status == 'block' || status == '') {
+		document.getElementById("xenese").style.display = "none";
+		document.getElementById("maptable").style.width = "2190px";
+		document.getElementById("pietable").style.display = "none";
+
+		if (maingaugepercentageavg == 0) {
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie", "Inbound Packets Max", 10, 10);
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie1", "Outbound Packets Max", 250, 220);
+
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie2", "Inbound Packets Avg", 250, 220);
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie3", "Outbound Packets Avg", 250, 220);
+
+		}
+	} else {
+		document.getElementById("xenese").style.display = "none";
+		document.getElementById("pietable").style.display = "block";
+		document.getElementById("maptable").style.width = "2190px";
+
+		if (maingaugepercentageavg == 0) {
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie", "Inbound Packets Max", 10, 10);
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie1", "Outbound Packets Max", 250, 220);
+
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie2", "Inbound Packets Avg", 250, 220);
+			createPie([{
+						"label": "TBD",
+						"value": 100
+					}
+				], "pie3", "Outbound Packets Avg", 250, 220);
+
+
+		}
+	}
+
+}
+
+function createPie(dataset, divtag, title, tooltipstring, ch, cw) {
+	const element = document.getElementById(divtag);
+	if (element != null) {
+		element.innerHTML = "";
+	}
+	if (pies.length < 6) {
+		var pie = new d3pie(divtag, {
+				header: {
+					title: {
+						text: title,
+						fontSize: 14
+					}
+				},
+				size: {
+					canvasHeight: 280,
+					canvasWidth: 420,
+					pieInnerRadius: "0%",
+					pieOuterRadius: null
+				},
+				labels: {
+					mainLabel: {
+						color: "#000000",
+						font: "arial",
+						fontSize: 11
+					},
+					value: {
+						color: "#cccc44",
+						font: "arial",
+						fontSize: 11
+					},
+					inner: {
+						format: "percentage", //value, percentage
+						hideWhenLessThanPercentage: null,
+						fontSize: 10
+					},
+				},
+				data: {
+					content: dataset
+				},
+				misc: {
+					gradient: {
+						enabled: true,
+						percentage: 75,
+						color: "#ccff33"
+					}
+				},
+				tooltips: {
+					enabled: true,
+					type: "placeholder", // caption|placeholder
+					string: "{label}:{value}",
+					placeholderParser: null,
+					styles: {
+						fadeInSpeed: 250,
+						backgroundColor: "#000000",
+						backgroundOpacity: 0.85,
+						color: "#efefef",
+						borderRadius: 2,
+						font: "arial",
+						fontSize: 14,
+						padding: 4
+					}
+				},
+
+			});
+		pies.push([divtag, pie]);
+	} else {
+		for (p in pies) {
+			if (pies[p[0]][0] == divtag) {
+				pies[p[0]][1].updateProp("data.content", dataset);
+
+			}
+		}
+
+	}
+
+}
+
+createPie([{
+			"label": "TBD",
+			"value": 100
+		}
+	], "pie", "Inbound Packets Max", 10, 10);
+createPie([{
+			"label": "TBD",
+			"value": 100
+		}
+	], "pie1", "Outbound Packets Max", 250, 220);
+
+createPie([{
+			"label": "TBD",
+			"value": 100
+		}
+	], "pie2", "Inbound Packets Avg", 250, 220);
+createPie([{
+			"label": "TBD",
+			"value": 100
+		}
+	], "pie3", "Outbound Packets Avg", 250, 220);
+
+var pietitle = ["Inbound Packets Max", "Outbound Packets Max", "Inbound Packets Avg", "Outbound Packets Avg"];
+// Load pie charts
+
+
+function startpiechart(maps) {
+
+	var i = 0;
+	for (m in maps) {
+		marr = maps[m];
+		if (marr.size > 0) {
+			let text = '[';
+			for (const[keym, valuem]of marr) {
+				text = text + '{"label":"' + keym + '", "value":' + valuem + '},';
+			}
+
+			text = text.substring(0, text.length - 1);
+
+			text = text + ']';
+
+			obj = JSON.parse(text);
+			if (i == 0) {
+				createPie(obj, "pie", pietitle[i]);
+			} else if (i > 0 && i < 4){
+				createPie(obj, "pie" + i, pietitle[i]);			
+			}
+		}
+		i = i + 1;
+	}
+
+}
+
+var mainheattablemap = new Map();
+var piechartdata = new Map();
+
+function addHeatdata(jsondata) {
+
+	var heatdata = [];
+
+	var mainhosts = [];
+	var piehosts = [];
+
+	maingaugepercentageavg = 0;
+
+	var xaxis = [];
+	var riskhosts = [];
+	var riskhostsanomaly = [];
+	var riskhostsnoping = [];
+	var allhosts = [];
+
+	hostsatrisk = 0;
+	mainheattablemap.clear();
+	piechartdata.clear();
+
+	for (j in jsondata.TopicReads) {
+		var patientlocation = "na";
+		var riskidentifier = "";
+		var patient = "";
+		var generated = "";
+		var topic = "";
+		var inside = 0;
+		var loghost = "";
+		var winstarttime = "";
+		var winendtime = "";
+		var msgidarr = "";
+
+		topic = jsondata.TopicReads[j].Topic;
+		var xvalue = "";
+
+		anomaly = jsondata.TopicReads[j].hyperprediction;
+		generated = jsondata.TopicReads[j].TimeStamp;
+		winstarttime = jsondata.TopicReads[j].WindowStartTime;
+		winendtime = jsondata.TopicReads[j].WindowEndTime;
+
+		jbuf = jsondata.TopicReads[j].Identifier;
+		msgidarr = jsondata.TopicReads[j].MsgIdData;
+		preprocesstype = jsondata.TopicReads[j].Preprocesstype;
+
+		idkeyarr = jbuf.split("~");
+		let type = idkeyarr[0];
+		let typename = idkeyarr[3].split(",")[2].split(":")[1];
+
+		for (id in idkeyarr) {
+			vbuf = idkeyarr[id];
+			//	 console.log("vbuf===",vbuf);
+
+			if (vbuf.includes("mainuid=")) {
+				loghost = vbuf.split("=")[1];
+				loghost = loghost.substring(0, loghost.length);
+
+				if (msgidarr) {
+					msgidarr = msgidarr.toString();
+				} else {
+					msgidarr = "None";
+				}
+			}
+		}
+		 
+		computedanomaly=0;
+		
+		if (loghost != "undefined" && loghost != "") {
+			xvalue = anomaly;
+			////////////////////////////////////////////COMPUTE RISK //////////////////////
+			if (Number(anomaly) >= RISKTHRESH && preprocesstype == "AnomProb") {
+		//		if (preprocesstype == "AnomProb") {
+			
+				riskhostsanomaly.push(loghost);
+				//console.log("-----numh=",numh,Number(anomaly));
+				anomaly = Number(anomaly);
+				computedanomaly = Number(anomaly);
+			} else if (idkeyarr[1].includes("FAILURE")) {
+				xvalue = "FAILURE";
+				anomaly = RISKTHRESH;
+				riskhostsnoping.push(loghost);
+
+			} else if (preprocesstype == "Trend") {
+				if (Number(anomaly) > 1000 && Number(anomaly) < 3000) {
+					anomaly = RISKTHRESH;
+					riskhosts.push(loghost);
+
+				} else if (Number(anomaly) > 3000) {
+					anomaly = RISKTHRESH;
+					riskhosts.push(loghost);
+
+				} else {
+					anomaly = 0.3;
+				}
+
+			} else if (preprocesstype == "Max") {
+
+				if (Number(anomaly) >= MAXTHRESH) {
+					anomaly = RISKTHRESH;
+					riskhosts.push(loghost);
+
+				} else {
+					anomaly = 0.3;
+				}
+
+			} else if (preprocesstype == "Min") {
+
+				if (Number(anomaly) == 0) {
+					anomaly = RISKTHRESH;
+					riskhosts.push(loghost);
+
+				} else {
+					anomaly = 0.3;
+				}
+
+			} else if (preprocesstype == "Variance") {
+
+				if (Number(anomaly) >= MAXTHRESH) {
+					anomaly = RISKTHRESH;
+					riskhosts.push(loghost);
+
+				} else {
+					anomaly = 0.3;
+				}
+
+			} else if (preprocesstype == "Avg") {
+
+				if (Number(anomaly) >= MAXTHRESH) {
+					anomaly = RISKTHRESH;
+					riskhosts.push(loghost);
+
+				} else {
+					anomaly = 0.3;
+				}
+
+			}
+
+			if (xvalue != "" && Number(anomaly) > .3) {				
+				retbuf = type + "=" + typename + "=" + anomaly + "=" + preprocesstype + "=" + xvalue + "=" + computedanomaly;
+				mainheattablemap.set(loghost + "_" + generated + "_" + typename + "_" + xvalue + "_" + winstarttime + "_" + winendtime + "_" + msgidarr + "_" + anomaly + "_" + preprocesstype + "_" + type, retbuf);
+				mainhosts.push(loghost);
+
+			}
+			  if ((preprocesstype == "Max" || preprocesstype == "Avg") && Number(xvalue) > MINTHRESH){
+				retbuf = type + "=" + typename + "=" + anomaly + "=" + preprocesstype + "=" + xvalue + "=" + computedanomaly;
+				piechartdata.set(loghost + "_" + generated + "_" + typename + "_" + xvalue + "_" + winstarttime + "_" + winendtime + "_" + msgidarr + "_" + anomaly + "_" + preprocesstype + "_" + type, retbuf);
+				piehosts.push(loghost);
+			  }
+
+		}
+
+	}
+
+	let uniquepiehosts = [...new Set(piehosts)];
+
+	let uniquehosts = [...new Set(mainhosts)];
+	let uniqueriskhosts = [...new Set(riskhosts)];
+	let uniqueriskhostsanomaly = [...new Set(riskhostsanomaly)];
+	let uniqueriskhostsnoping = [...new Set(riskhostsnoping)];
+	let allnetworkhosts = [...uniqueriskhosts,...uniqueriskhostsanomaly,...uniqueriskhostsnoping];
+	
+	let uniqueallhosts = [...new Set(allnetworkhosts)];
+	
+    uniqueallhosts.sort();
+	
+	uniqueriskhostsnoping.sort();
+    uniqueriskhostsanomaly.sort();
+
+	totalhosts = uniquehosts.length;
+	hostsatrisk = uniqueallhosts.length;
+	
+	uniqueriskhosts.sort();
+
+   if (riskhostsnoping.length==0){
+	hostrisk.value =  "Hosts At Risk: " + uniqueriskhosts.join();
+    document.getElementById('hostatrisk').innerHTML	= "Hosts At Risk: " + uniqueriskhosts.join();
+   }else{
+	hostrisk.value = "Hosts At Risk: " + uniqueriskhosts.join() + " - Cannot Ping Hosts:" + uniqueriskhostsnoping.join();	   
+    document.getElementById('hostatrisk').innerHTML	="Hosts At Risk: " + uniqueriskhosts.join() + " - Cannot Ping Hosts:" + uniqueriskhostsnoping.join();
+   }
+   
+   if (uniqueriskhostsanomaly.length!=0){
+     hostrisk.value = hostrisk.value + " - Anomalies Found in Hosts: " + uniqueriskhostsanomaly.join();
+    document.getElementById('hostatrisk').innerHTML	=hostrisk.value;
+	}
+
+	document.getElementById('totissues').innerHTML = hostsatrisk + " out of " + uniquehosts.length;
+	document.getElementById('potential').innerHTML = "Hosts At Potential Risk (>" + RISKTHRESH + ")";
+
+
+	mainheatmapdata(uniquehosts, mainheattablemap, xaxis);
+
+	processpiedata(uniquepiehosts, piechartdata, xaxis);
+}
+
+var inboundpacketsmax = new Map();
+var outboundpacketsmax = new Map();
+
+var inboundpacketsavg = new Map();
+var outboundpacketsavg = new Map();
+
+var mapset = [];
+
+////////////////////////////////////////////////////// SET PIE DATA ///////////////////////////
+function processpiedata(uniquehosts, mainheattablemap, xaxis) {
+
+	inboundpacketsmax.clear();
+	outboundpacketsmax.clear();
+
+	inboundpacketsavg.clear();
+	outboundpacketsavg.clear();
+
+	//inboundpacketsanomaly.clear();
+	//outboundpacketsanomaly.clear();
+    //console.log("mainheattablemap=========", mainheattablemap);
+
+	mapset = [inboundpacketsmax, outboundpacketsmax, inboundpacketsavg, outboundpacketsavg];
+
+	for (const[key, value]of mainheattablemap) {
+		keybuf = `${key}`;
+		valuebuf = `${value}`;
+
+		let ca = keybuf.split('_');
+		let xlabel = ca[2];
+		let tlabel = ca[1]
+		let hlabel = ca[0];
+		let pvalue = ca[3];
+
+		let karr = valuebuf.split('=');
+		let kriskvalue = Number(karr[2])*100;
+		
+		//console.log("kriskvalue====",hlabel,kriskvalue);
+		
+		let preprocesstype = karr[3];
+
+		let hlabelm = hlabel;
+		if (xlabel == "inboundpackets" && preprocesstype == "Max" && pvalue > 0) {
+			inboundpacketsmax.set(hlabelm, pvalue);
+			let hlabelr = hlabel;
+		//	inboundpacketsanomaly.set(hlabelr, kriskvalue);
+		} else if (xlabel == "outboundpackets" && preprocesstype == "Max"  && pvalue > 0) {
+			outboundpacketsmax.set(hlabelm, pvalue);
+			let hlabelr = hlabel;
+		//	outboundpacketsanomaly.set(hlabelr, kriskvalue);
+		} else if (xlabel == "outboundpackets" && preprocesstype == "Avg"  && pvalue > 0) {
+			outboundpacketsavg.set(hlabelm, pvalue);
+			let hlabelr = hlabel;
+			//outboundpacketsanomaly.set(hlabelr, kriskvalue);
+		} else if (xlabel == "inboundpackets" && preprocesstype == "Avg"  && pvalue > 0) {
+			inboundpacketsavg.set(hlabelm, pvalue);
+			let hlabelr = hlabel;
+			//inboundpacketsanomaly.set(hlabelr, kriskvalue);
+		}
+
+	}
+
+//console.log(inboundpacketsanomaly);
+
+}
+
+///////////////////////////////////////////////////////// MAIN HEAT MAP DATA ///////////////////////
+//var maxriskmap = new Map();
+
+function mainheatmapdata(uniquehosts, mainheattablemap, xaxis) {
+
+	hkeydata = [];
+	var msgids = "";
+//    maxriskmap.clear();
+
+	for (i in uniquehosts) {
+		var uhosts = uniquehosts[i];
+		var mainmsg = "";
+		var labelarr = [...Array(xaxis.length)].map(x => 0); // create empty array
+		var anomalyarr = [];
+		var avganomalyrisk = 0;
+		var count = 0;
+		for (const[key, value]of mainheattablemap) {
+			keybuf = `${key}`;
+			valuebuf = `${value}`;
+			let ca = keybuf.split('_');
+			let xlabel = ca[2];
+			let tlabel = ca[1]
+			let hlabel = ca[0];
+			let pvalue = ca[3];
+			//let anomalyvalue = ca[4];
+
+			if (hlabel == uhosts) {
+				let ca2 = valuebuf.split('=');
+				// get the anomaly risk
+				ptype = ca2[3];
+				rvalue = ca2[2];
+				
+				if (ptype == "AnomProb" && (xlabel=="inboundpackets" || xlabel=="outboundpackets" )){
+				  anomalyrisk = ca2[5];
+				  anomalyarr.push(Number(pvalue));
+				  avganomalyrisk = avganomalyrisk + Number(pvalue);
+				//  console.log("avganomalyrisk 1=",avganomalyrisk);
+				  count = count + 1;
+				}else if (xlabel=="inboundpackets" || xlabel=="outboundpackets"){
+				  anomalyarr.push(Number(rvalue));
+				  avganomalyrisk = avganomalyrisk + Number(rvalue);
+				//  console.log("avganomalyrisk 1=",avganomalyrisk);
+				  count = count + 1;
+					
+				}
+				
+				labelarr.push(Number(ca2[2]));
+				typerisk = (Number(ca2[2])*100).toFixed(2);
+				if (xlabel=="pingStatus" && pvalue==0){
+					pvalue="SUCCESS";
+	    			mainmsg = mainmsg + "<b>" + xlabel + " (" + ptype + ")</b>:<br>" + pvalue + "<br>At: " + tlabel + "<br>";
+				}else if(xlabel=="pingStatus" && pvalue==-1){
+					pvalue="FAILURE";
+	    			mainmsg = mainmsg + "<b>" + xlabel + " (" + ptype + ")</b>:<br>" + pvalue + "<br>At: " + tlabel + "<br>";
+				}else{
+					if (typerisk < RISKTHRESH*100){
+     				   mainmsg = mainmsg + "<b>" + xlabel + " (" + ptype + ")</b>:<br>" + pvalue + " (" + typerisk + "%)<br>At: " + tlabel + "<br>";  
+					}else{
+     				   mainmsg = mainmsg + "<font color=red><b>" + xlabel + " (" + ptype + ")</b>:<br>" + pvalue + " (" + typerisk + "%)<br>At: " + tlabel + "</font><br>";  
+					}
+				}
+
+			}
+
+		}
+		if (count != 0) {
+		//	console.log(" avganomalyrisk 2=", avganomalyrisk, " uhosts=",uhosts, " count=",count, " anomalyarr=",anomalyarr);
+
+			avganomalyrisk = (avganomalyrisk / count)*100;
+			//avganomalyrisk = Math.max( ...anomalyarr )*100;
+			if (avganomalyrisk > 0){
+			avganomalyrisk = avganomalyrisk.toFixed(2);
+			}
+		} else {
+			avganomalyrisk = 0;
+		}
+		hkeydata.push({
+			name: uhosts,
+			data: labelarr,
+//			product: "<b>Host Machine:</b> <b>192.168." + uhosts + "</b>: <br>" + mainmsg + "<br><b>Host Machine:</b> <b>192.168." + uhosts + "</b><br><font color=red><b>Avg. Anomaly Risk Level: " + avganomalyrisk + "%</b></font>"
+			product: "<b>Host Machine:</b> <b>192.168." + uhosts + "</b>: <br>" + mainmsg + "<br><b>Host Machine:</b> <b>192.168." + uhosts + "</b>"	
+	});
+
+	}
+	let uniquehkeyhosts = [...new Set(hkeydata)];
+	//console.log("hkeydata===",hkeydata);
+	
+    
+	heatmaptable(uniquehkeyhosts, xaxis);
+	hkeydata = [];
+	labelarr = [];
+	maingaugepercentageavg = 1;
+}
+
+//////////////////////////////////////////////////// FORMAT HEATMAP TABLE/////////////////////////////////
+function heatmaptable(datas, datatime) {
+
+	var colors = ["linear-gradient(to bottom right, #ff0040, #330000)", "#F27036", "#663F59", "#6A6E94", "#4E88B4", "#00A7C6", "#18D8D8", '#A9D794', '#46AF78', '#A93F55', '#8C5E58', '#2176FF', '#33A1FD', '#7A918D', '#BAFF29']
+
+	var options = {
+		series: datas,
+		chart: {
+			height: 500,
+			type: 'heatmap',
+		},
+		title: {
+			text: "Cybersecurity Risk and Network Monitoring",
+			align: 'center',
+		},
+		dataLabels: {
+			enabled: true,
+			style: {
+				fontSize: "10px",
+				//				fontColor: "#000000",
+				fontFamily: "Helvetica, Arial, sans-serif",
+				fontWeight: "bold"
+			}
+		},
+		plotOptions: {
+			heatmap: {
+				shadeIntensity: 0,
+				radius: 20,
+				useFillColorAsStroke: false,
+				colorScale: {
+					ranges: [{
+							from: 0,
+							to: .5,
+							color: '#00A100',
+							name: 'Low Risk'
+						}, {
+							from: .51,
+							to: .7,
+							color: '#128FD9',
+							name: 'Medium Risk'
+						}, {
+							from: .71,
+							to: .8,
+							color: '#FFB200',
+							name: 'High Risk'
+						}, {
+							from: RISKTHRESH,
+							to: 1,
+							color: '#FF0000',
+							name: 'Very High Risk'
+						}
+					]
+				}
+			} //heatmap
+		},
+	   noData: {
+          text: 'Loading...'
+        },
+		xaxis: {
+			type: "category",
+			categories: datatime,
+
+		},
+		//colors: colors,
+		yaxis: {
+			labels: {
+				style: {
+					fontSize: '11px'
+				}
+			}
+		},
+		grid: {
+			padding: {
+				right: 20
+			}
+		},
+		tooltip: {
+			custom: function ({
+				series,
+				seriesIndex,
+				dataPointIndex,
+				w
+			}) {
+				var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+				var data2 = w.globals.labels[dataPointIndex];
+				return (
+					'<div class="arrow_box">' +
+					"<span>" +
+					w.globals.initialSeries[seriesIndex].product +
+					"</span>" +
+					"</div>");
+			}
+		}
+	};
+
+	if (heatchart) {
+		  heatchart.destroy();
+        heatchart=null;
+		//heatchart.updateOptions(options);
+	//	heatchart.updateOptions({
+		//	            series: datas
+		//})
+
+	}//else{
+	
+	heatchart = new ApexCharts(document.querySelector("#heatmaptablechart"), options);
+	
+	heatchart.render();
+	//}
+}
+
+function drawChart(jsondata, topic) {
+
+	if (jsondata) {
+
+		var text;
+		var val;
+		//  var partitionarr=[];
+		var createdon;
+		var winstart;
+		var winend;
+
+		var processtype;
+
+		var identifier;
+		var idarr;
+		//var topic;
+		var processbuf;
+		var normalvalue;
+		var processvariable = "";
+		var ubound;
+		var predictionvalue;
+		var totalmessages;
+		var kafkakey;
+		var offset;
+		var partition;
+		var arr;
+		var st;
+		var ed;
+		var et;
+		var vbuf;
+		var buf;
+		var vbuf2;
+		var varr;
+		var msgiddatastr = "";
+		var Maintopic;
+
+		let rownum = 0;
+
+		for (j in jsondata.TopicReads) {
+			//get the fields
+			kafkakey = jsondata.TopicReads[j].kafkakey;
+			//try {
+			if (kafkakey != null && !kafkakeyarr.includes(kafkakey) && kafkakey.length > 0) {
+				kafkakeyarr.push(kafkakey);
+
+				createdon = jsondata.TopicReads[j].TimeStamp;
+				winstart = jsondata.TopicReads[j].WindowStartTime;
+				timestart = winstart;
+				winend = jsondata.TopicReads[j].WindowEndTime;
+				timeend = winend;
+
+				processtype = jsondata.TopicReads[j].Preprocesstype;
+
+				identifier = jsondata.TopicReads[j].Identifier;
+				idarr = identifier.split("~");
+				processvariable0 = idarr[3];
+				processvariable = processvariable0.split(",")[3].split(":")[1];
+
+				let indm = idarr.findIndex(element => element.includes("mainuid="))
+					msgiddatastr = idarr[indm].split("=")[1]
+
+				topic = jsondata.TopicReads[j].Topic;
+				Maintopic = jsondata.TopicReads[j].Maintopic;
+				processbuf = "_preprocessed_" + processtype;
+				predictionvalue = jsondata.TopicReads[j].hyperprediction;
+				totalmessages = jsondata.TopicReads[j].Numberofmessages;
+				kafkakey = jsondata.TopicReads[j].kafkakey;
+				offset = jsondata.TopicReads[j].Offset;
+				partition = jsondata.TopicReads[j].Partition;
+
+				if (processvariable == "pingStatus") {
+					predictionvalue = -1;
+					processtype = processtype + " (" + idarr[1] + ")";
+				} else {
+					predictionvalue = Number(predictionvalue);
+				}
+
+				arr = [createdon, winstart, winend, "192.168." + msgiddatastr, processvariable, processtype, predictionvalue, totalmessages, kafkakey, offset, partition];
+				dataintable.push(arr)
+				rownum++;
+
+				//predictioncount = predictioncount + 1;
+
+			}
+		}
+
+		maintotalmessages = maintotalmessages + rownum;
+		document.getElementById('totrecs').innerHTML = maintotalmessages;
+
+		if (rownum > 0) {
+			document.getElementById('tottime').innerHTML = "<font size=3><b>Start:</b> " + timestart + "<b><br>End:</b> " + timeend + "</font>"
+				drawTable2();
+
+		}
+	}
+
+}
+
+function drawTable2() {
+
+	if (maintable == null) {
+		maintable = new google.visualization.Table(document.getElementById('table_div'));
+	}
+
+	var formatter = new google.visualization.NumberFormat({
+			groupingSymbol: '',
+			fractionDigits: 0
+		});
+	var formatter2 = new google.visualization.NumberFormat({
+			groupingSymbol: '',
+			fractionDigits: 3
+		});
+
+	if (datatbl == null) {
+		datatbl = new google.visualization.DataTable();
+
+		datatbl.addColumn('string', 'Date/Time');
+		datatbl.addColumn('string', 'Time Window Start');
+		datatbl.addColumn('string', 'Time Window End');
+		datatbl.addColumn('string', 'Subject Information');
+
+		datatbl.addColumn('string', 'ProcessVariable');
+
+		datatbl.addColumn('string', 'Processtype');
+
+		datatbl.addColumn('number', 'Current Value');
+		//datatbl.addColumn('number', 'Normal Mean Value');
+		//datatbl.addColumn('number', 'Upper Bound Value');
+		datatbl.addColumn('number', 'Total Messages');
+		datatbl.addColumn('string', 'Kafkakey');
+		datatbl.addColumn('number', 'Offset');
+		datatbl.addColumn('number', 'Partition');
+
+		datatbl.sort({
+			column: 1,
+			desc: true
+		});
+
+		maintable.clearChart();
+
+		maintable.draw(datatbl, {
+			showRowNumber: true,
+			width: '100%',
+			height: '100%',
+			page: 'enable',
+			pageSize: 30,
+			allowHtml: true
+		});
+		if (append == 0) {
+			datatbl.removeRows(0, datatbl.getNumberOfRows() - 1);
+		}
+	} else {
+
+		//console.log("datatbl=",datatbl);
+
+
+		formatter.format(datatbl, 1);
+		formatter2.format(datatbl, 2);
+		datatbl.sort({
+			column: 1,
+			desc: true
+		});
+		if (datatbl.getNumberOfRows() > 0 && append == 0) {
+			datatbl.removeRows(0, datatbl.getNumberOfRows() - 1);
+		}
+
+		datatbl.addRows(dataintable);
+		maintable.clearChart();
+		maintable.draw(datatbl, {
+			showRowNumber: true,
+			width: '100%',
+			height: '100%',
+			page: 'enable',
+			pageSize: 30,
+			allowHtml: true,
+			'cssClassNames': cssClassNames
+		});
+
+		formatter = null;
+		formatter2 = null;
+	//	datatbl.removeRows(0,datatbl.getNumberOfRows()-1)
+
+	}
+
+	dataintable = [];
+
+}
+
+// sleep time expects milliseconds
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+//////////////////////////////////////////////////////////////////// MAIN WEBSOCKET STREAMING FUNCTION /////////////////////////////
+function streamLiveKafkaData() {
+
+	if ("WebSocket" in window) {
+		var url = window.location.host;
+		console.log(url);
+		mainport = url.split(":")[1];
+
+		var urlParams = new URLSearchParams(window.location.search);
+		var keys = urlParams.keys();
+		var entries = urlParams.entries();
+		for (pair of entries) {
+			if (pair[0] == "topic") {
+				topic = pair[1];
+			}
+
+			if (pair[0] == "topictype") {
+				topictype = pair[1];
+			}
+			if (pair[0] == "secure") {
+				secure = pair[1];
+			}
+			if (pair[0] == "vipertoken") {
+				vipertoken = pair[1];
+			}
+
+			if (pair[0] == "consumerid") {
+				consumerid = pair[1];
+			}
+
+			if (pair[0] == "offset") {
+				offset = pair[1];
+			}
+
+			if (pair[0] == "rollbackoffset") {
+				rollbackoffset = pair[1];
+			}
+			if (pair[0] == "groupid") {
+				groupid = pair[1];
+			}
+			if (pair[0] == "append") {
+				append = pair[1];
+			}
+		}
+
+ <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
+            if (window.location.href.indexOf("http://")!=-1){
+		     if (window.location.href.indexOf("/viz/")!=-1){
+                ws = new WebSocket("ws://"+url+"/viz/ws");
+             }else{
+                  ws = new WebSocket("ws://"+url+"/ws");
+             } 
+        }else{
+             if (window.location.href.indexOf("/viz/")!=-1){                                                                            
+                 ws = new WebSocket("wss://"+url+"/viz/ws");
+             }else{
+               ws = new WebSocket("wss://"+url+"/ws");
+             }
+           }
+
+
+ <!-- ************************************* CREATE WEBSOCKET OBJECT **************************** -->
+		
+		ws.onmessage = function (event) {
+			curTime = new Date();
+			var eventdata = `${event.data}`;
+
+			var maindata = eventdata.replace(/\\"/g, '"');
+			maindata = maindata.substr(1, maindata.length - 3);
+			if (maindata == "") {
+				return
+			}
+
+			// console.log("-------------maindata=",maindata);
+
+			var obj;
+			try {
+				obj = JSON.parse(maindata);
+			} catch (e) {
+				console.log("Json parse issue=", e.message);
+				return;
+			}
+
+			if (obj.ERROR) {
+				//				   $("#statustext").val("Websocket ERROR.."+obj.ERROR);
+				document.getElementById('statustext').innerHTML = "<font color='white'>Websocket ERROR.." + obj.ERROR + "</font>";
+
+				ws.close(1000);
+				alert(obj.ERROR);
+				ws = null;
+				$("#start").attr("disabled", false);
+				$("#start").html("Start Streaming");
+				return
+			}
+
+			if (START == 0) {
+				if (ws) {
+					ws.close(1000);
+				}
+				ws = null;
+				return;
+			}
+			if (append == 0) {
+				dataintable.splice(0, dataintable.length)
+
+				//     datainchart.splice(0, datainchart.length)
+				//predictioncount = 0;
+				jsonhist = null;
+				kafkakeyarr.splice(0, kafkakeyarr.length)
+			}
+
+			vipervizerror = "";
+
+			if (obj.VIPERVIZERROR) {
+				document.getElementById('statustext').innerHTML = "<font color='white'>TOO MANY PEOPLE CONNECTED</font>";
+				vipervizerror = "<font color='white'>TOO MANY PEOPLE CONNECTED</font>";
+				//			  alert(obj.VIPERVIZERROR);
+				return
+			}
+
+			kafkacluster = obj.Webkafkacluster
+			mainkafkatopic = obj.Webtopic
+
+			document.getElementById('accesstime').innerHTML = "<font color='white'>" + curTime + "</font>";
+			document.getElementById('kafkacluster').innerHTML = "<font color='white'>" + kafkacluster + ", Kafka Topic: " + obj.Webtopic + "</font>";
+
+			//////////////////////////////////////////////////// START FUNCTION CALLS FOR CHARTING
+			drawChart(obj, mainkafkatopic);
+			
+//			sleep(2000);
+		
+    		
+			addHeatdata(obj);
+	        
+	//		sleep(2000);
+
+         	var status = document.getElementById("pietable").style.display;
+
+	        if (status == 'block' ) {		
+			 try{
+        	   startpiechart(mapset);			   
+			 }catch(e){
+               
+			 }				 
+	        }				
+			/////////////////////////////////////////////////////////////////////////////////////////
+
+			obj = null;
+			maindata = null;
+			eventdata = null;
+
+		};
+
+		ws.onclose = function (event) {
+			//console.log("event=",event);
+
+			if (event.wasClean) {
+				console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+			} else {
+				console.log('[close] Connection died');
+
+			}
+			if (ws) {
+				ws.close(1000);
+			}
+			ws = null;
+			var el = document.getElementById('loaderdiv');
+			el.style.display = "none";
+
+			$("#start").attr("disabled", false);
+			//$("#statustext").val("Websocket closed");
+			if (vipervizerror != "") {
+				document.getElementById('statustext').innerHTML = vipervizerror;
+			} else {
+				document.getElementById('statustext').innerHTML = "<font color='white'>WEBSOCKET Closed</font>";
+			}
+
+			$("#start").html("Start Streaming");
+		};
+		ws.onopen = function (error) {
+			var password = ""; //document.getElementById("dashpass").value;
+
+			// SEND DATA BACK TO VIPERVIZ ////////////////////////////////////////////
+			var sendbuffer = "{\"Topic\":\"" + topic + "\",\"Topictype\":\"" + topictype + "\",\"Secure\":" + secure + ",\"Vipertoken\":\"" + vipertoken + "\",\"Consumerid\":\"" + consumerid + "\",\"Offset\":\"" + offset + "\",\"RollbackOffset\":\"" + rollbackoffset + "\",\"Groupid\":\"" + groupid + "\"}";
+
+			ws.send(sendbuffer);
+			//////////////////////////////////////////////////////////////////////////
+			var el = document.getElementById('loaderdiv');
+			el.style.display = "block";
+
+		};
+
+		ws.onerror = function (error) {
+			if (ws) {
+				ws.close(1000);
+			}
+			console.log(`[error] ${error.message}`);
+			document.getElementById('statustext').innerHTML = "<font color='white'>WEBSOCKET ERROR.." + `[error] ${error.message}` + "</font>";
+
+		};
+
+	} else {
+
+		// The browser doesn't support WebSocket
+		console.log("WebSocket NOT supported by your Browser!");
+	}
+}
+
+$('#Export').click(function () {
+	if (topic.length > 0) {
+		var headerRow = "";
+		var number_of_columns = datatbl.getNumberOfColumns();
+		for (var i = 0; i < number_of_columns; i++) {
+			headerRow += datatbl.getColumnLabel(i).replace("\n", " : ");
+			headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+		}
+		var csvFormattedDataTable = headerRow + google.visualization.dataTableToCsv(datatbl);
+		var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+		this.href = encodedUri;
+		this.download = topic + "-cyber-data.csv";
+		this.target = '_blank';
+	} else {
+		alert("Start streaming first");
+	}
+});
+
+$("#idForm").submit(function (e) {
+	if (ws && START == 1) {
+		ws.close(1000);
+		ws = null;
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+		START = 0;
+		$("#start").html("Start Streaming");
+		$("#start").attr("disabled", true);
+		//	    $("#statustext").val("WEBSOCKET CLOSING...");
+		document.getElementById('statustext').innerHTML = "<font color='white'>WEBSOCKET CLOSING...</font>";
+
+	} else {
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+		START = 1;
+		//   $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka Msgs...");
+		document.getElementById('statustext').innerHTML = "<font color='white'>WEBSOCKET OPEN..Receiving Kafka Msgs...</font>";
+
+		$("#start").html("Stop Streaming");
+		streamLiveKafkaData();
+
+	}
+
+});
+</script>
+</body>
+</html>

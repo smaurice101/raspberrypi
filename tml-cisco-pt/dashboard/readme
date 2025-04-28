@@ -1,0 +1,18 @@
+This is the TML-CISCO-CYBERTHREATS-NETWORKING-MONITORING dashboard.  
+
+It can be accessed by entering this URL in your dashboard:
+http://localhost:9000/tml-cisco-network-monitor.html?topic=cisco-network-preprocess&offset=-1&groupid=&rollbackoffset=200&topictype=prediction&append=0&secure=1
+
+IF USING TML-CISCO-PRIVATE Container Use (change 8001 port to your chosen port):
+http://localhost:8080/tml-cisco-network-privategpt-monitor.html?topic=cisco-network-preprocess,cisco-network-privategpt&offset=-1&groupid=&rollbackoffset=150&topictype=prediction&append=0&secure=1
+
+Docker Run: docker run -d -p 8080:8080 --net=host --env VIPERVIZPORT=8080 --env RUNTYPE=2 --env PGPTIP="http://127.0.0.1" 
+--env PGPTPORT=8001 --env PGPTROLLBACK=4 --env BROKERHOSTPORT=pkc-6ojv2.us-west4.gcp.confluent.cloud:9092 
+--env KAFKAPRODUCETOPIC=cisco-network-mainstream --env HACKEDHOSTS=5.100-i,6.18-i,5.18-i --env CLOUDUSERNAME=WMAGMDURPHZDCCRR 
+--env CLOUDPASSWORD=aPLpDkkTnIxkj2vZ59ySV3jgjCEjkl2u0gK3m0FlrQQaqqK/xpQtj1r22pdlJsGk maadsdocker/tml-cisco-network-cyberthreats-privategpt-amd64
+
+MAKE SURE PRIVATE GPT Container is Running:
+docker run -d -p 8001:8001 --env PORT=8001 --env GPU=0 --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-no-gpu-amd64
+
+Viper Logs:
+http://localhost:9000/viperlogs.html?topic=viperlogs&append=0

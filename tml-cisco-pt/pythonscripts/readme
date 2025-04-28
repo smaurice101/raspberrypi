@@ -1,0 +1,8 @@
+These are the poducing and preprocessing scripts:
+The main script is: pt-preprocess-external.py
+To generate use the pt-produce-localfile.py
+
+To produce data to Kafka Cloud on local computer use pt-produce-local.py
+
+NOTE: For student solutions all you need is the pt-preprocess-external.py
+

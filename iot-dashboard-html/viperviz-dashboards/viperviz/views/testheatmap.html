@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Leaflet Heatmap Demo</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="/leaflet/leaflet.css" />
+
+        <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+        <![endif]-->
+
+       				 <script type="text/javascript" src="/leaflet/leaflet.js"></script>   
+
+        <script src="/leaflet/leaflet-div-heatmap.js"></script>
+    </head>
+    <body>
+        <div id="map" style="width: 1600px; height: 400px"></div>
+        <script>
+
+			const map = L.map('map', {
+					center: [47.116386, -101.299591],
+					zoom: 2.0
+					});
+					
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);	
+            var heatmap = new L.DivHeatmapLayer();
+            
+            heatmap.addTo(map);
+			
+             heatmap.options= {
+			 color: '#DC4109',
+			 radius: 100,
+			 gradient: true,
+			 clickable: false
+			};
+//#52eb34
+        //    heatmap.testAddData();
+		
+
+	  function circleWithText(latLng, txt, circleOptions) {
+		var icon = L.divIcon({
+		html: '<div class="txt">' + txt + '</div>',
+		className: 'circle-with-txt',
+		iconSize: [40, 40]
+		});
+		var circle = L.circleMarker(latLng, circleOptions);
+		var marker = L.marker(latLng, {
+		icon: icon
+		});
+		var group = L.layerGroup([circle, marker]);
+		return(group);
+	}
+
+		//		  const marker1 = L.marker([27.416386, -108.299591]).addTo(map);
+			//		const marker2 = L.marker([27.116386, -100.299591]).addTo(map);
+				//	const marker3 = L.marker([37.116386, -104.299591]).addTo(map);
+					//const marker4 = L.marker([47.116386, -103.299591]).addTo(map);
+					
+		heatmap.clearData();
+		
+		heatmap.options= {
+			 color: '#52eb34',
+			 radius: 100,
+			 gradient: true,
+			 clickable: false
+			};	          
+			  heatmap.testAddData([{"lat":22.396428,"lon":114.109497},{"lat":27.416386,"lon":-108.299591},{"lat":47.116386,"lon":-103.299591}],3);
+
+             heatmap.options= {
+			 color: '#DC4109',
+			 radius: 40,
+			 gradient: true,
+			 clickable: false
+			};
+
+			  heatmap.testAddData([{"lat":37.116386,"lon":-104.299591},{"lat":27.416386,"lon":-108.299591},{"lat":47.116386,"lon":-103.299591}],3);
+            	  
+                 circleWithText([22.396428, 114.109497], '405', {radius: 20, weight: 0, color: 'yellow'}).addTo(map);			
+                 circleWithText([27.416386, -108.299591], '45', {radius: 20, weight: 0, color: 'green'}).addTo(map);
+				 
+                 circleWithText([27.116386, -100.299591], '145', {radius: 20, weight: 0, color: 'green'}).addTo(map);
+                 circleWithText([37.116386, -104.299591], '45', {radius: 20, weight: 0, color: 'green'}).addTo(map);
+                 circleWithText([47.116386, -103.299591], '245', {radius: 0, weight: 0, color: 'red'}).addTo(map);
+     circleWithText([55.116386, 134.299591], '45', {radius: 20, weight: 0, color: 'green'}).addTo(map);
+
+        </script>
+    </body>
+</html>

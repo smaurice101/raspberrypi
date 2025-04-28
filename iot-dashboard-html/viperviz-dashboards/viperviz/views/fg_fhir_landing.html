@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+<head>
+    <meta charset="UTF-8" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+    <title>FHIR Landing Page</title>
+    <style>
+	.loader {
+  border: 7px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 7px solid blue;
+  border-bottom: 7px solid blue;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+h1 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: 100; line-height: 10.4px; } h4 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 1px; font-style: bold; font-variant: normal; font-weight: 400; line-height: .4px; } p { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
+
+.a {
+    background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+}
+.b {
+         background: linear-gradient(to top left, #ffffff 0%, #ccffff 100%);
+
+
+}
+ 
+      #gauge_avgrisk {
+        width:370px; height:380px;
+		
+      }
+        #gauge_currrisk {
+        width:260px; height:150px;
+        display: inline-block;
+        margin: 1em;
+      }
+
+        #chart_div {
+              float: left;
+        }
+        
+        body {
+            
+            justify-content: center;
+            align-items: center;
+        }
+.orange-background {
+   background-color: orange;
+  }
+
+ .orchid-background {
+  background-color: orchid;
+ }
+
+.beige-background {
+ background-color: beige;
+  }		
+ .columnTitle {
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-size: 14px; 
+          color:white;
+          background-color: #607A75
+      } 
+.grid {
+  display: grid;
+  grid-gap: var(--card-padding);
+  margin: 0 auto;
+  max-width: 60em;
+  padding: 0;
+ 
+  @media (min-width: 42em) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+th, td {
+  padding: 5px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: var(--card-radius);
+  position: relative;
+  
+  &:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.plan-type {
+  color: var(--color-green);
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1em;
+}
+ .btnsave{
+       width: 50px;
+	   height: 25px;
+	   background: linear-gradient(to bottom right, #609931, #87bc27);
+	   color: white;
+	   align: top;
+    }
+	
+.padding
+{
+padding: 4px 5px 2px 2px;
+}	  
+    </style>
+<script type="text/javascript" src="/js/attention.js"></script>   
+
+<script type="text/javascript" src="/js/r.min.js"></script>   
+
+<script type="text/javascript" src="/js/justgage.js"></script>   
+<script type="text/javascript" src="/js/justgage.min.js"></script>   
+
+<script>
+
+function image(thetype,mess) {
+        
+		var titletext="";
+		var helptext="";
+		
+		if (thetype=="gauge"){
+		   titletext="Fraud Risk Meter";
+		    helptext="The Fraud Risk Meter shows the average fraud risk percentage of the population across time windows. The percentage is computed by averaging the Fraud Probability predictions for every patient. The high risk meter averages the high risk probabilities for the subset."; 
+		}else if (thetype=="block"){
+           titletext="XENESE Block Chain Chart";
+		    helptext="Every TML Fraud probability prediction is written to the block chain by XENESE in a Distributed Fraud Ledger.  The fraud predictions are processed by the XENESE workflow and can be integrated with downstream organizational and business systems."; 
+		
+		}else if (thetype=="barchart"){
+           titletext="Fraud Monitoring Bar Chart";
+		    helptext="The Fraud Monitoring Bar Chart shows the count of Total Fraud records in the data stream (GREY Bar), against the fraud that are above the upper bound (BLUE Bar)."; 
+		
+		}else if (thetype=="intensity"){
+           titletext="Fraud Intensity Curve With Annotations";
+		    helptext="The Fraud Intensity Curve With Annotations shows the intensity of the symptoms' values. The Intensity curve is computed by first determining which symptoms are out of bound (or higher than normal), if symptoms are higher than normal, then a delta value is computed by subtracting the computed value from the mean value of the symptom.  The absolute values of the deltas are then summed up and plotted on the intensity curve.  For example, if monitoring body temperature (BT) and heart rate (HR), and the computed value of BT=100, and HR=120, and the upper bound for BT is 98, and upper bound for HR is 80, both BT and HR are out of bounds.  If the mean value of BT is 97, and mean value for HR is 70, then ONE point on the intensity curve is the absolute value of: |100-97| + |120-70| = 53.  The unit of measurements is similar to a basis point to see how much this value differs from 0.  The larger this value differs from 0, the more intense the symptoms in the population and higher the fraud risk for a particular Disease emerging.  Each point on the intensity curve has its own ANNOTATION with all the details associated with the point."; 
+		
+		}else if (thetype=="table"){
+		  titletext="Table Data";
+		    helptext="The data in the table shows the preprocessed values for every patient used in the ML model.  These preprocessed values are the independent variables and are used to create the dependent variable for the logistic regression.  KAFKAKEY is a unique hash key for the Kafka message.   OFFSET/PARTITION show the actual location of the PROCESSED message in Kafka.  By PROCESSED we mean the MAX and AVG value process.  Time Window Start and End are the start and end of the Time Sliding Window in the data stream that is processed to compute MAX and AVG for 20 patients.  Date/Time is when this processing took place by VIPER."; 
+		
+		}else if (thetype=="healthrisk"){
+		  titletext="Real-Time Fraud Risk";
+		    helptext="The fraud Risk graph plots the real-time Fraud Risk percentage over time to show how the Fraud risk is trending."; 
+		
+		}else if (thetype=="ml"){
+		  titletext="Transactional Machine Learning Models";
+		    helptext="These are the ML models TML has built for every patient.  They are Fraud Probability predictions.  TML creates a logistic regression model for each patient."; 
+		
+		}
+		
+		
+		
+          new Attention.Prompt({
+                    title: titletext,
+                    content: helptext,
+                });
+			}
+</script>	
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+<link href="/css/tileslanding.css" rel="stylesheet">
+<link href="/css/attention.css" rel="stylesheet">
+<link href="/css/button.css" rel="stylesheet">
+<link href="/css/textbox.css" rel="stylesheet">
+<link href="/css/table3d.css" rel="stylesheet">
+<link href="/css/dropdown.css" rel="stylesheet">
+<link rel="stylesheet" href="/leaflet/leaflet.css" />
+
+<style>
+
+ #map {
+        position: relative;
+        width: 100%;
+        height: 500px;
+      }
+</style>
+<body>
+<center><img src='./firstgenesislogo.png'> | <img src='./OTICS-New-Logo-Black.png' width=150 height=70></center>
+	    			<img src='/img/diseasemonitor.png' width=100% height=327  >	
+
+			<h1><center>Transactional Machine Learning with KAFKA and Blockchain Integration</center></h1>
+		
+		<!-- ===========================================================Health Care =============== -->
+		<table border=0 style='width: 1500px;height: 200px; vertical-align: top;'>
+				<tr>		
+				<h3><center>Health Care Use Cases Using FHIR Data Standard</center></h3>
+				<td style="text-align: left; vertical-align: top;">
+				<table valign='top'  style="width: 300px; height: 100%">
+				<tr>
+				<td valign='top' >
+			   <div class="tile wide resource">
+               <div class="header">
+               <div class="title"><font size=5>Disease Surveillance</font></div>
+               </div>
+			   				<center>
+			   				<br><button id="startdisease" class="btn btn1" name="submit" onclick="javascript:window.open('https://127.0.0.1:8001/fhirpopulationhealthmap.html?topic=fhir-health-monitor&offset=-1&groupid=&rollbackoffset=70&topictype=prediction&append=0&secure=1');">Start Streaming</button>  
+               </center>
+                </div>
+			  
+		       </td>
+			   
+			   </tr>
+			   </table>
+			   </td>
+			   
+			   <!--------------------------------------- -->
+			   <td  valign='top' style="width: 450px; height: 100%" >				
+				<table valign='top' style="width: 450px; height: 100%">
+				<tr>
+				<td valign='top' width=450>
+				 <center>
+			<div class="tile wide resource" style="width: 420px; height: 100%">
+    <div class="header" >
+      <div class="title" ><font size=5>Medication Fraud Surveillance</font></div>
+    </div>
+  </div>
+		
+				 <div id="blockchain" style="text-align: right; vertical-align: top;width:100%;height: 500;overflow-y:auto;  padding-left: 15px;"></div>
+				 <br><button id="startmedicationfraud" class="btn btn1" name="submit" onclick="javascript:window.open('https://127.0.0.1:8001/medication-fraud-blockchain.html?topic=fhir-ml-prediction-results-output,fhir-fraud-monitor,fhir-ml-xenese-confirmation&offset=-1&groupid=&rollbackoffset=300&topictype=prediction&append=0&secure=1');">Start Streaming</button>  
+				  
+				
+                   </center>				 
+				</td>
+			   </tr>
+			   </table>
+			   </td>
+			   
+			<!-- ================================================================= -->   
+				<td  valign='top' >				
+				<table valign='top' style="width: 300px; height: 100%">
+				<tr>
+				<td valign='top' >
+				 <center>
+			<div class="tile wide resource" >
+    <div class="header" >
+      <div class="title" ><font size=5>Medication Side Effects</font></div>
+
+    </div>
+		  				<br><button id="startsieeffects" class="btn btn1" name="submit" >Start Streaming</button>  
+
+  </div>
+				 
+				
+                   </center>				 
+				</td>
+			   </tr>
+			   </table>
+			   </td>
+			
+				 
+                 </tr>
+				 
+                 </table>				 
+		<!-- ===========================================================IOT/Energy =============== -->
+		<table border=0 style='width: 1500px;height: 200px; vertical-align: top;'>
+				<tr>		
+				<br>
+				<h3><center>IOT/Energy Use Cases</center></h3>
+				<td style="text-align: left; vertical-align: top;">
+				<table valign='top'  style="width: 300px; height: 100%">
+				<tr>
+				<td valign='top' >
+			   <div class="tile wide quote">
+               <div class="header">
+               <div class="title"><font size=5>IoT Device Failure Prediction</font></div>
+               </div>
+			   				<center>
+			   				<br><button id="iotperformance" class="btn btn1" name="submit" onclick="javascript:window.open('https://127.0.0.1:8001/iot-failure-blockchain.html?topic=iot-ml-prediction-results-output,iot-preprocess&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1');">Start Streaming</button>  
+               </center>
+                </div>
+			  
+		       </td>
+			   
+			   </tr>
+			   </table>
+			   </td>
+			   
+			   <!--------------------------------------- -->
+			   
+			<!-- ================================================================= -->   
+			
+				 
+                 </tr>
+				 
+                 </table>				 			 
+				 
+				 
+				 
+				 
+				 
+				 
+				 <!--  <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea> -->
+            </form>
+        </div>
+        <div id="display"></div>
+    </div>
+	
+	<i><br><br><b>Powered by:</b> Transactional Machine Learning, Kafka, Viper, Viperviz, XENESE<br><b>Developed by:</b> OTICS Advanced Analytics, Inc.</i>
+
+
+</div>
+
+    <!-- CONTAINER FOR CHART -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+</body>
+
+</html>

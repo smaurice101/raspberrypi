@@ -1,0 +1,8 @@
+From any browser you can visualize the data processing in real-time from raspberry pi
+unzip viperviz.zip and place "viperviz" in viperviz folder (/viperviz)
+ http://localhost:9005/iot-failure-seneca.html?topic=iot-preprocess2,iot-preprocess&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1
+
+Or for a Machine Learing Dashboard enter:
+http://localhost:9005/iot-failure-machinelearning-seneca.html?topic=iot-preprocess,iot-ml-prediction-results-output&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1
+
+Viperlogs: http://localhost:9005/viperlogs.html?topic=viperlogs&append=0

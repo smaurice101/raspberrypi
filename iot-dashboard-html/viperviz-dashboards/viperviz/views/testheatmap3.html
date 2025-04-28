@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet.heat demo</title>
+    <link rel="stylesheet" href="/leaflet/leaflet.css" />
+    <script src="/leaflet/leaflet.js"></script>
+    <style>
+        #map { width: 800px; height: 600px; }
+        body { font: 16px/1.4 "Helvetica Neue", Arial, sans-serif; }
+        .ghbtns { position: relative; top: 4px; margin-left: 5px; }
+        a { color: #0077ff; }
+    </style>
+</head>
+<body>
+
+<p>
+    A dynamic demo of <a href="https://github.com/Leaflet/Leaflet.heat">Leaflet.heat</a>, a tiny and fast Leaflet heatmap plugin.
+    <iframe class="ghbtns" src="https://ghbtns.com/github-btn.html?user=Leaflet&amp;repo=Leaflet.heat&amp;type=watch&amp;count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+</p>
+
+<div id="map"></div>
+
+<!-- <script src="../node_modules/simpleheat/simpleheat.js"></script>
+<script src="../src/HeatLayer.js"></script>
+ -->
+<script src="/leaflet/leaflet-heat.js"></script>
+
+<script src="https://leaflet.github.io/Leaflet.markercluster/example/realworld.388.js"></script>
+<script>
+
+          const map = L.map('map', {
+					center: [47.116386, -101.299591],
+					zoom: 2.0
+					});
+					
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);	
+
+
+addressPoints = addressPoints.map(function (p) { return [p[0], p[1]]; });
+
+var heat = L.heatLayer(addressPoints).addTo(map),
+    draw = true;
+
+map.on({
+    movestart: function () { draw = false; },
+    moveend:   function () { draw = true; },
+    mousemove: function (e) {
+        if (draw) {
+		    console.log(e.latlng);
+            heat.addLatLng(e.latlng);
+        }
+    }
+})
+
+</script>
+</body>
+</html>

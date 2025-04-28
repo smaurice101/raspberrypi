@@ -1,0 +1,18 @@
+DIVE IS USED TO INSPECT THE DOCKER CONTAINER IN AN EFFORT TO REDUCE ITS SIZE 
+(https://github.com/wagoodman/dive)
+
+#Execute the following command to get the latest version tag of dive release. Assign version tag to variable.
+
+DIVE_VERSION=$(curl -s "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
+
+#Next, download Debian package (.deb) from releases page of the dive repository: 
+curl -Lo dive.deb "https://github.com/wagoodman/dive/releases/latest/download/dive_${DIVE_VERSION}_linux_amd64.deb"
+
+#Install dive
+sudo apt install -y ./dive.deb
+
+dive --version
+
+RUN DIVE:
+dive <container name>
+For examle: dive maadsdocker/seneca-iot-tml-kafka-amd64:latest

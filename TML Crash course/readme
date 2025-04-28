@@ -1,0 +1,5 @@
+TML Crash course
+Viperviz url: http://127.0.0.1:9000/iot-failure-seneca.html?topic=iot-preprocess,iot-preprocess2&offset=-1&groupid=&rollbackoffset=100&topictype=prediction&append=0&secure=1
+
+Or for a Machine Learing Dashboard enter:
+http://localhost:9000/iot-failure-machinelearning.html?topic=iot-preprocess,iot-ml-prediction-results-output&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1

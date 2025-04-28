@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seneca-cyber-networking-deployment
+spec:
+  selector:
+    matchLabels:
+      app: cybernetworking
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: cybernetworking
+    spec:
+      hostNetwork: true
+      containers:
+      - name: cybernetworking
+        image: maadsdocker/tml-cisco-network-cyberthreats-amd64
+        env:
+        - name: RUNTYPE
+          value: 1
+        - name: VIPERVIZPORT
+          value: 9000
+        - name: BROKERHOSTPORT
+          value: "127.0.0.1:9092"
+        - name: CLOUDUSERNAME
+          value: ""
+        - name: CLOUDPASSWORD
+          value: ""
+        - name: HACKEDHOSTS
+          value: "5.11-i,5.16-i,6.17-i"
+        - name: KAFKAPRODUCETOPIC
+          value: "cisco-network-mainstream"          

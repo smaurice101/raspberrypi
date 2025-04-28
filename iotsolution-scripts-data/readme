@@ -1,0 +1,17 @@
+Download all data from: https://drive.google.com/drive/folders/1wJEufLVtOzu8R-yYh6ybMASAaKkvMaTw?usp=share_link
+Copy ALL data to VIPER folder on USB stick
+
+Insert your file ID into this URL (https://drive.google.com/uc?export=download&id=), then surround the URL with quotes so that Bash doesn't misinterpret the &, like so:
+Get file ID by going to share -> copy link -> then get id from COpy link: https://drive.google.com/file/d/1mGcHQC7IxiTFYeUSFof3fDppVSC4rq3v/view?usp=drive_link
+
+Specifically, you will need to use this URL: https://drive.google.com/uc?export=download&id=
+
+YOU WILL NEED TO ADD THE id FOR YOUR FILE - THIS CAN BE FOUND BY RIGH-CLICKING ON YOUR FILE IN GOOGLE DRIVE - CHOOSE SHARE -> THEN COPY LINK -THEN COPY THE TEXt BETWEEN /d and /view.
+
+For example, here is a similar link: https://drive.google.com/file/d/1mGcHQC7IxiTFYeUSFof3fDppVSC4rq3v/view?usp=drive_link
+
+The id is 1mGcHQC7IxiTFYeUSFof3fDppVSC4rq3v.  The download url will be:
+https://drive.google.com/uc?export=download&id=1mGcHQC7IxiTFYeUSFof3fDppVSC4rq3v
+
+this url will need to be replaced in Dockerfile to download your IoTData.zip
+

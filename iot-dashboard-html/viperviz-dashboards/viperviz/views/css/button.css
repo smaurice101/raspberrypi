@@ -1,0 +1,20 @@
+.btn
+{
+  display: block;
+  margin: 1px 0;
+  width: 240px;
+  height: 50px;
+  border: none;
+  background-color: #ff4000;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  transition: .3s linear;
+}
+
+.btn1:hover {
+  transform: rotateX(15deg);
+  box-shadow: 0 15px 15px #00a8ff;
+}

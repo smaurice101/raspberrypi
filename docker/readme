@@ -1,0 +1,59 @@
+Install DOCKER: 
+0. sudo apt-get update
+1. sudo apt install docker.io docker.compose
+2. sudo docker --version
+3. sudo docker run hello-world
+4. sudo docker ps
+
+########### install buildx
+sudo apt install -y qemu-user-static binfmt-support
+sudo apt install docker-buildx
+################################################
+Docker build command: docker build -t <container name> --build-arg CHIP=<chip arch> --no-cache --network=host .
+replace: <container name> with name of your container
+replace: <chip arch> with: ARM32, or ARM64, or AMD64
+
+TO SPEED UP DOCKER BUILDS DO THIS:
+1. In your docker file add in a location where you want to start re-build.  EVERYTHING following this command will be rebuilt, everything above this 
+command will force Docker to used the cached layers: 
+# Custom cache invalidation
+ARG CACHEBUST=1
+
+2. Change your Docker build command to:
+docker build -t <container name> --build-arg CHIP=<chip arch> --build-arg CACHEBUST=$(date +%s) --network=host .
+
+Docker Tag: docker tag <container id>
+Docker Run: docker run -p 9005:9005 <container name>
+Replace <container id> with container id or name. Replace <viperviz port> with port viperviz is listening; do the following:
+1. go into the container: docker exec -it <mycontainer> bash
+2. run: tmux ls
+3. run: tmux a -t viperviz-visualization-9005
+4. Note: the port in step 3 - this is the <viperviz port>.
+5. exit TMUX: ctlr + B + D 
+6. Exec: docker run -d --net=host <container name> (for linux)
+6.1 For windows WSL: docker run -p 9005:9005 <container name>
+
+Visualization Access: http://localhost:9005/iot-failure-seneca.html?topic=iot-preprocess2,iot-preprocess&offset=-1&groupid=&rollbackoffset=500&topictype=prediction&append=0&secure=1
+
+docker pull maadsdocker/seneca-iot-tml-kafka-amd64
+If you run into issues try:
+1. sudo dockerd (start docker daemon)
+2. if you have registry.io connection refused try: echo "nameserver 8.8.8.8">/etc/resolv.conf
+2a. If permission denied then do: sudo chmod 666 /var/run/docker.sock
+2b. If get docker: open /var/lib/docker/tmp/GetImageBlob549217035: no such file or directory then do: systemctl restart docker
+3. if you have mount overlay2 issues try: rm -rf ~/Library/Containers/com.docker.docker
+4. if you have "too many symbolink" error: 
+  stop docker
+  sudo rm -rf /var/lib/docker
+  restart docker and pull
+
+IF you get "Deadline exceeded" or 
+"failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to authorize: rpc error: code = Unknown desc = failed to fetch oauth token:" 
+then TRY in Linux:
+export DOCKER_BUILDKIT=0
+export COMPOSE_DOCKER_CLI_BUILD=0
+
+#IP tables issue try:
+sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+sudo dockerd &

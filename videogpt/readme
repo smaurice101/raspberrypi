@@ -1,0 +1,4 @@
+use the maadstml API function to automate video analysis with video gpt: videochatloadresponse
+MAADSTML Python file: https://pypi.org/project/maadstml/
+you need the video gpt docker container running.  pull from here:
+https://hub.docker.com/r/maadsdocker/tml-videochatgpt-nvidia-gpu-amd64

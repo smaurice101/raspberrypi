@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Leaflet Map with Heatmap </title>
+    <meta charset="utf-8" />
+    <link 
+        rel="stylesheet" 
+        href="/leaflet/leaflet.css"
+    />
+</head>
+<body>
+    <div id="map" style="width: 1300px; height: 800px"></div>
+
+    <script
+       src="/leaflet/leaflet.js">
+    </script>
+    
+    <script
+       src="/leaflet/leaflet-heat.js">
+    </script>
+    <script>
+var quakePoints = [
+[47.116386, -101.299591,1.7345],
+[-38.8725,175.9561,2.6901],
+[-41.8992,174.3117,4.6968],
+[-41.7495,174.02,1.8642],
+[-41.7008,174.0876,2.1629],
+[-41.7371,174.0682,2.0408],
+[-41.372,173.3502,2.7565],
+[-41.7511,174.0623,2.4531],
+[-41.7557,174.3391,2.1871],
+[-41.6881,174.2726,3.1336],
+[-41.7463,174.1194,2.7113],
+[-41.6966,174.1238,2.4168]
+];
+          const map = L.map('map', {
+					center: [47.116386, -101.299591],
+					zoom: 2.0
+					});
+					
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);	
+			
+        var heat = L.heatLayer(quakePoints,{
+            radius: 20,
+            blur: 25, 
+            maxZoom: 17,
+        }).addTo(map);
+
+          heat.addLatLng({"lat":47.116386,"lng":-101.299591});
+
+    
+    </script>
+</body>
+</html>

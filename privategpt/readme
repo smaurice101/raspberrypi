@@ -1,0 +1,62 @@
+Docker pull: docker pull maadsdocker/tml-privategpt-no-gpu-amd64
+Docker pull (with GPU): docker pull maadsdocker/tml-privategpt-with-gpu-amd64
+
+Docker Run: docker run -d -p 8001:8001 --net=host --env PORT=8001 --env GPU=0 --env COLLECTION=tml --env WEB_CONCURRENCY=1 maadsdocker/tml-privategpt-no-gpu-amd64:latest
+(NOTE: IF YOU WANT PRIVATEGPT TO RUN IN MULTIPROCESSING MODE USE: --env WEB_CONCURRENCY=<# OF THREADS>, i.e. WEB_CONCURRENCY=5, means PrivateGPT will start 5 threads to process 5 requests at the same time) 
+open chrome or browser: localhost:8001
+
+NOTE: If you set WEB_CONCURRENCY > 1 - then you MUST run the qdrant vector DB container: docker run -d -p 6333:6333 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+You can view the Qdrant Vector DB in your browser by entering the URL: http://127.0.0.1:6333/dashboard#/console
+
+NOTE: Specify any name for VectorDB collections: COLLECTION
+************************************************************************************************************
+IF USING TML-CISCO-PRIVATE Container Use (change 8001 port to your chosen port):
+http://localhost:8080/tml-cisco-network-privategpt-monitor.html?topic=cisco-network-preprocess,cisco-network-privategpt&offset=-1&groupid=&rollbackoffset=150&topictype=prediction&append=0&secure=1
+
+Docker Run: docker run -d -p 8080:8080 --net=host --env VIPERVIZPORT=8080 --env RUNTYPE=2 --env PGPTIP="http://127.0.0.1" --env PGPTPORT=8001 
+--env PGPTROLLBACK=4 --env BROKERHOSTPORT=127.0.0.1:9092 --env KAFKAEMBEDDINGSFOLDER=kafkaembeddings --env DOCFOLDER="" 
+--env USEEMBEDDINGS=0 --env DELETEKAFKAEMBEDDINGSHOURS=10 --env KAFKAPRODUCETOPIC=cisco-network-mainstream 
+--env HACKEDHOSTS=5.100-i,6.18-i,5.18-i --env CLOUDUSERNAME= --env CLOUDPASSWORD= maadsdocker/tml-cisco-network-cyberthreats-privategpt-amd64
+
+NOTE: If max depth exceeded error run: docker image prune -a
+NOTE: To map host folder to container folder you need to map the host folder name to container folder with docker run -v /path/on/host:/path/inside/container <image_name>
+      THEN DOCFOLDER=/path/inside/container
+
+MAKE SURE PRIVATE GPT Container is Running:
+docker run -d -p 8001:8001 --net=host --env PORT=8001 --env GPU=0  --env COLLECTION=tml --env WEB_CONCURRENCY=1 --env CUDA_VISIBLE_DEVICES=0 maadsdocker/tml-privategpt-no-gpu-amd64
+
+*************************************************************************************************************
+Details of LLM:
+llm_load_print_meta: format           = GGUF V2
+llm_load_print_meta: arch             = llama
+llm_load_print_meta: vocab type       = SPM
+llm_load_print_meta: n_vocab          = 32000
+llm_load_print_meta: n_merges         = 0
+llm_load_print_meta: n_ctx_train      = 32768
+llm_load_print_meta: n_embd           = 4096
+llm_load_print_meta: n_head           = 32
+llm_load_print_meta: n_head_kv        = 8
+llm_load_print_meta: n_layer          = 32
+llm_load_print_meta: n_rot            = 128
+llm_load_print_meta: n_gqa            = 4
+llm_load_print_meta: f_norm_eps       = 0.0e+00
+llm_load_print_meta: f_norm_rms_eps   = 1.0e-05
+llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+llm_load_print_meta: n_ff             = 14336
+llm_load_print_meta: rope scaling     = linear
+llm_load_print_meta: freq_base_train  = 10000.0
+llm_load_print_meta: freq_scale_train = 1
+llm_load_print_meta: n_yarn_orig_ctx  = 32768
+llm_load_print_meta: rope_finetuned   = unknown
+llm_load_print_meta: model type       = 7B
+llm_load_print_meta: model ftype      = mostly Q4_K - Medium
+llm_load_print_meta: model params     = 7.24 B
+llm_load_print_meta: model size       = 4.07 GiB (4.83 BPW)
+llm_load_print_meta: general.name   = mistralai_mistral-7b-instruct-v0.1
+llm_load_print_meta: BOS token = 1 '<s>'
+llm_load_print_meta: EOS token = 2 '</s>'
+llm_load_print_meta: UNK token = 0 '<unk>'
+llm_load_print_meta: LF token  = 13 '<0x0A>'
+llm_load_tensors: ggml ctx size =    0.11 MB
+llm_load_tensors: mem required  = 4165.47 MB

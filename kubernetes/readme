@@ -1,0 +1,45 @@
+PLEASE NOTE: RENAME THIS "yaml" --> senecaiot.yml, THEN RUN  "kubectl apply -f senecaiot.yml" (no quotes)
+then: sudo chmod +x senecaiot.yml
+
+1. Download minikube
+wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+b. sudo install minikube-linux-amd64 minikube
+
+2. download kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+NOTE: if you do NOT have curl you can install it:
+a. sudo apt update && sudo apt upgrade
+b. sudo apt install curl
+
+3. chmod +x kubectl
+a. sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+(4. turn off swap: sudo swapoff -a  - MAY BE NEEDED IN SOME CASES)
+
+5. start minikube: minikube start --driver=docker
+b. make sure docker engine is installed . If not run: sudo apt-get install docker.io
+c. RUN: sudo chmod 666 /var/run/docker.sock
+
+6. minikube update-context
+
+7. enable dashboard: minikube addons enable dashboard
+
+COMMAND kubectl commands:
+1. create pod:  kubectl apply -f senecaiot.yml
+2. kubectl delete pods seneca-iot-pod
+3. kubectl get pods
+4. kubectl exec -it container_name bash
+5. kubectl describe pods pod_name
+6.  kubectl delete all --all --all-namespaces
+7. kubectl expose deployment seneca-iot-deployment --port=9005 --target-port=9005 --name=seneca-iot --type=LoadBalancer
+8. kubectl port-forward <pod name> 9005:9005
+
+ERRORS:
+if error or kubelet and aopiserver is STOPPED run: 
+a. minikube stop
+b. minikube delete
+c. minikube start
+d. minikube status
+
+timeout when pulling containers > 2GB (kubernetes defaults to 2GB)
+1. pull image manually: minikube ssh docker pull <container name>

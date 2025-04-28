@@ -1,0 +1,52 @@
+table {
+    margin: 5px auto;
+  	border-spacing: 10px;
+	width: 480px;
+      height: 500px;
+	box-shadow: 5px 4px 30px rgba(0,0,0,.10);
+	border-radius: 10px;
+	background: #fff;
+	transition: all .5s;
+	
+	
+	td {
+		padding: 10px 15px;
+	}
+	
+	thead {
+		background: linear-gradient(45deg, #614ad3, #e42c64);
+		border-radius: 10px 10px 0 0;
+		
+		tr {
+			border-radius: 10px 10px 0 0;
+		}
+		
+		td {
+			color: #fff;
+			font-size: 20px;
+		}
+		
+		td:first-of-type {
+			border-radius: 10px 0 0 0;
+		}
+		
+		td:last-of-type {
+			border-radius: 0 10px 0 0;
+		}
+	}
+	
+	tbody {
+		td {
+			border-top: 1px solid #f0f0f0;
+		}
+		
+		tr:hover {
+			background: rgba(123, 153, 218, .1);
+		}
+	}
+
+}
+
+table.threeDMode {
+	transform: rotateX(65deg) rotateZ(-35deg);
+}

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+<head>
+    <meta charset="UTF-8" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+    <title>Cluster Analysis Streaming</title>
+    <style>
+        #chart_div {
+            width: 100%;
+			height: 300;
+        }
+        #charttree_div {
+            width: 1400;
+			height: 300;
+        }
+        
+        body {
+            
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<body>
+<img src="https://raw.githubusercontent.com/smaurice101/maads-viper/master/oticsmain.JPG"  width=160 height=80 >
+
+<div class="row justify-content-md-center">
+    <div class="col-11" style="padding-top: 20px">
+        <h4><label id="maintitle"><b>CLUSTERING STREAM KAFKA TOPIC:</b></label></h4>
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <div class="col-11">
+
+        <div id="selectSymbol">
+            <form id="idForm">
+			 <b> Description:</b> <label id="description"></label><br>
+			 <b> Last Kafka Access Time:</b> <label id="accesstime"></label><br>
+			 <b> Kafka Cluster:</b> <label id="kafkacluster"></label><br><br>
+				<button id="start" name="submit">Start Streaming</button> <br><a id="Export" href="#">Download Table as CSV</a> | <a id="Export2" href="#">Download JSON</a>  <br>
+				<font size=2><b>Status:</b></font> <input type=text id="statustext" value="" style="font-size:10px;" size=100>
+                <table border=1 height=300><tr><td><div id="chart_div"></div></td><td width=2500><div id="charttree_div"></div></td></tr></table>
+				
+				
+                 </div>
+				 
+				 <div id="table_div"></div>
+				 <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea>
+            </form>
+        </div>
+        <div id="display"></div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+	     //google.charts.load("current", {
+           // packages: ["corechart", "line"]
+        //});
+      google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+      google.charts.load('current', {'packages':['table','annotationchart','bar','wordtree']});
+      google.charts.setOnLoadCallback(drawTable);
+	        google.charts.setOnLoadCallback(drawChartTree);
+
+
+      var START=0;
+	  var ws;
+	  var topic="";
+	  var offset=-1;
+	  var append=1;
+	  var chart=null;
+	  var charttree=null;
+	  var rollbackoffset=0;
+	  var groupid="";
+	  var topictype="";
+	  var vipertoken="";
+	  var consumerid="";
+	  var secure=0;
+	  var data;
+	  var chartdata;
+	  var dataintable=[];
+	  var kafkakeyarr=[];
+	  var anomalyfound=0;
+	  var totalanomaly=0;
+	  var logcount=0;
+	  var jsonhist="";
+	  ////////////////////////////////////
+	  	var loghyper="";
+		var logmaintopic="";
+		var logtopic="";
+		var logvalue="";
+		var logkafkakey="";
+		var logpreprocesstype="";
+		var logwindowstarttime="";
+		var logwindowendtime="";
+		var logunixstarttime="";
+		var logunixendtime="";
+		var logconditions="";
+		var logidentifier="";
+		var lognummessages="";
+		var logoffset="";
+		var logpartition="";
+		var loggenerated="";
+		var lognumclusters=0;
+		var logiter=0;
+		var logdescription="";
+		var logclusterdata;
+		var kafkacluster="";
+		
+       var options = {
+           title: "Monitoring Early Development of Disease Trends",
+		//     titlePosition: 'none',
+
+            hAxis: {
+                title: "Factors",
+				format: '0'
+             },
+            vAxis: {
+                 title: "Count of Subjects"
+				 
+             },
+			  tooltip: {
+				isHtml: true,
+				trigger: 'both',
+			},
+			    height: 300,
+				width: 800,
+				
+		   chartArea:{top:50,bottom:50,width:"700",height:"300"},
+		    //seriesType: 'line',
+			          bar: { groupWidth: "90%" },
+
+			 displayAnnotations: true,
+		//	           curveType: 'function',
+          bars: 'horizontal', // Required for Material Bar Charts.
+
+			 allowHtml: true,
+          //series: {1: {type: 'bar'}}
+        };
+		
+	     function getClusterData(clusterdata){
+	       for(var k in clusterdata) {
+               console.log(k, clusterdata[k]);
+             }
+	
+	     }
+		
+		function gettabledata(chartdata){
+		  if (!data){		
+		    return;
+		  }
+		  let thedate="";
+			let latestdate="";
+			
+		//	 chartdata.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+          //   chartdata.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+			
+			  
+		//   data.sort({column: 1, desc: true});
+		   
+			 
+		  for (t = 0; t < totalanomaly; t++) {
+		   let rowi=t+1;
+		    let deptitle=undefined;
+			 let deptext=undefined;
+			 
+		  
+			if (rs>=rt){
+			      deptitle="<b><font size=4>Found Log For Transaction " + "</font> (Row="+rowi+", Date="+ thedate+")</b><br>";
+				  deptext="<font size=3><b>Checking Logs Stream:</b><br>";
+				  let fv="";
+				  
+				  for (i = 0; i < tarr.length-1; i++) {
+				     let v=tarr[i];
+					 let v2=v.split(":");
+					 let num=i+1;
+					 
+					 if (parseInt(v2[1])<=0){
+				       fv=fv + num + ". " + v2[0] + " (no logs found) " + "<br>";
+					 }else{
+					   fv=fv + num + ". <b>" + v2[0] + " <font color=red>("+v2[1] + " logs found) " + "</font></b><br>";
+					 }
+				  }
+				  deptext=deptext + fv + "</font>";
+				  
+			 }
+			 chartdata.addRow([ 	dvalue, rs, rt,deptitle,deptext]);
+		  }
+		  
+		  return [thedate,latestdate];
+		}
+		
+	    function saveDynamicDataToFile(topic) {
+
+            var userInput = document.getElementById("txtData").value;	
+            const textToBLOB = new Blob([userInput], { type: "text/plain;charset=utf-8" });
+           const sFileName = topic+"-LOG-JSON.json";	   // The file to save the data.
+
+           let newLink = document.createElement("a");
+           newLink.download = sFileName;
+
+           if (window.webkitURL != null) {
+              newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+           }
+           else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+           }
+
+        newLink.click(); 
+		
+        }
+		
+		
+		  function drawChartTree(jsondata,topic){
+		    curTime = new Date();
+     	    var data = new google.visualization.DataTable();
+		     data.addColumn('string', "Factors");
+
+			var options = {
+			  maxFontSize: 22,
+			  colors: ['green', 'black', 'green'],
+              wordtree: {
+                format: 'implicit',
+		     
+              }
+           };
+
+ 			if (charttree==null){
+               charttree = new google.visualization.WordTree(document.getElementById("charttree_div"));
+            //   charttree = new google.visualization.WordTree(document.getElementsByClassName("float-container")[0]);
+             charttree.draw(data, options);
+		
+			  }
+			  
+		//	 console.log("Drawchart",jsondata)
+			  //////////////////////////////////////////////////Draw chart
+			   if (jsondata){
+			 				
+				   for (j in jsondata.TopicReads){
+				      var clusterdata=jsondata.TopicReads[j].Clusterdata
+					   for (c in clusterdata){
+                    //    console.log("Valuex=",clusterdata[c])
+						var ds = clusterdata[c].Factor;
+						var subject = clusterdata[c].Subject
+						subject = subject.replaceAll(',', ' ');
+						ds = ds.replaceAll('-AND-', ' ');
+						ds = ds.replaceAll('_', ' ');
+					    data.addRow([subject + ' ' + ds]);
+
+						}
+                     }	
+                     charttree.draw(data, options);
+					//console.log("Drawchart",data)
+                 }
+
+		  }
+		
+           function drawChart(jsondata,topic) {
+            
+			curTime = new Date();
+     		  var data = new google.visualization.DataTable();
+    		      data.addColumn('number', "Factors");
+	    		  data.addColumn('number', "Count of Subjects");
+
+            // draw chart on load
+			if (chart==null){
+            chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
+	      //   chart = new google.visualization.ColumnChart(document.getElementsByClassName("float-container")[0]);
+             chart.draw(data, options);
+		
+			  }
+		//	 console.log("Drawchart",jsondata)
+			  //////////////////////////////////////////////////Draw chart
+			   if (jsondata){
+                  document.getElementById('accesstime').innerHTML = curTime;
+    		//      data.addColumn('number', "Factors");
+	    		//  data.addColumn('number', "Count of Subjects");
+			 
+		    	//  data.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+                  ///data.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+				   for (j in jsondata.TopicReads){
+				      var clusterdata=jsondata.TopicReads[j].Clusterdata
+					   for (c in clusterdata){
+                       // console.log("Valuex=",clusterdata[c])
+                     //   data.addRow([clusterdata[c].Valuex,clusterdata[c].Valuey,clusterdata[c].Subject,clusterdata[c].Factor]);
+					    data.addRow([{v:clusterdata[c].Valuey,f:clusterdata[c].Factor + ", Correlation: " + clusterdata[c].Correlation},{v:clusterdata[c].Count, f: clusterdata[c].Subject}]);
+						     // [ {v:12, f: 'Allen'}, 40],
+
+						}
+						//break
+                     }	
+                     chart.draw(data, options);
+									 
+                 }
+			}
+
+			
+      function drawTable(jsondata) {	    	
+			
+        data = new google.visualization.DataTable();
+		data.addColumn('string', 'Generated');
+	//	data.addColumn('string', 'Maintopic');
+		data.addColumn('string', 'ClusterAlgorithm');
+		data.addColumn('number', 'AlgorithmIterations');
+		
+		
+		data.addColumn('string', 'CorrelationThreshold');
+		data.addColumn('number', 'NumberOfClusters');
+		data.addColumn('string', 'WindowStartTime');
+		data.addColumn('string', 'WindowEndTime');
+//		data.addColumn('string', 'WindowStartUnixTime');
+	//	data.addColumn('string', 'WindowEndUnixTime');
+//		data.addColumn('string', 'Preprocesstype');
+	//	data.addColumn('number', 'Numberofmessages');
+		
+		//data.addColumn('string', 'Conditions');
+		//data.addColumn('string', 'Identifier');
+			
+		data.addColumn('number', 'Offset');
+		data.addColumn('number', 'Partition');
+		data.addColumn('string', 'kafkakey');
+		
+			 
+		curTime = new Date();
+		if (jsondata){
+		document.getElementById('accesstime').innerHTML = curTime;
+		document.getElementById('description').innerHTML = logdescription;
+		document.getElementById('kafkacluster').innerHTML = kafkacluster;
+		
+		
+		//ADD previous data
+		var i=0;
+	  	  if  (dataintable.length>0 || append==0){
+		      for (r in dataintable){
+			      data.addRows([dataintable[r] ]);
+				  data.setProperty(i, 14, 'style', 'width:300px');
+                  i++;
+			  }
+		  }
+		  
+		  //get partition/offset
+		  var i=0;
+		  var partitionarr=[];
+		
+		  
+		  /////////////////////////START MAIN LOOP //////////////
+	        let rownum=0;
+		  
+		   for (j in jsondata.TopicReads){
+          //get the fields 
+			 
+		 		
+		    jsonhist=jsonhist+JSON.stringify(jsondata.TopicReads[j]) +",";
+		
+		     keybuf="";
+			 
+		//get the risk details
+		   var logdata="";
+		   var peerdata="";
+		   var transcnt="";
+		   var anomalycnt="";
+		   var flags="";
+		
+		   
+		   if (jsondata  ){
+			 kafkacluster= jsondata.kafkacluster
+			 
+		      if ('MESSAGE' in Object.keys(jsondata.TopicReads[j]) ){
+		      var keys = Object.keys(jsondata.TopicReads[j].MESSAGE);
+			  }
+		   if ('Message' in Object.keys(jsondata.TopicReads[j]) ){
+		      var keys = Object.keys(jsondata.TopicReads[j].Message);
+			  }
+		   
+		   
+		   
+			 for (k in keys){
+			       if ('MESSAGE' in Object.keys(jsondata.TopicReads[j]) ){
+				    if (JSON.stringify(jsondata.TopicReads[j].MESSAGE[keys[k]]).length>0){
+				      logdata=logdata+keys[k]+":"+JSON.stringify(jsondata.TopicReads[j].MESSAGE[keys[k]]) +"\n";
+				     }
+				  }
+				   if ('Message' in Object.keys(jsondata.TopicReads[j]) ){
+				    if (JSON.stringify(jsondata.TopicReads[j].Message[keys[k]]).length>0){
+				      logdata=logdata+keys[k]+":"+JSON.stringify(jsondata.TopicReads[j].Message[keys[k]]) +"\n";
+				   }
+				  }
+			 }
+			 
+												
+			 
+		}else{
+               return;
+            }		
+			 
+		///////////////////////////////////////////////////////////////////
+	
+		loghyper=jsondata.TopicReads[j].hyperprediction;
+		logmaintopic=jsondata.TopicReads[j].Produceto;
+		logtopic=jsondata.TopicReads[j].ClusterAlgorithm;
+		logvalue=jsondata.TopicReads[j].Valuecondition;
+		lognumclusters=jsondata.TopicReads[j].Numclusters;
+		logiter=jsondata.TopicReads[j].Iterations;
+		logdescription=jsondata.TopicReads[j].Description;
+		logkafkakey=jsondata.TopicReads[j].kafkakey;
+		
+		logclusterdata=jsondata.TopicReads[j].Clusterdata;
+		
+	//	logpreprocesstype=jsondata.TopicReads[j].Preprocesstype;
+		
+		logwindowstarttime=jsondata.TopicReads[j].WindowStartTime;
+		logwindowendtime=jsondata.TopicReads[j].WindowEndTime;
+//		logunixstarttime=jsondata.TopicReads[j].WindowStartUnixTime;
+	//	logunixendtime=jsondata.TopicReads[j].WindowEndUnixTime;
+		//logconditions=jsondata.TopicReads[j].Conditions;
+		//logidentifier=jsondata.TopicReads[j].Identifier;
+//		lognummessages=jsondata.TopicReads[j].Numberofmessages;
+		
+		
+		logoffset=jsondata.TopicReads[j].Offset;
+		logpartition=jsondata.TopicReads[j].Partition;
+		loggenerated=jsondata.TopicReads[j].Generated;
+		
+		////////////////////////////////////////////////////////////////
+		
+		rownum++;
+		var isbool=false;
+			 
+		// totalanomaly=totalanomaly+1;
+		 
+		 //arr=[createdon,{'v':unixtime},isbool,riskscore,riskscorethreshold,inputstream,offset,partition,fields,transcnt,anomalycnt,flags,kafkakey,anomalydata,peerdata];
+		 if (loghyper != undefined){
+		 arr=[loggenerated,logtopic,logiter,logvalue,lognumclusters,logwindowstarttime,logwindowendtime,logoffset,logpartition,logkafkakey];
+		 
+		 dataintable.push(arr)
+		 
+        data.addRows([ 	arr        ]);
+		  data.setProperty(0, 4, 'style', 'width:300px','pageSize:50');
+		 }
+		 
+         
+	    }
+		         
+					   
+	}
+	   
+	   	 var formatter = new google.visualization.NumberFormat({groupingSymbol:'',decimalSymbol:'.',fractionDigits:'2'});
+      	formatter.format(data, 1);
+
+	  
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+        
+		  data.sort({column: 1, desc: true});  
+        table.draw(data, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',allowHtml: true,pageSize: 50});	
+		 document.getElementById("txtData").value="["+jsonhist.slice(0,-1) + "]";
+		      
+      }
+	  
+	   function streamLiveKafkaData(){
+
+        if ("WebSocket" in window) {
+            var obj;
+            // Let us open a web socket
+			
+            var url = window.location.host;
+          //  console.log(url);
+		    var urlParams = new URLSearchParams(window.location.search);
+			var keys = urlParams.keys();
+			var entries = urlParams.entries();
+			for(pair of entries) { 			
+			    if (pair[0]=="topic"){
+				  topic=pair[1];
+				   document.getElementById('maintitle').innerHTML = "<b>CLUSTERING STREAM KAFKA TOPIC: <font color=red><i>"+ topic + "</i></font></b>";	
+				}
+				
+				
+				
+				if (pair[0]=="secure"){
+				  secure=pair[1];
+				}
+				if (pair[0]=="vipertoken"){
+				  vipertoken=pair[1];
+				}				
+					
+               if (pair[0]=="offset"){
+				  offset=pair[1];
+				}						
+
+               if (pair[0]=="rollbackoffset"){
+				  rollbackoffset=pair[1];
+				}		
+
+					
+				if (pair[0]=="append"){
+				  append=pair[1];
+				}					
+			
+			}
+			
+			
+			if (secure==0){
+             ws = new WebSocket("ws://"+url+"/ws");
+            }else{
+			    ws = new WebSocket("wss://"+url+"/ws");
+			}
+            ws.onmessage = function(event) {
+                curTime = new Date();
+				var eventdata=`${event.data}`;
+			   
+			//   console.log(eventdata);
+				var maindata=eventdata.replace(/\\"/g,'"');	 
+				
+			    maindata=maindata.substr(1, maindata.length-3);
+			  // console.log(maindata);
+			   
+				 try {
+					obj = JSON.parse(maindata);
+				} catch (e) {
+					return false;
+				}
+	
+				
+				
+				 if (obj.ERROR){
+				   $("#statustext").val("Websocket ERROR.."+obj.ERROR);
+				   ws.close(1000);
+				   alert(obj.ERROR);
+				   ws=null;
+				    $("#start").attr("disabled", false);
+					     $("#start").html("Start Streaming");
+						 return
+				   }
+				   
+                if (START==0){
+				    if (ws){
+					ws.close(1000);
+					}
+				   ws=null;
+				   return;
+				}
+				
+			  if (append==0){
+				dataintable=[];
+				datainchart=[];
+				datatbl=null;
+				kafkakeyarr=[];
+				jsonhist="";
+	
+			 }
+
+				drawTable(obj);
+				drawChart(obj,topic);
+				drawChartTree(obj,topic);
+				
+				
+            };
+
+            ws.onclose = function(event) {
+                if (event.wasClean) {
+                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                } else {
+                    console.log('[close] Connection died');
+					 
+                }
+				if (ws){
+					ws.close(1000);
+					}
+				ws=null;
+				 $("#start").attr("disabled", false);
+					   $("#statustext").val("Websocket closed");
+					     $("#start").html("Start Streaming");
+            };
+            ws.onopen = function(error) {
+			   
+			    var sendbuffer="{\"Topic\":\""+topic +"\",\"Secure\":"+secure +",\"Offset\":\"" +offset+ "\",\"Vipertoken\":\""+vipertoken+"\",\"RollbackOffset\":\""+rollbackoffset+"\"}";
+				//console.log("TOPICCC==",sendbuffer);
+                 ws.send(sendbuffer);
+            };
+			
+            ws.onerror = function(error) {
+			    if (ws){
+					ws.close(1000);
+					}
+                console.log(`[error] ${error.message}`);
+				$("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
+            };
+			
+			
+
+        } else {
+
+            // The browser doesn't support WebSocket
+            console.log("WebSocket NOT supported by your Browser!");
+        }
+    }
+    
+	$('#Export2').click( function(e) {
+	
+	     e.preventDefault(); /*your_code_here;*/ 
+		 saveDynamicDataToFile(topic);
+		 
+		 
+		 return false; 
+	} );
+	
+	$('#Export').click(function () {
+	  if (topic.length>0){
+	     var headerRow = "";
+         var number_of_columns = data.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += data.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(data);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = topic + "-Log-table-data.csv";
+        this.target = '_blank';
+	  }else{
+	      alert("Start streaming first");
+       }	  
+    });
+	
+	$("#idForm").submit(function(e) {
+	  if (ws && START==1){
+	   ws.close(1000);
+	   ws = null;
+	   e.preventDefault(); // avoid to execute the actual submit of the form.
+	   START=0;
+	   $("#start").html("Start Streaming");
+	   $("#start").attr("disabled", true);
+	    $("#statustext").val("WEBSOCKET CLOSING...");
+	   
+	  }else{
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+		START=1;
+        $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka messages from VIPERviz (RUNNING...)");
+
+		 $("#start").html("Stop Streaming");
+		streamLiveKafkaData();
+		}
+       
+    });
+	
+	
+</script>
+</body>
+</html>

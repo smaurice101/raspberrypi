@@ -1,0 +1,63 @@
+If running NVIDIA GPU machines then you should use the GPU container:
+
+Docker pull (with GPU): docker pull maadsdocker/tml-privategpt-with-gpu-amd64
+Docker Run: docker run -d -p 8001:8001 --gpus all --env CUDA_VISIBLE_DEVICES=0,2 --env PORT=8001 --env GPU=1 maadsdocker/tml-privategpt-with-gpu-amd64
+(NOTE: IF YOU WANT PRIVATEGPT TO RUN IN MULTIPROCESSING MODE USE: --env WEB_CONCURRENCY=<# OF THREADS>, i.e. WEB_CONCURRENCY=5, means PrivateGPT will start 5 threads to process 5 requests at the same time) 
+
+CUDA Environment variable description for CUDA_VISIBLE_DEVICES is found here: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#env-vars
+
+open chrome or browser: localhost:8001
+
+Pre-requisite:
+1. Install the NVidia Cuda toolkit on HOST Machine: apt-get install -y nvidia-cuda-toolkit 
+1.2 You should install the Nvidia container toolkit: curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list \
+  && \
+    sudo apt-get update
+
+2. Check Nvidia install: nvcc --version and with nvidia-smi
+3. Configure the container runtime: sudo nvidia-ctk runtime configure --runtime=docker
+4. Restart docker daemon: sudo dockerd
+----------------------------------------------------
+IF USING INTEL GPU: Install https://dgpu-docs.intel.com/driver/client/overview.html (Section 2.1.2, 2.1.3) in your VM:
+
+docker run -d -p 8001:8001 --env PORT=8001 --device /dev/dri --env GPU=0 --env WEB_CONCURRENCY=1 maadsdocker/tml-privategpt-no-gpu-amd64:latest
+
+
+Details of LLM:
+llm_load_print_meta: format           = GGUF V2
+llm_load_print_meta: arch             = llama
+llm_load_print_meta: vocab type       = SPM
+llm_load_print_meta: n_vocab          = 32000
+llm_load_print_meta: n_merges         = 0
+llm_load_print_meta: n_ctx_train      = 32768
+llm_load_print_meta: n_embd           = 4096
+llm_load_print_meta: n_head           = 32
+llm_load_print_meta: n_head_kv        = 8
+llm_load_print_meta: n_layer          = 32
+llm_load_print_meta: n_rot            = 128
+llm_load_print_meta: n_gqa            = 4
+llm_load_print_meta: f_norm_eps       = 0.0e+00
+llm_load_print_meta: f_norm_rms_eps   = 1.0e-05
+llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+llm_load_print_meta: n_ff             = 14336
+llm_load_print_meta: rope scaling     = linear
+llm_load_print_meta: freq_base_train  = 10000.0
+llm_load_print_meta: freq_scale_train = 1
+llm_load_print_meta: n_yarn_orig_ctx  = 32768
+llm_load_print_meta: rope_finetuned   = unknown
+llm_load_print_meta: model type       = 7B
+llm_load_print_meta: model ftype      = mostly Q4_K - Medium
+llm_load_print_meta: model params     = 7.24 B
+llm_load_print_meta: model size       = 4.07 GiB (4.83 BPW)
+llm_load_print_meta: general.name   = mistralai_mistral-7b-instruct-v0.1
+llm_load_print_meta: BOS token = 1 '<s>'
+llm_load_print_meta: EOS token = 2 '</s>'
+llm_load_print_meta: UNK token = 0 '<unk>'
+llm_load_print_meta: LF token  = 13 '<0x0A>'
+llm_load_tensors: ggml ctx size =    0.11 MB
+llm_load_tensors: mem required  = 4165.47 MB
+

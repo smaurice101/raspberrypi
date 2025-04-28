@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+<head>
+    <meta charset="UTF-8" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+    <title>FHIR Population Disease Surveillance Dashboard</title>
+    <style>
+h1 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: 100; line-height: 10.4px; } h4 { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 1px; font-style: bold; font-variant: normal; font-weight: 400; line-height: .4px; } p { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
+
+.a {
+    background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+}
+.b {
+         background: linear-gradient(to top left, #ffffff 0%, #ccffff 100%);
+
+
+}
+      #gauge_avgrisk {
+        width:400px; height:320px;
+		
+      }
+        #gauge_currrisk {
+        width:200px; height:120px;
+        display: inline-block;
+        margin: 1em;
+      }
+
+        #chart_div {
+              float: left;
+        }
+        
+        body {
+            
+            justify-content: center;
+            align-items: center;
+        }
+.orange-background {
+   background-color: orange;
+  }
+
+ .orchid-background {
+  background-color: orchid;
+ }
+
+.beige-background {
+ background-color: beige;
+  }		
+ .columnTitle {
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-size: 14px; 
+          color:white;
+          background-color: #607A75
+      } 
+.grid {
+  display: grid;
+  grid-gap: var(--card-padding);
+  margin: 0 auto;
+  max-width: 60em;
+  padding: 0;
+ 
+  @media (min-width: 42em) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+th, td {
+  padding: 10px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: var(--card-radius);
+  position: relative;
+  
+  &:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.plan-type {
+  color: var(--color-green);
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1em;
+}
+
+	  
+    </style>
+<script type="text/javascript" src="/js/attention.js"></script>   
+
+<script type="text/javascript" src="/js/r.min.js"></script>   
+
+<script type="text/javascript" src="/js/justgage.js"></script>   
+<script type="text/javascript" src="/js/justgage.min.js"></script>   
+
+
+<script>
+
+function image(thetype,mess) {
+        
+		var titletext="";
+		var helptext="";
+		
+		if (thetype=="gauge"){
+		   titletext="Health Risk Meter";
+		    helptext="The Health Risk Meter shows the average health risk percentage of the population across time windows. The percentage is computed by taking a ratio of the number of out of bounds symptoms in the population divided by the total population.  For example, if the current sliding window contains 100 population records, each with 10 symptoms being monitored, and 20 of those symptoms are out of bounds, then the risk is 20/100 or 20%."; 
+		}else if (thetype=="barchart"){
+           titletext="Health Symptom Monitoring Bar Chart";
+		    helptext="The Symptom Monitoring Bar Chart shows the count of Total Symptom records in the data stream (GREY Bar), against the symptoms that are above the upper bound (BLUE curve)."; 
+		
+		}else if (thetype=="intensity"){
+           titletext="Symptom Intensity Curve With Annotations";
+		    helptext="The Symptom Intensity Curve With Annotations shows the intensity of the symptoms' values. The Intensity curve is computed by first determining which symptoms are out of bound (or higher than normal), if symptoms are higher than normal, then a delta value is computed by subtracting the computed value from the mean value of the symptom.  The absolute values of the deltas are then summed up and plotted on the intensity curve.  For example, if monitoring body temperature (BT) and heart rate (HR), and the computed value of BT=100, and HR=120, and the upper bound for BT is 98, and upper bound for HR is 80, both BT and HR are out of bounds.  If the mean value of BT is 97, and mean value for HR is 70, then ONE point on the intensity curve is the absolute value of: |100-97| + |120-70| = 53.  The unit of measurements is similar to a basis point to see how much this value differs from 0.  The larger this value differs from 0, the more intense the symptoms in the population and higher the health risk for a particular Disease emerging.  Each point on the intensity curve has its own ANNOTATION with all the details associated with the point."; 
+		
+		}else if (thetype=="table"){
+		  titletext="Table Data";
+		    helptext="The data in the table takes the MAX and (AVG)ERAGE for ALL patients for EACH Symptom in a data stream.  For example, if a data stream for a given time sliding window of 60 seconds, contains 20 patients with body temperature and systolic, VIPER will take the MAX and AVG for ALL 20 patients for body temperature and systolic.  The MAX or AVG values are record in the 'Current Population Value' column.  The NORMAL MEAN and NORMAL UPPERBOUND values are specified by a human for that symptom.  Total messages are the number of message VIPER processed to compute the MAX and AVG values.  KAFKAKEY is a unique hash key for the Kafka message.   OFFSET/PARTITION show the actual location of the PROCESSED message in Kafka.  By PROCESSED we mean the MAX and AVG value process.  Time Window Start and End are the start and end of the Time Sliding Window in the data stream that is processed to compute MAX and AVG for 20 patients.  Date/Time is when this processing took place by VIPER.  SYMPTOM/SYMPTOMCODE are the FHIR standard symptom and codes.  PROCESS TYPE is the type of processing done by VIPER: AVG or MAX."; 
+		
+		}else if (thetype=="healthrisk"){
+		  titletext="Real-Time Health Risk";
+		    helptext="The health Risk graph plots the real-time Health Rish percentage over time to show how the Health risk is trending."; 
+		
+		}
+		
+		
+		
+          new Attention.Prompt({
+                    title: titletext,
+                    content: helptext,
+                });
+			}
+</script>	
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+<link href="/css/tiles.css" rel="stylesheet">
+<link href="/css/attention.css" rel="stylesheet">
+<link href="/css/button.css" rel="stylesheet">
+<link href="/css/textbox.css" rel="stylesheet">
+<link href="/css/table3d.css" rel="stylesheet">
+<link href="/css/dropdown.css" rel="stylesheet">
+
+
+<body>
+<table style="width: 99%;height: 90px">
+<tr>
+<td>
+<div class="row justify-content-md-center">
+	
+    <div class="col-12" style="padding-top: 1px">
+        <label id="maintitle"><b><h1>Real-Time Population Disease Surveillance Dashboard Using FHIR/KAFKA/TML</h1></b></label>
+		<h4><b>Description:</b> This Dashboard Analyses FHIR Observation Data to Monitor, in Real-Time, Health of Human Population that May Affect Emerging Diseases</h4>
+    </div>
+</div>
+
+<div class="row justify-content-md-center">
+    <div class="col-12">
+
+        <div id="selectSymbol">
+            <form id="idForm">
+		<h6>
+			 <b> Last Kafka Access Time:</b></b> <label id="accesstime"></label><br>
+			 <b> Kafka Cluster:</b> <label id="kafkacluster"></label><br>			
+			<b>Health Issues Found In Following Areas:</b><label id="issues"></label><br>	
+			</h6>
+		 
+				<button id="start" class="btn btn1" name="submit">Start Streaming</button>
+				<div class="form__group field">
+				<input type="input" class="form__field" placeholder="Status" name="statustext" id='statustext'  readonly/>
+				</div>
+				</td>
+				</tr>
+			</table>				
+				
+			
+		
+		<table border=0 style='width: 1300px;height: 500px; vertical-align: top;'>
+				<tr>		
+				
+				<td style="text-align: left; vertical-align: top;">
+				<table valign='top'  style="width: 300px; height: 100%">
+				<tr>
+				<td valign='top' >
+			   <div class="tile wide quote">
+               <div class="header">
+               <div id="totsymptoms" class="count">0</div>
+               <div class="title">Population Symptoms Being Monitored</div>
+               </div>
+                </div>
+			   
+    			<img src='./help.png' width=30 height=27  style="float: top;" onclick="image('barchart','')">	
+				 <div id="barchart_div" style="text-align: left; vertical-align: middle;width:400px;height: 295px" ></div>				 
+
+			 <div id="barchartlabel_div" style="text-align: left; vertical-align: top;width:100%;height: 250px;overflow-y:auto;" ></div>	
+<!--               <table >				
+				 <tr>
+				 <td>
+				 	<img src='./help.png' width=30 height=27  style="float: top;" onclick="image('barchart','')">	
+				 <div id="barchart_div" style="text-align: left; vertical-align: middle;width:300px;height: 450px" ></div>				 
+				 </td>
+				 <td>
+		        <div id="barchartlabel_div" style="text-align: left; vertical-align: left;width:100px;overflow-y:scroll;" ></div>				 
+				 
+				 </td>
+				 </table>
+	-->			 
+				
+		       </td>
+			   </tr>
+			   </table>
+			   </td>
+			   
+			   
+			   
+				<td  valign='top' >				
+				<table valign='top' style="width: 300px; height: 100%">
+				<tr>
+				<td valign='top'>
+				 <center>
+			<div class="tile wide resource">
+    <div class="header">
+      <div id="avgrisk" class="count">TBD</div>
+      <div class="title">Avg. Health Risk</div>
+    </div>
+  </div>
+				 
+<img src='./help.png' width=30 height=27  style="float: left;" onclick="image('gauge','')">				
+
+				  <div id="gauge_avgrisk"></div><br><br><br><br><br>
+						  <font size=2><b>Current Health Risk</b></font><br>
+				  <div id="gauge_currrisk"></div>
+				  
+				
+                   </center>				 
+				 <div id="gaugehealthrisk2_div" ></div>				 				 
+				</td>
+			   </tr>
+			   </table>
+			   </td>
+				<td  >	
+				<table>
+				<tr>
+				<td>
+				<table border=0 style='width: 1300px;height: 100%; vertical-align: top;'>
+				<tr>				
+				<center>
+			<div class="tile job">
+    <div class="header">
+      <div id="totrecs" class="count">0</div>
+      <div class="title">Total Kafka Messages Processed</div>
+    </div>
+  </div>
+			<div class="tile wide job">
+    <div class="header">
+      <div id="totissues" class="count">0</div>
+      <div class="title">Health Issues Found</div>
+    </div>
+  </div>
+			<div class="tile wide job">
+    <div class="header">
+      <div id="tottime"  class="count">TBD</div>
+      <div class="title">Kafka Time Window Analysed</div>
+    </div>
+  </div>
+    </center>
+				<td  valign='top'>	
+				<img src='./help.png' width=30 height=27  style="float: top;" onclick="image('healthrisk','')">	
+	
+				<center><h4>Real-Time Health Risk Timeline</h4><a id="Export3" href="#"> (Download Health Risk Data </a> | <a id="Export4" href="#"> Download Patient Data)</a>
+
+<div class="selectdiv"> 
+  <label>Save Historical Risk Data For:&nbsp; 
+        <select id="riskhours" valign="center" onchange="getSavehours(this.value);">
+          <option selected> Select Hours </option>
+          <option value=1>1 hour</option>
+          <option value=2>2 hours</option>
+          <option value=3>3 hours</option>
+          <option value=4>4 hours</option>
+          <option value=5>5 hours</option>
+          <option value=6>6 hours</option>
+          <option value=7>7 hours</option>
+          <option value=8>8 hours</option>
+          <option value=9>9 hours</option>
+          <option value=10>10 hours</option>
+          <option value=11>11 hours</option>
+          <option value=12>12 hours</option>
+          <option value=13>13 hours</option>
+          <option value=14>14 hours</option>
+          <option value=15>15 hours</option>
+          <option value=16>16 hours</option>
+          <option value=17>17 hours</option>
+          <option value=18>18 hours</option>
+          <option value=19>19 hours</option>
+          <option value=20>20 hours</option>
+          <option value=21>21 hours</option>
+          <option value=22>22 hours</option>
+          <option value=23>23 hours</option>
+          <option value=24>24 hours</option>
+		  
+      </select> 
+  </label>
+</div>
+			</center>				
+				 <div id="riskchart_div" style="height: 190px;display: inline-block; text-align: top;vertical-align: top;"></div>				 
+				 </td>
+				
+				</tr>
+				 <tr>
+				
+				<td valign='top'>	<img src='./help.png' width=30 height=27  style="float: top;" onclick="image('intensity','')">	
+				<center><h4>Current Population Values of Symptoms With Annotation Timeline</h4> ( <a id="Export" href="#">Download as CSV</a> )<br></center>				
+				 <div id="chart_div" style='width: 1250px; height: 170px;vertical-align: top;'></div>				 
+				 </td>
+				 
+				 
+				 </tr>
+				 </table>
+				 </td>
+				 </tr>
+				 </table>
+				 </td>
+				 
+                 </tr>
+				 <tr>				 
+				 <td colspan=3>
+				 <table style="width: 100%;">
+				 <tr>
+				 <td>
+				 <img src='./help.png' width=30 height=27  style="float: top;" onclick="image('table','')">	
+ 				  <div id="table_div"></div>
+				  </td>
+				  </tr>
+				  </table>
+                 </td>
+				 
+				 </tr>
+                 </table>				 
+				<!--   <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea> -->
+            </form>
+        </div>
+        <div id="display"></div>
+    </div>
+	
+	<i><b>Powered by:</b> Transactional Machine Learning, Kafka, Viper, Viperviz<br><b>Developed by:</b> OTICS Advanced Analytics, Inc.</i>
+
+</div>
+
+    <!-- CONTAINER FOR CHART -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+
+        // load current chart package
+        google.charts.load("current", {
+            packages: ["corechart", "line"]
+        });
+
+        google.charts.setOnLoadCallback(drawChart);
+		google.charts.load('current', {'packages':['table','annotatedtimeline','gauge','bar']});
+
+		google.charts.setOnLoadCallback(drawTable2);
+  
+		google.charts.setOnLoadCallback(drawJustgage);
+	       google.charts.setOnLoadCallback(drawDiffChart);
+
+	  
+		var banner = document.createElement("div");
+		banner.className = "b";
+		banner.style = "display: flex; justify-content: flex-end;";
+
+		banner.innerHTML = "<i><font color='#808080'>"+new Date() + "<br>OTICS Advanced Analytics Inc., Copyright 2022</font></i>";
+
+		document.body.insertBefore(banner,document.body.childNodes[0]);
+
+		getSavehours(-1);
+
+ // console.log(localStorage.key(0));
+        var START=0;
+	  var ws;
+	  var topic="";
+	  var offset=-1;
+	  var groupid="";
+	  var append=0;
+	  var rollbackoffset=0;
+	  var topictype="";
+	  var vipertoken="";
+	  var consumerid="";
+	  var secure=0;
+	  //////////////////////////
+	 // var data;
+	  var datatbl;
+	 // var datatbl2;
+	   var maintable;
+	  var chart=null;
+	  var dataintable=[];
+	//   var dataintable2=[];
+	  var datainchart=[];
+	  var kafkakeyarr=[];
+	  var totalpredictions=0;
+	  var predictioncount=0;
+	  var jsonhist="";
+	  var kafkacluster="";
+	  var issues="";
+	  var issuecount=0;                     
+	  var idkeyarr;
+	  var maingaugepercentage=0;
+	   var maingaugepercentageavg=0;
+	  var timestart="";
+	  var timeend="";
+	   var icvals = [];
+	   var mainmonitoring="";
+	   var healthriskarray= [];
+	   var maintimestamp="";
+	   var riskdatanum=0;
+	   var patientdatanum=0;
+	   var totalriskdata=150;
+	    var totalriskdatatosave=3000; // 3000 = ~4h of data 
+	//   var riskdatatosave = [];
+	//   var riskdataarray;
+	//   var oldData;
+	  // var newData;
+	   var symptommap;
+	   var identifiermap;
+	   var superidentifiermap = new Map();;
+	   
+	         // create options object with titles, colors, etc.
+	var cssClassNames = {
+		'headerRow': 'columnTitle',
+		'tableRow': '',
+		'oddTableRow': 'beige-background',
+		'selectedTableRow': 'orange-background large-font',
+		'hoverTableRow': '',
+		'headerCell': 'gold-border',
+		'tableCell': '',
+		'rowNumberCell': 'underline-blue-font'};
+     		 
+      var options = {
+           title: "Health Monitoring Values For " + topic,
+            hAxis: {
+                title: "Interval",
+				format: '0'
+             },
+            vAxis: {
+                 title: "Value"
+				 
+             },
+			 tooltip: {
+				isHtml: true
+			},
+			 explorer: {
+				actions: ['dragToZoom', 'rightClickToReset'],
+				axis: 'horizontal',
+				keepInBounds: true
+				},
+			 displayAnnotations: true,
+			 displayRangeSelector: false, 
+			 allowHtml: true,
+			 scaleType:'maximized',
+			 thickness: 3,
+		   chartArea:{top:10,width:"1250",height:"100"}
+        };
+
+      var g1 = new JustGage({
+          id: "gauge_avgrisk",
+          value: 0,
+          min: 0,
+          max: 100,       
+          label: "Avg. Health Risk"
+        });
+
+      var g2 = new JustGage({
+          id: "gauge_currrisk",
+          value: 0,
+          min: 0,
+          max: 100,
+          label: "Current Health Risk"
+		 
+        });
+      
+		function getCookie(cname) {
+			let name = cname + "=";
+			let decodedCookie = decodeURIComponent(document.cookie);
+			let ca = decodedCookie.split(';');
+			for(let i = 0; i <ca.length; i++) {
+				let c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+		return "";
+		}
+        
+		function getSavehours(value){		   
+		  if (value==-1){
+		     value = getCookie("riskhours");
+		     let element = document.getElementById("riskhours");
+			 if (value){
+              element.value = value;
+			  }else{
+                value=4;
+				 element.value = value;
+			 }			  
+		  }
+		   totalriskdatatosave = 12*60*Number(value);
+		   
+		   const riskobj = {
+		     hours: totalriskdatatosave
+		   }
+			const d = new Date();
+			d.setTime(d.getTime() + (30*24*60*60*1000));
+			let expires = "expires="+ d.toUTCString();
+			document.cookie = "riskhours" + "=" + value + ";" + expires + ";path=/";
+ 
+		 }
+		 
+        ////////////////////////////////////STORE RISK Data
+          function storepatientdata(maindetailsmap){
+
+     	        var currtimestamp = new Date();
+             var datestring = currtimestamp.getFullYear() + "-" + ("0"+(currtimestamp.getMonth()+1)).slice(-2) +"-"+("0" + currtimestamp.getDate()).slice(-2) + " " +
+				currtimestamp.getHours() + ":" +  ("0"+currtimestamp.getMinutes()).slice(-2);
+
+
+		    if (patientdatanum>=totalriskdatatosave){
+			  patientdatanum=0;
+			}
+		  //maindetailsmap.set(keybuf,uniqueArray);
+		    var r=0;
+           var buf ="";
+							
+			for (const [key, value] of maindetailsmap) {
+			 var keybuf=`${key}`;
+			// var valbuf=`${value}`;
+			
+			    var symname=getSymptomname(keybuf);
+			    
+			   // var c = keybuf.split("_");
+				for (d in value){					
+				  if (d==0){
+				    buf += datestring + "," + symname[1] + ",[" + symname[0] + "]," + value[d] + "," + maingaugepercentage + "\n"; 
+	    		  }else{
+					  buf +="-,-,-,"  + value[d] + ",-"+ "\n"; 
+					}
+					
+				}		
+
+				const riskobj = {
+          			  linedata: buf
+			        }
+
+				try{	
+			       window.localStorage.setItem("patientobj" + patientdatanum + "_" + r,JSON.stringify(riskobj));		
+				  r += 1;
+				  buf="";
+				   
+		       }catch(err) {
+					//document.getElementById("demo").innerHTML = err.message;
+					console.log(err.message);
+					console.log("err.message=",riskobj);
+					var e=err.message;
+                  }   
+				  
+            
+			}		  
+			
+			patientdatanum += 1;
+		  
+        }
+
+		
+       function storeriskdata(riskdatatosave){
+	      
+		    if (riskdatanum>=totalriskdatatosave){
+			  riskdatanum=0;
+			  riskdatatosave = [];
+			}
+			
+			//var header="DateTime,Symptomname,Code,Value,Ubound,Mean,Timewindow1,Timewindow2\n";
+             var buf="";
+			 
+			 //console.log(riskdatatosave);
+			 
+           //	  riskdatatosave.push([new Date().toISOString().slice(0, 19),symptomname[sd],dataarr, ubound,mean,timewindow[sd]]);
+		   
+		 //  console.log("riskdatatosave=",riskdatatosave);
+		   
+			for (r in riskdatatosave){
+			  
+			    var rowvalue=riskdatatosave[r];				
+			    var twindow = rowvalue[5];
+				var sp = rowvalue[1][1];
+				var sp2 = sp.split("_");
+				
+			    for (d in rowvalue[2]){					
+				    buf += rowvalue[0] +"," + rowvalue[1][0] +","  + sp2[0] + "," + rowvalue[2][d] +"," + rowvalue[3] +"," + rowvalue[4] + "\n"; 
+	    			
+				}		
+				//console.log("riskobj" + riskdatanum + "_" + r);
+				
+				const riskobj = {
+          			  linedata: buf
+			        }
+				try{	
+			       window.localStorage.setItem("riskobj" + riskdatanum + "_" + r,JSON.stringify(riskobj));		
+				   
+		       }catch(err) {
+					//document.getElementById("demo").innerHTML = err.message;
+			//		console.log(err.message);
+					var e=err.message;
+                  }   
+			  buf="";
+
+			}			
+            riskdatanum +=1;
+			riskdatatosave = [];
+			
+			
+       }
+	   
+	    function loadpatientriskdata(){
+	      var num=0;
+		  var totaldata="";
+
+		  var riskdataarray = new google.visualization.DataTable();
+
+              //buf += currtimestamp + symname[1] + ",[" + symname[0] + "]," + d + "," + maingaugepercentage + "\n"; 
+	    			
+		   riskdataarray.addColumn('string','DateTime');
+		   riskdataarray.addColumn('string','Symptomname');
+		   riskdataarray.addColumn('string','Code');
+		   riskdataarray.addColumn('number','Patient');
+		   riskdataarray.addColumn('number','RiskValue');
+		   
+		  for (rd=0;rd < totalriskdatatosave; rd++){
+         		var inside=0;
+				
+		       while(true){
+			     //console.log("riskobj" + rd + "_" + num)
+				 
+		        	var s2 = window.localStorage.getItem("patientobj" + rd + "_" + num);
+					if (s2){
+	                  const obj2 = JSON.parse(s2);		
+                    //  totaldata += obj2.linedata;			
+                      var ss=obj2.linedata.split("\n");
+					//  console.log("ss=",ss);
+					  
+					  for (t in ss){ // row
+					    let sbuf = ss[t];
+						if (sbuf.length > 0){
+						  let sbufarr = sbuf.split(",");
+						   if (sbufarr.length>0 && isNaN(sbufarr[3])==false){
+						  
+						  //console.log("sbufarr=",sbufarr);
+						
+					    //let rw = [ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7]];
+						   let rw = [sbufarr[0], sbufarr[1], sbufarr[2],sbufarr[3],Number(sbufarr[4])];
+						
+						//  console.log("rw=",rw);
+						  
+					      riskdataarray.addRows([rw]);
+						  inside=1;
+						}
+                       // riskdataarray.push([ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7] ]);
+					    }
+					  }
+					  
+					}else{
+                       break;
+					 }					
+					  num += 1;
+				}
+				
+			//	if (inside==0){
+				//  break
+				//}
+				
+		  }
+	         //console.log("riskdataarray=",riskdataarray);
+			 return riskdataarray;
+	   }
+
+	           ////////////////////////////////////LOAD RISK Data
+       function loadriskdata(){
+	      var num=0;
+		  var totaldata="";
+
+		  var riskdataarray = new google.visualization.DataTable();
+
+		//   riskdataarray.addColumn('string','DateTime');
+		   riskdataarray.addColumn('string','Symptomname');
+		   riskdataarray.addColumn('string','Code');
+		   riskdataarray.addColumn('number','Value');
+		   riskdataarray.addColumn('number','Ubound');
+		   riskdataarray.addColumn('number','Mean');
+		 //  riskdataarray.addColumn('string','Timewindow1');
+		  // riskdataarray.addColumn('string','Timewindow2');
+		   
+		  for (rd=0;rd < totalriskdatatosave; rd++){
+         		var inside=0;
+				
+		       while(true){
+			     //console.log("riskobj" + rd + "_" + num)
+				 
+		        	var s2 = window.localStorage.getItem("riskobj" + rd + "_" + num);
+					if (s2){
+	                  const obj2 = JSON.parse(s2);		
+                    //  totaldata += obj2.linedata;			
+                      var ss=obj2.linedata.split("\n");
+					//  console.log("ss=",ss);
+					  
+					  for (t in ss){ // row
+					    let sbuf = ss[t];
+						if (sbuf.length > 0){
+						  let sbufarr = sbuf.split(",");
+						   if (sbufarr.length>0 && isNaN(sbufarr[3])==false){
+						  
+						  //console.log("sbufarr=",sbufarr);
+						
+					    //let rw = [ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7]];
+						   let rw = [sbufarr[1], "["+sbufarr[2]+"]",Number(sbufarr[3]),Number(sbufarr[4]),Number(sbufarr[5])];
+						
+						//  console.log("rw=",rw);
+						  
+					      riskdataarray.addRows([rw]);
+						  inside=1;
+						}
+                       // riskdataarray.push([ss[t][0],ss[t][1],ss[t][2],ss[t][3],ss[t][4],ss[t][5],ss[t][6],ss[t][7] ]);
+					    }
+					  }
+					  
+					}else{
+                       break;
+					 }					
+					  num += 1;
+				}
+				
+			//	if (inside==0){
+				//  break
+				//}
+				
+		  }
+	         //console.log("riskdataarray=",riskdataarray);
+			 return riskdataarray;
+	   }
+
+	   
+       function storehealthrisk(){
+	   //console.log("healthriskarray=",healthriskarray);
+	     try{
+	        var currtimestamp = new Date();
+	        if (healthriskarray.length<=totalriskdata){
+			  healthriskarray.push([currtimestamp,maingaugepercentage]);			  
+			}else{
+			   healthriskarray.shift();
+			   //healthriskarray=hr;
+			   //delete healthriskarray[0];
+			   healthriskarray.push([currtimestamp,maingaugepercentage]);	
+			  //healthriskarray=[];
+			}
+			
+			//console.log("---------healthriskarray length=",healthriskarray.length);
+		//	 console.log("dataintable=",dataintable.length," kafkakeyarr=",kafkakeyarr.length," datainchart=",datainchart.length," icvals=",icvals.length, " //healthriskarray=",healthriskarray.length);
+			
+			var riskobj = {
+			  date: currtimestamp,
+			  riskvalue: maingaugepercentageavg			
+			}
+			window.localStorage.setItem("riskobj",JSON.stringify(riskobj));
+           
+		   var riskobjtosave = {
+			  totalnum: riskdatanum
+			}			
+			window.localStorage.setItem("riskobjtosave",JSON.stringify(riskobjtosave));
+		 }catch(err){
+		     console.log(err.message);
+             var e=err.message;
+           }		 
+	   }
+       
+	   
+	   function loadhealthrisk(){
+			var s = window.localStorage.getItem('riskobj');
+			const obj = JSON.parse(s);
+           maintimestamp = new Date(obj.date);
+		   maingaugepercentageavg = Number(obj.riskvalue);
+		     maingaugepercentage = Number(obj.riskvalue);
+		   //storehealthrisk();
+		    healthriskarray.push([maintimestamp,maingaugepercentage]);	
+			
+			var s2 = window.localStorage.getItem('riskobjtosave');
+	       const obj2 = JSON.parse(s2);		
+           riskdatanum = Number(obj2.totalnum);
+          
+       }	   
+	   
+       function monitoringpopup(){
+          new Attention.Prompt({
+                    title: "Population Symptoms Currently Being Monitored",
+                    content: mainmonitoring,
+                });
+         
+	   }
+ 	   
+	   function computeintensitycurve(jsondata){
+	         
+			 var symptomdata = [];
+			 var ubounddata = [];
+			 var symptomname = [];
+			 var timewindow = [];
+		//	 var identifier = [];
+			 var riskdatatosave = [];
+			 
+			 symptommap = new Map();
+             identifiermap = new Map();
+            // superidentifiermap = new Map();
+			 
+ 
+			// oldData =  google.visualization.arrayToDataTable(['Symptom', 'Count of Symptom']);
+			 //newData = google.visualization.arrayToDataTable(['Symptom', 'Count of Symptom']);
+			 
+    		    for (k in idkeyarr){
+	    		   var keybuf = idkeyarr[k];
+				    let varr = keybuf.split(" ");							  
+			        var keydata = [];
+					 var keydatatime = [];
+				//	 var keyident = [];
+					 var keyidentbuf = "";
+					//var keyub = [];
+		    	 	for (j in jsondata.TopicReads){
+			          let jbuf=jsondata.TopicReads[j].Topic;
+				      let js=jbuf.split("_");
+				      let buf = jbuf.substring(js[0].length+1);
+				
+						//	if (varr[0]==symptomcode){
+						//console.log("ss=" + idbuf + ", varr[0]=" + varr[0]);
+					     if (buf==varr[0] ){
+                            let jvalue=Number(jsondata.TopicReads[j].hyperprediction);						  
+ 				             keydata.push(jvalue); 
+            				var winstart=jsondata.TopicReads[j].WindowStartTime;
+			             	var winend=jsondata.TopicReads[j].WindowEndTime;
+							keydatatime.push([winstart,winend]);
+					//		keyident.push(jsondata.TopicReads[j].Identifier);
+					        keyidentbuf += jsondata.TopicReads[j].Identifier + ";";
+							 
+				         }
+					}
+					if (keydata.length>0){
+					   //keydata.push(varr[0]);//name
+					   //keydata.push(varr[1]); //ubound
+					   //keydata.push(varr[2]); //mean
+					    symptomname.push([varr[3],varr[0]]);
+                       	symptomdata.push(keydata);		
+                        ubounddata.push([varr[1], varr[2]]);	
+                        timewindow.push(keydatatime);	
+                     //    identifier.push(keyident);						
+						 symptommap.set(varr[0]+"_total",keydata.length); // store the total count of each symptom		
+						// console.log("keyident=",keyidentbuf);
+                         identifiermap.set(varr[0],keyidentbuf); // store the total count of each symptom			
+                         identifiermap.set(varr[0]+"_ubound",varr[1]); // store the total count of each symptom			
+						 
+					}else{
+						 symptommap.set(varr[0]+"_total",0); // store the total count of each symptom
+					
+					}
+					symptommap.set(varr[0],0);
+				 }
+               
+		//	   console.log("symptomdata=",symptomdata)
+			//   console.log("ubounddata=",ubounddata)
+			   
+             /////////////////////////////////Compute the delta data for curve
+			if (symptomdata.length>0){
+			  var icdata = [];
+			  
+		      for (let sd = 0; sd < symptomdata.length; sd++) {
+			      var uarr = ubounddata[sd];
+				  var ubound=uarr[0];
+				  var mean=uarr[1];
+				  var dataarr = symptomdata[sd];
+				  var rdata = [];
+				  
+			      for (i in dataarr){				     
+				     if (dataarr[i]>ubound){
+					    var val = Math.abs(dataarr[i]-mean);
+					    rdata.push(val);  // delta
+						var sname=symptomname[sd]; // ['name', 'code_preprocess_Avg']
+						var mapcnt=symptommap.get(sname[1]);
+						symptommap.set(sname[1],mapcnt+1);
+
+					 }else{
+					   rdata.push(0);
+					 }
+				  }
+				  
+				  if (rdata.length>0){
+				    icdata.push(rdata);
+				  }
+				  riskdatatosave.push([new Date().toISOString().slice(0, 19),symptomname[sd],dataarr, ubound,mean,timewindow[sd]]);
+			   }
+            			
+		//	console.log("icdata=",icdata);
+			//console.log("icdtalen=",icdata.length);
+			
+		   /////////////////////////////////////////////Get the curve data	
+		   var inum=0;
+		   icvals = [];
+		   var icnum=0;
+		   var totalic=0;
+		    while(true){
+			    var ival = 0;
+				var inside=0;
+				var undef=0;
+				var sd=0;
+				
+				
+		        for ( sd = 0; sd < icdata.length; sd++) {
+				     var m=icdata[sd];
+					 //console.log("m=",m,m[inum],inum);
+					 
+					 if (typeof(m[inum])!== "undefined"){  // go through each symptom
+				        ival = ival + m[inum];
+						inside=1;						
+						//console.log("inside loop=",inside);
+						//symptommap.set();
+						
+                    }else{
+                       undef +=1;
+					}			
+                    					
+				}
+				var halfsd= Math.ceil(sd*.5);
+			    document.getElementById('totsymptoms').innerHTML=sd;			 			
+			   
+			   if (ival>0 && ((sd-undef)>halfsd)){
+			     icnum += 1;
+			   }
+   		//       console.log("(sd-undef)=",(sd-undef),"Sd=",sd," undef=",undef,"halfsd=",halfsd, "ival=",ival, " icnum=",icnum);
+
+			   icvals.push(ival); // main curve data
+			   
+			   inum+=1;
+			  
+			   
+			   if (inside==0){
+			      break;
+			    }
+			 }
+		     // Health risk percentage
+		//	 	console.log("icvals=",icvals)
+			//  	console.log("icnum=",icnum)
+			//	console.log("icnum=",icnum, " inum=",inum);
+					
+			 maingaugepercentage = (icnum/inum)*100;
+			 maingaugepercentage = maingaugepercentage.toFixed(1);
+			  
+			  
+			 //superidentifiermap.set(maingaugepercentage, identifiermap);
+			 
+			//  console.log(symptommap);
+			  
+			//  console.log("icnum=",icnum, " inum=",inum);
+			  
+			// console.log("maingaugepercentage=",maingaugepercentage);						
+			
+		     storeriskdata(riskdatatosave);
+		   }
+		   
+		}
+			 
+	   
+	   
+	   function getAlltopics(jsondata){
+	        
+			var topics = [];
+			for (j in jsondata.TopicReads){
+				   jbuf=jsondata.TopicReads[j].Topic;
+				   let js=jbuf.split("_");
+				   let buf = jbuf.substring(js[0].length+1);
+				  topics.push(buf); 
+			}
+	       uniqueArray = Array.from(new Set(topics)); 
+		   //console.log("uniq=",uniqueArray);
+		   
+		   return uniqueArray;
+	   }
+	   
+	   function saveDynamicDataToFile(topic) {
+
+          //  var userInput = document.getElementById("txtData").value;	
+            const textToBLOB = new Blob([userInput], { type: "text/plain;charset=utf-8" });
+           const sFileName = topic+"-fhir-JSON.json";	   // The file to save the data.
+
+           let newLink = document.createElement("a");
+           newLink.download = sFileName;
+
+           if (window.webkitURL != null) {
+              newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+           }
+           else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+           }
+
+        newLink.click(); 
+		
+        }
+		
+		function highlightRow(index,symptom,symptomcode,processtype){
+				    
+			  if (datatbl){
+						
+                 datatbl.setProperties(index, 5, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+				   datatbl.setProperties(index, 4, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+		          datatbl.setProperties(index, 3, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+		          datatbl.setProperties(index, 1, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+		          datatbl.setProperties(index, 2, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+		          datatbl.setProperties(index, 6, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+		          datatbl.setProperties(index, 7, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+				     datatbl.setProperties(index, 8, {style: 'background-color:red;font-size:16px;color:#ffffff;'});
+                  datatbl.setProperties(index, 9, {style: 'background-color:red;font-size:16px;color:#ffffff;'});		
+                  if (issues.includes(symptomcode)==false){				  
+                     issues += "[" + symptom + " ("+symptomcode +", " + processtype +")]; ";
+				  }
+				  document.getElementById('issues').innerHTML  = "<font color=red size=3><b>" + issues + "</b></font>";
+				  issuecount +=1;
+              
+		      }
+		}
+		
+		function gettabledata(data){
+		  if (!datatbl){
+		    return;
+		  }
+		    let thedate="";
+			let latestdate="";
+		    data.addColumn('date', "Date");
+			 data.addColumn('number', "Value");
+			 
+			 data.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+             data.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+			  
+		   datatbl.sort({column: 1, desc: true});
+		  for (t = 0; t < predictioncount; t++) {
+		   thedate = datatbl.getValue(t, 1);
+		   		   
+		   if (t==0){
+		     latestdate=thedate;
+		   }
+		   dvalue=new Date(thedate);
+		 //  console.log("The date=",dvalue);
+		   
+		   let scode = datatbl.getValue(t, 4);
+		   
+		   let selectedData = datatbl.getValue(t, 6);
+		   let depvar=datatbl.getValue(t, 3);
+		   let ubound=datatbl.getValue(t, 8);
+		   let mean=datatbl.getValue(t, 7);
+
+		   let time1=datatbl.getValue(t, 1);
+		   let time2=datatbl.getValue(t, 2);
+		   let totmess=datatbl.getValue(t, 9);
+		   let ptype=datatbl.getValue(t, 5);
+
+		   let kafkakey=datatbl.getValue(t, 10);
+		   let offset=datatbl.getValue(t, 11);
+		   let partition=datatbl.getValue(t, 12);
+
+		   
+		   let deptext="<b><font size=3>The Current Population Value For Symptom</font><font color='red' size=3><i>"+depvar + "</i></font>" + "<font size=2> ("+ scode + ", " + ptype + ")</font> <font size=3> Is </font> <font color='red' size=3><u>" + selectedData+"</u></font></b>.";
+           if (mean==-1){
+		   deptext += "<br><font size=3><b>The mean value for this symptom is not defined.</b></font><br>";
+		   }else{
+		   deptext += "<br><font size=3><b>The mean value for this symptom is :" + mean + "</b></font><br>";		  
+		   }
+		   
+		   if (selectedData > ubound && ubound!=-1){
+		       
+			   highlightRow(t,depvar,scode,ptype);
+		   
+		       let diff = Math.abs(ubound - selectedData);
+			   diff = diff.toFixed(3);
+		       deptext += "<b><font color='red' size=3>This Current Population Value is ABOVE the upper bound of " + ubound + " by " + diff  + " points</font></b><br>";
+		   }else if (ubound==-1){
+		        deptext += "<b><font size=3>Upper bound not defined</font></b><br>";
+		   }
+		   else{
+		       deptext += "<b><font size=3>This Current Population Value seems NORMAL.</font></b><br>";		   
+		   }
+		       deptext += "<ul><li><font size=3>The Time Window for this current value is between: " + time1 + " and " + time2 +"</font></li>";		   
+		       deptext += "<li><font size=3>Total messages in this time window are: " + totmess + "</font></li>";		   
+		       deptext += "<li><font size=3>Process Type is: "  + ptype + "</font></li>";		   
+		       deptext += "<li><font size=3>Kafka Key: "  + kafkakey + "</font></li>";		   
+		       deptext += "<li><font size=3>Offset: "  + offset + "</font></li>";		   
+		       deptext += "<li><font size=3>Partition: "  + partition + "</font></li></ul>";		   
+		   
+		   let indeptext="";
+		  		   
+			 data.addRow([ 	dvalue, selectedData,deptext,indeptext]);
+			 //console.log(dvalue, selectedData,deptext,indeptext);
+		  }
+		  return [thedate,latestdate,data];
+		}
+
+		
+		function drawDiffChart(jsondata,topic){
+		//testchart();
+		//return;
+		var oldData;
+		var newData;
+		
+		if (jsondata==null){
+		  oldData = google.visualization.arrayToDataTable([
+			['Symptom', 'Count of Symptom'],
+			['TBD', 0],
+			]);
+
+			newData = google.visualization.arrayToDataTable([
+			['Symptom', 'Count of Symptom'],
+			['TBD', 0],
+			]);
+		}else{
+		 mainmonitoring="";
+		 
+		 if (idkeyarr){
+		   for (k in idkeyarr){
+	     	 var keybuf = idkeyarr[k];
+			  let varr = keybuf.split(" ");		
+             if (varr[0]!="n/a"){			  
+			  mainmonitoring += "[" + varr[3] + "(" + varr[1] + ", " + varr[2] + ", " + varr[0] + ")] ";
+			  }
+		   }				
+		}		
+		
+		    oldData = new google.visualization.DataTable();
+		    newData = new google.visualization.DataTable();
+		    
+			
+			oldData.addColumn('string','Symptom');
+		    oldData.addColumn('number','Count of Symptom');
+            //oldData.addColumn({type:'string',role:'tooltip'});
+			
+		    newData.addColumn('string','Symptom');
+		    newData.addColumn('number','Count of Symptom');
+            //newData.addColumn({type:'string',role:'tooltip'});
+			
+			
+            for (const [key, value] of symptommap) {
+			 var keybuf=`${key}`;
+			 var valbuf=`${value}`;
+			 
+			// console.log("keybuf=",keybuf);
+			// console.log("valbuf=",valbuf);
+			 
+			 if (keybuf.includes("_total") && isNaN(valbuf)==false){
+               var ka = keybuf.split("_");  	
+             //  	console.log("ka=",ka);
+               //	console.log("valbuf=",valbuf);
+			  // console.log(ka[0],Number(valbuf));
+			   
+				if (ka[0]!="n/a"){
+                  oldData.addRows([[ka[0],Number(valbuf)]]);			 
+			   }
+               // console.log(keybuf,valbuf);
+               }else{
+               var ka = keybuf.split("_");  			 
+			   if (ka[0]!="n/a"){
+                 newData.addRows([[ka[0],Number(valbuf)]]);					   
+			    }
+			   }
+			}
+       
+	   }
+		 //  console.log("olddata=",oldData);
+		  // console.log("newdata=",newData);
+		   
+			var barChartDiff = new google.visualization.BarChart(document.getElementById('barchart_div'));
+            var diffData = barChartDiff.computeDiff(oldData, newData);						
+ 
+			var options = {height:280, hAxis: {title: 'Count of Symptom Records'},fontSize:18,chartArea:{height:'350'},legend: { position: 'top' } };
+
+			barChartDiff.draw(diffData, options);
+
+		  // document.getElementById('barchartlabel_div').innerHTML="Population Symptoms Currently Being Monitored: <img src='./help.png' width=30 height=27  style='float: bottom;' //onclick='monitoringpopup()'>";	
+          var diffbuf="<b>Symptoms Being Monitored: </b><ul>";
+		  for (kv in idkeyarr){
+		     var buf=idkeyarr[kv];
+			 var buf2=buf.split(" ");
+			 var buf3 = buf2[0].split("_");
+			 if (buf3[0]!="n/a"){
+			    diffbuf += "<li>" + buf3[0] + ": " + buf2[3] + "</li>";
+			 }
+		  }
+		  
+          document.getElementById('barchartlabel_div').innerHTML=diffbuf + "</ul>";             
+
+		}
+
+		function drawChartBar(jsondata,topic){
+		var alltopics;
+		
+		if (jsondata==null){
+		  var data = google.visualization.arrayToDataTable([
+            ['Symptoms', 'Value', 'Delta'],
+            ['Systolic', 1000, 400],
+            ['Diastolic', 1170, 460],
+            ['BMI', 660, 1120],
+            ['Heart Rate', 1030, 540]
+          ]);
+        }else{
+		  alltopics=getAlltopics(jsondata);
+		 
+		}
+		
+        var options = {
+		  width: 400,
+          height: 400,		  
+		  fontSize: '18',
+		//  legend: { position: 'none' },
+          chart: {
+            title: 'Health Data',
+            subtitle: 'Monitoring',
+          },
+          bars: 'horizontal', // Required for Material Bar Charts.
+		//  chartArea:{left:2,top:1,width:'300',height:'275'},
+		
+		  hAxis: {gridlines :{color: '#333', minSpacing: 20} },
+		  legend: {position: 'bottom'}
+
+
+        };
+      /////////////////////////////////////process bar data
+	     var bardata =[];
+		 bardata.push(  ['Symptoms', 'Avg.Value', 'Delta']);
+		 var found=0;
+		 var hcount=0;
+		 mainmonitoring="";
+		 
+		 if (idkeyarr){
+		   for (k in idkeyarr){
+	     	 var keybuf = idkeyarr[k];
+			  let varr = keybuf.split(" ");		
+             if (varr[0]!="n/a"){			  
+			  mainmonitoring += "[" + varr[3] + "(" + varr[1] + ", " + varr[2] + ", " + varr[0] + ")] ";
+			  }
+		   }				
+		}		
+				
+	     if (alltopics){
+		    for (i in alltopics){
+			  var idbuf = alltopics[i];
+			   var ss=idbuf.split("_");	
+			//   var databuf = [];
+			    var num=0;
+                var valnum=0;
+				found=0;
+				
+			     for (j in jsondata.TopicReads){
+				   jbuf=jsondata.TopicReads[j].Topic;
+				   //console.log(jbuf + " includes=" + idbuf);
+				   
+                   if (jbuf.includes(idbuf)){
+				      found=1;
+					  num += 1;
+				       predictionvalue=Number(jsondata.TopicReads[j].hyperprediction);
+					   valnum = valnum + predictionvalue;
+				   }
+
+                 }
+               if (found){
+			      //found=0;
+				  
+                  var totval = valnum /num; 			 
+				 if (idkeyarr){
+				  
+				    for (k in idkeyarr){
+					   var keybuf = idkeyarr[k];
+					    let varr = keybuf.split(" ");							  
+						//	if (varr[0]==symptomcode){
+						
+					    
+						if (idbuf==varr[0] ){
+							
+					        var n1=Number(varr[1]);
+							var m1=Number(varr[2]);
+
+						    //console.log("INSIDE ss=" + idbuf + ", varr[0]=" + varr[0], " totval=",totval, " n1=",n1);
+
+							if (totval>n1){
+					          // console.log("INSIDE MAIN ss=" + idbuf + ", varr[0]=" + varr[0], " totval=",totval, " n1=",n1);
+
+							   var dbuf = Math.abs(totval-m1);
+							   bardata.push([ss[0], totval, dbuf]);
+							     hcount += 1;   
+							}
+					     }						 
+					}
+							
+				 }//else{
+			        //bardata.push([ss[0], totval, 0]);
+				  //}
+			  }
+			}
+		   
+		 }
+	  /////////////////////////////////////////////////////
+	  // console.log(bardata);
+	  
+	   
+	   if (hcount==0){ //if no data add something
+		     bardata =[];
+		     bardata.push(  ['Symptoms', 'Value', 'Delta']);
+		 
+			for (k in idkeyarr){
+     		   var keybuf = idkeyarr[k];
+				
+	    	    let varr = keybuf.split(" ");			
+				if (varr!="n/a"){
+                   let varr2 = varr[0].split("_");
+                       if (varr2.length>0){ 							
+			    	    bardata.push([varr2[0], 0, 0]);					
+			    		   }
+				     	}   
+				  }
+					 // bardata.push([ss[0], totval, 0]);
+		}
+		   data = google.visualization.arrayToDataTable(bardata);
+           var chart = new google.charts.Bar(document.getElementById('barchart_div'));
+           chart.draw(data, google.charts.Bar.convertOptions(options));
+		   //barchartlabel_div
+		   
+		  
+	}
+	   function parseIdentifier(){
+	   
+		//	console.log("identifiermap=",identifiermap);
+		   var mainpatients = [];
+		   var maindetailsmap = new Map();;
+			 
+			for (const [key, value] of identifiermap) {
+			 var keybuf=`${key}`;
+			 var valbuf=`${value}`;
+			 
+			 var ubound = identifiermap.get(keybuf + "_ubound");
+			// var barr = valbuf.split("~");
+			 
+			// console.log("keybuf=",keybuf);
+			// console.log("valbuf=",valbuf);
+			
+			  const word="Msgsjoined=";
+              var index = valbuf.indexOf(word);   // 8
+              var length = word.length;			// 7
+
+              var result = valbuf.slice(index + length);
+			  const resultarr = result.split(",");
+			  mainpatients = [];
+			  
+			  for (str in resultarr){
+			  // console.log("-------------str=",resultarr[str]);
+			   var bufvalue=resultarr[str];
+			    var valbufnum= bufvalue.substring(
+                     bufvalue.indexOf("(") + 1, 
+                     bufvalue.lastIndexOf(")")                
+				   );
+			    if (Number(valbufnum)> Number(ubound) && isNaN(valbufnum)==false && ubound!=-1){
+     			 // console.log("----value=",valbufnum, "-----bufvalue=",bufvalue," code=",keybuf, ubound);
+				  mainpatients.push(bufvalue);
+				 
+				}			 
+				
+			  }			
+             
+               if (mainpatients.length>0){
+			      var uniqueArray = Array.from(new Set(mainpatients)); 
+                       maindetailsmap.set(keybuf,uniqueArray);
+					   
+					   superidentifiermap.set(maingaugepercentage.toString(), maindetailsmap);
+				}			   
+			  
+		   }
+	      return maindetailsmap;
+	   }
+	    
+		function getSymptomname(sn){
+  		  for (kv in idkeyarr){
+		     var buf=idkeyarr[kv];
+			 var buf2=buf.split(" ");
+			 var buf3 = buf2[0].split("_");
+			 if (buf2[0]==sn){
+			    //diffbuf += "<li>" + buf3[0] + ": " + buf2[3] + "</li>";
+				return [buf3[0],buf2[3]];
+			 }
+		  }
+          return ["",""];
+		}
+		
+		function drawHealthriskchart(){
+		      var data = new google.visualization.DataTable();
+		       data.addColumn('date', "Date");
+			    data.addColumn('number', "Value");
+			
+    			 data.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+                 data.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+			
+			var maindetailmap=parseIdentifier(); //updates superidentifiermap
+			
+			storepatientdata(maindetailmap);
+			
+			  for (h in healthriskarray){
+			     var hv = healthriskarray[h];
+				// console.log("-----------hv=",hv);
+				 
+				 var dvalue=hv[0];
+				 var selectedData = hv[1];
+				 deptext = "<font size=3><b>Risk Value: " + selectedData + "</b></font>";
+				 indeptext = "<br><font size=3>At time: " + dvalue + "</font>";
+				 indeptext += "<br><font size=3><b>Patients Exceeding Upper Bound: </b></font><br>";
+				  var r=0;
+				  //main risk value
+				  var mainriskvalue=Number(selectedData);
+				  var localmap=superidentifiermap.get(selectedData);
+				//  console.log("localmap=",localmap);
+				  if (localmap){
+				    
+					for (const [key, value] of localmap) {
+						var keybuf=`${key}`;
+					//	console.log("key=",key, " value= ", value);
+						//var valbuf=`${value}`;
+						
+						  var sns=getSymptomname(keybuf);		    
+				          indeptext += "<font size=3 color=red><b>" + sns[1] + " (" + sns[0] + ")</b></font><br>";  		
+				         //   var varr = value.split(",");
+						    var num=1;
+                            for (vv in value){ 							
+						    indeptext += "<font size=2><b>" + num + ".</b>" + value[vv] + "</font><br>";
+							num +=1;
+						   }
+						
+		            }
+                   			
+				  }                 				 
+			     data.addRow([ 	dvalue, mainriskvalue,deptext,indeptext]);
+			  }
+
+
+     		var chartrisk = new google.visualization.AnnotatedTimeLine(document.getElementById('riskchart_div'));			
+				
+				chartrisk.draw(data, {  annotationsWidth: 37,  fontSize: '18', max: 100, min: 0, width: '1250',height: '80%', displayAnnotations: true,displayAnnotationsFilter: true,fill: 10,thickness: 5,scaleType:'maximized',allowHtml: true, displayRangeSelector: true, displayZoomButtons: true})                  					                 
+		
+		
+		}
+	
+	function drawJustgage(jsondata,topic){
+		   var tcount=0;
+		   var data;
+		   var tval = 0;
+		   var data2;
+		   var riskavg=0; 
+		   var riskcurr=0;
+		   var tnum=0;
+		   		   
+		   if (healthriskarray.length>0){
+		      
+		      for (h in healthriskarray){
+			    var t = healthriskarray[h];
+				if (isNaN(t[1])==false){
+				tval = tval + Number(t[1]);				
+				tnum = tnum + 1;
+				}
+			  }
+			  if (tnum!=0){
+		    	  maingaugepercentageavg = Number(tval/tnum);					  
+			       maingaugepercentageavg =maingaugepercentageavg.toFixed(1);
+			  }else{
+			    maingaugepercentageavg=0;
+			  }
+			  
+  			//  console.log("here===",maingaugepercentageavg, " tval=",tval, "healthriskarray.length=",healthriskarray.length, " tnum=", tnum );
+              tval=0;
+              tnum=0;
+
+
+		   }else{
+		     maingaugepercentageavg=Number(maingaugepercentage);
+		   }
+		   
+		   if (jsondata){
+			   tcount = jsondata.TopicReads.length;		
+               riskavg=Number(maingaugepercentageavg);
+               riskcurr=Number(maingaugepercentage);
+			   			   
+		   }
+		   
+
+		   if (tcount){
+             var buf="<font >Found " + issuecount + " Possible Issues</font>";
+
+			 if (issuecount>0){
+			    buf="<font color=red>Found " + issuecount + " Possible Issues<br></font><font color=red size=3>In this Time Window: <b><ul><li>" + timestart + "</li><li>" + timeend + "</li></ul></b></font>";
+			 }
+           
+		    document.getElementById('totrecs').innerHTML=tcount;			 
+		    document.getElementById('totissues').innerHTML=issuecount;			
+		    document.getElementById('tottime').innerHTML="<font size=3><ul><li><b>TimeWindowStart:</b> " + timestart + "</li><li><b>TimeWindowEnd:</b> " + timeend + "</li></ul></font>"
+
+			}
+		   document.getElementById('avgrisk').innerHTML=riskavg + "%";	 
+      g1.refresh(riskavg);
+	  g2.refresh(riskcurr);
+	}
+		
+		function drawChartGauge(jsondata,topic) {
+		   var tcount=0;
+		   var data;
+		   var tval = 0;
+		   var data2;
+		   
+		
+		   if (healthriskarray.length>0){
+		      for (h in healthriskarray){
+			    var t = healthriskarray[h];
+				tval += Number(t[1]);
+			  }
+			  maingaugepercentageavg = Number(tval/healthriskarray.length);
+			  maingaugepercentageavg =maingaugepercentageavg.toFixed(1);
+		   }else{
+		     maingaugepercentageavg=Number(maingaugepercentage);
+		   }
+		   
+		   if (jsondata){
+			   tcount = jsondata.TopicReads.length;				
+                    data = google.visualization.arrayToDataTable([
+                     ['Label', 'Value'],
+                     ['Avg. Risk', Number(maingaugepercentageavg)]
+                    ]);			  			
+				
+                    data2 = google.visualization.arrayToDataTable([
+                     ['Label', 'Value'],
+                     ['Curr. Risk', Number(maingaugepercentage)]
+                    ]);			  			
+			   
+		   }else{		   
+            data = google.visualization.arrayToDataTable([
+             ['Label', 'Value'],
+             ['Avg. Risk', 0]
+           ]);
+            data2 = google.visualization.arrayToDataTable([
+             ['Label', 'Value'],
+             ['Curr. Risk', 0]
+           ]);
+		   
+          }
+           var options = {
+             width: 690, height: 230,
+             redFrom: 90, redTo: 100,
+             yellowFrom:75, yellowTo: 90,
+             minorTicks: 5,
+			 fontSize: 10,
+			 displayZoomButtons: false
+           };
+
+           var options2 = {
+             width: 300, height: 130,
+             redFrom: 90, redTo: 100,
+             yellowFrom:75, yellowTo: 90,
+             minorTicks: 5,
+			 fontSize: 10
+           };
+		   
+         var chart = new google.visualization.Gauge(document.getElementById('gaugehealthrisk_div'));
+          chart.draw(data, options);
+
+         var chartsm = new google.visualization.Gauge(document.getElementById('gaugehealthrisksm_div'));
+          chartsm.draw(data2, options2);
+
+		   if (tcount){
+             var buf="<font >Found " + issuecount + " Possible Issues</font>";
+
+			 if (issuecount>0){
+			    buf="<font color=red>Found " + issuecount + " Possible Issues<br></font><font color=red size=3>In this Time Window: <b><ul><li>" + timestart + "</li><li>" + timeend + "</li></ul></b></font>";
+			 }
+			 
+			 document.getElementById('gaugehealthrisk2_div').innerHTML="<div class='grid'>" + 
+			" <label class='card'> " +
+			" <span class='plan-type'>" +
+			" Processed: " + tcount + " Messages " + " - " + buf + "</span>" + 
+			" </label> " +
+			"</div>"
+			}
+        
+		}
+		
+        function drawChart(jsondata,topic) {
+            
+			curTime = new Date();
+     		  var data = new google.visualization.DataTable();
+			  issues="";
+			  issuecount=0;
+			  
+			   document.getElementById('issues').innerHTML  = issues;
+            // draw chart on load
+			if (chart==null){
+		       data.addColumn('date', "Date");
+			    data.addColumn('number', "Value");
+			
+    			 data.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+                 data.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+			     data.addRow([curTime,0,'','']); 
+			     chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));	
+				chart.draw(data, options);
+								  
+			//console.log("here 1");			
+			
+			}
+
+				
+         if (jsondata){
+		    // Adjust Gauges			
+			
+            kafkacluster= jsondata.kafkacluster
+
+		    document.getElementById('accesstime').innerHTML = curTime;
+			document.getElementById('kafkacluster').innerHTML = kafkacluster + ", Kafka Topic: " + topic;
+ 
+		  //ADD previous data
+	  	  /* if  (dataintable.length>0 || append==0){
+		      if (datatbl){
+			      datatbl = new google.visualization.DataTable(); //clear the table
+				  var formatter = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:0});
+					datatbl.addColumn('string', 'Date/Time');
+					datatbl.addColumn('string', 'Time Window Start');
+					datatbl.addColumn('string', 'Time Window End');
+					datatbl.addColumn('string', 'Symptom');
+					datatbl.addColumn('string', 'Symptomcode');
+					datatbl.addColumn('string', 'Processtype');
+					
+					datatbl.addColumn('number', 'Current Population Value');				
+					datatbl.addColumn('number', 'Normal Mean Value');
+					datatbl.addColumn('number', 'Upper Bound Value');
+					datatbl.addColumn('number', 'Total Messages');				
+					datatbl.addColumn('string', 'Kafkakey');
+					datatbl.addColumn('number', 'Offset');
+					datatbl.addColumn('number', 'Partition');
+					
+				  formatter.format(datatbl, 1);	
+			  }
+			  /////////////////////////UN-COMMENT
+           		   
+			 for (r in dataintable){
+			          console.log("-----------------CALLING Draw table 2");
+		            drawTable(dataintable[r][0],dataintable[r][1],dataintable[r][2],dataintable[r][3],dataintable[r][4],dataintable[r][5],dataintable[r][6],dataintable[r][7],dataintable[r][8],dataintable[r][9],dataintable[r][10],dataintable[r][11],dataintable[r][12]   );
+			  }
+		  }*/
+		  
+		  //get partition/offset
+		  let i=0;
+		  
+		  var partitionarr=[];
+		  do {
+             var text = "LastOffset_partition_"+i;
+			 var val=jsondata[text];
+			 if (val){
+			   partitionarr.push(val);
+			 }
+			 i++;
+            } while(val)
+			
+		  ///////////////////////////////////START mainloop
+		 
+		  let rownum=0;
+		  
+		  for (j in jsondata.TopicReads){
+          //get the fields 
+		     var kafkakey=jsondata.TopicReads[j].kafkakey;
+			 
+		     if (!kafkakeyarr.includes(kafkakey) && kafkakey.length>0){
+		        kafkakeyarr.push(kafkakey);
+			      
+				  jsonhist=jsonhist+JSON.stringify(jsondata.TopicReads[j]) +",";
+				  
+				i++;	 
+				
+			//	console.log(jsondata);
+				
+				var createdon=jsondata.TopicReads[j].TimeStamp;	
+				maintimestamp = createdon;
+				var winstart=jsondata.TopicReads[j].WindowStartTime;
+				timestart=winstart;
+				var winend=jsondata.TopicReads[j].WindowEndTime;
+				timeend=winend;
+
+				var symptom=jsondata.TopicReads[j].PreprocessIdentifier;
+				var processtype=jsondata.TopicReads[j].Preprocesstype;
+				
+				var identifier=jsondata.TopicReads[j].Identifier;
+				var idarr = identifier.split("~");
+				var symptomcode = idarr[0];
+				var topic = jsondata.TopicReads[j].Topic;
+				var processbuf = "_preprocessed_" + processtype;
+				var normalvalue=-1;
+				var ubound=-1;
+				
+				for (v in idarr){		
+			      let vbuf = idarr[v];
+		           
+				   if (vbuf.includes("identifier:")){				   
+				      let buf = vbuf.substring(11);
+                       idkeyarr = buf.split(",");			
+         				for (v2 in idkeyarr){						 
+						    let vbuf2 = idkeyarr[v2];
+						    let varr = vbuf2.split(" ");							  
+						//	if (varr[0]==symptomcode){
+						     if (topic.includes(varr[0]) && topic.includes(processbuf) ){
+							   ubound = Number(varr[1]);
+							   normalvalue = Number(varr[2]);
+							   break;
+							}
+						
+						}
+                       					  
+				   }
+				}
+				
+				var predictionvalue=jsondata.TopicReads[j].hyperprediction;
+				var totalmessages=jsondata.TopicReads[j].Numberofmessages;
+				var kafkakey=jsondata.TopicReads[j].kafkakey;
+				var offset=jsondata.TopicReads[j].Offset;
+				var partition=jsondata.TopicReads[j].Partition;		
+		
+				  predictionvalue = Number(predictionvalue);
+				  datainchart.push(predictionvalue)
+
+				var arr=[createdon,winstart,winend,symptom,symptomcode,processtype,predictionvalue,normalvalue,ubound,totalmessages,kafkakey,offset,partition];
+		     	  dataintable.push(arr)
+		     
+				//data.addRow([ 	rownum, predictionvalue]);
+				rownum++;
+		
+		  /////////////////////   UNCOMMENT 
+		     // console.log("-----------------CALLING Draw table 1");
+				//drawTable(createdon,winstart,winend,symptom,symptomcode,processtype,predictionvalue,normalvalue,ubound,totalmessages,kafkakey,offset,partition,rownum);
+		    
+				predictioncount = predictioncount + 1;
+            //   document.getElementById('predictionlabel').innerHTML = "<b>"+ predictioncount + "</b>";	
+		 		 
+              }
+	         }	
+			      if (rownum>0){
+
+				     drawTable2();
+					 
+					  thedates=gettabledata(data);
+					  data = thedates[2];
+					  
+					  // console.log(thedate);
+					   let st=new Date(thedates[0]);
+					   let ed=new Date(thedates[1]);
+					   let et=new Date(ed.getTime() + 1000);
+					   
+					//    data = google.visualization.arrayToDataTable(icvals);
+
+					  chart.draw(data, {  annotationsWidth: 37,  width: '1250',height: '150', displayAnnotations: true,displayAnnotationsFilter: true,fill: 10,thickness: 3,scaleType:'maximized',allowHtml: true,zoomStartTime: st,zoomEndTime: et, displayRangeSelector: true, displayZoomButtons: true})                  					                 
+
+				  }
+		  }
+            
+		          	computeintensitycurve(jsondata);
+					drawDiffChart(jsondata,topic);
+					
+					storehealthrisk();
+					drawHealthriskchart();
+       		
+				drawJustgage(jsondata,topic);
+
+        }
+		
+		function drawTable2(){
+	//		var cvalue = Number(currentvalue);			 
+//			let arr=[createdon,winstart,winend,symptom,symptomcode,processtype,currentvalue,normalvalue,ubound,totalmessages,kafkakey,offset,partition];
+
+		    maintable = new google.visualization.Table(document.getElementById('table_div'));
+			var formatter = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:0});
+			var formatter2 = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:3});
+			
+			
+			 if (!datatbl){
+				datatbl = new google.visualization.DataTable();
+				
+				datatbl.addColumn('string', 'Date/Time');
+				datatbl.addColumn('string', 'Time Window Start');
+				datatbl.addColumn('string', 'Time Window End');
+				datatbl.addColumn('string', 'Symptom');
+				datatbl.addColumn('string', 'Symptomcode');
+				datatbl.addColumn('string', 'Processtype');
+				
+				datatbl.addColumn('number', 'Current Population Value');				
+				datatbl.addColumn('number', 'Normal Mean Value');
+				datatbl.addColumn('number', 'Upper Bound Value');
+				datatbl.addColumn('number', 'Total Messages');				
+				datatbl.addColumn('string', 'Kafkakey');
+				datatbl.addColumn('number', 'Offset');
+				datatbl.addColumn('number', 'Partition');
+		   
+			   datatbl.sort({column: 1, desc: true});
+				maintable.draw(datatbl, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',pageSize: 30, allowHtml: true});
+		     }else{		
+
+			   formatter.format(datatbl, 1);	
+			   formatter2.format(datatbl, 2);	
+			   datatbl.sort({column: 1, desc: true});
+			   if (datatbl.getNumberOfRows()>0 && append==0){
+			      datatbl.removeRows(0,dataintable.length);
+			   }
+			   
+		       datatbl.addRows(dataintable);
+			  maintable.draw(datatbl, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',pageSize: 30, allowHtml: true, 'cssClassNames': cssClassNames});
+			   
+	        }
+		 //  document.getElementById('predictionlabel').innerHTML = "<b>"+ predictioncount + "</b>";	
+		/*   if (jsonhist.length>0){
+		      document.getElementById("txtData").value="["+jsonhist.slice(0,-1) + "]";
+		   }*/		   		   					
+		
+		}
+		
+		
+		
+		function streamLiveKafkaData(){
+
+          if ("WebSocket" in window) {
+            var url = window.location.host;
+            console.log(url);
+		    var urlParams = new URLSearchParams(window.location.search);
+			var keys = urlParams.keys();
+			var entries = urlParams.entries();
+			for(pair of entries) { 			
+			    if (pair[0]=="topic"){
+				  topic=pair[1];
+				  // document.getElementById('maintitle').innerHTML = "<b>Real-Time Population Disease Surveillance Dashboard using FHIR/KAFKA/TML</b>";	
+				}
+				
+				if (pair[0]=="topictype"){
+				  topictype=pair[1];
+				} 
+				if (pair[0]=="secure"){
+				  secure=pair[1];
+				}
+				if (pair[0]=="vipertoken"){
+				  vipertoken=pair[1];
+				}				
+				
+				if (pair[0]=="consumerid"){
+				  consumerid=pair[1];
+				}	
+
+               if (pair[0]=="offset"){
+				  offset=pair[1];
+				}	
+				
+				if (pair[0]=="rollbackoffset"){
+				  rollbackoffset=pair[1];
+				}	
+				if (pair[0]=="groupid"){
+				  groupid=pair[1];
+				}	
+				if (pair[0]=="append"){
+				  append=pair[1];
+				}	
+			}
+			
+			
+			if (secure==0){
+             ws = new WebSocket("ws://"+url+"/ws");
+            }else{
+			    ws = new WebSocket("wss://"+url+"/ws");
+			}
+            ws.onmessage = function(event) {
+                curTime = new Date();
+				var eventdata=`${event.data}`;
+			
+				var maindata=eventdata.replace(/\\"/g,'"');
+			   maindata=maindata.substr(1, maindata.length-3);
+			   
+				var obj = JSON.parse(maindata);
+				 if (obj.ERROR){
+				   $("#statustext").val("Websocket ERROR.."+obj.ERROR);
+				   ws.close(1000);
+				   alert(obj.ERROR);
+				   ws=null;
+				    $("#start").attr("disabled", false);
+					     $("#start").html("Start Streaming");
+						 return
+				   }
+				   
+                if (START==0){
+				  if (ws){
+					ws.close(1000);
+					}
+				   ws=null;
+				   return;
+				}
+ 		      if (append==0){
+			       dataintable=[];
+				   datainchart=[];			 
+				   data=null; 
+				  predictioncount=0;
+				  jsonhist="";
+				  kafkakeyarr=[];
+                }
+		
+			    					
+				drawChart(obj,topic);
+				
+			//	console.log("---------------NEW MESSAGE SHOULD BE AFTER EVERYTHING DONE--------------------");
+            };
+
+            ws.onclose = function(event) {
+                if (event.wasClean) {
+                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                } else {
+                    console.log('[close] Connection died');
+					 
+                }
+				if (ws){
+					ws.close(1000);
+					}
+				ws=null;
+				 $("#start").attr("disabled", false);
+					   $("#statustext").val("Websocket closed");
+					     $("#start").html("Start Streaming");
+            };
+            ws.onopen = function(error) {
+			   
+			    var sendbuffer="{\"Topic\":\""+topic +"\",\"Topictype\":\""+topictype + "\",\"Secure\":"+secure +",\"Vipertoken\":\""+vipertoken+"\",\"Consumerid\":\""+consumerid + "\",\"Offset\":\""+offset + "\",\"RollbackOffset\":\""+rollbackoffset+"\",\"Groupid\":\""+groupid+"\"}";
+
+                 ws.send(sendbuffer);
+				 
+				 loadhealthrisk();
+				 
+				
+            };
+			
+            ws.onerror = function(error) {
+			  if (ws){
+					ws.close(1000);
+					}
+                console.log(`[error] ${error.message}`);
+				$("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
+            };
+			
+			
+
+        } else {
+
+            // The browser doesn't support WebSocket
+            console.log("WebSocket NOT supported by your Browser!");
+        }
+    }
+
+
+	$('#Export4').click( function(e) {
+	
+	  riskdataarray=loadpatientriskdata();
+	
+      if (riskdataarray){        
+		//console.log("riskdataarray=",riskdataarray);
+		
+	     var headerRow = "";
+         var number_of_columns = riskdataarray.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += riskdataarray.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }		
+		
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(riskdataarray);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = "patientrisk-data.csv";
+        this.target = '_blank';
+		
+	   }else{
+	      alert("Start streaming first");
+       }	
+	   
+	} );
+	
+	$('#Export3').click( function(e) {
+	
+	  riskdataarray=loadriskdata();
+	
+      if (riskdataarray){        
+		//console.log("riskdataarray=",riskdataarray);
+		
+	     var headerRow = "";
+         var number_of_columns = riskdataarray.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += riskdataarray.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }		
+		
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(riskdataarray);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = "healthrisk-data.csv";
+        this.target = '_blank';
+		
+	   }else{
+	      alert("Start streaming first");
+       }	
+	   
+	} );
+		
+	$('#Export2').click( function(e) {
+	
+	     e.preventDefault(); /*your_code_here;*/ 
+		 saveDynamicDataToFile(topic);
+		 
+		 
+		 return false; 
+	} );
+	
+		$('#Export').click(function () {
+	  if (topic.length>0){
+	     var headerRow = "";
+         var number_of_columns = datatbl.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += datatbl.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(datatbl);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = topic + "-fhir-data.csv";
+        this.target = '_blank';
+	  }else{
+	      alert("Start streaming first");
+       }	  
+    });
+	
+		$("#idForm").submit(function(e) {
+	  if (ws && START==1){
+	   ws.close(1000);
+	   ws = null;
+	   e.preventDefault(); // avoid to execute the actual submit of the form.
+	   START=0;
+	   $("#start").html("Start Streaming");
+	   $("#start").attr("disabled", true);
+	    $("#statustext").val("WEBSOCKET CLOSING...");
+	   
+	  }else{
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+		START=1;
+        $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka messages from VIPERviz (RUNNING...)");
+
+		 $("#start").html("Stop Streaming");
+		 streamLiveKafkaData();
+		
+		}
+       
+    });
+    </script>
+
+</body>
+
+</html>

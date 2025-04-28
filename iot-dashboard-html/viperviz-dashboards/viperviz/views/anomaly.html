@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+<head>
+    <meta charset="UTF-8" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+    <title>VIPERviz Anomaly Streaming</title>
+    <style>
+        #chart_div {
+            width: 100%;
+        }
+        
+        body {
+            
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<body>
+<div class="row justify-content-md-center">
+    <div class="col-8" style="padding-top: 20px">
+        <h4><label id="maintitle"><b>VIPERviz Anomaly Results For Data Stream:</b></label></h4>
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <div class="col-8">
+
+        <div id="selectSymbol">
+            <form id="idForm">
+			 <b> Last Kafka Access Time:</b></b> <label id="accesstime"></label><br><br>
+				<button id="start" name="submit">Start Streaming</button> <b>Anomalies Found:</b> <label id="anomalylabel"></label><br><a id="Export" href="#">Download Table as CSV</a> | <a id="Export2" href="#">Download JSON</a>  <br>
+				<font size=2><b>Status:</b></font> <input type=text id="statustext" value="" style="font-size:10px;" size=100>
+				 <div id="chart_div"></div>
+				 <div id="table_div"></div>
+				 <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea>
+            </form>
+        </div>
+        <div id="display"></div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+	     google.charts.load("current", {
+            packages: ["corechart", "line"]
+        });
+      google.charts.load('current', {'packages':['table','annotatedtimeline']});
+      google.charts.setOnLoadCallback(drawTable);
+
+      var START=0;
+	  var ws;
+	  var topic="";
+	  var offset=-1;
+	  var append=1;
+	  var chart=null;
+	  var rollbackoffset=0;
+	  var groupid="";
+	  var topictype="";
+	  var vipertoken="";
+	  var consumerid="";
+	  var secure=0;
+	  var data;
+	  var chartdata;
+	  var dataintable=[];
+	  var kafkakeyarr=[];
+	  var anomalyfound=0;
+	  var totalanomaly=0;
+	  var jsonhist="";
+		
+       var options = {
+           title: "Risk Values For " + topic,
+            hAxis: {
+                title: "Interval",
+				format: '0'
+             },
+            vAxis: {
+                 title: "Risk Scores"
+				 
+             },
+			  tooltip: {
+				isHtml: true,
+				trigger: 'both',
+			},
+		   chartArea:{top:10,width:"80%",height:"85%"},
+		    seriesType: 'bars',
+			 displayAnnotations: true,
+			 allowHtml: true,
+          series: {1: {type: 'line'}}
+        };
+		
+		function gettabledata(chartdata){
+		  if (!data){
+		    return;
+		  }
+		  let thedate="";
+			let latestdate="";
+			
+		    chartdata.addColumn('date', "Date");
+			 chartdata.addColumn('number', "Risk Score");
+			  chartdata.addColumn('number', "Risk Threshold");
+			 chartdata.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+             chartdata.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+			
+			  
+		   data.sort({column: 1, desc: true});
+		   
+			 
+		  for (t = 0; t < totalanomaly; t++) {
+		  thedate = data.getValue(t, 0);
+		  if (t==0){
+		     latestdate=thedate;
+		   }
+		   dvalue=new Date(thedate);
+		   let rs = data.getValue(t, 3);
+		   let rt = data.getValue(t, 4);
+		   let transaction = data.getValue(t, 10);
+		   let rowi=t+1;
+		    let deptitle=undefined;
+			 let deptext=undefined;
+			 
+		   transaction=transaction.replace(/[\n\r]+/g, ' ');
+			
+			if (rs>=rt){
+			      deptitle="<b><font size=4>Found Anomaly For Transaction with a Risk Score of</font><font size=4 color=red> "+rs + "</font> (Row="+rowi+", Date="+ thedate+")</b><br>";
+				  deptext="<font size=3><b>Following fields in this transaction were checked for anomalies:</b><br>";
+				  let fv="";
+				  let tarr=transaction.split(" ");
+				  
+				  for (i = 0; i < tarr.length-1; i++) {
+				     let v=tarr[i];
+					 let v2=v.split(":");
+					 let num=i+1;
+					 
+					 if (parseInt(v2[1])<=0){
+				       fv=fv + num + ". " + v2[0] + " (no anomaly found) " + "<br>";
+					 }else{
+					   fv=fv + num + ". <b>" + v2[0] + " <font color=red>("+v2[1] + " anomalies found) " + "</font></b><br>";
+					 }
+				  }
+				  deptext=deptext + fv + "</font>";
+				  
+			 }
+			 chartdata.addRow([ 	dvalue, rs, rt,deptitle,deptext]);
+		  }
+		  
+		  return [thedate,latestdate];
+		}
+		
+	    function saveDynamicDataToFile(topic) {
+
+            var userInput = document.getElementById("txtData").value;	
+            const textToBLOB = new Blob([userInput], { type: "text/plain;charset=utf-8" });
+           const sFileName = topic+"-Anomaly-JSON.json";	   // The file to save the data.
+
+           let newLink = document.createElement("a");
+           newLink.download = sFileName;
+
+           if (window.webkitURL != null) {
+              newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+           }
+           else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+           }
+
+        newLink.click(); 
+		
+        }
+		
+      function drawTable(jsondata) {
+	      let chartdata = google.visualization.arrayToDataTable([
+                ["Interval", "Risk Score", "Risk Threshold"],
+                [0, 0,0]
+            ]);
+			  chartdata = new google.visualization.DataTable();
+
+     				
+            // draw chart on load
+			if (chart==null){
+            // chart = new google.visualization.LineChart(
+              //  document.getElementById("chart_div")
+               //);
+			   
+			   chart = new google.visualization.AnnotatedTimeLine(
+                document.getElementById("chart_div")
+               );
+			    
+			    //chart.draw(chartdata, options);
+				chart.draw(chartdata, {
+				// height: 400,
+				//width: 600,
+					tooltip: {
+						isHtml: true
+						},
+						allowHtml: true,
+						scaleType:'allmaximized',
+						 seriesType: 'bars',
+						  displayAnnotations: true,
+						series: {1: {type: 'line'}},  
+						  chartArea:{top:10,width:"70%",height:"75%"},
+				});
+			}
+			
+			
+        data = new google.visualization.DataTable();
+		data.addColumn('string', 'Analysed On');
+			 data.addColumn('number', 'Unixtime');
+			 
+		data.addColumn('boolean', 'Status');
+		
+		    data.addColumn('number', 'Riskscore');
+		data.addColumn('number', 'Riskthreshold');
+		data.addColumn('string', 'InputStream Topic');
+		data.addColumn('number', 'Offset');
+		data.addColumn('number', 'Partition');
+	
+		
+		data.addColumn('string', 'Fields Analysed');
+		
+		data.addColumn('string', 'TransactionCounts');
+		data.addColumn('string', 'AnomalyCounts');
+		data.addColumn('string', 'Flags');
+		 
+        data.addColumn('string', 'Kafkakey');
+      
+		data.addColumn('string', 'Anomaly Data');
+		data.addColumn('string', 'Peer Data');
+			 
+		curTime = new Date();
+		if (jsondata){
+		document.getElementById('accesstime').innerHTML = curTime;
+		//ADD previous data
+		var i=0;
+	  	  if  (dataintable.length>0 || append==0){
+		      for (r in dataintable){
+			      data.addRows([dataintable[r] ]);
+				  data.setProperty(i, 14, 'style', 'width:300px');
+                  i++;
+			  }
+		  }
+		  
+		  //get partition/offset
+		  var i=0;
+		  var partitionarr=[];
+		  do {
+             var text = "LastOffset_partition_"+i;
+			 var val=jsondata[text];
+			 if (val){
+			   partitionarr.push(val);
+			 }
+			 i++;
+          } while(val)
+		  
+		  /////////////////////////START MAIN LOOP //////////////
+	        let rownum=0;
+		  
+		   for (j in jsondata.TopicReads){
+          //get the fields 
+		     var kafkakey=jsondata.TopicReads[j].Kafkakey;
+			 
+		     if (!kafkakeyarr.includes(kafkakey)){
+		        kafkakeyarr.push(kafkakey);
+				
+				 jsonhist=jsonhist+JSON.stringify(jsondata.TopicReads[j]) +",";
+		
+		     keybuf="";
+			 if (jsondata.TopicReads[j].Riskresults){
+		      var keys = Object.keys(jsondata.TopicReads[j].Riskresults);
+			  for (k in keys){
+			    if (keys[k]!="Riskscore" && keys[k]!="Riskscorethreshold" && keys[k]!="Status"){
+				   keybuf=keybuf + keys[k] + ";";
+				}
+			  }
+			 }else{  
+			   return;
+			 }
+		//get the risk details
+		   var anomalydata="";
+		   var peerdata="";
+		   var transcnt="";
+		   var anomalycnt="";
+		   var flags="";
+		
+		   if (jsondata){
+		   var keys = Object.keys(jsondata.TopicReads[j].Riskdetails);
+			 for (k in keys){
+			    if (keys[k].includes("Anomaly_")){
+				   anomalydata=anomalydata+keys[k]+":"+JSON.stringify(jsondata.TopicReads[j].Riskdetails[keys[k]]) +"\n";
+				}else if (keys[k].includes("Peers_")){
+				   peerdata=peerdata+keys[k]+":"+JSON.stringify(jsondata.TopicReads[j].Riskdetails[keys[k]]) +"\n";
+				}
+			 }
+			 
+			 if(jsondata.TopicReads[j].hasOwnProperty('TransactionCounts')){
+			   keys = Object.keys(jsondata.TopicReads[j].TransactionCounts);
+			   for (k in keys){
+				   transcnt=transcnt+keys[k]+":"+JSON.stringify(jsondata.TopicReads[j].TransactionCounts[keys[k]]) +"\n";
+			    }
+			 }else{
+			   transcnt="None";
+			 }
+			
+			if(jsondata.TopicReads[j].hasOwnProperty('AnomalyCounts')){
+			 for (k in keys){
+				   anomalycnt=anomalycnt+keys[k]+":"+JSON.stringify(jsondata.TopicReads[j].AnomalyCounts[keys[k]]) +"\n";
+			 }
+			}else{
+               anomalycnt="None";
+			 }			
+		
+			if(jsondata.TopicReads[j].hasOwnProperty('Flags')){
+			   for (k in keys){
+				   flags=flags+keys[k]+":"+JSON.stringify(jsondata.TopicReads[j].Flags[keys[k]]) +"\n";
+		    	 }
+			 }else{
+			    flags="None";
+			}
+			 
+		}else{
+               return;
+            }		
+			 
+		createdon=jsondata.TopicReads[j].Createdon;
+		unixtime=jsondata.TopicReads[j].Unixtime;
+		
+		offset=jsondata.TopicReads[j].Offset;
+		partition=jsondata.TopicReads[j].Partition;
+		
+		inputstream=jsondata.TopicReads[j].Inputstream;
+		inputstreamkafkakey=jsondata.TopicReads[j].inputstreamdata_Kafkakey;
+		riskscore=jsondata.TopicReads[j].Riskresults.Riskscore;
+		riskscorethreshold=jsondata.TopicReads[j].Riskresults.Riskscorethreshold;
+		fields=keybuf;
+		rownum++;
+		var isbool=false;
+		 if (riskscore>=riskscorethreshold){
+            isbool=true;
+			anomalyfound=anomalyfound+1;
+			}
+		 else{
+               isbool=false;
+		 }		 
+		 
+		 totalanomaly=totalanomaly+1;
+		 
+		 arr=[createdon,{'v':unixtime},isbool,riskscore,riskscorethreshold,inputstream,offset,partition,fields,transcnt,anomalycnt,flags,kafkakey,anomalydata,peerdata];
+		 dataintable.push(arr)
+		 
+        data.addRows([ 	arr        ]);
+		  data.setProperty(0, 14, 'style', 'width:300px');
+		 
+		if (anomalyfound>0){
+		 document.getElementById('anomalylabel').innerHTML = "<b><font color='red'>"+ anomalyfound + " found out of " + totalanomaly + "</font></b>";
+		 }else{
+		   document.getElementById('anomalylabel').innerHTML = "<b>"+ anomalyfound + " found out of " + totalanomaly + "</b>";
+		 }
+		 
+         }
+	    }
+		            //console.log(data);
+					if (rownum>0){
+					  thedates=gettabledata(chartdata);			
+					  // console.log(thedate);
+					   let st=new Date(thedates[0]);
+					   let ed=new Date(thedates[1]);
+					   let et=new Date(ed.getTime() + 1000);
+					    chart.draw(chartdata, options);
+					   chart.draw(chartdata, {displayAnnotations: true,thickness: 3,scaleType:'maximized',allowHtml: true,zoomStartTime: st,zoomEndTime: et});
+					   }
+					   
+	}
+	   
+	   	 var formatter = new google.visualization.NumberFormat({groupingSymbol:'',decimalSymbol:'.',fractionDigits:'2'});
+      	formatter.format(data, 1);
+
+	  
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+        
+		  data.sort({column: 1, desc: true});  
+        table.draw(data, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',allowHtml: true});	
+		 document.getElementById("txtData").value="["+jsonhist.slice(0,-1) + "]";
+		      
+      }
+	  
+	   function streamLiveKafkaData(){
+
+        if ("WebSocket" in window) {
+            var obj;
+            // Let us open a web socket
+			
+            var url = window.location.host;
+            console.log(url);
+		    var urlParams = new URLSearchParams(window.location.search);
+			var keys = urlParams.keys();
+			var entries = urlParams.entries();
+			for(pair of entries) { 			
+			    if (pair[0]=="topic"){
+				  topic=pair[1];
+				   document.getElementById('maintitle').innerHTML = "<b>VIPERviz Anomaly Results For Data Stream: <font color=red><i>"+ topic + "</i></font></b>";	
+				}
+				
+				if (pair[0]=="topictype"){
+				  topictype=pair[1];
+				} 
+				if (pair[0]=="secure"){
+				  secure=pair[1];
+				}
+				if (pair[0]=="vipertoken"){
+				  vipertoken=pair[1];
+				}				
+				
+				if (pair[0]=="consumerid"){
+				  consumerid=pair[1];
+				}	
+
+               if (pair[0]=="offset"){
+				  offset=pair[1];
+				}
+
+               if (pair[0]=="rollbackoffset"){
+				  rollbackoffset=pair[1];
+				}		
+
+				if (pair[0]=="groupid"){
+				  groupid=pair[1];
+				}	
+				if (pair[0]=="append"){
+				  append=pair[1];
+				}					
+			
+			}
+			
+			
+			if (secure==0){
+             ws = new WebSocket("ws://"+url+"/ws");
+            }else{
+			    ws = new WebSocket("wss://"+url+"/ws");
+			}
+            ws.onmessage = function(event) {
+                curTime = new Date();
+				var eventdata=`${event.data}`;
+			   
+			 //  console.log(eventdata);
+				var maindata=eventdata.replace(/\\"/g,'"');	 
+				
+			    maindata=maindata.substr(1, maindata.length-3);
+			   
+				 try {
+					obj = JSON.parse(maindata);
+				} catch (e) {
+					return false;
+				}
+	
+				
+				
+				 if (obj.ERROR){
+				   $("#statustext").val("Websocket ERROR.."+obj.ERROR);
+				   ws.close(1000);
+				   alert(obj.ERROR);
+				   ws=null;
+				    $("#start").attr("disabled", false);
+					     $("#start").html("Start Streaming");
+						 return
+				   }
+				   
+                if (START==0){
+				    if (ws){
+					ws.close(1000);
+					}
+				   ws=null;
+				   return;
+				}
+				
+			  if (append==0){
+				dataintable=[];
+				datainchart=[];
+				datatbl=null;
+			    anomalyfound=0;
+	    		totalanomaly=0;
+				kafkakeyarr=[];
+				jsonhist="";
+	
+			 }
+
+				drawTable(obj);
+				
+				
+            };
+
+            ws.onclose = function(event) {
+                if (event.wasClean) {
+                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                } else {
+                    console.log('[close] Connection died');
+					 
+                }
+				if (ws){
+					ws.close(1000);
+					}
+				ws=null;
+				 $("#start").attr("disabled", false);
+					   $("#statustext").val("Websocket closed");
+					     $("#start").html("Start Streaming");
+            };
+            ws.onopen = function(error) {
+			   
+			    var sendbuffer="{\"Topic\":\""+topic +"\",\"Topictype\":\""+topictype + "\",\"Secure\":"+secure +",\"Vipertoken\":\""+vipertoken+"\",\"Consumerid\":\""+consumerid + "\",\"Offset\":\""+offset + "\",\"RollbackOffset\":\""+rollbackoffset+"\",\"Groupid\":\""+groupid+"\"}";
+				//console.log("TOPICCC==",sendbuffer);
+                 ws.send(sendbuffer);
+            };
+			
+            ws.onerror = function(error) {
+			    if (ws){
+					ws.close(1000);
+					}
+                console.log(`[error] ${error.message}`);
+				$("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
+            };
+			
+			
+
+        } else {
+
+            // The browser doesn't support WebSocket
+            console.log("WebSocket NOT supported by your Browser!");
+        }
+    }
+    
+	$('#Export2').click( function(e) {
+	
+	     e.preventDefault(); /*your_code_here;*/ 
+		 saveDynamicDataToFile(topic);
+		 
+		 
+		 return false; 
+	} );
+	
+	$('#Export').click(function () {
+	  if (topic.length>0){
+	     var headerRow = "";
+         var number_of_columns = data.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += data.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(data);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = topic + "-Anomaly-table-data.csv";
+        this.target = '_blank';
+	  }else{
+	      alert("Start streaming first");
+       }	  
+    });
+	
+	$("#idForm").submit(function(e) {
+	  if (ws && START==1){
+	   ws.close(1000);
+	   ws = null;
+	   e.preventDefault(); // avoid to execute the actual submit of the form.
+	   START=0;
+	   $("#start").html("Start Streaming");
+	   $("#start").attr("disabled", true);
+	    $("#statustext").val("WEBSOCKET CLOSING...");
+	   
+	  }else{
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+		START=1;
+        $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka messages from VIPERviz (RUNNING...)");
+
+		 $("#start").html("Stop Streaming");
+		streamLiveKafkaData();
+		}
+       
+    });
+	
+	
+</script>
+</body>
+</html>

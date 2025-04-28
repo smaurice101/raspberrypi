@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seneca-iot-deployment
+spec:
+  selector:
+    matchLabels:
+      app: iot
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: iot
+    spec:
+      hostNetwork: true
+      containers:
+      - name: iot
+        image: maadsdocker/seneca-iot-tml-kafka-amd64
+        ports:
+           - containerPort: 9005
+             hostPort: 9005
+      

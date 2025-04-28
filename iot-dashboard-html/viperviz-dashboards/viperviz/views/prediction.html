@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+===========================================
+Developed by: Sebastian Maurice, PhD
+Copyright 2021 OTICS Advanced Analytics.
+All rights reserved.
+For help email: support@otics.ca
+Website: http://www.otics.ca
+=========================================-->
+<head>
+    <meta charset="UTF-8" />
+	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
+    <title>VIPERviz Prediction Streaming</title>
+    <style>
+        #chart_div {
+            width: 100%;
+        }
+        
+        body {
+            
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<body>
+<div class="row justify-content-md-center">
+    <div class="col-8" style="padding-top: 20px">
+        <h4> <label id="maintitle"><b>VIPERviz Prediction Results For Data Stream</b></label></h4>
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <div class="col-8">
+
+        <div id="selectSymbol">
+            <form id="idForm">
+			 <b> Last Kafka Access Time:</b></b> <label id="accesstime"></label><br><br>
+				<button id="start" name="submit">Start Streaming</button> <b>Number of Predictions:</b> <label id="predictionlabel"></label><br><a id="Export" href="#">Download as CSV</a> | <a id="Export2" href="#">Download JSON</a> <br>
+				<font size=2><b>Status:</b></font> <input type=text id="statustext" value="" style="font-size:10px;" size=100>
+				
+				 <div id="chart_div"></div>
+				  <div id="table_div"></div>
+				   <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea>
+            </form>
+        </div>
+        <div id="display"></div>
+    </div>
+</div>
+    <!-- CONTAINER FOR CHART -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   
+    <script>
+
+        // load current chart package
+        google.charts.load("current", {
+            packages: ["corechart", "line"]
+        });
+
+        // set callback function when api loaded
+        google.charts.setOnLoadCallback(drawChart);
+		google.charts.load('current', {'packages':['table','annotatedtimeline']});
+	//	google.charts.load('current', {'packages':['annotatedtimeline']});
+      google.charts.setOnLoadCallback(drawTable);
+ 
+        var START=0;
+	  var ws;
+	  var topic="";
+	  var offset=-1;
+	  var groupid="";
+	  var append=1;
+	  var rollbackoffset=0;
+	  var topictype="";
+	  var vipertoken="";
+	  var consumerid="";
+	  var secure=0;
+	  var data;
+	  var datatbl;
+	  var chart=null;
+	  var dataintable=[];
+	  var datainchart=[];
+	  var kafkakeyarr=[];
+	  var totalpredictions=0;
+	  var predictioncount=0;
+	  var jsonhist="";
+	  
+	         // create options object with titles, colors, etc.
+	     		 
+      var options = {
+           title: "Prediction Values For " + topic,
+            hAxis: {
+                title: "Interval",
+				format: '0'
+             },
+            vAxis: {
+                 title: "Prediction Value"
+				 
+             },
+			 tooltip: {
+				isHtml: true
+			},
+			 explorer: {
+				actions: ['dragToZoom', 'rightClickToReset'],
+				axis: 'horizontal',
+				keepInBounds: true
+				},
+			 displayAnnotations: true,
+			 allowHtml: true,
+			 scaleType:'maximized',
+			 thickness: 3,
+		   chartArea:{top:10,width:"70%",height:"75%"}
+        };
+	   
+	   
+	   function saveDynamicDataToFile(topic) {
+
+            var userInput = document.getElementById("txtData").value;	
+            const textToBLOB = new Blob([userInput], { type: "text/plain;charset=utf-8" });
+           const sFileName = topic+"-Prediction-JSON.json";	   // The file to save the data.
+
+           let newLink = document.createElement("a");
+           newLink.download = sFileName;
+
+           if (window.webkitURL != null) {
+              newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+           }
+           else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+           }
+
+        newLink.click(); 
+		
+        }
+		
+		function gettabledata(data){
+		  if (!datatbl){
+		    return;
+		  }
+		    let thedate="";
+			let latestdate="";
+		    data.addColumn('date', "Date");
+			 data.addColumn('number', "Prediction Value");
+			 
+			 data.addColumn({type: 'string', role: 'annotation', p: {html: true}});
+             data.addColumn({type: 'string', role: 'annotationText', p: {html: true}});
+
+		//	 data.addColumn('string', 'Dependentvariable');
+          //   data.addColumn('string', 'text2');
+			  
+		   datatbl.sort({column: 1, desc: true});
+		  for (t = 0; t < predictioncount; t++) {
+		   thedate = datatbl.getValue(t, 0);
+		   if (t==0){
+		     latestdate=thedate;
+		   }
+		   dvalue=new Date(thedate);
+		   let selectedData = datatbl.getValue(t, 2);
+		   let indepvars=datatbl.getValue(t, 11);
+		   let depvar=datatbl.getValue(t, 12);
+		   let indepvararr=indepvars.split(",");
+		   let inputvals=datatbl.getValue(t, 3);
+		   let inputvalsarr=inputvals.split(":");
+		   
+		   let deptext="<b><font size=3>The Predicted Value For </font><font size=3><i>"+depvar + "</i></font> <font size=3>Is</font> <font color='red' size=3><u>" + selectedData+"</u></font></b><br><b><font size=3>This Value Is Likely To Be Realized When:</font></b><br>";
+		   let indeptext="";
+		   
+		     for (var i = 1; i < indepvararr.length; i++) {
+                indeptext += "<b><font size=3>"+i +". " +indepvararr[i] + " Is</font>: <font color='red' size=3>" + inputvalsarr[i-1] + "</font></b><br>";
+            }
+		   
+			 data.addRow([ 	dvalue, selectedData,deptext,indeptext]);
+			 //console.log(dvalue, selectedData,deptext,indeptext);
+		  }
+		  return [thedate,latestdate];
+		}
+		
+		
+        function drawChart(jsondata,topic) {
+            
+			curTime = new Date();
+     		  var data = new google.visualization.DataTable();
+			  
+            // draw chart on load
+			if (chart==null){
+			     chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));	
+				chart.draw(data, options);
+  
+				chart.draw(data, {
+				// height: 400,
+				//width: 600,
+					tooltip: {
+						isHtml: true
+						},
+					 explorer: {
+						actions: ['dragToZoom', 'rightClickToReset'],
+						axis: 'horizontal',
+						keepInBounds: true
+						},
+						scaleType:'maximized',
+						allowHtml: true
+				});
+			}
+
+				
+         if (jsondata){
+		    document.getElementById('accesstime').innerHTML = curTime;
+		  //ADD previous data
+	  	   if  (dataintable.length>0 || append==0){
+		      if (datatbl){
+			      datatbl = new google.visualization.DataTable(); //clear the table
+				  var formatter = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:0});
+				  datatbl.addColumn('string', 'Date/Time');
+		          datatbl.addColumn('number', 'Unixtime');
+				  datatbl.addColumn('number', 'Prediction Value');
+		          datatbl.addColumn('string', 'Inputdata');
+		          datatbl.addColumn('string', 'Kafkakey');
+		          datatbl.addColumn('number', 'Offset');
+		          datatbl.addColumn('number', 'Partition');
+		          datatbl.addColumn('string', 'ConsumeFrom');
+		          datatbl.addColumn('string', 'Algokey');
+		          datatbl.addColumn('string', 'Algo');
+		          datatbl.addColumn('number', 'Usedeploy');
+				  datatbl.addColumn('string', 'Fieldnames');
+				   datatbl.addColumn('string', 'DependentVariable');
+				  formatter.format(datatbl, 1);	
+			  }
+		      for (r in dataintable){
+		            drawTable(dataintable[r][0],dataintable[r][1],dataintable[r][2],dataintable[r][3],dataintable[r][4],dataintable[r][5],dataintable[r][6],dataintable[r][7],dataintable[r][8],dataintable[r][9],dataintable[r][10],dataintable[r][11],dataintable[r][12]  );
+			  }
+		  }
+		  
+		  //get partition/offset
+		  let i=0;
+		  
+		  var partitionarr=[];
+		  do {
+             var text = "LastOffset_partition_"+i;
+			 var val=jsondata[text];
+			 if (val){
+			   partitionarr.push(val);
+			 }
+			 i++;
+            } while(val)
+			
+		  ///////////////////////////////////START mainloop
+		/*  i=0;
+		  if (datainchart.length>0 ){
+		     for (r in datainchart){
+               data.addRow([ 	i, datainchart[r]]);
+			    i++;
+			 }
+			   chart.draw(data, options);
+			 
+		  }
+		  */
+		 
+		  let rownum=0;
+		  for (j in jsondata.TopicReads){
+          //get the fields 
+		     var kafkakey=jsondata.TopicReads[j].kafkakey;
+			 
+		     if (!kafkakeyarr.includes(kafkakey) && kafkakey.length>0){
+		        kafkakeyarr.push(kafkakey);
+			      
+				  jsonhist=jsonhist+JSON.stringify(jsondata.TopicReads[j]) +",";
+				  
+				i++;	 
+				
+			//	console.log(jsondata);
+				
+				var createdon=jsondata.TopicReads[j].Created;	
+				var unixtime=jsondata.TopicReads[j].Unixtime;
+				var predictionvalue=jsondata.TopicReads[j].Hyperprediction;
+				var inputdata=jsondata.TopicReads[j].Inputdata;
+				var kafkakey=jsondata.TopicReads[j].kafkakey;
+				var offset=jsondata.TopicReads[j].Offset;
+				var partition=jsondata.TopicReads[j].Partition;
+				var consumefrom=jsondata.TopicReads[j].Produceto;
+				var algokey=jsondata.TopicReads[j].Algokey;
+				var algo=jsondata.TopicReads[j].Algo;
+				var usedeploy=jsondata.TopicReads[j].Usedeploy;
+				var fields=jsondata.TopicReads[j].Fieldnames;
+				var depvar=jsondata.TopicReads[j].DependentVariable;
+		
+		
+				inputdata = inputdata.replace(/,/g, ':');
+				var arr=[createdon,unixtime,predictionvalue,inputdata,kafkakey,offset,partition,consumefrom,algokey,algo,usedeploy,fields, depvar];
+		     	  dataintable.push(arr)
+				  datainchart.push(predictionvalue)
+		     
+				//data.addRow([ 	rownum, predictionvalue]);
+				rownum++;
+		//alert(arr);
+				drawTable(createdon,unixtime,predictionvalue,inputdata,kafkakey,offset,partition,consumefrom,algokey,algo,usedeploy,rownum,fields, depvar);
+		// chart.draw(data, options);
+				predictioncount = predictioncount + 1;
+               document.getElementById('predictionlabel').innerHTML = "<b>"+ predictioncount + "</b>";	
+		 		 
+              }
+	         }	
+			      if (rownum>0){
+				     				   
+					  thedates=gettabledata(data);
+					  // console.log(thedate);
+					   let st=new Date(thedates[0]);
+					   let ed=new Date(thedates[1]);
+					   let et=new Date(ed.getTime() + 1000);
+					   
+					   
+			   		  chart.draw(data, options);
+					  chart.draw(data, {displayAnnotations: true,thickness: 3,scaleType:'maximized',allowHtml: true,zoomStartTime: st,zoomEndTime: et});
+				  }
+		  }
+            // create data object with default value
+
+           // chart.draw(data, options);
+           
+        }
+		
+		function drawTable(createdon,unixtime,predictionvalue,inputdata,kafkakey,offset,partition,consumefrom,algokey,algo,usedeploy,rownum,fields, depvar){
+          	 let arr=[createdon,unixtime,predictionvalue,inputdata,kafkakey,offset,partition,consumefrom,algokey,algo,usedeploy,fields, depvar];
+		
+		    let table = new google.visualization.Table(document.getElementById('table_div'));
+			var formatter = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:0});
+			var formatter2 = new google.visualization.NumberFormat({groupingSymbol:'',fractionDigits:3});
+			 
+			 if (!datatbl){
+				datatbl = new google.visualization.DataTable();
+				
+				datatbl.addColumn('string', 'Date/Time');
+				datatbl.addColumn('number', 'Unixtime');
+				datatbl.addColumn('number', 'Prediction Value');
+				datatbl.addColumn('string', 'Inputdata');
+				datatbl.addColumn('string', 'Kafkakey');
+				datatbl.addColumn('number', 'Offset');
+				datatbl.addColumn('number', 'Partition');
+		   
+				datatbl.addColumn('string', 'ConsumeFrom');
+				datatbl.addColumn('string', 'Algokey');
+				datatbl.addColumn('string', 'Algo');
+				datatbl.addColumn('number', 'Usedeploy');
+				 datatbl.addColumn('string', 'Fieldnames');
+				   datatbl.addColumn('string', 'DependentVariable');
+				 formatter.format(datatbl, 1);	
+				 formatter2.format(datatbl, 2);	
+				   datatbl.sort({column: 1, desc: true});
+				table.draw(datatbl, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',pageSize: 20, allowHtml: true});
+				
+		     }else{		
+               		 
+		       datatbl.addRows([arr]);
+			   formatter.format(datatbl, 1);	
+			   formatter2.format(datatbl, 2);	
+			   datatbl.sort({column: 1, desc: true});
+  	           table.draw(datatbl, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',pageSize: 20, allowHtml: true});
+			   
+	        }
+		   document.getElementById('predictionlabel').innerHTML = "<b>"+ predictioncount + "</b>";	
+		   if (jsonhist.length>0){
+		      document.getElementById("txtData").value="["+jsonhist.slice(0,-1) + "]";
+		   }
+		}
+		
+		function streamLiveKafkaData(){
+
+          if ("WebSocket" in window) {
+            var url = window.location.host;
+            console.log(url);
+		    var urlParams = new URLSearchParams(window.location.search);
+			var keys = urlParams.keys();
+			var entries = urlParams.entries();
+			for(pair of entries) { 			
+			    if (pair[0]=="topic"){
+				  topic=pair[1];
+				   document.getElementById('maintitle').innerHTML = "<b>VIPERviz Prediction Results For Data Stream: <font color=red><i>"+ topic + "</i></font></b>";	
+				}
+				
+				if (pair[0]=="topictype"){
+				  topictype=pair[1];
+				} 
+				if (pair[0]=="secure"){
+				  secure=pair[1];
+				}
+				if (pair[0]=="vipertoken"){
+				  vipertoken=pair[1];
+				}				
+				
+				if (pair[0]=="consumerid"){
+				  consumerid=pair[1];
+				}	
+
+               if (pair[0]=="offset"){
+				  offset=pair[1];
+				}	
+				
+				if (pair[0]=="rollbackoffset"){
+				  rollbackoffset=pair[1];
+				}	
+				if (pair[0]=="groupid"){
+				  groupid=pair[1];
+				}	
+				if (pair[0]=="append"){
+				  append=pair[1];
+				}	
+			}
+			
+			
+			if (secure==0){
+             ws = new WebSocket("ws://"+url+"/ws");
+            }else{
+			    ws = new WebSocket("wss://"+url+"/ws");
+			}
+            ws.onmessage = function(event) {
+                curTime = new Date();
+				var eventdata=`${event.data}`;
+			
+				var maindata=eventdata.replace(/\\"/g,'"');
+			   maindata=maindata.substr(1, maindata.length-3);
+			   
+				var obj = JSON.parse(maindata);
+				 if (obj.ERROR){
+				   $("#statustext").val("Websocket ERROR.."+obj.ERROR);
+				   ws.close(1000);
+				   alert(obj.ERROR);
+				   ws=null;
+				    $("#start").attr("disabled", false);
+					     $("#start").html("Start Streaming");
+						 return
+				   }
+				   
+                if (START==0){
+				  if (ws){
+					ws.close(1000);
+					}
+				   ws=null;
+				   return;
+				}
+ 		      if (append==0){
+			       dataintable=[];
+				   datainchart=[];			 
+				   data=null; 
+				  predictioncount=0;
+				  jsonhist="";
+				  kafkakeyarr=[];
+                }
+		
+								
+				drawChart(obj,topic);
+				
+            };
+
+            ws.onclose = function(event) {
+                if (event.wasClean) {
+                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                } else {
+                    console.log('[close] Connection died');
+					 
+                }
+				if (ws){
+					ws.close(1000);
+					}
+				ws=null;
+				 $("#start").attr("disabled", false);
+					   $("#statustext").val("Websocket closed");
+					     $("#start").html("Start Streaming");
+            };
+            ws.onopen = function(error) {
+			   
+			    var sendbuffer="{\"Topic\":\""+topic +"\",\"Topictype\":\""+topictype + "\",\"Secure\":"+secure +",\"Vipertoken\":\""+vipertoken+"\",\"Consumerid\":\""+consumerid + "\",\"Offset\":\""+offset + "\",\"RollbackOffset\":\""+rollbackoffset+"\",\"Groupid\":\""+groupid+"\"}";
+                 ws.send(sendbuffer);
+				 
+				 
+				
+            };
+			
+            ws.onerror = function(error) {
+			  if (ws){
+					ws.close(1000);
+					}
+                console.log(`[error] ${error.message}`);
+				$("#statustext").val("WEBSOCKET ERROR.."+`[error] ${error.message}`);
+            };
+			
+			
+
+        } else {
+
+            // The browser doesn't support WebSocket
+            console.log("WebSocket NOT supported by your Browser!");
+        }
+    }
+		
+	$('#Export2').click( function(e) {
+	
+	     e.preventDefault(); /*your_code_here;*/ 
+		 saveDynamicDataToFile(topic);
+		 
+		 
+		 return false; 
+	} );
+	
+		$('#Export').click(function () {
+	  if (topic.length>0){
+	     var headerRow = "";
+         var number_of_columns = datatbl.getNumberOfColumns();
+         for (var i=0; i < number_of_columns; i++) {
+           headerRow += datatbl.getColumnLabel(i).replace("\n", " : ");
+           headerRow += (i === number_of_columns - 1) ? "\n" : ",";
+        }
+        var csvFormattedDataTable = headerRow+google.visualization.dataTableToCsv(datatbl);
+        var encodedUri = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csvFormattedDataTable);
+        this.href = encodedUri;
+        this.download = topic + "-Prediction-data.csv";
+        this.target = '_blank';
+	  }else{
+	      alert("Start streaming first");
+       }	  
+    });
+	
+		$("#idForm").submit(function(e) {
+	  if (ws && START==1){
+	   ws.close(1000);
+	   ws = null;
+	   e.preventDefault(); // avoid to execute the actual submit of the form.
+	   START=0;
+	   $("#start").html("Start Streaming");
+	   $("#start").attr("disabled", true);
+	    $("#statustext").val("WEBSOCKET CLOSING...");
+	   
+	  }else{
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+		START=1;
+        $("#statustext").val("WEBSOCKET OPEN..Receiving Kafka messages from VIPERviz (RUNNING...)");
+
+		 $("#start").html("Stop Streaming");
+		 streamLiveKafkaData();
+		
+		}
+       
+    });
+    </script>
+</body>
+
+</html>

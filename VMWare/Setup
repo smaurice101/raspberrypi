@@ -1,0 +1,32 @@
+VMWare Setup Sugestions:
+1. Download Linux Ubunto ISO desktop: https://ubuntu.com/download/desktop
+2. Start Latest VMWare and Create a new VM
+3. Choose Disk 50GB and 4GB memory or higher
+4. Choose Split disk and do a typical install
+
+Common ISSUES with VMWare:
+1. No network access - go into EDIT -> Virtual Network Editor -> Add 3 networks
+a. For example, VMNet0 should be NAT, VMNet1 should be Host only, VMNet2 should be Host only
+b. Click Apply
+
+2. Go to Windows View Network connections and you should see VMware virtual network adapters - make sure they are ENABLED
+a. If using Wifi - make sure the Wifi connection is set to sharing
+
+3. In your VM Settings - choose Network Adapter Custom:Specfic Virtual Network and Select VMNet0
+a. Click OK
+
+4. Your VM should now be connected to network
+
+IF your VM gets stuck on Boot it may be you ran out of disk space:
+1. Click CTRL+F1 (of F2) + ALT
+2. type df -h in tty (this will show which disk is 100% like /dev/sda3)
+3. clean up disk to free up space: sudo apt-get autoclean or sudo apt-get clean
+4. Or you may need to re-create VM with larger disk like 100GB
+5. Note you should run this disk from a USB with lots of space
+
+If you get an error:
+ERROR: could not get lock /var/lib/dpkg/lock-frontend
+Check processes running apt
+RUN: ps aux | grep -i apt
+Try: sudo killall apt apt-get or sudo kill -9 <process_id>
+OR: Ubuntu is likely downloading daily updates - you can disbale this
