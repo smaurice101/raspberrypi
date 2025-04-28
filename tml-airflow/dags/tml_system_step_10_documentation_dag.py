@@ -1124,9 +1124,12 @@ def generatedoc(**context):
      
     step1solutiontitle=stitle
     step1description=sdesc
-    with open("/tmux/cname.txt", "r") as f:
-      containername=f.read()
-
+    try:
+      with open("/tmux/cname.txt", "r") as f:
+        containername=f.read()
+    except Exception as e:   
+        pass
+ 
     if len(CLIENTPORT) > 1:
       kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
