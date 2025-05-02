@@ -94,8 +94,8 @@ def ingestfiles():
       if len(dirbuf) != len(maintopicbuf):
         tsslogging.locallogs("ERROR", "STEP 3: Produce LOCALFILE in {} You specified multiple doctopics, then must match docfolder".format(os.path.basename(__file__)))
         return
-    elif len(maintopicbuf) == 1 and len(dirbuf) > 1:
-       for i in range(len(dirbuf)-1):
+    elif len(maintopicbuf) == 1 and len(dirbuf) > 0:
+       for i in range(len(dirbuf)):
          maintopicbuf.append(maintopic)
     else:
        return
