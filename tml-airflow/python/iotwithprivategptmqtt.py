@@ -13,7 +13,7 @@ from datetime import datetime
 import maadstml
 
 default_args = {
-  'mqtt_broker' : 'b526253c5560459da5337e561c142369.s1.eu.hivemq.cloud', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
+  'mqtt_broker' : '', # <<<****** Enter MQTT broker i.e. test.mosquitto.org
   'mqtt_port' : '8883', # <<<******** Enter MQTT port i.e. 1883    
   'mqtt_subscribe_topic' : 'tml/iot', # <<<******** enter name of MQTT to subscribe to i.e. encyclopedia/#
   'mqtt_enabletls' : '1', # << Enable TLS if connecting to a cloud cluster like HiveMQ
@@ -27,8 +27,8 @@ default_args = {
 ######################################## USER CHOOSEN PARAMETERS ########################################
 
 def mqttconnection():
-     username="smaurice"
-     password=",9G*mRjp0$DE8!dacsa"
+     username="" # <<<<< Enter username
+     password="" # <<<<< Enter password
 
      client = paho.Client(paho.CallbackAPIVersion.VERSION2)
      
@@ -56,81 +56,6 @@ def publishtomqttbroker(client,line):
      except Exception as e:
        print(e)
        
-     
-     
-def formatdataandstream(mainjson,hackedid,client,noping):
-     global lastinboundpacketi,lastoutboundpacketi,lastinboundpacketd,lastoutboundpacketd
-
-     harr = hackedid.split(",")
-     if noping == '':
-       nopingarr = []
-     else:  
-       nopingarr = noping.split(",")
-          
-     jbuf = json.loads(mainjson)
-     
-     inside=0
-     for h in harr:
-       hidarr = h.split("-")
-       print(hidarr[0],jbuf["hostName"])
-       if jbuf["hostName"] == hidarr[0]: # hacked machines
-         print("host=name=",h)  
-         inside=1    
-         vali=random.randint(5096,10000)
-         valo=random.randint(5096,10000)
-         if jbuf["pingStatus"] == "FAILURE":              
-            jbuf["inboundpackets"]=0
-            jbuf["outboundpackets"]=0
-         elif hidarr[1]=="i":
-            lastinboundpacketi=lastinboundpacketi + vali
-            lastoutboundpacketi=lastoutboundpacketi + valo                  
-            jbuf["inboundpackets"]=lastinboundpacketi
-            jbuf["outboundpackets"]=lastoutboundpacketi
-            if lastinboundpacketi > 1000000000:
-                lastinboundpacketi=0 
-            if lastoutboundpacketi > 1000000000:
-                lastoutboundpacketi=0 
-         else:
-            vali=random.randint(10,1000)
-            valo=random.randint(10,1000)
-            lastinboundpacketd=lastinboundpacketd - vali
-            lastoutboundpacketd=lastoutboundpacketd - valo
-            if lastinboundpacketd <= 0:
-                  lastinboundpacketd=1000000
-            if lastoutboundpacketd <= 0:
-                  lastoutboundpacketd=1000000
-
-            jbuf["inboundpackets"]=lastinboundpacketd
-            jbuf["outboundpackets"]=lastoutboundpacketd
-
-       if len(nopingarr) > 0: 
-          if jbuf["hostName"] in nopingarr:
-            jbuf["pingStatus"] = "FAILURE"
-            jbuf["inboundpackets"]=0
-            jbuf["outboundpackets"]=0
-       else:
-            jbuf["pingStatus"] = "SUCCESS"
-              
-     if inside==0: # normal machines  
-         vali=random.randint(64,524)
-         valo=random.randint(64,524)
-         if jbuf["pingStatus"] == "FAILURE":
-            jbuf["inboundpackets"]=0
-            jbuf["outboundpackets"]=0
-         else:
-            jbuf["inboundpackets"]=vali
-            jbuf["outboundpackets"]=valo
-
-     jbuf = json.dumps(jbuf)              
-     jbuf='"'.join(jbuf.split("'"))
-#      writedata(jbuf)
-
-     ############################### Stream to MQTT BROKER HIVEMQ
-     publishtomqttbroker(client,jbuf)
-      
-###################################################### END TML PROCESS #######################################
-
-
 ###################################################### START MAIN PROCESS #######################################
 
 if __name__ == '__main__':
@@ -157,8 +82,6 @@ if __name__ == '__main__':
                print("Reached End of File - Restarting")
                print("Read End:",datetime.now())
                continue
-        #    senddata(line,producerid,maintopic)
-        #    formatdataandstream(line,hackedid,client,noping)
             publishtomqttbroker(client,line)
 
             time.sleep(.1)
