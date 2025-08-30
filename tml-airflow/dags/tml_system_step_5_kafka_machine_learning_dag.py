@@ -227,8 +227,11 @@ if __name__ == '__main__':
           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
         except Exception as e:
             #git push -f origin main
-            os.chdir("/{}".format(repo))
-            subprocess.call("git push -f origin main", shell=True)
+            try:
+              os.chdir("/{}".format(repo))
+              subprocess.call("git push -f origin main", shell=True)
+            except Exception as e:
+              pass
             
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3]
