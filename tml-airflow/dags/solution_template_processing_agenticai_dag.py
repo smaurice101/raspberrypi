@@ -22,7 +22,7 @@ step5 = importlib.import_module("tml_system_step_5_kafka_machine_learning_dag")
 step6 = importlib.import_module("tml_system_step_6_kafka_predictions_dag")
 step7 = importlib.import_module("tml_system_step_7_kafka_visualization_dag")
 step8 = importlib.import_module("tml_system_step_8_deploy_solution_to_docker_dag")
-step9 = importlib.import_module("tml_system_step_9_privategpt_qdrant_dag")
+step9 = importlib.import_module("tml_system_step_9b_agenticai_dag")
 step10 = importlib.import_module("tml_system_step_10_documentation_dag")
 
 
