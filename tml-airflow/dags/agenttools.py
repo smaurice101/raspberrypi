@@ -3,7 +3,7 @@ from langchain_core.tools import tool
 from email.mime.text import MIMEText
 from email.message import EmailMessage
 import smtplib
-
+from langchain_tavily import TavilySearch
 
 """
 You must define all your tools here for your agents to execute
@@ -66,4 +66,5 @@ def max_agent(query: list) -> int:
     '''Find the company with the most employees.'''
     print(query)
     return max(query)
+
 
