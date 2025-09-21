@@ -563,9 +563,9 @@ def startagenticai(**context):
                        default_args['rollbackoffset'],default_args['ollama-model'],default_args['deletevectordbcount'],default_args['vectordbpath'],
                        default_args['temperature'],default_args['topicid'],default_args['enabletls'],
                        default_args['partition'], default_args['vectordbcollectionname'], default_args['ollamacontainername'], 
-                       default_args['mainip'],default_args['mainport'],default_args['embedding']),
-                       default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt']),
-                       default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions']),
+                       default_args['mainip'],default_args['mainport'],default_args['embedding'],
+                       default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt'],
+                       default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
                        default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES']),"ENTER"])
 
 if __name__ == '__main__':
@@ -692,3 +692,4 @@ if __name__ == '__main__':
           if count > 10:
             break 
           
+
