@@ -801,6 +801,72 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--vectorsearchtype--;{}".format(pvectorsearchtype)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubevectorsearchtype--;{}".format(pvectorsearchtype)])
 
+    ollama= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_ollama-model".format(sname))
+    if ollama: # Step 9b executing
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-ollama-model--;{}".format(ollama)])
+      rollback= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_rollbackoffset".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-rollbackoffset--;{}".format(rollback)])
+
+      deletevector= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_deletevectordbcount".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-deletevectordbcount--;{}".format(deletevector)])
+
+      vectordbpath= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_vectordbpath".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-vectordbpath--;{}".format(vectordbpath)])
+
+      temp= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_temperature".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-temperature--;{}".format(temp)])
+
+      topicid= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_topicid".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-topicid--;{}".format(topicid)])
+
+      enabletls= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_enabletls".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-enabletls--;{}".format(enabletls)])
+
+      partition= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_partition".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-partition--;{}".format(partition)])
+
+      collection= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_vectordbcollectionname".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-vectordbcollectionname--;{}".format(collection)])
+
+      ollamacontainername= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_ollamacontainername".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
+
+      mainip= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_mainip".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-mainip--;{}".format(mainip)])
+
+      mainport= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_mainport".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-mainport--;{}".format(mainport)])
+
+      embedding= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_embedding".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-embedding--;{}".format(embedding)])
+
+      agents_topic_prompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agents_topic_prompt".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt)])
+
+      teamlead_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_teamlead_topic".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
+
+      teamleadprompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_teamleadprompt".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-teamleadprompt--;{}".format(teamleadprompt)])
+
+      supervisor_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_supervisor_topic".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-supervisor_topic--;{}".format(supervisor_topic)])
+
+      supervisorprompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_supervisorprompt".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-supervisorprompt--;{}".format(supervisorprompt)])
+
+      agenttoolfunctions= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agenttoolfunctions".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions)])
+
+      agent_team_supervisor_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agent_team_supervisor_topic".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
+
+      concurrency= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_concurrency".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-concurrency--;{}".format(concurrency)])
+
+      cuda= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_cuda".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-cuda--;{}".format(cuda)])
+ 
     ebuf=""
     if 'dockerenv' in default_args:
      if default_args['dockerenv'] != '':
