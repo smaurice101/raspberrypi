@@ -72,9 +72,9 @@ with DAG(
       python_callable=step8.dockerit,
       provide_context=True,      
   )
-# STEP 9: PrivateGPT      
+# STEP 9: AgenticAI      
   sensor_I = PythonOperator(
-      task_id="step_9_solution_task_ai",
+      task_id="step_9b_solution_task_agenticai",
       python_callable=step9.startagenticai,
       provide_context=True,      
   )              
