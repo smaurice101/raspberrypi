@@ -628,8 +628,7 @@ if __name__ == '__main__':
        default_args['concurrency']=concurrency
        default_args['CUDA_VISIBLE_DEVICES']=cuda
 
-
-        if "KUBE" not in os.environ:          
+       if "KUBE" not in os.environ:          
          
           tsslogging.locallogs("INFO", "STEP 9b: Starting Ollama container")
           v,buf,mainmodel,mainembedding=startpgptcontainer()
@@ -639,7 +638,7 @@ if __name__ == '__main__':
             tsslogging.locallogs("INFO", "STEP 9b: Success starting Ollama container.  Here is the run command: {}".format(buf))
 
           time.sleep(10)  # wait for containers to start
-        elif  os.environ["KUBE"] == "0":
+       elif  os.environ["KUBE"] == "0":
          
           tsslogging.locallogs("INFO", "STEP 9b: Starting ollama server")
           v,buf,mainmodel,mainembedding=startpgptcontainer()
@@ -649,19 +648,19 @@ if __name__ == '__main__':
             tsslogging.locallogs("INFO", "STEP 9b: Success starting Agentic AI.  Here is the run command: {}".format(buf))
 
           time.sleep(10)  # wait for containers to start         
-        else:  
+       else:  
           tsslogging.locallogs("INFO", "STEP 9b: [KUBERNETES] Starting Agentic AI - LOOKS LIKE THIS IS RUNNING IN KUBERNETES")
           tsslogging.locallogs("INFO", "STEP 9b: [KUBERNETES] Make sure you have applied the Agentic AI YAML files and have the agentic AI Pod running")
 
-        count=0
+       count=0
 
         # create the Supervisor and kick off action
-        llm,embedding=setollama()
-        actionagents=createactionagents(llm)
-        supervisorprompt = default_args['supervisorprompt']
-        app=createasupervisor(actionagents,supervisorprompt,llm)
+       llm,embedding=setollama()
+       actionagents=createactionagents(llm)
+       supervisorprompt = default_args['supervisorprompt']
+       app=createasupervisor(actionagents,supervisorprompt,llm)
     
-        while True:
+       while True:
          deletevectordbcnt +=1   
          try:
             agent_topics = default_args['agents_topic_prompt'] 
@@ -692,4 +691,5 @@ if __name__ == '__main__':
           if count > 10:
             break 
           
+
 
