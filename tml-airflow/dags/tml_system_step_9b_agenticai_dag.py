@@ -349,23 +349,18 @@ def createactionagents(llm):
     dynamic_module = importlib.import_module("agenttools")
 
     for f in funcname:
-      # print("f=====",f) 
        if len(f)>2:
          fname=f.split(":")[0]         
          fnamearr=fname.split(",")
          func_objects = []
          
          for fo in fnamearr:
-          #print("fo----",fo)   
           func_object = getattr(dynamic_module, fo)                
           func_objects.append(func_object)
          
          aname=f.split(":")[1]
          aprompt=f.split(":")[2]
-         
-         print("info---:",fname,aname,aprompt)
-     #    print("Tools===",func_object.name)
-         
+                  
          agent = create_react_agent(
             model=llm,
             tools=func_objects,
@@ -687,6 +682,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
