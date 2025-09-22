@@ -78,7 +78,6 @@ VIPERHOST=""
 VIPERPORT=""
 HTTPADDR=""
 mainproducerid = default_args['producerid']
-deletevectordbcnt=0
 
 def setollama():
     ###############  Ollama Model #################################
@@ -137,11 +136,10 @@ def cleanstring(mainstr):
     return mainstr
 
 ############## Delete folder content ########################
-def deletefoldercontents(dirpath):
-    global deletevectordbcnt
+def deletefoldercontents(dirpath,deletevectordbcnt):
     if deletevectordbcnt < int(default_args['deletevectordbcount']):
         deletevectordbcnt += 1   
-        return
+        return deletevectordbcnt
     else:
         deletevectordbcn=0
     
@@ -155,11 +153,11 @@ def deletefoldercontents(dirpath):
                 shutil.rmtree(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
-
+    return deletevectordbcnt
 ########################### Vector DB for Team Lead: Agent Responses ###############
 # this is for the team lead agent to consolidate information from individual agents
 ###################################################################################
-def loadtextdataintovectordb(responses):
+def loadtextdataintovectordb(responses,deletevectordbcnt):
 
     vectordbpath = default_args['vectordbpath']
     
@@ -169,7 +167,7 @@ def loadtextdataintovectordb(responses):
        os.makedirs(directory_path)
        
     # delete previous folder content
-    deletefoldercontents(directory_path)
+    deletevectordbcnt=deletefoldercontents(directory_path,deletevectordbcnt)
 
     documents = [Document(text=t) for t in responses]
 
@@ -185,7 +183,7 @@ def loadtextdataintovectordb(responses):
     
     tml_text_engine = tml_index.as_query_engine(similarity_top_k=3)
 
-    return tml_text_engine
+    return tml_text_engine,deletevectordbcnt
             
 def stopcontainers():
    ollamacontainername = default_args['ollamacontainername']
@@ -567,9 +565,7 @@ def startagenticai(**context):
                        default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
                        default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES']),"ENTER"])
 
-#if __name__ == '__main__':
-def main(): 
-    global deletevectordbcnt    
+if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
         repo=tsslogging.getrepo()      
@@ -658,7 +654,9 @@ def main():
     actionagents=createactionagents(llm)
     supervisorprompt = default_args['supervisorprompt']
     app=createasupervisor(actionagents,supervisorprompt,llm)
-    
+
+    deletevectordbcnt=0
+ 
     while True:
          deletevectordbcnt +=1   
          try:
@@ -667,7 +665,7 @@ def main():
 
             responses,bufresponses=agentquerytopics(agent_topics,topicjsons,llm)
 
-            tml_text_engine=loadtextdataintovectordb(responses)
+            tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt)
 
             teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)
                   
@@ -690,5 +688,6 @@ def main():
           if count > 10:
             break 
           
-main()
+#main()
+
 
