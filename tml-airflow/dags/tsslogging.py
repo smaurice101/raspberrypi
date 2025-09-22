@@ -570,7 +570,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            step9brollbackoffset,step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
                            step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
                            step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
-                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
