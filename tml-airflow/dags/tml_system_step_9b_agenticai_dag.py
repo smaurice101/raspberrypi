@@ -477,7 +477,7 @@ def startagenticai(**context):
             default_args['ollamacontainername'] = os.environ['step9bollamacontainername']
        if 'step9bCUDA_VISIBLE_DEVICES' in os.environ:
           if os.environ['step9bCUDA_VISIBLE_DEVICES'] != '':
-            default_args['step9bCUDA_VISIBLE_DEVICES'] = os.environ['step9bCUDA_VISIBLE_DEVICES']
+            default_args['CUDA_VISIBLE_DEVICES'] = os.environ['step9bCUDA_VISIBLE_DEVICES']
            
        if 'step9bmainip' in os.environ:
           if os.environ['step9bmainip'] != '':
@@ -682,6 +682,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
