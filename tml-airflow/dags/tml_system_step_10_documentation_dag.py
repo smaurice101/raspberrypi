@@ -866,7 +866,31 @@ def generatedoc(**context):
 
       cuda= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_cuda".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-cuda--;{}".format(cuda)])
- 
+
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--ollamacontainername--;{}".format(ollamacontainername)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubeconcur--;{}".format(concurrency)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubecollection--;{}".format(collection)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubetemperature--;{}".format(temp)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-rollbackoffset--;{}".format(rollback)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-ollama-model--;{}".format(ollama)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-deletevectordbcount--;{}".format(deletevector)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-vectordbpath--;{}".format(vectordbpath)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-topicid--;{}".format(topicid)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-enabletls--;{}".format(enabletls)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-partition--;{}".format(partition)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-vectordbcollectionname--;{}".format(collection)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainip--;{}".format(mainip)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainport--;{}".format(mainport)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-embedding--;{}".format(embedding)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-teamleadprompt--;{}".format(teamleadprompt)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-supervisor_topic--;{}".format(supervisor_topic)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-supervisorprompt--;{}".format(supervisorprompt)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
+
     ebuf=""
     if 'dockerenv' in default_args:
      if default_args['dockerenv'] != '':
