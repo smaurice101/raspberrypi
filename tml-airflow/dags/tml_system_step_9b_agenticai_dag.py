@@ -102,7 +102,7 @@ def setollama():
 
     try:
       ollama_emb = OllamaEmbedding(
-        base_url=mainip+":"+mainport,
+        base_url=mainip+":"+str(mainport),
         model_name=embeddingmodel
       )
     except Exception as e:
@@ -215,13 +215,11 @@ def startpgptcontainer():
       mainport = int(default_args['mainport'])
       cuda = int(default_args['CUDA_VISIBLE_DEVICES'])
       temp = default_args['temperature']
-      cw = default_args['contextwindowsize']
-      vectordimension=default_args['vectordimension'] 
-      mainmodel=default_args['model']
+      mainmodel=default_args['ollama-model']
       mainembedding=default_args['embedding']
       mainhost = default_args['mainhost']
 
-      ollamaserver = mainhost + ":" + mainport
+      ollamaserver = mainhost + ":" + str(mainport)
       stopcontainers()
       time.sleep(10)
       if os.environ['TSS'] == "1":       
@@ -689,6 +687,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
