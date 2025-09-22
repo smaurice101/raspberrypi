@@ -1259,7 +1259,24 @@ def generatedoc(**context):
                        step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,
                        step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
                        step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
-                       step4bpreprocess_data_topic,step4preprocess_data_topic)
+                       step4bpreprocess_data_topic,step4preprocess_data_topic,
+                       step9brollbackoffset,
+                       step9brollbackoffset,
+                       step9bdeletevectordbcount,
+                       step9bvectordbpath,
+                       step9btemperature,
+                       step9bvectordbcollectionname,
+                       step9bollamacontainername,
+                       step9bCUDA_VISIBLE_DEVICES,
+                       step9bmainip,
+                       step9bmainport,
+                       step9bembedding,
+                       step9bagents_topic_prompt,
+                       step9bteamlead_topic,
+                       step9bteamleadprompt,
+                       step9bsupervisor_topic,
+                       step9bagenttoolfunctions,
+                       step9bagent_team_supervisor_topic)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1277,8 +1294,25 @@ def generatedoc(**context):
                        step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocesstypes,
                        step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
                        step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
-                       step4bpreprocess_data_topic,step4preprocess_data_topic)
-
+                       step4bpreprocess_data_topic,step4preprocess_data_topic,
+                       step9brollbackoffset,
+                       step9brollbackoffset,
+                       step9bdeletevectordbcount,
+                       step9bvectordbpath,
+                       step9btemperature,
+                       step9bvectordbcollectionname,
+                       step9bollamacontainername,
+                       step9bCUDA_VISIBLE_DEVICES,
+                       step9bmainip,
+                       step9bmainport,
+                       step9bembedding,
+                       step9bagents_topic_prompt,
+                       step9bteamlead_topic,
+                       step9bteamleadprompt,
+                       step9bsupervisor_topic,
+                       step9bagenttoolfunctions,
+                       step9bagent_team_supervisor_topic)
+                                                                              
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
     kpfwd="kubectl port-forward deployment/{} {}:{}".format(sname,solutionvipervizport[1:],solutionvipervizport[1:])
