@@ -75,7 +75,7 @@ with DAG(
 # STEP 9: PrivateGPT      
   sensor_I = PythonOperator(
       task_id="step_9_solution_task_ai",
-      python_callable=step9.startprivategpt,
+      python_callable=step9.startagenticai,
       provide_context=True,      
   )              
   start_task2 = BashOperator(
