@@ -215,7 +215,6 @@ def startpgptcontainer():
       mainport = int(default_args['mainport'])
       cuda = int(default_args['CUDA_VISIBLE_DEVICES'])
       temp = default_args['temperature']
-      vectorsearchtype = default_args['vectorsearchtype']
       cw = default_args['contextwindowsize']
       vectordimension=default_args['vectordimension'] 
       mainmodel=default_args['model']
@@ -690,6 +689,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
