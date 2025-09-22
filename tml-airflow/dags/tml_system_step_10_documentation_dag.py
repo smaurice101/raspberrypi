@@ -803,69 +803,91 @@ def generatedoc(**context):
 
     ollama= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_ollama-model".format(sname))
     if ollama: # Step 9b executing
+      step9bollama=ollama
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-ollama-model--;{}".format(ollama)])
       rollback= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_rollbackoffset".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-rollbackoffset--;{}".format(rollback)])
+      step9brollback=rollback
 
       deletevector= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_deletevectordbcount".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-deletevectordbcount--;{}".format(deletevector)])
+      step9bdeletevector=deletevector
 
       vectordbpath= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_vectordbpath".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-vectordbpath--;{}".format(vectordbpath)])
+      step9bvectordbpath=vectordbpath
 
       temp= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_temperature".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-temperature--;{}".format(temp)])
+      step9btemp=temp
 
       topicid= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_topicid".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-topicid--;{}".format(topicid)])
+      step9btopicid=topicid
 
       enabletls= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_enabletls".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-enabletls--;{}".format(enabletls)])
+      step9benabletls=enabletls
 
       partition= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_partition".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-partition--;{}".format(partition)])
+      step9bpartition=partition
 
       collection= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_vectordbcollectionname".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-vectordbcollectionname--;{}".format(collection)])
+      step9bcollection=collection
 
       ollamacontainername= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_ollamacontainername".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
+      step9bollamacontainername=ollamacontainername
 
       mainip= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_mainip".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-mainip--;{}".format(mainip)])
+      step9bmainip=mainip
 
       mainport= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_mainport".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-mainport--;{}".format(mainport)])
+      step9bmainport=mainport
 
       embedding= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_embedding".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-embedding--;{}".format(embedding)])
+      step9bembedding=embedding
 
       agents_topic_prompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agents_topic_prompt".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt)])
+      step9bagents_topic_prompt=agents_topic_prompt
 
       teamlead_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_teamlead_topic".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
+      step9bteamlead_topic=teamlead_topic
 
       teamleadprompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_teamleadprompt".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-teamleadprompt--;{}".format(teamleadprompt)])
+      step9bteamleadprompt=teamleadprompt
 
       supervisor_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_supervisor_topic".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-supervisor_topic--;{}".format(supervisor_topic)])
+      step9bsupervisor_topic=supervisor_topic
 
       supervisorprompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_supervisorprompt".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-supervisorprompt--;{}".format(supervisorprompt)])
+      step9bsupervisorprompt=supervisorprompt
 
       agenttoolfunctions= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agenttoolfunctions".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions)])
+      step9bagenttoolfunctions=agenttoolfunctions
 
       agent_team_supervisor_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agent_team_supervisor_topic".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
+      step9bagent_team_supervisor_topic=agent_team_supervisor_topic
 
       concurrency= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_concurrency".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-concurrency--;{}".format(concurrency)])
+      step9bconcurrency=concurrency
 
       cuda= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_cuda".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-cuda--;{}".format(cuda)])
+      step9bcuda=cuda
 
       doparse("/{}/docs/source/kube.rst".format(sname), ["--ollamacontainername--;{}".format(ollamacontainername)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubeconcur--;{}".format(concurrency)])
