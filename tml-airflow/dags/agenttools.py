@@ -20,6 +20,7 @@ The format is funcname = ["<function name>,<function_name>:<agent name>:<prompt>
 NOTE: You can assign multiple functions to agents - separate multiple functions by a comma
 """
 
+# if your tool requires a package you can install it using the install_package function
 def install_package(package_name):
     """
     Installs a specified Python package using pip.
@@ -78,6 +79,7 @@ def max_agent(query: list) -> int:
     '''Find the company with the most employees.'''
     print(query)
     return max(query)
+
 
 
 
