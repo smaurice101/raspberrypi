@@ -2,8 +2,9 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timezone
 from airflow.decorators import dag, task
-from llama_index.core import VectorStoreIndex,Document
 from langgraph_supervisor import create_supervisor
+from llama_index.core.indices.vector_store.base import VectorStoreIndex
+from llama_index.core.schema import Document  # Document is often found here
 from langgraph.prebuilt import create_react_agent
 from llama_index.embeddings.ollama import OllamaEmbedding
 from langchain_ollama import ChatOllama
@@ -689,5 +690,6 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
