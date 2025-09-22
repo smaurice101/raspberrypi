@@ -217,7 +217,7 @@ def startpgptcontainer():
       temp = default_args['temperature']
       mainmodel=default_args['ollama-model']
       mainembedding=default_args['embedding']
-      mainhost = default_args['mainhost']
+      mainhost = default_args['mainip']
 
       ollamaserver = mainhost + ":" + str(mainport)
       stopcontainers()
@@ -682,6 +682,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
