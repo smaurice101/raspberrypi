@@ -214,7 +214,24 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
                 step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
                 step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
-                step4bpreprocess_data_topic='',step4preprocess_data_topic=''):
+                step4bpreprocess_data_topic='',step4preprocess_data_topic='',
+                step9brollbackoffset='',
+                step9brollbackoffset='',
+                step9bdeletevectordbcount='',
+                step9bvectordbpath='',
+                step9btemperature='',
+                step9bvectordbcollectionname='',
+                step9bollamacontainername='',
+                step9bCUDA_VISIBLE_DEVICES='',
+                step9bmainip='',
+                step9bmainport='',
+                step9bembedding='',
+                step9bagents_topic_prompt='',
+                step9bteamlead_topic='',
+                step9bteamleadprompt='',
+                step9bsupervisor_topic='',
+                step9bagenttoolfunctions='',
+                step9bagent_team_supervisor_topic):
                
     cp = ""
     cpp = ""
@@ -461,7 +478,39 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9pgptport # privateGPT port i.e. 8001
                value: '{}'                                   
              - name: step9vectordimension # privateGPT vector dimension
-               value: '{}'                                                                                
+               value: '{}'                    
+             - name: step9brollbackoffset
+               value: '{}'
+             - name: step9bdeletevectordbcount
+               value: '{}'
+             - name: step9bvectordbpath
+               value: '{}'
+             - name: step9btemperature
+               value: '{}'
+             - name: step9bvectordbcollectionname
+               value: '{}'
+             - name: step9bollamacontainername
+               value: '{}'
+             - name: step9bCUDA_VISIBLE_DEVICES
+               value: '{}'
+             - name: step9bmainip
+               value: '{}'
+             - name: step9bmainport
+               value: '{}'
+             - name: step9bembedding
+               value: '{}'
+             - name: step9bagents_topic_prompt
+               value: '{}'
+             - name: step9bteamlead_topic
+               value: '{}'
+             - name: step9bteamleadprompt
+               value: '{}'
+             - name: step9bsupervisor_topic
+               value: '{}'
+             - name: step9bagenttoolfunctions
+               value: '{}'
+             - name: step9bagent_team_supervisor_topic
+               value: '{}'               
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -517,7 +566,12 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,
+                           step9brollbackoffset,step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
+                           step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
+                           step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
     return kcmd
@@ -537,8 +591,25 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
                      step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
                      step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
-                     step4bpreprocess_data_topic='',step4preprocess_data_topic=''):
-                     
+                     step4bpreprocess_data_topic='',step4preprocess_data_topic='',
+                     step9brollbackoffset='',
+                     step9brollbackoffset='',
+                     step9bdeletevectordbcount='',
+                     step9bvectordbpath='',
+                     step9btemperature='',
+                     step9bvectordbcollectionname='',
+                     step9bollamacontainername='',
+                     step9bCUDA_VISIBLE_DEVICES='',
+                     step9bmainip='',
+                     step9bmainport='',
+                     step9bembedding='',
+                     step9bagents_topic_prompt='',
+                     step9bteamlead_topic='',
+                     step9bteamleadprompt='',
+                     step9bsupervisor_topic='',
+                     step9bagenttoolfunctions='',
+                     step9bagent_team_supervisor_topic):
+                                         
     cp = ""
     cpp = ""
     
@@ -781,6 +852,38 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                                                  
              - name: step9vectordimension # privateGPT vector dimension
                value: '{}'                                                                 
+             - name: step9brollbackoffset
+               value: '{}'
+             - name: step9bdeletevectordbcount
+               value: '{}'
+             - name: step9bvectordbpath
+               value: '{}'
+             - name: step9btemperature
+               value: '{}'
+             - name: step9bvectordbcollectionname
+               value: '{}'
+             - name: step9bollamacontainername
+               value: '{}'
+             - name: step9bCUDA_VISIBLE_DEVICES
+               value: '{}'
+             - name: step9bmainip
+               value: '{}'
+             - name: step9bmainport
+               value: '{}'
+             - name: step9bembedding
+               value: '{}'
+             - name: step9bagents_topic_prompt
+               value: '{}'
+             - name: step9bteamlead_topic
+               value: '{}'
+             - name: step9bteamleadprompt
+               value: '{}'
+             - name: step9bsupervisor_topic
+               value: '{}'
+             - name: step9bagenttoolfunctions
+               value: '{}'
+             - name: step9bagent_team_supervisor_topic
+               value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -820,7 +923,12 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
-                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,step1solutiontitle,step1description,kubebroker,kafkabroker,
+                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,
+                           step9brollbackoffset,step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
+                           step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
+                           step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,                           
+                           step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
     return kcmd
