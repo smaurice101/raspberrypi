@@ -4,6 +4,8 @@ from email.mime.text import MIMEText
 from email.message import EmailMessage
 import smtplib
 from langchain_tavily import TavilySearch
+import subprocess
+import sys
 
 """
 You must define all your tools here for your agents to execute
@@ -17,6 +19,16 @@ The format is funcname = ["<function name>,<function_name>:<agent name>:<prompt>
 
 NOTE: You can assign multiple functions to agents - separate multiple functions by a comma
 """
+
+def install_package(package_name):
+    """
+    Installs a specified Python package using pip.
+    """
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package_name])
+        print(f"Successfully installed {package_name}")
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing {package_name}: {e}")
 
 # SendEmail by Agent
 @tool
@@ -66,5 +78,6 @@ def max_agent(query: list) -> int:
     '''Find the company with the most employees.'''
     print(query)
     return max(query)
+
 
 
