@@ -383,7 +383,6 @@ def createactionagents(llm):
 
 def createasupervisor(agents,supervisorprompt,llm):
 
-
     workflow = create_supervisor(
       agents,
       model=llm,
@@ -568,9 +567,9 @@ def startagenticai(**context):
                        default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
                        default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES']),"ENTER"])
 
-if __name__ == '__main__':
-    global deletevectordbcnt
-    
+#if __name__ == '__main__':
+def main(): 
+    global deletevectordbcnt    
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
         repo=tsslogging.getrepo()      
@@ -691,6 +690,5 @@ if __name__ == '__main__':
           if count > 10:
             break 
           
-
-
+main()
 
