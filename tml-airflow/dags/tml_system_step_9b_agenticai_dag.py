@@ -516,10 +516,10 @@ def startagenticai(**context):
 
 
        ti = context['task_instance']
-       ti.xcom_push(key="{}_rollbackoffset".format(sname), value=default_args['rollbackoffset'])
+       ti.xcom_push(key="{}_rollbackoffset".format(sname), value="_{}".format(default_args['rollbackoffset']))
        ti.xcom_push(key="{}_ollama-model".format(sname), value=default_args['ollama-model'])
-       ti.xcom_push(key="{}_deletevectordbcount".format(sname), value=default_args['deletevectordbcount'])
-       ti.xcom_push(key="{}_vectordbpath".format(sname), value="_{}".format(default_args['vectordbpath']))
+       ti.xcom_push(key="{}_deletevectordbcount".format(sname), value="_{}".format(default_args['deletevectordbcount']))
+       ti.xcom_push(key="{}_vectordbpath".format(sname), value="{}".format(default_args['vectordbpath']))
        ti.xcom_push(key="{}_temperature".format(sname), value="_{}".format(default_args['temperature']))
        ti.xcom_push(key="{}_topicid".format(sname), value="_{}".format(default_args['topicid']))
        ti.xcom_push(key="{}_enabletls".format(sname), value="_{}".format(default_args['enabletls']))
@@ -527,7 +527,7 @@ def startagenticai(**context):
        ti.xcom_push(key="{}_vectordbcollectionname".format(sname), value=default_args['vectordbcollectionname'])
        ti.xcom_push(key="{}_ollamacontainername".format(sname), value=default_args['ollamacontainername'])
        ti.xcom_push(key="{}_mainip".format(sname), value=default_args['mainip'])
-       ti.xcom_push(key="{}_mainport".format(sname), value=default_args['mainport'])
+       ti.xcom_push(key="{}_mainport".format(sname), value="_{}".format(default_args['mainport']))
        ti.xcom_push(key="{}_embedding".format(sname), value=default_args['embedding'])
        ti.xcom_push(key="{}_agents_topic_prompt".format(sname), value=default_args['agents_topic_prompt'])
        ti.xcom_push(key="{}_teamlead_topic".format(sname), value=default_args['teamlead_topic'])
@@ -682,6 +682,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
