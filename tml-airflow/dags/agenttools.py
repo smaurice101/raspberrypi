@@ -22,12 +22,12 @@ NOTE: You can assign multiple functions to agents - separate multiple functions 
 
 # if your tool requires a package you can install it using the install_package function
 # the function will check if package is already installed
-def install_package(package_name):
+def install_package(package_name, importname):
     """
     Installs a specified Python package using pip.
     """
     try:
-        __import__(package_name)
+        __import__(importname)
     except ImportError:
         print(f"Package '{package_name}' not found. Attempting to install...")
         try:
@@ -35,6 +35,8 @@ def install_package(package_name):
             print(f"Package '{package_name}' installed successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error installing package '{package_name}': {e}")
+
+#install_package("langchain-tavily","from langchain_tavily import TavilySearch")
             
 # SendEmail by Agent
 @tool
@@ -84,6 +86,7 @@ def max_agent(query: list) -> int:
     '''Find the company with the most employees.'''
     print(query)
     return max(query)
+
 
 
 
