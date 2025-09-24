@@ -87,6 +87,15 @@ def max_agent(query: list) -> int:
     print(query)
     return max(query)
 
+@tool
+def average(query: list) -> int:
+    '''Find the average.'''
+    average=0.0
+    if len(query) !=0:
+      average = sum(query) / len(query)
+      average = round(average, 2)        
+    return average
+
 
 
 
