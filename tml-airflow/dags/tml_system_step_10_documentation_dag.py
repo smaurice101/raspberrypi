@@ -198,6 +198,23 @@ def generatedoc(**context):
     step4braw_data_topic=""
     step4bpreprocess_data_topic=""
 
+    step9brollback=""
+    step9bdeletevectordbcount=""
+    step9bvectordbpath=""
+    step9btemperature=""
+    step9bvectordbcollectionname=""
+    step9bollamacontainername=""
+    step9bCUDA_VISIBLE_DEVICES=""
+    step9bmainip=""
+    step9bmainport=""
+    step9bembedding=""
+    step9bagents_topic_prompt=""
+    step9bteamlead_topic=""
+    step9bteamleadprompt=""
+    step9bsupervisor_topic=""
+    step9bagenttoolfunctions=""
+    step9bagent_team_supervisor_topic=""
+
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
              kube=1
@@ -1262,8 +1279,7 @@ def generatedoc(**context):
                        step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
                        step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
                        step4bpreprocess_data_topic,step4preprocess_data_topic,
-                       step9brollbackoffset,
-                       step9brollbackoffset,
+                       step9brollback,
                        step9bdeletevectordbcount,
                        step9bvectordbpath,
                        step9btemperature,
@@ -1297,8 +1313,7 @@ def generatedoc(**context):
                        step4jsoncriteria,step4ajsoncriteria,step4amaxrows[1:],step4apreprocesstypes,step4araw_data_topic,
                        step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,step4braw_data_topic,
                        step4bpreprocess_data_topic,step4preprocess_data_topic,
-                       step9brollbackoffset,
-                       step9brollbackoffset,
+                       step9brollback,
                        step9bdeletevectordbcount,
                        step9bvectordbpath,
                        step9btemperature,
