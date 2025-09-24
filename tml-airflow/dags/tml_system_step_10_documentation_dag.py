@@ -900,6 +900,9 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
       step9bagent_team_supervisor_topic=agent_team_supervisor_topic
 
+      agenttopic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agenttopic".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttopic--;{}".format(agenttopic)])
+     
       concurrency= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_concurrency".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-concurrency--;{}".format(concurrency[1:])])
       step9bconcurrency=concurrency[1:]
