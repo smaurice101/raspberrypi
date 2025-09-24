@@ -539,6 +539,7 @@ def startagenticai(**context):
        ti.xcom_push(key="{}_agent_team_supervisor_topic".format(sname), value=default_args['agent_team_supervisor_topic'])        
        ti.xcom_push(key="{}_concurrency".format(sname), value="_{}".format(default_args['concurrency']))
        ti.xcom_push(key="{}_cuda".format(sname), value="_{}".format(default_args['CUDA_VISIBLE_DEVICES']))
+       ti.xcom_push(key="{}_agenttopic".format(sname), value="{}".format(default_args['agenttopic']))
 
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
@@ -683,6 +684,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
