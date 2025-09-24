@@ -223,9 +223,9 @@ def startpgptcontainer():
       stopcontainers()
       time.sleep(10)
       if os.environ['TSS'] == "1":       
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,vectordimension,mainmodel,mainembedding,ollamaserver,ollamacontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
       else:
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env vectorsearchtype=\"{}\" --env contextwindowsize={} --env vectordimension={}  --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(pgptport,pgptport,pgptport,collection,concurrency,cuda,temperature,vectorsearchtype,cw,vectordimension,mainmodel,mainembedding,ollamaserver,ollamacontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
          
       v=subprocess.call(buf, shell=True)
       print("INFO STEP 9b: Ollama container.  Here is the run command: {}, v={}".format(buf,v))
@@ -682,6 +682,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
