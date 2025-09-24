@@ -42,6 +42,7 @@ default_args = {
  'delay' : '100', # change as needed
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
+ 'agenttopic' : '', # this topic contains the individual agent responses
  'agents_topic_prompt' : """
 <consumefrom - topic agent will monitor:prompt you want for the agent to answer;consumefrom - topic2 agent will monitor:prompt you want for the agent to answer>
 """, # <topic agent will monitor:prompt you want for the agent>
@@ -300,7 +301,8 @@ def agentquerytopics(usertopics,topicjsons,llm):
     topicsarr = usertopics.split(";")
     bufresponse = ""
     bufarr = []
-    
+    agenttopic = default_args['agenttopic']
+ 
     if len(topicsarr) == 0:
         print("No topics data")
         return ""
@@ -322,7 +324,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
       print(bufresponse)
       bufarr.append(bufresponse)
             
-      producegpttokafka(bufresponse,t2[0].strip())
+      producegpttokafka(bufresponse,agenttopic)
       
       responses.append(response)      
     
@@ -681,6 +683,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
