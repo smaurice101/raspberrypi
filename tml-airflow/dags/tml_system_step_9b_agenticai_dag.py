@@ -43,7 +43,7 @@ default_args = {
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
  'agents_topic_prompt' : """
-<consumefrom - topic agent will monitor:prompt you want for the agent to answer>
+<consumefrom - topic agent will monitor:prompt you want for the agent to answer;consumefrom - topic2 agent will monitor:prompt you want for the agent to answer>
 """, # <topic agent will monitor:prompt you want for the agent>
  'teamlead_topic' : '', # Enter the team lead topic - all team lead responses will be written to this topic
  'teamleadprompt' : """
@@ -52,7 +52,7 @@ Enter the prompt for the Team lead agent
  'supervisor_topic' : '', # Enter the supervisor topic - all supervisor responses will be written to this topic
  'supervisorprompt' : '', # Enter the supervisor prompt 
  'agenttoolfunctions' : """
-tool_function:agent_name:system_prompt,tool_function2:agent_name2:sysemt_prompt2,....
+tool_function:agent_name:system_prompt;tool_function2:agent_name2:sysemt_prompt2,....
 """,  # enter the tools : tool_function is the name of the funtions in the agenttools python file
  'agent_team_supervisor_topic': '', # this topic will hold the responses from agents, team lead and supervisor
  'producerid' : 'agentic-ai',   # <<< *** Leave as is
@@ -681,6 +681,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
