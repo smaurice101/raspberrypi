@@ -285,7 +285,7 @@ def windowname(wtype,sname,dagname):
 ############# Get the real-time data from the data streams #########################
 def getjsonsfromtopics(topics):
 
-    topicsarr = topics.split(",")
+    topicsarr = topics.split(";")
     topicjsons = []
     
     for t in topicsarr:
@@ -297,7 +297,7 @@ def getjsonsfromtopics(topics):
 
 
 def agentquerytopics(usertopics,topicjsons,llm):
-    topicsarr = usertopics.split(",")
+    topicsarr = usertopics.split(";")
     bufresponse = ""
     bufarr = []
     
@@ -348,7 +348,7 @@ def createactionagents(llm):
     agents=[]
     dynamic_module = importlib.import_module("agenttools")
     maintools=default_args['agenttoolfunctions']
-    funcname=maintools.split(",")
+    funcname=maintools.split(";")
  
     for f in funcname:
        if len(f)>2:
@@ -681,6 +681,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
