@@ -67,7 +67,7 @@ tool_function:agent_name:system_prompt,tool_function2:agent_name2:sysemt_prompt2
  'CUDA_VISIBLE_DEVICES' : '0', # change as needed
  'temperature' : '0.1', # This value ranges between 0 and 1, it controls how conservative LLM model will be, if 0 very very, if 1 it will hallucinate
  #--------------------
- 'ollama-model': 'llama3.2',
+ 'ollama-model': 'llama3.1',
  'deletevectordbcount': '10',
  'vectordbpath': '/rawdata/vectordb'
 }
@@ -347,17 +347,16 @@ def teamleadqueryengine(tml_text_engine):
 def createactionagents(llm):
     agents=[]
     dynamic_module = importlib.import_module("agenttools")
-
+    maintools=default_args['agenttoolfunctions']
+    funcname=maintools.split(",")
+ 
     for f in funcname:
        if len(f)>2:
          fname=f.split(":")[0]         
-         fnamearr=fname.split(",")
          func_objects = []
-         
-         for fo in fnamearr:
-          func_object = getattr(dynamic_module, fo)                
-          func_objects.append(func_object)
-         
+         func_object = getattr(dynamic_module, fname)                
+         func_objects.append(func_object)
+                  
          aname=f.split(":")[1]
          aprompt=f.split(":")[2]
                   
@@ -682,6 +681,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
