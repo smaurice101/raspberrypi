@@ -24,6 +24,7 @@ import json
 import threading
 import re
 from binaryornot.check import is_binary
+import base64
 docidstrarr = []
 
 sys.dont_write_bytecode = True
@@ -684,6 +685,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
