@@ -33,7 +33,7 @@ sys.dont_write_bytecode = True
 SMTP_SERVER=''
 SMTP_PORT=0
 SMTP_USERNAME=''
-SMTP_PASSWORD=''
+SMTP_PASSWORD='' # this should be base64 encoded 
 recipient=''
 
 if 'SMTP_SERVER' in os.environ:
@@ -705,6 +705,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
