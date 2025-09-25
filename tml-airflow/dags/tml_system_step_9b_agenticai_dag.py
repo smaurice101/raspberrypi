@@ -115,12 +115,22 @@ def setollama():
          default_args['mainip']="ollama-service"
          mainip=default_args['mainip']
 
-    try:
-      llm = ChatOllama(model=model, base_url=mainip+":"+mainport, temperature=temperature)
-    except Exception as e:
-      print("ERROR STEP 9b: Cannot load Ollama LLM model '{}' not found.".format(model))
-      tsslogging.locallogs("ERROR", "STEP 9b: Cannot load Ollama LLM model '{}' not found.".format(model))
-      return "",""
+    gotllm=0
+    for i in range(30):
+      print("Checking if LLM loaded..wait")
+      try:
+        llm = ChatOllama(model=model, base_url=mainip+":"+str(mainport), temperature=temperature)
+        gotllm=1
+        print("LLM loaded")
+        break
+      except Exception as e:
+        print("Error=",e)
+        time.sleep(5)
+    
+    if gotllm==0: 
+        print("ERROR STEP 9b: Cannot load Ollama LLM model '{}' not found.".format(model))
+        tsslogging.locallogs("ERROR", "STEP 9b: Cannot load Ollama LLM model '{}' not found.".format(model))      
+        return "","" 
 
     try:
       ollama_emb = OllamaEmbedding(
@@ -288,6 +298,7 @@ def consumefromtopic(maintopic):
       delay = int(default_args['delay'])
       partition = int(default_args['partition'])
 
+      print("before viperconsume",VIPERHOST,VIPERPORT,maintopic)
       result=maadstml.viperconsumefromtopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,
                   consumerid,companyname,partition,enabletls,delay,
                   offset, brokerhost,brokerport,microserviceid,
@@ -307,12 +318,18 @@ def windowname(wtype,sname,dagname):
 ############# Get the real-time data from the data streams #########################
 def getjsonsfromtopics(topics):
 
+    print("in getjsonsfromtopics")
+
     topicsarr = topics.split(";")
     topicjsons = []
-    
+           
     for t in topicsarr:
-      t2 = t.split(":")[0]
-      jsonvalue=consumefromtopic(t2)
+      t=t.strip()
+      t2 = t.split(":")[0].strip()
+      try:
+        jsonvalue=consumefromtopic(t2)
+      except Exception as e:
+        print("error=",e)
       topicjsons.append(jsonvalue)
 
     return topicjsons
@@ -368,14 +385,18 @@ def teamleadqueryengine(tml_text_engine):
 ################ Create Supervisor
 
 def createactionagents(llm):
+    print("in createactionagents")
+
     agents=[]
     dynamic_module = importlib.import_module("agenttools")
-    maintools=default_args['agenttoolfunctions']
+    maintools=default_args['agenttoolfunctions'].strip()
     funcname=maintools.split(";")
  
     for f in funcname:
        if len(f)>2:
+         f=f.strip()
          fname=f.split(":")[0]         
+         print(fname)
          func_objects = []
          func_object = getattr(dynamic_module, fname)                
          func_objects.append(func_object)
@@ -395,6 +416,7 @@ def createactionagents(llm):
 
 
 def createasupervisor(agents,supervisorprompt,llm):
+    print("in createasupervisor")
 
     workflow = create_supervisor(
       agents,
@@ -667,12 +689,22 @@ if __name__ == '__main__':
 
         # create the Supervisor and kick off action
     llm,embedding=setollama()
-    actionagents=createactionagents(llm)
-    supervisorprompt = default_args['supervisorprompt']
-    app=createasupervisor(actionagents,supervisorprompt,llm)
+
+    if llm !="":
+      try:
+        actionagents=createactionagents(llm)
+        supervisorprompt = default_args['supervisorprompt']
+        app=createasupervisor(actionagents,supervisorprompt,llm)
+      except Exception as e:
+        print("Error=",e)
+        tsslogging.locallogs("WARN", "STEP 9b unable to create agents {}".format(e))
+    else:
+       tsslogging.locallogs("WARN","STEP 9b unable to load LLM - Aborting") 
+       print("WARN", "STEP 9b unable to load LLM - Aborting")
+       exit(0)
 
     deletevectordbcnt=0
- 
+    print("before while") 
     while True:
          deletevectordbcnt +=1   
          try:
@@ -692,7 +724,6 @@ if __name__ == '__main__':
             if default_args['agent_team_supervisor_topic']!='':
               producegpttokafka(complete,default_args['agent_team_supervisor_topic'])
 
-
             time.sleep(1)
          except Exception as e:
           print("Error=",e)              
@@ -703,28 +734,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 10:
             break 
-          
-#main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
