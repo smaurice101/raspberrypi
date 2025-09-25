@@ -30,6 +30,20 @@ docidstrarr = []
 sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
+if SMTP_SERVER in os.environ:
+   SMTP_SERVER=os.environ['SMTP_SERVER']
+if SMTP_PORT in os.environ:
+   SMTP_PORT=int(os.environ['SMTP_PORT'])
+if SMTP_USERNAME in os.environ:
+   SMTP_USERNAME=os.environ['SMTP_USERNAME']
+if SMTP_PASSWORD in os.environ:
+   SMTP_PASSWORD=os.environ['SMTP_PASSWORD']
+   base64_bytes = SMTP_PASSWORD.encode('ascii')
+   message_bytes = base64.b64decode(base64_bytes)
+   SMTP_PASSWORD = message_bytes.decode('ascii')   
+if recipient in os.environ:
+   recipient=os.environ['recipient']
+
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
  'ollamacontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-llama3-tools', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
@@ -685,6 +699,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
