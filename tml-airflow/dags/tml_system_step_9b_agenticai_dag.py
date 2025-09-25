@@ -120,7 +120,7 @@ def setollama():
     except Exception as e:
       print("ERROR STEP 9b: Cannot load Ollama LLM model '{}' not found.".format(model))
       tsslogging.locallogs("ERROR", "STEP 9b: Cannot load Ollama LLM model '{}' not found.".format(model))
-      return "" 
+      return "",""
 
     try:
       ollama_emb = OllamaEmbedding(
@@ -130,7 +130,7 @@ def setollama():
     except Exception as e:
       print("ERROR STEP 9b: Cannot load Ollama embedding '{}' not found.".format(embeddingmodel))
       tsslogging.locallogs("ERROR", "STEP 9b: Cannot load Ollama embedding '{}' not found.".format(embeddingmodel))
-      return "" 
+      return "",""
 
     Settings.embed_model = ollama_emb
     Settings.llm = llm
@@ -705,6 +705,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
