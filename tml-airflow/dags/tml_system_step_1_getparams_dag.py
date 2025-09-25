@@ -372,6 +372,10 @@ def getparams(**context):
       output = f.read()
       VIPERHOSTPREPROCESSPGPT = output.split(",")[0]
       VIPERPORTPREPROCESSPGPT = output.split(",")[1]        
+    with open('/Viper-preprocess-agenticai/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTPREPROCESSAGENTICAI = output.split(",")[0]
+      VIPERPORTPREPROCESSAGENTICAI = output.split(",")[1]             
     with open('/Viper-ml/viper.txt', 'r') as f:
       output = f.read()
       VIPERHOSTML = output.split(",")[0]
