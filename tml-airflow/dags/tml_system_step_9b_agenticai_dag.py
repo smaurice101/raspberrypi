@@ -105,7 +105,7 @@ mainproducerid = default_args['producerid']
 def setollama():
     ###############  Ollama Model #################################
     model=default_args['ollama-model']
-    temperature=int(default_args['temperature'])
+    temperature=float(default_args['temperature'])
     embeddingmodel=default_args['embedding'] #"nomic-embed-text"
     mainip=default_args['mainip']
     mainport=default_args['mainport']
@@ -705,6 +705,7 @@ if __name__ == '__main__':
             break 
           
 #main()
+
 
 
 
