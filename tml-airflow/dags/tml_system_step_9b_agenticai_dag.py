@@ -340,7 +340,11 @@ def agentquerytopics(usertopics,topicjsons,llm):
     bufresponse = ""
     bufarr = []
     agenttopic = default_args['agenttopic']
- 
+
+    model = default_args['ollama-model']  
+    temperature = float(default_args['temperature'])
+    embeddingmodel = default_args['embedding']
+
     if len(topicsarr) == 0:
         print("No topics data")
         return "",""
@@ -370,6 +374,10 @@ def agentquerytopics(usertopics,topicjsons,llm):
 
 def teamleadqueryengine(tml_text_engine):
     bufresponse = ""
+
+    model = default_args['ollama-model']
+    temperature = float(default_args['temperature'])
+    embeddingmodel = default_args['embedding']
 
     response = tml_text_engine.query(teamleadprompt )
     response=str(response)
@@ -428,8 +436,13 @@ def createasupervisor(agents,supervisorprompt,llm):
     return app
 
 def invokesupervisor(app,maincontent):
-
-
+   
+    model = default_args['ollama-model']
+    temperature = float(default_args['temperature'])
+    embeddingmodel = default_args['embedding']
+    funcname = default_args['agenttoolfunctions']
+    funcname = funcname.replace(";","==")
+ 
     try:    
         supervisormaincontent ="""
           Here is the team lead's response: {}.  Generate an approprate action using one of the tools.
@@ -474,7 +487,7 @@ def invokesupervisor(app,maincontent):
         
       return mainjson,bufresponse
     except Exception as e:
-      print("ERROR: invald json")  
+      print("ERROR: invalid json")  
       return "error","error"
 
 def formatcompletejson(bufresponses,teamlead_response,lastmessage):
@@ -704,21 +717,15 @@ if __name__ == '__main__':
        exit(0)
 
     deletevectordbcnt=0
-    print("before while") 
     while True:
          deletevectordbcnt +=1   
          try:
             agent_topics = default_args['agents_topic_prompt'] 
             topicjsons=getjsonsfromtopics(agent_topics)
-
             responses,bufresponses=agentquerytopics(agent_topics,topicjsons,llm)
-
             tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt)
-
-            teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)
-                  
+            teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)                  
             mainjson,supbuf=invokesupervisor(app,teamlead_response)
-
             complete=formatcompletejson(bufresponses,teambuf,supbuf)
 
             if default_args['agent_team_supervisor_topic']!='':
@@ -727,12 +734,11 @@ if __name__ == '__main__':
             time.sleep(1)
          except Exception as e:
           print("Error=",e)              
-          tsslogging.locallogs("ERROR", "STEP 9b: Agentic AI Step 9b DAG in {} {}  Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e))
-          tsslogging.tsslogit("PrivateGPT Step 9b DAG in {} {} Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e), "ERROR" )
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+          if count == 0:
+            tsslogging.locallogs("ERROR", "STEP 9b: Agentic AI Step 9b DAG in {} {}  Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e))
+            tsslogging.tsslogit("PrivateGPT Step 9b DAG in {} {} Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e), "ERROR" )
+            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
           time.sleep(5)
           count = count + 1
-          if count > 10:
+          if count > 60:
             break 
-
-
