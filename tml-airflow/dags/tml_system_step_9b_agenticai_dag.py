@@ -343,7 +343,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
  
     if len(topicsarr) == 0:
         print("No topics data")
-        return ""
+        return "",""
         
     responses = []
     for t,mainjson in zip(topicsarr,topicjsons):
@@ -734,4 +734,5 @@ if __name__ == '__main__':
           count = count + 1
           if count > 10:
             break 
+
 
