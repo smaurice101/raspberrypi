@@ -303,7 +303,6 @@ def consumefromtopic(maintopic):
                   consumerid,companyname,partition,enabletls,delay,
                   offset, brokerhost,brokerport,microserviceid,
                   topicid,rollbackoffsets,preprocesstype)
-
       return result
                 
 
@@ -354,7 +353,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
       t2  = t.split(":")
       #print("q========",q)
       query_str=t2[1]+ f". here is the JSON: {mainjson}"
-      #print("query_string====",query_str)
+      print("query_string====",query_str)
 
 
     # Invoking with a string
@@ -362,6 +361,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
       response=response.content    
       prompt=cleanstring(t2[1].strip())
       response=cleanstring(response)
+      response=response.replace(";",",")
       bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Topic_Agent": "'+t2[0].strip()+'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
       print(bufresponse)
       bufarr.append(bufresponse)
@@ -384,6 +384,7 @@ def teamleadqueryengine(tml_text_engine):
 #    print("team repsose = ", response)
     prompt=cleanstring(teamleadprompt.strip())
     response=cleanstring(response.strip())
+    response=response.replace(";",",")
     bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Team_Lead_Agent": "'+default_args['teamlead_topic'] +'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
 
     producegpttokafka(bufresponse,default_args['teamlead_topic'])
@@ -442,6 +443,7 @@ def invokesupervisor(app,maincontent):
     embeddingmodel = default_args['embedding']
     funcname = default_args['agenttoolfunctions']
     funcname = funcname.replace(";","==")
+    maincontent=maincontent.replace(";",",")
  
     try:    
         supervisormaincontent ="""
@@ -469,6 +471,7 @@ def invokesupervisor(app,maincontent):
           lastmessage=chunk["messages"][-1].content
         
     lastmessage=cleanstring(lastmessage.strip())
+    lastmessage=lastmessage.replace(";",",")
     bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Supervisor_Agent": "' + default_args['supervisor_topic'] + '","Prompt":"' + supervisormaincontent + '","Response": "' + lastmessage.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
         
     
@@ -741,4 +744,7 @@ if __name__ == '__main__':
           time.sleep(5)
           count = count + 1
           if count > 60:
-            break 
+            break
+
+
+             
