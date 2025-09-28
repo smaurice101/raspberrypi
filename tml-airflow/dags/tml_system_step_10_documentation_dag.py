@@ -89,7 +89,7 @@ def setupurls(projectname,producetype,sname):
     stepurl8="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_8_deploy_solution_to_docker_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl9="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_9_privategpt_qdrant_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl9b="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_9b_agenticai_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
-    stepurl10="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_10_documentation_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
+    stepurl10="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_10_documentation_dag_tml-multi-agenticai-iot-3f10-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
 
     print("stepurl1=",stepurl1)
     
@@ -1086,7 +1086,7 @@ def generatedoc(**context):
         doparse("/{}/docs/source/details.rst".format(sname), ["--hyperbatch--;{}".format(hyperbatch[1:])])
     
     snamerp=sname.replace("_","-")
-    rbuf = "https://{}.readthedocs.io".format(snamerp)
+    rbuf = "https://{}.readthedocs.io".format(sname)
     doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
     
     ############# VIZ URLS
@@ -1368,10 +1368,10 @@ def generatedoc(**context):
        pass 
 
     doparse("/{}/docs/source/operating.rst".format(sname), ["--tmuxwindows--;{}".format(tmuxwindows)])
-    try:
-     if os.environ['TSS'] == "1":
+    #try:
+    if os.environ['TSS'] == "1":
       doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TSS Development Environment Container"])
-     else:
+    else:
        if "KUBE" not in os.environ:
          doparse("/{}/docs/source/operating.rst".format(sname), ["--tssgen--;TML Solution Container"])
        else:
@@ -1383,21 +1383,22 @@ def generatedoc(**context):
     # Kick off shell script 
     #tsslogging.git_push("/{}".format(sname),"For solution details GOTO: https://{}.readthedocs.io".format(sname),sname)
     
-     subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,snamertd), shell=True)
     
-     rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
+    rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
+     #try:
+    sp=f"{sname}/docs/source"
+    orepo=tsslogging.getrepo()
+    op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}" 
+    files,opath=tsslogging.dorst2pdf(sp,op)
+    tsslogging.mergepdf(opath,files,f"{sname}")
+    gb="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/pdf_documentation/{}.pdf".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,sname)
+    print("INFO: Your PDF Documentation will be found here: {}".format(gb))
 
-     try:
-      sp=f"{projectname}-{sname}/docs/source"
-      orepo=tsslogging.getrepo()
-      op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}" 
-      files,opath=tsslogging.dorst2pdf(sp,op)
-      tsslogging.mergepdf(opath,files,projectname)
-      gb="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/pdf_documentation/{}.pdf".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
-      print("INFO: Your PDF Documentation will be found here: {}".format(gb))
-     except Exception as e:
-       print("Error=",e) 
+    subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,snamertd), shell=True)
 
+     #except Exception as e:
+      # print("Error=",e) 
+    try:  
      if rtd == None: 
         URL = 'https://readthedocs.org/api/v3/projects/'
         TOKEN = os.environ['READTHEDOCS']
