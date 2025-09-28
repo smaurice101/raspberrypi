@@ -1388,12 +1388,13 @@ def generatedoc(**context):
      rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
 
      try:
-      sp=f"{sname}/docs/source"
+      sp=f"{projectname}-{sname}/docs/source"
       orepo=tsslogging.getrepo()
       op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}" 
       files,opath=tsslogging.dorst2pdf(sp,op)
-      tsslogging.mergepdf(opath,files,sname)
-      print("INFO: Your PDF Documentation will be found here: {}".format(op))
+      tsslogging.mergepdf(opath,files,projectname)
+      gb="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/pdf_documentation/{}.pdf".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
+      print("INFO: Your PDF Documentation will be found here: {}".format(gb))
      except Exception as e:
        print("Error=",e) 
 
