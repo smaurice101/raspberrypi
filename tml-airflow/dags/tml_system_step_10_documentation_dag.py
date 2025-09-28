@@ -1085,8 +1085,8 @@ def generatedoc(**context):
         doparse("/{}/docs/source/details.rst".format(sname), ["--keyprocesstype--;{}".format(pprocesstype)])
         doparse("/{}/docs/source/details.rst".format(sname), ["--hyperbatch--;{}".format(hyperbatch[1:])])
     
-    
-    rbuf = "https://{}.readthedocs.io".format(sname)
+    snamerp=sname.replace("_","-")
+    rbuf = "https://{}.readthedocs.io".format(snamerp)
     doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
     
     ############# VIZ URLS
