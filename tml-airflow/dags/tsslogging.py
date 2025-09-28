@@ -10,6 +10,8 @@ import socket
 import time
 import fcntl
 import json
+from pypdf import PdfWriter
+
 
 class LockDirectory(object):
     def __init__(self, directory):
@@ -1149,3 +1151,36 @@ def getmitre(mess,fname):
            return tactic, technique,jb
     
     return "na","na",""
+
+import subprocess
+#from pypdf import PdfMerger
+from pypdf import PdfWriter
+import os
+
+def dorst2pdf(spath,opath):
+
+    rst_files = ["details.rst",  "operating.rst",  "usage.rst", "kube.rst",  "logs.rst"]
+    pdf_files = []
+    directory_path = f"{opath}/pdf_documentation/"
+
+    os.makedirs(directory_path, exist_ok=True) 
+
+    for rst_file in rst_files:
+        rst_filef=f"{spath}/{rst_file}"
+        pdf_file = rst_file.replace('.rst', '.pdf')        
+        pdf_file=f"{opath}/pdf_documentation/{pdf_file}"
+
+        subprocess.run(['rst2pdf', rst_filef, '-o', pdf_file])
+        pdf_files.append(pdf_file)
+
+    return pdf_files,directory_path
+
+def mergepdf(opath,pdffiles,sname):
+
+        merger = PdfWriter()
+
+        for pdf in pdffiles:
+            merger.append(pdf)
+        wpath=f"{opath}/{sname}.pdf"
+        merger.write(wpath)
+        merger.close()
