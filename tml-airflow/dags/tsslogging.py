@@ -1152,11 +1152,6 @@ def getmitre(mess,fname):
     
     return "na","na",""
 
-import subprocess
-#from pypdf import PdfMerger
-from pypdf import PdfWriter
-import os
-
 def dorst2pdf(spath,opath):
 
     rst_files = ["details.rst",  "operating.rst",  "usage.rst", "kube.rst",  "logs.rst"]
