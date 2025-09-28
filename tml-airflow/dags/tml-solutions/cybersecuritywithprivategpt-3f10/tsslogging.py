@@ -9,6 +9,7 @@ import os
 import socket
 import time
 import fcntl
+import json
 from pypdf import PdfWriter
 
 class LockDirectory(object):
@@ -37,7 +38,7 @@ def rtdsolution(pname,did):
         sdm=''
         if 'solution_preprocessing_dag-' not in sd:  #normal dag solution
              if 'solution_preprocessing_dag_' in sd:
-                 sdm = sd[27:len(sd)-len(sname)]
+                 sdm = sd[27:len(sd)-len(sname)-1]
                  sname = "{}-{}".format(sname,sdm)
              else:    
                  sdm = sd[23:len(sd)-len(sname)-5]
@@ -201,13 +202,36 @@ def ingressnoext(sname): # Localfile being accessed
 
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
-               step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
-               step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
-               step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
-               step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
-               step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',
-               step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
-               step4cpatternscorethreshold='',step4crtmsstream='',projectname=''):
+                step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
+                step9rollbackoffset,kubebroker,kafkabroker,producetype,step9prompt='',step9context='',step9keyattribute='',step9keyprocesstype='',
+                step9hyperbatch='',step9vectordbcollectionname='',step9concurrency='',cudavisibledevices='',step9docfolder='',
+                step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
+                step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',
+                step9vectorsize='',step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
+                step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
+                step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
+                step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize='',
+                step9pgptcontainername='',step9pgpthost='',step9pgptport='',step9vectordimension='',
+                step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
+                step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
+                step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
+                step4bpreprocess_data_topic='',step4preprocess_data_topic='',
+                step9brollbackoffset='',
+                step9bdeletevectordbcount='',
+                step9bvectordbpath='',
+                step9btemperature='',
+                step9bvectordbcollectionname='',
+                step9bollamacontainername='',
+                step9bCUDA_VISIBLE_DEVICES='',
+                step9bmainip='',
+                step9bmainport='',
+                step9bembedding='',
+                step9bagents_topic_prompt='',
+                step9bteamlead_topic='',
+                step9bteamleadprompt='',
+                step9bsupervisor_topic='',
+                step9bagenttoolfunctions='',
+                step9bagent_team_supervisor_topic=''):
                
     cp = ""
     cpp = ""
@@ -278,6 +302,8 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              volumeMounts:
              - name: dockerpath
                mountPath: /var/run/docker.sock
+             - name: rawdata
+               mountPath: /rawdata  # container folder where the local folder will be mounted
              ports:
          {}
              env:
@@ -339,22 +365,70 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: 'privategpt-service' # This is private GPT service in kubernetes
              - name: KUBE
                value: '1'
+             - name: step3localfileinputfile # STEP 3 localfile inputfile field can be adjusted here.
+               value: '{}'
+             - name: step3localfiledocfolder # STEP 3 # STEP 3 docfolder inputfile field can be adjusted here.
+               value: '{}'
              - name: step4maxrows # STEP 4 maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'
              - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
-               value: '{}'                                    
+               value: '{}'
              - name: step4cmaxrows # STEP 4c maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
-               value: '{}'               
+               value: '{}'
              - name: step4crawdatatopic # STEP 4c
                value: '{}'               
              - name: step4csearchterms # STEP 4c 
-               value: '{}'               
+               value: '{}'
              - name: step4crememberpastwindows # STEP 4c 
-               value: '{}'               
+               value: '{}'
+             - name: step4cpatternwindowthreshold # STEP 4c 
+               value: '{}'
+             - name: step4crtmsscorethreshold # STEP 4c 
+               value: '{}'
+             - name: step4cattackscorethreshold # STEP 4c 
+               value: '{}'
              - name: step4cpatternscorethreshold # STEP 4c 
-               value: '{}'               
+               value: '{}' 
              - name: step4crtmsstream # STEP 4c 
                value: '{}'                              
+             - name: step4clocalsearchtermfolder # STEP 4c 
+               value: '{}'                              
+             - name: step4clocalsearchtermfolderinterval # STEP 4c 
+               value: '{}'                                             
+             - name: step4crtmsfoldername # STEP 4c 
+               value: '{}'                                                                                          
+             - name: step4crtmsmaxwindows # STEP 4c adjust RTMSMAXWINDOWS for Step 4c
+               value: '{}'                           
+             - name: step2raw_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step2preprocess_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step4raw_data_topic # STEP 4
+               value: '{}'                           
+             - name: step4preprocess_data_topic # STEP 4
+               value: '{}'                                          
+             - name: step4preprocesstypes # STEP 4
+               value: '{}'                                          
+             - name: step4jsoncriteria # STEP 4
+               value: '{}'                           
+             - name: step4ajsoncriteria # STEP 4a 
+               value: '{}'                           
+             - name: step4amaxrows # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocesstypes # STEP 4a
+               value: '{}'                           
+             - name: step4araw_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocess_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4bpreprocesstypes # STEP 4b
+               value: '{}'                           
+             - name: step4bjsoncriteria # STEP 4b
+               value: '{}'                           
+             - name: step4braw_data_topic # STEP 4b 
+               value: '{}'                           
+             - name: step4bpreprocess_data_topic # STEP 4b 
+               value: '{}'                           
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                  
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -394,11 +468,53 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9temperature # privateGPT LLM temperature between 0 and 1 i.e. 0.3, if 0, LLM model is conservative, if 1 it hallucinates
                value: '{}'                                             
              - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclid
-               value: '{}'                                                            
+               value: '{}'               
+             - name: step9contextwindowsize # privateGPT for contextwindow size
+               value: '{}'                    
+             - name: step9pgptcontainername # privateGPT container name
+               value: '{}'                    
+             - name: step9pgpthost # privateGPT host ip i.e.: http://127.0.0.1
+               value: '{}'                    
+             - name: step9pgptport # privateGPT port i.e. 8001
+               value: '{}'                                   
+             - name: step9vectordimension # privateGPT vector dimension
+               value: '{}'                    
+             - name: step9brollbackoffset
+               value: '{}'
+             - name: step9bdeletevectordbcount
+               value: '{}'
+             - name: step9bvectordbpath
+               value: '{}'
+             - name: step9btemperature
+               value: '{}'
+             - name: step9bvectordbcollectionname
+               value: '{}'
+             - name: step9bollamacontainername
+               value: '{}'
+             - name: step9bCUDA_VISIBLE_DEVICES
+               value: '{}'
+             - name: step9bmainip
+               value: '{}'
+             - name: step9bmainport
+               value: '{}'
+             - name: step9bembedding
+               value: '{}'
+             - name: step9bagents_topic_prompt
+               value: '{}'
+             - name: step9bteamlead_topic
+               value: '{}'
+             - name: step9bteamleadprompt
+               value: '{}'
+             - name: step9bsupervisor_topic
+               value: '{}'
+             - name: step9bagenttoolfunctions
+               value: '{}'
+             - name: step9bagent_team_supervisor_topic
+               value: '{}'               
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
-               value: '{}'                                          
+               value: '{}'        
              - name: KUBEBROKERHOST
                value: '{}'         
              - name: KAFKABROKERHOST
@@ -407,6 +523,9 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
            - name: dockerpath
              hostPath:
                path: /var/run/docker.sock
+           - name: rawdata
+             hostPath:
+               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER the paths will be specific to your environment
    ---
      apiVersion: v1
      kind: Service
@@ -439,10 +558,19 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,mqttuser,
-                           airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
+                           airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
+                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocess_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
+                           step4amaxrows,step4apreprocesstypes,step4araw_data_topic,step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,
+                           step4braw_data_topic,step4bpreprocess_data_topic,
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
+                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,
+                           step9brollbackoffset,step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
+                           step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
+                           step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
@@ -456,7 +584,31 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step9docfolderingestinterval='',step9useidentifierinprompt='',step5processlogic='',step5independentvariables='',
                      step9searchterms='',step9streamall='',step9temperature='',step9vectorsearchtype='',step9llmmodel='',step9embedding='',step9vectorsize='',
                      step4cmaxrows='',step4crawdatatopic='',step4csearchterms='',step4crememberpastwindows='',
-                     step4cpatternscorethreshold='',step4crtmsstream='',projectname=''):
+                     step4cpatternwindowthreshold='',step4crtmsstream='',projectname='',step4crtmsscorethreshold='',step4cattackscorethreshold='',
+                     step4cpatternscorethreshold='',step4clocalsearchtermfolder='',step4clocalsearchtermfolderinterval='',step4crtmsfoldername='',
+                     step3localfileinputfile='',step3localfiledocfolder='',step4crtmsmaxwindows='',step9contextwindowsize='',
+                     step9pgptcontainername='',step9pgpthost='',step9pgptport='',step9vectordimension='',
+                     step2raw_data_topic='',step2preprocess_data_topic='',step4raw_data_topic='',step4preprocesstypes='',
+                     step4jsoncriteria='',step4ajsoncriteria='',step4amaxrows='',step4apreprocesstypes='',step4araw_data_topic='',
+                     step4apreprocess_data_topic='',step4bpreprocesstypes='',step4bjsoncriteria='',step4braw_data_topic='',
+                     step4bpreprocess_data_topic='',step4preprocess_data_topic='',
+                     step9brollbackoffset='',
+                     step9bdeletevectordbcount='',
+                     step9bvectordbpath='',
+                     step9btemperature='',
+                     step9bvectordbcollectionname='',
+                     step9bollamacontainername='',
+                     step9bCUDA_VISIBLE_DEVICES='',
+                     step9bmainip='',
+                     step9bmainport='',
+                     step9bembedding='',
+                     step9bagents_topic_prompt='',
+                     step9bteamlead_topic='',
+                     step9bteamleadprompt='',
+                     step9bsupervisor_topic='',
+                     step9bagenttoolfunctions='',
+                     step9bagent_team_supervisor_topic=''):
+                                         
     cp = ""
     cpp = ""
     
@@ -522,6 +674,8 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              volumeMounts:
              - name: dockerpath
                mountPath: /var/run/docker.sock
+             - name: rawdata
+               mountPath: /rawdata   # container folder where the local folder will be mounted                           
              ports:
          {}
              env:
@@ -583,6 +737,10 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: 'privategpt-service' # This is private GPT service in kubernetes
              - name: KUBE
                value: '1'
+             - name: step3localfileinputfile # STEP 3 localfile inputfile field can be adjusted here.
+               value: '{}'
+             - name: step3localfiledocfolder # STEP 3 # STEP 3 docfolder inputfile field can be adjusted here.
+               value: '{}'               
              - name: step4maxrows # STEP 4 maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
                value: '{}'
              - name: step4bmaxrows # STEP 4b maxrows field can be adjusted here.  Higher the number more data to process, BUT more memory needed.
@@ -595,10 +753,54 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'               
              - name: step4crememberpastwindows # STEP 4c 
                value: '{}'               
-             - name: step4cpatternscorethreshold # STEP 4c 
+             - name: step4cpatternwindowthreshold # STEP 4c 
                value: '{}'               
+             - name: step4crtmsscorethreshold # STEP 4c 
+               value: '{}' 
+             - name: step4cattackscorethreshold # STEP 4c 
+               value: '{}' 
+             - name: step4cpatternscorethreshold # STEP 4c 
+               value: '{}'                
              - name: step4crtmsstream # STEP 4c 
                value: '{}'                              
+             - name: step4clocalsearchtermfolder # STEP 4c 
+               value: '{}'                              
+             - name: step4clocalsearchtermfolderinterval # STEP 4c 
+               value: '{}'                                                            
+             - name: step4crtmsfoldername # STEP 4c 
+               value: '{}'                                                                           
+             - name: step4crtmsmaxwindows # STEP 4c adjust RTMSMAXWINDOWS for Step 4c
+               value: '{}'                                       
+             - name: step2raw_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step2preprocess_data_topic # STEP 2 
+               value: '{}'                           
+             - name: step4raw_data_topic # STEP 4
+               value: '{}'                           
+             - name: step4preprocess_data_topic # STEP 4
+               value: '{}'                                                         
+             - name: step4preprocesstypes # STEP 4
+               value: '{}'                                                         
+             - name: step4jsoncriteria # STEP 4
+               value: '{}'                           
+             - name: step4ajsoncriteria # STEP 4a 
+               value: '{}'                           
+             - name: step4amaxrows # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocesstypes # STEP 4a
+               value: '{}'                           
+             - name: step4araw_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4apreprocess_data_topic # STEP 4a
+               value: '{}'                           
+             - name: step4bpreprocesstypes # STEP 4b
+               value: '{}'                           
+             - name: step4bjsoncriteria # STEP 4b
+               value: '{}'                           
+             - name: step4braw_data_topic # STEP 4b 
+               value: '{}'                           
+             - name: step4bpreprocess_data_topic # STEP 4b 
+               value: '{}'                                          
              - name: step5rollbackoffsets # STEP 5 rollbackoffsets field can be adjusted here.  Higher the number more training data to process, BUT more memory needed.
                value: '{}'                              
              - name: step5processlogic # STEP 5 processlogic field can be adjusted here.  
@@ -639,6 +841,48 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                                             
              - name: step9vectorsearchtype # privateGPT for QDrant VectorDB similarity search.  Must be either Cosine, Manhattan, Dot, Euclid
                value: '{}'                                                                           
+             - name: step9contextwindowsize # context window size
+               value: '{}'                                                                                          
+             - name: step9pgptcontainername # privateGPT container name
+               value: '{}'                    
+             - name: step9pgpthost # privateGPT host ip i.e.: http://127.0.0.1
+               value: '{}'                    
+             - name: step9pgptport # privateGPT port i.e. 8001
+               value: '{}'                                                  
+             - name: step9vectordimension # privateGPT vector dimension
+               value: '{}'                                                                 
+             - name: step9brollbackoffset
+               value: '{}'
+             - name: step9bdeletevectordbcount
+               value: '{}'
+             - name: step9bvectordbpath
+               value: '{}'
+             - name: step9btemperature
+               value: '{}'
+             - name: step9bvectordbcollectionname
+               value: '{}'
+             - name: step9bollamacontainername
+               value: '{}'
+             - name: step9bCUDA_VISIBLE_DEVICES
+               value: '{}'
+             - name: step9bmainip
+               value: '{}'
+             - name: step9bmainport
+               value: '{}'
+             - name: step9bembedding
+               value: '{}'
+             - name: step9bagents_topic_prompt
+               value: '{}'
+             - name: step9bteamlead_topic
+               value: '{}'
+             - name: step9bteamleadprompt
+               value: '{}'
+             - name: step9bsupervisor_topic
+               value: '{}'
+             - name: step9bagenttoolfunctions
+               value: '{}'
+             - name: step9bagent_team_supervisor_topic
+               value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -651,6 +895,9 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
            - name: dockerpath
              hostPath:
                path: /var/run/docker.sock
+           - name: rawdata
+             hostPath:
+               path: /mnt  # CHANGE AS NEEDED TO YOUR LOCAL FOLDER the paths will be specific to your environment
    ---
      apiVersion: v1
      kind: Service
@@ -667,10 +914,19 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
          targetPort: {}
        selector:
          app: {}""".format(sname,sname,sname,sname,containername,cp,projectname,sname,sdag,guser,grepo,solutionexternalport,chip,solutionairflowport,solutionvipervizport,dockerusername,cpp,externalport,kuser,vipervizport,
-                           mqttuser,airflowport,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternscorethreshold,step4crtmsstream,
+                           mqttuser,airflowport,step3localfileinputfile,step3localfiledocfolder,step4maxrows,step4bmaxrows,step4cmaxrows,step4crawdatatopic,step4csearchterms,step4crememberpastwindows,step4cpatternwindowthreshold,
+                           step4crtmsscorethreshold,step4cattackscorethreshold,step4cpatternscorethreshold,step4crtmsstream,step4clocalsearchtermfolder,step4clocalsearchtermfolderinterval,step4crtmsfoldername,step4crtmsmaxwindows,
+                           step2raw_data_topic,step2preprocess_data_topic,step4raw_data_topic,step4preprocess_data_topic,step4preprocesstypes,step4jsoncriteria,step4ajsoncriteria,
+                           step4amaxrows,step4apreprocesstypes,step4araw_data_topic,step4apreprocess_data_topic,step4bpreprocesstypes,step4bjsoncriteria,
+                           step4braw_data_topic,step4bpreprocess_data_topic,                           
                            step5rollbackoffsets,step5processlogic,step5independentvariables,step6maxrows,step9rollbackoffset,
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
+                           step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,
+                           step9brollbackoffset,step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
+                           step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
+                           step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,                           
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
@@ -761,6 +1017,7 @@ def testtmlconnection():
             subprocess.call(["tmux", "kill-window", "-t", "viper-produce"])             
             subprocess.call(["tmux", "kill-window", "-t", "viper-preprocess"])             
             subprocess.call(["tmux", "kill-window", "-t", "viper-preprocess2"])             
+            subprocess.call(["tmux", "kill-window", "-t", "viper-preprocess3"])                           
             subprocess.call(["tmux", "kill-window", "-t", "viper-preprocess-pgpt"])             
             subprocess.call(["tmux", "kill-window", "-t", "viper-predict"])             
             subprocess.call(["tmux", "kill-window", "-t", "viper-ml"])             
@@ -807,9 +1064,11 @@ def locallogs(mtype,message):
   
   now = datetime.datetime.now(timezone.utc)
   dbuf = "[{} ".format(mtype) + now.strftime("%Y-%m-%d_%H:%M:%S") + "]"
-
-  with open("/dagslocalbackup/logs.txt", "a") as myfile:
-    myfile.write("  {} {}\n\n".format(dbuf,message))
+  try:
+    with open("/dagslocalbackup/logs.txt", "a") as myfile:
+      myfile.write("  {} {}\n\n".format(dbuf,message))
+  except Exception as e:
+      print("WARN: Cannot write to /dagslocalbackup/logs.txt:",e)
     
     
 def git_push2(solution):
@@ -822,20 +1081,7 @@ def git_push2(solution):
 def git_push(repopath,message,sname):
     sname=getrepo()
     subprocess.call("/tmux/gitp.sh {} {}".format(sname,message), shell=True)
-    
-#    try:
- #       repo = Repo(repopath)
-  #      repo.git.add(update=True)
-   #     repo.index.commit(message)
-    #    origin = repo.remote(name=sname)
-     #   origin.push()
-   # except:
-    #    print('Some error occured while pushing the code') 
-        #git push -f origin main
-     #   os.chdir("/{}".format(repopath))
-      #  subprocess.call("git push -f {} main".format(sname), shell=True)
-        
-
+            
 def tsslogit(message,mtype="INFO"):
   repo=""    
   now = datetime.datetime.now(timezone.utc)
@@ -849,6 +1095,62 @@ def tsslogit(message,mtype="INFO"):
     dbuf = "[{} {}]".format(mtype,now.strftime("%Y-%m-%d_%H:%M:%S"))
     file1.write("{} {}\n".format(dbuf,message))
 
+def loadmitre(fname):
+    d=""
+    try:
+      with open(fname) as f:
+        d = json.load(f)
+        return d
+    except Exception as e:
+       print("Error reading file {} {}".format(fname,e)) 
+       return "" 
+
+def getmitre(mess,fname):
+
+    tactic=""
+    technique=""
+    tacticarr=[]
+    techniquearr=[]
+    
+    dj=loadmitre(fname)
+    if dj=="":
+        return "na","na",""
+    
+    for key, values in dj.items():
+         #print(f"{key}{values}")
+         if key in mess:
+             key=key.replace(" ","_")
+             tacticarr.append(key)
+             for v in values:
+               if v in mess:
+                 v=v.replace(" ","_")  
+                 techniquearr.append(v)
+    if len(tacticarr)>0 and len(techniquearr)>0:
+           tacticarr=set(tacticarr)
+           techniquearr=set(techniquearr)        
+           tactic='-'.join(tacticarr)
+           technique='-'.join(techniquearr)
+           jb=",\"tactic\":\""+tactic+"\",\"technique\":\""+technique+"\""
+           return tactic, technique,jb
+
+    if len(tacticarr)==0: # may be only technique is given - then find associated tactic
+       for key, values in dj.items():
+             key=key.replace(" ","_")             
+             for v in values:
+               if v in mess:
+                 v=v.replace(" ","_")  
+                 techniquearr.append(v)  
+                 tacticarr.append(key)  
+       if len(tacticarr)>0 and len(techniquearr)>0:
+           tacticarr=set(tacticarr)
+           techniquearr=set(techniquearr)
+           tactic='-'.join(tacticarr)
+           technique='-'.join(techniquearr)
+           jb=",\"tactic\":\""+tactic+"\",\"technique\":\""+technique+"\""
+           return tactic, technique,jb
+    
+    return "na","na",""
+
 def dorst2pdf(spath,opath):
 
     rst_files = ["details.rst",  "operating.rst",  "usage.rst", "kube.rst",  "logs.rst"]
@@ -860,19 +1162,27 @@ def dorst2pdf(spath,opath):
     for rst_file in rst_files:
         rst_filef=f"{spath}/{rst_file}"
         pdf_file = rst_file.replace('.rst', '.pdf')        
-        pdf_file=f"{opath}/{pdf_file}"
+        pdf_filef=f"{opath}/pdf_documentation/{pdf_file}"
 
-        subprocess.run(['rst2pdf', rst_filef, '-o', pdf_file])
-        pdf_files.append(pdf_file)
+        print("pdffile=",pdf_filef,rst_filef)
+        subprocess.call("rst2pdf {} -o {}".format(rst_filef,pdf_filef), shell=True)
+
+        pdf_files.append(pdf_filef)
 
     return pdf_files,directory_path
 
 def mergepdf(opath,pdffiles,sname):
-
+      try:
         merger = PdfWriter()
 
         for pdf in pdffiles:
             merger.append(pdf)
         wpath=f"{opath}/{sname}.pdf"
+        print("wpath=",wpath)
         merger.write(wpath)
         merger.close()
+
+        for pdf in pdffiles:
+            os.remove(pdf)
+      except Exception as e:
+        pass
