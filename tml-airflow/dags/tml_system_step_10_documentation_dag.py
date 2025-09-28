@@ -1386,6 +1386,12 @@ def generatedoc(**context):
      subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,snamertd), shell=True)
     
      rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
+     sp=f"{sname}/docs/source"
+     orepo=tsslogging.getrepo()
+     op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}/pdf_documentation" 
+     files,opath=tsslogging.dorst2pdf(sp,op)
+     tsslogging.mergepdf(opath,files,sname)
+     print("INFO: Your PDF Documentation will be found here: {}".format(op))
 
      if rtd == None: 
         URL = 'https://readthedocs.org/api/v3/projects/'
