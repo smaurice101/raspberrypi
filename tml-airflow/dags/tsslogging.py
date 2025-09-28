@@ -12,7 +12,6 @@ import fcntl
 import json
 from pypdf import PdfWriter
 
-
 class LockDirectory(object):
     def __init__(self, directory):
         #assert os.path.exists(directory)
@@ -1163,19 +1162,27 @@ def dorst2pdf(spath,opath):
     for rst_file in rst_files:
         rst_filef=f"{spath}/{rst_file}"
         pdf_file = rst_file.replace('.rst', '.pdf')        
-        pdf_file=f"{opath}/{pdf_file}"
+        pdf_filef=f"{opath}/pdf_documentation/{pdf_file}"
 
-        subprocess.run(['rst2pdf', rst_filef, '-o', pdf_file])
-        pdf_files.append(pdf_file)
+        print("pdffile=",pdf_filef,rst_filef)
+        subprocess.call("rst2pdf {} -o {}".format(rst_filef,pdf_filef), shell=True)
+
+        pdf_files.append(pdf_filef)
 
     return pdf_files,directory_path
 
 def mergepdf(opath,pdffiles,sname):
-
+      try:
         merger = PdfWriter()
 
         for pdf in pdffiles:
             merger.append(pdf)
         wpath=f"{opath}/{sname}.pdf"
+        print("wpath=",wpath)
         merger.write(wpath)
         merger.close()
+
+        for pdf in pdffiles:
+            os.remove(pdf)
+      except Exception as e:
+        pass
