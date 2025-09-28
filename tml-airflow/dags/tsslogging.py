@@ -1163,7 +1163,7 @@ def dorst2pdf(spath,opath):
     for rst_file in rst_files:
         rst_filef=f"{spath}/{rst_file}"
         pdf_file = rst_file.replace('.rst', '.pdf')        
-        pdf_file=f"{opath}/pdf_documentation/{pdf_file}"
+        pdf_file=f"{opath}/{pdf_file}"
 
         subprocess.run(['rst2pdf', rst_filef, '-o', pdf_file])
         pdf_files.append(pdf_file)
