@@ -1387,7 +1387,7 @@ def generatedoc(**context):
     
      rtd = context['ti'].xcom_pull(task_ids='step_10_solution_task_document',key="{}_RTD".format(sname))
 
-     try
+     try:
       sp=f"{sname}/docs/source"
       orepo=tsslogging.getrepo()
       op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}" 
