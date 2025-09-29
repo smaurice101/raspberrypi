@@ -124,7 +124,56 @@ def doparse(fname,farr):
         file.writelines(data)
       except Exception as e:
          pass
-    
+
+def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollback,ollama,deletevector,vectordbpath,topicid,enabletls,partition,mainip,
+                       mainport,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,
+                       pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,mainmodel,mainembedding,pgptcontainername):
+      if ollamacontainername != None:
+       doparse("/{}/ollama.yml".format(op), ["--ollamacontainername--;{}".format(ollamacontainername)])
+       doparse("/{}/ollama.yml".format(op), ["--agenticai-kubeconcur--;{}".format(concurrency[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-kubecollection--;{}".format(collection)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-kubetemperature--;{}".format(temp[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-rollbackoffset--;{}".format(rollback[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-ollama-model--;{}".format(ollama)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-deletevectordbcount--;{}".format(deletevector[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-vectordbpath--;{}".format(vectordbpath)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-topicid--;{}".format(topicid[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-enabletls--;{}".format(enabletls[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-partition--;{}".format(partition[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-vectordbcollectionname--;{}".format(collection)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-mainip--;{}".format(mainip)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-mainport--;{}".format(mainport[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-embedding--;{}".format(embedding)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-teamleadprompt--;{}".format(teamleadprompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-supervisor_topic--;{}".format(supervisor_topic)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-supervisorprompt--;{}".format(supervisorprompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions.strip().replace('\n','').replace("\\n","").replace("'","").replace(";","=="))])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
+
+      if pgptcontainername != None:
+       doparse("/{}/privategpt.yml".format(op), ["--kubevectorsearchtype--;{}".format(pvectorsearchtype)])
+       doparse("/{}/privategpt.yml".format(op), ["--kubetemperature--;{}".format(ptemperature[1:])])
+       doparse("/{}/privategpt.yml".format(op), ["--kubecollection--;{}".format(pcollection)])
+       doparse("/{}/privategpt.yml".format(op), ["--kubeconcur--;{}".format(pconcurrency[1:])])
+       doparse("/{}/privategpt.yml".format(op), ["--kubevectordimension--;{}".format(pvectordimension[1:])])
+       doparse("/{}/privategpt.yml".format(op), ["--kubecontextwindowsize--;{}".format(pcontextwindowsize[1:])])
+       doparse("/{}/privategpt.yml".format(op), ["--kubemainmodel--;{}".format(mainmodel)])
+       doparse("/{}/privategpt.yml".format(op), ["--kubemainembedding--;{}".format(mainembedding)])
+       doparse("/{}/privategpt.yml".format(op), ["--kubeprivategpt--;{}".format(pgptcontainername)])
+
+def copyymls(projectname,sname,ingressyml,solutionyml):
+    orepo=tsslogging.getrepo()
+    op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}/ymls" 
+    os.makedirs(op, exist_ok=True) 
+    op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}/ymls/{sname}" 
+    os.makedirs(op, exist_ok=True) 
+
+    tsslogging.writeoutymls(op,ingressyml,solutionyml,sname)
+
+  
 def generatedoc(**context):    
     istss1=1
     if 'TSS' in os.environ:
@@ -717,11 +766,15 @@ def generatedoc(**context):
     pconsumefrom = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_consumefrom".format(sname))
     pgpt_data_topic = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgpt_data_topic".format(sname))
     pgptcontainername = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_pgptcontainername".format(sname))
-    if pgptcontainername:
+    pmainmodel=""
+    pmainembedding=""
+    if pgptcontainername != None:
       step9pgptcontainername=pgptcontainername
       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubeprivategpt--;{}".format(pgptcontainername)])
       mainmodel = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_mainmodel".format(sname))
+      pmainmodel=mainmodel
       mainembedding = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_mainembedding".format(sname))
+      pmainembedding=mainembedding
       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubemainmodel--;{}".format(mainmodel)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubemainembedding--;{}".format(mainembedding)])
      
@@ -750,6 +803,7 @@ def generatedoc(**context):
      
     if pprompt:
       step9prompt=pprompt
+      step9prompt=step9prompt.strip().replace('\n','').replace("\\n","").replace(";",",").replace("''","")
 
     pdocfolder = context['ti'].xcom_pull(task_ids='step_9_solution_task_ai',key="{}_docfolder".format(sname))
     if pdocfolder:
@@ -821,7 +875,7 @@ def generatedoc(**context):
       doparse("/{}/docs/source/kube.rst".format(sname), ["--kubevectorsearchtype--;{}".format(pvectorsearchtype)])
 
     ollama= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_ollama-model".format(sname))
-    if ollama: # Step 9b executing
+    if ollama != None: # Step 9b executing
       step9bollama=ollama
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-ollama-model--;{}".format(ollama)])
       rollback= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_rollbackoffset".format(sname))
@@ -830,7 +884,7 @@ def generatedoc(**context):
 
       deletevector= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_deletevectordbcount".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-deletevectordbcount--;{}".format(deletevector[1:])])
-      step9bdeletevector=deletevector[1:]
+      step9bdeletevectordbcount=deletevector[1:]
 
       vectordbpath= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_vectordbpath".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-vectordbpath--;{}".format(vectordbpath)])
@@ -838,7 +892,7 @@ def generatedoc(**context):
 
       temp= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_temperature".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-temperature--;{}".format(temp[1:])])
-      step9btemp=temp[1:]
+      step9btemperature=temp[1:]
 
       topicid= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_topicid".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-topicid--;{}".format(topicid[1:])])
@@ -854,7 +908,7 @@ def generatedoc(**context):
 
       collection= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_vectordbcollectionname".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-vectordbcollectionname--;{}".format(collection)])
-      step9bcollection=collection
+      step9bvectordbcollectionname=collection
 
       ollamacontainername= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_ollamacontainername".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
@@ -883,6 +937,7 @@ def generatedoc(**context):
       teamleadprompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_teamleadprompt".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-teamleadprompt--;{}".format(teamleadprompt)])
       step9bteamleadprompt=teamleadprompt
+      step9bteamleadprompt=step9bteamleadprompt.replace('\n',' ').replace("\\n","").strip().replace(";",",").replace("''","")
 
       supervisor_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_supervisor_topic".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-supervisor_topic--;{}".format(supervisor_topic)])
@@ -891,10 +946,13 @@ def generatedoc(**context):
       supervisorprompt= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_supervisorprompt".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-supervisorprompt--;{}".format(supervisorprompt)])
       step9bsupervisorprompt=supervisorprompt
+      step9bsupervisorprompt=step9bsupervisorprompt.replace('\n','').replace("\\n","").strip().replace(";",",").replace("''","")
 
       agenttoolfunctions= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agenttoolfunctions".format(sname))
-      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions)])
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions)])      
       step9bagenttoolfunctions=agenttoolfunctions
+      step9bagenttoolfunctions=step9bagenttoolfunctions.replace('\n','').replace("\\n","").strip().replace(";",",").replace("''","")
+
 
       agent_team_supervisor_topic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agent_team_supervisor_topic".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
@@ -909,7 +967,7 @@ def generatedoc(**context):
 
       cuda= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_cuda".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-cuda--;{}".format(cuda[1:])])
-      step9bcuda=cuda[1:]
+      step9bCUDA_VISIBLE_DEVICES=cuda[1:]
 
       doparse("/{}/docs/source/kube.rst".format(sname), ["--ollamacontainername--;{}".format(ollamacontainername)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubeconcur--;{}".format(concurrency[1:])])
@@ -927,12 +985,12 @@ def generatedoc(**context):
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainip--;{}".format(mainip)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainport--;{}".format(mainport[1:])])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-embedding--;{}".format(embedding)])
-      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
-      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-teamleadprompt--;{}".format(teamleadprompt)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-teamleadprompt--;{}".format(teamleadprompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",",") )])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-supervisor_topic--;{}".format(supervisor_topic)])
-      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-supervisorprompt--;{}".format(supervisorprompt)])
-      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-supervisorprompt--;{}".format(supervisorprompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions.strip().replace('\n','').replace("\\n","").replace("'","").replace(";","=="))])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
 
     ebuf=""
@@ -1070,6 +1128,7 @@ def generatedoc(**context):
         doparse("/{}/docs/source/details.rst".format(sname), ["--topicid--;{}".format(ptopicid[1:])])
         doparse("/{}/docs/source/details.rst".format(sname), ["--enabletls--;{}".format(penabletls[1:])])
         doparse("/{}/docs/source/details.rst".format(sname), ["--partition--;{}".format(ppartition[1:])])
+        pprompt=pprompt.replace("\\n"," ")
         doparse("/{}/docs/source/details.rst".format(sname), ["--prompt--;{}".format(pprompt)])
         doparse("/{}/docs/source/details.rst".format(sname), ["--context--;{}".format(pcontext)])
         doparse("/{}/docs/source/details.rst".format(sname), ["--jsonkeytogather--;{}".format(pjsonkeytogather)])
@@ -1210,20 +1269,36 @@ def generatedoc(**context):
    
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamefile--;{}.yml".format(sname)])
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionname--;{}".format(sname)])
-    if pgptcontainername == None:
-            if '127.0.0.1' in brokerhost:
-              kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
-            else: 
-              kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
-            
-            doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
-    else:
+    if pgptcontainername != None and ollama != None:
+            if '127.0.0.1' in brokerhost:            
+              kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f ollama.yml -f {}.yml".format(sname)
+            else:
+              kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f ollama.yml -f {}.yml".format(sname)
+             
+            doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])      
+    elif pgptcontainername != None:
             if '127.0.0.1' in brokerhost:            
               kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
             else:
               kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f {}.yml".format(sname)
              
             doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
+    elif ollama != None:
+            if '127.0.0.1' in brokerhost:
+              kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml -f ollama.yml".format(sname)
+            else: 
+              kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml -f ollama.yml".format(sname)
+            
+            doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])          
+    else:
+            if '127.0.0.1' in brokerhost:
+              kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
+            else: 
+              kcmd = "kubectl apply -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f {}.yml".format(sname)
+            
+            doparse("/{}/docs/source/kube.rst".format(sname), ["--kubectl--;{}".format(kcmd)])
+  
+      
     if maxrows4:
       step4maxrows=maxrows4[1:]
     else:
@@ -1263,7 +1338,9 @@ def generatedoc(**context):
         containername=f.read()
     except Exception as e:   
         pass
- 
+
+#    step9bagenttoolfunctions=""
+    step9bagents_topic_prompt=step9bagents_topic_prompt.replace("\\n","").replace('\n','').strip().replace(";","==").replace("'","")
     if len(CLIENTPORT) > 1:
       kcmd2=tsslogging.genkubeyaml(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1359,6 +1436,7 @@ def generatedoc(**context):
         data.append("viper-produce")
         data.append("viper-preprocess")
         data.append("viper-preprocess-pgpt")
+        data.append("viper-preprocess-agenticai")        
         data.append("viper-ml")
         data.append("viper-predict")
         tmuxwindows = ", ".join(data)
@@ -1391,9 +1469,19 @@ def generatedoc(**context):
     op=f"/{orepo}/tml-airflow/dags/tml-solutions/{projectname}" 
     files,opath=tsslogging.dorst2pdf(sp,op)
     tsslogging.mergepdf(opath,files,f"{sname}")
+  
     gb="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/pdf_documentation/{}.pdf".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,sname)
     print("INFO: Your PDF Documentation will be found here: {}".format(gb))
 
+    # gityml
+    gityml="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/ymls/{}".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,sname)
+    doparse("/{}/docs/source/kube.rst".format(sname), ["--gityml--;{}".format(gityml)])
+
+    copyymls(projectname,sname,kcmd3,kcmd2)
+    updateollamaandpgpt(op,step9bollamacontainername,step9bconcurrency,step9bvectordbcollectionname,step9btemperature,step9brollback,step9bollama,step9bdeletevectordbcount,step9bvectordbpath,step9btopicid,step9benabletls,step9bpartition,step9bmainip,
+                       step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,step9bsupervisor_topic,step9bsupervisorprompt,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
+                       pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,pmainmodel,pmainembedding,pgptcontainername)
+  
     subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,snamertd), shell=True)
 
      #except Exception as e:
