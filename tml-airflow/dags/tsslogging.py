@@ -200,6 +200,7 @@ def ingressnoext(sname): # Localfile being accessed
 
   return ing
 
+  
 def writeoutymls(op,ingyml,solyml,sname):
 #                kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f ollama.yml -f {}.yml".format(sname)
   file_name=f"{op}/ingress.yml"
@@ -828,7 +829,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
                value: '{}'                                             
              - name: step9prompt # STEP 9 Enter PGPT prompt
-               value: '{}'                  
+               value: "{}"                  
              - name: step9context # STEP 9 Enter PGPT context
                value: '{}'             
              - name: step9keyattribute
@@ -888,15 +889,15 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9bembedding
                value: '{}'
              - name: step9bagents_topic_prompt
-               value: '{}'
+               value: "{}"
              - name: step9bteamlead_topic
                value: '{}'
              - name: step9bteamleadprompt
-               value: '{}'
+               value: "{}"
              - name: step9bsupervisor_topic
                value: '{}'
              - name: step9bagenttoolfunctions
-               value: '{}'
+               value: "{}"
              - name: step9bagent_team_supervisor_topic
                value: '{}'               
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
@@ -955,16 +956,13 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
                            step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,
-                           step9brollbackoffset,step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
+                           step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
                            step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
                            step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
                            step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
 
-    file_name=f"{sname}.yml"
-    with open(file_name, "w") as file:
-      file.write(kcmd)
 
     return kcmd
 
@@ -1204,7 +1202,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
                value: '{}'                  
              - name: step9prompt # STEP 9 Enter PGPT prompt
-               value: '{}'                  
+               value: "{}"                  
              - name: step9context # STEP 9 Enter PGPT context
                value: '{}'                                 
              - name: step9keyattribute
@@ -1264,15 +1262,15 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step9bembedding
                value: '{}'
              - name: step9bagents_topic_prompt
-               value: '{}'
+               value: "{}"
              - name: step9bteamlead_topic
                value: '{}'
              - name: step9bteamleadprompt
-               value: '{}'
+               value: "{}"
              - name: step9bsupervisor_topic
                value: '{}'
              - name: step9bagenttoolfunctions
-               value: '{}'
+               value: "{}"
              - name: step9bagent_team_supervisor_topic
                value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
@@ -1315,16 +1313,12 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                            step9prompt,step9context,step9keyattribute,step9keyprocesstype,step9hyperbatch,step9vectordbcollectionname,step9concurrency,cudavisibledevices,
                            step9docfolder,step9docfolderingestinterval,step9useidentifierinprompt,step9searchterms,step9streamall,step9temperature,step9vectorsearchtype,
                            step9contextwindowsize,step9pgptcontainername,step9pgpthost,step9pgptport,step9vectordimension,
-                           step9brollbackoffset,step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
+                           step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
                            step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
                            step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
                            step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,                           
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
-
-    file_name=f"{sname}.yml"
-    with open(file_name, "w") as file:
-      file.write(kcmd)
   
     return kcmd
 
