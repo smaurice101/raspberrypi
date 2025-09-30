@@ -264,7 +264,7 @@ def generatedoc(**context):
     step9bsupervisor_topic=""
     step9bagenttoolfunctions=""
     step9bagent_team_supervisor_topic=""
-
+    step9bconcurrency=""
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
              kube=1
