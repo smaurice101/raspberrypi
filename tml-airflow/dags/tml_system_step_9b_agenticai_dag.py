@@ -594,7 +594,12 @@ def startagenticai(**context):
        ti.xcom_push(key="{}_teamleadprompt".format(sname), value=default_args['teamleadprompt'])
        ti.xcom_push(key="{}_supervisor_topic".format(sname), value=default_args['supervisor_topic'])
        ti.xcom_push(key="{}_supervisorprompt".format(sname), value=default_args['supervisorprompt'])
-       ti.xcom_push(key="{}_agenttoolfunctions".format(sname), value=default_args['agenttoolfunctions'])
+
+       at=default_args['agenttoolfunctions']
+       at=at.replace(SMTP_PASSWORD,'')
+
+       ti.xcom_push(key="{}_agenttoolfunctions".format(sname), value=at)
+  
        ti.xcom_push(key="{}_agent_team_supervisor_topic".format(sname), value=default_args['agent_team_supervisor_topic'])        
        ti.xcom_push(key="{}_concurrency".format(sname), value="_{}".format(default_args['concurrency']))
        ti.xcom_push(key="{}_cuda".format(sname), value="_{}".format(default_args['CUDA_VISIBLE_DEVICES']))
@@ -746,5 +751,5 @@ if __name__ == '__main__':
           if count > 60:
             break
 
-
              
+
