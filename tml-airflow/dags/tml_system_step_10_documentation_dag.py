@@ -89,7 +89,7 @@ def setupurls(projectname,producetype,sname):
     stepurl8="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_8_deploy_solution_to_docker_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl9="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_9_privategpt_qdrant_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl9b="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_9b_agenticai_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
-    stepurl10="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_10_documentation_dag_tml-multi-agentic-iot2-3f10_tml-multi-agenticai-iot-3f10-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
+    stepurl10="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_10_documentation_dag_tml-multi-agenticai-iot-3f10-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
 
     print("stepurl1=",stepurl1)
     
@@ -133,18 +133,18 @@ def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollb
        doparse("/{}/ollama.yml".format(op), ["--ollamacontainername--;{}".format(ollamacontainername)])
        doparse("/{}/ollama.yml".format(op), ["--agenticai-kubeconcur--;{}".format(concurrency[1:])])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-kubecollection--;{}".format(collection)])
-       doparse("/{}/ollama.yml".format(op),  ["--agenticai-kubetemperature--;{}".format(temp[1:])])
-       doparse("/{}/ollama.yml".format(op),  ["--agenticai-rollbackoffset--;{}".format(rollback[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-kubetemperature--;{}".format(temp)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-rollbackoffset--;{}".format(rollback)])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-ollama-model--;{}".format(ollama)])
-       doparse("/{}/ollama.yml".format(op),  ["--agenticai-deletevectordbcount--;{}".format(deletevector[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-deletevectordbcount--;{}".format(deletevector)])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-vectordbpath--;{}".format(vectordbpath)])
-       doparse("/{}/ollama.yml".format(op),  ["--agenticai-topicid--;{}".format(topicid[1:])])
-       doparse("/{}/ollama.yml".format(op),  ["--agenticai-enabletls--;{}".format(enabletls[1:])])
-       doparse("/{}/ollama.yml".format(op),  ["--agenticai-partition--;{}".format(partition[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-topicid--;{}".format(topicid)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-enabletls--;{}".format(enabletls)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-partition--;{}".format(partition)])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-vectordbcollectionname--;{}".format(collection)])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-mainip--;{}".format(mainip)])
-       doparse("/{}/ollama.yml".format(op),  ["--agenticai-mainport--;{}".format(mainport[1:])])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-mainport--;{}".format(mainport)])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-embedding--;{}".format(embedding)])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
@@ -247,7 +247,7 @@ def generatedoc(**context):
     step4bmaxrows=""
     step4braw_data_topic=""
     step4bpreprocess_data_topic=""
-
+      
     step9brollback=""
     step9bdeletevectordbcount=""
     step9bvectordbpath=""
