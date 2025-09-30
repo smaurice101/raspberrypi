@@ -128,6 +128,7 @@ def doparse(fname,farr):
 def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollback,ollama,deletevector,vectordbpath,topicid,enabletls,partition,mainip,
                        mainport,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,
                        pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,mainmodel,mainembedding,pgptcontainername):
+      print("update==",op)
       if ollamacontainername != None:
        doparse("/{}/ollama.yml".format(op), ["--ollamacontainername--;{}".format(ollamacontainername)])
        doparse("/{}/ollama.yml".format(op), ["--agenticai-kubeconcur--;{}".format(concurrency[1:])])
@@ -172,7 +173,7 @@ def copyymls(projectname,sname,ingressyml,solutionyml):
     os.makedirs(op, exist_ok=True) 
 
     tsslogging.writeoutymls(op,ingressyml,solutionyml,sname)
-
+    return op
   
 def generatedoc(**context):    
     istss1=1
@@ -1477,8 +1478,8 @@ def generatedoc(**context):
     gityml="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/ymls/{}".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,sname)
     doparse("/{}/docs/source/kube.rst".format(sname), ["--gityml--;{}".format(gityml)])
 
-    copyymls(projectname,sname,kcmd3,kcmd2)
-    updateollamaandpgpt(op,step9bollamacontainername,step9bconcurrency,step9bvectordbcollectionname,step9btemperature,step9brollback,step9bollama,step9bdeletevectordbcount,step9bvectordbpath,step9btopicid,step9benabletls,step9bpartition,step9bmainip,
+    oppt=copyymls(projectname,sname,kcmd3,kcmd2)
+    updateollamaandpgpt(oppt,step9bollamacontainername,step9bconcurrency,step9bvectordbcollectionname,step9btemperature,step9brollback,step9bollama,step9bdeletevectordbcount,step9bvectordbpath,step9btopicid,step9benabletls,step9bpartition,step9bmainip,
                        step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,step9bsupervisor_topic,step9bsupervisorprompt,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
                        pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,pmainmodel,pmainembedding,pgptcontainername)
   
