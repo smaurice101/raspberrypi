@@ -89,7 +89,7 @@ def setupurls(projectname,producetype,sname):
     stepurl8="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_8_deploy_solution_to_docker_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl9="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_9_privategpt_qdrant_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
     stepurl9b="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_9b_agenticai_dag-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
-    stepurl10="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_10_documentation_dag_tml-multi-agenticai-iot-3f10-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
+    stepurl10="https://github.com/{}/{}/tree/main/tml-airflow/dags/tml-solutions/{}/tml_system_step_10_documentation_dag_tml-multi-agentic-iot2-3f10_tml-multi-agenticai-iot-3f10-{}.py".format(os.environ['GITUSERNAME'],tsslogging.getrepo(),projectname,projectname)
 
     print("stepurl1=",stepurl1)
     
