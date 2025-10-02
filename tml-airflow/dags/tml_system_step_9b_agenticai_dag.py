@@ -393,8 +393,9 @@ def teamleadqueryengine(tml_text_engine):
 
 ################ Create Supervisor
 
-def createactionagents(llm,repo):
+def createactionagents(llm):
     print("in createactionagents")
+    repo=tsslogging.getrepo()
     current_directory_path = os.getcwd()
     sname = os.path.basename(current_directory_path)
     
@@ -721,7 +722,7 @@ if __name__ == '__main__':
 
     if llm !="":
       try:
-        actionagents=createactionagents(llm,repo)
+        actionagents=createactionagents(llm)
         supervisorprompt = default_args['supervisorprompt']
         app=createasupervisor(actionagents,supervisorprompt,llm)
       except Exception as e:
@@ -760,5 +761,6 @@ if __name__ == '__main__':
             break
 
              
+
 
 
