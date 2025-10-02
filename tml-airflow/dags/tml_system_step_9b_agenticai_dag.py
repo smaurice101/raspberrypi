@@ -629,7 +629,7 @@ def startagenticai(**context):
                        default_args['mainip'],default_args['mainport'],default_args['embedding'],
                        default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt'],
                        default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
-                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],sname),"ENTER"])
+                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],pname),"ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -665,7 +665,7 @@ if __name__ == '__main__':
         agent_team_supervisor_topic=sys.argv[24]
         concurrency=sys.argv[25]        
         cuda =  sys.argv[26]
-        sname = sys.argv[27]
+        pname = sys.argv[27]
 
        default_args['rollbackoffset']=rollbackoffset
        default_args['ollama-model']=ollamamodel
@@ -721,7 +721,7 @@ if __name__ == '__main__':
 
     if llm !="":
       #try:
-      actionagents=createactionagents(llm,sname)
+      actionagents=createactionagents(llm,pname)
       supervisorprompt = default_args['supervisorprompt']
       try:
         app=createasupervisor(actionagents,supervisorprompt,llm)
@@ -762,6 +762,7 @@ if __name__ == '__main__':
 
 
              
+
 
 
 
