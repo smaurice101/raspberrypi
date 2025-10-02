@@ -393,11 +393,19 @@ def teamleadqueryengine(tml_text_engine):
 
 ################ Create Supervisor
 
-def createactionagents(llm):
+def createactionagents(llm,repo):
     print("in createactionagents")
-
+    current_directory_path = os.getcwd()
+    sname = os.path.basename(current_directory_path)
+    
     agents=[]
-    dynamic_module = importlib.import_module("agenttools")
+    filepath=f"/{repo}/tml-airflow/dags/tml-solutions/{sname}/agenttools.py"
+    module_name = "agenttools"
+    
+    spec = importlib.util.spec_from_file_location(module_name, filepath)    
+    dynamic_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(dynamic_module)
+   
     maintools=default_args['agenttoolfunctions'].strip()
     funcname=maintools.split(";")
  
@@ -713,7 +721,7 @@ if __name__ == '__main__':
 
     if llm !="":
       try:
-        actionagents=createactionagents(llm)
+        actionagents=createactionagents(llm,repo)
         supervisorprompt = default_args['supervisorprompt']
         app=createasupervisor(actionagents,supervisorprompt,llm)
       except Exception as e:
@@ -752,4 +760,5 @@ if __name__ == '__main__':
             break
 
              
+
 
