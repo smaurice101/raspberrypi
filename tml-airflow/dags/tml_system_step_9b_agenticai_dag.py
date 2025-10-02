@@ -152,7 +152,9 @@ def remove_escape_sequences(string):
 
 def cleanstring(mainstr):
 
-    mainstr = mainstr.replace('"',"").replace('`',"").replace("\n","").replace("\\n","").replace("\t","").replace("\\t","").replace("\r","").replace("\\r","").replace("\\*","").replace("\\ ","").replace("\\\\","\\").replace("\\1","1").replace("\\2","2").replace("\\3","3").replace("\\4","4").replace("\\5","5").replace("\\6","6").replace("\\7","7").replace("\\8","8").replace("\\9","9")
+    mainstr = mainstr.replace('"',"").replace("'","").replace('`',"").replace("\n","").replace("\\n","").replace("\t","").replace("\\t","").replace("\r","").replace("\\r","").replace("\\*","").replace("\\ ","").replace("\\\\","\\").replace("\\1","1").replace("\\2","2").replace("\\3","3").replace("\\4","4").replace("\\5","5").replace("\\6","6").replace("\\7","7").replace("\\8","8").replace("\\9","9")
+    mainstr = mainstr.splitlines()
+    mainstr = " ".join(mainstr)
 
     a = list(mainstr.lower())
     b = "abcdefghijklmnopqrstuvwxyz-*123456789'{}`"
@@ -350,6 +352,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
         
     responses = []
     for t,mainjson in zip(topicsarr,topicjsons):
+      t=t.strip()
       t2  = t.split(":")
       #print("q========",q)
       query_str=t2[1]+ f". here is the JSON: {mainjson}"
@@ -399,6 +402,7 @@ def createactionagents(llm,sname):
     
     agents=[]
     filepath=f"/{repo}/tml-airflow/dags/tml-solutions/{sname}/agenttools.py"
+    print("filepath===",filepath)
     module_name = "agenttools"
     
     spec = importlib.util.spec_from_file_location(module_name, filepath)    
@@ -502,15 +506,30 @@ def invokesupervisor(app,maincontent):
 
 def formatcompletejson(bufresponses,teamlead_response,lastmessage):
 
-    mjson = '['
+    bufresponses = " ".join(str(bufresponses).splitlines())
+    teamlead_response = " ".join(str(teamlead_response).splitlines())
+    lastmessage = " ".join(str(lastmessage).splitlines())
+   
+    bufresponses = " ".join(bufresponses.split(" "))
+    teamlead_response = " ".join(teamlead_response.split(" "))
+    lastmessage = " ".join(lastmessage.split(" "))
 
-    for k in bufresponses:
-        mjson = mjson + k + ","
-    
-    mjson = mjson + teamlead_response + ","
-    mjson = mjson + str(lastmessage) + "]"
+    bufresponses = bufresponses.replace("'","").replace("\n"," ").replace("\\n"," ").replace("\t", " ").replace("\r"," ").strip()
+    teamlead_response = teamlead_response.replace("'","").replace("\n"," ").replace("\\n"," ").replace("\t", " ").replace("\r", " ").strip()
+    lastmessage = lastmessage.replace("'","").replace("\n"," ").replace("\t", " ").replace("\\n"," ").replace("\r"," ").strip()
 
-    return mjson    
+    print("bufresponses===",bufresponses)
+    print("teambuf===",teambuf)
+    print("supbuf===",supbuf)
+  
+    mainjson = bufresponses[:-1] + "," + teamlead_response + "," + lastmessage + "]"
+    mainjson = " ".join(mainjson.split())
+    mainjson = " ".join(mainjson.splitlines())
+
+    mainjson = mainjson.replace("'","").replace("\n"," ").replace("\\n"," ").replace("\t", " ").replace("\r"," ").replace("\\r"," ").strip()
+    #print("mainjson======",mainjson)
+
+    return mainjson    
 
 def startagenticai(**context):
        sd = context['dag'].dag_id
@@ -759,12 +778,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 60:
             break
-
-
-             
-
-
-
-
-
-
