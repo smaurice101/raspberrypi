@@ -393,20 +393,19 @@ def teamleadqueryengine(tml_text_engine):
 
 ################ Create Supervisor
 
-def createactionagents(llm):
+def createactionagents(llm,sname):
     print("in createactionagents")
     repo=tsslogging.getrepo()
-    current_directory_path = os.getcwd()
-    sname = os.path.basename(current_directory_path)
     
     agents=[]
     filepath=f"/{repo}/tml-airflow/dags/tml-solutions/{sname}/agenttools.py"
+    print("filepath===",filepath)
     module_name = "agenttools"
     
     spec = importlib.util.spec_from_file_location(module_name, filepath)    
     dynamic_module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(dynamic_module)
-   
+  
     maintools=default_args['agenttoolfunctions'].strip()
     funcname=maintools.split(";")
  
@@ -623,7 +622,7 @@ def startagenticai(**context):
        wn = windowname('agenticai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-agenticai", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,
                        VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['rollbackoffset'],default_args['ollama-model'],default_args['deletevectordbcount'],default_args['vectordbpath'],
                        default_args['temperature'],default_args['topicid'],default_args['enabletls'],
@@ -631,7 +630,7 @@ def startagenticai(**context):
                        default_args['mainip'],default_args['mainport'],default_args['embedding'],
                        default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt'],
                        default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
-                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES']),"ENTER"])
+                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],sname),"ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -667,6 +666,7 @@ if __name__ == '__main__':
         agent_team_supervisor_topic=sys.argv[24]
         concurrency=sys.argv[25]        
         cuda =  sys.argv[26]
+        sname = sys.argv[27]
 
        default_args['rollbackoffset']=rollbackoffset
        default_args['ollama-model']=ollamamodel
@@ -721,9 +721,10 @@ if __name__ == '__main__':
     llm,embedding=setollama()
 
     if llm !="":
+      #try:
+      actionagents=createactionagents(llm,sname)
+      supervisorprompt = default_args['supervisorprompt']
       try:
-        actionagents=createactionagents(llm)
-        supervisorprompt = default_args['supervisorprompt']
         app=createasupervisor(actionagents,supervisorprompt,llm)
       except Exception as e:
         print("Error=",e)
@@ -760,7 +761,9 @@ if __name__ == '__main__':
           if count > 60:
             break
 
+
              
+
 
 
 
