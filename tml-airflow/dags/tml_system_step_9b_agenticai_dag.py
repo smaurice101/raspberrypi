@@ -823,6 +823,7 @@ if __name__ == '__main__':
             tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
           time.sleep(5)
           count = count + 1
-          if count > 60:
+          if count > 600:
             break
+
 
