@@ -25,7 +25,7 @@ import threading
 import re
 from binaryornot.check import is_binary
 import base64
-docidstrarr = []
+import requests
 
 sys.dont_write_bytecode = True
 
@@ -147,6 +147,24 @@ def setollama():
 
     return llm,ollama_emb
 
+
+def get_loaded_models():
+    mainip=default_args['mainip']
+    mainport=int(default_args['mainport'])
+    model=default_args['ollama-model']
+    OLLAMA_URL = f"{mainip}:{mainport}/api/tags"
+
+    try:
+        response = requests.get("http://" +OLLAMA_URL)
+        response.raise_for_status()
+        data = response.json()
+        # Assume 'models' key contains the list of available/loaded models
+        loaded_models = [model for model in data.get("models", [])]
+        return 1
+    except Exception as e:
+        print(f"Error querying Ollama server: {e}")
+        return 0
+
 def remove_escape_sequences(string):
     return string.encode('utf-8').decode('unicode_escape')
 
@@ -170,6 +188,7 @@ def cleanstring(mainstr):
     mainstr=''.join(a)    
     mainstr=re.sub(r'[\n\r]+', '', mainstr)
 
+    mainstr = mainstr.translate({ord('\n'): None, ord('\r'): None})
     return mainstr
 
 ############## Delete folder content ########################
@@ -340,7 +359,6 @@ def getjsonsfromtopics(topics):
 
 def extract_hyperpredictiondata(hjson):
 
-    print("hyson====",hjson)
 
     hyper_json = json.loads(hjson)
     hlist = []
@@ -373,6 +391,9 @@ def extract_hyperpredictiondata(hjson):
         hlist.append("[" + jbuf + "]")
 
     hliststr = ",".join(hlist)
+    hliststr=re.sub(r'[\n\r]+', '', hliststr)
+    hliststr = hliststr.translate({ord('\n'): None, ord('\r'): None})
+    print("hliststr==",hliststr)
     return hliststr
 
 
@@ -407,7 +428,8 @@ def agentquerytopics(usertopics,topicjsons,llm):
     # Invoking with a string
       response = llm.invoke(query_str)
       response=response.content    
-      prompt=cleanstring(t2[1].strip())
+      prompt=cleanstring(t2[1].strip()) + f". here is the data: {mainjson}"
+
       response=cleanstring(response)
       response=response.replace(";",",")
       bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Topic_Agent": "'+t2[0].strip()+'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
@@ -574,7 +596,9 @@ def formatcompletejson(bufresponses,teamlead_response,lastmessage):
     mainjson=re.sub(r'[\n\r]+', '', mainjson)
 
     mainjson = mainjson.replace("'","").replace("\n"," ").replace("\\n"," ").replace("\t", " ").replace("\r"," ").replace("\\r"," ").strip()
-    #print("mainjson======",mainjson)
+
+    mainjson = mainjson.translate({ord('\n'): None, ord('\r'): None})
+    print("mainjson======",mainjson)
 
     return mainjson    
 
@@ -783,6 +807,19 @@ if __name__ == '__main__':
     count=0
 
         # create the Supervisor and kick off action
+   
+    while True:
+       llmstatus = get_loaded_models()
+       print("llmstatus==",llmstatus)
+       if llmstatus == 0:
+          time.sleep(5)
+       else:
+          break 
+       count += 1
+       if count > 600:
+         print("ERROR: Unable to load LLM model")
+         break   
+
     llm,embedding=setollama()
 
     if llm !="":
@@ -825,5 +862,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-
-
