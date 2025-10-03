@@ -151,19 +151,37 @@ def setollama():
 def get_loaded_models():
     mainip=default_args['mainip']
     mainport=int(default_args['mainport'])
-    model=default_args['ollama-model']
+    mainmodel=default_args['ollama-model']
     OLLAMA_URL = f"{mainip}:{mainport}/api/tags"
+    count = 0
 
-    try:
-        response = requests.get("http://" +OLLAMA_URL)
+    while True:
+      try:
+        response = requests.get(OLLAMA_URL)
         response.raise_for_status()
         data = response.json()
         # Assume 'models' key contains the list of available/loaded models
         loaded_models = [model for model in data.get("models", [])]
-        return 1
-    except Exception as e:
-        print(f"Error querying Ollama server: {e}")
-        return 0
+        print("loaded_models=",loaded_models)
+        if mainmodel in json.dumps(loaded_models) or mainmodel+":latest" in json.dumps(loaded_models):
+          print(f"Model {mainmodel} found")
+          return 1
+        else:
+          time.sleep(5)
+          count += 1
+          if count > 600:
+           break 
+          else:
+            continue                   
+      except Exception as e:
+        print(f"Error querying Ollama server: {e} Will keep trying")
+        time.sleep(5)
+        count += 1
+        if count > 20:
+          break
+        continue
+
+    return 0
 
 def remove_escape_sequences(string):
     return string.encode('utf-8').decode('unicode_escape')
@@ -240,8 +258,11 @@ def loadtextdataintovectordb(responses,deletevectordbcnt):
     tml_text_engine = tml_index.as_query_engine(similarity_top_k=3)
 
     return tml_text_engine,deletevectordbcnt
+
             
 def stopcontainers():
+
+
    ollamacontainername = default_args['ollamacontainername']
    cfound=0
    subprocess.call("docker image ls > gptfiles.txt", shell=True)
@@ -254,13 +275,18 @@ def stopcontainers():
             buf="docker stop $(docker ps -q --filter ancestor={} )".format(darr[0])
             if ollamacontainername in darr[0]:
                 cfound=1  
-            print(buf)
-            subprocess.call(buf, shell=True)
+                # if ollama container found check if model is already loaded - if not  stop container
+                if get_loaded_models()==0:
+                  print(buf)
+                  subprocess.call(buf, shell=True)
+                  return 0
+                break
    if cfound==0:
       print("INFO STEP 9b: Ollama container {} not found.  It may need to be pulled.".format(ollamacontainername))
       tsslogging.locallogs("WARN", "STEP 9b: Ollama container not found. It may need to be pulled if it does not start: docker pull {}".format(ollamacontainername))
+      return 0
 
-
+   return 1
 
 def startpgptcontainer():
       print("Starting Ollama container: {}".format(default_args['ollamacontainername'])) 
@@ -275,12 +301,17 @@ def startpgptcontainer():
       mainhost = default_args['mainip']
 
       ollamaserver = mainhost + ":" + str(mainport)
-      stopcontainers()
+
+
       time.sleep(10)
       if os.environ['TSS'] == "1":       
           buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
       else:
           buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
+
+
+      if stopcontainers() == 1:
+        return 1,buf,mainmodel,mainembedding
          
       v=subprocess.call(buf, shell=True)
       print("INFO STEP 9b: Ollama container.  Here is the run command: {}, v={}".format(buf,v))
@@ -780,6 +811,8 @@ if __name__ == '__main__':
        default_args['concurrency']=concurrency
        default_args['CUDA_VISIBLE_DEVICES']=cuda
 
+
+
     if "KUBE" not in os.environ:          
          
           tsslogging.locallogs("INFO", "STEP 9b: Starting Ollama container")
@@ -808,17 +841,9 @@ if __name__ == '__main__':
 
         # create the Supervisor and kick off action
    
-    while True:
-       llmstatus = get_loaded_models()
-       print("llmstatus==",llmstatus)
-       if llmstatus == 0:
-          time.sleep(5)
-       else:
-          break 
-       count += 1
-       if count > 600:
-         print("ERROR: Unable to load LLM model")
-         break   
+    llmstatus = get_loaded_models()
+    print("llmstatus==",llmstatus)
+   
 
     llm,embedding=setollama()
 
@@ -862,3 +887,4 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
