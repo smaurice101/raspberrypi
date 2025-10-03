@@ -168,6 +168,8 @@ def cleanstring(mainstr):
         i=i+1
 
     mainstr=''.join(a)    
+    mainstr=re.sub(r'[\n\r]+', '', mainstr)
+
     return mainstr
 
 ############## Delete folder content ########################
@@ -336,6 +338,45 @@ def getjsonsfromtopics(topics):
     return topicjsons
 
 
+def extract_hyperpredictiondata(hjson):
+
+    print("hyson====",hjson)
+
+    hyper_json = json.loads(hjson)
+    hlist = []
+
+    for item in hyper_json['streamtopicdetails']['topicreads']:
+        jbuf = ""
+        hyperprediction = str(item['hyperprediction'])
+        jbuf = "hyperprediction=" + hyperprediction
+        if "preprocesstype" in item:
+           ptypes = item['preprocesstype']
+           jbuf = jbuf + ", processtype=" + ptypes
+           iden = item['identifier']
+           idenarr = iden.split("~")
+           pv = idenarr[0]
+           jbuf = jbuf + ", processvariable=" + pv
+
+        if "islogistic" in item:
+           if item['islogistic'] == "1":
+              jbuf = jbuf + ", processtype=probability prediction" 
+           else:
+              jbuf = jbuf + ", processtype=prediction"
+
+
+        if "identifier" in item:
+            iden = item['identifier']
+            idenarr = iden.split("~")
+            mainuid = idenarr[-1]
+            jbuf = jbuf + ", " + mainuid
+
+        hlist.append("[" + jbuf + "]")
+
+    hliststr = ",".join(hlist)
+    return hliststr
+
+
+
 def agentquerytopics(usertopics,topicjsons,llm):
     topicsarr = usertopics.split(";")
     bufresponse = ""
@@ -355,7 +396,11 @@ def agentquerytopics(usertopics,topicjsons,llm):
       t=t.strip()
       t2  = t.split(":")
       #print("q========",q)
-      query_str=t2[1]+ f". here is the JSON: {mainjson}"
+      mainjson=mainjson.lower()
+      if "hyperprediction" in mainjson:
+         mainjson=extract_hyperpredictiondata(mainjson)
+  
+      query_str=t2[1]+ f". here is the data: {mainjson}"
       print("query_string====",query_str)
 
 
@@ -525,6 +570,8 @@ def formatcompletejson(bufresponses,teamlead_response,lastmessage):
     mainjson = bufresponses[:-1] + "," + teamlead_response + "," + lastmessage + "]"
     mainjson = " ".join(mainjson.split())
     mainjson = " ".join(mainjson.splitlines())
+
+    mainjson=re.sub(r'[\n\r]+', '', mainjson)
 
     mainjson = mainjson.replace("'","").replace("\n"," ").replace("\\n"," ").replace("\t", " ").replace("\r"," ").replace("\\r"," ").strip()
     #print("mainjson======",mainjson)
@@ -778,3 +825,4 @@ if __name__ == '__main__':
           count = count + 1
           if count > 60:
             break
+
