@@ -321,7 +321,7 @@ def startpgptcontainer():
  
 
 def producegpttokafka(value,maintopic):
-     inputbuf=value
+     inputbuf=value.strip()
      topicid=int(default_args['topicid'])
      producerid=default_args['producerid']
      identifier = default_args['identifier']
@@ -329,6 +329,9 @@ def producegpttokafka(value,maintopic):
      # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
      delay=default_args['delay']
      enabletls=default_args['enabletls']
+
+     inputbuf = inputbuf.translate({ord('\n'): None, ord('\r'): None})
+     inputbuf=inputbuf.replace("\n"," ").replace("\\n"," ")
 
      try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,'',
@@ -887,4 +890,5 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
 
