@@ -26,6 +26,7 @@ import re
 from binaryornot.check import is_binary
 import base64
 import requests
+from json_repair import repair_json
 
 sys.dont_write_bytecode = True
 
@@ -454,6 +455,16 @@ def extract_hyperpredictiondata(hjson):
     print("hliststr==",hliststr)
     return hliststr
 
+def checkjson(cjson):
+
+   try:
+     checkedjson = json.loads(cjson)  # check to see if json loads - if not its bad
+   except Exception as e:
+     cjson = repair_json(cjson, skip_json_loads=True )
+     pass
+     # bad json
+
+   return cjson
 
 
 def agentquerytopics(usertopics,topicjsons,llm):
@@ -492,6 +503,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
       response=response.replace(";",",").replace(":","").replace("'","").replace('"',"")
       
       bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Topic_Agent": "'+t2[0].strip()+'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
+      bufresponse=checkjson(bufresponse)
       print(bufresponse)
       bufarr.append(bufresponse)
             
@@ -515,6 +527,7 @@ def teamleadqueryengine(tml_text_engine):
     response=cleanstring(response.strip())
     response=response.replace(";",",").replace(":","").replace('"',"").replace("'","")
     bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Team_Lead_Agent": "'+default_args['teamlead_topic'] +'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
+    bufresponse=checkjson(bufresponse)
 
     producegpttokafka(bufresponse,default_args['teamlead_topic'])
 
@@ -621,6 +634,8 @@ def invokesupervisor(app,maincontent):
     mainjson=json.dumps({"supervisor_workflow_invocation": mainjson})
     mainjson=mainjson[:-1] + ",\"funcname\":" + json.dumps(funcname)+",\"supervisorprompt\":\""+supervisormaincontent+"\"}"
     mainjson=cleanstring(mainjson)
+    mainjson=checkjson(mainjson)
+   
     try:
       #print(mainjson)
       producegpttokafka(mainjson,default_args['supervisor_topic'])
@@ -915,4 +930,5 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
 
