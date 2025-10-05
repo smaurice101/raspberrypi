@@ -457,14 +457,31 @@ def extract_hyperpredictiondata(hjson):
 
 def checkjson(cjson):
 
-   try:
+    model = default_args['ollama-model']
+    temperature = float(default_args['temperature'])
+    embeddingmodel = default_args['embedding']
+
+    try:
      checkedjson = json.loads(cjson)  # check to see if json loads - if not its bad
-   except Exception as e:
+    except Exception as e:
+     print("Json error=",e)
+     if cjson[-1] != '}':
+        if "Model" not in cjson and "Embedding" not in cjson and "Temperature" not in cjson: 
+          cjson = cjson +'","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
+        else:
+          cjson = cjson + '"}'
+              
+     elif cjson[-2] != '"':
+        if "Model" not in cjson and "Embedding" not in cjson and "Temperature" not in cjson:
+          cjson = cjson[:-1] +'","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
+        else:
+          cjson = cjson[:-1] + '"}'
+
      cjson = repair_json(cjson, skip_json_loads=True )
      pass
      # bad json
 
-   return cjson
+    return cjson
 
 
 def agentquerytopics(usertopics,topicjsons,llm):
@@ -930,5 +947,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-
-
