@@ -460,8 +460,8 @@ def checkjson(cjson):
     model = default_args['ollama-model']
     temperature = float(default_args['temperature'])
     embeddingmodel = default_args['embedding']
+
     cjson = cjson.strip()
-   
     try:
      checkedjson = json.loads(cjson)  # check to see if json loads - if not its bad
     except Exception as e:
@@ -514,13 +514,13 @@ def agentquerytopics(usertopics,topicjsons,llm):
 
     # Invoking with a string
       response = llm.invoke(query_str)
-      response=response.content    
+      response=str(response.content)
       prompt=cleanstring(t2[1].strip()) + f". here is the data: {mainjson}"
 
       response=cleanstring(response)
       response=response.replace(";",",").replace(":","").replace("'","").replace('"',"")
       
-      bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Topic_Agent": "'+t2[0].strip()+'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
+      bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Agent_Name": "Topic_Agent", "Topic": "'+t2[0].strip()+'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
       bufresponse=checkjson(bufresponse)
       print(bufresponse)
       bufarr.append(bufresponse)
@@ -544,7 +544,7 @@ def teamleadqueryengine(tml_text_engine):
     prompt=cleanstring(teamleadprompt.strip())
     response=cleanstring(response.strip())
     response=response.replace(";",",").replace(":","").replace('"',"").replace("'","")
-    bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Team_Lead_Agent": "'+default_args['teamlead_topic'] +'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
+    bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Agent_Name": "Team_Lead_Agent", "Topic": "'+default_args['teamlead_topic'] +'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
     bufresponse=checkjson(bufresponse)
 
     producegpttokafka(bufresponse,default_args['teamlead_topic'])
@@ -637,10 +637,11 @@ def invokesupervisor(app,maincontent):
         stream_mode="values",):
         if chunk["messages"][-1].content != "":
           lastmessage=chunk["messages"][-1].content
-        
+    
+    lastmessage=str(lastmessage)    
     lastmessage=cleanstring(lastmessage.strip())
     lastmessage=lastmessage.replace(";",",").replace("'","").replace('"',"").replace(":","")
-    bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Supervisor_Agent": "' + default_args['supervisor_topic'] + '","Prompt":"' + supervisormaincontent + '","Response": "' + lastmessage.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
+    bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Agent_Name": "Supervisor_Agent", "Topic": "' + default_args['supervisor_topic'] + '","Prompt":"' + supervisormaincontent + '","Response": "' + lastmessage.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
         
     
     mainjson=[]
