@@ -460,7 +460,8 @@ def checkjson(cjson):
     model = default_args['ollama-model']
     temperature = float(default_args['temperature'])
     embeddingmodel = default_args['embedding']
-
+    cjson = cjson.strip()
+   
     try:
      checkedjson = json.loads(cjson)  # check to see if json loads - if not its bad
     except Exception as e:
@@ -947,3 +948,4 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
