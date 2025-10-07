@@ -92,7 +92,8 @@ tool_function:agent_name:system_prompt;tool_function2:agent_name2:sysemt_prompt2
  #--------------------
  'ollama-model': 'llama3.1',
  'deletevectordbcount': '10',
- 'vectordbpath': '/rawdata/vectordb'
+ 'vectordbpath': '/rawdata/vectordb',
+ 'contextwindow': 10000  
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -110,6 +111,7 @@ def setollama():
     embeddingmodel=default_args['embedding'] #"nomic-embed-text"
     mainip=default_args['mainip']
     mainport=int(default_args['mainport'])
+    contextwindow=default_args['contextwindow']
 
     if 'KUBE' in os.environ:
       if os.environ['KUBE'] == "1":
@@ -120,7 +122,7 @@ def setollama():
     for i in range(30):
       print("Checking if LLM loaded..wait")
       try:
-        llm = ChatOllama(model=model, base_url=mainip+":"+str(mainport), temperature=temperature)
+        llm = ChatOllama(model=model, base_url=mainip+":"+str(mainport), temperature=temperature, num_ctx=int(contextwindow))
         gotllm=1
         print("LLM loaded")
         break
@@ -366,7 +368,7 @@ def producegpttokafka(value,maintopic):
         print("ERROR:",e)
 
 def consumefromtopic(maintopic):
-      #maintopic = default_args['consumefrom']
+
       rollbackoffsets = int(default_args['rollbackoffset'])
       enabletls = int(default_args['enabletls'])
       consumerid=default_args['consumerid']
@@ -399,14 +401,14 @@ def windowname(wtype,sname,dagname):
 ############# Get the real-time data from the data streams #########################
 def getjsonsfromtopics(topics):
 
-    print("in getjsonsfromtopics")
+    print("in getjsonsfromtopics==",topics)
 
-    topicsarr = topics.split(";")
+    topicsarr = topics.split("->>")
     topicjsons = []
            
     for t in topicsarr:
       t=t.strip()
-      t2 = t.split(":")[0].strip()
+      t2 = t.split("<<-")[0].strip()
       try:
         jsonvalue=consumefromtopic(t2)
       except Exception as e:
@@ -418,6 +420,7 @@ def getjsonsfromtopics(topics):
 
 def extract_hyperpredictiondata(hjson):
 
+    print("in extract")
 
     hyper_json = json.loads(hjson)
     hnum=0
@@ -497,7 +500,7 @@ def checkjson(cjson):
 
 
 def agentquerytopics(usertopics,topicjsons,llm):
-    topicsarr = usertopics.split(";")
+    topicsarr = usertopics.split("->>")
     bufresponse = ""
     bufarr = []
     agenttopic = default_args['agenttopic']
@@ -580,19 +583,19 @@ def createactionagents(llm,sname):
     spec.loader.exec_module(dynamic_module)
   
     maintools=default_args['agenttoolfunctions'].strip()
-    funcname=maintools.split(";")
+    funcname=maintools.split("->>")
  
     for f in funcname:
        if len(f)>2:
          f=f.strip()
-         fname=f.split(":")[0]         
+         fname=f.split("<<-")[0]         
          print(fname)
          func_objects = []
          func_object = getattr(dynamic_module, fname)                
          func_objects.append(func_object)
                   
-         aname=f.split(":")[1]
-         aprompt=f.split(":")[2]
+         aname=f.split("<<-")[1]
+         aprompt=f.split("<<-")[2]
                   
          agent = create_react_agent(
             model=llm,
@@ -606,7 +609,7 @@ def createactionagents(llm,sname):
 
 
 def createasupervisor(agents,supervisorprompt,llm):
-    print("in createasupervisor")
+    print("in createasupervisor==",supervisorprompt)
 
     workflow = create_supervisor(
       agents,
@@ -808,6 +811,8 @@ def startagenticai(**context):
        ti.xcom_push(key="{}_cuda".format(sname), value="_{}".format(default_args['CUDA_VISIBLE_DEVICES']))
        ti.xcom_push(key="{}_agenttopic".format(sname), value="{}".format(default_args['agenttopic']))
 
+       ti.xcom_push(key="{}_contextwindow".format(sname), value="_{}".format(default_args['contextwindow']))
+
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))
@@ -817,7 +822,7 @@ def startagenticai(**context):
        wn = windowname('agenticai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-agenticai", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {}".format(fullpath,
                        VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['rollbackoffset'],default_args['ollama-model'],default_args['deletevectordbcount'],default_args['vectordbpath'],
                        default_args['temperature'],default_args['topicid'],default_args['enabletls'],
@@ -825,7 +830,7 @@ def startagenticai(**context):
                        default_args['mainip'],default_args['mainport'],default_args['embedding'],
                        default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt'],
                        default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
-                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],pname),"ENTER"])
+                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['contextwindow'],pname),"ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -862,6 +867,7 @@ if __name__ == '__main__':
         concurrency=sys.argv[25]        
         cuda =  sys.argv[26]
         pname = sys.argv[27]
+        contextwindow = sys.argv[28]
 
        default_args['rollbackoffset']=rollbackoffset
        default_args['ollama-model']=ollamamodel
@@ -885,7 +891,7 @@ if __name__ == '__main__':
        default_args['agent_team_supervisor_topic']=agent_team_supervisor_topic
        default_args['concurrency']=concurrency
        default_args['CUDA_VISIBLE_DEVICES']=cuda
-
+       default_args['contextwindow']=contextwindow
 
 
     if "KUBE" not in os.environ:          
@@ -917,7 +923,7 @@ if __name__ == '__main__':
         # create the Supervisor and kick off action
    
     llmstatus = get_loaded_models()
-    print("llmstatus==",llmstatus)
+    print("llmstatus==",llmstatus,pname)
    
 
     llm,embedding=setollama()
@@ -939,10 +945,11 @@ if __name__ == '__main__':
     deletevectordbcnt=0
     while True:
          deletevectordbcnt +=1   
+         #try:
+         agent_topics = default_args['agents_topic_prompt'] 
+         topicjsons=getjsonsfromtopics(agent_topics)
+         responses,bufresponses=agentquerytopics(agent_topics,topicjsons,llm)
          try:
-            agent_topics = default_args['agents_topic_prompt'] 
-            topicjsons=getjsonsfromtopics(agent_topics)
-            responses,bufresponses=agentquerytopics(agent_topics,topicjsons,llm)
             tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt,llm)
             teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)                  
             mainjson,supbuf=invokesupervisor(app,teamlead_response)
