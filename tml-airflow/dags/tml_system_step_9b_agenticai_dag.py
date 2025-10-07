@@ -429,6 +429,9 @@ def extract_hyperpredictiondata(hjson):
     mainuid=""
     jbufs = ""
 
+    if len(hyper_json['streamtopicdetails']['topicreads']) == 0:
+     return ""
+
     for item in hyper_json['streamtopicdetails']['topicreads']:
         jbuf = ""
 
@@ -457,9 +460,10 @@ def extract_hyperpredictiondata(hjson):
             iden = item['identifier']
             idenarr = iden.split("~")
             mainuid = idenarr[-1]
+            mainuid = mainuid.split("=")[1]
  
 
-        jbuf = '{"hyperprediction":' + str(hnum) + ',"processtype":"' + pt + '", "processvariable":"' + pv + '", "mainuid":"' + mainuid + '"}'
+        jbuf = '{"hp":' + str(hnum) + ',"pt":"' + pt + '", "pv":"' + pv + '", "uid":"' + mainuid + '"}'
         jbufs = jbufs + jbuf +","
  
 
@@ -520,6 +524,8 @@ def agentquerytopics(usertopics,topicjsons,llm):
       mainjson=mainjson.lower()
       if "hyperprediction" in mainjson:
          mainjson=extract_hyperpredictiondata(mainjson)
+         if mainjson == "":
+           continue
   
       if "<<data>>" in t2[1]:
          query_str=t2[1]
@@ -774,6 +780,9 @@ def startagenticai(**context):
        if 'step9bagent_team_supervisor_topic' in os.environ:
           if os.environ['step9bagent_team_supervisor_topic'] != '':
             default_args['agent_team_supervisor_topic'] = os.environ['step9bagent_team_supervisor_topic']
+       if 'step9bcontextwindow' in os.environ:
+          if os.environ['step9bcontextwindow'] != '':
+            default_args['contextwindow'] = os.environ['step9bcontextwindow']
 
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSAGENTICAI".format(sname))
@@ -969,8 +978,6 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-
-
 
 
 
