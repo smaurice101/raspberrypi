@@ -67,7 +67,7 @@ default_args = {
  'agenttopic' : '', # this topic contains the individual agent responses
  'agents_topic_prompt' : """
 <consumefrom - topic agent will monitor:prompt you want for the agent to answer;consumefrom - topic2 agent will monitor:prompt you want for the agent to answer>
-""", # <topic agent will monitor:prompt you want for the agent>
+""", # <topic agent will monitor:prompt you want for the agent>, separate multiple topic agents with <<-
  'teamlead_topic' : '', # Enter the team lead topic - all team lead responses will be written to this topic
  'teamleadprompt' : """
 Enter the prompt for the Team lead agent
@@ -256,7 +256,7 @@ def deletefoldercontents(dirpath,deletevectordbcnt):
 ########################### Vector DB for Team Lead: Agent Responses ###############
 # this is for the team lead agent to consolidate information from individual agents
 ###################################################################################
-def loadtextdataintovectordb(responses,deletevectordbcnt):
+def loadtextdataintovectordb(responses,deletevectordbcnt,llm):
 
     vectordbpath = default_args['vectordbpath']
     
@@ -280,7 +280,7 @@ def loadtextdataintovectordb(responses,deletevectordbcnt):
     # persist index
     tml_index.storage_context.persist(persist_dir=directory_path)
     
-    tml_text_engine = tml_index.as_query_engine(similarity_top_k=3)
+    tml_text_engine = tml_index.as_query_engine(llm=llm,similarity_top_k=3)
 
     return tml_text_engine,deletevectordbcnt
 
@@ -420,36 +420,47 @@ def extract_hyperpredictiondata(hjson):
 
 
     hyper_json = json.loads(hjson)
-    hlist = []
+    hnum=0
+    pt=""
+    pv=""
+    mainuid=""
+    jbufs = ""
 
     for item in hyper_json['streamtopicdetails']['topicreads']:
         jbuf = ""
-        hyperprediction = str(item['hyperprediction'])
-        jbuf = "hyperprediction=" + hyperprediction
+
         if "preprocesstype" in item:
            ptypes = item['preprocesstype']
-           jbuf = jbuf + ", processtype=" + ptypes
+           pt = ptypes
            iden = item['identifier']
            idenarr = iden.split("~")
            pv = idenarr[0]
-           jbuf = jbuf + ", processvariable=" + pv
+           hyperprediction = str(item['hyperprediction'])
+           hnum=round(float(hyperprediction))
 
         if "islogistic" in item:
+           pv="machine learning"
            if item['islogistic'] == "1":
-              jbuf = jbuf + ", processtype=probability prediction" 
+              pt = "probability prediction" 
+              hyperprediction = str(item['hyperprediction'])
+              hnum = round(float(hyperprediction)*100)             
            else:
-              jbuf = jbuf + ", processtype=prediction"
+              hyperprediction = str(item['hyperprediction'])
+              hnum = round(float(hyperprediction))
+              pt = "prediction"
 
 
         if "identifier" in item:
             iden = item['identifier']
             idenarr = iden.split("~")
             mainuid = idenarr[-1]
-            jbuf = jbuf + ", " + mainuid
+ 
 
-        hlist.append("[" + jbuf + "]")
+        jbuf = '{"hyperprediction":' + str(hnum) + ',"processtype":"' + pt + '", "processvariable":"' + pv + '", "mainuid":"' + mainuid + '"}'
+        jbufs = jbufs + jbuf +","
+ 
 
-    hliststr = ",".join(hlist)
+    hliststr = "[" + jbufs[:-1] + "]"
     hliststr=re.sub(r'[\n\r]+', '', hliststr)
     hliststr = hliststr.translate({ord('\n'): None, ord('\r'): None})
     print("hliststr==",hliststr)
@@ -502,20 +513,22 @@ def agentquerytopics(usertopics,topicjsons,llm):
     responses = []
     for t,mainjson in zip(topicsarr,topicjsons):
       t=t.strip()
-      t2  = t.split(":")
-      #print("q========",q)
+      t2  = t.split("<<-")
       mainjson=mainjson.lower()
       if "hyperprediction" in mainjson:
          mainjson=extract_hyperpredictiondata(mainjson)
   
-      query_str=t2[1]+ f". here is the data: {mainjson}"
-#      print("query_string====",query_str)
+      if "<<data>>" in t2[1]:
+         query_str=t2[1]
+         query_str = query_str.replace("<<data>>", f"{mainjson}")
+         print("query_string====",query_str)
 
 
     # Invoking with a string
       response = llm.invoke(query_str)
       response=str(response.content)
-      prompt=cleanstring(t2[1].strip()) + f". here is the data: {mainjson}"
+      
+      prompt=cleanstring(t2[1].strip())
 
       response=cleanstring(response)
       response=response.replace(";",",").replace(":","").replace("'","").replace('"',"")
@@ -930,7 +943,7 @@ if __name__ == '__main__':
             agent_topics = default_args['agents_topic_prompt'] 
             topicjsons=getjsonsfromtopics(agent_topics)
             responses,bufresponses=agentquerytopics(agent_topics,topicjsons,llm)
-            tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt)
+            tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt,llm)
             teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)                  
             mainjson,supbuf=invokesupervisor(app,teamlead_response)
             complete=formatcompletejson(bufresponses,teambuf,supbuf)
@@ -949,5 +962,4 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-
 
