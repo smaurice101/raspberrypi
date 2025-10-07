@@ -260,6 +260,5 @@ if __name__ == '__main__':
 #          time.sleep(10)
          except Exception as e:
           tsslogging.locallogs("ERROR", "STEP 5: Machine Learning DAG in {} {}".format(os.path.basename(__file__),e))
-          tsslogging.tsslogit("Machine Learning DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-          break
+          time.sleep(10)
+          continue 
