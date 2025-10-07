@@ -66,8 +66,8 @@ default_args = {
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
  'agenttopic' : '', # this topic contains the individual agent responses
  'agents_topic_prompt' : """
-<consumefrom - topic agent will monitor:prompt you want for the agent to answer;consumefrom - topic2 agent will monitor:prompt you want for the agent to answer>
-""", # <topic agent will monitor:prompt you want for the agent>, separate multiple topic agents with <<-
+<consumefrom - topic agent will monitor:prompt you want for the agent to answer->>consumefrom - topic2 agent will monitor<<-prompt you want for the agent to answer>
+""", # <topic agent will monitor:prompt you want for the agent>, separate multiple topic agents with ->>
  'teamlead_topic' : '', # Enter the team lead topic - all team lead responses will be written to this topic
  'teamleadprompt' : """
 Enter the prompt for the Team lead agent
@@ -962,4 +962,5 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
 
