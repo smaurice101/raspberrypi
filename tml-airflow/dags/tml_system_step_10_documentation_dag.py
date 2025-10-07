@@ -126,7 +126,7 @@ def doparse(fname,farr):
          pass
 
 def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollback,ollama,deletevector,vectordbpath,topicid,enabletls,partition,mainip,
-                       mainport,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,
+                       mainport,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,contextwindow,
                        pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,mainmodel,mainembedding,pgptcontainername):
       print("update==",op)
       if ollamacontainername != None:
@@ -153,6 +153,7 @@ def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollb
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-supervisorprompt--;{}".format(supervisorprompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions.strip().replace('\n','').replace("\\n","").replace("'","").replace(";","=="))])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-contextwindow--;{}".format(contextwindow)])
 
       if pgptcontainername != None:
        doparse("/{}/privategpt.yml".format(op), ["--kubevectorsearchtype--;{}".format(pvectorsearchtype)])
@@ -270,6 +271,7 @@ def generatedoc(**context):
     step9benabletls=""
     step9bpartition=""
     step9bsupervisorprompt=""
+    step9bcontextwindow=""
 
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
@@ -976,6 +978,10 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-cuda--;{}".format(cuda[1:])])
       step9bCUDA_VISIBLE_DEVICES=cuda[1:]
 
+      contextwindow= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_contextwindow".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-contextwindow--;{}".format(contextwindow[1:])])
+      step9bcontextwindow=contextwindow[1:]
+      
       doparse("/{}/docs/source/kube.rst".format(sname), ["--ollamacontainername--;{}".format(ollamacontainername)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubeconcur--;{}".format(concurrency[1:])])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubecollection--;{}".format(collection)])
@@ -991,6 +997,8 @@ def generatedoc(**context):
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainip--;{}".format(mainip)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainport--;{}".format(mainport[1:])])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-contextwindow--;{}".format(contextwindow[1:])])
+      
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-embedding--;{}".format(embedding)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
@@ -1381,7 +1389,7 @@ def generatedoc(**context):
                        step9bteamleadprompt,
                        step9bsupervisor_topic,
                        step9bagenttoolfunctions,
-                       step9bagent_team_supervisor_topic)
+                       step9bagent_team_supervisor_topic,step9bcontextwindow)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1415,7 +1423,7 @@ def generatedoc(**context):
                        step9bteamleadprompt,
                        step9bsupervisor_topic,
                        step9bagenttoolfunctions,
-                       step9bagent_team_supervisor_topic)
+                       step9bagent_team_supervisor_topic,step9bcontextwindow)
                                                                               
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
@@ -1486,7 +1494,7 @@ def generatedoc(**context):
 
     oppt=copyymls(projectname,sname,kcmd3,kcmd2)
     updateollamaandpgpt(oppt,step9bollamacontainername,step9bconcurrency,step9bvectordbcollectionname,step9btemperature,step9brollback,step9bollama,step9bdeletevectordbcount,step9bvectordbpath,step9btopicid,step9benabletls,step9bpartition,step9bmainip,
-                       step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,step9bsupervisor_topic,step9bsupervisorprompt,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
+                       step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,step9bsupervisor_topic,step9bsupervisorprompt,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,
                        pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,pmainmodel,pmainembedding,pgptcontainername)
   
     subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,snamertd), shell=True)
