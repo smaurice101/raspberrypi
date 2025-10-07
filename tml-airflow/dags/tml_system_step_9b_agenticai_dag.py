@@ -104,20 +104,23 @@ VIPERPORT=""
 HTTPADDR=""
 mainproducerid = default_args['producerid']
 
-def setollama():
+def setollama(model):
     ###############  Ollama Model #################################
-    model=default_args['ollama-model']
+#    model=default_args['ollama-model']
     temperature=float(default_args['temperature'])
     embeddingmodel=default_args['embedding'] #"nomic-embed-text"
     mainip=default_args['mainip']
     mainport=int(default_args['mainport'])
     contextwindow=default_args['contextwindow']
 
+#    mainmodels = model.split(",") # agent,teamlead,supervisor
+
     if 'KUBE' in os.environ:
       if os.environ['KUBE'] == "1":
          default_args['mainip']="ollama-service"
          mainip=default_args['mainip']
 
+    print("model====",model)
     gotllm=0
     for i in range(30):
       print("Checking if LLM loaded..wait")
@@ -151,10 +154,48 @@ def setollama():
     return llm,ollama_emb
 
 
+def checkforloadedmodels(mainmodel):
+    mainip=default_args['mainip']   
+    mainport=int(default_args['mainport'])
+
+    OLLAMA_URL = f"{mainip}:{mainport}/api/tags"
+    count = 0
+
+    while True:
+      try:
+        response = requests.get(OLLAMA_URL)
+        response.raise_for_status()
+        data = response.json()
+        # Assume 'models' key contains the list of available/loaded models
+        loaded_models = [model for model in data.get("models", [])]
+        print("loaded_models=",loaded_models)
+        if mainmodel in json.dumps(loaded_models) or mainmodel+":latest" in json.dumps(loaded_models):
+          print(f"Model {mainmodel} found")
+          return 1
+        else:
+          pull_ollama_model(mainmodel) # pull the model
+          time.sleep(5)
+          count += 1
+          if count > 600:
+           break
+          else:
+            continue
+      except Exception as e:
+        print(f"Error querying Ollama server: {e} Will keep trying")
+        time.sleep(5)
+        count += 1
+        if count > 20:
+          break
+        continue
+
+    return 0
+
+
 def get_loaded_models():
     mainip=default_args['mainip']
     mainport=int(default_args['mainport'])
     mainmodel=default_args['ollama-model']
+    mainmodel = mainmodel.split(",")[0] #check if one model is there
     OLLAMA_URL = f"{mainip}:{mainport}/api/tags"
     count = 0
 
@@ -285,6 +326,40 @@ def loadtextdataintovectordb(responses,deletevectordbcnt,llm):
     tml_text_engine = tml_index.as_query_engine(llm=llm,similarity_top_k=3)
 
     return tml_text_engine,deletevectordbcnt
+
+def pull_ollama_model(model_name):
+    """
+    Initiates an Ollama model pull using the Ollama API.
+
+    Args:
+        model_name (str): The name of the model to pull (e.g., "llama3").
+    """
+    mainip=default_args['mainip']
+    mainport=int(default_args['mainport'])
+
+    url = f"http://{mainip}:{mainport}/api/pull"  # Default Ollama API endpoint
+    headers = {"Content-Type": "application/json"}
+    payload = {"name": model_name}
+
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(payload), stream=True)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+
+        print(f"Initiating pull for model: {model_name}")
+        for chunk in response.iter_content(chunk_size=None):
+            if chunk:
+                # Process the streaming response, e.g., print progress
+                try:
+                    data = json.loads(chunk.decode('utf-8'))
+                    if 'status' in data:
+                        print(f"Status: {data['status']}", end='\r')
+                except json.JSONDecodeError:
+                    pass # Handle incomplete JSON chunks if necessary
+
+        print(f"\nPull for model '{model_name}' completed.")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error pulling model '{model_name}': {e}")
 
             
 def stopcontainers():
@@ -513,6 +588,9 @@ def agentquerytopics(usertopics,topicjsons,llm):
     temperature = float(default_args['temperature'])
     embeddingmodel = default_args['embedding']
 
+    md = model.split(",")
+    model=md[0]
+     
     if len(topicsarr) == 0:
         print("No topics data")
         return "",""
@@ -557,6 +635,10 @@ def teamleadqueryengine(tml_text_engine):
     bufresponse = ""
 
     model = default_args['ollama-model']
+    md = model.split(",")
+    if len(md)>1:
+      model=md[1]
+
     temperature = float(default_args['temperature'])
     embeddingmodel = default_args['embedding']
 
@@ -629,6 +711,10 @@ def createasupervisor(agents,supervisorprompt,llm):
 def invokesupervisor(app,maincontent):
    
     model = default_args['ollama-model']
+    md = model.split(",")
+    if len(md)>2:
+      model=md[2]
+
     temperature = float(default_args['temperature'])
     embeddingmodel = default_args['embedding']
     funcname = default_args['agenttoolfunctions']
@@ -931,18 +1017,29 @@ if __name__ == '__main__':
 
         # create the Supervisor and kick off action
    
-    llmstatus = get_loaded_models()
-    print("llmstatus==",llmstatus,pname)
+#    llmstatus = get_loaded_models()
+ #   print("llmstatus==",llmstatus,pname)
    
+    mainmodels=default_args['ollama-model']
+   
+    models = mainmodels.split(",")  #models must be agent,teamlead,supervisor
+    embedding=None
 
-    llm,embedding=setollama()
+    modelsarr = []
+    for m in models:
+       llmstatus = get_loaded_models()
+       checkforloadedmodels(m)
+       print("llmstatus==",llmstatus,pname)
+       llm,embedding=setollama(m.strip())
+       modelsarr.append(llm)
 
-    if llm !="":
+
+    if len(modelsarr) >2:
       #try:
-      actionagents=createactionagents(llm,pname)
+      actionagents=createactionagents(modelsarr[2],pname)
       supervisorprompt = default_args['supervisorprompt']
       try:
-        app=createasupervisor(actionagents,supervisorprompt,llm)
+        app=createasupervisor(actionagents,supervisorprompt,modelsarr[2])
       except Exception as e:
         print("Error=",e)
         tsslogging.locallogs("WARN", "STEP 9b unable to create agents {}".format(e))
@@ -957,9 +1054,9 @@ if __name__ == '__main__':
          #try:
          agent_topics = default_args['agents_topic_prompt'] 
          topicjsons=getjsonsfromtopics(agent_topics)
-         responses,bufresponses=agentquerytopics(agent_topics,topicjsons,llm)
+         responses,bufresponses=agentquerytopics(agent_topics,topicjsons,modelsarr[0])
          try:
-            tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt,llm)
+            tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt,modelsarr[1])
             teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)                  
             mainjson,supbuf=invokesupervisor(app,teamlead_response)
             complete=formatcompletejson(bufresponses,teambuf,supbuf)
@@ -978,6 +1075,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-
-
-
