@@ -415,6 +415,9 @@ def startpgptcontainer():
       mainembedding=default_args['embedding']
       mainhost = default_args['mainip']
 
+      mainmodels = mainmodel.split(",")
+      mainmodel = " && ".join(mainmodels)
+
       ollamaserver = mainhost + ":" + str(mainport)
       localmodels=''
       if default_args['localmodelsfolder'] != '':
@@ -1105,4 +1108,5 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
 
