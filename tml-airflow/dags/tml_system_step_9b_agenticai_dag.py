@@ -93,7 +93,8 @@ tool_function:agent_name:system_prompt;tool_function2:agent_name2:sysemt_prompt2
  'ollama-model': 'llama3.1',
  'deletevectordbcount': '10',
  'vectordbpath': '/rawdata/vectordb',
- 'contextwindow': 10000  
+ 'contextwindow': '10000',
+ 'localmodelsfolder': '/mnt/c/maads/tml-airflow/rawdata/ollama'  
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -415,13 +416,15 @@ def startpgptcontainer():
       mainhost = default_args['mainip']
 
       ollamaserver = mainhost + ":" + str(mainport)
-
+      localmodels=''
+      if default_args['localmodelsfolder'] != '':
+          localmodels = "-v " + default_args['localmodelsfolder'] + ":/root/.ollama:z"
 
       time.sleep(10)
       if os.environ['TSS'] == "1":       
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z {} --env PORT={} --env TSS=1 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,localmodels,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
       else:
-          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
+          buf = "docker run -d -p {}:{} --net=host --gpus all -v /var/run/docker.sock:/var/run/docker.sock:z {} --env PORT={} --env TSS=0 --env GPU=1 --env COLLECTION={} --env WEB_CONCURRENCY={} --env CUDA_VISIBLE_DEVICES={} --env TOKENIZERS_PARALLELISM=false --env temperature={} --env LLAMAMODEL=\"{}\" --env mainembedding=\"{}\" --env OLLAMASERVERPORT=\"{}\" {}".format(mainport,mainport,localmodels,mainport,collection,concurrency,cuda,temperature,mainmodel,mainembedding,ollamaserver,ollamacontainername)
 
 
       if stopcontainers() == 1:
@@ -863,6 +866,10 @@ def startagenticai(**context):
           if os.environ['step9bagents_topic_prompt'] != '':
             default_args['agents_topic_prompt'] = os.environ['step9bagents_topic_prompt']
 
+       if 'step9bagenttopic' in os.environ:
+          if os.environ['step9bagenttopic'] != '':
+            default_args['agenttopic'] = os.environ['step9bagenttopic']
+
        if 'step9bteamlead_topic' in os.environ:
           if os.environ['step9bteamlead_topic'] != '':
             default_args['teamlead_topic'] = os.environ['step9bteamlead_topic']
@@ -881,6 +888,10 @@ def startagenticai(**context):
        if 'step9bcontextwindow' in os.environ:
           if os.environ['step9bcontextwindow'] != '':
             default_args['contextwindow'] = os.environ['step9bcontextwindow']
+
+       if 'step9blocalmodelsfolder' in os.environ:
+          if os.environ['step9blocalmodelsfolder'] != '':
+            default_args['localmodelsfolder'] = os.environ['step9blocalmodelsfolder']
 
        VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
        VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPREPROCESSAGENTICAI".format(sname))
@@ -920,6 +931,8 @@ def startagenticai(**context):
 
        ti.xcom_push(key="{}_contextwindow".format(sname), value="_{}".format(default_args['contextwindow']))
 
+       ti.xcom_push(key="{}_localmodelsfolder".format(sname), value="{}".format(default_args['localmodelsfolder']))
+
        repo=tsslogging.getrepo()
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))
@@ -929,7 +942,7 @@ def startagenticai(**context):
        wn = windowname('agenticai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-agenticai", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {}".format(fullpath,
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\"".format(fullpath,
                        VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['rollbackoffset'],default_args['ollama-model'],default_args['deletevectordbcount'],default_args['vectordbpath'],
                        default_args['temperature'],default_args['topicid'],default_args['enabletls'],
@@ -937,7 +950,8 @@ def startagenticai(**context):
                        default_args['mainip'],default_args['mainport'],default_args['embedding'],
                        default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt'],
                        default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
-                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],pname,default_args['contextwindow']),"ENTER"])
+                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],
+                       pname,default_args['contextwindow'],default_args['localmodelsfolder'],default_args['agenttopic']),"ENTER"])
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -975,6 +989,9 @@ if __name__ == '__main__':
         cuda =  sys.argv[26]
         pname = sys.argv[27]
         contextwindow = sys.argv[28]
+        localmodelsfolder = sys.argv[29]
+
+        agenttopic = sys.argv[30]
 
        default_args['rollbackoffset']=rollbackoffset
        default_args['ollama-model']=ollamamodel
@@ -999,7 +1016,8 @@ if __name__ == '__main__':
        default_args['concurrency']=concurrency
        default_args['CUDA_VISIBLE_DEVICES']=cuda
        default_args['contextwindow']=contextwindow
-
+       default_args['localmodelsfolder']=localmodelsfolder
+       default_args['agenttopic']=agenttopic
 
     if "KUBE" not in os.environ:          
          
@@ -1063,11 +1081,11 @@ if __name__ == '__main__':
     deletevectordbcnt=0
     while True:
          deletevectordbcnt +=1   
-         #try:
-         agent_topics = default_args['agents_topic_prompt'] 
-         topicjsons=getjsonsfromtopics(agent_topics)
-         responses,bufresponses=agentquerytopics(agent_topics,topicjsons,modelsarr[0])
          try:
+            agent_topics = default_args['agents_topic_prompt'] 
+            topicjsons=getjsonsfromtopics(agent_topics)
+            responses,bufresponses=agentquerytopics(agent_topics,topicjsons,modelsarr[0])
+         
             tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt,modelsarr[1])
             teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)                  
             mainjson,supbuf=invokesupervisor(app,teamlead_response)
