@@ -155,6 +155,12 @@ def setollama(model):
 
 
 def checkforloadedmodels(mainmodel):
+
+    if 'KUBE' in os.environ:
+      if os.environ['KUBE'] == "1":
+         default_args['mainip']="ollama-service"
+         mainip=default_args['mainip']
+
     mainip=default_args['mainip']   
     mainport=int(default_args['mainport'])
 
@@ -192,6 +198,12 @@ def checkforloadedmodels(mainmodel):
 
 
 def get_loaded_models():
+
+    if 'KUBE' in os.environ:
+      if os.environ['KUBE'] == "1":
+         default_args['mainip']="ollama-service"
+         mainip=default_args['mainip']
+
     mainip=default_args['mainip']
     mainport=int(default_args['mainport'])
     mainmodel=default_args['ollama-model']
@@ -337,7 +349,7 @@ def pull_ollama_model(model_name):
     mainip=default_args['mainip']
     mainport=int(default_args['mainport'])
 
-    url = f"http://{mainip}:{mainport}/api/pull"  # Default Ollama API endpoint
+    url = f"{mainip}:{mainport}/api/pull"  # Default Ollama API endpoint
     headers = {"Content-Type": "application/json"}
     payload = {"name": model_name}
 
@@ -1075,3 +1087,4 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
