@@ -973,7 +973,7 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttopic--;{}".format(agenttopic)])
       step9bagenttopic=agenttopic
 
-      localmodelsfolder= context['ti'].xcom_pull(task_ids='step_9b_localmodelsfolder',key="{}_localmodelsfolder".format(sname))
+      localmodelsfolder= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_localmodelsfolder".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-localmodelsfolder--;{}".format(localmodelsfolder)])
       step9blocalmodelsfolder=localmodelsfolder
       
