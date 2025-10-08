@@ -272,6 +272,8 @@ def generatedoc(**context):
     step9bpartition=""
     step9bsupervisorprompt=""
     step9bcontextwindow=""
+    step9blocalmodelsfolder=""
+    step9bagenttopic=""
 
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
@@ -969,7 +971,12 @@ def generatedoc(**context):
 
       agenttopic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agenttopic".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttopic--;{}".format(agenttopic)])
-     
+      step9bagenttopic=agenttopic
+
+      localmodelsfolder= context['ti'].xcom_pull(task_ids='step_9b_localmodelsfolder',key="{}_localmodelsfolder".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-localmodelsfolder--;{}".format(localmodelsfolder)])
+      step9blocalmodelsfolder=localmodelsfolder
+      
       concurrency= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_concurrency".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-concurrency--;{}".format(concurrency[1:])])
       step9bconcurrency=concurrency[1:]
@@ -998,6 +1005,9 @@ def generatedoc(**context):
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainip--;{}".format(mainip)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainport--;{}".format(mainport[1:])])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-contextwindow--;{}".format(contextwindow[1:])])
+
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agenttopic--;{}".format(agenttopic)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-localmodelsfolder--;{}".format(localmodelsfolder)])
       
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-embedding--;{}".format(embedding)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
@@ -1160,7 +1170,7 @@ def generatedoc(**context):
         doparse("/{}/docs/source/details.rst".format(sname), ["--hyperbatch--;{}".format(hyperbatch[1:])])
     
     snamerp=sname.replace("_","-")
-    rbuf = "https://{}.readthedocs.io".format(sname)
+    rbuf = "https://{}.readthedocs.io".format(snamerp)
     doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
     
     ############# VIZ URLS
