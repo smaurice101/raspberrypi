@@ -164,42 +164,6 @@ def ingressgrpc(sname):
 
   return ing
 
-def ingressnoext(sname): # Localfile being accessed
-  ing = """
-    ############# nginx-ingress-{}.yml
-    apiVersion: networking.k8s.io/v1
-    kind: Ingress
-    metadata:
-      name: tml-ingress
-      annotations:
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-    spec:
-      ingressClassName: nginx
-      rules:
-        - host: tml.tss
-          http:
-            paths:
-              - path: /viz(/|$)(.*)
-                pathType: ImplementationSpecific
-                backend:
-                  service:
-                    name: {}-visualization-service
-                    port:
-                      number: 80
-    ---
-    apiVersion: v1
-    kind: ConfigMap
-    apiVersion: v1
-    metadata:
-      name: ingress-nginx-controller
-      namespace: ingress-nginx
-    data:
-      allow-snippet-annotations: "true"
-  """.format(sname,sname,sname)
-
-  return ing
-
 def writeoutymls(op,ingyml,solyml,sname):
 #                kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f ollama.yml -f {}.yml".format(sname)
   file_name=f"{op}/ingress.yml"
@@ -590,6 +554,42 @@ spec:
   with open(file_name, "w") as file:
     file.write(ing)
 
+def ingressnoext(sname): # Localfile being accessed
+  ing = """
+    ############# nginx-ingress-{}.yml
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: tml-ingress
+      annotations:
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: tml.tss
+          http:
+            paths:
+              - path: /viz(/|$)(.*)
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: {}-visualization-service
+                    port:
+                      number: 80
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ingress-nginx-controller
+      namespace: ingress-nginx
+    data:
+      allow-snippet-annotations: "true"
+  """.format(sname,sname,sname)
+
+  return ing
+
 
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
@@ -622,7 +622,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step9bteamleadprompt='',
                 step9bsupervisor_topic='',
                 step9bagenttoolfunctions='',
-                step9bagent_team_supervisor_topic='',step9bcontextwindow=''):
+                step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9bagenttopic='',step9blocalmodelsfolder=''):
                
     cp = ""
     cpp = ""
@@ -904,6 +904,10 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                value: '{}'               
              - name: step9bcontextwindow
                value: '{}'                              
+             - name: step9bagenttopic
+               value: '{}'                              
+             - name: step9blocalmodelsfolder
+               value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -963,7 +967,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
                            step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
                            step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
-                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,step9bagenttopic,step9blocalmodelsfolder,
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
                     
@@ -1000,7 +1004,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step9bteamleadprompt='',
                      step9bsupervisor_topic='',
                      step9bagenttoolfunctions='',
-                     step9bagent_team_supervisor_topic='',step9bcontextwindow=''):
+                     step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9bagenttopic='',step9blocalmodelsfolder=''):
                                          
     cp = ""
     cpp = ""
@@ -1278,6 +1282,10 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                value: '{}'                              
              - name: step9bcontextwindow
                value: '{}'                                             
+             - name: step9bagenttopic
+               value: '{}'                              
+             - name: step9blocalmodelsfolder
+               value: '{}'                                             
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -1321,7 +1329,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                            step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
                            step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
                            step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
-                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,                           
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,step9bagenttopic,step9blocalmodelsfolder,                           
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
                     
