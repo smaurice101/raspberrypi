@@ -630,6 +630,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
 
 
     # Invoking with a string
+      print("------before llm invoke===")
       response = llm.invoke(query_str)
       response=str(response.content)
       
@@ -640,7 +641,7 @@ def agentquerytopics(usertopics,topicjsons,llm):
       
       bufresponse  = '{"Date": "' + str(datetime.now(timezone.utc)) + '","Agent_Name": "Topic_Agent", "Topic": "'+t2[0].strip()+'","Prompt":"' + prompt + '","Response": "' + response.strip() + '","Model": "' + model + '","Embedding":"' + embeddingmodel + '", "Temperature":"' + str(temperature) +'"}'
       bufresponse=checkjson(bufresponse)
-      print(bufresponse)
+      print("======bufresponse====",bufresponse)
       bufarr.append(bufresponse)
             
       producegpttokafka(bufresponse,agenttopic)
@@ -1084,11 +1085,11 @@ if __name__ == '__main__':
     deletevectordbcnt=0
     while True:
          deletevectordbcnt +=1   
-         try:
-            agent_topics = default_args['agents_topic_prompt'] 
-            topicjsons=getjsonsfromtopics(agent_topics)
-            responses,bufresponses=agentquerytopics(agent_topics,topicjsons,modelsarr[0])
-         
+         #try:
+         agent_topics = default_args['agents_topic_prompt'] 
+         topicjsons=getjsonsfromtopics(agent_topics)
+         responses,bufresponses=agentquerytopics(agent_topics,topicjsons,modelsarr[0])
+         try:        
             tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt,modelsarr[1])
             teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)                  
             mainjson,supbuf=invokesupervisor(app,teamlead_response)
@@ -1108,5 +1109,6 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
 
 
