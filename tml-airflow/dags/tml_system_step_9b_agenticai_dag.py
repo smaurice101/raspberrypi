@@ -809,6 +809,23 @@ def formatcompletejson(bufresponses,teamlead_response,lastmessage):
     print("teambuf===",teambuf)
     print("supbuf===",supbuf)
   
+    # check if valid 
+    try:
+      jvalid=json.loads(bufresponses)
+    except Exception as e:
+      bufresponses = '[{"Status": "no data found", "Model": "na", "Embedding": "na", "Temperature": "na", "Prompt": "na", "Response": "no data found", "Date": "' + str(datetime.now(timezone.utc)) + '", "Agent_Name": "", "Topic": "na"}]'
+      
+    try:
+      jvalid=json.loads(teamlead_response)
+    except Exception as e:
+      teamlead_response =  '{"Status": "no data found", "Model": "na", "Embedding": "na", "Temperature": "na", "Prompt": "na", "Response": "no data found", "Date": "' + str(datetime.now(timezone.utc)) + '", "Agent_Name": "Team Lead agent", "Topic": "na"}'
+
+    try:
+      jvalid=json.loads(lastmessage)
+    except Exception as e:
+      lastmessage = '{"Status": "no data found", "Model": "na", "Embedding": "na", "Temperature": "na", "Prompt": "na", "Response": "Error - likely a Tool could not be run. Check your tools.", "Date": "' + str(datetime.now(timezone.utc)) + '", "Agent_Name": "Supervisor agent", "Topic": "na"}'
+
+
     mainjson = bufresponses[:-1] + "," + teamlead_response + "," + lastmessage + "]"
     mainjson = " ".join(mainjson.split())
     mainjson = " ".join(mainjson.splitlines())
@@ -1085,11 +1102,11 @@ if __name__ == '__main__':
     deletevectordbcnt=0
     while True:
          deletevectordbcnt +=1   
-         #try:
-         agent_topics = default_args['agents_topic_prompt'] 
-         topicjsons=getjsonsfromtopics(agent_topics)
-         responses,bufresponses=agentquerytopics(agent_topics,topicjsons,modelsarr[0])
-         try:        
+         try:
+            agent_topics = default_args['agents_topic_prompt'] 
+            topicjsons=getjsonsfromtopics(agent_topics)
+            responses,bufresponses=agentquerytopics(agent_topics,topicjsons,modelsarr[0])
+         #try:        
             tml_text_engine,deletevectordbcnt=loadtextdataintovectordb(responses,deletevectordbcnt,modelsarr[1])
             teamlead_response,teambuf=teamleadqueryengine(tml_text_engine)                  
             mainjson,supbuf=invokesupervisor(app,teamlead_response)
