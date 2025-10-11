@@ -622,7 +622,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step9bteamleadprompt='',
                 step9bsupervisor_topic='',
                 step9bagenttoolfunctions='',
-                step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9bagenttopic='',step9blocalmodelsfolder=''):
+                step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9blocalmodelsfolder='',step9bagenttopic=''):
                
     cp = ""
     cpp = ""
@@ -1004,7 +1004,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step9bteamleadprompt='',
                      step9bsupervisor_topic='',
                      step9bagenttoolfunctions='',
-                     step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9bagenttopic='',step9blocalmodelsfolder=''):
+                     step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9blocalmodelsfolder='',step9bagenttopic=''):
                                          
     cp = ""
     cpp = ""
