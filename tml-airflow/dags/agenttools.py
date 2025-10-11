@@ -47,6 +47,8 @@ def send_email(smtp_server: str, smtp_port: int, username: str, password: str,
     """
 
     recemails = recipient.split(",")
+    if subject =="":
+       subject = "[TML AGENT ALERT]"
     
     try:        
         # Use the updated format_email which preserves body line breaks        
@@ -95,6 +97,7 @@ def average(query: list) -> int:
       average = sum(query) / len(query)
       average = round(average, 2)        
     return average
+
 
 
 
