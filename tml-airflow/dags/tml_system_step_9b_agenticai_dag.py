@@ -660,6 +660,7 @@ def teamleadqueryengine(tml_text_engine):
     temperature = float(default_args['temperature'])
     embeddingmodel = default_args['embedding']
 
+    teamleadprompt = teamleadprompt.replace(";"," ")
     response = tml_text_engine.query(teamleadprompt )
     response=str(response)
 #    print("team repsose = ", response)
@@ -717,6 +718,8 @@ def createactionagents(llm,sname):
 def createasupervisor(agents,supervisorprompt,llm):
     print("in createasupervisor==",supervisorprompt)
 
+    supervisorprompt = supervisorprompt.replace(";"," ")
+ 
     workflow = create_supervisor(
       agents,
       model=llm,
@@ -741,7 +744,7 @@ def invokesupervisor(app,maincontent):
  
     try:    
         supervisormaincontent ="""
-          Here is the team lead's response: {}.  Generate an approprate action using one of the tools.
+          Here is the team lead's assessment: {}.  Based on the Team Lead's assessment what is the appropriate action.
         """.format(maincontent) 
         
         result = app.invoke({
@@ -1125,10 +1128,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-
-
-
-
-
-
-
