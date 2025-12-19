@@ -87,8 +87,10 @@ spec:
               fieldPath: metadata.name  # Gets pod-hash suffix
         - name: PROCESS_MODE
           value: "csv_parallel"  # Signal your app          
-        - name: KUBE
-          value: "1"         
+        - name: KUBE        
+          value: "1"
+        - name: checkfilesseconds        
+          value: "30" # check CSV every 30 seconds          
         volumeMounts:
         - mountPath: /tml/spreadsheets
           name: spreadsheets
