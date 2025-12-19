@@ -17,7 +17,7 @@ spec:
         pod-index: "{{ .SerialNumber }}"  # Unique pod ID        
     spec:
       #hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+      dnsPolicy: ClusterFirst #ClusterFirstWithHostNet
       containers:
       - name: tml-pipeline
         image: maadsdocker/tml-pipeline-prod-amd64:latest
