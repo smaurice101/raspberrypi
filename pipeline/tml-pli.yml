@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: tml-oil-gas
+      annotations:
+        pod-index: "{{ .SerialNumber }}"  # Unique pod ID        
     spec:
       #hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
@@ -79,9 +81,21 @@ spec:
           value: "25"  
         - name: LOGTOPIC
           value: "pipelogs"        		  
+        - name: POD_INDEX  # NEW: Unique pod identifier
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name  # Gets pod-hash suffix
+        - name: PROCESS_MODE
+          value: "csv_parallel"  # Signal your app          
+        - name: KUBE
+          value: "1"         
         volumeMounts:
         - mountPath: /tml/spreadsheets
           name: spreadsheets
+        - mountPath: /tml/done  # NEW: Track processed files
+          name: done
+        - mountPath: /tml/locks  # NEW: File locking
+          name: locks          
         ports:
         - containerPort: 8080
       restartPolicy: Always
@@ -89,4 +103,12 @@ spec:
       - name: spreadsheets
         hostPath:
           path: /tmp/tmlpipeline/spreadsheets
+          type: DirectoryOrCreate
+      - name: done  # NEW
+        hostPath:
+          path: /tmp/tmlpipeline/done
+          type: DirectoryOrCreate
+      - name: locks  # NEW
+        hostPath:
+          path: /tmp/tmlpipeline/locks
           type: DirectoryOrCreate
