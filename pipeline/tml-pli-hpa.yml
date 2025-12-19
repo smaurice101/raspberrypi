@@ -2,48 +2,16 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: tml-pipelines-hpa
-  labels:
-    app: tml-oil-gas
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
     kind: Deployment
     name: tml-pipelines
-  minReplicas: 1
-  maxReplicas: 20  # Increased for hundreds of CSVs
+  minReplicas: 2
+  maxReplicas: 50  # Scale up for CSV bursts
   metrics:
-  # PRIMARY: Scale on unprocessed CSV count
-  - type: Pods
-    pods:
-      metric:
-        name: csvs_unprocessed  # Custom metric from your app
-      target:
-        type: AverageValue
-        averageValue: 5  # 5 CSVs per pod = 100 pods for 500 CSVs
-  # SECONDARY: CPU fallback
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70
-  # TERTIARY: Memory fallback  
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
-  behavior:
-    scaleDown:
-      stabilizationWindowSeconds: 300  # Don't scale down too fast
-      policies:
-      - type: Pods
-        value: 2
-        periodSeconds: 60
-    scaleUp:
-      stabilizationWindowSeconds: 60
-      policies:
-      - type: Pods
-        value: 5
-        periodSeconds: 15  # Scale up fast when CSVs arrive
+        averageUtilization: 60  # Aggressive scaling
