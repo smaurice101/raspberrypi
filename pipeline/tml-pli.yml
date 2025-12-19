@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tml-pipelines
+  labels:
+    app: tml-oil-gas
+spec:
+  replicas: 2  # Start with 1
+  selector:
+    matchLabels:
+      app: tml-oil-gas
+  template:
+    metadata:
+      labels:
+        app: tml-oil-gas
+    spec:
+      #hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: tml-pipeline
+        image: maadsdocker/tml-pipeline-prod-amd64:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "500m"    # Reduced 
+            memory: "2Gi"
+          limits:
+            cpu: "1000m"   # 1 core max, integer quota
+            memory: "4Gi"
+        # Remove securityContext temporarily 
+        livenessProbe:
+          exec:          # Use exec instead of HTTP for now
+            command:
+            - /bin/sh
+            - -c
+            - "pgrep -f tml-pipeline || exit 1"
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "pgrep -f tml-pipeline || exit 1"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+ #      readinessProbe:
+#          httpGet:
+ #           path: /ready
+  #          port: 8080
+  #        initialDelaySeconds: 10
+          periodSeconds: 10
+        env:
+        - name: BROKERHOSTPORT
+          value: "127.0.0.1:9092" # Local Kafka running inside container, switch to Cloud KAfka MUST enter API_KEY=CLOUDUSERNAME, API_Secret=CLOUDPASSWORD
+        - name: CLOUDUSERNAME
+          value: ""
+        - name: CLOUDPASSWORD
+          value: ""
+        - name: maxdistance
+          value: "0.8"
+        - name: heatmapdatapoints
+          value: "60"
+        - name: linregdatapoints
+          value: "200"
+        - name: outputfolder
+          value: "/tml"
+        - name: tmldir
+          value: "/tml/"      
+        - name: azuremodel
+          value: "gpt-35-turbo"      
+        - name: AZURE_OPENAI_API_KEY
+          value: ""      
+        - name: AZURE_OPENAI_ENDPOINT
+          value: ""           
+        - name: genheat
+          value: "1"                  
+        - name: pipeage
+          value: "25"  
+        - name: LOGTOPIC
+          value: "pipelogs"        		  
+        volumeMounts:
+        - mountPath: /tml/spreadsheets
+          name: spreadsheets
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+      - name: spreadsheets
+        hostPath:
+          path: /tmp/tmlpipeline/spreadsheets
+          type: DirectoryOrCreate
