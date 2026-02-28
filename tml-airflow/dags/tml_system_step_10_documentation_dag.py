@@ -1216,8 +1216,9 @@ def generatedoc(**context):
     #-------------------    
     airflowurl = "http:\/\/localhost:{}".format(airflowport[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(airflowurl), "/{}/docs/source/operating.rst".format(sname)])
-    
-    readthedocs = "https:\/\/{}.readthedocs.io".format(sname)
+
+    snamerp=sname.replace("_","-")
+    readthedocs = "https:\/\/{}.readthedocs.io".format(snamerp)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
     triggername = sd
