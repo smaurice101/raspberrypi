@@ -42,13 +42,7 @@ def deletetopics(topic):
     buf = "/Kafka/kafka_2.13-3.0.0/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic {} --delete".format(topic)
     
     proc=subprocess.run(buf, shell=True)
-    #proc.terminate()
-    #proc.wait()
-                
-    repo=tsslogging.getrepo()    
-    tsslogging.tsslogit("Deleting topic {} in {}".format(topic,os.path.basename(__file__)), "INFO" )                     
-    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")  
-    
+                    
 def setupkafkatopics(**context):
  # Set personal data
 
