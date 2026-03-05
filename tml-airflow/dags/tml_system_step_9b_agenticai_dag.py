@@ -659,7 +659,7 @@ def teamleadqueryengine(tml_text_engine):
 
     temperature = float(default_args['temperature'])
     embeddingmodel = default_args['embedding']
-
+    teamleadprompt = default_args['teamleadprompt']
     teamleadprompt = teamleadprompt.replace(";"," ")
     response = tml_text_engine.query(teamleadprompt )
     response=str(response)
@@ -1128,3 +1128,4 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
