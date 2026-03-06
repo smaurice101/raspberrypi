@@ -1123,9 +1123,10 @@ if __name__ == '__main__':
           if count == 0:
             tsslogging.locallogs("ERROR", "STEP 9b: Agentic AI Step 9b DAG in {} {}  Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e))
             tsslogging.tsslogit("PrivateGPT Step 9b DAG in {} {} Aborting after 10 consecutive errors.".format(os.path.basename(__file__),e), "ERROR" )
-            tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
+            #tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
           time.sleep(5)
           count = count + 1
           if count > 600:
             break
+
 
