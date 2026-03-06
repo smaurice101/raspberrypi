@@ -56,23 +56,80 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,
 
 
 # Check if tmux window exists BEFORE creating
-def tmuxsession(windowinstance,new_pythonrun):
-    check_result = subprocess.run(
-        ["tmux", "has-session", "-t", f"plugin_{windowinstance}"], 
-        capture_output=True
-    )
+def tmuxsession(windowinstance,steps):
     
-    if check_result.returncode != 0:
-        # Window doesn't exist - create it
-        subprocess.run(["tmux", "new-session", "-d", "-s", f"plugin_{windowinstance}"])
-        
-    # Send command to existing OR newly created window
-    subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}", "C-c"])
+    chip='amd64'
+    mainos='linux'
+    cdir=''
+    isnew1=0
+    isnew2=0
+    viperrun=''
+    viperport=-1
   
-    subprocess.run([
-        "tmux", "send-keys", "-t", f"plugin_{windowinstance}", 
-        new_pythonrun, "ENTER"
-    ], capture_output=True, text=True)
+    if 'CHIP' in os.environ:
+      chip=os.environ['CHIP']
+    
+    chip=chip.lower()  
+    windowinstance=windowinstance.replace("_","-")
+     
+    # start the binary
+    if steps=="4":      
+       cdir="/Viper-preprocess"
+       viperrun=f"/Viper-preprocess/viper-{mainos}-{chip}"
+    if steps=="5":      
+       cdir="/Viper-ml"      
+       viperrun=f"/Viper-ml/viper-{mainos}-{chip}"
+    if steps=="6":      
+       cdir="/Viper-predict"            
+       viperrun=f"/Viper-predict/viper-{mainos}-{chip}"
+    if steps=="9b":      
+       cdir="/Viper-preprocess-agenticai"                  
+       viperrun=f"/Viper-preprocess-agenticai/viper-{mainos}-{chip}"
+
+    if windowinstance != 'default':
+      check_result = subprocess.run(
+          ["tmux", "has-session", "-t", f"plugin_{windowinstance}"], 
+          capture_output=True
+      )
+      check_result2 = subprocess.run(
+          ["tmux", "has-session", "-t", f"plugin_{windowinstance}_{steps}"], 
+          capture_output=True
+      )
+    
+      if check_result.returncode != 0:
+          # Window doesn't exist - create it
+          subprocess.run(["tmux", "new-session", "-d", "-s", f"plugin_{windowinstance}"])
+          subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}", f"cd /{cdir}", "ENTER"], capture_output=True, text=True)        
+          isnew1=1
+      else:
+         subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}", "C-c"])
+  
+      if check_result2.returncode != 0:
+          # Window doesn't exist - create it
+          subprocess.run(["tmux", "new-session", "-d", "-s", f"plugin_{windowinstance}_{steps}"])
+          isnew2=1
+      else:
+          subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}_{steps}", "C-c"])
+  
+    with open(f"{cdir}/viper.txt", 'r', encoding='utf-8') as file:
+        line = file.readline()
+        oldviperport=line.split(",")[1]
+
+    if windowinstance!='default':      
+      subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}_{steps}", f"cd /{cdir}", "ENTER"], capture_output=True, text=True)
+      subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}_{steps}", viperrun, "ENTER"], capture_output=True, text=True)
+
+    if isnew2:
+      time.sleep(5)
+
+    with open(f"{cdir}/viper.txt", 'r', encoding='utf-8') as file:
+        line = file.readline()
+        viperport=line.split(",")[1]
+
+    return oldviperport,viperport,f"plugin_{windowinstance}_{steps}",f"plugin_{windowinstance}"
+    #start the script
+  #  subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}", new_pythonrun, "ENTER"], capture_output=True, text=True)
+
 
 def flatten_for_shell(arg_list):
     """Flatten lists and remove newlines from strings"""
@@ -99,12 +156,13 @@ def flatten_for_shell(arg_list):
 def stopstart(steps,stepsarr,windowinstance='default'):
 
   pythonrun=''
-  
+  step=''
   if steps=='step4':
-    with open("/Viper-preprocess/viper.txt", 'r', encoding='utf-8') as file:
-        line = file.readline()
-        viperport=line.split(",")[1]
-    
+    step='4'
+    oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
+    if windowinstance=='default':
+      viperport=oldviperport
+      
     with open("/tmux/step4_preprocess.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         pythonrun = lines[2].strip()  # Index 2 = 3rd line     
@@ -119,34 +177,19 @@ def stopstart(steps,stepsarr,windowinstance='default'):
         args[-5] = stepsarr[-1]    # rollbackoffset
       
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
-        print(f"new_pythonrun: {new_pythonrun}")
-      
-  elif steps=='step4c':
-    with open("/tmux/step4c_preprocess.txt", 'r', encoding='utf-8') as file:
-        lines = file.readlines()
-        pythonrun = lines[2].strip()  # Index 2 = 3rd line     
-        wn = lines[1].strip()
-        args = shlex.split(pythonrun)      
-        args[-13] = stepsarr[-13] 
-        args[-12] = stepsarr[-12]           
-        args[-11] = stepsarr[-11]      
-        args[-10] = stepsarr[-10]        
-        args[-9] = stepsarr[-9]    
-        args[-8] = stepsarr[-8]           
-        args[-7] = stepsarr[-7]    
-        args[-6] = stepsarr[-6]       
-        args[-5] = stepsarr[-5]    
-        args[-4] = stepsarr[-4]           
-        args[-3] = stepsarr[-3]    
-        args[-2] = stepsarr[-2]       
-        args[-1] = stepsarr[-1]    
-        new_pythonrun = shlex.join(args) 
+        print(f"new_pythonrun: {new_pythonrun}")      
   elif steps=='step5':
+    step='5'
+    oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
+    if windowinstance=='default':
+      viperport=oldviperport
+  
     with open("/tmux/step5_ml.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         pythonrun = lines[2].strip()  # Index 2 = 3rd line     
         wn = lines[1].strip()
         args = shlex.split(pythonrun)      
+        args[-11] = viperport  # viper port                 
         args[-8] = stepsarr[-8]           
         args[-7] = stepsarr[-7]    
         args[-6] = stepsarr[-6]       
@@ -159,11 +202,17 @@ def stopstart(steps,stepsarr,windowinstance='default'):
         print(f"new_pythonrun: {new_pythonrun}")
       
   elif steps=='step6':
+    step='6'    
+    oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
+    if windowinstance=='default':
+      viperport=oldviperport
+    
     with open("/tmux/step6_predictions.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         pythonrun = lines[2].strip()  # Index 2 = 3rd line     
         wn = lines[1].strip()
         args = shlex.split(pythonrun)      
+        args[-10] = viperport  # viper port      
         args[-7] = stepsarr[-7]    
         args[-6] = stepsarr[-6]       
         args[-5] = stepsarr[-5]    
@@ -177,8 +226,9 @@ def stopstart(steps,stepsarr,windowinstance='default'):
   if windowinstance=='default':
     subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
     subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "{}".format(new_pythonrun), "ENTER"],capture_output=True, text=True)        
-  else:
-    tmuxsession(windowinstance,new_pythonrun)    
+  else:  
+    subprocess.run(["tmux", "send-keys", "-t", "{}".format(swn), "{}".format(new_pythonrun), "ENTER"],capture_output=True, text=True)        
+    
     #subprocess.run(["tmux", "new", "-d", "-s", "{}".format(windowinstance)])
     #subprocess.run(["tmux", "send-keys", "-t", "{}".format(windowinstance), "{}".format(new_pythonrun), "ENTER"],capture_output=True, text=True)        
     
@@ -195,37 +245,37 @@ def terminatetmuxwindows(step,wn):
             subprocess.run(['tmux', 'kill-session', '-t', session_name])
               
             print(f"Killed tmux session: {session_name}")
-            mw=session_name.replace("plugin_", "", 1)
+            
+            mw=session_name.split("_")[1]#session_name.replace("plugin_", "", 1)
             wt = wt + mw + ","
     wt = wt[:-1]      
   elif wn=='default':
-    if step==4:
+    if step=="4":
       with open("/tmux/step4_preprocess.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         wn = lines[1].strip()
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])        
         wt=wn
-    if step==5:
+    if step=="5":
       with open("/tmux/step5_ml.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         wn = lines[1].strip()
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])      
         wt=wn        
-    if step==6:
+    if step=="6":
       with open("/tmux/step6_predictions.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         wn = lines[1].strip()
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
         wt=wn        
   else: 
-       subprocess.run(['tmux', 'kill-session', '-t', f"plugin_{wn}"])
+       subprocess.run(['tmux', 'kill-session', '-t', f"plugin_{wn}_{step}"])
+       subprocess.run(['tmux', 'kill-session', '-t', f"plugin_{wn}"])    
        wt = wn
   return wt    
 
 def gettmlsystemsparams():
     repo=tsslogging.getrepo()  
-    tsslogging.tsslogit("RESTAPI producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")            
 
   ############################################### API Routes ########################################      
 
@@ -243,7 +293,7 @@ def gettmlsystemsparams():
           if not jdata:
             return "Missing windows", 400
           
-          step = int(jdata.get('step',0))            
+          step = jdata.get('step','')            
           windowname = jdata.get('windowname','')
           
           if windowname != '':
