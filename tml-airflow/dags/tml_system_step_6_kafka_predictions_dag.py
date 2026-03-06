@@ -183,11 +183,34 @@ def startpredictions(**context):
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
-            
+
+       preprocess_data_topic = default_args['preprocess_data_topic']
+       ml_prediction_topic = default_args['ml_prediction_topic']
+       streamstojoin = default_args['streamstojoin']
+       inputdata = default_args['inputdata']
+       consumefrom = default_args['consumefrom']
+       maxrows = default_args['maxrows']
+       pathtoalgos = default_args['pathtoalgos']
+  
        wn = windowname('predict',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-predict", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,HPDEHOSTPREDICT,HPDEPORTPREDICT[1:],maxrows), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {} {} {} \"{}\" \"{}\" {} \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,
+                                                      HPDEHOSTPREDICT,HPDEPORTPREDICT[1:],maxrows,
+                                                      preprocess_data_topic,ml_prediction_topic,
+                                                      streamstojoin,inputdata,consumefrom,pathtoalgos), "ENTER"],capture_output=True, text=True)        
+
+
+       pane_pid = subprocess.check_output([
+          "tmux", "list-panes", "-t", wn, "-F", "#{pane_pid}"
+       ]).decode().strip()
+
+       with open("/tmux/step6_predictions.txt", 'w', encoding='utf-8') as file: 
+          file.write("{}\n".format(pane_pid))
+          file.write("{}\n".format(wn))
+          file.write("python {} 1 {} {}{} {} {}{} {} {} {} {} \"{}\" \"{}\" {} \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],HPDEADDR,
+                                                      HPDEHOSTPREDICT,HPDEPORTPREDICT[1:],maxrows,preprocess_data_topic,ml_prediction_topic,
+                                                      streamstojoin,inputdata,consumefrom,pathtoalgos))         
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -201,7 +224,18 @@ if __name__ == '__main__':
          HPDEPORTPREDICT=sys.argv[6]    
          maxrows =  sys.argv[7]
          default_args['maxrows'] = maxrows
-         
+         default_args['preprocess_data_topic'] = sys.argv[8]
+         default_args['ml_prediction_topic'] = sys.argv[9]
+         default_args['streamstojoin'] = sys.argv[10]
+         default_args['inputdata'] = sys.argv[11]
+         default_args['consumefrom'] = sys.argv[12]
+         args=sys.argv[13]
+         if args.startswith("/"):
+           default_args['pathtoalgos'] = args
+         else:  
+           default_args['pathtoalgos'] = f"/Viper-ml/viperlogs/{args}"
+
+
          tsslogging.locallogs("INFO", "STEP 6: Predictions started")
          while True:
           try:              
