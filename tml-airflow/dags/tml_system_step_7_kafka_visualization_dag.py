@@ -41,13 +41,6 @@ def windowname(wtype,vipervizport,sname,dagname):
 def startstreamingengine(**context):
         repo=tsslogging.getrepo()  
         tsslogging.locallogs("INFO", "STEP 7: Visualization started")
-        try:
-          tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-        except Exception as e:
-            #git push -f origin main
-            os.chdir("/{}".format(repo))
-            subprocess.call("git push -f origin main", shell=True)
     
         sd = context['dag'].dag_id
         sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
