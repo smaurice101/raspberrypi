@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from airflow.decorators import dag, task
 from flask import Flask, request, jsonify
 from gevent.pywsgi import WSGIServer
@@ -14,6 +14,8 @@ import subprocess
 import time
 import random
 import shlex
+from typing import Dict, Any
+import re
 
 sys.dont_write_bytecode = True
 ##################################################  REST API SERVER #####################################
@@ -39,6 +41,26 @@ default_args = {
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
+def writeviperlogs(errortype,message,VIPERTOKEN, VIPERHOST, VIPERPORT):
+
+  args = default_args    
+  dt = datetime.now(timezone.utc)
+  timestamp = dt.strftime("[%a, %d %b %Y %H:%M:%S UTC]")
+  
+  vmsg=f"{timestamp} {errortype.upper()} [{message}]"
+  Logjson = json.dumps({
+      "MESSAGE": str(vmsg),
+      "SERVICE": "TML-Plugin",
+      "HOST": VIPERHOST,
+      "PORT": str(VIPERPORT),
+      "KAFKA_CONNECT_BOOTSTRAP_SERVERS": "Kafka Broker"
+  })
+
+  #Logjson=f'{"MESSAGE":"{vmsg}","SERVICE": "TML-Plugin", "HOST": "{VIPERHOST}","PORT": "{str(VIPERPORT)}","KAFKA_CONNECT_BOOTSTRAP_SERVERS": "Kafka Broker"}'		 
+
+#  print("Logjson=",Logjson)
+  producetokafka(Logjson, "", "","plugin-producer","viperlogs","",args,VIPERTOKEN, VIPERHOST, VIPERPORT)
+
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,VIPERTOKEN, VIPERHOST, VIPERPORT):
      inputbuf=value     
      topicid=int(args['topicid'])
@@ -51,6 +73,7 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,
      try:
         result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
                                             topicid,identifier)
+        print("produce result========",result)
      except Exception as e:
         print("ERROR:",e)
 
@@ -153,12 +176,16 @@ def flatten_for_shell(arg_list):
                   
     return ' '.join(flat_args)
   
-def stopstart(steps,stepsarr,windowinstance='default'):
+def stopstart(step,stepsarr,windowinstance='default'):
 
+  print("Stopstart")
   pythonrun=''
-  step=''
-  if steps=='step4':
-    step='4'
+
+  print("windowinstance==",windowinstance)
+  print("step==",isinstance(step,str),step)
+  step=str(step)
+  
+  if step=="4":
     oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
     if windowinstance=='default':
       viperport=oldviperport
@@ -178,8 +205,7 @@ def stopstart(steps,stepsarr,windowinstance='default'):
       
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
         print(f"new_pythonrun: {new_pythonrun}")      
-  elif steps=='step5':
-    step='5'
+  elif step=="5":
     oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
     if windowinstance=='default':
       viperport=oldviperport
@@ -201,8 +227,7 @@ def stopstart(steps,stepsarr,windowinstance='default'):
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
         print(f"new_pythonrun: {new_pythonrun}")
       
-  elif steps=='step6':
-    step='6'    
+  elif step=="6":
     oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
     if windowinstance=='default':
       viperport=oldviperport
@@ -254,6 +279,9 @@ def terminatetmuxwindows(step,wn):
       with open("/tmux/step4_preprocess.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         wn = lines[1].strip()
+
+        print("wn 4=========",wn)
+        
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])        
         wt=wn
     if step=="5":
@@ -329,6 +357,7 @@ def gettmlsystemsparams():
                                  'myname','myemail','mylocation',description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,'')
                 print(result)
+                writeviperlogs("INFO",f"Creating Topic: {pt}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                                        
             return jsonify({
               'status': 'success',
               'topics': topics,
@@ -337,6 +366,7 @@ def gettmlsystemsparams():
               'description': description
             }), 201
           except Exception as e:
+            writeviperlogs("ERROR",f"Creating Topic failed: {pt}: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
             return jsonify({
               'status': f"error: {e}",
               'topics': topics,
@@ -353,7 +383,7 @@ def gettmlsystemsparams():
           if not jdata or not jdata.get('rawdatatopic'):
             return "Missing preprocess or invalid preprocess", 400
 
-          step = jdata.get('step','')  
+          step = str(jdata.get('step','') )
           try:
            if step=='4':
             step4raw_data_topic = jdata.get('rawdatatopic','')  
@@ -364,7 +394,7 @@ def gettmlsystemsparams():
             
             windowinstance = jdata.get("windowinstance","default")                        
             step4arr = [step4raw_data_topic,step4preprocesstypes,step4jsoncriteria,step4preprocess_data_topic,rollbackoffset]
-            stopstart('step4',step4arr,windowinstance)
+            stopstart(step,step4arr,windowinstance)
             
            elif step=='4c':
              maxrows = jdata.get('maxrows',10)  
@@ -383,7 +413,7 @@ def gettmlsystemsparams():
              windowinstance = jdata.get("windowinstance","default")            
              step4carr = [maxrows,searchterms,rememberpastwindows,patternwindowthreshold,raw_data_topic,rtmsstream,rtmsscorethreshold,attackscorethreshold,patternscorethreshold,
                          localsearchtermfolder,localsearchtermfolderinterval,rtmsfoldername,rtmsmaxwindows]
-             stopstart('step4c',step4carr,windowinstance)
+             stopstart(step,step4carr,windowinstance)
 
            return jsonify({
               'status': 'success',
@@ -395,6 +425,7 @@ def gettmlsystemsparams():
               'windowinstance': jdata.get("windowinstance","default")                 
               }), 201
           except Exception as e:
+           writeviperlogs("ERROR",f"Preprocessing failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
            return jsonify({
               'status': f"error:{e}",
               'step4raw_data_topic': jdata.get('rawdatatopic',''),
@@ -403,7 +434,7 @@ def gettmlsystemsparams():
               'step4jsoncriteria': jdata.get('jsoncriteria',''),
               'rollbackoffset': jdata.get('rollbackoffset',400),            
               'windowinstance': jdata.get("windowinstance","default")                 
-              }), 201
+              }), 400
             
           
 #-------------------------------- MACHINE LEARNING -----------------------------------------------------                  
@@ -413,9 +444,9 @@ def gettmlsystemsparams():
           if not jdata:
             return "Missing ml or invalid ml", 400
 
-          step = jdata.get('step','')  
+          step = str(jdata.get('step','') )
           try:
-            if step==5:
+            if step=="5":
              trainingdatafolder = jdata.get('trainingdatafolder','')  
              ml_data_topic = jdata.get('ml_data_topic','')  
              preprocess_data_topic = jdata.get('preprocess_data_topic','')  
@@ -424,10 +455,10 @@ def gettmlsystemsparams():
              independentvariables = jdata.get('independentvariables','')  
              processlogic = jdata.get('processlogic','')  
              rollbackoffsets = jdata.get('rollbackoffsets',50)  
-             windowinstance = jdata.get("windowinstance","default")            
+             windowinstance = jdata.get('windowinstance','default')            
              step5arr = [rollbackoffsets,processlogic,independentvariables,dependentvariable,
                          islogistic,preprocess_data_topic,ml_data_topic,trainingdatafolder]
-             stopstart('step5',step5arr,windowinstance)
+             stopstart(step,step5arr,windowinstance)
              return jsonify({
               'status': "success",
               'trainingdatafolder': jdata.get('trainingdatafolder',''),
@@ -438,9 +469,10 @@ def gettmlsystemsparams():
               'independentvariables': jdata.get('independentvariables',''),
               'processlogic': jdata.get('processlogic',''),
               'rollbackoffsets': jdata.get('rollbackoffsets',50),
-              'windowinstance': jdata.get("windowinstance","default")                          
+              'windowinstance': jdata.get('windowinstance','default')                          
               }), 201    
           except Exception as e:
+             writeviperlogs("ERROR",f"Machine learning failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
              return jsonify({
               'status': f"error:{e}",
               'trainingdatafolder': jdata.get('trainingdatafolder',''),
@@ -461,10 +493,10 @@ def gettmlsystemsparams():
           if not jdata:
             return "Missing ml or invalid prediction", 400
           
-          step = jdata.get('step','')  
+          step = str(jdata.get('step','') )
 
           try:
-            if step==6:
+            if step=="6":
              pathtoalgos = jdata.get('pathtoalgos','')  
              maxrows = jdata.get('rollbackoffsets',50)  
              consumefrom = jdata.get('consumefrom','')  
@@ -472,9 +504,9 @@ def gettmlsystemsparams():
              streamstojoin = jdata.get('streamstojoin','')  
              ml_prediction_topic = jdata.get('ml_prediction_topic','')  
              preprocess_data_topic = jdata.get('preprocess_data_topic','')  
-             windowinstance = jdata.get("windowinstance","default")            
+             windowinstance = jdata.get('windowinstance','default')            
              step6arr = [maxrows,preprocess_data_topic,ml_prediction_topic,streamstojoin,inputdata,consumefrom,pathtoalgos]
-             stopstart('step6',step6arr,windowinstance)
+             stopstart(step,step6arr,windowinstance)
              return jsonify({
               'status': "success",
                'pathtoalgos': jdata.get('pathtoalgos',''),
@@ -484,9 +516,10 @@ def gettmlsystemsparams():
                'streamstojoin': jdata.get('streamstojoin',''),  
                'ml_prediction_topic': jdata.get('ml_prediction_topic',''),  
                'preprocess_data_topic': jdata.get('preprocess_data_topic',''),  
-               'windowinstance': jdata.get("windowinstance","default")    
+               'windowinstance': jdata.get('windowinstance','default')    
               }), 201          
           except Exception as e:
+             writeviperlogs("ERROR",f"Predictions failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
              return jsonify({
               'status': f"error:{e}",
                'pathtoalgos': jdata.get('pathtoalgos',''),
@@ -496,7 +529,7 @@ def gettmlsystemsparams():
                'streamstojoin': jdata.get('streamstojoin',''),  
                'ml_prediction_topic': jdata.get('ml_prediction_topic',''),  
                'preprocess_data_topic': jdata.get('preprocess_data_topic',''),  
-               'windowinstance': jdata.get("windowinstance","default")    
+               'windowinstance': jdata.get('windowinstance','default')    
               }), 400
     
 #-------------------------------- CONSUME -----------------------------------------------------                        
@@ -525,7 +558,6 @@ def gettmlsystemsparams():
           legal = jdata.get('legal','tml-legal')  
           
           forward_headers = {'Content-Type': 'application/json'}
-
 
           if maintopic != '':
            try: 
@@ -601,11 +633,15 @@ def gettmlsystemsparams():
                    })                 
                  except Exception as e:
                     forward_statuses.append({'url': fw.strip(), 'error': str(e)})
+                    writeviperlogs("ERROR",f"Forwarding URL failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                
+
                response['forward_statuses'] = forward_statuses                   
                return jsonify(response), 200
            except Exception as e:
                print("Error=",e)
+               writeviperlogs("ERROR",f"Consume failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                             
                return jsonify({"error": f"Consumption failed: {e}"}), 500
+             
              
   #         return result      
 ####################################################################################################      
@@ -627,7 +663,97 @@ def gettmlsystemsparams():
              item = json.dumps(item)            
              readdata(item,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'],topic)
           return "ok"      
-        
+
+####################################################################################################
+        @app.route(rule='/health', methods=['POST'])
+        def tmux_health_check_json() -> Dict[str, Any]:
+            def run_tmux(cmd):
+                try:
+                    result = subprocess.run(['tmux'] + cmd, capture_output=True, text=True, timeout=10)
+                    return result.stdout.strip()
+                except:
+                    return ""
+            
+            result = {
+                "timestamp": datetime.now().isoformat(),
+                "sessions": [],
+                "summary": {
+                    "total_plugin_windows": 0,
+                    "error_count": 0,
+                    "healthy": True
+                }
+            }
+            
+            # Get clean session list
+            sessions_raw = run_tmux(['ls', '-F', '#{session_name}']) or run_tmux(['list-sessions', '-F', '#{session_name}'])
+            sessions = [s.strip() for s in sessions_raw.split('\n') if s.strip()]
+            
+            crash_patterns = [r'panic[:\s]', r'fatal\s+error', r'segmentation.*fault', 
+                             r'SIGSEGV', r'runtime\s+error', r'goroutine\s+panic', 
+                             r'signal:.*killed', r'signal:.*abrt']
+            
+            for session_name in sessions:
+                # ✅ FIX 1: Check if SESSION starts with plugin_
+                is_plugin_session = session_name.startswith('plugin_')
+                session_name_user ="n/a"
+                if is_plugin_session:
+                  session_name_user=session_name.split("_")[1]
+                  
+                session_data = {
+                    "name": session_name,
+                    "user_session": session_name_user, 
+                    "is_plugin_session": is_plugin_session,
+                    "plugin_windows": [],
+                    "status": "healthy",
+                    "plugin_window_count": 0
+                }
+                
+                # Get windows for this session
+                windows_raw = run_tmux(['list-windows', '-t', session_name, 
+                                       '-F', '#{window_index}:#{window_name}'])
+                windows = [w for w in windows_raw.split('\n') if ':' in w]
+                
+                # ✅ FIX 2: Include ANY window starting with plugin_ OR session is plugin_
+                plugin_windows = []
+                for win in windows:
+                    win_index, win_name = win.split(':', 1)
+                    # Check if WINDOW starts with plugin_ OR SESSION is plugin_
+                    if win_name.startswith('plugin_') or is_plugin_session:
+                        plugin_windows.append((win_index, win_name))
+                
+                # Process plugin windows
+                for win_index, win_name in plugin_windows:
+                    result["summary"]["total_plugin_windows"] += 1
+                    session_data["plugin_window_count"] += 1
+                    
+                    pane_content = run_tmux(['capture-pane', '-t', f'{session_name}:{win_index}.0', 
+                                           '-S', '-1000', '-e', '-q'])
+                    
+                    crashes = [line.strip() for line in pane_content.split('\n') 
+                              if any(re.search(p, line, re.IGNORECASE) for p in crash_patterns)]
+                    
+                    window_data = {
+                        "index": win_index,
+                        "name": win_name,
+                        "status": "healthy" if not crashes else "crashed",
+                        "crash_lines": crashes[:5]
+                    }
+                    
+                    if crashes:
+                        result["summary"]["error_count"] += 1
+                        session_data["status"] = "unhealthy"
+                        result["summary"]["healthy"] = False
+                    
+                    session_data["plugin_windows"].append(window_data)
+                
+                # ✅ FIX 3: Include ANY session with plugin activity
+                if session_data["plugin_window_count"] > 0 or is_plugin_session:
+                    result["sessions"].append(session_data)
+ 
+            writeviperlogs("INFO",f"{result}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
+            
+            return jsonify(result),200
+####################################################################################################      
         #app.run(port=default_args['rest_port']) # for dev
         if os.environ['TSS']=="0": 
           try:  
@@ -636,18 +762,21 @@ def gettmlsystemsparams():
            tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to WSGIServer in {} - {}".format(os.path.basename(__file__),e))
                 
            tsslogging.tsslogit("ERROR: Cannot connect to WSGIServer in {}".format(os.path.basename(__file__)), "ERROR" )                     
-           tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
+ #          tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
            print("ERROR: Cannot connect to  WSGIServer") 
+           writeviperlogs("ERROR",f"Cannot start TML Plugin server: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
            return             
         else:
           try:  
             print("Listening")  
+            writeviperlogs("INFO","TML Plugin Server Started",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
             http_server = WSGIServer(('', int(default_args['tss_rest_port'])), app)
           except Exception as e:
            tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to WSGIServer in {} - {}".format(os.path.basename(__file__),e))                                
            tsslogging.tsslogit("ERROR: Cannot connect to WSGIServer in {}".format(os.path.basename(__file__)), "ERROR" )                     
-           tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
+#           tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
            print("ERROR: Cannot connect to  WSGIServer") 
+           writeviperlogs("ERROR",f"Cannot start plugin server: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
            return             
             
         tsslogging.locallogs("INFO", "STEP 3: RESTAPI HTTP Server started ... successfully")
