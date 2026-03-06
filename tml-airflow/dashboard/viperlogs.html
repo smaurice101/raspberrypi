@@ -57,6 +57,93 @@ Website: http://www.otics.ca
             --border-radius: 16px;
         }
 
+.streaming-btn {
+    position: relative;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(59, 130, 246, 0.9));
+    border: 2px solid transparent;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 10px 30px rgba(30, 58, 138, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    backdrop-filter: blur(10px);
+}
+
+.streaming-btn:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(16, 185, 129, 0.95));
+    box-shadow: 
+        0 20px 40px rgba(59, 130, 246, 0.5),
+        0 0 30px rgba(59, 130, 246, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    transform: translateY(-3px);
+}
+
+.streaming-btn:active {
+    transform: translateY(-1px);
+}
+
+.streaming-btn:disabled {
+    background: rgba(75, 85, 99, 0.5);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Pulsing ring animation for active streaming */
+.streaming-btn.streaming {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 
+        0 0 0 0 rgba(16, 185, 129, 0.7),
+        0 10px 30px rgba(16, 185, 129, 0.4),
+        inset 0 0 0 1px rgba(255,255,255,0.2);
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 
+            0 0 0 0 rgba(16, 185, 129, 0.7),
+            0 10px 30px rgba(16, 185, 129, 0.4),
+            inset 0 0 0 1px rgba(255,255,255,0.2);
+    }
+    70% {
+        box-shadow: 
+            0 0 0 20px rgba(16, 185, 129, 0),
+            0 10px 30px rgba(16, 185, 129, 0.3),
+            inset 0 0 0 1px rgba(255,255,255,0.2);
+    }
+    100% {
+        box-shadow: 
+            0 0 0 0 rgba(16, 185, 129, 0),
+            0 10px 30px rgba(16, 185, 129, 0.2),
+            inset 0 0 0 1px rgba(255,255,255,0.2);
+    }
+}
+
+/* Loading spinner overlay */
+.streaming-btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    animation: spin 1s ease-in-out infinite;
+}
         
     </style>
 </head>
@@ -78,7 +165,7 @@ Website: http://www.otics.ca
 			 
 				<div class="loader" id="loaderdiv" style="display:none;float: left"></div>
 			 
-				<button id="start" name="submit">Start Streaming</button> <br><a id="Export" href="#">Download Table as CSV</a> | <a id="Export2" href="#">Download JSON</a>  <br>
+				<button id="start" name="submit" class="streaming-btn">Start Streaming</button> <br><a id="Export" href="#">Download Table as CSV</a> | <a id="Export2" href="#">Download JSON</a>  <br>
 				<font size=2><b>Status:</b></font> <input type=text id="statustext" value="" style="font-size:10px;" size=100>
 				 <div id="chart_div"></div>
 <div id="search_div" style="margin-bottom: 10px;">
