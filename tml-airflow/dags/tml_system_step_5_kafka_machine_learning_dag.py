@@ -207,6 +207,13 @@ def startml(**context):
        ti.xcom_push(key="{}_coefsubtopicnames".format(sname), value=default_args['coefsubtopicnames'])
        ti.xcom_push(key="{}_HPDEADDR".format(sname), value=HPDEADDR)
 
+       dependentvariable=default_args['dependentvariable']
+       rollbackoffsets=default_args['rollbackoffsets'] 
+       islogistic=default_args['islogistic']
+       preprocess_data_topic=default_args['preprocess_data_topic']
+       ml_data_topic=default_args['ml_data_topic']
+       fullpathtotrainingdata=default_args['fullpathtotrainingdata']
+
        repo=tsslogging.getrepo() 
        if sname != '_mysolution_':
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
@@ -216,7 +223,19 @@ def startml(**context):
        wn = windowname('ml',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-ml", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {} \"{}\" \"{}\"".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], HPDEADDR, HPDEHOST, HPDEPORT[1:],rollback,processlogic,independentvariables), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {}{} {} {} \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], 
+                                             HPDEADDR, HPDEHOST, HPDEPORT[1:],rollbackoffsets,processlogic,independentvariables,dependentvariable, islogistic,
+                                             preprocess_data_topic, ml_data_topic,fullpathtotrainingdata), "ENTER"],capture_output=True, text=True)        
+       pane_pid = subprocess.check_output([
+          "tmux", "list-panes", "-t", wn, "-F", "#{pane_pid}"
+       ]).decode().strip()
+
+       with open("/tmux/step5_ml.txt", 'w', encoding='utf-8') as file: 
+          file.write("{}\n".format(pane_pid))
+          file.write("{}\n".format(wn))
+          file.write("python {} 1 {} {}{} {} {}{} {} {} \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:], 
+                                             HPDEADDR, HPDEHOST, HPDEPORT[1:],rollbackoffsets,processlogic,independentvariables,dependentvariable, islogistic,
+                                             preprocess_data_topic, ml_data_topic,fullpathtotrainingdata))         
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -234,8 +253,24 @@ if __name__ == '__main__':
         default_args['processlogic'] = processlogic
         independentvariables =  sys.argv[9]
         default_args['independentvariables'] = independentvariables
+
+         #-------------------
+        default_args['dependentvariable'] =  sys.argv[10]
+        default_args['islogistic'] =  sys.argv[11]
+        default_args['preprocess_data_topic'] =  sys.argv[12]
+        default_args['ml_data_topic'] =  sys.argv[13]
+
+        args = sys.argv[14]  
+        if args.startswith("/"):
+           default_args['fullpathtotrainingdata'] = sys.argv[14]
+        else:
+           default_args['fullpathtotrainingdata'] =  f"/Viper-ml/viperlogs/{args}"
+          
+         #------------------------
+         
         subprocess.run("rm -rf {}".format(default_args['fullpathtotrainingdata']), shell=True)
-        
+
+         
         tsslogging.locallogs("INFO", "STEP 5: Machine learning started")
         try: 
           f = open("/tmux/step5.txt", "w")
@@ -251,4 +286,4 @@ if __name__ == '__main__':
          except Exception as e:
           tsslogging.locallogs("ERROR", "STEP 5: Machine Learning DAG in {} {}".format(os.path.basename(__file__),e))
           time.sleep(10)
-          continue 
+          continue
