@@ -222,16 +222,6 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":          
         repo=tsslogging.getrepo()
-        try:
-          tsslogging.tsslogit("Machine Learning DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-        except Exception as e:
-            #git push -f origin main
-            try:
-              os.chdir("/{}".format(repo))
-              subprocess.call("git push -f origin main", shell=True)
-            except Exception as e:
-              pass
             
         VIPERTOKEN = sys.argv[2]
         VIPERHOST = sys.argv[3]
