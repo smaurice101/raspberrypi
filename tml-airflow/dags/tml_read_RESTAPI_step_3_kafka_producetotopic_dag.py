@@ -749,10 +749,12 @@ def gettmlsystemsparams():
                 # ✅ FIX 3: Include ANY session with plugin activity
                 if session_data["plugin_window_count"] > 0 or is_plugin_session:
                     result["sessions"].append(session_data)
- 
+          
             writeviperlogs("INFO",f"{result}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
             
             return jsonify(result),200
+
+      
 ####################################################################################################      
         #app.run(port=default_args['rest_port']) # for dev
         if os.environ['TSS']=="0": 
