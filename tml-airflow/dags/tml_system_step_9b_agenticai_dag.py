@@ -976,6 +976,25 @@ def startagenticai(**context):
                        default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],
                        pname,default_args['contextwindow'],default_args['localmodelsfolder'],default_args['agenttopic']),"ENTER"])
 
+       pane_pid = subprocess.check_output([
+          "tmux", "list-panes", "-t", wn, "-F", "#{pane_pid}"
+       ]).decode().strip()
+
+       with open("/tmux/step9b_agenticai.txt", 'w', encoding='utf-8') as file: 
+          file.write("{}\n".format(pane_pid))
+          file.write("{}\n".format(wn))
+          file.write("python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\"".format(fullpath,
+                       VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+                       default_args['rollbackoffset'],default_args['ollama-model'],default_args['deletevectordbcount'],default_args['vectordbpath'],
+                       default_args['temperature'],default_args['topicid'],default_args['enabletls'],
+                       default_args['partition'], default_args['vectordbcollectionname'], default_args['ollamacontainername'], 
+                       default_args['mainip'],default_args['mainport'],default_args['embedding'],
+                       default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt'],
+                       default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
+                       default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],
+                       pname,default_args['contextwindow'],default_args['localmodelsfolder'],default_args['agenttopic']))         
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
        if sys.argv[1] == "1":
@@ -1128,5 +1147,6 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
 
 
