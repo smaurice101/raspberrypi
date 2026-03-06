@@ -192,7 +192,17 @@ def dopreprocessing(**context):
        wn = windowname('preprocess',sname,sd)     
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],maxrows,default_args['raw_data_topic'],default_args['preprocesstypes'],default_args['jsoncriteria'],default_args['preprocess_data_topic']), "ENTER"])        
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} {} \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],
+                                                          maxrows,default_args['raw_data_topic'],default_args['preprocesstypes'],default_args['jsoncriteria'],default_args['preprocess_data_topic']), "ENTER"],capture_output=True, text=True)        
+       pane_pid = subprocess.check_output([
+          "tmux", "list-panes", "-t", wn, "-F", "#{pane_pid}"
+       ]).decode().strip()
+
+       with open("/tmux/step4_preprocess.txt", 'w', encoding='utf-8') as file: 
+          file.write("{}\n".format(pane_pid))
+          file.write("{}\n".format(wn))
+          file.write("python {} 1 {} {}{} {} {} \"{}\" \"{}\" \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],
+                                                          maxrows,default_args['raw_data_topic'],default_args['preprocesstypes'],default_args['jsoncriteria'],default_args['preprocess_data_topic']))         
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -218,5 +228,5 @@ if __name__ == '__main__':
           except Exception as e:    
            tsslogging.locallogs("ERROR", "STEP 4: Preprocessing DAG in {} {}".format(os.path.basename(__file__),e))
            tsslogging.tsslogit("Preprocessing DAG in {} {}".format(os.path.basename(__file__),e), "ERROR" )                     
-           #tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
+           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
            break
