@@ -12,7 +12,7 @@ Website: http://www.otics.ca
 <base target="/" />   
     <meta charset="UTF-8" />
 	   <link rel="shortcut icon" type="image/x-icon" href="./oticsico.png" />
-    <title>VIPER Log Streaming</title>
+    <title>TML Plugin Log Streaming</title>
     <style>
 		.loader {
   border: 7px solid #f3f3f3;
@@ -43,6 +43,21 @@ Website: http://www.otics.ca
             justify-content: center;
             align-items: center;
         }
+
+        /* [EXACT SAME STYLES AS BEFORE - NO CHANGES] */
+        :root {
+            --primary-blue: #1e3a8a;
+            --primary-dark: #0f172a;
+            --primary-light: #e2e8f0;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --error-red: #ef4444;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            --card-shadow: 0 20px 25px -5px rgba(0, 0,0, 0.1), 0 10px 10px -5px rgba(0, 0,0, 0.04);
+            --border-radius: 16px;
+        }
+
+        
     </style>
 </head>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -50,7 +65,7 @@ Website: http://www.otics.ca
 
 <div class="row justify-content-md-center">
     <div class="col-11" style="padding-top: 20px">
-        <h4><label id="maintitle"><b>TRANSACTIONAL MACHINE LEARNING (TML): LOG STREAMING</b></label></h4>
+        <h4><label id="maintitle"><b>TML REST API Plugin Server: LOG STREAMING</b></label></h4>
     </div>
 </div>
 <div class="row justify-content-md-center">
@@ -66,6 +81,9 @@ Website: http://www.otics.ca
 				<button id="start" name="submit">Start Streaming</button> <br><a id="Export" href="#">Download Table as CSV</a> | <a id="Export2" href="#">Download JSON</a>  <br>
 				<font size=2><b>Status:</b></font> <input type=text id="statustext" value="" style="font-size:10px;" size=100>
 				 <div id="chart_div"></div>
+<div id="search_div" style="margin-bottom: 10px;">
+    <input type="text" id="searchbox" placeholder="Search logs (message, service, host)..." style="width: 100%; padding: 8px;">
+</div>                 
 				 <div id="table_div"></div>
 				 <textarea name="txtData" id="txtData" style="display: none;" class="textboxmulti"></textarea>
             </form>
@@ -80,9 +98,9 @@ Website: http://www.otics.ca
 
     <script type="text/javascript">
 	     google.charts.load("current", {
-            packages: ["corechart", "line"]
+            packages: ["corechart", "line","controls"]
         });
-      google.charts.load('current', {'packages':['table','annotatedtimeline']});
+      google.charts.load('current', {'packages':['table','annotatedtimeline','controls']});
       google.charts.setOnLoadCallback(drawTable);
 
       var START=0;
@@ -349,13 +367,69 @@ Website: http://www.otics.ca
 	   	 var formatter = new google.visualization.NumberFormat({groupingSymbol:'',decimalSymbol:'.',fractionDigits:'2'});
       	formatter.format(data, 1);
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+   var dashboard = new google.visualization.Dashboard(
+        document.getElementById('table_div')
+    );
+
+    // Create the data view for filtering
+    var dataView = new google.visualization.DataView(data);
+    
+    // Create search filter (searches columns 0,1,2 - Message, Service, Host)
+    var searchFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'search_div',
+        options: {
+            filterColumnLabel: 'Message',  // Primary search column
+            matchType: 'any',              // Search any column
+            ui: {
+                label: 'Search logs:',
+                queryInput: {
+                    alwaysOnTop: true,
+                    position: 'top'
+                }
+            },
+            useFormattedValue: true
+        },
+        state: { search: '' }
+    });
+
+    // Create the table
+    var table = new google.visualization.ChartWrapper({
+        chartType: 'Table',
+        containerId: 'table_div',
+        options: {
+            showRowNumber: true,
+            width: '100%', 
+            height: '100%',
+            page: 'enable',
+            allowHtml: true,
+            pageSize: 50
+        }
+    });
+
+    // Bind filter to table
+    dashboard.bind([searchFilter], [table]);
+    
+    // Draw everything
+    dashboard.draw(data);
+    
+    // Update your existing export logic
+    document.getElementById("txtData").value = "[" + jsonhist.slice(0,-1) + "]";
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 	  
-        var table = new google.visualization.Table(document.getElementById('table_div'));
+/*        var table = new google.visualization.Table(document.getElementById('table_div'));
         
 		  data.sort({column: 1, desc: true});  
         table.draw(data, {showRowNumber: true, width: '100%', height: '100%',page: 'enable',allowHtml: true,pageSize: 50});	
 		 document.getElementById("txtData").value="["+jsonhist.slice(0,-1) + "]";
-		      
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////              
       }
 	  
 	   function streamLiveKafkaData(){
@@ -375,7 +449,7 @@ Website: http://www.otics.ca
 			
 			    if (pair[0]=="topic"){
 				  topic=pair[1];
-				   document.getElementById('maintitle').innerHTML = "<b>VIPER LOG STREAM: <font color=red><i>"+ topic + "</i></font></b>";	
+				   document.getElementById('maintitle').innerHTML = "<b>TML REST API Plugin Server: <font color=red><i>"+ topic + "</i></font></b>";	
 				}
 				
 				
