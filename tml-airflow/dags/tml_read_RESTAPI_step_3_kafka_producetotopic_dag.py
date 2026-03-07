@@ -1,3 +1,46 @@
+import maadstml
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+import json
+from datetime import datetime, timezone
+from airflow.decorators import dag, task
+from flask import Flask, request, jsonify
+from gevent.pywsgi import WSGIServer
+import sys
+import tsslogging
+import os
+import subprocess
+import time
+import random
+import shlex
+from typing import Dict, Any
+import re
+
+sys.dont_write_bytecode = True
+##################################################  REST API SERVER #####################################
+# This is a REST API server that will handle connections from a client
+# There are two endpoints you can use to stream data to this server:
+# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
+# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
+
+
+######################################## USER CHOOSEN PARAMETERS ########################################
+default_args = {
+  'owner' : 'Sebastian Maurice',    
+  'enabletls': '1',
+  'microserviceid' : '',
+  'producerid' : 'iotsolution',  
+  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
+  'identifier' : 'TML solution',  
+  'tss_rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
+  'rest_port' : '9002',  # <<< ***** replace replace with port number i.e. this is listening on port 9000     
+  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : '-999', # <<< ********* do not modify              
+}
+
+######################################## DO NOT MODIFY BELOW #############################################
+
 def writeviperlogs(errortype,message,VIPERTOKEN, VIPERHOST, VIPERPORT):
 
   args = default_args    
@@ -980,3 +1023,4 @@ if __name__ == '__main__':
          os.environ['VIPERPORT']=VIPERPORT
         
          gettmlsystemsparams()
+
