@@ -56,7 +56,7 @@ def writeviperlogs(errortype,message,VIPERTOKEN, VIPERHOST, VIPERPORT):
       "KAFKA_CONNECT_BOOTSTRAP_SERVERS": "Kafka Broker"
   })
 
-  #Logjson=f'{"MESSAGE":"{vmsg}","SERVICE": "TML-Plugin", "HOST": "{VIPERHOST}","PORT": "{str(VIPERPORT)}","KAFKA_CONNECT_BOOTSTRAP_SERVERS": "Kafka Broker"}'		 
+  #Logjson=f'{"MESSAGE":"{vmsg}","SERVICE": "TML-Plugin", "HOST": "{VIPERHOST}","PORT": "{str(VIPERPORT)}","KAFKA_CONNECT_BOOTSTRAP_SERVERS": "Kafka Broker"}'         
 
 #  print("Logjson=",Logjson)
   producetokafka(Logjson, "", "","plugin-producer","viperlogs","",args,VIPERTOKEN, VIPERHOST, VIPERPORT)
@@ -247,6 +247,36 @@ def stopstart(step,stepsarr,windowinstance='default'):
         args[-1] = stepsarr[-1]    
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
         print(f"new_pythonrun: {new_pythonrun}")
+  elif step=="9b":
+    oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
+    if windowinstance=='default':
+      viperport=oldviperport
+    
+    with open("/tmux/step9b_agenticai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        pythonrun = lines[2].strip()  # Index 2 = 3rd line     
+        wn = lines[1].strip()
+        args = shlex.split(pythonrun)      
+        args[-27] = viperport  # viper port              
+        args[-26] = stepsarr[-17]    
+        args[-25] = stepsarr[-16]    
+        args[-23] = stepsarr[-15]    
+        args[-22] = stepsarr[-14]          
+        args[-18] = stepsarr[-13]       
+        args[-17] = stepsarr[-12]          
+        args[-14] = stepsarr[-11]           
+        args[-13] = stepsarr[-10]    
+        args[-12] = stepsarr[-9]       
+        args[-11] = stepsarr[-8]    
+        args[-10] = stepsarr[-7]    
+        args[-9] = stepsarr[-6]       
+        args[-8] = stepsarr[-5]    
+        args[-7] = stepsarr[-4]           
+        args[-3] = stepsarr[-3]    
+        args[-2] = stepsarr[-2]       
+        args[-1] = stepsarr[-1]    
+        new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
+        print(f"new_pythonrun: {new_pythonrun}")
   
   if windowinstance=='default':
     subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
@@ -272,16 +302,34 @@ def terminatetmuxwindows(step,wn):
             print(f"Killed tmux session: {session_name}")
             
             mw=session_name.split("_")[1]#session_name.replace("plugin_", "", 1)
+            mw=session_name
             wt = wt + mw + ","
     wt = wt[:-1]      
+    with open("/tmux/step4_preprocess.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])        
+        wt = wt + wn + ","        
+    with open("/tmux/step5_ml.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])      
+        wt = wt + wn + ","           
+    with open("/tmux/step6_predictions.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt = wt + wn + ","
+    with open("/tmux/step9b_agenticai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt = wt + wn      
   elif wn=='default':
     if step=="4":
       with open("/tmux/step4_preprocess.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         wn = lines[1].strip()
-
-        print("wn 4=========",wn)
-        
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])        
         wt=wn
     if step=="5":
@@ -295,7 +343,34 @@ def terminatetmuxwindows(step,wn):
         lines = file.readlines()
         wn = lines[1].strip()
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt=wn
+    if step=="9b":
+      with open("/tmux/step9b_agenticai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
         wt=wn        
+    if step=="0":
+      with open("/tmux/step4_preprocess.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])        
+        wt = wt + wn + ","        
+      with open("/tmux/step5_ml.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])      
+        wt = wt + wn + ","           
+      with open("/tmux/step6_predictions.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt = wt + wn + ","             
+      with open("/tmux/step9b_agenticai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt = wt + wn                      
   else: 
        subprocess.run(['tmux', 'kill-session', '-t', f"plugin_{wn}_{step}"])
        subprocess.run(['tmux', 'kill-session', '-t', f"plugin_{wn}"])    
@@ -531,7 +606,85 @@ def gettmlsystemsparams():
                'preprocess_data_topic': jdata.get('preprocess_data_topic',''),  
                'windowinstance': jdata.get('windowinstance','default')    
               }), 400
-    
+
+#-------------------------------- AGENTIC AI -----------------------------------------------------                        
+        @app.route(rule='/agenticai', methods=['POST'])
+        def agenticaidata():
+          jdata = request.get_json()          
+          if not jdata:
+            return "Missing agentic ai or invalid agentic ai", 400
+          
+          step = str(jdata.get('step','') )
+          
+          try:
+            if step=="9b":
+             maxrows = jdata.get('rollbackoffsets',10)  
+             ollamamodel= jdata.get('ollama-model','phi3:3.8b,phi3:3.8b,llama3.2:3b') #agent - team lead - supervisor
+             vectordbpath= jdata.get('vectordbpath','/rawdata/vectordb')
+             temperature= float(jdata.get('temperature',0.1))
+             vectordbcollectionname= jdata.get('vectordbcollectionname','tml-llm-model')
+             ollamacontainername= jdata.get('ollamacontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-llama3-tools')
+             embedding= jdata.get('embedding','nomic-embed-text')
+             agents_topic_prompt= jdata.get('agents_topic_prompt','')
+             teamlead_topic= jdata.get('teamlead_topic','team-lead-responses')
+             teamleadprompt= jdata.get('teamleadprompt','')
+             supervisor_topic= jdata.get('supervisor_topic','')
+             supervisorprompt= jdata.get('supervisorprompt','')
+             agenttoolfunctions= jdata.get('agenttoolfunctions','')
+             agent_team_supervisor_topic= jdata.get('agent_team_supervisor_topic','')              
+             contextwindow = jdata.get('contextwindow','')  
+             localmodelsfolder = jdata.get('localmodelsfolder','')  
+             agenttopic = jdata.get('agenttopic','')  
+             windowinstance = jdata.get('windowinstance','default')            
+             step9barr = [maxrows,ollamamodel,vectordbpath,temperature,vectordbcollectionname,ollamacontainername,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,
+                         supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,contextwindow,localmodelsfolder,agenttopic]
+             stopstart(step,step9barr,windowinstance)
+      
+             return jsonify({               
+              'status': "success",
+              'rollbackoffset': jdata.get('rollbackoffsets',10),
+              'ollamamodel': jdata.get('ollama-model','phi3:3.8b,phi3:3.8b,llama3.2:3b'), #agent - team lead - supervisor
+              'vectordbpath': jdata.get('vectordbpath','/rawdata/vectordb'),
+              'temperature': jdata.get('temperature','0.1'),
+              'vectordbcollectionname': jdata.get('vectordbcollectionname','tml-llm-model'),
+              'ollamacontainername': jdata.get('ollamacontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-llama3-tools'),
+              'embedding': jdata.get('embedding','nomic-embed-text'),
+              'agents_topic_prompt': jdata.get('agents_topic_prompt',''),
+              'teamlead_topic': jdata.get('teamlead_topic','team-lead-responses'),
+              'teamleadprompt': jdata.get('teamleadprompt',''),
+              'supervisor_topic': jdata.get('supervisor_topic','supervisor-responses'),
+              'supervisorprompt': jdata.get('supervisorprompt',''),
+              'agenttoolfunctions': jdata.get('agenttoolfunctions',''),
+              'agent_team_supervisor_topic': jdata.get('agent_team_supervisor_topic','all-agents-responses'),
+              'contextwindow': jdata.get('contextwindow','4096'),  
+              'localmodelsfolder': jdata.get('localmodelsfolder','/rawdata/ollama'),
+              'agenttopic': jdata.get('agenttopic','agent-responses'),
+              'windowinstance': jdata.get('windowinstance','default')               
+              }), 201          
+          except Exception as e:
+             writeviperlogs("ERROR",f"Agentic AI failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
+             return jsonify({
+              'status': f"error:{e}",
+              'rollbackoffset': jdata.get('rollbackoffsets',10),
+              'ollamamodel': jdata.get('ollama-model','phi3:3.8b,phi3:3.8b,llama3.2:3b'), #agent - team lead - supervisor
+              'vectordbpath': jdata.get('vectordbpath','/rawdata/vectordb'),
+              'temperature': jdata.get('temperature','0.1'),
+              'vectordbcollectionname': jdata.get('vectordbcollectionname','tml-llm-model'),
+              'ollamacontainername': jdata.get('ollamacontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-llama3-tools'),
+              'embedding': jdata.get('embedding','nomic-embed-text'),
+              'agents_topic_prompt': jdata.get('agents_topic_prompt',''),
+              'teamlead_topic': jdata.get('teamlead_topic','team-lead-responses'),
+              'teamleadprompt': jdata.get('teamleadprompt',''),
+              'supervisor_topic': jdata.get('supervisor_topic','supervisor-responses'),
+              'supervisorprompt': jdata.get('supervisorprompt',''),
+              'agenttoolfunctions': jdata.get('agenttoolfunctions',''),
+              'agent_team_supervisor_topic': jdata.get('agent_team_supervisor_topic','all-agents-responses'),
+              'contextwindow': jdata.get('contextwindow','4096'),  
+              'localmodelsfolder': jdata.get('localmodelsfolder','/rawdata/ollama'),
+              'agenttopic': jdata.get('agenttopic','agent-responses'),
+              'windowinstance': jdata.get('windowinstance','default')               
+              }), 400
+      
 #-------------------------------- CONSUME -----------------------------------------------------                        
         @app.route(rule='/consume', methods=['POST'])
         def consumedata():
