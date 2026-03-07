@@ -718,8 +718,8 @@ def gettmlsystemsparams():
                 for win in windows:
                     win_index, win_name = win.split(':', 1)
                     # Check if WINDOW starts with plugin_ OR SESSION is plugin_
-                    if win_name.startswith('plugin_') or is_plugin_session:
-                        plugin_windows.append((win_index, win_name))
+                    #if win_name.startswith('plugin_') or is_plugin_session:
+                    plugin_windows.append((win_index, win_name))
                 
                 # Process plugin windows
                 for win_index, win_name in plugin_windows:
