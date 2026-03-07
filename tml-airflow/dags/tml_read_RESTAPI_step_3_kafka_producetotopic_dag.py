@@ -1,46 +1,3 @@
-import maadstml
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
-import json
-from datetime import datetime, timezone
-from airflow.decorators import dag, task
-from flask import Flask, request, jsonify
-from gevent.pywsgi import WSGIServer
-import sys
-import tsslogging
-import os
-import subprocess
-import time
-import random
-import shlex
-from typing import Dict, Any
-import re
-
-sys.dont_write_bytecode = True
-##################################################  REST API SERVER #####################################
-# This is a REST API server that will handle connections from a client
-# There are two endpoints you can use to stream data to this server:
-# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
-# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
-
-
-######################################## USER CHOOSEN PARAMETERS ########################################
-default_args = {
-  'owner' : 'Sebastian Maurice',    
-  'enabletls': '1',
-  'microserviceid' : '',
-  'producerid' : 'iotsolution',  
-  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
-  'identifier' : 'TML solution',  
-  'tss_rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
-  'rest_port' : '9002',  # <<< ***** replace replace with port number i.e. this is listening on port 9000     
-  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : '-999', # <<< ********* do not modify              
-}
-
-######################################## DO NOT MODIFY BELOW #############################################
-
 def writeviperlogs(errortype,message,VIPERTOKEN, VIPERHOST, VIPERPORT):
 
   args = default_args    
@@ -257,6 +214,7 @@ def stopstart(step,stepsarr,windowinstance='default'):
         pythonrun = lines[2].strip()  # Index 2 = 3rd line     
         wn = lines[1].strip()
         args = shlex.split(pythonrun)      
+
         args[-27] = viperport  # viper port              
         args[-26] = stepsarr[-17]    
         args[-25] = stepsarr[-16]    
@@ -277,7 +235,8 @@ def stopstart(step,stepsarr,windowinstance='default'):
         args[-1] = stepsarr[-1]    
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
         print(f"new_pythonrun: {new_pythonrun}")
-  
+
+  new_pythonrun=new_pythonrun.replace("<<n>>",'\n')
   if windowinstance=='default':
     subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
     subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "{}".format(new_pythonrun), "ENTER"],capture_output=True, text=True)        
@@ -621,20 +580,20 @@ def gettmlsystemsparams():
              maxrows = jdata.get('rollbackoffsets',10)  
              ollamamodel= jdata.get('ollama-model','phi3:3.8b,phi3:3.8b,llama3.2:3b') #agent - team lead - supervisor
              vectordbpath= jdata.get('vectordbpath','/rawdata/vectordb')
-             temperature= float(jdata.get('temperature',0.1))
+             temperature= float(jdata.get('temperature','0.1'))
              vectordbcollectionname= jdata.get('vectordbcollectionname','tml-llm-model')
              ollamacontainername= jdata.get('ollamacontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-llama3-tools')
              embedding= jdata.get('embedding','nomic-embed-text')
              agents_topic_prompt= jdata.get('agents_topic_prompt','')
              teamlead_topic= jdata.get('teamlead_topic','team-lead-responses')
              teamleadprompt= jdata.get('teamleadprompt','')
-             supervisor_topic= jdata.get('supervisor_topic','')
+             supervisor_topic= jdata.get('supervisor_topic','supervisor-responses')
              supervisorprompt= jdata.get('supervisorprompt','')
              agenttoolfunctions= jdata.get('agenttoolfunctions','')
-             agent_team_supervisor_topic= jdata.get('agent_team_supervisor_topic','')              
-             contextwindow = jdata.get('contextwindow','')  
-             localmodelsfolder = jdata.get('localmodelsfolder','')  
-             agenttopic = jdata.get('agenttopic','')  
+             agent_team_supervisor_topic= jdata.get('agent_team_supervisor_topic','all-agents-responses')              
+             contextwindow = jdata.get('contextwindow','4096')  
+             localmodelsfolder = jdata.get('localmodelsfolder','/rawdata/ollama')  
+             agenttopic = jdata.get('agenttopic','agent-responses')  
              windowinstance = jdata.get('windowinstance','default')            
              step9barr = [maxrows,ollamamodel,vectordbpath,temperature,vectordbcollectionname,ollamacontainername,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,
                          supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,contextwindow,localmodelsfolder,agenttopic]
