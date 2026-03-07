@@ -983,7 +983,7 @@ def startagenticai(**context):
        with open("/tmux/step9b_agenticai.txt", 'w', encoding='utf-8') as file: 
           file.write("{}\n".format(pane_pid))
           file.write("{}\n".format(wn))
-          file.write("python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\"".format(fullpath,
+          buf="python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\"".format(fullpath,
                        VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['rollbackoffset'],default_args['ollama-model'],default_args['deletevectordbcount'],default_args['vectordbpath'],
                        default_args['temperature'],default_args['topicid'],default_args['enabletls'],
@@ -992,7 +992,9 @@ def startagenticai(**context):
                        default_args['agents_topic_prompt'],default_args['teamlead_topic'],default_args['teamleadprompt'],
                        default_args['supervisor_topic'],default_args['supervisorprompt'],default_args['agenttoolfunctions'],
                        default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],
-                       pname,default_args['contextwindow'],default_args['localmodelsfolder'],default_args['agenttopic']))         
+                       pname,default_args['contextwindow'],default_args['localmodelsfolder'],default_args['agenttopic'])
+          buf=buf.replace("\n","<<n>>").replace("\\n","<<n>>").replace("\r","<<n>>").replace("\\r","<<n>>") 
+          file.write(buf)         
 
 
 if __name__ == '__main__':
@@ -1147,6 +1149,5 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-
 
 
