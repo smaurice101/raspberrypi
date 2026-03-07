@@ -106,7 +106,7 @@ def tmuxsession(windowinstance,steps):
        cdir="/Viper-predict"            
        viperrun=f"/Viper-predict/viper-{mainos}-{chip}"
     if steps=="9b":      
-       cdir="/Viper-preprocess-agenticai"                  
+       cdir="/Viper-preprocess-agenticai"                 
        viperrun=f"/Viper-preprocess-agenticai/viper-{mainos}-{chip}"
 
     if windowinstance != 'default':
@@ -1023,4 +1023,3 @@ if __name__ == '__main__':
          os.environ['VIPERPORT']=VIPERPORT
         
          gettmlsystemsparams()
-
