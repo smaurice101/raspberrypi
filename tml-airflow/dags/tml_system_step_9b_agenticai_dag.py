@@ -373,34 +373,28 @@ def pull_ollama_model(model_name):
     except requests.exceptions.RequestException as e:
         print(f"Error pulling model '{model_name}': {e}")
 
-            
+
+
+def get_container_ids(image_name):
+    cmd = ["docker", "ps", "-q", "--filter", f"ancestor={image_name}"]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode == 0:
+        return result.stdout.strip().split()
+    return []
+
 def stopcontainers():
 
-
    ollamacontainername = default_args['ollamacontainername']
-   cfound=0
-   subprocess.call("docker image ls > gptfiles.txt", shell=True)
-   with open('gptfiles.txt', 'r', encoding='utf-8') as file:
-        data = file.readlines()
-        r=0
-        for d in data:
-          darr = d.split(" ")
-          if '-privategpt-' in darr[0]:
-            buf="docker stop $(docker ps -q --filter ancestor={} )".format(darr[0])
-            if ollamacontainername in darr[0]:
-                cfound=1  
-                # if ollama container found check if model is already loaded - if not  stop container
-                if get_loaded_models()==0:
-                  print(buf)
-                  subprocess.call(buf, shell=True)
-                  return 0
-                break
-   if cfound==0:
-      print("INFO STEP 9b: Ollama container {} not found.  It may need to be pulled.".format(ollamacontainername))
-      tsslogging.locallogs("WARN", "STEP 9b: Ollama container not found. It may need to be pulled if it does not start: docker pull {}".format(ollamacontainername))
-      return 0
+   container_ids=get_container_ids(ollamacontainername)
 
-   return 1
+# Stop them
+   if container_ids:
+    subprocess.run(["docker", "stop"] + container_ids, check=False)
+    print("All TML-privateGPT containers stopped")
+
+   print("ollamacontainername=",ollamacontainername, container_ids)
+   return 0
+      
 
 def startpgptcontainer():
       print("Starting Ollama container: {}".format(default_args['ollamacontainername'])) 
