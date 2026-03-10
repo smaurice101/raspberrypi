@@ -416,6 +416,7 @@ def startpgptcontainer():
 
       mainmodels = mainmodel.split(",")
       mainmodel = " && ".join(mainmodels)
+      subprocess.run("pkill -9 ollama", shell=True)
 
       ollamaserver = mainhost + ":" + str(mainport)
       localmodels=''
@@ -1149,5 +1150,6 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
+
 
 
