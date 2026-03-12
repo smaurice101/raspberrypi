@@ -760,7 +760,7 @@ if __name__ == '__main__':
         VIPERHOST = sys.argv[3]
         VIPERPORT = sys.argv[4]
         vectordbcollectionname =  sys.argv[5]
-        consumerfrom =  sys.argv[6]
+        consumefrom =  sys.argv[6]
         pgpttopic =  sys.argv[7]
          
         concurrency =  sys.argv[8]
