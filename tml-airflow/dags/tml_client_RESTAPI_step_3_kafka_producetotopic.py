@@ -18,11 +18,11 @@ apiroute = "jsondataline"
 
 # USE THIS ENDPOINT IF TML RUNNING IN DOCKER CONTAINER
 # DOCKER CONTAINER ENDPOINT
-#API_ENDPOINT = "{}//localhost:{}/{}".format(httpaddr,rest_port,apiroute)
+API_ENDPOINT = "{}//localhost:{}/api/v1/{}".format(httpaddr,rest_port,apiroute)
 
 # USE THIS ENDPOINT IF TML RUNNING IN KUBERNETES
 # KUBERNETES ENDPOINT
-API_ENDPOINT = "{}//tml.tss/ext/{}".format(httpaddr,apiroute)
+#API_ENDPOINT = "{}//tml.tss/ext/api/v1/{}".format(httpaddr,apiroute)
  
 def send_tml_data(data): 
   # data to be sent to api
