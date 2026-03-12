@@ -720,17 +720,36 @@ def startprivategpt(**context):
        mainmodel,mainembedding=llmattrs(default_args['pgptcontainername'])
        ti.xcom_push(key="{}_mainmodel".format(sname), value="{}".format(mainmodel))
        ti.xcom_push(key="{}_mainembedding".format(sname), value="{}".format(mainembedding))
- 
+
+  
        wn = windowname('ai',sname,sd)
        subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
        subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
-                       default_args['vectordbcollectionname'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
+       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+                       default_args['vectordbcollectionname'],default_args['consumefrom'],default_args['pgpt_data_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
                        default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
                        default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],
                        default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall'],default_args['temperature'],
                        default_args['vectorsearchtype'], default_args['contextwindowsize'], default_args['pgptcontainername'], 
-                       default_args['pgpthost'],default_args['pgptport'],default_args['vectordimension']), "ENTER"])
+                       default_args['pgpthost'],default_args['pgptport'],default_args['vectordimension']), "ENTER"],capture_output=True, text=True)
+
+       pane_pid = subprocess.check_output([
+          "tmux", "list-panes", "-t", wn, "-F", "#{pane_pid}"
+       ]).decode().strip()
+
+       with open("/tmux/step9_ai.txt", 'w', encoding='utf-8') as file: 
+          file.write("{}\n".format(pane_pid))
+          file.write("{}\n".format(wn))
+          buf="python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+                       default_args['vectordbcollectionname'],default_args['consumefrom'],default_args['pgpt_data_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
+                       default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
+                       default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],
+                       default_args['useidentifierinprompt'],default_args['searchterms'],default_args['streamall'],default_args['temperature'],
+                       default_args['vectorsearchtype'], default_args['contextwindowsize'], default_args['pgptcontainername'], 
+                       default_args['pgpthost'],default_args['pgptport'],default_args['vectordimension'])
+         
+          buf=buf.replace("\n","<<n>>").replace("\\n","<<n>>").replace("\r","<<n>>").replace("\\r","<<n>>") 
+          file.write(buf)         
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -741,30 +760,36 @@ if __name__ == '__main__':
         VIPERHOST = sys.argv[3]
         VIPERPORT = sys.argv[4]
         vectordbcollectionname =  sys.argv[5]
-        concurrency =  sys.argv[6]
+        consumerfrom =  sys.argv[6]
+        pgpttopic =  sys.argv[7]
+         
+        concurrency =  sys.argv[8]
 
-        cuda =  sys.argv[7]
-        rollbackoffset =  sys.argv[8]
-        prompt =  sys.argv[9]
-        context =  sys.argv[10]
-        keyattribute =  sys.argv[11]
-        keyprocesstype =  sys.argv[12]
-        hyperbatch =  sys.argv[13]
-        docfolder =  sys.argv[14]
-        docfolderingestinterval =  sys.argv[15]
-        useidentifierinprompt =  sys.argv[16]
-        searchterms =  sys.argv[17]
-        streamall =  sys.argv[18]
-        temperature = sys.argv[19]
-        vectorsearchtype = sys.argv[20]
+        cuda =  sys.argv[9]
+        rollbackoffset =  sys.argv[10]
+        prompt =  sys.argv[11]
+        context =  sys.argv[12]
+        keyattribute =  sys.argv[13]
+        keyprocesstype =  sys.argv[14]
+        hyperbatch =  sys.argv[15]
+        docfolder =  sys.argv[16]
+        docfolderingestinterval =  sys.argv[17]
+        useidentifierinprompt =  sys.argv[18]
+        searchterms =  sys.argv[19]
+        streamall =  sys.argv[20]
+        temperature = sys.argv[21]
+        vectorsearchtype = sys.argv[22]
 
-        contextwindowsize = sys.argv[21]
-        pgptcontainername = sys.argv[22]
+        contextwindowsize = sys.argv[23]
+        pgptcontainername = sys.argv[24]
 
-        pgpthost = sys.argv[23]
-        pgptport = sys.argv[24]
-        vectordimension=sys.argv[25]
-        
+        pgpthost = sys.argv[25]
+        pgptport = sys.argv[26]
+        vectordimension=sys.argv[27]
+
+        default_args['consumefrom'] = consumefrom
+        default_args['pgpt_data_topic'] = pgpttopic
+         
         default_args['vectordimension']=vectordimension
         
         default_args['rollbackoffset']=rollbackoffset
@@ -858,5 +883,5 @@ if __name__ == '__main__':
           time.sleep(5)
           count = count + 1
           if count > 10:
-            break 
-          
+            break
+           
