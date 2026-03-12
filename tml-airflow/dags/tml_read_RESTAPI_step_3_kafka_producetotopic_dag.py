@@ -105,6 +105,9 @@ def tmuxsession(windowinstance,steps):
     if steps=="6":      
        cdir="/Viper-predict"            
        viperrun=f"/Viper-predict/viper-{mainos}-{chip}"
+    if steps=="9":      
+       cdir="/Viper-preprocess-pgpt"                 
+       viperrun=f"/Viper-preprocess-pgpt/viper-{mainos}-{chip}"      
     if steps=="9b":      
        cdir="/Viper-preprocess-agenticai"                 
        viperrun=f"/Viper-preprocess-agenticai/viper-{mainos}-{chip}"
@@ -247,6 +250,40 @@ def stopstart(step,stepsarr,windowinstance='default'):
         args[-1] = stepsarr[-1]    
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
         print(f"new_pythonrun: {new_pythonrun}")
+  elif step=="9":
+    oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
+    if windowinstance=='default':
+      viperport=oldviperport
+    
+    with open("/tmux/step9_ai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        pythonrun = lines[2].strip()  # Index 2 = 3rd line     
+        wn = lines[1].strip()
+        args = shlex.split(pythonrun)      
+      
+        args[-24] = viperport  # viper port     
+        args[-23] = stepsarr[-18]   #vectorcollectionname      
+        args[-22] = stepsarr[-17]   #consumefrom 
+        args[-21] = stepsarr[-16]   #pgpt data topic
+        args[-18] = stepsarr[-15]    #rollback
+        args[-17] = stepsarr[-14]    #prompt      
+        args[-16] = stepsarr[-13]    #context   
+        args[-15] = stepsarr[-12]   #keyattribute       
+        args[-14] = stepsarr[-11]   #keyprocess 
+      
+        args[-13] = stepsarr[-10]    #hyperbatch      
+        args[-12] = stepsarr[-9]     #docfolder  
+        args[-11] = stepsarr[-8]    #docingestinterval
+      
+        args[-7] = stepsarr[-7]    #temp
+        args[-6] = stepsarr[-6]    #vectorsearch         
+        args[-5] = stepsarr[-5]    ##context window
+        args[-4] = stepsarr[-4]    #pgptcontainername       
+        args[-3] = stepsarr[-3]    #pgpthost
+        args[-2] = stepsarr[-2]    #pgptport   
+        args[-1] = stepsarr[-1]    #vectordimension
+        new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
+        print(f"new_pythonrun: {new_pythonrun}")      
   elif step=="9b":
     oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
     if windowinstance=='default':
@@ -322,6 +359,11 @@ def terminatetmuxwindows(step,wn):
         wn = lines[1].strip()
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
         wt = wt + wn + ","
+    with open("/tmux/step9_ai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt = wt + wn            
     with open("/tmux/step9b_agenticai.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         wn = lines[1].strip()
@@ -352,6 +394,12 @@ def terminatetmuxwindows(step,wn):
         wn = lines[1].strip()
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
         wt=wn        
+    if step=="9":
+      with open("/tmux/step9_ai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt=wn                
     if step=="0":
       with open("/tmux/step4_preprocess.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
@@ -368,6 +416,11 @@ def terminatetmuxwindows(step,wn):
         wn = lines[1].strip()
         subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
         wt = wt + wn + ","             
+      with open("/tmux/step9_ai.txt", 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        wn = lines[1].strip()
+        subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
+        wt = wt + wn                              
       with open("/tmux/step9b_agenticai.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         wn = lines[1].strip()
@@ -392,7 +445,7 @@ def gettmlsystemsparams():
         app.config['VIPERPORT'] = os.environ['VIPERPORT']
 
 #-------------------------------- TERMINATE WINDOW -----------------------------------------------------      
-        @app.route(rule='/terminatewindow', methods=['POST'])
+        @app.route(rule='/api/v1/terminatewindow', methods=['POST'])
         def windowterminate(): 
           jdata = request.get_json()          
           if not jdata:
@@ -412,7 +465,7 @@ def gettmlsystemsparams():
           }), 201
 
 #-------------------------------- CREATETOPIC -----------------------------------------------------      
-        @app.route(rule='/createtopic', methods=['POST'])
+        @app.route(rule='/api/v1/createtopic', methods=['POST'])
         def storecreatetopic():
           jdata = request.get_json()          
           if not jdata or not jdata.get('topics'):
@@ -454,7 +507,7 @@ def gettmlsystemsparams():
             
         
 #-------------------------------- PREPROCESS -----------------------------------------------------            
-        @app.route(rule='/preprocess', methods=['POST'])
+        @app.route(rule='/api/v1/preprocess', methods=['POST'])
         def storepreprocess():
           jdata = request.get_json()          
           if not jdata or not jdata.get('rawdatatopic'):
@@ -515,7 +568,7 @@ def gettmlsystemsparams():
             
           
 #-------------------------------- MACHINE LEARNING -----------------------------------------------------                  
-        @app.route(rule='/ml', methods=['POST'])
+        @app.route(rule='/api/v1/ml', methods=['POST'])
         def storeml():
           jdata = request.get_json()          
           if not jdata:
@@ -564,7 +617,7 @@ def gettmlsystemsparams():
               }), 400
               
 #-------------------------------- PREDICTIONS -----------------------------------------------------                        
-        @app.route(rule='/predict', methods=['POST'])
+        @app.route(rule='/api/v1/predict', methods=['POST'])
         def predictdata():
           jdata = request.get_json()          
           if not jdata:
@@ -609,8 +662,90 @@ def gettmlsystemsparams():
                'windowinstance': jdata.get('windowinstance','default')    
               }), 400
 
+#-------------------------------- AI -----------------------------------------------------                        
+        @app.route(rule='/api/v1/ai', methods=['POST'])
+        def aidata():
+          jdata = request.get_json()          
+          if not jdata:
+            return "Missing ai or invalid ai", 400
+          
+          step = str(jdata.get('step','') )
+          try:
+            if step=="9":
+             vectordimension = jdata.get('vectordimension','768')  
+             contextwindowsize= jdata.get('contextwindowsize','8192') #agent - team lead - supervisor
+             vectorsearchtype= jdata.get('vectorsearchtype','Manhattan')
+             temperature= float(jdata.get('temperature','0.1'))
+             docfolderingestinterval= jdata.get('docfolderingestinterval','900')
+             docfolder= jdata.get('docfolder','')
+             vectordbcollectionname= jdata.get('vectordbcollectionname','tml-pgpt')
+             hyperbatch= jdata.get('hyperbatch','0')
+             keyprocesstype= jdata.get('keyprocesstype','')
+             keyattribute= jdata.get('keyattribute','hyperprediction')
+             context= jdata.get('context','')
+             prompt= jdata.get('prompt','')
+             pgptport= jdata.get('pgptport','8001')
+             pgpthost= jdata.get('pgpthost','http://127.0.0.1')              
+             pgpt_data_topic = jdata.get('pgpt_data_topic','')  
+             consumefrom = jdata.get('consumefrom','')  
+             rollbackoffset = jdata.get('rollbackoffset','5')  
+             pgptcontainername = jdata.get('pgptcontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v2') 
+             windowinstance = jdata.get('windowinstance','default')            
+              
+             step9arr = [vectordbcollectionname,consumefrom,pgpt_data_topic, rollbackoffset, prompt,context,keyattribute,keyprocesstype,
+                         hyperbatch,docfolder,docfolderingestinterval, temperature,vectorsearchtype,contextwindowsize,pgptcontainername, pgpthost,pgptport,vectordimension]
+              
+             stopstart(step,step9arr,windowinstance)
+      
+             return jsonify({               
+              'status': "success",
+               'vectordimension': jdata.get('vectordimension','768'),
+               'contextwindowsize': jdata.get('contextwindowsize','8192'), #agent - team lead - supervisor
+               'vectorsearchtype': jdata.get('vectorsearchtype','Manhattan'),
+               'temperature': jdata.get('temperature','0.1'),
+               'docfolderingestinterval': jdata.get('docfolderingestinterval','900'),
+               'docfolder': jdata.get('docfolder',''),
+               'vectordbcollectionname': jdata.get('vectordbcollectionname','tml-pgpt'),
+               'hyperbatch': jdata.get('hyperbatch','0'),
+               'keyprocesstype': jdata.get('keyprocesstype',''),
+               'keyattribute': jdata.get('keyattribute','hyperprediction'),
+               'context': jdata.get('context',''),
+               'prompt': jdata.get('prompt',''),
+               'pgptport': jdata.get('pgptport','8001'),
+               'pgpthost': jdata.get('pgpthost','http://127.0.0.1'),
+               'pgpt_data_topic': jdata.get('pgpt_data_topic',''),
+               'consumefrom': jdata.get('consumefrom',''),
+               'rollbackoffset': jdata.get('rollbackoffset','5'),
+               'pgptcontainername': jdata.get('pgptcontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v2'),
+               'windowinstance': jdata.get('windowinstance','default')                                         
+              }), 201          
+          except Exception as e:
+             writeviperlogs("ERROR",f"AI failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
+             return jsonify({
+              'status': f"error:{e}",
+               'vectordimension': jdata.get('vectordimension','768'),
+               'contextwindowsize': jdata.get('contextwindowsize','8192'), #agent - team lead - supervisor
+               'vectorsearchtype': jdata.get('vectorsearchtype','Manhattan'),
+               'temperature': jdata.get('temperature','0.1'),
+               'docfolderingestinterval': jdata.get('docfolderingestinterval','900'),
+               'docfolder': jdata.get('docfolder',''),
+               'vectordbcollectionname': jdata.get('vectordbcollectionname','tml-pgpt'),
+               'hyperbatch': jdata.get('hyperbatch','0'),
+               'keyprocesstype': jdata.get('keyprocesstype',''),
+               'keyattribute': jdata.get('keyattribute','hyperprediction'),
+               'context': jdata.get('context',''),
+               'prompt': jdata.get('prompt',''),
+               'pgptport': jdata.get('pgptport','8001'),
+               'pgpthost': jdata.get('pgpthost','http://127.0.0.1'),
+               'pgpt_data_topic': jdata.get('pgpt_data_topic',''),
+               'consumefrom': jdata.get('consumefrom',''),
+               'rollbackoffset': jdata.get('rollbackoffset','5'),
+               'pgptcontainername': jdata.get('pgptcontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v2'),
+               'windowinstance': jdata.get('windowinstance','default')                                                        
+              }), 400
+      
 #-------------------------------- AGENTIC AI -----------------------------------------------------                        
-        @app.route(rule='/agenticai', methods=['POST'])
+        @app.route(rule='/api/v1/agenticai', methods=['POST'])
         def agenticaidata():
           jdata = request.get_json()          
           if not jdata:
@@ -688,7 +823,7 @@ def gettmlsystemsparams():
               }), 400
       
 #-------------------------------- CONSUME -----------------------------------------------------                        
-        @app.route(rule='/consume', methods=['POST'])
+        @app.route(rule='/api/v1/consume', methods=['POST'])
         def consumedata():
           jdata = request.get_json()          
           osdu = jdata.get('osdu','false')
@@ -801,7 +936,7 @@ def gettmlsystemsparams():
   #         return result      
 ####################################################################################################      
       
-        @app.route(rule='/jsondataline', methods=['POST'])
+        @app.route(rule='/api/v1/jsondataline', methods=['POST'])
         def storejsondataline():
           jdata = request.get_json()
           topic = jdata.get('sendtotopic','')            
@@ -809,7 +944,7 @@ def gettmlsystemsparams():
           readdata(jdata,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'],topic)
           return "ok"
     
-        @app.route(rule='/jsondataarray', methods=['POST'])
+        @app.route(rule='/api/v1/jsondataarray', methods=['POST'])
         def storejsondataarray():    
           jdata = request.get_json()
           
@@ -820,7 +955,7 @@ def gettmlsystemsparams():
           return "ok"      
 
 ####################################################################################################
-        @app.route(rule='/health', methods=['POST'])
+        @app.route(rule='/api/v1/health', methods=['POST'])
         def tmux_health_check_json() -> Dict[str, Any]:
             def run_tmux(cmd):
                 try:
@@ -1023,3 +1158,4 @@ if __name__ == '__main__':
          os.environ['VIPERPORT']=VIPERPORT
         
          gettmlsystemsparams()
+
