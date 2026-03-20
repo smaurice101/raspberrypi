@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Separator AI Intelligence Platform - V-102</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #0077aa 100%);
+            --accent-gradient: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #e65c00 100%);
+            --neon-blue: #00d4ff;
+            --neon-orange: #ff6b35;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glow-blue: 0 0 30px rgba(0, 212, 255, 0.5);
+            --glow-orange: 0 0 30px rgba(255, 107, 53, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(ellipse at center, #0a0e1a 0%, #000410 70%);
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* SCANNING LINES */
+        .scanline {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            animation: scan 8s linear infinite;
+            z-index: 1;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .scanline:nth-child(2) { animation-delay: -2s; }
+        .scanline:nth-child(3) { animation-delay: -4s; }
+
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100vh; opacity: 0; }
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-rows: 90px 1fr;
+            grid-template-columns: 320px 1fr 380px;
+            height: 100vh;
+            gap: 0;
+            position: relative;
+            z-index: 10;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* HEADER */
+        .header {
+            grid-column: 1 / -1;
+            background: rgba(0, 10, 25, 0.9);
+            backdrop-filter: blur(30px) saturate(180%);
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glow-blue), inset 0 1px 0 rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--glow-orange), 0 8px 32px rgba(255, 107, 53, 0.4);
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.8;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-indicator {
+            display: flex;
+            gap: 16px;
+        }
+
+        .status-card {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .status-card:hover::after { left: 100%; }
+        .status-card:hover { transform: translateY(-2px); }
+
+        .status-green { border-left: 4px solid #10b981; box-shadow: 0 0 20px rgba(16,185,129,0.3); }
+        .status-yellow { border-left: 4px solid #f59e0b; box-shadow: 0 0 20px rgba(245,158,11,0.3); }
+        .status-red { border-left: 4px solid #ef4444; box-shadow: 0 0 20px rgba(239,68,68,0.3); }
+
+        /* SIDEBAR */
+        .sidebar {
+            background: rgba(5, 15, 35, 0.9);
+            backdrop-filter: blur(30px) saturate(180%);
+            padding: 35px 25px;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow-y: auto;
+            box-shadow: var(--glow-blue);
+            position: relative;
+        }
+
+        .sidebar h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover::before { transform: scaleX(1); }
+        .metric-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(8px) translateY(-4px);
+            box-shadow: var(--glow-blue), 0 25px 50px rgba(0,0,0,0.4);
+        }
+
+        .metric-title {
+            font-size: 13px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-unit {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .risk-badge {
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace;
+            backdrop-filter: blur(20px);
+        }
+
+        .risk-low { 
+            background: rgba(16, 185, 129, 0.2); 
+            color: #10b981; 
+            box-shadow: 0 0 15px rgba(16,185,129,0.4);
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+        .risk-med { 
+            background: rgba(245, 158, 11, 0.2); 
+            color: #f59e0b; 
+            box-shadow: 0 0 15px rgba(245,158,11,0.4);
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+        .risk-high { 
+            background: rgba(239, 68, 68, 0.2); 
+            color: #ef4444; 
+            box-shadow: 0 0 15px rgba(239,68,68,0.4);
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 35px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 30px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 0;
+        }
+
+        .kpi-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .kpi-card:hover::before { opacity: 0.05; }
+        .kpi-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: var(--glow-blue), 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .kpi-trend.positive .trend-arrow { 
+            color: #10b981; 
+            text-shadow: 0 0 10px rgba(16,185,129,0.5);
+            animation: bounce 1s infinite;
+        }
+        .kpi-trend.negative .trend-arrow { 
+            color: #ef4444; 
+            text-shadow: 0 0 10px rgba(239,68,68,0.5);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .kpi-value {
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 1;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .kpi-label {
+            font-size: 15px;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* CHARTS */
+        .chart-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid var(--glass-border);
+            height: 450px;
+            box-shadow: var(--glow-blue);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            box-shadow: var(--glow-blue), 0 20px 40px rgba(0,0,0,0.3);
+            transform: translateY(-4px);
+        }
+
+        .chart-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            background: rgba(5, 15, 35, 0.9);
+            backdrop-filter: blur(30px);
+            padding: 35px 30px;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow-y: auto;
+            box-shadow: var(--glow-orange);
+        }
+
+        .right-panel h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .prediction-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(34, 197, 94, 0.15));
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(16,185,129,0.3);
+        }
+
+        .prediction-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .prediction-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #10b981;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+        }
+
+        .prediction-value {
+            font-size: 44px;
+            font-weight: 800;
+            color: #10b981;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(16,185,129,0.5);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .prediction-confidence {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            padding-top: 20px;
+            border-top: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 30px;
+            border-left: 6px solid #ffffff;
+            box-shadow: 0 0 30px rgba(239,68,68,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .alert-icon {
+            font-size: 28px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+        }
+
+        @media (max-width: 1600px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: 90px auto 1fr auto;
+                padding: 5px;
+            }
+            
+            .sidebar, .right-panel, .main-content {
+                max-height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SCANNING LINES ONLY (NO PARTICLES) -->
+    <!-- SCANNING LINES -->
+    <!-- <div class="scanline"></div>
+    <div class="scanline"></div>
+    <div class="scanline"></div>
+	-->
+	
+    <div class="dashboard">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-oil-can"></i>
+                </div>
+                <div>
+                    <div class="header-title">Separator AI Intelligence</div>
+                    <div class="subtitle">V-102 | Transactional ML • Real-Time SCADA Processing</div>
+                </div>
+            </div>
+            
+            <div class="status-indicator">
+                <div class="status-card status-green">
+                    <i class="fas fa-circle"></i>
+                    <span>🧠 TML Live</span>
+                </div>
+                <div class="status-card status-green">
+                    <i class="fas fa-bolt"></i>
+                    <span>1.2s Latency</span>
+                </div>
+                <div class="status-card status-yellow">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Carryover ↑ 1.9%</span>
+                </div>
+            </div>
+        </div>
+
+		<!-- SIDEBAR: RAW SCADA -->
+		<div class="sidebar">
+			<h3><i class="fas fa-microchip"></i> SCADA Raw Feed</h3>
+			
+			<div class="metric-card">
+				<div class="metric-title">Vessel Pressure</div>
+				<div class="metric-value" data-key="operatingPressure">65.2</div>
+				<div class="metric-unit">bar</div>
+				<div class="risk-badge risk-low">OPTIMAL</div>
+			</div>
+
+			<div class="metric-card">
+				<div class="metric-title">Gas Flow Rate</div>
+				<div class="metric-value" data-key="gasFlowRate">215.8</div>
+				<div class="metric-unit">m³/hr</div>
+				<div class="risk-badge risk-low">STABLE</div>
+			</div>
+
+			<div class="metric-card">
+				<div class="metric-title">Water Flow</div>
+				<div class="metric-value" data-key="waterFlowRate">38.4</div>
+				<div class="metric-unit">m³/hr</div>
+				<div class="risk-badge risk-med">TRENDING ↑</div>
+			</div>
+
+			<div class="metric-card">
+				<div class="metric-title">HCL Injection</div>
+				<div class="metric-value" data-key="hclFlowRate">24.9</div>
+				<div class="metric-unit">m³/hr</div>
+				<div class="risk-badge risk-low">BALANCED</div>
+			</div>
+
+			<div class="metric-card">
+				<div class="metric-title">Solids Carry</div>
+				<div class="metric-value" data-key="solidFlowRate">9.8</div>
+				<div class="metric-unit">kg/hr</div>
+				<div class="risk-badge risk-low">FILTERED</div>
+			</div>
+		</div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- KPI GRID -->
+            <div class="kpi-grid">
+			<div class="kpi-card">
+				<div class="kpi-trend positive">
+					<i class="fas fa-arrow-up trend-arrow"></i>
+					<span>+2.4%</span>
+				</div>
+				<div class="kpi-value" data-key="carryover">17.25</div>
+				<div class="kpi-label">AI Carryover Rate</div>
+			</div>
+
+			<div class="kpi-card">
+				<div class="kpi-trend positive">
+					<i class="fas fa-arrow-up trend-arrow"></i>
+					<span>+15%</span>
+				</div>
+				<div class="kpi-value" data-key="flow_stability">3,720</div>
+				<div class="kpi-label">Flow Stability Index</div>
+			</div>
+
+			<div class="kpi-card">
+				<div class="kpi-trend positive">
+					<i class="fas fa-arrow-up trend-arrow"></i>
+					<span>+8.2%</span>
+				</div>
+				<div class="kpi-value" data-key="gas_reynolds">181K</div>
+				<div class="kpi-label">Gas Reynolds Number</div>
+			</div>
+
+			<div class="kpi-card">
+				<div class="kpi-trend negative">
+					<i class="fas fa-arrow-down trend-arrow"></i>
+					<span>-0.34</span>
+				</div>
+				<div class="kpi-value" data-key="inversion_risk">-0.34</div>
+				<div class="kpi-label">Inversion Risk Score</div>
+			</div>
+
+            </div>
+
+            <!-- CHARTS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div class="chart-container">
+                    <div class="chart-title">
+                        <i class="fas fa-brain"></i>
+                        TML Carryover Prediction
+                    </div>
+                    <canvas id="carryoverChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Multi-Phase Reynolds
+                    </div>
+                    <canvas id="reynoldsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- PREDICTION CARD -->
+            <div class="prediction-card">
+                <div class="prediction-title">
+                    <i class="fas fa-robot"></i>
+                    Next 6h Carryover Forecast
+                </div>
+                <div class="prediction-value" data-key="carryover_forecast">18.2%</div>
+                <div style="font-size: 14px; opacity: 0.8; margin: 4px 0;">(+0.95% from baseline)</div>
+                <div class="prediction-confidence">
+                    <span>🧠 Confidence: <strong data-key="confidence">94.7%</strong></span>
+                    <span>⚠️ Risk: <strong style="color: #f59e0b;">MEDIUM</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: PROCESSED ANALYTICS -->
+        <div class="right-panel">
+            <h3><i class="fas fa-chart-line"></i> AI Processed Metrics</h3>
+            
+			<div class="metric-card">
+				<div class="metric-title">Flow Stability</div>
+				<div class="metric-value" data-key="flow_stability">3,720</div>
+				<div class="metric-unit">Index</div>
+				<div class="risk-badge risk-low">ELITE PERFORMANCE</div>
+			</div>
+
+			<div class="metric-card">
+				<div class="metric-title">Emulsion Ratio</div>
+				<div class="metric-value" data-key="emulsion_ratio">2.24</div>
+				<div class="metric-unit">Phase Ratio</div>
+				<div class="risk-badge risk-med">MONITOR</div>
+			</div>
+
+			<div class="metric-card">
+				<div class="metric-title">Stokes Number</div>
+				<div class="metric-value" data-key="stokes_number">1.96μ</div>
+				<div class="metric-unit">Droplet Dynamics</div>
+				<div class="risk-badge risk-low">PERFECT SEPARATION</div>
+			</div>
+
+            <div class="alert-banner">
+                <div class="alert-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <strong>🧠 TML Alert</strong><br>
+                    <span style="opacity: 0.95; font-size: 15px; font-weight: 500;">
+                        Carryover 17.2% detected (↑ +1.9%). Mist extractor efficiency dropping. 
+                        <strong>Recommend valve adjustment in 14min.</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ✅ FIXED: COMPLETE LIVE DATA UPDATES FOR ALL METRICS
+
+        // Global chart references
+        let carryoverChart, reynoldsChart;
+
+//************************************************************************************//
+			// 🔥 WEBSOCKET INTEGRATION - REPLACE ALL DATA FUNCTIONS
+			let ws;
+			let messageHistory = []; // Store recent messages for charts
+
+			function getConfigFromURL() {
+				const urlParams = new URLSearchParams(window.location.search);
+				return {
+					port: parseInt(urlParams.get('port')) || 49689,
+					topic: urlParams.get('topic') || 'scada-raw-data',
+					offset: urlParams.get('offset') || '-1',
+					rollbackoffset: urlParams.get('rollbackoffset') || '100',
+					groupid: urlParams.get('groupid') || '',
+					topictype: urlParams.get('topictype') || 'prediction',
+					append: urlParams.get('append') || '0',
+					secure: urlParams.get('secure') || '1'
+				};
+			}
+
+			// Connect to your exact WebSocket endpoint
+			function connectWebSocket() {
+			//tml-carryover.html?port=6060&topic=scada-raw-data
+			    const config = getConfigFromURL();
+				
+				const wsUrl = `ws://localhost:${config.port}/ws`;
+				
+				ws = new WebSocket(wsUrl);
+
+				ws.onopen = () => {
+					console.log('✅ WebSocket CONNECTED to SCADA dashboard');
+					document.querySelector('.status-card span').textContent = '🧠 TML Live (WS)';
+				    secure=1;
+				    vipertoken="";   
+				    offset="-1";
+				    password="";
+      			    consumerid="";
+					// Build object → serialize to JSON
+					const sendbuffer = {
+					  Topic: config.topic,
+					  Topictype: config.topictype,
+					  Secure: secure,
+					  Vipertoken: vipertoken,
+					  Consumerid: consumerid,
+					  Offset: offset,
+					  RollbackOffset: config.rollbackoffset,
+					  Groupid: config.groupid,
+					  Dashboardpassword: "iot_" + password,
+					};
+
+					// Send as JSON string
+					ws.send(JSON.stringify(sendbuffer));
+				 
+				};
+
+				ws.onmessage = (event) => {
+				  try {
+					//const message = JSON.parse(event.data);
+                    var eventdata=`${event.data}`;
+				    var maindata=eventdata.replace(/\\"/g,'"');
+			        maindata=maindata.substr(1, maindata.length-3);						
+				    
+			   
+				   var message;
+				   try{
+					message = JSON.parse(maindata);
+					}catch(e){
+					   console.log("Json parse issue=",e.message);
+					   return;
+					}
+				
+					// Handle both single objects AND TopicReads array
+					let liveDataArray = [];
+					
+					console.log("message main=",message);
+					// Process each vessel
+					message.TopicReads?.forEach((record, i) => {
+					  const vessel = record.data.SeparatorMetrics.RawFields;
+				/*"vesselIndex": 10.0,
+				"operatingPressure": 7057.0,
+				"operatingTemperature": 3686.0,
+				"gasFlowRate": 48424.0,
+				"gasDensity": 1992.0,
+				"gasCompressabilityFactor": 969.0,
+				"gasViscosity": 18820.0,
+				"hclFlowRate": 3533.0,
+				"hclDensity": 1052.0,
+				"hclViscosity": 784.0,
+				"hclSurfaceTension": 5485.0,
+				"waterFlowRate": 15353.0,
+				"waterDensity": 99.0,
+				"waterViscosity": 950.0,
+				"waterSurfaceTension": 7360.0,
+				"hclWaterSurfaceTension": 3247.0,
+				"phseInversionCriticalWaterCut": 478.0,
+				"solidFlowRate": 993.0,
+				"solidDensity": 208.0,
+				"carryover": 12.51714,
+				"gas_reynolds": 726290.324257,
+				"flow_stability": 1592.103867,
+				"inversion_risk": -0.446295,
+				"density_ratio": 4.96988,
+				"water_reynolds": 2267.173318,
+				"reynolds_ratio": 320.350596,
+				"emulsion_ratio": 2.266708,
+				"stokes_number": 0.000002
+				*/
+                      livedata={
+					    raw: {
+						  operatingPressure: (vessel.operatingPressure || 0).toFixed(1),
+						  gasFlowRate: (vessel.gasFlowRate || 0).toFixed(1),
+						  waterFlowRate: (vessel.waterFlowRate || 0).toFixed(1),
+						  hclFlowRate: (vessel.hclFlowRate || 0).toFixed(1),
+						  solidFlowRate: (vessel.solidFlowRate || 0).toFixed(1)					     
+						  },
+					    processed: {
+						  carryover: (vessel.carryover || 0).toFixed(1),
+						  gas_reynolds: (vessel.gas_reynolds || 0).toFixed(0),
+						  flow_stability: (vessel.flow_stability || 0).toFixed(0),
+						  inversion_risk: (vessel.inversion_risk || 0).toFixed(3),
+						  emulsion_ratio: (vessel.emulsion_ratio || 0).toFixed(2),
+						  stokes_number: (vessel.stokes_number || 0).toFixed(6),
+						  water_reynolds: (vessel.water_reynolds || 0).toFixed(0)
+						  },
+				    	ai: {
+					     	carryover_forecast: (vessel.carryover || vessel.prediction || '18.2').toFixed(1),
+						    confidence: vessel.confidence || vessel.confidence_score || '94.7'
+					    }
+				     };					  
+					  updateAllMetrics(livedata);
+					  updateChartsTML(livedata);
+					  
+					  console.log(`Vessel ${vessel.vesselIndex}:`);
+					  console.log(`  Carryover: ${vessel.carryover.toFixed(1)}%`);
+					  console.log(`  Inversion Risk: ${vessel.inversion_risk.toFixed(3)}`);
+					  console.log(`  Flow Stability: ${vessel.flow_stability.toFixed(0)}`);
+					  console.log(`  Time: ${record.data.AcquisitionTime}`);
+					});
+	
+/*					if (message.TopicReads && Array.isArray(message.TopicReads)) {
+					  // New SCADA format: { TopicReads: [vessel1, vessel2, ...] }
+					  liveDataArray = message.TopicReads.map(record => 
+					    //console.log(record)  // ✅ No trailing comma
+						transformWebSocketData(record)
+					  );
+					  console.log("📡 SCADA array:", liveDataArray.length, "vessels");
+					} else {
+					  // Legacy single-object format
+					  console.log("error");
+					  liveDataArray = [transformWebSocketData(message)];
+					}
+					
+					// Process all vessels in array
+					liveDataArray.forEach(liveData => {
+				//	  console.log("liveData=", liveData);
+					  updateAllMetrics(liveData);
+					  updateCharts(liveData);
+					});
+*/					
+				  } catch (e) {
+					console.warn('Invalid WS message:', event.data.substring(0, 200) + '...');
+				  }
+				};
+
+
+				ws.onclose = () => {
+					console.log('❌ WebSocket DISCONNECTED - reconnecting in 3s...');
+					document.querySelector('.status-card span').textContent = '🧠 TML Reconnecting...';
+					setTimeout(connectWebSocket, 3000); // Auto-reconnect
+				};
+
+				ws.onerror = (error) => {
+					console.error('WebSocket ERROR:', error);
+				};
+			}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// Transform raw WebSocket messages to dashboard format
+			function transformWebSocketData(message) {
+				// Adjust these mappings based on your actual message structure
+				// Check console.log('📡 New prediction:') to see your data format
+				//console.log("message 2=",message);
+				
+				return {
+					raw: {
+						operatingPressure: message.pressure || message.vessel_pressure || '65.2',
+						gasFlowRate: message.gas_flow || message.flow_rate?.gas || '215.8',
+						waterFlowRate: message.water_flow || message.flow_rate?.water || '38.4',
+						hclFlowRate: message.hcl_flow || message.injection_rate || '24.9',
+						solidFlowRate: message.solids || message.solid_carryover || '9.8'
+					},
+					processed: {
+						carryover: message.carryover || message.carryover_rate || '17.2',
+						gas_reynolds: message.reynolds?.gas || message.gas_reynolds || 181299,
+						flow_stability: message.stability || message.flow_stability || 3720,
+						inversion_risk: message.inversion_risk || message.risk_score || '-0.34',
+						emulsion_ratio: message.emulsion || message.phase_ratio || '2.24',
+						stokes_number: message.stokes || 0.00000196,
+						water_reynolds: message.reynolds?.water || 639
+					},
+					ai: {
+						carryover_forecast: message.forecast || message.prediction || '18.2',
+						confidence: message.confidence || message.confidence_score || '94.7'
+					}
+				};
+			}
+
+			// Graceful cleanup
+			window.addEventListener('beforeunload', () => {
+				if (ws) ws.close();
+			});
+
+//************************************************************************************//
+
+
+//******************************************POST /api/v1/consume ********************//
+
+		// 🚀 INTEGRATED WITH YOUR EXACT ENDPOINT
+		async function fetchLiveData() {
+			try {
+				const payload = {
+					topic: 'failure_predictions',
+					rollbackoffset: 50,
+					osdu: 'false'
+				};
+
+				const response = await fetch('http://localhost:5000/api/v1/consume', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(payload)
+				});
+
+				if (!response.ok) {
+					throw new Error(`API Error: ${response.status} ${response.statusText}`);
+				}
+
+				const apiResponse = await response.json();
+				console.log('API Messages:', apiResponse.messages);
+
+				// Transform your API response (adjust these mappings to your actual data structure)
+				// Assuming apiResponse.messages is an array of prediction objects
+				const latestMessage = apiResponse.messages[0] || {}; // Use most recent message
+
+				return {
+					raw: {
+						operatingPressure: latestMessage.pressure?.toFixed(1) || '65.2',
+						gasFlowRate: latestMessage.gas_flow?.toFixed(1) || '215.8',
+						waterFlowRate: latestMessage.water_flow?.toFixed(1) || '38.4',
+						hclFlowRate: latestMessage.hcl_flow?.toFixed(1) || '24.9',
+						solidFlowRate: latestMessage.solids?.toFixed(1) || '9.8'
+					},
+					processed: {
+						carryover: latestMessage.carryover?.toFixed(2) || '17.2',
+						gas_reynolds: latestMessage.gas_reynolds || 181299,
+						flow_stability: latestMessage.flow_stability || 3720,
+						inversion_risk: latestMessage.inversion_risk?.toFixed(2) || '-0.34',
+						emulsion_ratio: latestMessage.emulsion_ratio?.toFixed(2) || '2.24',
+						stokes_number: latestMessage.stokes_number || 0.00000196,
+						water_reynolds: latestMessage.water_reynolds || 639
+					},
+					ai: {
+						carryover_forecast: latestMessage.forecast?.toFixed(1) || '18.2',
+						confidence: latestMessage.confidence?.toFixed(1) || '94.7'
+					}
+				};
+
+			} catch (error) {
+				console.warn('API failed, using fallback:', error.message);
+				// Fallback to your original fake data
+				return generateLiveData();
+			}
+		}
+
+        // LIVE SCADA + AI DATA GENERATOR
+        function generateLiveData() {
+            const now = Date.now();
+            return {
+                raw: {
+                    operatingPressure: (65 + Math.sin(now / 8000) * 1.5).toFixed(1),
+                    gasFlowRate: (215 + (Math.random() - 0.5) * 10).toFixed(1),
+                    waterFlowRate: (38 + (Math.random() - 0.5) * 4).toFixed(1),
+                    hclFlowRate: (24.9 + (Math.random() - 0.5) * 1.5).toFixed(1),
+                    solidFlowRate: (9.8 + (Math.random() - 0.5) * 1).toFixed(1)
+                },
+                processed: {
+                    carryover: (17.7 + Math.random() * 0.5).toFixed(2),
+                    gas_reynolds: Math.round((215 * 850 + Math.random() * 5000)),
+                    flow_stability: Math.round(3720 + (Math.random() - 0.5) * 200),
+                    inversion_risk: (-0.34 + (Math.random() - 0.5) * 0.1).toFixed(2),
+                    emulsion_ratio: (2.24 + (Math.random() - 0.5) * 0.1).toFixed(2),
+                    stokes_number: (0.00000196 + Math.random() * 0.0000001),
+                    water_reynolds: Math.round(639 + Math.random() * 50)
+                },
+                ai: {
+                    carryover_forecast: (18.2 + Math.random() * 0.3).toFixed(1),
+                    confidence: (94.7 + (Math.random() - 0.5) * 2).toFixed(1)
+                }
+            };
+        }
+
+        // 🔥 UPDATE ALL DASHBOARD VALUES - NOW WORKS 100%
+        function updateAllMetrics(data) {
+            // Update RAW SCADA values
+			const selectors = [
+				'[data-key="operatingPressure"]',
+				'[data-key="gasFlowRate"]',
+				'[data-key="waterFlowRate"]',
+				'[data-key="hclFlowRate"]',
+				'[data-key="solidFlowRate"]',
+				'[data-key="carryover"]',
+				'[data-key="flow_stability"]',
+				'[data-key="inversion_risk"]',
+				'[data-key="emulsion_ratio"]',
+				'[data-key="stokes_number"]',
+				'[data-key="gas_reynolds"]',
+				'[data-key="carryover_forecast"]',
+				'[data-key="confidence"]'
+			];			
+					
+			selectors.forEach((sel, i) => {
+				if (!document.querySelector(sel)) {
+					console.error(`❌ MISSING: ${sel}`);
+				}
+			});
+	
+	        //console.log("here data.processed.carryover=",data.processed.carryover);
+			
+            document.querySelector('[data-key="operatingPressure"]').textContent = data.raw.operatingPressure;
+            document.querySelector('[data-key="gasFlowRate"]').textContent = data.raw.gasFlowRate;
+            document.querySelector('[data-key="waterFlowRate"]').textContent = data.raw.waterFlowRate;
+            document.querySelector('[data-key="hclFlowRate"]').textContent = data.raw.hclFlowRate;
+            document.querySelector('[data-key="solidFlowRate"]').textContent = data.raw.solidFlowRate;
+
+            // Update PROCESSED AI metrics
+            document.querySelector('[data-key="carryover"]').textContent = data.processed.carryover + '%';
+            document.querySelector('[data-key="flow_stability"]').textContent = data.processed.flow_stability.toLocaleString();
+            document.querySelector('[data-key="inversion_risk"]').textContent = data.processed.inversion_risk;
+            document.querySelector('[data-key="emulsion_ratio"]').textContent = data.processed.emulsion_ratio;
+            document.querySelector('[data-key="stokes_number"]').textContent = (data.processed.stokes_number * 1e6).toFixed(0) + 'μ';
+            
+            // Update gas reynolds with K suffix
+            const gasReK = (data.processed.gas_reynolds / 1000).toFixed(0) + 'K';
+            document.querySelector('[data-key="gas_reynolds"]').textContent = gasReK;
+
+            // Update AI prediction
+            document.querySelector('[data-key="carryover_forecast"]').textContent = data.ai.carryover_forecast + '%';
+            document.querySelector('[data-key="confidence"]').textContent = data.ai.confidence + '%';
+        }
+
+        // UPDATE CHARTS
+        function updateChartsTML(data) {
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            
+			
+            if (carryoverChart) {
+			
+                carryoverChart.data.labels.push(time);
+                carryoverChart.data.labels.shift();
+                carryoverChart.data.datasets[0].data.push(parseFloat(data.processed.carryover));
+                carryoverChart.data.datasets[0].data.shift();
+                carryoverChart.data.datasets[1].data.push(parseFloat(data.ai.carryover_forecast));
+                carryoverChart.data.datasets[1].data.shift();
+                carryoverChart.update('none');
+								
+            }
+            
+			if (reynoldsChart) {
+				// ✅ Parse strings back to numbers
+				const gasRe = parseFloat(data.processed.gas_reynolds) || 0;
+				const waterRe = parseFloat(data.processed.water_reynolds) || 0;
+				
+				reynoldsChart.data.datasets[0].data = [gasRe, waterRe];
+				reynoldsChart.data.labels = [
+					`Gas Re (${(gasRe/1000).toFixed(0)}K)`,
+					`Water Re (${waterRe.toFixed(0)})`
+				];
+				
+				reynoldsChart.update();  // ✅ No 'none' mode
+			}
+
+        }
+		
+        function updateCharts(data) {
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            			
+            if (carryoverChart) {
+                carryoverChart.data.labels.push(time);
+                carryoverChart.data.labels.shift();
+                carryoverChart.data.datasets[0].data.push(parseFloat(data.processed.carryover));
+                carryoverChart.data.datasets[0].data.shift();
+                carryoverChart.data.datasets[1].data.push(parseFloat(data.ai.carryover_forecast));
+                carryoverChart.data.datasets[1].data.shift();
+                carryoverChart.update('none');
+				
+//				console.log(carryoverChart);
+            }
+            
+			
+            if (reynoldsChart) {
+                reynoldsChart.data.datasets[0].data = [data.processed.gas_reynolds, data.processed.water_reynolds];
+                reynoldsChart.data.labels = [
+                    `Gas Re (${(data.processed.gas_reynolds/1000).toFixed(0)}K)`,
+                    `Water Re (${data.processed.water_reynolds.toFixed(0)})`
+                ];
+                reynoldsChart.update('none');
+            }
+        }
+
+        // 🔥 MAIN UPDATE ENGINE
+        function updateDashboard() {
+		    /// ********************API *******************  //
+			const liveData = connectWebSocket();  // Now async WEBSOCKETS!
+		    /// ***************************************  //
+		
+		    /// ********************API *******************  //
+			//const liveData = await fetchLiveData();  // Now async REST API!
+		    /// ***************************************  //
+            
+			//const liveData = generateLiveData();
+            updateAllMetrics(liveData);
+            updateCharts(liveData);
+        }
+
+        // INITIALIZE EVERYTHING
+        function initDashboard() {
+            // Initialize charts first
+            const carryoverCtx = document.getElementById('carryoverChart').getContext('2d');
+            carryoverChart = new Chart(carryoverCtx, {
+                type: 'line',
+                data: {
+                    labels: Array(7).fill().map((_, i) => `T-${6-i}`),
+                    datasets: [{
+                        label: 'Live Carryover',
+                        data: Array(7).fill(17),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                        tension: 0.4, fill: true,
+                        pointBackgroundColor: '#f59e0b',
+                        pointBorderColor: '#ffffff', pointBorderWidth: 3, pointRadius: 6
+                    }, {
+                        label: '🧠 TML Prediction',
+                        data: Array(7).fill(18),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderDash: [8, 4], tension: 0.4,
+                        pointRadius: 8, pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#ffffff', pointBorderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.08)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+
+            const reynoldsCtx = document.getElementById('reynoldsChart').getContext('2d');
+            reynoldsChart = new Chart(reynoldsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Gas Re (181K)', 'Water Re (639)'],
+                    datasets: [{ data: [181299, 639], backgroundColor: ['#00d4ff', '#06b6d4'], 
+                               borderWidth: 3, borderColor: '#ffffff', circumference: 180, rotation: 270 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', padding: 25, usePointStyle: true } } }
+                }
+            });
+
+            // Start live updates
+            updateDashboard();
+            setInterval(updateDashboard, 500); // Every 2.5 seconds
+			
+			
+		    // 🔥 NEW: Connect WebSocket INSTEAD of polling
+           //connectWebSocket(); //*************** IF USING WEBSOCKETS ///
+        }
+
+        // START ON LOAD
+        window.addEventListener('load', initDashboard);
+    </script>
+
+
+</body>
+</html>
