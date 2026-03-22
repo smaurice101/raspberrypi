@@ -16,7 +16,27 @@ import random
 import shlex
 from typing import Dict, Any
 import re
+import threading
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+from typing import List
+#import nest_asyncio
+#nest_asyncio.apply()
 
+lock = threading.Lock()
+mqtt_lock = threading.Lock()
+
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import scadaglobals as sg
+import scada_modbus as cv
+import mqtt_loop as mq
+
+VIPERTOKEN = "" #os.environ['VIPERTOKEN']
+VIPERHOST = "" #os.environ['VIPERHOST']
+VIPERPORT = "" #os.environ['VIPERPORT']
+HTTPADDR = ""
 sys.dont_write_bytecode = True
 ##################################################  REST API SERVER #####################################
 # This is a REST API server that will handle connections from a client
@@ -438,16 +458,21 @@ def gettmlsystemsparams():
   ############################################### API Routes ########################################      
 
     if VIPERHOST != "":
-        app = Flask(__name__)
+        #app = Flask(__name__)
+        app = FastAPI()
                  
-        app.config['VIPERTOKEN'] = os.environ['VIPERTOKEN']
-        app.config['VIPERHOST'] = os.environ['VIPERHOST']
-        app.config['VIPERPORT'] = os.environ['VIPERPORT']
+        app.add_middleware(
+              CORSMiddleware,
+              allow_origins=["*"],  # Allow all for dev
+              allow_credentials=True,
+              allow_methods=["*"],
+              allow_headers=["*"],
+        )
 
 #-------------------------------- TERMINATE WINDOW -----------------------------------------------------      
-        @app.route(rule='/api/v1/terminatewindow', methods=['POST'])
-        def windowterminate(): 
-          jdata = request.get_json()          
+        @app.post('/api/v1/terminatewindow')
+        def windowterminate(jdata: dict): 
+#          jdata = request.get_json()          
           if not jdata:
             return "Missing windows", 400
           
@@ -456,18 +481,18 @@ def gettmlsystemsparams():
           
           if windowname != '':
                wd=terminatetmuxwindows(step,windowname)
-               return jsonify({
+               return {
                     'status': f"success: windows terminated: {wd}",
-               }), 201
+               }
 
-          return jsonify({
+          return {
               'status': 'success: no windows terminated',
-          }), 201
+          }
 
 #-------------------------------- CREATETOPIC -----------------------------------------------------      
-        @app.route(rule='/api/v1/createtopic', methods=['POST'])
-        def storecreatetopic():
-          jdata = request.get_json()          
+        @app.post('/api/v1/createtopic')
+        def storecreatetopic(jdata: dict):
+#          jdata = request.get_json()          
           if not jdata or not jdata.get('topics'):
             return "Missing topics", 400
           
@@ -483,33 +508,33 @@ def gettmlsystemsparams():
           try:
             for pt in ptarr:
               if len(pt)>0:
-                result=maadstml.vipercreatetopic(app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'],pt,'companyname',
+                result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOST,VIPERPORT,pt,'companyname',
                                  'myname','myemail','mylocation',description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,'')
                 print(result)
-                writeviperlogs("INFO",f"Creating Topic: {pt}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                                        
-            return jsonify({
+                writeviperlogs("INFO",f"Creating Topic: {pt}",VIPERTOKEN,VIPERHOST,VIPERPORT)                                        
+            return {
               'status': 'success',
               'topics': topics,
               'partitions': numpartitions,
               'replication': replication,
               'description': description
-            }), 201
+            }
           except Exception as e:
-            writeviperlogs("ERROR",f"Creating Topic failed: {pt}: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
-            return jsonify({
+            writeviperlogs("ERROR",f"Creating Topic failed: {pt}: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+            return {
               'status': f"error: {e}",
               'topics': topics,
               'partitions': numpartitions,
               'replication': replication,
               'description': description
-            }), 400
+            }
             
         
 #-------------------------------- PREPROCESS -----------------------------------------------------            
-        @app.route(rule='/api/v1/preprocess', methods=['POST'])
-        def storepreprocess():
-          jdata = request.get_json()          
+        @app.post('/api/v1/preprocess')
+        def storepreprocess(jdata: dict):
+#          jdata = request.get_json()          
           if not jdata or not jdata.get('rawdatatopic'):
             return "Missing preprocess or invalid preprocess", 400
 
@@ -545,7 +570,7 @@ def gettmlsystemsparams():
                          localsearchtermfolder,localsearchtermfolderinterval,rtmsfoldername,rtmsmaxwindows]
              stopstart(step,step4carr,windowinstance)
 
-           return jsonify({
+           return {
               'status': 'success',
               'step4raw_data_topic': jdata.get('rawdatatopic',''),
               'step4preprocess_data_topic': jdata.get('preprocessdatatopic',''),
@@ -553,10 +578,10 @@ def gettmlsystemsparams():
               'step4jsoncriteria': jdata.get('jsoncriteria',''),
               'rollbackoffset': jdata.get('rollbackoffset',400),            
               'windowinstance': jdata.get("windowinstance","default")                 
-              }), 201
+              }
           except Exception as e:
-           writeviperlogs("ERROR",f"Preprocessing failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
-           return jsonify({
+           writeviperlogs("ERROR",f"Preprocessing failed: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+           return {
               'status': f"error:{e}",
               'step4raw_data_topic': jdata.get('rawdatatopic',''),
               'step4preprocess_data_topic': jdata.get('preprocessdatatopic',''),
@@ -564,13 +589,13 @@ def gettmlsystemsparams():
               'step4jsoncriteria': jdata.get('jsoncriteria',''),
               'rollbackoffset': jdata.get('rollbackoffset',400),            
               'windowinstance': jdata.get("windowinstance","default")                 
-              }), 400
+              }
             
           
 #-------------------------------- MACHINE LEARNING -----------------------------------------------------                  
-        @app.route(rule='/api/v1/ml', methods=['POST'])
-        def storeml():
-          jdata = request.get_json()          
+        @app.post('/api/v1/ml')
+        def storeml(jdata: dict):
+#          jdata = request.get_json()          
           if not jdata:
             return "Missing ml or invalid ml", 400
 
@@ -589,7 +614,7 @@ def gettmlsystemsparams():
              step5arr = [rollbackoffsets,processlogic,independentvariables,dependentvariable,
                          islogistic,preprocess_data_topic,ml_data_topic,trainingdatafolder]
              stopstart(step,step5arr,windowinstance)
-             return jsonify({
+             return {
               'status': "success",
               'trainingdatafolder': jdata.get('trainingdatafolder',''),
               'ml_data_topic': jdata.get('ml_data_topic',''),  
@@ -600,10 +625,10 @@ def gettmlsystemsparams():
               'processlogic': jdata.get('processlogic',''),
               'rollbackoffsets': jdata.get('rollbackoffsets',50),
               'windowinstance': jdata.get('windowinstance','default')                          
-              }), 201    
+              }    
           except Exception as e:
-             writeviperlogs("ERROR",f"Machine learning failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
-             return jsonify({
+             writeviperlogs("ERROR",f"Machine learning failed: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+             return {
               'status': f"error:{e}",
               'trainingdatafolder': jdata.get('trainingdatafolder',''),
               'ml_data_topic': jdata.get('ml_data_topic',''),  
@@ -614,12 +639,12 @@ def gettmlsystemsparams():
               'processlogic': jdata.get('processlogic',''),
               'rollbackoffsets': jdata.get('rollbackoffsets',50),
               'windowinstance': jdata.get("windowinstance","default")            
-              }), 400
+              }
               
 #-------------------------------- PREDICTIONS -----------------------------------------------------                        
-        @app.route(rule='/api/v1/predict', methods=['POST'])
-        def predictdata():
-          jdata = request.get_json()          
+        @app.post('/api/v1/predict')
+        def predictdata(jdata: dict):
+#          jdata = request.get_json()          
           if not jdata:
             return "Missing ml or invalid prediction", 400
           
@@ -637,7 +662,7 @@ def gettmlsystemsparams():
              windowinstance = jdata.get('windowinstance','default')            
              step6arr = [maxrows,preprocess_data_topic,ml_prediction_topic,streamstojoin,inputdata,consumefrom,pathtoalgos]
              stopstart(step,step6arr,windowinstance)
-             return jsonify({
+             return {
               'status': "success",
                'pathtoalgos': jdata.get('pathtoalgos',''),
                'maxrows': jdata.get('rollbackoffsets',50), 
@@ -647,10 +672,10 @@ def gettmlsystemsparams():
                'ml_prediction_topic': jdata.get('ml_prediction_topic',''),  
                'preprocess_data_topic': jdata.get('preprocess_data_topic',''),  
                'windowinstance': jdata.get('windowinstance','default')    
-              }), 201          
+              }         
           except Exception as e:
-             writeviperlogs("ERROR",f"Predictions failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
-             return jsonify({
+             writeviperlogs("ERROR",f"Predictions failed: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+             return {
               'status': f"error:{e}",
                'pathtoalgos': jdata.get('pathtoalgos',''),
                'maxrows': jdata.get('rollbackoffsets',50), 
@@ -660,12 +685,12 @@ def gettmlsystemsparams():
                'ml_prediction_topic': jdata.get('ml_prediction_topic',''),  
                'preprocess_data_topic': jdata.get('preprocess_data_topic',''),  
                'windowinstance': jdata.get('windowinstance','default')    
-              }), 400
+              }
 
 #-------------------------------- AI -----------------------------------------------------                        
-        @app.route(rule='/api/v1/ai', methods=['POST'])
-        def aidata():
-          jdata = request.get_json()          
+        @app.post('/api/v1/ai')
+        def aidata(jdata: dict):
+#          jdata = request.get_json()          
           if not jdata:
             return "Missing ai or invalid ai", 400
           
@@ -697,7 +722,7 @@ def gettmlsystemsparams():
               
              stopstart(step,step9arr,windowinstance)
       
-             return jsonify({               
+             return {               
               'status': "success",
                'vectordimension': jdata.get('vectordimension','768'),
                'contextwindowsize': jdata.get('contextwindowsize','8192'), #agent - team lead - supervisor
@@ -718,10 +743,10 @@ def gettmlsystemsparams():
                'rollbackoffset': jdata.get('rollbackoffset','5'),
                'pgptcontainername': jdata.get('pgptcontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v2'),
                'windowinstance': jdata.get('windowinstance','default')                                         
-              }), 201          
+              }          
           except Exception as e:
-             writeviperlogs("ERROR",f"AI failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
-             return jsonify({
+             writeviperlogs("ERROR",f"AI failed: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+             return {
               'status': f"error:{e}",
                'vectordimension': jdata.get('vectordimension','768'),
                'contextwindowsize': jdata.get('contextwindowsize','8192'), #agent - team lead - supervisor
@@ -742,12 +767,12 @@ def gettmlsystemsparams():
                'rollbackoffset': jdata.get('rollbackoffset','5'),
                'pgptcontainername': jdata.get('pgptcontainername','maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v2'),
                'windowinstance': jdata.get('windowinstance','default')                                                        
-              }), 400
+              }
       
 #-------------------------------- AGENTIC AI -----------------------------------------------------                        
-        @app.route(rule='/api/v1/agenticai', methods=['POST'])
-        def agenticaidata():
-          jdata = request.get_json()          
+        @app.post('/api/v1/agenticai')
+        def agenticaidata(jdata: dict):
+#          jdata = request.get_json()          
           if not jdata:
             return "Missing agentic ai or invalid agentic ai", 400
           
@@ -777,7 +802,7 @@ def gettmlsystemsparams():
                          supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,contextwindow,localmodelsfolder,agenttopic]
              stopstart(step,step9barr,windowinstance)
       
-             return jsonify({               
+             return {               
               'status': "success",
               'rollbackoffset': jdata.get('rollbackoffsets',10),
               'ollamamodel': jdata.get('ollama-model','phi3:3.8b,phi3:3.8b,llama3.2:3b'), #agent - team lead - supervisor
@@ -797,10 +822,10 @@ def gettmlsystemsparams():
               'localmodelsfolder': jdata.get('localmodelsfolder','/rawdata/ollama'),
               'agenttopic': jdata.get('agenttopic','agent-responses'),
               'windowinstance': jdata.get('windowinstance','default')               
-              }), 201          
+              }
           except Exception as e:
-             writeviperlogs("ERROR",f"Agentic AI failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
-             return jsonify({
+             writeviperlogs("ERROR",f"Agentic AI failed: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+             return {
               'status': f"error:{e}",
               'rollbackoffset': jdata.get('rollbackoffsets',10),
               'ollamamodel': jdata.get('ollama-model','phi3:3.8b,phi3:3.8b,llama3.2:3b'), #agent - team lead - supervisor
@@ -820,12 +845,12 @@ def gettmlsystemsparams():
               'localmodelsfolder': jdata.get('localmodelsfolder','/rawdata/ollama'),
               'agenttopic': jdata.get('agenttopic','agent-responses'),
               'windowinstance': jdata.get('windowinstance','default')               
-              }), 400
+              }
       
 #-------------------------------- CONSUME -----------------------------------------------------                        
-        @app.route(rule='/api/v1/consume', methods=['POST'])
-        def consumedata():
-          jdata = request.get_json()          
+        @app.post('/api/v1/consume')
+        def consumedata(jdata: dict):
+#          jdata = request.get_json()          
           osdu = jdata.get('osdu','false')
           kind = jdata.get('kind','tml')  
 
@@ -833,7 +858,7 @@ def gettmlsystemsparams():
             if osdu=='false':
               return "Missing ml or invalid consume", 400
             else:
-              return jsonify({
+              return {
                   "kind": f"{kind}",
                   "id": "consume-error",
                   "error": {
@@ -841,7 +866,7 @@ def gettmlsystemsparams():
                       "message": "Missing topic or invalid consume request",
                       "reason": "Topic parameter required"
                   }
-              }), 400              
+              }             
           forward_statuses = []
           maintopic = jdata.get('topic','')
           forwardurl = jdata.get('forwardurl','')  
@@ -907,7 +932,7 @@ def gettmlsystemsparams():
   
             if forwardurl == '':
                 #print("response=",response)
-                return jsonify(response), 200
+                return response
             else:              
                farr = [fw.strip() for fw in forwardurl.split(",")]  # Clean whitespace              
                for fw in farr: 
@@ -923,39 +948,188 @@ def gettmlsystemsparams():
                    })                 
                  except Exception as e:
                     forward_statuses.append({'url': fw.strip(), 'error': str(e)})
-                    writeviperlogs("ERROR",f"Forwarding URL failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                
+                    writeviperlogs("ERROR",f"Forwarding URL failed: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                
 
                response['forward_statuses'] = forward_statuses                   
-               return jsonify(response), 200
+               return response
            except Exception as e:
                print("Error=",e)
-               writeviperlogs("ERROR",f"Consume failed: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                             
-               return jsonify({"error": f"Consumption failed: {e}"}), 500
+               writeviperlogs("ERROR",f"Consume failed: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                             
+               return {"error": f"Consumption failed: {e}"}
              
              
-  #         return result      
+##################### INDUSTRIAL API ##############################################################
+#-------------------------------- SCADA/MODBUS -----------------------------------------------------                        
+        @app.post("/api/v1/scada_modbus_read")
+        async def start_vessel_read(req: dict):
+            
+            #req = request.get_json()
+            job_id = str(time.time())
+            
+            scada_cfg = {
+                "host": req.get("scada_host", "127.0.0.1"),
+                "port": req.get("scada_port", 2502),
+                "unit_id": req.get("slave_id", 1),
+            }
+
+            with lock:  # ✅ Thread-safe
+                if sg.read_job and sg.read_job["stop"]:
+                    # Don't sleep - just skip or queue
+                    pass
+        
+                # Stop existing thread first
+                if sg.read_thread and sg.read_thread.is_alive():
+                    sg.read_job["stop"] = True
+                    sg.read_thread.join(timeout=float(req.get("read_interval_seconds", 0.3))+1.0)
+            
+
+                sg.read_job = {"stop": False, "job_id": job_id}
+                sg.read_thread = threading.Thread(
+                target=cv.modbus_read_loop,
+                args=(
+                    scada_cfg,
+                    req.get("read_interval_seconds", 0.3),
+                    req.get("callback_url",""),
+                    req.get("max_reads",-1),
+                    req.get("fields", []),
+                    req.get("scaling", {}),
+                    req.get("start_register", 40001) - 40001,
+                    req.get("sendtotopic", ""),            
+                    job_id,
+                    VIPERTOKEN,
+                    VIPERHOST,
+                    VIPERPORT,
+                    default_args,
+                    req.get("vessel_names", {}),
+                    req.get("createvariables", "")  # ✅ Dynamic from request                  
+                   ),
+                   daemon=True,
+                )
+                sg.read_thread.start()
+        
+            return {
+                "message": "SCADA Vessel read started",
+                "job_id": job_id,
+                "config_from_request": {
+                    "fields": len(req.get("fields", [])),
+                    "has_createvariables": bool(req.get("createvariables"))
+                }
+            }
+
+
+        @app.post("/api/v1/vessel_data")
+        def vessel_data_callback(data: dict):
+#            data = request.get_json()
+    
+            # DYNAMIC: Handle ANY data structure from callback
+            vessel = data.get('vessel', data)  # Nested OR flat
+    
+            # DYNAMIC: Find vessel identifier (vesselIndex OR first field)
+            vessel_id = (vessel or {}).get('vesselIndex', 
+                 next(iter(vessel), 'N/A') if vessel else 'N/A')
+    
+            # DYNAMIC: Find pressure field (operatingPressure OR first numeric)
+            pressure = 0
+            for key, val in vessel.items():
+                if isinstance(val, (int, float)) and 'pressure' in key.lower():
+                   pressure = val
+                   break
+    
+            print(f"📨 Job {data.get('job_id', 'N/A')} | Vessel {vessel_id}: {pressure:.1f}")
+            print(f"   Total fields: {len(vessel) if vessel else 0}")
+    
+            # DYNAMIC: Show computed vars (anything not in original fields list)
+            original_fields = data.get('fields', [])
+            computed_fields = {k: v for k, v in vessel.items() 
+                              if k not in original_fields and isinstance(v, (int, float))}
+    
+            for field, value in list(computed_fields.items())[:3]:
+                print(f"   {field}: {value:.0f}")
+
+            print(json.dumps(data))
+            return json.dumps(data)
+
+
+        @app.post("/api/v1/scada_read_stop")
+        def stop_vessel_read():
+            if sg.read_job:
+                sg.read_job["stop"] = True
+            return {"message": "Stop signal sent"}
+        
+        @app.get("/api/v1/scada_status")
+        def status():
+            return {
+                "running": sg.read_job is not None and not sg.read_job.get("stop", True) if sg.read_job else False
+            }
+
+################################# MQTT #############################################################
+        
+        @app.post("/api/v1/mqtt_subscribe")
+        def start_mqtt_subscribe(req: dict):
+          
+         try:
+          job_id = str(time.time())
+          mqtt_cfg = {
+            "broker": req.get("mqtt_broker", ""),
+            "port": int(req.get("mqtt_port", "8883")),
+            "topic": req.get("mqtt_subscribe_topic", ""),
+            "sendtotopic": req.get("sendtotopic",""),
+            "username": os.environ.get('MQTTUSERNAME', ''),
+            "password": os.environ.get('MQTTPASSWORD', ''),
+            "enable_tls": req.get("mqtt_enabletls","1"),
+            "VIPERTOKEN": app.config['VIPERTOKEN'],
+            "VIPERHOST":  app.config['VIPERHOST'],
+            "VIPERPORT": app.config['VIPERPORT'],
+            "default_args": default_args,            
+          }         
+
+          with mqtt_lock:  # New lock for MQTT globals (add to scadaglobals.py)
+          # Stop existing MQTT thread
+            if sg.mqtt_thread and sg.mqtt_thread.is_alive():
+              sg.mqtt_job["stop"] = True
+              sg.mqtt_client.disconnect()
+#              sg.mqtt_thread.join(timeout=2.0)
+        
+            sg.mqtt_job = {"stop": False, "job_id": job_id}
+            sg.mqtt_thread = threading.Thread(
+               target=mq.mqttserverconnect_threaded,  # Your function, modified below
+               args=(mqtt_cfg, job_id),
+               daemon=False
+             )
+            sg.mqtt_thread.start()
+
+            # Keep this thread alive as long as the job is running
+    
+          return {
+            "message": "MQTT subscription started",
+            "job_id": job_id            
+          }
+      
+         except Exception as e:
+            print("❌ JSON ERROR:", str(e))
+            return {"error": f"JSON parse failed: {str(e)}"}
 ####################################################################################################      
       
-        @app.route(rule='/api/v1/jsondataline', methods=['POST'])
-        def storejsondataline():
-          jdata = request.get_json()
+        @app.post('/api/v1/jsondataline')
+        def storejsondataline(jdata: dict):
+#          jdata = request.get_json()
           topic = jdata.get('sendtotopic','')            
           jdata = json.dumps(jdata)
-          readdata(jdata,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'],topic)
+          readdata(jdata,VIPERTOKEN,VIPERHOST,VIPERPORT,topic)
           return "ok"
     
-        @app.route(rule='/api/v1/jsondataarray', methods=['POST'])
-        def storejsondataarray():    
-          jdata = request.get_json()
+        @app.post('/api/v1/jsondataarray')
+        def storejsondataarray(jdata: List[dict]):    
+#          jdata = request.get_json()
           
-          for item in json_array: 
+          for item in jdata: 
              topic = item.get('sendtotopic','')                        
              item = json.dumps(item)            
-             readdata(item,app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'],topic)
+             readdata(item,VIPERTOKEN,VIPERHOST,VIPERPORT,topic)
           return "ok"      
 
 ####################################################################################################
-        @app.route(rule='/api/v1/health', methods=['POST'])
+        @app.post('/api/v1/health')
         def tmux_health_check_json() -> Dict[str, Any]:
             def run_tmux(cmd):
                 try:
@@ -1040,39 +1214,57 @@ def gettmlsystemsparams():
                 if session_data["plugin_window_count"] > 0 or is_plugin_session:
                     result["sessions"].append(session_data)
           
-            writeviperlogs("INFO",f"{result}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
+            writeviperlogs("INFO",f"{result}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
             
-            return jsonify(result),200
+            return result
+
 
       
 ####################################################################################################      
         #app.run(port=default_args['rest_port']) # for dev
         if os.environ['TSS']=="0": 
           try:  
-            http_server = WSGIServer(('', int(default_args['rest_port'])), app)
+            #http_server = WSGIServer(('', int(default_args['rest_port'])), app)
+
+            uvicorn.run(
+              app,  # Replace 'your_file_name' with actual filename
+              host="0.0.0.0",
+              port=int(default_args['rest_port']),
+              log_level="info",
+              reload=False  # Disable reload in production
+            )
+
           except Exception as e:
            tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to WSGIServer in {} - {}".format(os.path.basename(__file__),e))
                 
            tsslogging.tsslogit("ERROR: Cannot connect to WSGIServer in {}".format(os.path.basename(__file__)), "ERROR" )                     
  #          tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
            print("ERROR: Cannot connect to  WSGIServer") 
-           writeviperlogs("ERROR",f"Cannot start TML Plugin server: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
+           writeviperlogs("ERROR",f"Cannot start TML Plugin server: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
            return             
         else:
           try:  
             print("Listening")  
-            writeviperlogs("INFO","TML Plugin Server Started",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
-            http_server = WSGIServer(('', int(default_args['tss_rest_port'])), app)
+            writeviperlogs("INFO","TML Plugin Server Started",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+            #http_server = WSGIServer(('', int(default_args['tss_rest_port'])), app)
+
+            uvicorn.run(
+               app,  # Replace 'your_file_name' with actual filename
+               host="0.0.0.0",
+               port=int(default_args['tss_rest_port']),
+               log_level="info",
+               reload=False  # Disable reload in production
+            )
           except Exception as e:
            tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to WSGIServer in {} - {}".format(os.path.basename(__file__),e))                                
            tsslogging.tsslogit("ERROR: Cannot connect to WSGIServer in {}".format(os.path.basename(__file__)), "ERROR" )                     
 #           tsslogging.git_push("/{}".format(repo),"Entry from {} - {}".format(os.path.basename(__file__),e),"origin")        
            print("ERROR: Cannot connect to  WSGIServer") 
-           writeviperlogs("ERROR",f"Cannot start plugin server: {e}",app.config['VIPERTOKEN'],app.config['VIPERHOST'],app.config['VIPERPORT'])                            
+           writeviperlogs("ERROR",f"Cannot start plugin server: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
            return             
             
         tsslogging.locallogs("INFO", "STEP 3: RESTAPI HTTP Server started ... successfully")
-        http_server.serve_forever()        
+#        http_server.serve_forever()        
 
      #return [VIPERTOKEN,VIPERHOST,VIPERPORT]
         
@@ -1103,6 +1295,7 @@ def windowname(wtype,sname,dagname):
     return wn
 
 def startproducing(**context):
+       global VIPERTOKEN, VIPERHOST, VIPERPORT, HTTPADDR 
        sd = context['dag'].dag_id
        sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
        pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
