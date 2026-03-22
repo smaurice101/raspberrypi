@@ -522,6 +522,171 @@
                 max-height: 500px;
             }
         }
+		
+.vessel-table-container {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 24px;
+    margin: 20px 0;
+    max-height: 400px;
+    overflow-y: auto;
+    backdrop-filter: blur(20px);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #e2e8f0;
+}
+
+.table-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.sort-btn {
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sort-btn:hover, .sort-btn.active {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: var(--glow-blue);
+}
+
+.vessels-table {
+    display: grid;
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.vessel-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.vessel-row:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateX(4px);
+    box-shadow: var(--glow-blue);
+}
+
+.vessel-id {
+    font-weight: 700;
+    color: #00d4ff;
+    font-size: 16px;
+}
+
+.vessel-carryover {
+    font-size: 14px;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.vessel-risk {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.risk-low { background: rgba(16,185,129,0.2); color: #10b981; }
+.risk-med { background: rgba(245,158,11,0.2); color: #f59e0b; }
+.risk-high { background: rgba(239,68,68,0.2); color: #ef4444; }
+		
+/* FIX DUAL SCROLLBARS */
+.sidebar, .main-content, .right-panel {
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevents horizontal scroll */
+    scrollbar-width: thin; /* Firefox */
+}
+
+html, body {
+    overflow-x: hidden; /* Body scrollbar only */
+}
+
+/* 🔥 AWESOME CUSTOM SCROLLBARS */
+.sidebar::-webkit-scrollbar,
+.main-content::-webkit-scrollbar,
+.right-panel::-webkit-scrollbar,
+.vessel-table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.main-content::-webkit-scrollbar-track,
+.right-panel::-webkit-scrollbar-track,
+.vessel-table-container::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.main-content::-webkit-scrollbar-thumb,
+.right-panel::-webkit-scrollbar-thumb,
+.vessel-table-container::-webkit-scrollbar-thumb {
+    background: var(--primary-gradient);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,212,255,0.5);
+    transition: all 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover,
+.main-content::-webkit-scrollbar-thumb:hover,
+.right-panel::-webkit-scrollbar-thumb:hover,
+.vessel-table-container::-webkit-scrollbar-thumb:hover {
+    box-shadow: 0 0 20px rgba(0,212,255,0.8);
+    transform: scale(1.2);
+}
+
+/* Firefox custom scrollbars */
+.sidebar, .main-content, .right-panel, .vessel-table-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-blue) rgba(255,255,255,0.03);
+}
+
+.vessel-table-container {
+    max-height: 400px; /* Fixed height */
+    overflow: hidden;  /* Single scroll source */
+}
+
+.vessels-table {
+    max-height: 340px; /* Slightly less than container */
+    overflow-y: auto;  /* ONLY this scrolls */
+}
+
+#api-send-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: var(--glow-orange), 0 8px 32px rgba(255,107,53,0.6);
+}
+
+		
     </style>
 </head>
 <body>
@@ -561,45 +726,63 @@
             </div>
         </div>
 
+
 		<!-- SIDEBAR: RAW SCADA -->
 		<div class="sidebar">
 			<h3><i class="fas fa-microchip"></i> SCADA Raw Feed</h3>
 			
 			<div class="metric-card">
 				<div class="metric-title">Vessel Pressure</div>
-				<div class="metric-value" data-key="operatingPressure">65.2</div>
+				<div class="metric-value" data-key="operatingPressure">--</div>
 				<div class="metric-unit">bar</div>
 				<div class="risk-badge risk-low">OPTIMAL</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">Gas Flow Rate</div>
-				<div class="metric-value" data-key="gasFlowRate">215.8</div>
+				<div class="metric-value" data-key="gasFlowRate">--</div>
 				<div class="metric-unit">m³/hr</div>
 				<div class="risk-badge risk-low">STABLE</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">Water Flow</div>
-				<div class="metric-value" data-key="waterFlowRate">38.4</div>
+				<div class="metric-value" data-key="waterFlowRate">--</div>
 				<div class="metric-unit">m³/hr</div>
 				<div class="risk-badge risk-med">TRENDING ↑</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">HCL Injection</div>
-				<div class="metric-value" data-key="hclFlowRate">24.9</div>
+				<div class="metric-value" data-key="hclFlowRate">--</div>
 				<div class="metric-unit">m³/hr</div>
 				<div class="risk-badge risk-low">BALANCED</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">Solids Carry</div>
-				<div class="metric-value" data-key="solidFlowRate">9.8</div>
+				<div class="metric-value" data-key="solidFlowRate">--</div>
 				<div class="metric-unit">kg/hr</div>
 				<div class="risk-badge risk-low">FILTERED</div>
 			</div>
+			
+<!-- FLEET CARRYOVER METRICS -->
+<div class="metric-card">
+  <div class="metric-title">Top 50 Vessels Carryover</div>
+  <div class="metric-value" data-key="top50_carryover">--</div>
+  <div class="metric-unit">% (Highest)</div>
+  <div class="risk-badge risk-med">FLEET MAX</div>
+</div>
+
+<div class="metric-card">
+  <div class="metric-title">Fleet Average Carryover</div>
+  <div class="metric-value" data-key="fleet_avg_carryover">--</div>
+  <div class="metric-unit">% (All Vessels)</div>
+  <div class="risk-badge risk-low">FLEET AVG</div>
+</div>
+			
 		</div>
+
 
         <!-- MAIN CONTENT -->
         <div class="main-content">
@@ -610,7 +793,7 @@
 					<i class="fas fa-arrow-up trend-arrow"></i>
 					<span>+2.4%</span>
 				</div>
-				<div class="kpi-value" data-key="carryover">17.25</div>
+				<div class="kpi-value" data-key="carryover">--</div>
 				<div class="kpi-label">AI Carryover Rate</div>
 			</div>
 
@@ -619,7 +802,7 @@
 					<i class="fas fa-arrow-up trend-arrow"></i>
 					<span>+15%</span>
 				</div>
-				<div class="kpi-value" data-key="flow_stability">3,720</div>
+				<div class="kpi-value" data-key="flow_stability">--</div>
 				<div class="kpi-label">Flow Stability Index</div>
 			</div>
 
@@ -628,7 +811,7 @@
 					<i class="fas fa-arrow-up trend-arrow"></i>
 					<span>+8.2%</span>
 				</div>
-				<div class="kpi-value" data-key="gas_reynolds">181K</div>
+				<div class="kpi-value" data-key="gas_reynolds">--</div>
 				<div class="kpi-label">Gas Reynolds Number</div>
 			</div>
 
@@ -637,7 +820,7 @@
 					<i class="fas fa-arrow-down trend-arrow"></i>
 					<span>-0.34</span>
 				</div>
-				<div class="kpi-value" data-key="inversion_risk">-0.34</div>
+				<div class="kpi-value" data-key="inversion_risk">--</div>
 				<div class="kpi-label">Inversion Risk Score</div>
 			</div>
 
@@ -668,64 +851,222 @@
                     <i class="fas fa-robot"></i>
                     Next 6h Carryover Forecast
                 </div>
-                <div class="prediction-value" data-key="carryover_forecast">18.2%</div>
-                <div style="font-size: 14px; opacity: 0.8; margin: 4px 0;">(+0.95% from baseline)</div>
+                <div class="prediction-value" data-key="carryover_forecast">--</div>
+                <div style="font-size: 14px; opacity: 0.8; margin: 4px 0;">--</div>
                 <div class="prediction-confidence">
-                    <span>🧠 Confidence: <strong data-key="confidence">94.7%</strong></span>
-                    <span>⚠️ Risk: <strong style="color: #f59e0b;">MEDIUM</strong></span>
+                    <span>🧠 Confidence: <strong data-key="confidence">--</strong></span>
+                    <span>⚠️ Risk: <strong style="color: #f59e0b;">--</strong></span>
                 </div>
             </div>
         </div>
 
         <!-- RIGHT PANEL: PROCESSED ANALYTICS -->
-        <div class="right-panel">
-            <h3><i class="fas fa-chart-line"></i> AI Processed Metrics</h3>
-            
-			<div class="metric-card">
-				<div class="metric-title">Flow Stability</div>
-				<div class="metric-value" data-key="flow_stability">3,720</div>
-				<div class="metric-unit">Index</div>
-				<div class="risk-badge risk-low">ELITE PERFORMANCE</div>
-			</div>
+<div class="right-panel">
+<button
+  id="api-send-btn"
+  style="padding:8px 14px;border-radius:999px;border:none;background:#28a745;color:#fff;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(40,167,69,0.4);transition:all 0.3s ease;"
+>
+  <i class="fas fa-paper-plane"></i> Send API Request To START DASHBOARD
+</button>
 
-			<div class="metric-card">
-				<div class="metric-title">Emulsion Ratio</div>
-				<div class="metric-value" data-key="emulsion_ratio">2.24</div>
-				<div class="metric-unit">Phase Ratio</div>
-				<div class="risk-badge risk-med">MONITOR</div>
-			</div>
 
-			<div class="metric-card">
-				<div class="metric-title">Stokes Number</div>
-				<div class="metric-value" data-key="stokes_number">1.96μ</div>
-				<div class="metric-unit">Droplet Dynamics</div>
-				<div class="risk-badge risk-low">PERFECT SEPARATION</div>
-			</div>
+  
+  
+    <h4><i class="fas fa-ship"></i> Fleet Carryover (50 Vessels)</h4>
+    
+    <!-- EXISTING METRIC CARDS - KEEP THESE 
+    <div class="metric-card">
+        <div class="metric-title">Flow Stability</div>
+        <div class="metric-value" data-key="flow_stability">3,720</div>
+        <div class="metric-unit">Index</div>
+        <div class="risk-badge risk-low">ELITE PERFORMANCE</div>
+    </div>
+	-->
+    <!-- ... other existing cards ... -->
 
-            <div class="alert-banner">
-                <div class="alert-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div>
-                    <strong>🧠 TML Alert</strong><br>
-                    <span style="opacity: 0.95; font-size: 15px; font-weight: 500;">
-                        Carryover 17.2% detected (↑ +1.9%). Mist extractor efficiency dropping. 
-                        <strong>Recommend valve adjustment in 14min.</strong>
-                    </span>
-                </div>
+<!-- --------------------------------------------------------------------------------->
+<div class="metric-card">
+
+  <h4 style="margin-bottom: 10px;">TML SCADA CONNECT and MACHINE LEARNING</h4>
+
+  <label style="font-size:12px;opacity:0.8;">Endpoint URL</label>
+  <input
+    id="api-endpoint"
+    type="text"
+    value="http://localhost:9001/api/v1/scada_modbus_read"
+    style="width:100%;margin:4px 0 10px 0;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;"
+  >
+
+  <label style="font-size:12px;opacity:0.8;">JSON payload</label>
+  <button
+    type="button"
+    onclick="(function(){ const el = document.getElementById('api-payload'); if (!el) return; el.select(); document.execCommand('copy'); })()"
+    style="margin-left:8px;margin-top:4px;padding:3px 8px;background:#007cba;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;height:24px;line-height:1;"
+  >
+    Copy
+  </button>
+
+  <textarea
+    id="api-payload"
+    rows="10"
+    style="width:100%;margin:4px 0 10px 0;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;"
+  >
+{
+  "scada_host": "127.0.0.1",
+  "scada_port": 2502,
+  "slave_id": 1,
+  "read_interval_seconds": 2,
+  "callback_url": "http://localhost:9001/api/v1/vessel_data",
+  "max_reads": -1,
+  "start_register": 40001,
+  "sendtotopic": "scada-raw-data",
+  "createvariables": "carryover = 100 * (waterFlowRate + hclFlowRate + solidFlowRate) / (waterFlowRate + hclFlowRate + solidFlowRate + gasFlowRate),gas_reynolds= gasFlowRate * gasDensity / (gasViscosity * operatingPressure), water_reynolds= waterFlowRate * waterDensity / (waterViscosity * operatingPressure), reynolds_ratio= gas_reynolds / water_reynolds, stokes_number=(waterDensity-gasDensity) * waterViscosity / operatingPressure**2, inversion_risk= waterFlowRate/gasFlowRate - phseInversionCriticalWaterCut, emulsion_ratio= waterSurfaceTension / hclWaterSurfaceTension, density_ratio= waterDensity / gasDensity, flow_stability= reynolds_ratio * density_ratio",
+  "fields": [
+    "vesselIndex",
+    "operatingPressure",
+    "operatingTemperature",
+    "gasFlowRate",
+    "gasDensity",
+    "gasCompressabilityFactor",
+    "gasViscosity",
+    "hclFlowRate",
+    "hclDensity",
+    "hclViscosity",
+    "hclSurfaceTension",
+    "waterFlowRate",
+    "waterDensity",
+    "waterViscosity",
+    "waterSurfaceTension",
+    "hclWaterSurfaceTension",
+    "phseInversionCriticalWaterCut",
+    "solidFlowRate",
+    "solidDensity"
+  ],
+  "scaling": {
+    "vesselIndex": 1,
+    "operatingPressure": 100,
+    "operatingTemperature": 100,
+    "gasFlowRate": 100,
+    "gasDensity": 1000,
+    "gasCompressabilityFactor": 1000,
+    "gasViscosity": 1000000000,
+    "hclFlowRate": 100,
+    "hclDensity": 1,
+    "hclViscosity": 1000000,
+    "hclSurfaceTension": 100000,
+    "waterFlowRate": 1000,
+    "waterDensity": 10,
+    "waterViscosity": 1000000,
+    "waterSurfaceTension": 100000,
+    "hclWaterSurfaceTension": 100000,
+    "phseInversionCriticalWaterCut": 1000,
+    "solidFlowRate": 100,
+    "solidDensity": 10
+  },
+  "vessel_names": {
+    "1": "Separator 1A",
+    "2": "Separator 1B",
+    "3": "Separator 2A",
+    "4": "Separator 2B",
+    "5": "Separator 3A",
+    "6": "Separator 3B",
+    "7": "Separator 4A",
+    "8": "Separator 4B",
+    "9": "Separator 5A",
+    "10": "Separator 5B",
+    "11": "Separator 6A",
+    "12": "Separator 6B",
+    "13": "Deoiler V1",
+    "14": "Deoiler V2",
+    "15": "Deoiler V3",
+    "16": "Test Sep 1",
+    "17": "Test Sep 2",
+    "18": "Test Sep 3",
+    "19": "Heater Treater 1",
+    "20": "Heater Treater 2",
+    "21": "Gun Barrel 1",
+    "22": "Gun Barrel 2",
+    "23": "Gun Barrel 3",
+    "24": "FWKO 1",
+    "25": "FWKO 2",
+    "26": "FWKO 3",
+    "27": "Treaters 1A",
+    "28": "Treaters 1B",
+    "29": "Treaters 2A",
+    "30": "Treaters 2B",
+    "31": "Slop Tank 1",
+    "32": "Slop Tank 2",
+    "33": "Wash Tank 1",
+    "34": "Wash Tank 2",
+    "35": "Produced Water 1",
+    "36": "Produced Water 2",
+    "37": "Produced Water 3",
+    "38": "Gas Scrubber 1",
+    "39": "Gas Scrubber 2",
+    "40": "Gas Scrubber 3",
+    "41": "Test Vessel A",
+    "42": "Test Vessel B",
+    "43": "Test Vessel C",
+    "44": "High Pressure 1",
+    "45": "High Pressure 2",
+    "46": "Low Pressure 1",
+    "47": "Low Pressure 2",
+    "48": "Medium Pressure 1",
+    "49": "Medium Pressure 2",
+    "50": "Stock Tank"
+  }
+}
+  </textarea>
+
+  <pre
+    id="api-response"
+    style="margin-top:10px;max-height:160px;overflow:auto;font-size:11px;background:rgba(0,0,0,0.6);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);"
+  >
+  </pre>
+</div>
+
+<!-- ----------------------------------------------------------------------------------------->
+
+
+
+    <!-- NEW VESSEL TABLE -->
+    <div class="vessel-table-container">
+        <div class="table-header">
+            <span>Vessel Carryover Rates</span>
+            <div class="table-controls">
+                <button id="sort-high" class="sort-btn active">Worst ↑</button>
+                <button id="sort-low" class="sort-btn">Best ↓</button>
             </div>
         </div>
+        <div class="vessels-table" id="vesselsTable">
+            <!-- Vessels populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- KEEP YOUR EXISTING ALERT BANNER -->
+    <div class="alert-banner">TML Alert: (Alerts will show and Executed by Agents)</div>
+</div>		
+		
     </div>
     <script>
         // ✅ FIXED: COMPLETE LIVE DATA UPDATES FOR ALL METRICS
 
         // Global chart references
         let carryoverChart, reynoldsChart;
-
+		// Global state
+		let allVesselsData = {};
+		let sortOrder = 'desc'; // 'desc' = worst first, 'asc' = best first
+        let VESSEL_NAMES = {};
+        let sendBtn, endpointEl, payloadEl, responseEl;		
+		let sendbutton=0;
+// ONE LINE - 50 vessels with realistic data (8-25% carryover)
+		//allVesselsData = Array.from({length:50}, (_,i) => ({vesselIndex:i+1, carryover: (10+Math.random()*15).toFixed(2)*1}));
+        //updateVesselTable();					  
+		
 //************************************************************************************//
 			// 🔥 WEBSOCKET INTEGRATION - REPLACE ALL DATA FUNCTIONS
-			let ws;
-			let messageHistory = []; // Store recent messages for charts
+		let ws = null;
+    	let messageHistory = []; // Store recent messages for charts
 
 			function getConfigFromURL() {
 				const urlParams = new URLSearchParams(window.location.search);
@@ -795,39 +1136,33 @@
 					// Handle both single objects AND TopicReads array
 					let liveDataArray = [];
 					
-					console.log("message main=",message);
+					//console.log("message main=",message);
 					// Process each vessel
+					if (message.vessel_names) {
+						VESSEL_NAMES = message.vessel_names;  // ✅ Extract from payload
+						console.log('✅ Vessel mapping loaded:', Object.keys(VESSEL_NAMES).length, 'vessels');
+					}
+					
 					message.TopicReads?.forEach((record, i) => {
 					  const vessel = record.data.SeparatorMetrics.RawFields;
-				/*"vesselIndex": 10.0,
-				"operatingPressure": 7057.0,
-				"operatingTemperature": 3686.0,
-				"gasFlowRate": 48424.0,
-				"gasDensity": 1992.0,
-				"gasCompressabilityFactor": 969.0,
-				"gasViscosity": 18820.0,
-				"hclFlowRate": 3533.0,
-				"hclDensity": 1052.0,
-				"hclViscosity": 784.0,
-				"hclSurfaceTension": 5485.0,
-				"waterFlowRate": 15353.0,
-				"waterDensity": 99.0,
-				"waterViscosity": 950.0,
-				"waterSurfaceTension": 7360.0,
-				"hclWaterSurfaceTension": 3247.0,
-				"phseInversionCriticalWaterCut": 478.0,
-				"solidFlowRate": 993.0,
-				"solidDensity": 208.0,
-				"carryover": 12.51714,
-				"gas_reynolds": 726290.324257,
-				"flow_stability": 1592.103867,
-				"inversion_risk": -0.446295,
-				"density_ratio": 4.96988,
-				"water_reynolds": 2267.173318,
-				"reynolds_ratio": 320.350596,
-				"emulsion_ratio": 2.266708,
-				"stokes_number": 0.000002
-				*/
+					  VESSEL_NAMES = record.data.SeparatorMetrics.vessel_names;
+                      const vesselIndex = parseInt(vessel.vesselIndex) || i + 1;					
+                      const vesselName = VESSEL_NAMES[vesselIndex?.toString()] || `Vessel #${vesselIndex}`;					  
+
+					//console.log("VESSEL NAMES=",VESSEL_NAMES);
+					  
+					  //console.log("vesselName=",vesselName);
+						// Store vessel data
+						allVesselsData[vesselIndex] = {
+							carryover: parseFloat(vessel.carryover) || 0,
+							vesselIndex: vesselIndex,
+                            vesselName,							
+							timestamp: record.data.AcquisitionTime
+						};
+    
+             		  responseEl = document.getElementById('api-response');		
+	                  responseEl.textContent = "Receiving messages from TML Server..";
+					  
                       livedata={
 					    raw: {
 						  operatingPressure: (vessel.operatingPressure || 0).toFixed(1),
@@ -852,12 +1187,13 @@
 				     };					  
 					  updateAllMetrics(livedata);
 					  updateChartsTML(livedata);
+                      updateVesselTable();					  
 					  
-					  console.log(`Vessel ${vessel.vesselIndex}:`);
-					  console.log(`  Carryover: ${vessel.carryover.toFixed(1)}%`);
-					  console.log(`  Inversion Risk: ${vessel.inversion_risk.toFixed(3)}`);
-					  console.log(`  Flow Stability: ${vessel.flow_stability.toFixed(0)}`);
-					  console.log(`  Time: ${record.data.AcquisitionTime}`);
+					  //console.log(`Vessel ${vessel.vesselIndex}:`);
+					  //console.log(`  Carryover: ${vessel.carryover.toFixed(1)}%`);
+					  //console.log(`  Inversion Risk: ${vessel.inversion_risk.toFixed(3)}`);
+					  //console.log(`  Flow Stability: ${vessel.flow_stability.toFixed(0)}`);
+					  //console.log(`  Time: ${record.data.AcquisitionTime}`);
 					});
 	
 /*					if (message.TopicReads && Array.isArray(message.TopicReads)) {
@@ -887,13 +1223,19 @@
 
 
 				ws.onclose = () => {
-					console.log('❌ WebSocket DISCONNECTED - reconnecting in 3s...');
-					document.querySelector('.status-card span').textContent = '🧠 TML Reconnecting...';
-					setTimeout(connectWebSocket, 3000); // Auto-reconnect
+					console.log('❌ WebSocket DISCONNECTED...');
+            		  responseEl = document.getElementById('api-response');		
+					  responseEl.textContent="Websocket DISCONNECTED";
+					
+					//document.querySelector('.status-card span').textContent = '🧠 TML Reconnecting...';
+					//setTimeout(connectWebSocket, 3000); // Auto-reconnect
 				};
 
 				ws.onerror = (error) => {
 					console.error('WebSocket ERROR:', error);
+             		  responseEl = document.getElementById('api-response');		
+	                  responseEl.textContent = "ERROR: " + error;
+					
 				};
 			}
 
@@ -950,7 +1292,7 @@
 					osdu: 'false'
 				};
 
-				const response = await fetch('http://localhost:5000/api/v1/consume', {
+				const response = await fetch('http://localhost:9002/api/v1/consume', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -963,7 +1305,7 @@
 				}
 
 				const apiResponse = await response.json();
-				console.log('API Messages:', apiResponse.messages);
+				//console.log('API Messages:', apiResponse.messages);
 
 				// Transform your API response (adjust these mappings to your actual data structure)
 				// Assuming apiResponse.messages is an array of prediction objects
@@ -1038,8 +1380,8 @@
 				'[data-key="carryover"]',
 				'[data-key="flow_stability"]',
 				'[data-key="inversion_risk"]',
-				'[data-key="emulsion_ratio"]',
-				'[data-key="stokes_number"]',
+				//'[data-key="emulsion_ratio"]',
+				//'[data-key="stokes_number"]',
 				'[data-key="gas_reynolds"]',
 				'[data-key="carryover_forecast"]',
 				'[data-key="confidence"]'
@@ -1051,7 +1393,7 @@
 				}
 			});
 	
-	        //console.log("here data.processed.carryover=",data.processed.carryover);
+	        //console.log("here data.processed.carryover=",data);
 			
             document.querySelector('[data-key="operatingPressure"]').textContent = data.raw.operatingPressure;
             document.querySelector('[data-key="gasFlowRate"]').textContent = data.raw.gasFlowRate;
@@ -1063,8 +1405,8 @@
             document.querySelector('[data-key="carryover"]').textContent = data.processed.carryover + '%';
             document.querySelector('[data-key="flow_stability"]').textContent = data.processed.flow_stability.toLocaleString();
             document.querySelector('[data-key="inversion_risk"]').textContent = data.processed.inversion_risk;
-            document.querySelector('[data-key="emulsion_ratio"]').textContent = data.processed.emulsion_ratio;
-            document.querySelector('[data-key="stokes_number"]').textContent = (data.processed.stokes_number * 1e6).toFixed(0) + 'μ';
+            //document.querySelector('[data-key="emulsion_ratio"]').textContent = data.processed.emulsion_ratio;
+            //document.querySelector('[data-key="stokes_number"]').textContent = (data.processed.stokes_number * 1e6).toFixed(0) + 'μ';
             
             // Update gas reynolds with K suffix
             const gasReK = (data.processed.gas_reynolds / 1000).toFixed(0) + 'K';
@@ -1149,6 +1491,62 @@
             updateCharts(liveData);
         }
 
+		function updateFleetMetrics() {
+		  const vesselCarryovers = Object.values(allVesselsData).map(v => v.carryover).filter(Boolean);
+		  
+		  if (vesselCarryovers.length === 0) return;
+		  
+		  // 50 vessels carryover rate (highest)
+		  const top50Carryovers = vesselCarryovers.sort((a,b) => b-a).slice(0, 50);
+		  const highestCarryover50 = top50Carryovers.length > 0 ? 
+			Math.max(...top50Carryovers).toFixed(2) : '0.00';
+		  
+		  // Average carryover rate for all vessels
+		  const avgCarryover = (vesselCarryovers.reduce((sum, val) => sum + val, 0) / vesselCarryovers.length).toFixed(2);
+		  
+		  // Update dashboard elements
+		  const avgElement = document.querySelector('[data-key="fleet_avg_carryover"]');
+		  const top50Element = document.querySelector('[data-key="top50_carryover"]');
+		  
+		  if (avgElement) avgElement.textContent = avgCarryover + '%';
+		  if (top50Element) top50Element.textContent = highestCarryover50 + '%';
+		  
+		  console.log(`📊 Fleet Stats: Avg=${avgCarryover}%, Top50=${highestCarryover50}% (${vesselCarryovers.length} vessels)`);
+		}
+
+		function updateVesselTable() {
+			const table = document.getElementById('vesselsTable');
+			if (!table) return;
+			
+			// Get top 50 vessels (or all if less than 50)
+			const vessels = Object.values(allVesselsData)
+				.sort((a, b) => sortOrder === 'desc' ? b.carryover - a.carryover : a.carryover - b.carryover)
+				.slice(0, 50);
+			
+			table.innerHTML = vessels.map(vessel => {
+				const riskClass = getRiskClass(vessel.carryover);
+				return `
+					<div class="vessel-row">
+						<div class="vessel-id">${String(vessel.vesselName).padStart(2, '0')} (${vessel.carryover.toFixed(1)}%)</div>
+						<div class="vessel-risk ${riskClass}">${getRiskLabel(vessel.carryover)}</div>
+					</div>
+				`;
+			}).join('');
+		}
+
+		function getRiskClass(carryover) {
+			if (carryover > 20) return 'risk-high';
+			if (carryover > 15) return 'risk-med';
+			return 'risk-low';
+		}
+
+		function getRiskLabel(carryover) {
+			if (carryover > 20) return 'CRITICAL';
+			if (carryover > 15) return 'WARNING';
+			return 'NORMAL';
+		}
+
+
         // INITIALIZE EVERYTHING
         function initDashboard() {
             // Initialize charts first
@@ -1208,10 +1606,121 @@
            //connectWebSocket(); //*************** IF USING WEBSOCKETS ///
         }
 
-        // START ON LOAD
-        window.addEventListener('load', initDashboard);
+        // START ON LOAD		
+		
+		// Add after DOM loads
+		document.addEventListener('DOMContentLoaded', () => {
+		  sendBtn = document.getElementById('api-send-btn');
+		  endpointEl = document.getElementById('api-endpoint');
+		  payloadEl = document.getElementById('api-payload');
+		  responseEl = document.getElementById('api-response');		
+			document.getElementById('sort-high')?.addEventListener('click', () => {
+				sortOrder = 'desc';
+				updateSortButtons();
+				updateVesselTable();
+			});
+			
+			document.getElementById('sort-low')?.addEventListener('click', () => {
+				sortOrder = 'asc';
+				updateSortButtons();
+				updateVesselTable();
+			});			
+			
+		sendBtn.addEventListener('click', async () => {
+
+          if (sendbutton===1){
+		    sendbutton=0;
+			
+			if(ws!== null){
+			  //ws.close();
+              ws.close(1000, "Client closed");			  
+			  ws=null;
+			}
+					
+            sendBtn.disabled = false;
+//            sendBtn.innerHTML = 'Send API Request To START DASHBOARD';						
+		sendBtn.innerHTML = '<i class="fas fa-paper-plane" style="color:#fff;"></i> Send API Request To START DASHBOARD';
+		sendBtn.style.color = "#fff";
+		sendBtn.style.background = "#28a745";  // green background
+			
+		  responseEl.textContent = 'Dashboard Stopped';			
+			  // Destroy existing chart if any
+			  if (carryoverChart) {
+				carryoverChart.destroy();
+			  }		  
+			 if (reynoldsChart) {			  
+				reynoldsChart.destroy();			 
+				}
+			return;			
+		  }		  
+
+		  sendBtn.disabled = true;		  
+		  sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+		  responseEl.textContent = 'Initializing dashboard + executing Python...';
+
+          
+		  let payload;
+		  try {
+			payload = JSON.parse(payloadEl.value);
+		  } catch (e) {
+			responseEl.textContent = 'Invalid JSON: ' + e.message;
+			resetButton();
+			return;
+		  }
+
+	      const wsUrl = endpointEl.value; //`http://localhost:9001/api/v1/scada_modbus_read`;
+		  try {
+			// 1. First execute your Python API
+			const res = await fetch(wsUrl, {
+			  method: 'POST',
+			  headers: { 'Content-Type': 'application/json' },
+			  body: JSON.stringify(payload)
+			});
+
+			const text = await res.text();
+			responseEl.textContent = `✅ Python executed!\nStatus: ${res.status}\nResponse:\n${text}`;
+
+			// 2. ONLY NOW initialize dashboard (charts, WS connection, etc.)
+			if (typeof initDashboard === 'function') {
+			  await initDashboard();  // Your full dashboard init (charts + WS)
+			  responseEl.textContent += `\n\n✅ Dashboard initialized!`;
+			  
+			  // 3. Optionally start live updates
+		//	  alert("before connect");
+			  connectWebSocket();  // Your WS connection
+			} else {
+			  responseEl.textContent += `\n\n❌ initDashboard() not found`;
+			}
+
+		  } catch (err) {
+			responseEl.textContent = ``;
+		  } finally {
+			resetButton();
+		  }
+		});
+
+		});
+
+		function resetButton() {
+		  sendBtn.disabled = false;
+//		  sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> STOP SCADA PROCESSING';
+sendBtn.innerHTML = '<i class="fas fa-paper-plane" style="color:#dc3545;"></i> STOP SCADA PROCESSING';
+sendBtn.style.color = "#dc3545";
+sendBtn.style.background = "#dc3545";
+sendBtn.style.color = "#fff";
+
+		  
+		  sendbutton=1;
+		}
+
+		function updateSortButtons() {
+			document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+			document.getElementById(sortOrder === 'desc' ? 'sort-high' : 'sort-low')?.classList.add('active');
+		}
+		
     </script>
 
 
 </body>
 </html>
+
