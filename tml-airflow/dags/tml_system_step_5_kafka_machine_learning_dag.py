@@ -60,10 +60,10 @@ VIPERPORT=""
 HPDEHOST = ''    
 HPDEPORT = ''
 HTTPADDR=""
-maintopic =  default_args['preprocess_data_topic']  
-mainproducerid = default_args['producerid']                     
         
 def performSupervisedMachineLearning():
+      maintopic =  default_args['preprocess_data_topic']  
+      mainproducerid = default_args['producerid']                     
             
       viperconfigfile = default_args['viperconfigfile']
       # Set personal data
