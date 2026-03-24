@@ -264,7 +264,7 @@ if __name__ == '__main__':
         if args.startswith("/"):
            default_args['fullpathtotrainingdata'] = sys.argv[14]
         else:
-           default_args['fullpathtotrainingdata'] =  f"/Viper-ml/viperlogs/{args}"
+           default_args['fullpathtotrainingdata'] =  f"/rawdata/ml/{args}"
           
          #------------------------
          
