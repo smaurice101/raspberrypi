@@ -20,7 +20,7 @@ sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
- 'pgptcontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-v2', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
+ 'pgptcontainername' : '', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
  'rollbackoffset' : '5',  # <<< *** Change as needed
  'offset' : '-1', # leave as is
  'enabletls' : '1', # change as needed
@@ -31,8 +31,8 @@ default_args = {
  'delay' : '100', # change as needed
  'companyname' : 'otics',  # <<< *** Change as needed
  'consumerid' : 'streamtopic',  # <<< *** Leave as is
- 'consumefrom' : 'cisco-network-preprocess',    # <<< *** Change as needed
- 'pgpt_data_topic' : 'cisco-network-privategpt',
+ 'consumefrom' : '',    # <<< *** Change as needed
+ 'pgpt_data_topic' : '',
  'producerid' : 'private-gpt',   # <<< *** Leave as is
  'identifier' : 'This is analysing TML output with privategpt',
  'pgpthost': 'http://127.0.0.1', # PrivateGPT container listening on this host
@@ -44,13 +44,13 @@ default_args = {
 anomaly probabilities for cyber threats from analysis of inbound and outbound packets. If inbound or outbound \
 anomaly probabilities are less than 0.60, it is likely the risk of a cyber attack is also low. If its above 0.60, then risk is mid to high.', # what is this data about? Provide context to PrivateGPT
  'jsonkeytogather' : 'hyperprediction', # enter key you want to gather data from to analyse with PrivateGpt i.e. Identifier or hyperprediction
- 'keyattribute' : 'inboundpackets,outboundpackets', # change as needed  
- 'keyprocesstype' : 'anomprob',  # change as needed
+ 'keyattribute' : '', # change as needed  
+ 'keyprocesstype' : '',  # change as needed
  'hyperbatch' : '0', # Set to 1 if you want to batch all of the hyperpredictions and sent to chatgpt, set to 0, if you want to send it one by one   
  'vectordbcollectionname' : 'tml-llm-model-v2', # change as needed
  'concurrency' : '2', # change as needed Leave at 1
  'CUDA_VISIBLE_DEVICES' : '0', # change as needed
- 'docfolder': 'mylogs,mylogs2',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
+ 'docfolder': '',  # You can specify the sub-folder that contains TEXT or PDF files..this is a subfolder in the MAIN folder mapped to /rawdata
                    # if this field in NON-EMPTY, privateGPT will query these documents as the CONTEXT to answer your prompt
                    # separate multiple folders with a comma
  'docfolderingestinterval': '900', # how often you want TML to RE-LOAD the files in docfolder - enter the number of SECONDS, if 0 they are read ONCE
@@ -148,7 +148,10 @@ def startpgptcontainer():
       vectorsearchtype = default_args['vectorsearchtype']
       cw = default_args['contextwindowsize']
       vectordimension=default_args['vectordimension'] 
- 
+
+      if pgptcontainername == "":
+         return 1,"","",""
+        
       stopcontainers()
       time.sleep(10)
       if '-no-gpu-' in pgptcontainername:       
@@ -884,4 +887,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 10:
             break
-           
