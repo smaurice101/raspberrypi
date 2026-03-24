@@ -52,7 +52,7 @@ if 'recipient' in os.environ:
 
 default_args = {
  'owner': 'Sebastian Maurice',   # <<< *** Change as needed
- 'ollamacontainername' : 'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-llama3-tools', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
+ 'ollamacontainername' : '',#'maadsdocker/tml-privategpt-with-gpu-nvidia-amd64-llama3-tools', #'maadsdocker/tml-privategpt-no-gpu-amd64',  # enter a valid container https://hub.docker.com/r/maadsdocker/tml-privategpt-no-gpu-amd64
  'rollbackoffset' : '5',  # <<< *** Change as needed
  'offset' : '-1', # leave as is
  'enabletls' : '1', # change as needed
@@ -93,7 +93,7 @@ tool_function:agent_name:system_prompt;tool_function2:agent_name2:sysemt_prompt2
  'deletevectordbcount': '10',
  'vectordbpath': '/rawdata/vectordb',
  'contextwindow': '10000',
- 'localmodelsfolder': '/mnt/c/maads/tml-airflow/rawdata/ollama'  
+ 'localmodelsfolder': '/rawdata/ollama'  
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
@@ -397,6 +397,10 @@ def stopcontainers():
       
 
 def startpgptcontainer():
+
+      if default_args['ollamacontainername'] == "":
+        return 1,"","",""
+        
       print("Starting Ollama container: {}".format(default_args['ollamacontainername'])) 
       collection = default_args['vectordbcollectionname']
       concurrency = default_args['concurrency']
@@ -956,11 +960,12 @@ def startagenticai(**context):
         fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))
        else:
          fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))
- 
-       wn = windowname('agenticai',sname,sd)
-       subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-agenticai", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\"".format(fullpath,
+
+       if default_args['ollamacontainername'] != '':
+         wn = windowname('agenticai',sname,sd)
+         subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+         subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-agenticai", "ENTER"])
+         subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\"".format(fullpath,
                        VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['rollbackoffset'],default_args['ollama-model'],default_args['deletevectordbcount'],default_args['vectordbpath'],
                        default_args['temperature'],default_args['topicid'],default_args['enabletls'],
@@ -971,11 +976,11 @@ def startagenticai(**context):
                        default_args['agent_team_supervisor_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],
                        pname,default_args['contextwindow'],default_args['localmodelsfolder'],default_args['agenttopic']),"ENTER"])
 
-       pane_pid = subprocess.check_output([
+         pane_pid = subprocess.check_output([
           "tmux", "list-panes", "-t", wn, "-F", "#{pane_pid}"
-       ]).decode().strip()
+         ]).decode().strip()
 
-       with open("/tmux/step9b_agenticai.txt", 'w', encoding='utf-8') as file: 
+         with open("/tmux/step9b_agenticai.txt", 'w', encoding='utf-8') as file: 
           file.write("{}\n".format(pane_pid))
           file.write("{}\n".format(wn))
           buf="python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} \"{}\" \"{}\"".format(fullpath,
@@ -1144,5 +1149,3 @@ if __name__ == '__main__':
           count = count + 1
           if count > 600:
             break
-             
-
