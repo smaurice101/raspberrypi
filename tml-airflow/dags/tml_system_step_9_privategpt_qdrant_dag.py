@@ -724,11 +724,12 @@ def startprivategpt(**context):
        ti.xcom_push(key="{}_mainmodel".format(sname), value="{}".format(mainmodel))
        ti.xcom_push(key="{}_mainembedding".format(sname), value="{}".format(mainembedding))
 
-  
-       wn = windowname('ai',sname,sd)
-       subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
+
+       if default_args['pgptcontainername'] != '':
+         wn = windowname('ai',sname,sd)
+         subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+         subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-preprocess-pgpt", "ENTER"])
+         subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
                        default_args['vectordbcollectionname'],default_args['consumefrom'],default_args['pgpt_data_topic'],default_args['concurrency'],default_args['CUDA_VISIBLE_DEVICES'],default_args['rollbackoffset'],
                        default_args['prompt'],default_args['context'],default_args['keyattribute'],default_args['keyprocesstype'],
                        default_args['hyperbatch'],default_args['docfolder'],default_args['docfolderingestinterval'],
@@ -736,11 +737,11 @@ def startprivategpt(**context):
                        default_args['vectorsearchtype'], default_args['contextwindowsize'], default_args['pgptcontainername'], 
                        default_args['pgpthost'],default_args['pgptport'],default_args['vectordimension']), "ENTER"],capture_output=True, text=True)
 
-       pane_pid = subprocess.check_output([
+         pane_pid = subprocess.check_output([
           "tmux", "list-panes", "-t", wn, "-F", "#{pane_pid}"
-       ]).decode().strip()
+         ]).decode().strip()
 
-       with open("/tmux/step9_ai.txt", 'w', encoding='utf-8') as file: 
+         with open("/tmux/step9_ai.txt", 'w', encoding='utf-8') as file: 
           file.write("{}\n".format(pane_pid))
           file.write("{}\n".format(wn))
           buf="python {} 1 {} {}{} {} \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" \"{}\" {} {} {} {} \"{}\" \"{}\" {} {}".format(fullpath,VIPERTOKEN, HTTPADDR, VIPERHOST, VIPERPORT[1:],
