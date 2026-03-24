@@ -166,13 +166,15 @@ def tmuxsession(windowinstance,steps):
       subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}_{steps}", f"cd /{cdir}", "ENTER"], capture_output=True, text=True)
       subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}_{steps}", viperrun, "ENTER"], capture_output=True, text=True)
 
-    if isnew2:
-      time.sleep(5)
+    time.sleep(3)
+    #if isnew2:
+     # time.sleep(5)
 
     with open(f"{cdir}/viper.txt", 'r', encoding='utf-8') as file:
         line = file.readline()
         viperport=line.split(",")[1]
 
+    
     return oldviperport,viperport,f"plugin_{windowinstance}_{steps}",f"plugin_{windowinstance}"
     #start the script
   #  subprocess.run(["tmux", "send-keys", "-t", f"plugin_{windowinstance}", new_pythonrun, "ENTER"], capture_output=True, text=True)
