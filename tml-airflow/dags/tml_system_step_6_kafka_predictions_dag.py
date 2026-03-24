@@ -55,15 +55,14 @@ HTTPADDR=""
 
 # that is a change 2
 # Set Global variable for Viper confifuration file - change the folder path for your computer
-viperconfigfile="/Viper-predict/viper.env"
-
-mainproducerid = default_args['producerid']     
-maintopic=default_args['preprocess_data_topic']
-predictiontopic=default_args['ml_prediction_topic']
-
 
 def performPrediction():
 
+      viperconfigfile="/Viper-predict/viper.env"
+
+      mainproducerid = default_args['producerid']     
+      maintopic=default_args['preprocess_data_topic']
+      predictiontopic=default_args['ml_prediction_topic']
         
       # Set personal data
       companyname=default_args['companyname']
