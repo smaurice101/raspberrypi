@@ -21,6 +21,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from typing import List
+import requests
 #import nest_asyncio
 #nest_asyncio.apply()
 
@@ -961,7 +962,7 @@ def gettmlsystemsparams():
 ##################### INDUSTRIAL API ##############################################################
 #-------------------------------- SCADA/MODBUS -----------------------------------------------------                        
         @app.post("/api/v1/scada_modbus_read")
-        async def start_vessel_read(req: dict):
+        def start_vessel_read(req: dict):
             
             #req = request.get_json()
             job_id = str(time.time())
@@ -971,7 +972,7 @@ def gettmlsystemsparams():
                 "port": req.get("scada_port", 2502),
                 "unit_id": req.get("slave_id", 1),
             }
-
+            baseurl = req.get("base_url", "")
             with lock:  # ✅ Thread-safe
                 if sg.read_job and sg.read_job["stop"]:
                     # Don't sleep - just skip or queue
@@ -982,7 +983,24 @@ def gettmlsystemsparams():
                     sg.read_job["stop"] = True
                     sg.read_thread.join(timeout=float(req.get("read_interval_seconds", 0.3))+1.0)
             
-
+                # Helper to send optional payloads
+                def post_if_payload(key: str, endpoint: str) -> None:
+                    payload = req.get(key, {})
+                    print("payload====",payload)
+                    if payload:
+                        try:
+                            u = endpoint
+                            requests.post(u.strip(), json=payload, timeout=5.0)
+                        except Exception as e:
+                            print(f"Error: cannot send {key} post in scada modbus: {e}")
+                            writeviperlogs("ERROR",f"cannot send {key} post in scada modbus: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
+            
+                post_if_payload("preprocessing", f"{baseurl}/api/v1/preprocess")
+                post_if_payload("machinelearning", f"{baseurl}/api/v1/ml")
+                post_if_payload("predictions", f"{baseurl}/api/v1/predict")
+                post_if_payload("agenticai", f"{baseurl}/api/v1/agenticai")              
+                post_if_payload("ai", f"{baseurl}/api/v1/ai")                            
+              
                 sg.read_job = {"stop": False, "job_id": job_id}
                 sg.read_thread = threading.Thread(
                 target=cv.modbus_read_loop,
@@ -1069,6 +1087,7 @@ def gettmlsystemsparams():
           
          try:
           job_id = str(time.time())
+          baseurl = req.get("base_url", "")
           mqtt_cfg = {
             "broker": req.get("mqtt_broker", ""),
             "port": int(req.get("mqtt_port", "8883")),
@@ -1089,7 +1108,24 @@ def gettmlsystemsparams():
               sg.mqtt_job["stop"] = True
               sg.mqtt_client.disconnect()
 #              sg.mqtt_thread.join(timeout=2.0)
+
+            # Helper to send optional payloads
+            def post_if_payload(key: str, endpoint: str) -> None:
+                payload = req.get(key, {})
+                if payload:
+                    try:
+                        u = endpoint
+                        requests.post(u.strip(), json=payload, timeout=5.0)
+                    except Exception as e:
+                        print(f"Error: cannot send {key} post in scada modbus: {e}")
+                        writeviperlogs("ERROR",f"cannot send {key} post in scada modbus: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
         
+            post_if_payload("preprocessing", f"{baseurl}/api/v1/preprocess")
+            post_if_payload("machinelearning", f"{baseurl}/api/v1/ml")
+            post_if_payload("predictions", f"{baseurl}/api/v1/predict")
+            post_if_payload("agenticai", f"{baseurl}/api/v1/agenticai")              
+            post_if_payload("ai", f"{baseurl}/api/v1/ai")                            
+            
             sg.mqtt_job = {"stop": False, "job_id": job_id}
             sg.mqtt_thread = threading.Thread(
                target=mq.mqttserverconnect_threaded,  # Your function, modified below
@@ -1351,4 +1387,3 @@ if __name__ == '__main__':
          os.environ['VIPERPORT']=VIPERPORT
         
          gettmlsystemsparams()
-
