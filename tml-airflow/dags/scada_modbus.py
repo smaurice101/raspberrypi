@@ -40,7 +40,8 @@ def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args,
      except Exception as e:
         print("ERROR:",e)
 
-def modbus_read_loop(scada_cfg, interval_s, callback_url, max_reads, fields, scaling, start_address, sendtotopic, job_id, VIPERTOKEN, VIPERHOST, VIPERPORT,args,vessel_names,createvariables=""):
+
+def modbus_read_loop(scada_cfg, interval_s, callback_url, max_reads, fields, scaling, start_address, sendtotopic, job_id, VIPERTOKEN, VIPERHOST, VIPERPORT,args,vessel_names,preprocessing,machinelearning, predictions, agenticai, ai,createvariables=""):
     """100% DYNAMIC - uses ONLY data from request"""
     read_count = 0
     client = ModbusClient(host=scada_cfg["host"], port=scada_cfg["port"], unit_id=scada_cfg["unit_id"])
@@ -56,7 +57,7 @@ def modbus_read_loop(scada_cfg, interval_s, callback_url, max_reads, fields, sca
                 if isinstance(regs, list) and len(regs) > 0:
                     # DYNAMIC PAYLOAD from request data ONLY
                     payload = {
-                        k: v for k, v in locals().items() if k in ['scada_cfg', 'interval_s', 'callback_url', 'max_reads', 'fields', 'scaling', 'start_address','sendtotopic','vessel_names']
+                        k: v for k, v in locals().items() if k in ['scada_cfg', 'interval_s', 'callback_url', 'max_reads', 'fields', 'scaling', 'start_address','sendtotopic','vessel_names','preprocessing','machinelearning','predictions','agenticai','ai']
                     }
                     payload.update({
                         "scada_host": scada_cfg["host"],
@@ -68,7 +69,12 @@ def modbus_read_loop(scada_cfg, interval_s, callback_url, max_reads, fields, sca
                         "fields": fields,  # From request
                         "scaling": scaling,  # From request
                         "sendtotopic": sendtotopic,
-                        "vessel_names": vessel_names 
+                        "vessel_names": vessel_names,
+                        "preprocessing": preprocessing,
+                        "machinelearning": machinelearning,
+                        "predictions": predictions,
+                        "agenticai": agenticai,
+                        "ai": ai                    
                     })
                     
                     # Map ALL registers dynamically
@@ -235,7 +241,8 @@ def payload_to_osdu_dynamic(processed_payload: Dict[str, Any]) -> Dict[str, Any]
     config_keys = {
         'scada_host', 'scada_port', 'slave_id', 'read_interval_seconds',
         'tml_api_url', 'callback_url', 'max_reads', 'start_register', 
-        'createvariables', 'fields', 'scaling','sendtotopic','vessel_names'
+        'createvariables', 'fields', 'scaling','sendtotopic','vessel_names',
+        'preprocessing','machinelearning','predictions','agenticai','ai'
     }
     
     vessel_id = processed_payload.get('vesselIndex', 0)
