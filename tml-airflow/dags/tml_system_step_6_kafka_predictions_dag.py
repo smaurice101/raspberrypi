@@ -232,7 +232,7 @@ if __name__ == '__main__':
          if args.startswith("/"):
            default_args['pathtoalgos'] = args
          else:  
-           default_args['pathtoalgos'] = f"/Viper-ml/viperlogs/{args}"
+           default_args['pathtoalgos'] = f"/rawdata/ml/{args}"
 
 
          tsslogging.locallogs("INFO", "STEP 6: Predictions started")
