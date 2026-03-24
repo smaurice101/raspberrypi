@@ -230,10 +230,13 @@ def stopstart(step,stepsarr,windowinstance='default'):
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
         print(f"new_pythonrun: {new_pythonrun}")      
   elif step=="5":
+    
     oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
+
     if windowinstance=='default':
       viperport=oldviperport
-  
+
+
     with open("/tmux/step5_ml.txt", 'r', encoding='utf-8') as file:
         lines = file.readlines()
         pythonrun = lines[2].strip()  # Index 2 = 3rd line     
@@ -249,7 +252,7 @@ def stopstart(step,stepsarr,windowinstance='default'):
         args[-2] = stepsarr[-2]       
         args[-1] = stepsarr[-1]    
         new_pythonrun = flatten_for_shell(args) #shlex.join(flatten_for_shell(args))
-        print(f"new_pythonrun: {new_pythonrun}")
+        print(f"STEP 5 new_pythonrun: {new_pythonrun}")
       
   elif step=="6":
     oldviperport,viperport,vwn,swn=tmuxsession(windowinstance,step)    
@@ -342,6 +345,7 @@ def stopstart(step,stepsarr,windowinstance='default'):
     subprocess.run(["tmux", "send-keys", "-t", wn, "C-c"])
     subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "{}".format(new_pythonrun), "ENTER"],capture_output=True, text=True)        
   else:  
+    subprocess.run(["tmux", "send-keys", "-t", "{}".format(swn), "C-c"])
     subprocess.run(["tmux", "send-keys", "-t", "{}".format(swn), "{}".format(new_pythonrun), "ENTER"],capture_output=True, text=True)        
     
     #subprocess.run(["tmux", "new", "-d", "-s", "{}".format(windowinstance)])
@@ -994,7 +998,8 @@ def gettmlsystemsparams():
                         except Exception as e:
                             print(f"Error: cannot send {key} post in scada modbus: {e}")
                             writeviperlogs("ERROR",f"cannot send {key} post in scada modbus: {e}",VIPERTOKEN,VIPERHOST,VIPERPORT)                            
-            
+
+#                post_if_payload("terminatewindow", f"{baseurl}/api/v1/terminatewindow")            
                 post_if_payload("preprocessing", f"{baseurl}/api/v1/preprocess")
                 post_if_payload("machinelearning", f"{baseurl}/api/v1/ml")
                 post_if_payload("predictions", f"{baseurl}/api/v1/predict")
@@ -1019,6 +1024,11 @@ def gettmlsystemsparams():
                     VIPERPORT,
                     default_args,
                     req.get("vessel_names", {}),
+                    req.get("preprocessing", {}),
+                    req.get("machinelearning", {}),
+                    req.get("predictions", {}),
+                    req.get("agenticai", {}),
+                    req.get("ai", {}),                
                     req.get("createvariables", "")  # ✅ Dynamic from request                  
                    ),
                    daemon=True,
