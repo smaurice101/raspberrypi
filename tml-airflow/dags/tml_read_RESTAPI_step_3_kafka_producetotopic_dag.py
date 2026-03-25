@@ -1108,9 +1108,9 @@ def gettmlsystemsparams():
             "username": os.environ.get('MQTTUSERNAME', ''),
             "password": os.environ.get('MQTTPASSWORD', ''),
             "enable_tls": req.get("mqtt_enabletls","1"),
-            "VIPERTOKEN": app.config['VIPERTOKEN'],
-            "VIPERHOST":  app.config['VIPERHOST'],
-            "VIPERPORT": app.config['VIPERPORT'],
+            "VIPERTOKEN": VIPERTOKEN,
+            "VIPERHOST":  VIPERHOST,
+            "VIPERPORT": VIPERPORT,
             "default_args": default_args,            
           }         
 
