@@ -268,7 +268,7 @@ if __name__ == '__main__':
           
          #------------------------
          
-        subprocess.run("rm -rf {}".format(default_args['fullpathtotrainingdata']), shell=True)
+      #  subprocess.run("rm -rf {}".format(default_args['fullpathtotrainingdata']), shell=True)
 
          
         tsslogging.locallogs("INFO", "STEP 5: Machine learning started")
