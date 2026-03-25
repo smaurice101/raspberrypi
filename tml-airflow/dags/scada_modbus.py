@@ -245,10 +245,14 @@ def payload_to_osdu_dynamic(processed_payload: Dict[str, Any]) -> Dict[str, Any]
         'preprocessing','machinelearning','predictions','agenticai','ai'
     }
     
-    vessel_id = processed_payload.get('vesselIndex', 0)
+    vessel_id = int(processed_payload.get('vesselIndex', 0))
     scada_host = processed_payload.get('scada_host', 'unknown')
     scada_port = processed_payload.get('scada_port', 0)
-    
+
+    vessel_names = processed_payload.get('vessel_names', {})  # default dict
+    vessel_name = vessel_names.get(str(vessel_id), f"Vessel_{vessel_id}")
+    vessel_name = vessel_name.replace(" ", "_")
+
     osdu_record = {
         "kind": "dataset--data:opendes:dataset--Well:1.0",
         "acl": {"viewers": ["data.default.viewers@[default]"], "owners": ["data.default.owners@[default]"]},
@@ -261,7 +265,7 @@ def payload_to_osdu_dynamic(processed_payload: Dict[str, Any]) -> Dict[str, Any]
             "ID": f"vessel-{vessel_id}-{int(datetime.now(timezone.utc).timestamp())}",
             "Source": f"SCADA:{scada_host}:{scada_port}",
             "AcquisitionTime": timestamp,
-            "WellUWI": f"WELL-{vessel_id}",
+            "WellUWI": f"{vessel_name}",
             "SeparatorMetrics": {
                 **{k: processed_payload[k] for k in config_keys if k in processed_payload},
                 "RawFields": raw_fields,  # 3-DECIMAL ROUNDED (27 fields total)
