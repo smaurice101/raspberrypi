@@ -40,7 +40,8 @@ recipient=''
 if 'SMTP_SERVER' in os.environ:
    SMTP_SERVER=os.environ['SMTP_SERVER']
 if 'SMTP_PORT' in os.environ:
-   SMTP_PORT=int(os.environ['SMTP_PORT'])
+   if os.environ['SMTP_PORT'] !='':
+      SMTP_PORT=int(os.environ['SMTP_PORT'])
 if 'SMTP_USERNAME' in os.environ:
    SMTP_USERNAME=os.environ['SMTP_USERNAME']
 if 'SMTP_PASSWORD' in os.environ:
