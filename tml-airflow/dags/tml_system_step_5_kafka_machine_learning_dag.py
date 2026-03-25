@@ -28,7 +28,7 @@ default_args = {
   'brokerhost' : '', # <<< *** Leave as is   
   'brokerport' : '-999', # <<< *** Leave as is
   'deploy' : '1', # <<< *** do not modofy
-  'modelruns': '100', # <<< *** Change as needed      
+  'modelruns': '50', # <<< *** Change as needed      
   'offset' : '-1', # <<< *** Do not modify
   'islogistic' : '1',  # <<< *** Change as needed, 1=logistic, 0=not logistic
   'networktimeout' : '600', # <<< *** Change as needed      
