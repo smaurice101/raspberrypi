@@ -686,6 +686,7 @@ html, body {
   box-shadow: var(--glow-orange), 0 8px 32px rgba(255,107,53,0.6);
 }
 
+
 		
     </style>
 </head>
@@ -705,7 +706,7 @@ html, body {
                     <i class="fas fa-oil-can"></i>
                 </div>
                 <div>
-                    <div class="header-title">Separator AI Intelligence</div>
+                    <div class="header-title">RealFlow SCADA AI: Separator Intelligence</div>
                     <div class="subtitle">V-102 | Transactional ML • Real-Time SCADA Processing</div>
                 </div>
             </div>
@@ -714,14 +715,6 @@ html, body {
                 <div class="status-card status-green">
                     <i class="fas fa-circle"></i>
                     <span>🧠 TML Live</span>
-                </div>
-                <div class="status-card status-green">
-                    <i class="fas fa-bolt"></i>
-                    <span>1.2s Latency</span>
-                </div>
-                <div class="status-card status-yellow">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Carryover ↑ 1.9%</span>
                 </div>
             </div>
         </div>
@@ -735,38 +728,35 @@ html, body {
 				<div class="metric-title">Vessel Pressure</div>
 				<div class="metric-value" data-key="operatingPressure">--</div>
 				<div class="metric-unit">bar</div>
-				<div class="risk-badge risk-low">OPTIMAL</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">Gas Flow Rate</div>
 				<div class="metric-value" data-key="gasFlowRate">--</div>
 				<div class="metric-unit">m³/hr</div>
-				<div class="risk-badge risk-low">STABLE</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">Water Flow</div>
 				<div class="metric-value" data-key="waterFlowRate">--</div>
 				<div class="metric-unit">m³/hr</div>
-				<div class="risk-badge risk-med">TRENDING ↑</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">HCL Injection</div>
 				<div class="metric-value" data-key="hclFlowRate">--</div>
 				<div class="metric-unit">m³/hr</div>
-				<div class="risk-badge risk-low">BALANCED</div>
 			</div>
 
 			<div class="metric-card">
 				<div class="metric-title">Solids Carry</div>
 				<div class="metric-value" data-key="solidFlowRate">--</div>
 				<div class="metric-unit">kg/hr</div>
-				<div class="risk-badge risk-low">FILTERED</div>
 			</div>
+
 			
-<!-- FLEET CARRYOVER METRICS -->
+<!-- FLEET CARRYOVER METRICS 
+
 <div class="metric-card">
   <div class="metric-title">Top 50 Vessels Carryover</div>
   <div class="metric-value" data-key="top50_carryover">--</div>
@@ -780,7 +770,7 @@ html, body {
   <div class="metric-unit">% (All Vessels)</div>
   <div class="risk-badge risk-low">FLEET AVG</div>
 </div>
-			
+			-->
 		</div>
 
 
@@ -789,39 +779,39 @@ html, body {
             <!-- KPI GRID -->
             <div class="kpi-grid">
 			<div class="kpi-card">
-				<div class="kpi-trend positive">
+				<!-- <div class="kpi-trend positive">
 					<i class="fas fa-arrow-up trend-arrow"></i>
 					<span>+2.4%</span>
-				</div>
+				</div> -->
 				<div class="kpi-value" data-key="carryover">--</div>
-				<div class="kpi-label">AI Carryover Rate</div>
+				<div class="kpi-label">Avg. AI Carryover Rate</div>
 			</div>
 
 			<div class="kpi-card">
-				<div class="kpi-trend positive">
+				<!--<div class="kpi-trend positive">
 					<i class="fas fa-arrow-up trend-arrow"></i>
 					<span>+15%</span>
-				</div>
+				</div> -->
 				<div class="kpi-value" data-key="flow_stability">--</div>
-				<div class="kpi-label">Flow Stability Index</div>
+				<div class="kpi-label">Avg. Flow Stability Index</div>
 			</div>
 
 			<div class="kpi-card">
-				<div class="kpi-trend positive">
+				<!-- <div class="kpi-trend positive">
 					<i class="fas fa-arrow-up trend-arrow"></i>
 					<span>+8.2%</span>
-				</div>
+				</div> -->
 				<div class="kpi-value" data-key="gas_reynolds">--</div>
-				<div class="kpi-label">Gas Reynolds Number</div>
+				<div class="kpi-label">Avg. Gas Reynolds Number</div>
 			</div>
 
 			<div class="kpi-card">
-				<div class="kpi-trend negative">
+				<!--<div class="kpi-trend negative">
 					<i class="fas fa-arrow-down trend-arrow"></i>
 					<span>-0.34</span>
-				</div>
+				</div> -->
 				<div class="kpi-value" data-key="inversion_risk">--</div>
-				<div class="kpi-label">Inversion Risk Score</div>
+				<div class="kpi-label">Avg. Inversion Risk Score</div>
 			</div>
 
             </div>
@@ -831,32 +821,38 @@ html, body {
                 <div class="chart-container">
                     <div class="chart-title">
                         <i class="fas fa-brain"></i>
-                        TML Carryover Prediction
+                       Avg. TML Carryover Prediction
                     </div>
                     <canvas id="carryoverChart"></canvas>
                 </div>
 
-                <div class="chart-container">
-                    <div class="chart-title">
-                        <i class="fas fa-tachometer-alt"></i>
-                        Multi-Phase Reynolds
-                    </div>
-                    <canvas id="reynoldsChart"></canvas>
-                </div>
+
+<div class="chart-container">
+    <div class="chart-title" id="heatmapTitle">
+        <i class="fas fa-ships" style="color: #ff6b35;"></i>
+        Real-Time Entity Level Carryover Predictions
+    </div>
+    <div id="namedHeatmap" style="height: 100%; padding: 25px;">
+        <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; height: 85%;">
+            <!-- Vessel tiles with names -->
+        </div>
+        <div style="font-size: 12px; opacity: 0.8; text-align: center; margin-top: 8px;">
+            🟢 Safe | 🟡 Warning | 🔴 Critical (>15%)
+        </div>
+    </div>
+</div>
+
+				
             </div>
 
             <!-- PREDICTION CARD -->
             <div class="prediction-card">
                 <div class="prediction-title">
                     <i class="fas fa-robot"></i>
-                    Next 6h Carryover Forecast
+                    Next 6h Avg. Carryover Forecast
                 </div>
                 <div class="prediction-value" data-key="carryover_forecast">--</div>
                 <div style="font-size: 14px; opacity: 0.8; margin: 4px 0;">--</div>
-                <div class="prediction-confidence">
-                    <span>🧠 Confidence: <strong data-key="confidence">--</strong></span>
-                    <span>⚠️ Risk: <strong style="color: #f59e0b;">--</strong></span>
-                </div>
             </div>
         </div>
 
@@ -868,11 +864,6 @@ html, body {
 >
   <i class="fas fa-paper-plane"></i> Send API Request To START DASHBOARD
 </button>
-
-
-  
-  
-    <h4><i class="fas fa-ship"></i> Fleet Carryover (50 Vessels)</h4>
     
     <!-- EXISTING METRIC CARDS - KEEP THESE 
     <div class="metric-card">
@@ -887,13 +878,13 @@ html, body {
 <!-- --------------------------------------------------------------------------------->
 <div class="metric-card">
 
-  <h4 style="margin-bottom: 10px;">TML SCADA CONNECT and MACHINE LEARNING</h4>
+  <h4 style="margin-bottom: 10px;">ONE-CLICK: MACHINE LEARNING and AI</h4>
 
   <label style="font-size:12px;opacity:0.8;">Endpoint URL</label>
   <input
     id="api-endpoint"
     type="text"
-    value="http://localhost:9001/api/v1/scada_modbus_read"
+    value="http://localhost:9002/api/v1/scada_modbus_read"
     style="width:100%;margin:4px 0 10px 0;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;"
   >
 
@@ -915,12 +906,13 @@ html, body {
   "scada_host": "127.0.0.1",
   "scada_port": 2502,
   "slave_id": 1,
-  "read_interval_seconds": 2,
-  "callback_url": "http://localhost:9001/api/v1/vessel_data",
+  "base_url": "http://localhost:9002",
+  "read_interval_seconds": 0.5,
+  "callback_url": "http://localhost:9002/api/v1/vessel_data",
   "max_reads": -1,
   "start_register": 40001,
   "sendtotopic": "scada-raw-data",
-  "createvariables": "carryover = 100 * (waterFlowRate + hclFlowRate + solidFlowRate) / (waterFlowRate + hclFlowRate + solidFlowRate + gasFlowRate),gas_reynolds= gasFlowRate * gasDensity / (gasViscosity * operatingPressure), water_reynolds= waterFlowRate * waterDensity / (waterViscosity * operatingPressure), reynolds_ratio= gas_reynolds / water_reynolds, stokes_number=(waterDensity-gasDensity) * waterViscosity / operatingPressure**2, inversion_risk= waterFlowRate/gasFlowRate - phseInversionCriticalWaterCut, emulsion_ratio= waterSurfaceTension / hclWaterSurfaceTension, density_ratio= waterDensity / gasDensity, flow_stability= reynolds_ratio * density_ratio",
+	"createvariables":"Pg  = operatingPressure,Qg  = gasFlowRate,Qw  = waterFlowRate,Qh  = hclFlowRate,Qs  = solidFlowRate,rhog = gasDensity,rhow = waterDensity,mug  = gasViscosity,muw  = waterViscosity,sw   = waterSurfaceTension,sow  = hclWaterSurfaceTension,picwc = phseInversionCriticalWaterCut/1000.0,Zg    = gasCompressabilityFactor/1000.0,raw_co = (Qw + Qh + Qs) / ((Qw + Qh + Qs) + Qg + 1e-6),carryover = 15.0 * (raw_co ** 0.3),gas_reynolds = (Qg * rhog) / (mug + 1e-6),water_reynolds = (Qw * rhow) / (muw + 1e-6),reynolds_ratio = gas_reynolds / (water_reynolds + 1e-6),stokes_number = (rhow - rhog) * muw / ((Pg + 1e-6)*(Pg + 1e-6)),inversion_risk = (Qw / (Qg + 1e-6)) - picwc,emulsion_ratio = sw / (sow + 1e-6),density_ratio = rhow / (rhog + 1e-6),flow_stability = density_ratio",
   "fields": [
     "vesselIndex",
     "operatingPressure",
@@ -944,24 +936,24 @@ html, body {
   ],
   "scaling": {
     "vesselIndex": 1,
-    "operatingPressure": 100,
-    "operatingTemperature": 100,
-    "gasFlowRate": 100,
-    "gasDensity": 1000,
+    "operatingPressure": 1,
+    "operatingTemperature": 1,
+    "gasFlowRate": 1,
+    "gasDensity": 1,
     "gasCompressabilityFactor": 1000,
-    "gasViscosity": 1000000000,
-    "hclFlowRate": 100,
+    "gasViscosity": 1000,
+    "hclFlowRate": 1,
     "hclDensity": 1,
-    "hclViscosity": 1000000,
-    "hclSurfaceTension": 100000,
-    "waterFlowRate": 1000,
-    "waterDensity": 10,
-    "waterViscosity": 1000000,
-    "waterSurfaceTension": 100000,
-    "hclWaterSurfaceTension": 100000,
-    "phseInversionCriticalWaterCut": 1000,
-    "solidFlowRate": 100,
-    "solidDensity": 10
+    "hclViscosity": 1,
+    "hclSurfaceTension": 1,
+    "waterFlowRate": 1,
+    "waterDensity": 1,
+    "waterViscosity": 1,
+    "waterSurfaceTension": 1,
+    "hclWaterSurfaceTension": 1,
+    "phseInversionCriticalWaterCut": 1,
+    "solidFlowRate": 1,
+    "solidDensity": 1
   },
   "vessel_names": {
     "1": "Separator 1A",
@@ -1014,7 +1006,40 @@ html, body {
     "48": "Medium Pressure 1",
     "49": "Medium Pressure 2",
     "50": "Stock Tank"
-  }
+  },
+  "preprocessing": {
+    "step": "4",
+    "jsoncriteria": "uid=data.WellUWI,filter:allrecords~subtopics=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~values=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~identifiers=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~datetime=data.AcquisitionTime~msgid=data.Source~latlong=",
+    "rawdatatopic": "scada-raw-data",
+    "preprocessdatatopic": "scada-preprocess-data",
+    "preprocesstypes": "raw,trend,avg,variance",
+    "windowinstance": "scada-preprocess",
+    "rollbackoffsets": "300"
+  },
+   "machinelearning": { 
+   "step": "5",
+   "trainingdatafolder": "scada-ml-models",
+   "ml_data_topic": "scada-ml-data",
+   "preprocess_data_topic": "scada-preprocess-data",
+   "rollbackoffsets": 500,
+   "islogistic": 0,
+   "dependentvariable": "data.SeparatorMetrics.RawFields.carryover_preprocessed_Raw",
+   "independentvariables": "data.SeparatorMetrics.RawFields.stokes_number_preprocessed_Raw,data.SeparatorMetrics.RawFields.density_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.emulsion_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.inversion_risk_preprocessed_Raw,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut_preprocessed_Raw,data.SeparatorMetrics.RawFields.gasFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.waterFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.operatingPressure_preprocessed_Trend",
+		"windowinstance": "scada-ml"
+	  },	
+  "predictions": {
+	"step": "6",
+	"pathtoalgos": "scada-ml-models",
+	"rollbackoffsets": 500,
+	"consumefrom": "scada-ml-data",
+	"inputdata": "",
+	"streamstojoin": "data.SeparatorMetrics.RawFields.stokes_number_preprocessed_Raw,data.SeparatorMetrics.RawFields.density_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.emulsion_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.inversion_risk_preprocessed_Raw,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut_preprocessed_Raw,data.SeparatorMetrics.RawFields.gasFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.waterFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.operatingPressure_preprocessed_Trend",
+	"ml_prediction_topic": "scada-ml-prediction-results-output",
+	"preprocess_data_topic": "scada-preprocess-data",
+	"windowinstance": "scada-prediction"
+},
+	"agenticai": {"step":"9b"},
+	"ai": {"step":"9"}
 }
   </textarea>
 
@@ -1059,6 +1084,8 @@ html, body {
         let VESSEL_NAMES = {};
         let sendBtn, endpointEl, payloadEl, responseEl;		
 		let sendbutton=0;
+        let overallAverage=0.0;
+		let vesselcount = 0;
 // ONE LINE - 50 vessels with realistic data (8-25% carryover)
 		//allVesselsData = Array.from({length:50}, (_,i) => ({vesselIndex:i+1, carryover: (10+Math.random()*15).toFixed(2)*1}));
         //updateVesselTable();					  
@@ -1070,8 +1097,10 @@ html, body {
 
 			function getConfigFromURL() {
 				const urlParams = new URLSearchParams(window.location.search);
+				//console.log(window.location.search);
+				
 				return {
-					port: parseInt(urlParams.get('port')) || 49689,
+					port: parseInt(urlParams.get('vipervizport')) || 49689,
 					topic: urlParams.get('topic') || 'scada-raw-data',
 					offset: urlParams.get('offset') || '-1',
 					rollbackoffset: urlParams.get('rollbackoffset') || '100',
@@ -1082,13 +1111,120 @@ html, body {
 				};
 			}
 
-			// Connect to your exact WebSocket endpoint
+///////////////////////////////////////// PROCESS RAW DATA TOPIC ////////////////////////////////////////
+			function scadarawdata(message){
+					// Handle both single objects AND TopicReads array
+					let liveDataArray = [];
+					
+					//console.log("message main=",message);
+					// Process each vessel
+					if (message.vessel_names) {
+						VESSEL_NAMES = message.vessel_names;  // ✅ Extract from payload
+						console.log('✅ Vessel mapping loaded:', Object.keys(VESSEL_NAMES).length, 'vessels');
+					}
+					
+						message.TopicReads?.forEach((record, i) => {
+						  const vessel = record.data.SeparatorMetrics.RawFields;
+						  VESSEL_NAMES = record.data.SeparatorMetrics.vessel_names;
+						  const vesselIndex = parseInt(vessel.vesselIndex) || i + 1;					
+						  const vesselName = VESSEL_NAMES[vesselIndex?.toString()] || `Vessel #${vesselIndex}`;
+
+						  allVesselsData[vesselIndex] = {
+							...vessel,  // ✅ All fields copied automatically
+							vesselIndex,
+							vesselName,
+							timestamp: record.data.AcquisitionTime
+						  };
+             		      responseEl = document.getElementById('api-response');		
+						  responseEl.textContent = "Receiving messages from TML Server..";
+						});
+					  	
+				// SIMPLIFIED: Average all vessels with reduce()
+				const allRecords = Object.values(allVesselsData);
+				const averages = {
+				  raw: {
+					operatingPressure: (allRecords.reduce((sum, v) => sum + parseFloat(v.operatingPressure || 0), 0) / allRecords.length || 0).toFixed(2),
+					gasFlowRate: (allRecords.reduce((sum, v) => sum + parseFloat(v.gasFlowRate || 0), 0) / allRecords.length || 0).toFixed(2),
+					waterFlowRate: (allRecords.reduce((sum, v) => sum + parseFloat(v.waterFlowRate || 0), 0) / allRecords.length || 0).toFixed(2),
+					hclFlowRate: (allRecords.reduce((sum, v) => sum + parseFloat(v.hclFlowRate || 0), 0) / allRecords.length || 0).toFixed(2),
+					solidFlowRate: (allRecords.reduce((sum, v) => sum + parseFloat(v.solidFlowRate || 0), 0) / allRecords.length || 0).toFixed(2)
+				  },
+				  processed: {
+					carryover: (allRecords.reduce((sum, v) => sum + v.carryover, 0) / allRecords.length || 0).toFixed(2),
+					gas_reynolds: (allRecords.reduce((sum, v) => sum + parseFloat(v.gas_reynolds || 0), 0) / allRecords.length || 0).toFixed(2),
+					flow_stability: (allRecords.reduce((sum, v) => {
+					  const raw = parseFloat(v.flow_stability || v.density_ratio || 0);
+					  return sum + Math.min(10.0, raw / 125.0);  // Scale 0-10 here!
+					}, 0) / allRecords.length || 0).toFixed(2),
+					
+					//inversion_risk: (allRecords.reduce((sum, v) => sum + parseFloat(v.inversion_risk || 0), 0) / allRecords.length || 0).toFixed(3),
+					inversion_risk: (allRecords.reduce((sum, v) => {
+						const raw = parseFloat(v.inversion_risk || 0);
+						return sum + Math.min(1.0, Math.max(0, raw / 500.0));  // Scale 0-1 (0-500 range)
+					}, 0) / allRecords.length || 0).toFixed(3),					
+					
+					emulsion_ratio: (allRecords.reduce((sum, v) => sum + parseFloat(v.emulsion_ratio || 0), 0) / allRecords.length || 0).toFixed(2),
+					stokes_number: (allRecords.reduce((sum, v) => sum + parseFloat(v.stokes_number || 0), 0) / allRecords.length || 0).toFixed(6),
+					water_reynolds: (allRecords.reduce((sum, v) => sum + parseFloat(v.water_reynolds || 0), 0) / allRecords.length || 0).toFixed(2)
+				  },
+				  ai: {
+					carryover_forecast: '18.2',  // Or average predictions if available
+					confidence: '94.7'
+				  }				  				  
+				};
+				      livedata=averages;
+					  updateAllMetrics(livedata);
+					  
+			//		  updateSimpleHeatmap();					  					  
+					  //updateChartsTML(livedata);
+              //        updateVesselTable();				
+			}
+
+///////////////////////////////////////// PROCESS SCADA PREDICTIONS DATA TOPIC ////////////////////////////////////////
+// Function to extract mainuid from Identifier field
+			function extractMainuid(identifier) {
+			  const match = identifier.match(/mainuid=([^~]+)/);
+			  return match ? match[1] : null;
+			}
+
+			// Calculate average Hyperprediction by mainuid
+			function calculateAverageByMainuid(data) {
+			  const grouped = {};
+			  
+			  data.TopicReads?.forEach((item, i) => {			  
+				const mainuid = extractMainuid(item.Identifier);
+				if (mainuid) {
+				  if (!grouped[mainuid]) {
+					grouped[mainuid] = { sum: 0, count: 0 };
+				  }
+				  grouped[mainuid].sum += item.Hyperprediction;
+				  grouped[mainuid].count += 1;
+				}
+			  });
+			  
+			  // Convert to array of averages
+			  return Object.entries(grouped).map(([mainuid, { sum, count }]) => ({
+				mainuid,
+				averageHyperprediction: Number((sum / count).toFixed(1)),
+				count
+			  }));
+			}
+			
+			function scadapredictions(message){
+			  const averages = calculateAverageByMainuid(message);
+            //  console.log(averages);
+              updateSimpleHeatmap2(averages);			  
+			  //updateVesselTable2(message);
+               updateChartsTML2();			  
+			}
+			
+//////////////////////////////////////////////////// CONNECT WEBOCKETS ///////////////////////////////////////////////////////////			
 			function connectWebSocket() {
 			//tml-carryover.html?port=6060&topic=scada-raw-data
 			    const config = getConfigFromURL();
 				
 				const wsUrl = `ws://localhost:${config.port}/ws`;
-				
+								
 				ws = new WebSocket(wsUrl);
 
 				ws.onopen = () => {
@@ -1118,125 +1254,46 @@ html, body {
 				};
 
 				ws.onmessage = (event) => {
-				  try {
 					//const message = JSON.parse(event.data);
                     var eventdata=`${event.data}`;
 				    var maindata=eventdata.replace(/\\"/g,'"');
+					//var maindata=eventdata.replace(/\\\\"/g, '"');
+					
+					    // 2. Remove outer quotes if present
 			        maindata=maindata.substr(1, maindata.length-3);						
 				    
+			//		console.log("maindata=",maindata);
+					//scada-raw-data,scada-ml-prediction-results-output
 			   
 				   var message;
 				   try{
 					message = JSON.parse(maindata);
+                       if (message.Webtopic=="scada-raw-data"){
+					      scadarawdata(message);
+                        }					
+                       if (message.Webtopic=="scada-ml-prediction-results-output"){
+					      scadapredictions(message);
+						  updateVesselTable2(message);
+                        }					
+					  	
 					}catch(e){
 					   console.log("Json parse issue=",e.message);
 					   return;
-					}
-				
-					// Handle both single objects AND TopicReads array
-					let liveDataArray = [];
-					
-					//console.log("message main=",message);
-					// Process each vessel
-					if (message.vessel_names) {
-						VESSEL_NAMES = message.vessel_names;  // ✅ Extract from payload
-						console.log('✅ Vessel mapping loaded:', Object.keys(VESSEL_NAMES).length, 'vessels');
-					}
-					
-					message.TopicReads?.forEach((record, i) => {
-					  const vessel = record.data.SeparatorMetrics.RawFields;
-					  VESSEL_NAMES = record.data.SeparatorMetrics.vessel_names;
-                      const vesselIndex = parseInt(vessel.vesselIndex) || i + 1;					
-                      const vesselName = VESSEL_NAMES[vesselIndex?.toString()] || `Vessel #${vesselIndex}`;					  
+					}				
 
-					//console.log("VESSEL NAMES=",VESSEL_NAMES);
-					  
-					  //console.log("vesselName=",vesselName);
-						// Store vessel data
-						allVesselsData[vesselIndex] = {
-							carryover: parseFloat(vessel.carryover) || 0,
-							vesselIndex: vesselIndex,
-                            vesselName,							
-							timestamp: record.data.AcquisitionTime
-						};
-    
-             		  responseEl = document.getElementById('api-response');		
-	                  responseEl.textContent = "Receiving messages from TML Server..";
-					  
-                      livedata={
-					    raw: {
-						  operatingPressure: (vessel.operatingPressure || 0).toFixed(1),
-						  gasFlowRate: (vessel.gasFlowRate || 0).toFixed(1),
-						  waterFlowRate: (vessel.waterFlowRate || 0).toFixed(1),
-						  hclFlowRate: (vessel.hclFlowRate || 0).toFixed(1),
-						  solidFlowRate: (vessel.solidFlowRate || 0).toFixed(1)					     
-						  },
-					    processed: {
-						  carryover: (vessel.carryover || 0).toFixed(1),
-						  gas_reynolds: (vessel.gas_reynolds || 0).toFixed(0),
-						  flow_stability: (vessel.flow_stability || 0).toFixed(0),
-						  inversion_risk: (vessel.inversion_risk || 0).toFixed(3),
-						  emulsion_ratio: (vessel.emulsion_ratio || 0).toFixed(2),
-						  stokes_number: (vessel.stokes_number || 0).toFixed(6),
-						  water_reynolds: (vessel.water_reynolds || 0).toFixed(0)
-						  },
-				    	ai: {
-					     	carryover_forecast: (vessel.carryover || vessel.prediction || '18.2').toFixed(1),
-						    confidence: vessel.confidence || vessel.confidence_score || '94.7'
-					    }
-				     };					  
-					  updateAllMetrics(livedata);
-					  updateChartsTML(livedata);
-                      updateVesselTable();					  
-					  
-					  //console.log(`Vessel ${vessel.vesselIndex}:`);
-					  //console.log(`  Carryover: ${vessel.carryover.toFixed(1)}%`);
-					  //console.log(`  Inversion Risk: ${vessel.inversion_risk.toFixed(3)}`);
-					  //console.log(`  Flow Stability: ${vessel.flow_stability.toFixed(0)}`);
-					  //console.log(`  Time: ${record.data.AcquisitionTime}`);
-					});
-	
-/*					if (message.TopicReads && Array.isArray(message.TopicReads)) {
-					  // New SCADA format: { TopicReads: [vessel1, vessel2, ...] }
-					  liveDataArray = message.TopicReads.map(record => 
-					    //console.log(record)  // ✅ No trailing comma
-						transformWebSocketData(record)
-					  );
-					  console.log("📡 SCADA array:", liveDataArray.length, "vessels");
-					} else {
-					  // Legacy single-object format
-					  console.log("error");
-					  liveDataArray = [transformWebSocketData(message)];
-					}
+              };
+			  
+				ws.onclose = (event) => {
+					console.log(`❌ WebSocket DISCONNECTED: code=${event.code}, reason="${event.reason || 'none'}", wasClean=${event.wasClean}`);
+					const responseEl = document.getElementById('api-response');
+					responseEl.textContent = `WebSocket DISCONNECTED (code: ${event.code})`;
 					
-					// Process all vessels in array
-					liveDataArray.forEach(liveData => {
-				//	  console.log("liveData=", liveData);
-					  updateAllMetrics(liveData);
-					  updateCharts(liveData);
-					});
-*/					
-				  } catch (e) {
-					console.warn('Invalid WS message:', event.data.substring(0, 200) + '...');
-				  }
+					// Add onerror for early errors
+					ws.onerror = (error) => {
+						console.error('WebSocket ERROR:', error);
+					};
 				};
 
-
-				ws.onclose = () => {
-					console.log('❌ WebSocket DISCONNECTED...');
-            		  responseEl = document.getElementById('api-response');		
-					  responseEl.textContent="Websocket DISCONNECTED";
-					
-					//document.querySelector('.status-card span').textContent = '🧠 TML Reconnecting...';
-					//setTimeout(connectWebSocket, 3000); // Auto-reconnect
-				};
-
-				ws.onerror = (error) => {
-					console.error('WebSocket ERROR:', error);
-             		  responseEl = document.getElementById('api-response');		
-	                  responseEl.textContent = "ERROR: " + error;
-					
-				};
 			}
 
 
@@ -1402,22 +1459,44 @@ html, body {
             document.querySelector('[data-key="solidFlowRate"]').textContent = data.raw.solidFlowRate;
 
             // Update PROCESSED AI metrics
-            document.querySelector('[data-key="carryover"]').textContent = data.processed.carryover + '%';
+            document.querySelector('[data-key="carryover"]').textContent = overallAverage.toFixed(1) + '%';
             document.querySelector('[data-key="flow_stability"]').textContent = data.processed.flow_stability.toLocaleString();
             document.querySelector('[data-key="inversion_risk"]').textContent = data.processed.inversion_risk;
             //document.querySelector('[data-key="emulsion_ratio"]').textContent = data.processed.emulsion_ratio;
             //document.querySelector('[data-key="stokes_number"]').textContent = (data.processed.stokes_number * 1e6).toFixed(0) + 'μ';
             
             // Update gas reynolds with K suffix
-            const gasReK = (data.processed.gas_reynolds / 1000).toFixed(0) + 'K';
+            const gasReK = data.processed.gas_reynolds;
+			//console.log(data.processed.gas_reynolds, data.processed.flow_stability);
+			
             document.querySelector('[data-key="gas_reynolds"]').textContent = gasReK;
 
             // Update AI prediction
-            document.querySelector('[data-key="carryover_forecast"]').textContent = data.ai.carryover_forecast + '%';
+            document.querySelector('[data-key="carryover_forecast"]').textContent = overallAverage.toFixed(1) + '%';
             document.querySelector('[data-key="confidence"]').textContent = data.ai.confidence + '%';
         }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
         // UPDATE CHARTS
+        function updateChartsTML2(data) {
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            
+			
+            if (carryoverChart) {
+			
+                carryoverChart.data.labels.push(time);
+                carryoverChart.data.labels.shift();
+                carryoverChart.data.datasets[0].data.push(parseFloat(18.0));
+                carryoverChart.data.datasets[0].data.shift();
+                carryoverChart.data.datasets[1].data.push(parseFloat(overallAverage.toFixed(1)));
+                carryoverChart.data.datasets[1].data.shift();
+                carryoverChart.update('none');
+								
+            }
+            
+
+        }
+		
         function updateChartsTML(data) {
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
             
@@ -1449,6 +1528,7 @@ html, body {
 			}
 
         }
+
 		
         function updateCharts(data) {
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
@@ -1514,6 +1594,32 @@ html, body {
 		  console.log(`📊 Fleet Stats: Avg=${avgCarryover}%, Top50=${highestCarryover50}% (${vesselCarryovers.length} vessels)`);
 		}
 
+////////////////////////////////////////////// Vessel Tables /////////////////////////
+		function updateVesselTable2(message) {
+			const table = document.getElementById('vesselsTable');
+			if (!table) return;
+			
+			// Get Hyperprediction averages by vessel (mainuid = vessel)
+			const averages = calculateAverageByMainuid(message)
+				.sort((a, b) => sortOrder === 'desc' ? b.averageHyperprediction - a.averageHyperprediction : a.averageHyperprediction - b.averageHyperprediction)
+				.slice(0, 50);
+			
+			table.innerHTML = averages.map(avgData => {
+				const vesselName = avgData.mainuid || 'Unknown'; // Separator_5A, Separator_4A
+				const hyperprediction = parseFloat(avgData.averageHyperprediction) || 0;
+				const riskClass = getRiskClass(hyperprediction);
+				
+				return `
+					<div class="vessel-row">
+						<div class="vessel-id">
+							${String(vesselName)}<br> 
+							(${hyperprediction.toFixed(1)})
+						</div>
+						<div class="vessel-risk ${riskClass}">${getRiskLabel(hyperprediction)}</div>
+					</div>
+				`;
+			}).join('');
+		}
 		function updateVesselTable() {
 			const table = document.getElementById('vesselsTable');
 			if (!table) return;
@@ -1535,14 +1641,14 @@ html, body {
 		}
 
 		function getRiskClass(carryover) {
-			if (carryover > 20) return 'risk-high';
-			if (carryover > 15) return 'risk-med';
+			if (carryover > 15) return 'risk-high';
+			if (carryover > 10) return 'risk-med';
 			return 'risk-low';
 		}
 
 		function getRiskLabel(carryover) {
-			if (carryover > 20) return 'CRITICAL';
-			if (carryover > 15) return 'WARNING';
+			if (carryover > 15) return 'CRITICAL';
+			if (carryover > 10) return 'WARNING';
 			return 'NORMAL';
 		}
 
@@ -1583,7 +1689,7 @@ html, body {
                 }
             });
 
-            const reynoldsCtx = document.getElementById('reynoldsChart').getContext('2d');
+/*            const reynoldsCtx = document.getElementById('reynoldsChart').getContext('2d');
             reynoldsChart = new Chart(reynoldsCtx, {
                 type: 'doughnut',
                 data: {
@@ -1596,7 +1702,7 @@ html, body {
                     plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', padding: 25, usePointStyle: true } } }
                 }
             });
-
+*/
             // Start live updates
             updateDashboard();
             setInterval(updateDashboard, 500); // Every 2.5 seconds
@@ -1713,13 +1819,126 @@ sendBtn.style.color = "#fff";
 		  sendbutton=1;
 		}
 
+function updateSimpleHeatmap2(averages) {
+    const grid = document.querySelector('#namedHeatmap > div');
+    if (!grid) return;
+    
+   const heatmapElement = document.getElementById('heatmapTitle'); // Use ID instead of class
+
+	
+	overallAverage = averages.reduce((sum, avg) => sum + avg.averageHyperprediction, 0) / averages.length;
+	vesselcount = averages.length;
+	
+    // Update title with live data
+    heatmapElement.innerHTML = `
+        <i class="fas fa-ships" style="color: #ff6b35;"></i>
+        Real-Time Separator Carryover Predictions 
+        <span style="font-size: 0.85em; opacity: 0.8; font-weight: 500;">
+            (${vesselcount} separators | Fleet Avg: ${overallAverage.toFixed(1)})
+        </span>
+    `;
+
+     document.querySelector('[data-key="carryover"]').textContent = overallAverage.toFixed(1) + '%';
+      document.querySelector('[data-key="carryover_forecast"]').textContent = overallAverage.toFixed(1) + '%';
+	
+    //console.log("overallAverage=",overallAverage);
+	
+    grid.innerHTML = '';
+    
+    // Dynamically loop through ONLY the averages in the array - no hardcoded 50
+    averages.forEach((avgData, i) => {
+        const val = parseFloat(avgData.averageHyperprediction) || 0;
+        
+        // Use mainuid as vessel name or fallback
+        const vesselName = avgData.mainuid || `V${i+1}`;
+        
+        const color = val > 15 ? '#ef4444' : val > 10 ? '#f59e0b' : '#10b981';
+        const size = val > 15 ? '12px' : val > 10 ? '11px' : '10px';
+        
+        grid.innerHTML += `<div style="
+            width: 100%; height: 100%; 
+            background: ${color}; 
+            border-radius: 6px; 
+            font-size: ${size}; 
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+            font-weight: 800; color: white;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: all 0.2s ease;
+            padding: 2px;
+        " title="${vesselName}: ${val.toFixed(1)} carryover risk" 
+           onmouseover="this.style.transform='scale(1.1)'" 
+           onmouseout="this.style.transform='scale(1)'">
+            ${val.toFixed(0)}<br>
+            <span style="font-size: 8px; opacity: 0.9;">${vesselName.slice(0,3)}</span>
+        </div>`;
+    });
+}
+
+function updateSimpleHeatmap() {
+    const grid = document.querySelector('#namedHeatmap > div');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    const vessels = Object.values(allVesselsData);
+    
+    for(let i = 0; i < 50; i++) {
+        const vessel = vessels[i] || {carryover: 0};
+        const vesselIndex = vessel.vesselIndex || (i + 1);
+        const val = parseFloat(vessel.carryover) || 0;
+        
+        // Get vessel name from your VESSEL_NAMES object
+        const vesselName = VESSEL_NAMES[vesselIndex?.toString()] || 
+                          `Vessel ${vesselIndex}` || 
+                          `V${i+1}`;
+        
+        const color = val > 15 ? '#ef4444' : val > 8 ? '#f59e0b' : '#10b981';
+        const size = val > 15 ? '12px' : val > 8 ? '11px' : '10px';
+        
+        grid.innerHTML += `<div style="
+            width: 100%; height: 100%; 
+            background: ${color}; 
+            border-radius: 6px; 
+            font-size: ${size}; 
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+            font-weight: 800; color: white;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: all 0.2s ease;
+            padding: 2px;
+        " title="${vesselName}: ${val.toFixed(1)}%" 
+           onmouseover="this.style.transform='scale(1.1)'" 
+           onmouseout="this.style.transform='scale(1)'">
+            ${val.toFixed(0)}<br>
+            <span style="font-size: 8px; opacity: 0.9;">${vesselName.slice(0,3)}</span>
+        </div>`;
+    }
+}
+
+
 		function updateSortButtons() {
 			document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
 			document.getElementById(sortOrder === 'desc' ? 'sort-high' : 'sort-low')?.classList.add('active');
 		}
 		
     </script>
-
+	
+<!-- Add this to VERY BOTTOM of <body> (before </body>) -->
+<footer style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1e293b;
+    color: #e2e8f0;
+    text-align: center;
+    padding: 15px;
+    z-index: 1000;
+">
+  <a href='https://www.otics.ca' style="color: #60a5fa; text-decoration: none;" target=new>Otics Advanced Analytics, Inc.</a>  <!-- your footer content -->
+</footer>
 
 </body>
 </html>
