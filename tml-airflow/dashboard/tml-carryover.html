@@ -687,7 +687,24 @@ html, body {
 }
 
 
-		
+@keyframes btn-ripple {
+  0% { box-shadow: 0 0 0 0 var(--glow-orange); }
+  70% { box-shadow: 0 0 0 30px rgba(255,107,53,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,107,53,0); }
+}
+@keyframes metric-glow {
+  0% { box-shadow: var(--glow-blue); }
+  50% { box-shadow: 0 0 50px var(--neon-blue), inset 0 0 20px rgba(0,212,255,0.3); }
+  100% { box-shadow: var(--glow-blue); }
+}
+@keyframes scan-speedup {
+  0% { animation-duration: 8s; }
+  50% { animation-duration: 0.5s; }
+  100% { animation-duration: 8s; }
+}
+.processing .scanline { animation-duration: 0.3s !important; }
+.processing .metric-card, .processing .kpi-card { animation: metric-glow 1s ease-in-out; }
+.btn-ripple { animation: btn-ripple 0.7s ease-out; transform: scale(0.95); }		
     </style>
 </head>
 <body>
@@ -1614,6 +1631,7 @@ html, body {
 			  ws=null;
 			}
 					
+					
             sendBtn.disabled = false;
 //            sendBtn.innerHTML = 'Send API Request To START DASHBOARD';						
 		sendBtn.innerHTML = '<i class="fas fa-paper-plane" style="color:#fff;"></i> Send API Request To START DASHBOARD';
@@ -1635,15 +1653,24 @@ html, body {
 		  sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
 		  responseEl.textContent = 'Initializing dashboard + executing Python...';
 
+  sendBtn.classList.add('btn-ripple');
+  document.body.classList.add('processing');
           
 		  let payload;
 		  try {
             const jsonString = await gitpullpayload();			
 			//console.log(jsonString);
 			payload = JSON.parse(jsonString);
+			  startProcessingAnimation();
+			  
+   setTimeout(() => {
+      sendBtn.classList.remove('btn-ripple');
+      document.body.classList.remove('processing');
+    }, 1500);
+			  
 		  } catch (e) {
 			responseEl.textContent = 'Invalid JSON: ' + e.message;
-			resetButton();
+			resetButton();	
 			return;
 		  }
 
@@ -1691,6 +1718,36 @@ html, body {
 		  
 		  sendbutton=1;
 		}
+
+// NEW: Animation function
+function startProcessingAnimation() {
+  // Pulse all metrics
+  document.querySelectorAll('.metric-card, .kpi-card').forEach(el => {
+    el.style.animation = 'none';
+    el.offsetHeight; // Trigger reflow
+    el.style.animation = 'metric-glow 1.5s ease-in-out';
+  });
+  
+  // Speed up scanning lines temporarily
+  const scanlines = document.querySelectorAll('.scanline');
+  scanlines.forEach((line, i) => {
+    line.style.animationDuration = '0.2s';
+    setTimeout(() => { line.style.animationDuration = '8s'; }, 800);
+  });
+  
+  // Optional: Cyber beep sound
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+  gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+  oscillator.start(audioCtx.currentTime);
+  oscillator.stop(audioCtx.currentTime + 0.1);
+}
 
 function updateSimpleHeatmap2(averages) {
     const grid = document.querySelector('#namedHeatmap > div');
@@ -1816,4 +1873,3 @@ function updateSimpleHeatmap() {
 
 </body>
 </html>
-
