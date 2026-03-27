@@ -5,6 +5,7 @@
   "base_url": "http://localhost:9002",
   "read_interval_seconds": 0.8,
   "callback_url": "http://localhost:9002/api/v1/vessel_data",
+  "github_url": "https://raw.githubusercontent.com/smaurice101/raspberrypi/refs/heads/main/tml-airflow/data/payloads/scadaai/127001_2502",
   "max_reads": -1,
   "start_register": 40001,
   "sendtotopic": "scada-raw-data", 
