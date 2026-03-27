@@ -706,7 +706,7 @@ html, body {
                     <i class="fas fa-oil-can"></i>
                 </div>
                 <div>
-                    <div class="header-title">RealFlow SCADA AI: Separator Intelligence</div>
+                    <div class="header-title">RealFlow SCADA AI: Advanced Separator Monitoring Intelligence</div>
                     <div class="subtitle">V-102 | Transactional ML • Real-Time SCADA Processing</div>
                 </div>
             </div>
@@ -885,10 +885,10 @@ html, body {
     id="api-endpoint"
     type="text"
     value="http://localhost:9002/api/v1/scada_modbus_read"
-    style="width:100%;margin:4px 0 10px 0;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;"
+    style="width:100%;margin:4px 0 10px 0;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;" readonly
   >
 
-  <label style="font-size:12px;opacity:0.8;">JSON payload</label>
+  <label style="font-size:12px;opacity:0.8;">JSON Payload Pulled From GitHub</label>
   <button
     type="button"
     onclick="(function(){ const el = document.getElementById('api-payload'); if (!el) return; el.select(); document.execCommand('copy'); })()"
@@ -900,147 +900,8 @@ html, body {
   <textarea
     id="api-payload"
     rows="10"
-    style="width:100%;margin:4px 0 10px 0;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;"
+    style="width:100%;margin:4px 0 10px 0;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;" readonly
   >
-{
-  "scada_host": "127.0.0.1",
-  "scada_port": 2502,
-  "slave_id": 1,
-  "base_url": "http://localhost:9002",
-  "read_interval_seconds": 0.5,
-  "callback_url": "http://localhost:9002/api/v1/vessel_data",
-  "max_reads": -1,
-  "start_register": 40001,
-  "sendtotopic": "scada-raw-data", 
-	"createvariables":"Pg  = operatingPressure,Qg  = gasFlowRate,Qw  = waterFlowRate,Qh  = hclFlowRate,Qs  = solidFlowRate,rhog = gasDensity,rhow = waterDensity,mug  = gasViscosity,muw  = waterViscosity,sw   = waterSurfaceTension,sow  = hclWaterSurfaceTension,picwc = phseInversionCriticalWaterCut/1000.0,Zg    = gasCompressabilityFactor/1000.0,raw_co = (Qw + Qh + Qs) / ((Qw + Qh + Qs) + Qg + 1e-6),carryover = 15.0 * (raw_co ** 0.3),gas_reynolds = (Qg * rhog) / (mug + 1e-6),water_reynolds = (Qw * rhow) / (muw + 1e-6),reynolds_ratio = gas_reynolds / (water_reynolds + 1e-6),stokes_number = (rhow - rhog) * muw / ((Pg + 1e-6)*(Pg + 1e-6)),inversion_risk = (Qw / (Qg + 1e-6)) - picwc,emulsion_ratio = sw / (sow + 1e-6),density_ratio = rhow / (rhog + 1e-6),flow_stability = density_ratio",
-  "fields": [
-    "vesselIndex",
-    "operatingPressure",
-    "operatingTemperature",
-    "gasFlowRate",
-    "gasDensity",
-    "gasCompressabilityFactor",
-    "gasViscosity",
-    "hclFlowRate",
-    "hclDensity",
-    "hclViscosity",
-    "hclSurfaceTension",
-    "waterFlowRate",
-    "waterDensity",
-    "waterViscosity",
-    "waterSurfaceTension",
-    "hclWaterSurfaceTension",
-    "phseInversionCriticalWaterCut",
-    "solidFlowRate",
-    "solidDensity"
-  ],
-  "scaling": {
-    "vesselIndex": 1,
-    "operatingPressure": 1,
-    "operatingTemperature": 1,
-    "gasFlowRate": 1,
-    "gasDensity": 1,
-    "gasCompressabilityFactor": 1000,
-    "gasViscosity": 1000,
-    "hclFlowRate": 1,
-    "hclDensity": 1,
-    "hclViscosity": 1,
-    "hclSurfaceTension": 1,
-    "waterFlowRate": 1,
-    "waterDensity": 1,
-    "waterViscosity": 1,
-    "waterSurfaceTension": 1,
-    "hclWaterSurfaceTension": 1,
-    "phseInversionCriticalWaterCut": 1,
-    "solidFlowRate": 1,
-    "solidDensity": 1
-  },
-  "vessel_names": {
-    "1": "Separator 1A",
-    "2": "Separator 1B",
-    "3": "Separator 2A",
-    "4": "Separator 2B",
-    "5": "Separator 3A",
-    "6": "Separator 3B",
-    "7": "Separator 4A",
-    "8": "Separator 4B",
-    "9": "Separator 5A",
-    "10": "Separator 5B",
-    "11": "Separator 6A",
-    "12": "Separator 6B",
-    "13": "Deoiler V1",
-    "14": "Deoiler V2",
-    "15": "Deoiler V3",
-    "16": "Test Sep 1",
-    "17": "Test Sep 2",
-    "18": "Test Sep 3",
-    "19": "Heater Treater 1",
-    "20": "Heater Treater 2",
-    "21": "Gun Barrel 1",
-    "22": "Gun Barrel 2",
-    "23": "Gun Barrel 3",
-    "24": "FWKO 1",
-    "25": "FWKO 2",
-    "26": "FWKO 3",
-    "27": "Treaters 1A",
-    "28": "Treaters 1B",
-    "29": "Treaters 2A",
-    "30": "Treaters 2B",
-    "31": "Slop Tank 1",
-    "32": "Slop Tank 2",
-    "33": "Wash Tank 1",
-    "34": "Wash Tank 2",
-    "35": "Produced Water 1",
-    "36": "Produced Water 2",
-    "37": "Produced Water 3",
-    "38": "Gas Scrubber 1",
-    "39": "Gas Scrubber 2",
-    "40": "Gas Scrubber 3",
-    "41": "Test Vessel A",
-    "42": "Test Vessel B",
-    "43": "Test Vessel C",
-    "44": "High Pressure 1",
-    "45": "High Pressure 2",
-    "46": "Low Pressure 1",
-    "47": "Low Pressure 2",
-    "48": "Medium Pressure 1",
-    "49": "Medium Pressure 2",
-    "50": "Stock Tank"
-  },
-  "preprocessing": {
-    "step": "4",
-    "jsoncriteria": "uid=data.WellUWI,filter:allrecords~subtopics=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~values=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~identifiers=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~datetime=data.AcquisitionTime~msgid=data.Source~latlong=",
-    "rawdatatopic": "scada-raw-data",
-    "preprocessdatatopic": "scada-preprocess-data",
-    "preprocesstypes": "raw,trend,avg,variance",
-    "windowinstance": "scada-preprocess",
-    "rollbackoffsets": "300"
-  },
-   "machinelearning": { 
-   "step": "5",
-   "trainingdatafolder": "scada-ml-models",
-   "ml_data_topic": "scada-ml-data",
-   "preprocess_data_topic": "scada-preprocess-data",
-   "rollbackoffsets": 500,
-   "islogistic": 0,
-   "dependentvariable": "data.SeparatorMetrics.RawFields.carryover_preprocessed_Raw",
-   "independentvariables": "data.SeparatorMetrics.RawFields.stokes_number_preprocessed_Raw,data.SeparatorMetrics.RawFields.density_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.emulsion_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.inversion_risk_preprocessed_Raw,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut_preprocessed_Raw,data.SeparatorMetrics.RawFields.gasFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.waterFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.operatingPressure_preprocessed_Trend",
-		"windowinstance": "scada-ml"
-	  },	
-  "predictions": {
-	"step": "6",
-	"pathtoalgos": "scada-ml-models",
-	"rollbackoffsets": 500,
-	"consumefrom": "scada-ml-data",
-	"inputdata": "",
-	"streamstojoin": "data.SeparatorMetrics.RawFields.stokes_number_preprocessed_Raw,data.SeparatorMetrics.RawFields.density_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.emulsion_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.inversion_risk_preprocessed_Raw,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut_preprocessed_Raw,data.SeparatorMetrics.RawFields.gasFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.waterFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.operatingPressure_preprocessed_Trend",
-	"ml_prediction_topic": "scada-ml-prediction-results-output",
-	"preprocess_data_topic": "scada-preprocess-data",
-	"windowinstance": "scada-prediction"
-},
-	"agenticai": {"step":"9b"},
-	"ai": {"step":"9"}
-}
   </textarea>
 
   <pre
@@ -1654,7 +1515,29 @@ html, body {
 			return 'NORMAL';
 		}
 
+///////////////////////////////////////////////////////////// INITIALIZE /////////////////////////////////////
+		async function gitpullpayload() {
+			const apiUrl = 'https://api.github.com/repos/smaurice101/raspberrypi/contents/tml-airflow/data/payloads/scadaai/127001_2502?ref=main';
+			
+			try {
+				const response = await fetch(apiUrl);
+				const fileData = await response.json();
+				
+				// Decode base64 content
+				const jsonString = atob(fileData.content);
+				document.getElementById('api-payload').textContent = jsonString;
+				mainpayload = jsonString;
+				
+				//console.log("✅ GitHub API fresh:", fileData.sha);
+				return jsonString;
+			} catch (error) {
+				console.error("GitHub API failed:", error);
+				throw error;
+			}
+		}
 
+		
+		
         // INITIALIZE EVERYTHING
         function initDashboard() {
             // Initialize charts first
@@ -1691,23 +1574,9 @@ html, body {
                 }
             });
 
-/*            const reynoldsCtx = document.getElementById('reynoldsChart').getContext('2d');
-            reynoldsChart = new Chart(reynoldsCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Gas Re (181K)', 'Water Re (639)'],
-                    datasets: [{ data: [181299, 639], backgroundColor: ['#00d4ff', '#06b6d4'], 
-                               borderWidth: 3, borderColor: '#ffffff', circumference: 180, rotation: 270 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', padding: 25, usePointStyle: true } } }
-                }
-            });
-*/
-            // Start live updates
-            updateDashboard();
-            setInterval(updateDashboard, 500); // Every 2.5 seconds
+            //gitpullpayload();
+            //updateDashboard();
+           // setInterval(updateDashboard, 500); // Every 2.5 seconds
 			
 			
 		    // 🔥 NEW: Connect WebSocket INSTEAD of polling
@@ -1769,7 +1638,9 @@ html, body {
           
 		  let payload;
 		  try {
-			payload = JSON.parse(payloadEl.value);
+            const jsonString = await gitpullpayload();			
+			//console.log(jsonString);
+			payload = JSON.parse(jsonString);
 		  } catch (e) {
 			responseEl.textContent = 'Invalid JSON: ' + e.message;
 			resetButton();
@@ -1812,10 +1683,10 @@ html, body {
 		function resetButton() {
 		  sendBtn.disabled = false;
 //		  sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> STOP SCADA PROCESSING';
-sendBtn.innerHTML = '<i class="fas fa-paper-plane" style="color:#dc3545;"></i> STOP SCADA PROCESSING';
-sendBtn.style.color = "#dc3545";
-sendBtn.style.background = "#dc3545";
-sendBtn.style.color = "#fff";
+			sendBtn.innerHTML = '<i class="fas fa-paper-plane" style="color:#dc3545;"></i> STOP SCADA PROCESSING';
+			sendBtn.style.color = "#dc3545";
+			sendBtn.style.background = "#dc3545";
+			sendBtn.style.color = "#fff";
 
 		  
 		  sendbutton=1;
