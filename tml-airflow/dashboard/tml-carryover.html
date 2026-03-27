@@ -821,7 +821,7 @@ html, body {
                 <div class="chart-container">
                     <div class="chart-title">
                         <i class="fas fa-brain"></i>
-                       Avg. TML Carryover Prediction
+                       Avg. vs Max: TML Carryover Prediction
                     </div>
                     <canvas id="carryoverChart"></canvas>
                 </div>
@@ -878,7 +878,7 @@ html, body {
 <!-- --------------------------------------------------------------------------------->
 <div class="metric-card">
 
-  <h4 style="margin-bottom: 10px;">ONE-CLICK: MACHINE LEARNING and AI</h4>
+  <h4 style="margin-bottom: 10px;">ONE-CLICK: Machine Learning and Multi-Agentic AI</h4>
 
   <label style="font-size:12px;opacity:0.8;">Endpoint URL</label>
   <input
@@ -911,7 +911,7 @@ html, body {
   "callback_url": "http://localhost:9002/api/v1/vessel_data",
   "max_reads": -1,
   "start_register": 40001,
-  "sendtotopic": "scada-raw-data",
+  "sendtotopic": "scada-raw-data", 
 	"createvariables":"Pg  = operatingPressure,Qg  = gasFlowRate,Qw  = waterFlowRate,Qh  = hclFlowRate,Qs  = solidFlowRate,rhog = gasDensity,rhow = waterDensity,mug  = gasViscosity,muw  = waterViscosity,sw   = waterSurfaceTension,sow  = hclWaterSurfaceTension,picwc = phseInversionCriticalWaterCut/1000.0,Zg    = gasCompressabilityFactor/1000.0,raw_co = (Qw + Qh + Qs) / ((Qw + Qh + Qs) + Qg + 1e-6),carryover = 15.0 * (raw_co ** 0.3),gas_reynolds = (Qg * rhog) / (mug + 1e-6),water_reynolds = (Qw * rhow) / (muw + 1e-6),reynolds_ratio = gas_reynolds / (water_reynolds + 1e-6),stokes_number = (rhow - rhog) * muw / ((Pg + 1e-6)*(Pg + 1e-6)),inversion_risk = (Qw / (Qg + 1e-6)) - picwc,emulsion_ratio = sw / (sow + 1e-6),density_ratio = rhow / (rhog + 1e-6),flow_stability = density_ratio",
   "fields": [
     "vesselIndex",
@@ -1085,6 +1085,7 @@ html, body {
         let sendBtn, endpointEl, payloadEl, responseEl;		
 		let sendbutton=0;
         let overallAverage=0.0;
+        let overallMax=0.0;		
 		let vesselcount = 0;
 // ONE LINE - 50 vessels with realistic data (8-25% carryover)
 		//allVesselsData = Array.from({length:50}, (_,i) => ({vesselIndex:i+1, carryover: (10+Math.random()*15).toFixed(2)*1}));
@@ -1441,7 +1442,7 @@ html, body {
 				//'[data-key="stokes_number"]',
 				'[data-key="gas_reynolds"]',
 				'[data-key="carryover_forecast"]',
-				'[data-key="confidence"]'
+	//			'[data-key="confidence"]'
 			];			
 					
 			selectors.forEach((sel, i) => {
@@ -1473,7 +1474,7 @@ html, body {
 
             // Update AI prediction
             document.querySelector('[data-key="carryover_forecast"]').textContent = overallAverage.toFixed(1) + '%';
-            document.querySelector('[data-key="confidence"]').textContent = data.ai.confidence + '%';
+      //      document.querySelector('[data-key="confidence"]').textContent = data.ai.confidence + '%';
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1483,12 +1484,13 @@ html, body {
             
 			
             if (carryoverChart) {
-			
+	//		    console.log(overallAverage.toFixed(1),overallMax.toFixed(1));
+				
                 carryoverChart.data.labels.push(time);
                 carryoverChart.data.labels.shift();
-                carryoverChart.data.datasets[0].data.push(parseFloat(18.0));
+                carryoverChart.data.datasets[0].data.push(parseFloat(overallAverage.toFixed(1)));
                 carryoverChart.data.datasets[0].data.shift();
-                carryoverChart.data.datasets[1].data.push(parseFloat(overallAverage.toFixed(1)));
+                carryoverChart.data.datasets[1].data.push(parseFloat(overallMax.toFixed(1)));
                 carryoverChart.data.datasets[1].data.shift();
                 carryoverChart.update('none');
 								
@@ -1662,16 +1664,16 @@ html, body {
                 data: {
                     labels: Array(7).fill().map((_, i) => `T-${6-i}`),
                     datasets: [{
-                        label: 'Live Carryover',
-                        data: Array(7).fill(17),
+                        label: 'Fleet Average',
+                        data: Array(7).fill(0),
                         borderColor: '#f59e0b',
                         backgroundColor: 'rgba(245, 158, 11, 0.15)',
                         tension: 0.4, fill: true,
                         pointBackgroundColor: '#f59e0b',
                         pointBorderColor: '#ffffff', pointBorderWidth: 3, pointRadius: 6
                     }, {
-                        label: '🧠 TML Prediction',
-                        data: Array(7).fill(18),
+                        label: 'MAX Carryover',
+                        data: Array(7).fill(0),
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         borderDash: [8, 4], tension: 0.4,
@@ -1825,6 +1827,7 @@ function updateSimpleHeatmap2(averages) {
     
    const heatmapElement = document.getElementById('heatmapTitle'); // Use ID instead of class
 
+	overallMax = Math.max(...averages.map(a => a.averageHyperprediction));
 	
 	overallAverage = averages.reduce((sum, avg) => sum + avg.averageHyperprediction, 0) / averages.length;
 	vesselcount = averages.length;
