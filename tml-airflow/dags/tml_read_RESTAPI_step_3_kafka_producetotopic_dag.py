@@ -1092,6 +1092,22 @@ def gettmlsystemsparams():
                 "running": sg.read_job is not None and not sg.read_job.get("stop", True) if sg.read_job else False
             }
 
+        @app.post("/api/v1/external_payload")
+        def extpayload(data: dict):
+              datatopic = data.get("sendtotopic", "")
+              baseurl = data.get("base_url", "")          
+              try:
+                if datatopic != "":
+                   requests.post(f"{baseurl}/api/v1/jsondataline", json=data, timeout=5.0)
+                   return "ok"
+                else:
+                   return "No sendtotopic its empty" 
+              except Exception as e:
+                return {
+                 "message": f"Error: {e}"
+                }
+                
+      
 ################################# MQTT #############################################################
         
         @app.post("/api/v1/mqtt_subscribe")
