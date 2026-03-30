@@ -1,0 +1,104 @@
+{
+  "vessels": [
+    {
+      "id": 1,
+      "name": "Separator 1A",
+      "type": "separator",
+      "V0": 3.0,
+      "diameter": 3.5,
+      "height": 12.0,
+      "rho_l": 900.0,
+      "rho_g": 80.0,
+      "mu_g": 1.8e-5,
+      "inlet_eff": 0.55,
+      "mist_eff": 0.98,
+      "souders_k": 0.35,
+      "gravity_h": 2.5,
+      "d_mean_um": 220.0,
+      "d_sigma_um": 1.4,
+      "carryover_scale": 100.0
+    },
+    {
+      "id": 2,
+      "name": "Separator 1B",
+      "type": "separator",
+      "V0": 2.5,
+      "diameter": 3.2,
+      "height": 10.5,
+      "rho_l": 910.0,
+      "rho_g": 75.0,
+      "mu_g": 1.9e-5,
+      "inlet_eff": 0.60,
+      "mist_eff": 0.97,
+      "souders_k": 0.36,
+      "gravity_h": 2.3,
+      "d_mean_um": 240.0,
+      "d_sigma_um": 1.5,
+      "carryover_scale": 100.0
+    },
+    {
+      "id": 24,
+      "name": "FWKO 1",
+      "type": "fwko",
+      "V0": 1.0,
+      "diameter": 2.8,
+      "height": 8.0,
+      "rho_l": 950.0,
+      "rho_g": 20.0,
+      "mu_g": 1.6e-5,
+      "inlet_eff": 0.50,
+      "mist_eff": 0.95,
+      "souders_k": 0.32,
+      "gravity_h": 2.0,
+      "d_mean_um": 300.0,
+      "d_sigma_um": 1.6,
+      "carryover_scale": 100.0
+    },
+    {
+      "id": 50,
+      "name": "Stock Tank",
+      "type": "tank",
+      "V0": 5.0,
+      "diameter": 5.0,
+      "height": 15.0,
+      "rho_l": 850.0,
+      "rho_g": 1.2,
+      "mu_g": 1.2e-5,
+      "inlet_eff": 0.40,
+      "mist_eff": 0.85,
+      "souders_k": 0.25,
+      "gravity_h": 4.0,
+      "d_mean_um": 500.0,
+      "d_sigma_um": 1.8,
+      "carryover_scale": 1000.0
+    }
+  ],
+  "flows": [
+    {
+      "from": 1,
+      "to": 24,
+      "F_in": 4.0,
+      "f_gas": 0.65
+    },
+    {
+      "from": 2,
+      "to": 24,
+      "F_in": 13.5,
+      "f_gas": 0.70
+    },
+    {
+      "from": 24,
+      "to": 50,
+      "F_in": 30.0,
+      "f_gas": 0.20
+    }
+  ],
+  "solver": {
+    "t0": 0.0,
+    "t_end": 10.0,
+    "dt": 0.1
+  },
+  "physics": {
+    "g": 9.81
+  }
+}
