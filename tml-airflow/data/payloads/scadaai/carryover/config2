@@ -394,7 +394,8 @@
 			"g": 9.81
 		},		
         "sendtotopic": "carryover_physics",
-        "topologyname": "config2" 
+        "topologyname": "config2",
+        "localfoldername": "mycarryoverdata"
 	},
 	"preprocessing": {
 		"step": "4",
