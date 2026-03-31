@@ -162,7 +162,8 @@
 		},		
         "sendtotopic": "carryover_physics",
         "topologyname": "config1",
-        "localfoldername": "mycarryoverdata"
+        "localfoldername": "mycarryoverdata",
+        "rollbackoffset": 300 
 	},
 	"preprocessing": {
 		"step": "4",
