@@ -164,7 +164,8 @@
         "topologyname": "config1",
         "localfoldername": "mycarryoverdata",
         "rollbackoffsets": 10,
-        "callback_url": ""
+        "callback_url": "",
+        "time_interval": 30
 	},
 	"preprocessing": {
 		"step": "4",
