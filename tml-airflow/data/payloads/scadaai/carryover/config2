@@ -360,7 +360,8 @@
         "localfoldername": "mycarryoverdata",
         "rollbackoffsets": 300,
         "callback_url": "",
-        "time_interval": 30
+        "time_interval": 30,
+        "physics_preprocessed_topic": "scada_wth_phyics"  
 	},
 	"preprocessing": {
 		"step": "4",
