@@ -361,7 +361,7 @@
         "rollbackoffsets": 300,
         "callback_url": "",
         "time_interval": 30,
-        "preprocessed_physics_topic": "scada_wth_phyics"  
+        "preprocessed_physics_topic": "scada_with_physics"  
 	},
 	"preprocessing": {
 		"step": "4",
