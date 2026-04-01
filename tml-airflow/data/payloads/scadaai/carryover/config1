@@ -75,7 +75,7 @@
 				"gravity_h": 2.5,
 				"d_mean_um": 220.0,
 				"d_sigma_um": 1.4,
-				"carryover_scale": 0.001
+				"carryover_scale": 0.1
 			},
 			{
 				"id": 2,
@@ -93,7 +93,7 @@
 				"gravity_h": 2.3,
 				"d_mean_um": 240.0,
 				"d_sigma_um": 1.5,
-				"carryover_scale": 0.001
+				"carryover_scale": 0.1
 			},
 			{
 				"id": 24,
@@ -111,7 +111,7 @@
 				"gravity_h": 2.0,
 				"d_mean_um": 300.0,
 				"d_sigma_um": 1.6,
-				"carryover_scale": 0.001
+				"carryover_scale": 0.1
 			},
 			{
 				"id": 50,
@@ -129,7 +129,7 @@
 				"gravity_h": 4.0,
 				"d_mean_um": 500.0,
 				"d_sigma_um": 1.8,
-				"carryover_scale": 0.001
+				"carryover_scale": 0.1
 			}
 		],
 		"flows": [
