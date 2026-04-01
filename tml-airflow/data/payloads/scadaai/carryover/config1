@@ -165,7 +165,8 @@
         "localfoldername": "mycarryoverdata",
         "rollbackoffsets": 10,
         "callback_url": "",
-        "time_interval": 30
+        "time_interval": 30,
+        "physics_preprocessed": "scada_wth_phyics"  
 	},
 	"preprocessing": {
 		"step": "4",
