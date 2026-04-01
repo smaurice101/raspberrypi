@@ -359,7 +359,8 @@
         "topologyname": "config2",
         "localfoldername": "mycarryoverdata",
         "rollbackoffsets": 300,
-        "callback_url": ""
+        "callback_url": "",
+        "time_interval": 30
 	},
 	"preprocessing": {
 		"step": "4",
