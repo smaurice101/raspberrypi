@@ -170,21 +170,21 @@
 	},
 	"preprocessing": {
 		"step": "4",
-		"jsoncriteria": "uid=data.WellUWI,filter:allrecords~subtopics=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~values=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~identifiers=data.SeparatorMetrics.RawFields.carryover,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure~datetime=data.AcquisitionTime~msgid=data.Source~latlong=",
-		"rawdatatopic": "scada-raw-data",
-		"preprocessdatatopic": "scada-preprocess-data",
+		"jsoncriteria": "uid=data.WellUWI,filter:allrecords~subtopics=data.SeparatorMetrics.RawFields.carryover_bias,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure,data.SeparatorMetrics.RawFields.carryover_sim,data.SeparatorMetrics.RawFields.carryover_scada_norm~values=data.SeparatorMetrics.RawFields.carryover_bias,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure,data.SeparatorMetrics.RawFields.carryover_sim,data.SeparatorMetrics.RawFields.carryover_scada_norm~identifiers=data.SeparatorMetrics.RawFields.carryover_sim,data.SeparatorMetrics.RawFields.stokes_number,data.SeparatorMetrics.RawFields.density_ratio,data.SeparatorMetrics.RawFields.emulsion_ratio,data.SeparatorMetrics.RawFields.inversion_risk,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut,data.SeparatorMetrics.RawFields.gasFlowRate,data.SeparatorMetrics.RawFields.waterFlowRate,data.SeparatorMetrics.RawFields.operatingPressure,data.SeparatorMetrics.RawFields.carryover_sim,data.SeparatorMetrics.RawFields.carryover_scada_norm~datetime=data.AcquisitionTime~msgid=data.Source~latlong=",
+		"rawdatatopic": "scada_with_physics",
+		"preprocessdatatopic": "scada_with_physics_preprocess",
 		"preprocesstypes": "raw,trend,avg,variance",
-		"windowinstance": "scada-preprocess",
+		"windowinstance": "scada-preprocess_physics",
 		"rollbackoffsets": "300"
 	},
 	"machinelearning": {
 		"step": "5",
 		"trainingdatafolder": "scada-ml-models",
 		"ml_data_topic": "scada-ml-data",
-		"preprocess_data_topic": "scada-preprocess-data",
+		"preprocess_data_topic": "scada_with_physics_preprocess",
 		"rollbackoffsets": 500,
 		"islogistic": 0,
-		"dependentvariable": "data.SeparatorMetrics.RawFields.carryover_preprocessed_Raw",
+		"dependentvariable": "data.SeparatorMetrics.RawFields.carryover_bias_preprocessed_Raw",
 		"independentvariables": "data.SeparatorMetrics.RawFields.stokes_number_preprocessed_Raw,data.SeparatorMetrics.RawFields.density_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.emulsion_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.inversion_risk_preprocessed_Raw,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut_preprocessed_Raw,data.SeparatorMetrics.RawFields.gasFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.waterFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.operatingPressure_preprocessed_Trend",
 		"windowinstance": "scada-ml"
 	},
@@ -196,7 +196,7 @@
 		"inputdata": "",
 		"streamstojoin": "data.SeparatorMetrics.RawFields.stokes_number_preprocessed_Raw,data.SeparatorMetrics.RawFields.density_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.emulsion_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.inversion_risk_preprocessed_Raw,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut_preprocessed_Raw,data.SeparatorMetrics.RawFields.gasFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.waterFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.operatingPressure_preprocessed_Trend",
 		"ml_prediction_topic": "scada-ml-prediction-results-output",
-		"preprocess_data_topic": "scada-preprocess-data",
+		"preprocess_data_topic": "scada_with_physics_preprocess",
 		"windowinstance": "scada-prediction"
 	},
 	"agenticai": {
