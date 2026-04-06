@@ -1329,7 +1329,7 @@
 		"sendtotopic": "carryover_physics",
 		"topologyname": "config_50vessels",
 		"localfoldername": "mycarryoverdata",
-		"rollbackoffsets": 300,
+		"rollbackoffsets": 700,
 		"callback_url": "",
 		"time_interval": 30,
 		"preprocessed_physics_topic": "scada_with_physics",
