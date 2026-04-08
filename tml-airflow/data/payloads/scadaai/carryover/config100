@@ -4,7 +4,7 @@
 	"slave_id": 1,
 	"base_url": "http://localhost:9002",
 	"read_interval_seconds": 0.5,
-	"callback_url": "http://localhost:9002/api/v1/vessel_data",
+	"callback_url": "",
 	"max_reads": -1,
 	"start_register": 40001,
 	"sendtotopic": "scada-raw-data",
