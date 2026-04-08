@@ -586,8 +586,7 @@
 		"preprocessdatatopic": "scada_with_physics_preprocess",
 		"preprocesstypes": "raw,trend,avg,variance",
 		"windowinstance": "scada-preprocess_physics-20",
-		"rollbackoffsets": "600",
-        "pathtotmlattrs": "oem=n/a,lat=n/a,long=n/a,location=n/a,identifier=data.SeparatorMetrics.RawFields.carryover_sim"
+		"rollbackoffsets": "600"
 	},
 	"machinelearning": {
 		"step": "5",
