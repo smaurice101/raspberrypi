@@ -2597,7 +2597,7 @@
 		"trainingdatafolder": "scada-ml-models",
 		"ml_data_topic": "scada-ml-data",
 		"preprocess_data_topic": "scada_with_physics_preprocess",
-		"rollbackoffsets": 500,
+		"rollbackoffsets": 300,
 		"islogistic": 0,
 		"dependentvariable": "data.SeparatorMetrics.RawFields.carryover_bias_preprocessed_Raw",
 		"independentvariables": "data.SeparatorMetrics.RawFields.stokes_number_preprocessed_Raw,data.SeparatorMetrics.RawFields.density_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.emulsion_ratio_preprocessed_Raw,data.SeparatorMetrics.RawFields.inversion_risk_preprocessed_Raw,data.SeparatorMetrics.RawFields.phseInversionCriticalWaterCut_preprocessed_Raw,data.SeparatorMetrics.RawFields.gasFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.waterFlowRate_preprocessed_Trend,data.SeparatorMetrics.RawFields.operatingPressure_preprocessed_Trend",
