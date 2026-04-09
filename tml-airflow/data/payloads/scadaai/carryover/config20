@@ -52,19 +52,27 @@
 		"solidDensity": 1
 	},
 	"vessel_names": {
-		"1": "HP Sep Train A",
-		"2": "HP Sep Train B",
-		"3": "MP Sep Train A",
-		"4": "MP Sep Train B",
-		"5": "LP Sep Train A",
-		"6": "LP Sep Train B",
-		"7": "FWKO A",
-		"8": "FWKO B",
-		"9": "Stock Tank A",
-		"10": "Stock Tank B",
-		"11": "GastoSales Scrubber",
-		"12": "Flare Gas Knock‑Out"
-	},
+  "1": "Sep1A",
+  "2": "Sep1B",
+  "3": "Sep2A",
+  "4": "Sep2B",
+  "5": "Sep3A",
+  "6": "Sep3B",
+  "7": "Sep4A",
+  "8": "Sep4B",
+  "9": "Sep5A",
+  "10": "Sep5B",
+  "11": "Sep6A",
+  "12": "Sep6B",
+  "13": "Deoiler1",
+  "14": "Deoiler2",
+  "15": "Deoiler3",
+  "16": "TestSep1",
+  "17": "TestSep2",
+  "18": "TestSep3",
+  "19": "HT1",
+  "20": "HT2"
+},
 	"carryover_topology": {
 		"vessels": [
 			{
