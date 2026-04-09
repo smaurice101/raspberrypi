@@ -594,7 +594,7 @@
 		"preprocessdatatopic": "scada_with_physics_preprocess",
 		"preprocesstypes": "raw,trend,avg,variance",
 		"windowinstance": "scada-preprocess_physics-20",
-		"rollbackoffsets": "600"
+		"rollbackoffsets": "400"
 	},
 	"machinelearning": {
 		"step": "5",
