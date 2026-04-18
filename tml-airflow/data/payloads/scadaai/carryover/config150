@@ -3967,7 +3967,7 @@
 		"callback_url": "",
 		"time_interval": 5,
 		"preprocessed_physics_topic": "scada_with_physics",
-		"savetodiskfrequency": 1
+		"savetodiskfrequency": 0
 	},
 	"preprocessing": {
 		"step": "4",
