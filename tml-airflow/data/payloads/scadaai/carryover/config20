@@ -600,7 +600,7 @@
 	},
 	"preprocessing1": {
 		"step": "4",
-		"jsoncriteria": "uid=EntityName,filter:allrecords~subtopics=PreprocessSubtopic~values=hyperprediction~identifiers=PreprocessSubtopic~datetime=~msgid=EntityName~latlong=",
+		"jsoncriteria": "uid=EntityName,filter:allrecords~subtopics=PreprocessSubtopic~values=hyperprediction~identifiers=PreprocessSubtopic~datetime=TimeStamp~msgid=EntityName~latlong=",
 		"rawdatatopic": "scada_with_physics_cleaned",
 		"preprocessdatatopic": "scada_with_physics_preprocess_cleaned",
 		"preprocesstypes": "raw,trend,avg,variance",
