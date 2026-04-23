@@ -67,7 +67,7 @@
     "waterDensity": {"min": 800, "max": 1200},
     "waterViscosity": {"min": 0.5, "max": 1000},
     "waterSurfaceTension": {"min": 50, "max": 10000},
-    "hclWaterSurfaceTension": {"min": 0, "max": 100},
+    "hclWaterSurfaceTension": {"min": 0, "max": 10000},
     "phseInversionCriticalWaterCut": {"min": 0, "max": 1000},
     "solidFlowRate": {"min": 0, "max": 1000},
     "solidDensity": {"min": 10, "max": 4000}
