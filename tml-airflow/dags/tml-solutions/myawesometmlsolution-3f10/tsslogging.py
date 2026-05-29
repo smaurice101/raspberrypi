@@ -95,7 +95,7 @@ def ingress(sname):
     data:
       allow-snippet-annotations: "true"
   """.format(sname,sname,sname)
-    
+
   return ing
 
 def ingressgrpc(sname):
@@ -164,43 +164,6 @@ def ingressgrpc(sname):
 
   return ing
 
-def ingressnoext(sname): # Localfile being accessed
-  ing = """
-    ############# nginx-ingress-{}.yml
-    apiVersion: networking.k8s.io/v1
-    kind: Ingress
-    metadata:
-      name: tml-ingress
-      annotations:
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-    spec:
-      ingressClassName: nginx
-      rules:
-        - host: tml.tss
-          http:
-            paths:
-              - path: /viz(/|$)(.*)
-                pathType: ImplementationSpecific
-                backend:
-                  service:
-                    name: {}-visualization-service
-                    port:
-                      number: 80
-    ---
-    apiVersion: v1
-    kind: ConfigMap
-    apiVersion: v1
-    metadata:
-      name: ingress-nginx-controller
-      namespace: ingress-nginx
-    data:
-      allow-snippet-annotations: "true"
-  """.format(sname,sname,sname)
-
-  return ing
-
-  
 def writeoutymls(op,ingyml,solyml,sname):
 #                kcmd = "kubectl apply -f kafka.yml -f secrets.yml -f mysql-storage.yml -f mysql-db-deployment.yml -f qdrant.yml -f privategpt.yml -f ollama.yml -f {}.yml".format(sname)
   file_name=f"{op}/ingress.yml"
@@ -554,6 +517,8 @@ spec:
           value: "--agenticai-agenttoolfunctions--"
         - name: agent_team_supervisor_topic
           value: "--agenticai-agent_team_supervisor_topic--"
+        - name: contextwindow
+          value: "--agenticai-contextwindow--"          
         - name: TSS
           value: "0"
         - name: KUBE
@@ -589,6 +554,43 @@ spec:
   with open(file_name, "w") as file:
     file.write(ing)
 
+def ingressnoext(sname): # Localfile being accessed
+  ing = """
+    ############# nginx-ingress-{}.yml
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: tml-ingress
+      annotations:
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: tml.tss
+          http:
+            paths:
+              - path: /viz(/|$)(.*)
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: {}-visualization-service
+                    port:
+                      number: 80
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ingress-nginx-controller
+      namespace: ingress-nginx
+    data:
+      allow-snippet-annotations: "true"
+  """.format(sname,sname,sname)
+
+  return ing
+
+
 def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
                 guser,grepo,chip,dockerusername,externalport,kuser,mqttuser,airflowport,vipervizport,
                 step4maxrows,step4bmaxrows,step5rollbackoffsets,step6maxrows,step1solutiontitle,step1description,
@@ -620,7 +622,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                 step9bteamleadprompt='',
                 step9bsupervisor_topic='',
                 step9bagenttoolfunctions='',
-                step9bagent_team_supervisor_topic=''):
+                step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9blocalmodelsfolder='',step9bagenttopic=''):
                
     cp = ""
     cpp = ""
@@ -829,7 +831,7 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
                value: '{}'                                             
              - name: step9prompt # STEP 9 Enter PGPT prompt
-               value: "{}"                  
+               value: '{}'                  
              - name: step9context # STEP 9 Enter PGPT context
                value: '{}'             
              - name: step9keyattribute
@@ -889,17 +891,23 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
              - name: step9bembedding
                value: '{}'
              - name: step9bagents_topic_prompt
-               value: "{}"
+               value: '{}'
              - name: step9bteamlead_topic
                value: '{}'
              - name: step9bteamleadprompt
-               value: "{}"
+               value: '{}'
              - name: step9bsupervisor_topic
                value: '{}'
              - name: step9bagenttoolfunctions
-               value: "{}"
+               value: '{}'
              - name: step9bagent_team_supervisor_topic
                value: '{}'               
+             - name: step9bcontextwindow
+               value: '{}'                              
+             - name: step9bagenttopic
+               value: '{}'                              
+             - name: step9blocalmodelsfolder
+               value: '{}'                              
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -959,11 +967,10 @@ def genkubeyaml(sname,containername,clientport,solutionairflowport,solutionviper
                            step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
                            step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
                            step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
-                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,step9bagenttopic,step9blocalmodelsfolder,
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname,sname,sname,mport,cpp,sname)
-
-
+                    
     return kcmd
 
 def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solutionvipervizport,solutionexternalport,sdag,
@@ -997,7 +1004,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                      step9bteamleadprompt='',
                      step9bsupervisor_topic='',
                      step9bagenttoolfunctions='',
-                     step9bagent_team_supervisor_topic=''):
+                     step9bagent_team_supervisor_topic='',step9bcontextwindow='',step9blocalmodelsfolder='',step9bagenttopic=''):
                                          
     cp = ""
     cpp = ""
@@ -1202,7 +1209,7 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step9rollbackoffset # STEP 9 rollbackoffset field can be adjusted here.  Higher the number more information sent to privateGPT, BUT more memory needed.
                value: '{}'                  
              - name: step9prompt # STEP 9 Enter PGPT prompt
-               value: "{}"                  
+               value: '{}'                  
              - name: step9context # STEP 9 Enter PGPT context
                value: '{}'                                 
              - name: step9keyattribute
@@ -1262,17 +1269,23 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
              - name: step9bembedding
                value: '{}'
              - name: step9bagents_topic_prompt
-               value: "{}"
+               value: '{}'
              - name: step9bteamlead_topic
                value: '{}'
              - name: step9bteamleadprompt
-               value: "{}"
+               value: '{}'
              - name: step9bsupervisor_topic
                value: '{}'
              - name: step9bagenttoolfunctions
-               value: "{}"
+               value: '{}'
              - name: step9bagent_team_supervisor_topic
                value: '{}'                              
+             - name: step9bcontextwindow
+               value: '{}'                                             
+             - name: step9bagenttopic
+               value: '{}'                              
+             - name: step9blocalmodelsfolder
+               value: '{}'                                             
              - name: step1solutiontitle # STEP 1 solutiontitle field can be adjusted here. 
                value: '{}'                              
              - name: step1description # STEP 1 description field can be adjusted here. 
@@ -1316,10 +1329,10 @@ def genkubeyamlnoext(sname,containername,clientport,solutionairflowport,solution
                            step9brollbackoffset,step9bdeletevectordbcount,step9bvectordbpath,step9btemperature,
                            step9bvectordbcollectionname,step9bollamacontainername,step9bCUDA_VISIBLE_DEVICES,step9bmainip,
                            step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,
-                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,                           
+                           step9bsupervisor_topic,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,step9bagenttopic,step9blocalmodelsfolder,                           
                            step1solutiontitle,step1description,kubebroker,kafkabroker,
                            sname,sname,solutionvipervizport,sname)
-  
+                    
     return kcmd
 
 def getqip():
@@ -1333,7 +1346,7 @@ def getqip():
         
 def optimizecontainer(cname,sname,sd):
     rbuf=os.environ['READTHEDOCS']
-    buf="docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env GPG_KEY='' --env PYTHON_SHA256=''  --env SMTP_PASSWORD='' --env SMTP_SERVER='' --env SMTP_USERNAME='' --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env SOLUTIONDAG={} --env TSS=-9  --env READTHEDOCS='{}' --env MQTTPASSWORD='' --env DOCKERPASSWORD=''  --env  GITPASSWORD=''  --env recipient='' --env PATH='' --env KAFKACLOUDPASSWORD='' {}".format(os.environ['DOCKERUSERNAME'], sname, sd, rbuf[:4],cname )
+    buf="docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env GPG_KEY='' --env PYTHON_SHA256='' --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env SOLUTIONDAG={} --env TSS=-9  --env READTHEDOCS='{}' --env MQTTPASSWORD='' --env DOCKERPASSWORD='' --env SMTP_PASSWORD='' --env SMTP_SERVER='' --env SMTP_USERNAME='' --env  GITPASSWORD='' --env recipient='' --env PATH='' --env KAFKACLOUDPASSWORD='' {}".format(os.environ['DOCKERUSERNAME'], sname, sd, rbuf[:4],cname )
     
     print("Container optimizing: {}".format(buf))
     subprocess.call(buf, shell=True)
@@ -1374,6 +1387,8 @@ def optimizecontainer(cname,sname,sd):
         
     subprocess.call(buf, shell=True)
     subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
+    proc=subprocess.Popen("docker push {}".format(cname), shell=True)
+
     return status
     
 def testvizconnection(portnum):
