@@ -1387,6 +1387,8 @@ def optimizecontainer(cname,sname,sd):
         
     subprocess.call(buf, shell=True)
     subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
+    proc=subprocess.Popen("docker push {}".format(cname), shell=True)
+
     return status
     
 def testvizconnection(portnum):
