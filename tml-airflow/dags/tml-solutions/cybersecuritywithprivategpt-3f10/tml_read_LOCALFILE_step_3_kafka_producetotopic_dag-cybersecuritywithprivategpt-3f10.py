@@ -37,6 +37,45 @@ default_args = {
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+from airflow.decorators import dag, task
+import sys
+import maadstml
+import tsslogging
+import os
+import subprocess
+import json 
+import time
+import random 
+import threading
+from contextlib import contextmanager
+from contextlib import ExitStack
+import re
+
+sys.dont_write_bytecode = True
+######################################## USER CHOOSEN PARAMETERS ########################################
+default_args = {
+  'owner' : 'Sebastian Maurice', # <<< *** Change as needed   
+  'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
+  'microserviceid' : '', # <<< *** leave blank
+  'producerid' : 'iotsolution',   # <<< *** Change as needed   
+  'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
+  'identifier' : 'TML solution',   # <<< *** Change as needed   
+  'inputfile' : '',#'/rawdatademo/cisco_network_data.txt',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
+  'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
+  'topicid' : '-999', # <<< ********* do not modify  
+  'sleep' : 0.15, # << Control how fast data streams - if 0 - the data will stream as fast as possible - BUT this may cause connecion reset by peer 
+  'docfolder' : '/rawdatademo/mylogsdemo,/rawdatademo/mylogs2demo', # You can read TEXT files or any file in these folders that are inside the volume mapped to /rawdata
+  'doctopic' : 'rtms-stream-mylogs,rtms-stream-mylogs2',  # This is the topic that will contain the docfolder file data
+  'chunks' :3000, # if 0 the files in docfolder are read line by line, otherwise they are read by chunks i.e. 512
+  'docingestinterval' : 0, # specify the frequency in seconds to read files in docfolder - if 0 the files are read ONCE
+}
+
+######################################## DO NOT MODIFY BELOW #############################################
+
 # This sets the lat/longs for the IoT devices so it can be map
 VIPERTOKEN=""
 VIPERHOST=""
@@ -103,9 +142,9 @@ def ingestfiles():
     while True:
        for dr,tr in zip(dirbuf,maintopicbuf):
          filenames = []
-         if os.path.isdir("/{}".format(dr)):
-           a = [os.path.join("/{}".format(dr), f) for f in os.listdir("/{}".format(dr)) if 
-           os.path.isfile(os.path.join("/{}".format(dr), f))]
+         if os.path.isdir("{}".format(dr)):
+           a = [os.path.join("{}".format(dr), f) for f in os.listdir("{}".format(dr)) if 
+           os.path.isfile(os.path.join("{}".format(dr), f))]
            filenames.extend(a)
            print("filename=",filenames)
            if len(filenames) > 0:
