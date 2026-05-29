@@ -104,7 +104,7 @@ def ingestfiles():
        for dr,tr in zip(dirbuf,maintopicbuf):
          filenames = []
          if os.path.isdir("/{}".format(dr)):
-           a = [os.path.join("/{}".format(dr), f) for f in os.listdir("/rawdata/{}".format(dr)) if 
+           a = [os.path.join("/{}".format(dr), f) for f in os.listdir("/{}".format(dr)) if 
            os.path.isfile(os.path.join("/{}".format(dr), f))]
            filenames.extend(a)
            print("filename=",filenames)
