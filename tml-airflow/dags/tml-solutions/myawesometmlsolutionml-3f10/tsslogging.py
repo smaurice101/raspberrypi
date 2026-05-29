@@ -1377,17 +1377,30 @@ def optimizecontainer(cname,sname,sd):
       except Exception as e:
          print("ERROR: ",e)
          continue
-            
-    buf="docker image tag  {}sq:latest  {}".format(cname,cname)
-    print("Docker image tag: {}".format(buf))
-    subprocess.call(buf, shell=True)
-    time.sleep(3)
-    buf="docker rmi {}sq:latest --force".format(cname)
-    print("Docker image rmi: {}".format(buf))
+
+
+      if status == "good":
+        # 1. Update the image metadata tags
+        buf = "docker image tag {}sq:latest {}".format(cname, cname)
+        print("Docker image tag: {}".format(buf))
+        subprocess.call(buf, shell=True)
         
-    subprocess.call(buf, shell=True)
-    subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
-    proc=subprocess.Popen("docker push {}".format(cname), shell=True)
+        # 2. Remove the temporary 'sq' image pointer 
+        buf = "docker rmi {}sq:latest --force".format(cname)
+        print("Docker image rmi: {}".format(buf))
+        subprocess.call(buf, shell=True)
+        
+        # 3. Trigger the background push safely
+        print("🚀 Optimization verified. Initiating async push for {}...".format(cname))
+        proc = subprocess.Popen(
+            "docker push {}".format(cname), 
+            shell=True,
+            stdout=subprocess.DEVNULL,  # Prevents 17GB of progress bars from flooding your logs
+            stderr=subprocess.DEVNULL
+        )
+        
+        # 4. Clean up dangling builder layers AFTER the push process is handed off to the engine daemon
+        subprocess.call("docker image prune -f", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)    
 
     return status
     
