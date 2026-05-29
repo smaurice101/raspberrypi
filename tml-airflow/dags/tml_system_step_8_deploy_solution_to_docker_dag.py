@@ -9,6 +9,7 @@ import tsslogging
 import git
 import time
 import sys
+import threading
 
 sys.dont_write_bytecode = True
 
@@ -70,18 +71,19 @@ def dockerit(**context):
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
        
-         status=tsslogging.optimizecontainer(cname,sname,sd) 
-         if status=="":   
-           tsslogging.locallogs("WARN", "STEP 8: There seems to be an issue optimizing the container.  Here is the commit command: {} - message={}.  Container may NOT pushed.".format(cbuf,v)) 
-         else:
-           tsslogging.locallogs("INFO", "STEP 8: Docker Container created and optimized.  Will push it now.  Here is the commit command: {} - message={}".format(cbuf,v))         
-           
-         #v=subprocess.call("docker push {}".format(cname), shell=True) 
-         proc=subprocess.Popen("docker push {}".format(cname), shell=True)
-         time.sleep(3)   
-         proc.terminate()
-         proc.wait()
+         script_env = os.environ.copy()
+      
+         # Spawns the script asynchronously and moves to the next line of Python instantly
+         proc = subprocess.Popen(
+            ["/tmux/optimizedocker.sh", cname, sname, sd, repo],
+            env=script_env,
+            stdout=subprocess.DEVNULL,  # Suppresses output so it runs completely silently
+            stderr=subprocess.DEVNULL,
+            start_new_session=True      # Detaches the script so it keeps running even if the main Python process restarts
+          )
 
+         tsslogging.locallogs("INFO", "STEP 8: Docker Container process started - check Github logs for status - it could take few minutes. Here is the commit command: {} - message={}".format(cbuf,v))         
+           
        elif len(cid) <= 1:
               tsslogging.locallogs("ERROR", "STEP 8: There seems to be an issue with docker commit. Here is the command: docker commit {} {}".format(cid,cname)) 
               tsslogging.tsslogit("Deploying to Docker in {}".format(os.path.basename(__file__)), "ERROR" )             
