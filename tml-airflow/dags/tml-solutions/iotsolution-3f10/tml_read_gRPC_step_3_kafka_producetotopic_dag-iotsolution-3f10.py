@@ -1,239 +1,290 @@
-import asyncio
-import signal
-from google.protobuf.json_format import MessageToJson
-from grpc_reflection.v1alpha import reflection
-import maadstml
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 from datetime import datetime
 from airflow.decorators import dag, task
-import grpc
-from concurrent import futures
-import time
-import tml_grpc_pb2_grpc as pb2_grpc
-import tml_grpc_pb2 as pb2
-
-import tsslogging
 import sys
+import maadstml
+import tsslogging
 import os
 import subprocess
-import random
-import json
-import nest_asyncio
-nest_asyncio.apply()
-#from grpc.experimental import aio
-sys.dont_write_bytecode = True
-##################################################  gRPC SERVER ###############################################
-# This is a gRPCserver that will handle connections from a client
-# There are two endpoints you can use to stream data to this server:
-# 1. jsondataline -  You can POST a single JSONs from your client app. Your json will be streamed to Kafka topic.
-# 2. jsondataarray -  You can POST JSON arrays from your client app. Your json will be streamed to Kafka topic.
+import json 
+import time
+import random 
+import threading
+from contextlib import contextmanager
+from contextlib import ExitStack
+import re
 
+sys.dont_write_bytecode = True
 ######################################## USER CHOOSEN PARAMETERS ########################################
 default_args = {
-  'owner' : 'Sebastian Maurice', # <<< *** Change as needed
+  'owner' : 'Sebastian Maurice', # <<< *** Change as needed   
   'enabletls': '1', # <<< *** 1=connection is encrypted, 0=no encryption
-  'microserviceid' : '', # <<< ***** leave blank
-  'producerid' : 'iotsolution',  # <<< *** Change as needed
+  'microserviceid' : '', # <<< *** leave blank
+  'producerid' : 'iotsolution',   # <<< *** Change as needed   
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
-  'identifier' : 'TML solution',  # <<< *** Change as needed
-  'tss_gRPC_Port' : '9001',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001
-  'gRPC_Port' : '9002',  # <<< ***** replace with gRPC port i.e. this gRPC server listening on port 9001
+  'identifier' : 'TML solution',   # <<< *** Change as needed   
+  'inputfile' : '',#'/rawdatademo/cisco_network_data.txt',  # <<< ***** replace ?  to input file name to read. NOTE this data file should be JSON messages per line and stored in the HOST folder mapped to /rawdata folder 
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
-  'topicid' : '-999', # <<< ********* do not modify
+  'topicid' : '-999', # <<< ********* do not modify  
+  'sleep' : 0.15, # << Control how fast data streams - if 0 - the data will stream as fast as possible - BUT this may cause connecion reset by peer 
+  'docfolder' : '/rawdatademo/mylogsdemo,/rawdatademo/mylogs2demo', # You can read TEXT files or any file in these folders that are inside the volume mapped to /rawdata
+  'doctopic' : 'rtms-stream-mylogs,rtms-stream-mylogs2',  # This is the topic that will contain the docfolder file data
+  'chunks' :3000, # if 0 the files in docfolder are read line by line, otherwise they are read by chunks i.e. 512
+  'docingestinterval' : 0, # specify the frequency in seconds to read files in docfolder - if 0 the files are read ONCE
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
 
-
+# This sets the lat/longs for the IoT devices so it can be map
 VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
-HTTPADDR=""
-VIPERHOSTFROM=""
 
+def read_in_chunks(file_object, chunk_size=1024):
+    """Lazy function (generator) to read a file piece by piece.
+    Default chunk size: 1k."""
+    while True:
+        try:
+          if chunk_size != 0:
+            data = file_object.read(chunk_size).decode('utf-8')            
+            if len(data)>0 and data[-1] != ' ':
+                 ct=0
+                 for c in reversed(data):
+                   if c == ' ':
+                        break
+                   ct = ct +1
+                 if ct < len(data):
+                   file_object.seek(file_object.tell()-ct)
+                   data = data[:len(data)-ct]
+          else:
+            data = file_object.readline().decode('utf-8')            
+          data=data.replace('"','').replace("'","").replace("\\n"," ").replace('\n'," ").replace("\\r"," ").replace('\r'," ").replace(';'," ").replace('&'," ").strip()
+          if not data:
+               break
+          yield data          
+        except Exception as e:
+           break
 
-class TmlprotoService(pb2_grpc.TmlprotoServicer):
+def readallfiles(fd,tr,cs=1024):
+  args=default_args
+  producerid='userfilestream'
+  print("fd=",fd.name)
+  for piece in read_in_chunks(fd,cs):
+        piece=re.sub(' +', ' ', piece)
+        pj='{"RTMSMessage":"' + piece + '"}'
+        
+        producetokafka(pj, "", "",producerid,tr,"",args)
+  return []    
 
-  def __init__(self, *args, **kwargs):
-    pass
+def ingestfiles():
+    args = default_args
+    buf = default_args['docfolder']
+    chunks = int(default_args['chunks'])
+    maintopic = default_args['doctopic']
+    producerid='userfilestream'     
+    interval=int(default_args['docingestinterval'])
 
-  async def GetServerResponse(self, request, context):
-
-    maintopic = default_args['topics']
-    producerid = default_args['producerid']
-
-
-    if request != None:
-     try:
-      message = json.dumps(json.loads(request.message))
-      inputbuf=f"{message}"
-      print("inputbuf=",inputbuf)
-
-      topicid=default_args['topicid']
-
-     # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topi> delay=int(args['delay'])
-      enabletls = int(default_args['enabletls'])
-      identifier = default_args['identifier']
-      delay = int(default_args['delay'])
-      try:
-        result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,'',
-                                            topicid,identifier)
-        return pb2.MessageResponse(message="Success producing message",received=True)
-      except Exception as e:
-        return pb2.MessageResponse(message="Failed to produce message, err={} message={}".format(e,inputbuf),received=False)
-     except Exception as e:
-      return pb2.MessageResponse(message="Failed to produce message, err={} message={}".format(e,inputbuf),received=False)
-
-
-    return pb2.MessageResponse(message="Failed to produce message",received=False)
-
-async def serve():
-
-
-    tsslogging.locallogs("INFO", "STEP 3: producing data started")
-    repo=tsslogging.getrepo()
-    tsslogging.tsslogit("gRPC producing DAG in {}".format(os.path.basename(__file__)), "INFO" )
-    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-    mainport=0
-    server_options = [
-        ("grpc.keepalive_time_ms", 20000),
-        ("grpc.keepalive_timeout_ms", 10000),
-        ("grpc.http2.min_ping_interval_without_data_ms", 5000),
-        ("grpc.max_connection_idle_ms", 10000),
-        ("grpc.max_connection_age_ms", 30000),
-        ("grpc.max_connection_age_grace_ms", 5000),
-        ("grpc.http2.max_pings_without_data", 5),
-        ("grpc.keepalive_permit_without_calls", 1),
-    ]
-
-    try:
-        server = grpc.aio.server(futures.ThreadPoolExecutor(),options=server_options)
-#        server = grpc.server(futures.ThreadPoolExecutor(max_workers=100))
-        SERVICE_NAMES = (
-          pb2.DESCRIPTOR.services_by_name["Tmlproto"].full_name,
-          reflection.SERVICE_NAME,
-        )
-        reflection.enable_server_reflection(SERVICE_NAMES, server)
-
-        pb2_grpc.add_TmlprotoServicer_to_server(TmlprotoService(), server)
-        if os.environ['TSS']=="0":
-#          server_creds = grpc.alts_server_credentials()
-          with open('/{}/tml-airflow/certs/server.key'.format(repo), 'rb') as f:
-            server_key = f.read()
-          with open('/{}/tml-airflow/certs/server.crt'.format(repo), 'rb') as f:
-           server_cert = f.read()
-          server_creds = grpc.ssl_server_credentials( [(server_key, server_cert)] )
-          mainport=int(default_args['gRPC_Port'])
-          server.add_secure_port("[::]:{}".format(int(default_args['gRPC_Port'])), server_creds)
-
-        else:
-          server.add_insecure_port("[::]:{}".format(int(default_args['tss_gRPC_Port'])))
-          mainport=int(default_args['tss_gRPC_Port'])
+    #gather files in the folders
+    dirbuf = buf.split(",")
+    # check if user wants to split folders to separate topics
+    maintopicbuf = maintopic.split(",")
+    if len(maintopicbuf) > 1:
+      if len(dirbuf) != len(maintopicbuf):
+        tsslogging.locallogs("ERROR", "STEP 3: Produce LOCALFILE in {} You specified multiple doctopics, then must match docfolder".format(os.path.basename(__file__)))
+        return
+    elif len(maintopicbuf) == 1 and len(dirbuf) > 0:
+       for i in range(len(dirbuf)):
+         maintopicbuf.append(maintopic)
+    else:
+       return
+  
+    while True:
+       for dr,tr in zip(dirbuf,maintopicbuf):
+         filenames = []
+         if os.path.isdir("/{}".format(dr)):
+           a = [os.path.join("/{}".format(dr), f) for f in os.listdir("/{}".format(dr)) if 
+           os.path.isfile(os.path.join("/{}".format(dr), f))]
+           filenames.extend(a)
+           print("filename=",filenames)
+           if len(filenames) > 0:
+             with ExitStack() as stack:
+               files = [stack.enter_context(open(i, "rb")) for i in filenames]
+               contents = [readallfiles(file,tr,chunks) for file in files]
+       if interval==0:
+         break
+       else:  
+        time.sleep(interval)         
+      
+def startdirread():
+  if 'docfolder' not in default_args and 'doctopic' not in default_args and 'chunks' not in default_args and 'docingestinterval' not in default_args:
+     return
+    
+  if default_args['docfolder'] != '' and default_args['doctopic'] != '':
+    print("INFO startdirread")  
+    try:  
+      t = threading.Thread(name='child procs', target=ingestfiles)
+      t.start()
     except Exception as e:
-           tsslogging.locallogs("ERROR", "STEP 3: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e))
+      print(e)
+  
+def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
+ inputbuf=value     
+ topicid=int(args['topicid'])
 
-           tsslogging.tsslogit("ERROR: Cannot connect to gRPC server in {} - {}".format(os.path.basename(__file__),e), "ERROR" )
-           tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")
-           print("ERROR: Cannot connect to gRPC server in:",e)
-           return
+ # Add a 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic 
+ delay = int(args['delay'])
+ enabletls = int(args['enabletls'])
+ identifier = args['identifier']
 
-    tsslogging.locallogs("INFO", "STEP 3: gRPC server started .. waiting for connections")
-    await server.start()
-    print("gRPC server started - listening on port ",mainport)
-    await server.wait_for_termination()
+ try:
+    result=maadstml.viperproducetotopic(VIPERTOKEN,VIPERHOST,VIPERPORT,maintopic,producerid,enabletls,delay,'','', '',0,inputbuf,substream,
+                                        topicid,identifier)
+#    print("result=",result)
+ except Exception as e:
+    print("ERROR:",e)
 
-async def shutdown_server(server) -> None:
-    #logging.info ("Shutting down server...")
-    await server.stop(None)
+def readdata():
 
-def handle_sigterm(sig, frame) -> None:
-    asyncio.create_task(shutdown_server(server))
+  repo = tsslogging.getrepo()
+  tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+  tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
 
-async def handle_sigint() -> None:
-    loop = asyncio.get_running_loop()
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, loop.stop)
+  args = default_args  
+  inputfile=args['inputfile']
+
+  # MAin Kafka topic to store the real-time data
+  maintopic = args['topics']
+  producerid = args['producerid']
+
+  startdirread()
+  
+  if maintopic=='' or inputfile=='':
+     return
+  k=0
+  try:
+    file1 = open(inputfile, 'r')
+    print("Data Producing to Kafka Started:",datetime.now())
+  except Exception as e:
+    tsslogging.locallogs("ERROR", "Localfile producing DAG in {} - {}".format(os.path.basename(__file__),e))     
+    
+    tsslogging.tsslogit("Localfile producing DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
+    tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")        
+    return
+
+  tsslogging.locallogs("INFO", "STEP 3: reading local file..successfully")   
+
+  while True:
+    line = file1.readline()
+    line = line.replace(";", " ")
+    print("line=",line)
+    # add lat/long/identifier
+    k = k + 1
+    try:
+      if line == "":
+        #break
+        file1.seek(0)
+        k=0
+        print("Reached End of File - Restarting")
+        print("Read End:",datetime.now())
+        continue
+      producetokafka(line.strip(), "", "",producerid,maintopic,"",args)
+      # change time to speed up or slow down data   
+      time.sleep(args['sleep'])
+    except Exception as e:
+      print(e)  
+      pass  
+
+  file1.close()
 
 def windowname(wtype,sname,dagname):
     randomNumber = random.randrange(10, 9999)
     wn = "python-{}-{}-{},{}".format(wtype,randomNumber,sname,dagname)
-    with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file:
+    with open("/tmux/pythonwindows_{}.txt".format(sname), 'a', encoding='utf-8') as file: 
       file.writelines("{}\n".format(wn))
-
+    
     return wn
 
 def startproducing(**context):
-       global VIPERTOKEN
-       global VIPERHOST
-       global VIPERPORT
-       global HTTPADDR
-       global VIPERHOSTFROM
 
-       tsslogging.locallogs("INFO", "STEP 3: producing data started")
+  tsslogging.locallogs("INFO", "STEP 3: producing data started")     
+  
+  sd = context['dag'].dag_id
 
-       sd = context['dag'].dag_id
-       sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
-       pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
+  sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
+  pname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_projectname".format(sd))
+  VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))
+  VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
+  VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
+  HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
 
-       VIPERTOKEN = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERTOKEN".format(sname))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-       VIPERHOST = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERHOSTPRODUCE".format(sname))
-       VIPERPORT = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_VIPERPORTPRODUCE".format(sname))
-       HTTPADDR = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_HTTPADDR".format(sname))
+  VIPERHOSTFROM=tsslogging.getip(VIPERHOST)     
+  ti = context['task_instance']
+  ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='LOCALFILE')
+  ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
+  ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="")
+  ti.xcom_push(key="{}_IDENTIFIER".format(sname),value="{},{}".format(default_args['identifier'],default_args['inputfile']))
 
-       chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))
-       repo=tsslogging.getrepo()
+  ti.xcom_push(key="{}_FROMHOST".format(sname),value=VIPERHOSTFROM)
+  ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
 
-       if sname != '_mysolution_':
-        fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))
-       else:
-         fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))
+  ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="")
+  ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="")
+    
+  ti.xcom_push(key="{}_PORT".format(sname),value="_{}".format(VIPERPORT))
+  ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
 
-       hs,VIPERHOSTFROM=tsslogging.getip(VIPERHOST)
-       ti = context['task_instance']
-       ti.xcom_push(key="{}_PRODUCETYPE".format(sname),value='gRPC')
-       ti.xcom_push(key="{}_TOPIC".format(sname),value=default_args['topics'])
+  inputfile=default_args['inputfile']
+  if 'step3localfileinputfile' in os.environ:
+       default_args['inputfile']=os.environ['step3localfileinputfile']
+       ti.xcom_push(key="{}_inputfile".format(sname),value=default_args['inputfile'])
+  else:
+       ti.xcom_push(key="{}_inputfile".format(sname),value=default_args['inputfile'])
+  
+  docfolder=''
+  if 'docfolder' in default_args and 'doctopic' in default_args:
+    docfolder=default_args['docfolder']
+    ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
+    ti.xcom_push(key="{}_doctopic".format(sname),value=default_args['doctopic'])
+    ti.xcom_push(key="{}_chunks".format(sname),value="_{}".format(default_args['chunks']))
+    ti.xcom_push(key="{}_docingestinterval".format(sname),value="_{}".format(default_args['docingestinterval']))
+  else:  
+    ti.xcom_push(key="{}_docfolder".format(sname),value='')
+    ti.xcom_push(key="{}_doctopic".format(sname),value='')
+    ti.xcom_push(key="{}_chunks".format(sname),value='')
+    ti.xcom_push(key="{}_docingestinterval".format(sname),value='')
 
-       if os.environ['TSS']=="0":
-        ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))
-       else:
-        ti.xcom_push(key="{}_CLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))
+  if 'step3localfiledocfolder' in os.environ:
+       default_args['docfolder']=os.environ['step3localfiledocfolder']
+       ti.xcom_push(key="{}_docfolder".format(sname),value=default_args['docfolder'])
+        
+  chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))   
 
-       ti.xcom_push(key="{}_TSSCLIENTPORT".format(sname),value="_{}".format(default_args['tss_gRPC_Port']))
-       ti.xcom_push(key="{}_TMLCLIENTPORT".format(sname),value="_{}".format(default_args['gRPC_Port']))
+  repo=tsslogging.getrepo() 
 
-       ti.xcom_push(key="{}_IDENTIFIER".format(sname),value=default_args['identifier'])
-
-       ti.xcom_push(key="{}_FROMHOST".format(sname),value="{},{}".format(hs,VIPERHOSTFROM))
-       ti.xcom_push(key="{}_TOHOST".format(sname),value=VIPERHOST)
-
-       ti.xcom_push(key="{}_PORT".format(sname),value=VIPERPORT)
-       ti.xcom_push(key="{}_HTTPADDR".format(sname),value=HTTPADDR)
-
-       wn = windowname('produce',sname,sd)
-       subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
-       subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {}".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOSTFROM,VIPERPORT[1:]), "ENTER"])
-
-       tsslogging.locallogs("INFO", "STEP 3: producing data completed")
-
+  if sname != '_mysolution_':
+     fullpath="/{}/tml-airflow/dags/tml-solutions/{}/{}".format(repo,pname,os.path.basename(__file__))  
+  else:
+     fullpath="/{}/tml-airflow/dags/{}".format(repo,os.path.basename(__file__))  
+    
+  wn = windowname('produce',sname,sd)  
+  subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
+  subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viper-produce", "ENTER"])
+  subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "python {} 1 {} {}{} {} \"{}\" \"{}\"".format(fullpath,VIPERTOKEN,HTTPADDR,VIPERHOST,VIPERPORT[1:],inputfile,docfolder), "ENTER"])        
+        
 if __name__ == '__main__':
-
+    
     if len(sys.argv) > 1:
-       if sys.argv[1] == "1":
+       if sys.argv[1] == "1":  
          VIPERTOKEN = sys.argv[2]
-         VIPERHOST = sys.argv[3]
-         VIPERPORT = sys.argv[4]
-#         serve()
-
-         server = None
-         signal.signal(signal.SIGTERM, handle_sigterm)
-         try:
-            print("Starting asyncio event loop")
-            asyncio.get_event_loop().run_until_complete(serve())
-         except KeyboardInterrupt:
-           pass
+         VIPERHOST = sys.argv[3] 
+         VIPERPORT = sys.argv[4]          
+         inputfile = sys.argv[5]          
+         default_args['inputfile']=inputfile
+         docfolder = sys.argv[6]                   
+         default_args['docfolder']=docfolder
+         readdata()
 
 
 
