@@ -10,6 +10,7 @@ import git
 import time
 import sys
 import threading
+import uuid
 
 sys.dont_write_bytecode = True
 
@@ -45,7 +46,8 @@ def dockerit(**context):
        
        chip = context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_chip".format(sname))         
        cname = os.environ['DOCKERUSERNAME']  + "/{}-{}".format(sname,chip)          
-      
+       dockercname="{}-{}".format(sname,chip)    
+           
        print("Containername=",cname)
        tsslogging.locallogs("INFO", "STEP 8: Starting docker push for: {}".format(cname))
        if os.environ['TSS'] == "1":
@@ -70,18 +72,18 @@ def dockerit(**context):
          subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
-       
-         script_env = os.environ.copy()
-      
-         # Spawns the script asynchronously and moves to the next line of Python instantly
-         proc = subprocess.Popen(
-            ["/tmux/optimizedocker.sh", cname, sname, sd, repo],
-            env=script_env,
-            stdout=subprocess.DEVNULL,  # Suppresses output so it runs completely silently
-            stderr=subprocess.DEVNULL,
-            start_new_session=True      # Detaches the script so it keeps running even if the main Python process restarts
-          )
 
+         QUEUE_DIR = "/tmux/optimizer_queue"
+         os.makedirs(QUEUE_DIR, exist_ok=True)
+         #job_file = os.path.join(QUEUE_DIR, f"{cname}.job")
+    
+          # Write the arguments inside the file as metadata
+         with open(f"{QUEUE_DIR}/{dockercname}.job", "w") as f:
+              f.write(f"CNAME={cname}\n")
+              f.write(f"SNAME={sname}\n")
+              f.write(f"SD={sd}\n")
+              f.write(f"REPO={repo}\n")
+          
          tsslogging.locallogs("INFO", "STEP 8: Docker Container process started - check Github logs for status - it could take few minutes. Here is the commit command: {} - message={}".format(cbuf,v))         
            
        elif len(cid) <= 1:
