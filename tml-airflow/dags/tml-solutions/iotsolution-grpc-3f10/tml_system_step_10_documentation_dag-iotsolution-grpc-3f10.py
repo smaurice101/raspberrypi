@@ -15,26 +15,37 @@ import time
 sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
-default_args = {    
- 'conf_project' : 'Transactional Machine Learning (TML)',
- 'conf_copyright' : '2024, Otics Advanced Analytics, Incorporated - For Support email support@otics.ca',
- 'conf_author' : 'Sebastian Maurice',
- 'conf_release' : '0.1',
- 'conf_version' : '0.1.0',
- 'dockerenv': '', # add any environmental variables for docker must be: variable1=value1, variable2=value2
- 'dockerinstructions': '', # add instructions on how to run the docker container
+default_args = {
+    'conf_project': 'Transactional Machine Learning (TML)',
+    'conf_copyright': '2024, Otics Advanced Analytics, Incorporated - For Support email support@otics.ca',
+    'conf_author': 'Sebastian Maurice',
+    'conf_release': 0.1,
+    'conf_version': '0.1.0',
+    'dockerenv': '', # add any environmental variables for docker must be: variable1=value1, variable2=value2
+    'dockerinstructions': '', # add instructions on how to run the docker container
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 
 def triggerbuild(sname):
-
         URL = "https://readthedocs.org/api/v3/projects/{}/versions/latest/builds/".format(sname)
+        
+        if 'READTHEDOCS' not in os.environ:
+             logger.error("READTHEDOCS Token missing from target environment context variable.")
+             raise KeyError("Missing required READTHEDOCS authentication vector.")
+             
         TOKEN = os.environ['READTHEDOCS']
         HEADERS = {'Authorization': f'token {TOKEN}'}
-        response = requests.post(URL, headers=HEADERS)
-        print(response.json())
+        
+        tsslogging.tsslogit(f"Dispatching API outbound trigger payload to: {URL}")
 
+        response = requests.post(URL, headers=HEADERS)
+        
+        # 🟢 CRITICAL: Force the script to crash explicitly if Read the Docs returns an error (4xx/5xx)
+        response.raise_for_status()
+        
+        tsslogging.tsslogit(f"Read the Docs Build Response Received: {json.dumps(response.json())}")
+    
 def updatebranch(sname,branch):
     
         URL = "https://readthedocs.org/api/v3/projects/{}/".format(sname)
@@ -107,26 +118,31 @@ def setupurls(projectname,producetype,sname):
     doparse("/{}/docs/source/details.rst".format(sname), ["--step9url--;{}".format(stepurl9)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--step9burl--;{}".format(stepurl9b)]) 
     doparse("/{}/docs/source/details.rst".format(sname), ["--step10url--;{}".format(stepurl10)])
-    
-def doparse(fname,farr):
-      data = ''
-      try:  
-       with open(fname, 'r', encoding='utf-8') as file: 
-        data = file.readlines() 
-        r=0
-        for d in data:        
-            for f in farr:
+
+
+def doparse(fname, farr):
+      """Parses string replacement criteria safely without swallowing execution errors."""
+      if not os.path.exists(fname):
+           # 🟢 Force visibility in the logs when git fails to supply target file layouts
+           tsslogging.tsslogit(f"File Missing, unable to parse replacement mappings: {fname}")          
+           raise FileNotFoundError(f"Target document pathway was missing during execution block: {fname}")
+
+      with open(fname, 'r', encoding='utf-8') as file: 
+           data = file.readlines() 
+      
+      for r in range(len(data)):        
+           for f in farr:
                 fs = f.split(";")
-                if fs[0] in d:
-                    data[r] = d.replace(fs[0],fs[1])
-            r += 1  
-       with open(fname, 'w', encoding='utf-8') as file: 
-        file.writelines(data)
-      except Exception as e:
-         pass
+                if len(fs) > 1 and fs[0] in data[r]:
+                     data[r] = data[r].replace(fs[0], fs[1])
+                     
+      with open(fname, 'w', encoding='utf-8') as file: 
+           file.writelines(data)
+      tsslogging.tsslogit(f"DAG 10: Successfully processed inline template criteria tokens for asset: {fname}")          
+    
 
 def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollback,ollama,deletevector,vectordbpath,topicid,enabletls,partition,mainip,
-                       mainport,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,
+                       mainport,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,contextwindow,
                        pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,mainmodel,mainembedding,pgptcontainername):
       print("update==",op)
       if ollamacontainername != None:
@@ -153,6 +169,7 @@ def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollb
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-supervisorprompt--;{}".format(supervisorprompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-agenttoolfunctions--;{}".format(agenttoolfunctions.strip().replace('\n','').replace("\\n","").replace("'","").replace(";","=="))])
        doparse("/{}/ollama.yml".format(op),  ["--agenticai-agent_team_supervisor_topic--;{}".format(agent_team_supervisor_topic)])
+       doparse("/{}/ollama.yml".format(op),  ["--agenticai-contextwindow--;{}".format(contextwindow)])
 
       if pgptcontainername != None:
        doparse("/{}/privategpt.yml".format(op), ["--kubevectorsearchtype--;{}".format(pvectorsearchtype)])
@@ -270,6 +287,9 @@ def generatedoc(**context):
     step9benabletls=""
     step9bpartition=""
     step9bsupervisorprompt=""
+    step9bcontextwindow=""
+    step9blocalmodelsfolder=""
+    step9bagenttopic=""
 
     if "KUBE" in os.environ:
           if os.environ["KUBE"] == "1":
@@ -967,7 +987,12 @@ def generatedoc(**context):
 
       agenttopic= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_agenttopic".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-agenttopic--;{}".format(agenttopic)])
-     
+      step9bagenttopic=agenttopic
+
+      localmodelsfolder= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_localmodelsfolder".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-localmodelsfolder--;{}".format(localmodelsfolder)])
+      step9blocalmodelsfolder=localmodelsfolder
+      
       concurrency= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_concurrency".format(sname))
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-concurrency--;{}".format(concurrency[1:])])
       step9bconcurrency=concurrency[1:]
@@ -976,6 +1001,10 @@ def generatedoc(**context):
       doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-cuda--;{}".format(cuda[1:])])
       step9bCUDA_VISIBLE_DEVICES=cuda[1:]
 
+      contextwindow= context['ti'].xcom_pull(task_ids='step_9b_solution_task_agenticai',key="{}_contextwindow".format(sname))
+      doparse("/{}/docs/source/details.rst".format(sname), ["--agenticai-contextwindow--;{}".format(contextwindow[1:])])
+      step9bcontextwindow=contextwindow[1:]
+      
       doparse("/{}/docs/source/kube.rst".format(sname), ["--ollamacontainername--;{}".format(ollamacontainername)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubeconcur--;{}".format(concurrency[1:])])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-kubecollection--;{}".format(collection)])
@@ -991,6 +1020,11 @@ def generatedoc(**context):
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-ollamacontainername--;{}".format(ollamacontainername)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainip--;{}".format(mainip)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-mainport--;{}".format(mainport[1:])])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-contextwindow--;{}".format(contextwindow[1:])])
+
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agenttopic--;{}".format(agenttopic)])
+      doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-localmodelsfolder--;{}".format(localmodelsfolder)])
+      
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-embedding--;{}".format(embedding)])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-agents_topic_prompt--;{}".format(agents_topic_prompt.strip().replace('\n','').replace("\\n","").replace("'","").replace(";",","))])
       doparse("/{}/docs/source/kube.rst".format(sname), ["--agenticai-teamlead_topic--;{}".format(teamlead_topic)])
@@ -1152,7 +1186,7 @@ def generatedoc(**context):
         doparse("/{}/docs/source/details.rst".format(sname), ["--hyperbatch--;{}".format(hyperbatch[1:])])
     
     snamerp=sname.replace("_","-")
-    rbuf = "https://{}.readthedocs.io".format(sname)
+    rbuf = "https://{}.readthedocs.io".format(snamerp)
     doparse("/{}/docs/source/details.rst".format(sname), ["--readthedocs--;{}".format(rbuf)])
     
     ############# VIZ URLS
@@ -1198,8 +1232,9 @@ def generatedoc(**context):
     #-------------------    
     airflowurl = "http:\/\/localhost:{}".format(airflowport[1:])
     subprocess.call(["sed", "-i", "-e",  "s/--airflowurl--/{}/g".format(airflowurl), "/{}/docs/source/operating.rst".format(sname)])
-    
-    readthedocs = "https:\/\/{}.readthedocs.io".format(sname)
+
+    snamerp=sname.replace("_","-")
+    readthedocs = "https:\/\/{}.readthedocs.io".format(snamerp)
     subprocess.call(["sed", "-i", "-e",  "s/--readthedocs--/{}/g".format(readthedocs), "/{}/docs/source/operating.rst".format(sname)])
     
     triggername = sd
@@ -1381,7 +1416,7 @@ def generatedoc(**context):
                        step9bteamleadprompt,
                        step9bsupervisor_topic,
                        step9bagenttoolfunctions,
-                       step9bagent_team_supervisor_topic)
+                       step9bagent_team_supervisor_topic,step9bcontextwindow,step9blocalmodelsfolder, step9bagenttopic)
     else: 
       kcmd2=tsslogging.genkubeyamlnoext(sname,containername,TMLCLIENTPORT[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionexternalport[1:],
                        sd,os.environ['GITUSERNAME'],os.environ['GITREPOURL'],chipmain,os.environ['DOCKERUSERNAME'],
@@ -1415,7 +1450,7 @@ def generatedoc(**context):
                        step9bteamleadprompt,
                        step9bsupervisor_topic,
                        step9bagenttoolfunctions,
-                       step9bagent_team_supervisor_topic)
+                       step9bagent_team_supervisor_topic,step9bcontextwindow,step9blocalmodelsfolder, step9bagenttopic)
                                                                               
     doparse("/{}/docs/source/kube.rst".format(sname), ["--solutionnamecode--;{}".format(kcmd2)])
 
@@ -1486,7 +1521,7 @@ def generatedoc(**context):
 
     oppt=copyymls(projectname,sname,kcmd3,kcmd2)
     updateollamaandpgpt(oppt,step9bollamacontainername,step9bconcurrency,step9bvectordbcollectionname,step9btemperature,step9brollback,step9bollama,step9bdeletevectordbcount,step9bvectordbpath,step9btopicid,step9benabletls,step9bpartition,step9bmainip,
-                       step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,step9bsupervisor_topic,step9bsupervisorprompt,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,
+                       step9bmainport,step9bembedding,step9bagents_topic_prompt,step9bteamlead_topic,step9bteamleadprompt,step9bsupervisor_topic,step9bsupervisorprompt,step9bagenttoolfunctions,step9bagent_team_supervisor_topic,step9bcontextwindow,
                        pvectorsearchtype,ptemperature,pcollection,pconcurrency,pvectordimension,pcontextwindowsize,pmainmodel,pmainembedding,pgptcontainername)
   
     subprocess.call("/tmux/gitp.sh {} 'For solution details GOTO: https://{}.readthedocs.io'".format(sname,snamertd), shell=True)
@@ -1519,7 +1554,7 @@ def generatedoc(**context):
             json=data,
             headers=HEADERS,
         )
-        print(response.json())
+#        print(response.json())
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
      time.sleep(10)
