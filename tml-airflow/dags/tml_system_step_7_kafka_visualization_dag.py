@@ -84,7 +84,7 @@ def startstreamingengine(**context):
           subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
           mainport=0 
-          if tss[1:] == "1":
+          if os.environ["TSS"] == "1":
             subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport[1:]), "ENTER"])            
             mainport=int(vipervizport[1:])
           else:    
