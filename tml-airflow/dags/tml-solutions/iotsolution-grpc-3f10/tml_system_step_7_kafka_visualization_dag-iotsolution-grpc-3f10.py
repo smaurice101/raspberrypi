@@ -41,13 +41,6 @@ def windowname(wtype,vipervizport,sname,dagname):
 def startstreamingengine(**context):
         repo=tsslogging.getrepo()  
         tsslogging.locallogs("INFO", "STEP 7: Visualization started")
-        try:
-          tsslogging.tsslogit("Visualization DAG in {}".format(os.path.basename(__file__)), "INFO" )                     
-          tsslogging.git_push("/{}".format(repo),"Entry from {}".format(os.path.basename(__file__)),"origin")    
-        except Exception as e:
-            #git push -f origin main
-            os.chdir("/{}".format(repo))
-            subprocess.call("git push -f origin main", shell=True)
     
         sd = context['dag'].dag_id
         sname=context['ti'].xcom_pull(task_ids='step_1_solution_task_getparams',key="{}_solutionname".format(sd))
@@ -91,7 +84,7 @@ def startstreamingengine(**context):
           subprocess.run(["tmux", "new", "-d", "-s", "{}".format(wn)])
           subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "cd /Viperviz", "ENTER"])
           mainport=0 
-          if tss[1:] == "1":
+          if os.environ["TSS"] == "1":
             subprocess.run(["tmux", "send-keys", "-t", "{}".format(wn), "/Viperviz/viperviz-linux-{} 0.0.0.0 {}".format(chip,vipervizport[1:]), "ENTER"])            
             mainport=int(vipervizport[1:])
           else:    
