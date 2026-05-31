@@ -15,26 +15,37 @@ import time
 sys.dont_write_bytecode = True
 
 ######################################################USER CHOSEN PARAMETERS ###########################################################
-default_args = {    
- 'conf_project' : 'Transactional Machine Learning (TML)',
- 'conf_copyright' : '2024, Otics Advanced Analytics, Incorporated - For Support email support@otics.ca',
- 'conf_author' : 'Sebastian Maurice',
- 'conf_release' : '0.1',
- 'conf_version' : '0.1.0',
- 'dockerenv': '', # add any environmental variables for docker must be: variable1=value1, variable2=value2
- 'dockerinstructions': '', # add instructions on how to run the docker container
+default_args = {
+    'conf_project': 'Transactional Machine Learning (TML)',
+    'conf_copyright': '2024, Otics Advanced Analytics, Incorporated - For Support email support@otics.ca',
+    'conf_author': 'Sebastian Maurice',
+    'conf_release': 0.1,
+    'conf_version': '0.1.0',
+    'dockerenv': '', # add any environmental variables for docker must be: variable1=value1, variable2=value2
+    'dockerinstructions': '', # add instructions on how to run the docker container
 }
 
 ############################################################### DO NOT MODIFY BELOW ####################################################
 
 def triggerbuild(sname):
-
         URL = "https://readthedocs.org/api/v3/projects/{}/versions/latest/builds/".format(sname)
+        
+        if 'READTHEDOCS' not in os.environ:
+             logger.error("READTHEDOCS Token missing from target environment context variable.")
+             raise KeyError("Missing required READTHEDOCS authentication vector.")
+             
         TOKEN = os.environ['READTHEDOCS']
         HEADERS = {'Authorization': f'token {TOKEN}'}
-        response = requests.post(URL, headers=HEADERS)
-        print(response.json())
+        
+        tsslogging.tsslogit(f"Dispatching API outbound trigger payload to: {URL}")
 
+        response = requests.post(URL, headers=HEADERS)
+        
+        # 🟢 CRITICAL: Force the script to crash explicitly if Read the Docs returns an error (4xx/5xx)
+        response.raise_for_status()
+        
+        tsslogging.tsslogit(f"Read the Docs Build Response Received: {json.dumps(response.json())}")
+    
 def updatebranch(sname,branch):
     
         URL = "https://readthedocs.org/api/v3/projects/{}/".format(sname)
@@ -107,23 +118,28 @@ def setupurls(projectname,producetype,sname):
     doparse("/{}/docs/source/details.rst".format(sname), ["--step9url--;{}".format(stepurl9)])
     doparse("/{}/docs/source/details.rst".format(sname), ["--step9burl--;{}".format(stepurl9b)]) 
     doparse("/{}/docs/source/details.rst".format(sname), ["--step10url--;{}".format(stepurl10)])
-    
-def doparse(fname,farr):
-      data = ''
-      try:  
-       with open(fname, 'r', encoding='utf-8') as file: 
-        data = file.readlines() 
-        r=0
-        for d in data:        
-            for f in farr:
+
+
+def doparse(fname, farr):
+      """Parses string replacement criteria safely without swallowing execution errors."""
+      if not os.path.exists(fname):
+           # 🟢 Force visibility in the logs when git fails to supply target file layouts
+           tsslogging.tsslogit(f"File Missing, unable to parse replacement mappings: {fname}")          
+           raise FileNotFoundError(f"Target document pathway was missing during execution block: {fname}")
+
+      with open(fname, 'r', encoding='utf-8') as file: 
+           data = file.readlines() 
+      
+      for r in range(len(data)):        
+           for f in farr:
                 fs = f.split(";")
-                if fs[0] in d:
-                    data[r] = d.replace(fs[0],fs[1])
-            r += 1  
-       with open(fname, 'w', encoding='utf-8') as file: 
-        file.writelines(data)
-      except Exception as e:
-         pass
+                if len(fs) > 1 and fs[0] in data[r]:
+                     data[r] = data[r].replace(fs[0], fs[1])
+                     
+      with open(fname, 'w', encoding='utf-8') as file: 
+           file.writelines(data)
+      tsslogging.tsslogit(f"DAG 10: Successfully processed inline template criteria tokens for asset: {fname}")          
+    
 
 def updateollamaandpgpt(op,ollamacontainername,concurrency,collection,temp,rollback,ollama,deletevector,vectordbpath,topicid,enabletls,partition,mainip,
                        mainport,embedding,agents_topic_prompt,teamlead_topic,teamleadprompt,supervisor_topic,supervisorprompt,agenttoolfunctions,agent_team_supervisor_topic,contextwindow,
@@ -1538,7 +1554,7 @@ def generatedoc(**context):
             json=data,
             headers=HEADERS,
         )
-        print(response.json())
+#        print(response.json())
         tsslogging.tsslogit(response.json())
         os.environ['tssdoc']="1"
      time.sleep(10)
