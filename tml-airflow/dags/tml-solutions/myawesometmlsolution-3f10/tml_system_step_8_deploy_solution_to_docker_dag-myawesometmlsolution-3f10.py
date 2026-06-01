@@ -90,7 +90,7 @@ def dockerit(**context):
               f.write(f"SD={sd}\n")
               f.write(f"REPO={repo}\n")
           
-         #tsslogging.locallogs("INFO", "STEP 8: Docker Container process started - check Github logs for status - it could take few minutes. Here is the commit command: {} - message={}".format(cbuf,v))         
+         tsslogging.locallogs("INFO", "STEP 8: Docker Container process started - check Github logs for status - it could take few minutes. Here is the commit command: {} - message={}".format(cbuf,v))         
            
        elif len(cid) <= 1:
               tsslogging.locallogs("ERROR", "STEP 8: There seems to be an issue with docker commit. Here is the command: docker commit {} {}".format(cid,cname)) 
