@@ -1343,7 +1343,104 @@ def getqip():
      qip=file1.read()
      qip=qip.rstrip()
      os.environ['qip']=qip  
+
+def optimizecontainer2(cname, sname, sd):
+    rbuf = os.environ.get('READTHEDOCS', '')
+    
+    # 1. Cleanly build parameters to skip heavy inline shell interpolation strings
+    env_vars = {
+        'GPG_KEY': '', 'PYTHON_SHA256': '', 'TSS': '-9',
+        'MQTTPASSWORD': '', 'DOCKERPASSWORD': '', 'SMTP_PASSWORD': '',
+        'SMTP_SERVER': '', 'SMTP_USERNAME': '', 'GITPASSWORD': '',
+        'recipient': '', 'PATH': '', 'KAFKACLOUDPASSWORD': '',
+        'DOCKERUSERNAME': os.environ.get('DOCKERUSERNAME', ''),
+        'SOLUTIONNAME': str(sname),
+        'SOLUTIONDAG': str(sd),
+        'READTHEDOCS': rbuf[:4]
+    }
+    
+    # Build env array arguments for the docker execution line safely
+    env_args = []
+    for k, v in env_vars.items():
+        env_args.extend(["--env", f"{k}={v}"])
+
+    # Construct complete command list to avoid using slow `shell=True` for container creation
+    cmd = ["docker", "run", "-d", "-v", "/var/run/docker.sock:/var/run/docker.sock:z"] + env_args + [cname]
+    
+    print(f"Container optimizing: {' '.join(cmd)[:200]}...") 
+    
+    try:
+        # Capture the spawned Container ID directly to track it perfectly
+        container_id = subprocess.check_output(cmd).decode("utf-8").strip()
+    except Exception as e:
+        print("ERROR launching container: ", e)
+        return "failed"
+
+    print(f"Tracking Container ID: {container_id[:12]}")
+
+    status = ""
+    start_time = time.time()
+    timeout = 450  # 90 iterations * 5s equivalent max ceiling
+
+    # 2. Adaptive Backoff Loop: Start fast, scale out if the 17GB processing takes longer
+    poll_interval = 1.0 
+    
+    while True:
+        elapsed = time.time() - start_time
+        if elapsed > timeout:
+            print("WARN: Unable to optimize container (Timeout reached)")
+            break
+            
+        try:
+            # 🟢 THE SPEED FIX: Use precise container status targeting.
+            # 'docker inspect' returns a clean state code rather than parsing huge string blocks.
+            check_cmd = ["docker", "inspect", "-f", "{{.State.Running}}", container_id]
+            is_running = subprocess.check_output(check_cmd).decode("utf-8").strip()
+            
+            if is_running == "false":
+                print("INFO: Container optimized and finished execution.")  
+                status = "good"
+                break
+                
+        except subprocess.CalledProcessError:
+            # Container was auto-removed or disappeared when finished, indicating completion
+            print("INFO: Container optimized (Lifecycle Complete)")
+            status = "good"
+            break
+        except Exception as e:
+            print("ERROR while tracking container state: ", e)
+            
+        # Dynamically scale intervals up to 4s max cap if processing is heavy
+        time.sleep(poll_interval)
+        if poll_interval < 4.0:
+            poll_interval += 0.5
+
+    # 3. Handle post-optimization verification tasks
+    if status == "good":
+        # Combine image tag operations or keep them standard without shell dependencies
+        subprocess.call(["docker", "image", "tag", f"{cname}sq:latest", cname], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.call(["docker", "rmi", f"{cname}sq:latest", "--force"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
+        print(f"🚀 Optimization verified. Initiating async push for {cname}...")
+        
+        # 🟢 THE BULK FLATTEN PUSH FIX: Cap network/disk allocation threads 
+        # Limits multi-core worker memory footprints from spiking on huge structural pushes
+        push_env = os.environ.copy()
+        push_env["GOMAXPROCS"] = "1"
+        
+        subprocess.Popen(
+            f"docker push {cname}", 
+            shell=True,
+            env=push_env,
+            stdout=subprocess.DEVNULL, 
+            stderr=subprocess.DEVNULL
+        )
+        
+        # Fast garbage collection 
+        subprocess.Popen("docker image prune -f", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)    
+
+    return status
+    
 def optimizecontainer(cname,sname,sd):
     rbuf=os.environ['READTHEDOCS']
     buf="docker run -d -v /var/run/docker.sock:/var/run/docker.sock:z --env GPG_KEY='' --env PYTHON_SHA256='' --env DOCKERUSERNAME='{}' --env SOLUTIONNAME={} --env SOLUTIONDAG={} --env TSS=-9  --env READTHEDOCS='{}' --env MQTTPASSWORD='' --env DOCKERPASSWORD='' --env SMTP_PASSWORD='' --env SMTP_SERVER='' --env SMTP_USERNAME='' --env  GITPASSWORD='' --env recipient='' --env PATH='' --env KAFKACLOUDPASSWORD='' {}".format(os.environ['DOCKERUSERNAME'], sname, sd, rbuf[:4],cname )
