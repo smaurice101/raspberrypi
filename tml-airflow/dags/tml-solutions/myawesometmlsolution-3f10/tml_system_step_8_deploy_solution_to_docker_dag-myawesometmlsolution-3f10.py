@@ -73,11 +73,11 @@ def dockerit(**context):
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
 
-         status=tsslogging.optimizecontainer2(cname,sname,sd) 
-         if status=="":   
-           tsslogging.locallogs("WARN", "STEP 8: There seems to be an issue optimizing the container.  Here is the commit command: {} - message={}.  Container may NOT pushed.".format(cbuf,v)) 
-         else:
-           tsslogging.locallogs("INFO", "STEP 8: Docker Container created and optimized.  Will push it now.  Here is the commit command: {} - message={}".format(cbuf,v))         
+         #status=tsslogging.optimizecontainer2(cname,sname,sd) 
+#         if status=="":   
+ #          tsslogging.locallogs("WARN", "STEP 8: There seems to be an issue optimizing the container.  Here is the commit command: {} - message={}.  Container may NOT pushed.".format(cbuf,v)) 
+  #       else:
+   #        tsslogging.locallogs("INFO", "STEP 8: Docker Container created and optimized.  Will push it now.  Here is the commit command: {} - message={}".format(cbuf,v))         
              
          QUEUE_DIR = "/tmux/optimizer_queue"
          os.makedirs(QUEUE_DIR, exist_ok=True)
