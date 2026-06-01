@@ -1563,5 +1563,8 @@ def generatedoc(**context):
      ti = context['task_instance']
      ti.xcom_push(key="{}_RTD".format(sname), value="DONE")
      print("INFO: Your Documentation will be found here: https://{}.readthedocs.io/en/latest".format(snamertd))
+     with open("/tmux/rtdsname.txt", 'w', encoding='utf-8') as file: 
+          file.write("{}".format(snamertd))
+      
     except Exception as e:
      print("ERROR=",e)
