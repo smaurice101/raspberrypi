@@ -70,6 +70,8 @@ def dockerit(**context):
        if os.environ['TSS'] == "1" and len(cid) > 1: 
          print("[INFO] docker commit {} {}".format(cid,cname))  
          subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
+         subprocess.call(f"docker rmi -f {cname}", shell=True)
+             
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}_tmlworking".format(cid,cname), shell=True)
 
