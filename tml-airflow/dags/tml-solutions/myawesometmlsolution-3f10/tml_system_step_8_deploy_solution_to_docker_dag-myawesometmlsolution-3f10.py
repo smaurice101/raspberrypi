@@ -71,6 +71,7 @@ def dockerit(**context):
          print("[INFO] docker commit {} {}".format(cid,cname))  
          subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
          subprocess.call(f"docker rmi -f {cname}", shell=True)
+         subprocess.call(f"docker rmi -f {cname}_tmlworking", shell=True)
              
          cbuf="docker commit {} {}".format(cid,cname)
          v=subprocess.call("docker commit {} {}_tmlworking".format(cid,cname), shell=True)
