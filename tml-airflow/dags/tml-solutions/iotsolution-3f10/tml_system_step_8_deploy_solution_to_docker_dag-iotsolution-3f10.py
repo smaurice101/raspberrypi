@@ -70,8 +70,11 @@ def dockerit(**context):
        if os.environ['TSS'] == "1" and len(cid) > 1: 
          print("[INFO] docker commit {} {}".format(cid,cname))  
          subprocess.call("docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)", shell=True)
+         subprocess.call(f"docker rmi -f {cname}", shell=True)
+         subprocess.call(f"docker rmi -f {cname}-tmlworking", shell=True)
+             
          cbuf="docker commit {} {}".format(cid,cname)
-         v=subprocess.call("docker commit {} {}".format(cid,cname), shell=True)
+         v=subprocess.call("docker commit {} {}-tmlworking".format(cid,cname), shell=True)
 
          QUEUE_DIR = "/tmux/optimizer_queue"
          os.makedirs(QUEUE_DIR, exist_ok=True)
@@ -83,6 +86,7 @@ def dockerit(**context):
               f.write(f"SNAME={sname}\n")
               f.write(f"SD={sd}\n")
               f.write(f"REPO={repo}\n")
+              f.write(f"OCNAME={cname}-tmlworking\n")               
           
          tsslogging.locallogs("INFO", "STEP 8: Docker Container process started - check Github logs for status - it could take few minutes. Here is the commit command: {} - message={}".format(cbuf,v))         
            
