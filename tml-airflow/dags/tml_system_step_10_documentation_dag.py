@@ -1058,7 +1058,7 @@ def generatedoc(**context):
      
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
-      dockerrun = """docker run -d --net=host -p {}:{} -p {}:{} -p {}:{} -p {}:{} \\
+      dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \\
           --env TSS=0 \\
           --env SOLUTIONNAME={} \\
           --env SOLUTIONDAG={} \\
@@ -1091,7 +1091,7 @@ def generatedoc(**context):
                           externalport[1:],vipervizport[1:],airflowport[1:],ebuf,containername)       
     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
-      dockerrun = """docker run -d --net=host -p {}:{} -p {}:{} -p {}:{} \\
+      dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} \\
           --env TSS=0 \\
           --env SOLUTIONNAME={} \\
           --env SOLUTIONDAG={} \\
