@@ -96,20 +96,34 @@ def reinitbinaries(sname):
     
     for f in vizwindowfiles: 
         try:
-          with open(f, 'r', encoding='utf-8') as file: 
-             data = file.readlines()  
-             for d in data:
-                 d=d.rstrip()
-                 dsw = d.split(",")[0]             
-                 dsp = d.split(",")[1]
-                 if dsw != "":  
-                   subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw)])        
-                   v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
-                   time.sleep(1) 
-          os.remove(f)                    
+            with open(f, 'r', encoding='utf-8') as file: 
+                data = file.readlines()  
+                for d in data:
+                    d = d.rstrip()
+                    if not d or "," not in d:  # 💡 Safeguard against empty lines or bad format
+                        continue
+                
+                    parts = d.split(",")
+                    dsw = parts[0].strip()     # 💡 Strip potential whitespace
+                    dsp = parts[1].strip()     # 💡 Strip potential whitespace
+                
+                    if dsw != "":  
+                        subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw)])        
+                        try:
+                            pids = subprocess.check_output(["lsof", "-i", f":{dsp}", "-t"]).decode().strip().split()
+                            for pid in pids:
+                                if pid:
+                                    subprocess.call(["kill", "-9", pid])
+                        except subprocess.CalledProcessError:
+                            # lsof returns exit code 1 if no PIDs match the port, which is totally fine
+                            pass                     
+                    
+                        time.sleep(1) 
+                    
+            os.remove(f)                    
         except Exception as e:
-         pass
-       
+            pass
+     
     # copy folders
     shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
     #remove local logs
