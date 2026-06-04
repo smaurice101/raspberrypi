@@ -77,60 +77,89 @@ default_args = {
 ############################################################### DO NOT MODIFY BELOW ####################################################
     
 def reinitbinaries(sname):  
-    pywindowfiles=glob.glob("/tmux/pythonwindows_*") 
+    # --- 1. CLEAN PYTHON WINDOWS ---
+    pywindowfiles = glob.glob("/tmux/pythonwindows_*") 
     
     for f in pywindowfiles: 
         try:
-          with open(f, 'r', encoding='utf-8') as file: 
-            data = file.readlines() 
+            with open(f, 'r', encoding='utf-8') as file: 
+                data = file.readlines() 
+            
             for d in data:          
-              if d != "":             
-                d=d.rstrip()            
-                v=subprocess.call(["tmux", "kill-window", "-t", "{}".format(d)])   
-          os.remove(f)        
+                d = d.strip()
+                if not d:
+                    continue
+                
+                # Support both comma (,) and equals (=) splitters
+                parts = re.split(r'[,=]', d)
+                window_name = parts[0].strip()
+                
+                if window_name:             
+                    subprocess.call(["tmux", "kill-window", "-t", window_name], stderr=subprocess.DEVNULL)   
+            
+            os.remove(f)        
         except Exception as e:
-         print("ERROR=",e)   
-         pass
+            print("ERROR Cleaning Python Windows:", e)   
 
-    vizwindowfiles=glob.glob("/tmux/vipervizwindows_*") 
+    # --- 2. CLEAN VIPERVIZ WINDOWS & PORTS ---
+    vizwindowfiles = glob.glob("/tmux/vipervizwindows_*") 
     
     for f in vizwindowfiles: 
         try:
             with open(f, 'r', encoding='utf-8') as file: 
                 data = file.readlines()  
-                for d in data:
-                    d = d.rstrip()
-                    if not d or "," not in d:  # 💡 Safeguard against empty lines or bad format
-                        continue
+            
+            for d in data:
+                d = d.strip()
+                if not d:
+                    continue
                 
-                    parts = d.split(",")
-                    dsw = parts[0].strip()     # 💡 Strip potential whitespace
-                    dsp = parts[1].strip()     # 💡 Strip potential whitespace
+                # Support both comma (,) and equals (=) splitters
+                if "," not in d and "=" not in d:
+                    continue
                 
-                    if dsw != "":  
-                        subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw)])        
+                parts = re.split(r'[,=]', d)
+                dsw = parts[0].strip()     # Window Name
+                dsp = parts[1].strip()     # Port Number
+                
+                if dsw:  
+                    subprocess.call(["tmux", "kill-window", "-t", dsw], stderr=subprocess.DEVNULL)        
+                    
+                    # SANITIZATION: Strip out any non-numeric characters (like underscores '_')
+                    clean_port = re.sub(r'\D', '', dsp)
+                    
+                    if clean_port:
                         try:
-                            pids = subprocess.check_output(["lsof", "-i", f":{dsp}", "-t"]).decode().strip().split()
+                            # Safely find PIDs bound to the pure numeric port
+                            pids = subprocess.check_output(
+                                ["lsof", "-i", f":{clean_port}", "-t"], 
+                                stderr=subprocess.DEVNULL
+                            ).decode().strip().split()
+                            
                             for pid in pids:
-                                if pid:
-                                    subprocess.call(["kill", "-9", pid])
+                                if pid.isdigit():
+                                    subprocess.call(["kill", "-9", pid], stderr=subprocess.DEVNULL)
                         except subprocess.CalledProcessError:
-                            # lsof returns exit code 1 if no PIDs match the port, which is totally fine
+                            # lsof returns exit code 1 if no PIDs match, which is safe to ignore
                             pass                     
                     
-                        time.sleep(1) 
+                    time.sleep(0.5) 
                     
             os.remove(f)                    
         except Exception as e:
-            pass
+            print("ERROR Cleaning Viperviz Windows:", e)
      
-    # copy folders
-    shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
-    #remove local logs
+    # --- 3. COPY FOLDERS & UTILITIES ---
     try:
-      os.remove('/dagslocalbackup/logs.txt')    
+        shutil.copytree("/tss_readthedocs", f"/{sname}", dirs_exist_ok=True)
     except Exception as e:
-      pass 
+        print("ERROR Copying Trees:", e)
+
+    # --- 4. REMOVE LOCAL LOGS ---
+    try:
+        os.remove('/dagslocalbackup/logs.txt')    
+    except Exception as e:
+        pass
         
 def updateviperenv():
     # update ALL
@@ -288,6 +317,8 @@ def updateviperenv():
     time.sleep(3)        
     
 def getparams(**context):
+
+
   args = default_args    
   VIPERHOST = ""
   VIPERPORT = ""
@@ -355,6 +386,7 @@ def getparams(**context):
   
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
+
   reinitbinaries(sname)
   updateviperenv()
 
