@@ -78,43 +78,89 @@ default_args = {
 ############################################################### DO NOT MODIFY BELOW ####################################################
     
 def reinitbinaries(sname):  
-    pywindowfiles=glob.glob("/tmux/pythonwindows_*") 
+    # --- 1. CLEAN PYTHON WINDOWS ---
+    pywindowfiles = glob.glob("/tmux/pythonwindows_*") 
     
     for f in pywindowfiles: 
         try:
-          with open(f, 'r', encoding='utf-8') as file: 
-            data = file.readlines() 
+            with open(f, 'r', encoding='utf-8') as file: 
+                data = file.readlines() 
+            
             for d in data:          
-              if d != "":             
-                d=d.rstrip()            
-                v=subprocess.call(["tmux", "kill-window", "-t", "{}".format(d)])   
-          os.remove(f)        
+                d = d.strip()
+                if not d:
+                    continue
+                
+                # Support both comma (,) and equals (=) splitters
+                parts = re.split(r'[,=]', d)
+                window_name = parts[0].strip()
+                
+                if window_name:             
+                    subprocess.call(["tmux", "kill-window", "-t", window_name], stderr=subprocess.DEVNULL)   
+            
+            os.remove(f)        
         except Exception as e:
-         print("ERROR=",e)   
-         pass
+            print("ERROR Cleaning Python Windows:", e)   
 
-    vizwindowfiles=glob.glob("/tmux/vipervizwindows_*") 
+    # --- 2. CLEAN VIPERVIZ WINDOWS & PORTS ---
+    vizwindowfiles = glob.glob("/tmux/vipervizwindows_*") 
     
     for f in vizwindowfiles: 
         try:
-          with open(f, 'r', encoding='utf-8') as file: 
-             data = file.readlines()  
-             for d in data:
-                 d=d.rstrip()
-                 dsw = d.split(",")[0]             
-                 dsp = d.split(",")[1]
-                 if dsw != "":  
-                   subprocess.call(["tmux", "kill-window", "-t", "{}".format(dsw)])        
-                   v=subprocess.call(["kill", "-9", "$(lsof -i:{} -t)".format(dsp)])
-                   time.sleep(1) 
-          os.remove(f)                    
+            with open(f, 'r', encoding='utf-8') as file: 
+                data = file.readlines()  
+            
+            for d in data:
+                d = d.strip()
+                if not d:
+                    continue
+                
+                # Support both comma (,) and equals (=) splitters
+                if "," not in d and "=" not in d:
+                    continue
+                
+                parts = re.split(r'[,=]', d)
+                dsw = parts[0].strip()     # Window Name
+                dsp = parts[1].strip()     # Port Number
+                
+                if dsw:  
+                    subprocess.call(["tmux", "kill-window", "-t", dsw], stderr=subprocess.DEVNULL)        
+                    
+                    # SANITIZATION: Strip out any non-numeric characters (like underscores '_')
+                    clean_port = re.sub(r'\D', '', dsp)
+                    
+                    if clean_port:
+                        try:
+                            # Safely find PIDs bound to the pure numeric port
+                            pids = subprocess.check_output(
+                                ["lsof", "-i", f":{clean_port}", "-t"], 
+                                stderr=subprocess.DEVNULL
+                            ).decode().strip().split()
+                            
+                            for pid in pids:
+                                if pid.isdigit():
+                                    subprocess.call(["kill", "-9", pid], stderr=subprocess.DEVNULL)
+                        except subprocess.CalledProcessError:
+                            # lsof returns exit code 1 if no PIDs match, which is safe to ignore
+                            pass                     
+                    
+                    time.sleep(0.5) 
+                    
+            os.remove(f)                    
         except Exception as e:
-         pass
-       
-    # copy folders
-    shutil.copytree("/tss_readthedocs", "/{}".format(sname),dirs_exist_ok=True)
-    #remove local logs
-    os.remove('/dagslocalbackup/logs.txt')    
+            print("ERROR Cleaning Viperviz Windows:", e)
+     
+    # --- 3. COPY FOLDERS & UTILITIES ---
+    try:
+        shutil.copytree("/tss_readthedocs", f"/{sname}", dirs_exist_ok=True)
+    except Exception as e:
+        print("ERROR Copying Trees:", e)
+
+    # --- 4. REMOVE LOCAL LOGS ---
+    try:
+        os.remove('/dagslocalbackup/logs.txt')    
+    except Exception as e:
+        pass
         
 def updateviperenv():
     # update ALL
@@ -128,7 +174,12 @@ def updateviperenv():
           cloudusername = os.environ['KAFKACLOUDUSERNAME']
     if 'KAFKACLOUDPASSWORD' in os.environ:
           cloudpassword = os.environ['KAFKACLOUDPASSWORD']
-
+    if 'KAFKABROKERHOST' in os.environ:
+          default_args['brokerhost'] = os.environ['KAFKABROKERHOST']
+          default_args['brokerport']=''
+    if 'SASLMECHANISM' in os.environ:
+       default_args['SASLMECHANISM']=os.environ['SASLMECHANISM']     
+     
     if '127.0.0.1' in default_args['brokerhost']:
       cloudusername = ""
       cloudpassword = ""
@@ -145,7 +196,7 @@ def updateviperenv():
           else: 
              default_args['brokerhost']="kafka-service"
            
-    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess-pgpt/viper.env','/Viper-preprocess2/viper.env','/Viper-preprocess3/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
+    filepaths = ['/Viper-produce/viper.env','/Viper-preprocess/viper.env','/Viper-preprocess1/viper.env','/Viper-preprocess-pgpt/viper.env','/Viper-preprocess-agenticai/viper.env','/Viper-preprocess2/viper.env','/Viper-preprocess3/viper.env','/Viper-ml/viper.env','/Viper-predict/viper.env','/Viperviz/viper.env']
     for mainfile in filepaths:
      with open(mainfile, 'r', encoding='utf-8') as file: 
        data = file.readlines() 
@@ -267,6 +318,8 @@ def updateviperenv():
     time.sleep(3)        
     
 def getparams(**context):
+
+
   args = default_args    
   VIPERHOST = ""
   VIPERPORT = ""
@@ -278,14 +331,22 @@ def getparams(**context):
   HPDEPORTPREDICT = ""
 
   tsslogging.locallogs("INFO", "STEP 1: Build started") 
+
   try: 
-    f = open("/tmux/step1solution.txt", "w")
-    f.write(default_args['solutionname'])
-    f.close()
+    if os.environ['TSS']=="1":
+     if 'READTHEDOCS' in os.environ:
+      if  len(os.environ['READTHEDOCS']) < 4:
+        sys.exit()
+      f = open("/tmux/rd4.txt", "w") 
+      rd=os.environ['READTHEDOCS']
+      f.write(rd[:4])
+      f.close()
+     else:
+       sys.exit() 
   except Exception as e:
     pass
 
-  if os.environ['TSS']==1:
+  if os.environ['TSS']=="1":
     try: 
       shutil.rmtree("/rawdata/rtms") 
     except Exception as e:
@@ -300,7 +361,20 @@ def getparams(**context):
   sd = context['dag'].dag_id 
   pname = args['solutionname']    
   sname = tsslogging.rtdsolution(pname,sd)
+  try: 
+    f = open("/tmux/step1projectname.txt", "w")
+    f.write(pname)
+    f.close()
+  except Exception as e:
+    pass
 
+  try: 
+    f = open("/tmux/step1solution.txt", "w")
+    f.write(sname)
+    f.close()
+  except Exception as e:
+    pass
+ 
   if 'step1description' in os.environ:
     desc = os.environ['step1description']
   else: 
@@ -313,6 +387,7 @@ def getparams(**context):
   
   brokerhost = args['brokerhost']   
   brokerport = args['brokerport'] 
+
   reinitbinaries(sname)
   updateviperenv()
 
@@ -328,6 +403,10 @@ def getparams(**context):
       output = f.read()
       VIPERHOSTPREPROCESS = output.split(",")[0]
       VIPERPORTPREPROCESS = output.split(",")[1]    
+    with open('/Viper-preprocess1/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTPREPROCESS1 = output.split(",")[0]
+      VIPERPORTPREPROCESS1 = output.split(",")[1]         
     with open('/Viper-preprocess2/viper.txt', 'r') as f:
       output = f.read()
       VIPERHOSTPREPROCESS2 = output.split(",")[0]
@@ -340,6 +419,10 @@ def getparams(**context):
       output = f.read()
       VIPERHOSTPREPROCESSPGPT = output.split(",")[0]
       VIPERPORTPREPROCESSPGPT = output.split(",")[1]        
+    with open('/Viper-preprocess-agenticai/viper.txt', 'r') as f:
+      output = f.read()
+      VIPERHOSTPREPROCESSAGENTICAI = output.split(",")[0]
+      VIPERPORTPREPROCESSAGENTICAI = output.split(",")[1]             
     with open('/Viper-ml/viper.txt', 'r') as f:
       output = f.read()
       VIPERHOSTML = output.split(",")[0]
@@ -479,6 +562,9 @@ def getparams(**context):
   task_instance.xcom_push(key="{}_VIPERPORTPRODUCE".format(sname),value="_{}".format(VIPERPORT))
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS".format(sname),value=VIPERHOSTPREPROCESS)
   task_instance.xcom_push(key="{}_VIPERPORTPREPROCESS".format(sname),value="_{}".format(VIPERPORTPREPROCESS))
+  task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS1".format(sname),value=VIPERHOSTPREPROCESS1)
+  task_instance.xcom_push(key="{}_VIPERPORTPREPROCESS1".format(sname),value="_{}".format(VIPERPORTPREPROCESS1))
+ 
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS2".format(sname),value=VIPERHOSTPREPROCESS2)
   task_instance.xcom_push(key="{}_VIPERPORTPREPROCESS2".format(sname),value="_{}".format(VIPERPORTPREPROCESS2))
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESS3".format(sname),value=VIPERHOSTPREPROCESS3)
@@ -486,7 +572,10 @@ def getparams(**context):
 
   task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESSPGPT".format(sname),value=VIPERHOSTPREPROCESSPGPT)
   task_instance.xcom_push(key="{}_VIPERPORTPREPROCESSPGPT".format(sname),value="_{}".format(VIPERPORTPREPROCESSPGPT))
-    
+
+  task_instance.xcom_push(key="{}_VIPERHOSTPREPROCESSAGENTICAI".format(sname),value=VIPERHOSTPREPROCESSAGENTICAI)
+  task_instance.xcom_push(key="{}_VIPERPORTPREPROCESSAGENTICAI".format(sname),value="_{}".format(VIPERPORTPREPROCESSAGENTICAI))
+   
   task_instance.xcom_push(key="{}_VIPERHOSTML".format(sname),value=VIPERHOSTML)
   task_instance.xcom_push(key="{}_VIPERPORTML".format(sname),value="_{}".format(VIPERPORTML))
   task_instance.xcom_push(key="{}_VIPERHOSTPREDICT".format(sname),value=VIPERHOSTPREDICT)
