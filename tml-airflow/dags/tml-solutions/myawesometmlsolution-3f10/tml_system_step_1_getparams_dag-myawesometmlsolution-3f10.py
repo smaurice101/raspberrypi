@@ -10,6 +10,7 @@ import time
 import subprocess
 import shutil
 import glob
+import re
 
 sys.dont_write_bytecode = True
 ######################################################USER CHOSEN PARAMETERS ###########################################################
