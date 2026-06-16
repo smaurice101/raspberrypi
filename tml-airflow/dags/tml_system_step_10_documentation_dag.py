@@ -1083,7 +1083,7 @@ def generatedoc(**context):
           --env MQTTPASSWORD='' \\          
           --env AIRFLOWPORT={}  \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
-          {}""".format(solutionexternalport[1:],solutionexternalport[1:],
+          {}:latest""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,
                           solutionexternalport[1:],chipmain,
@@ -1115,7 +1115,7 @@ def generatedoc(**context):
           --env MQTTPASSWORD='' \\          
           --env AIRFLOWPORT={} \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
-          {}""".format(solutionexternalport[1:],solutionexternalport[1:],
+          {}:latest""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],
