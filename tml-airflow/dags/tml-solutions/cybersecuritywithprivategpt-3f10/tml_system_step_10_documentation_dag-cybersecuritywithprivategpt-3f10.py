@@ -1058,7 +1058,7 @@ def generatedoc(**context):
      
     if len(CLIENTPORT) > 1:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;{}".format(TMLCLIENTPORT[1:])])
-      dockerrun = """docker run -d --net=host -p {}:{} -p {}:{} -p {}:{} -p {}:{} \\
+      dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} -p {}:{} \\
           --env TSS=0 \\
           --env SOLUTIONNAME={} \\
           --env SOLUTIONDAG={} \\
@@ -1083,7 +1083,7 @@ def generatedoc(**context):
           --env MQTTPASSWORD='' \\          
           --env AIRFLOWPORT={}  \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
-          {}""".format(solutionexternalport[1:],solutionexternalport[1:],
+          {}:latest""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           TMLCLIENTPORT[1:],TMLCLIENTPORT[1:],sname,sd,
                           solutionexternalport[1:],chipmain,
@@ -1091,7 +1091,7 @@ def generatedoc(**context):
                           externalport[1:],vipervizport[1:],airflowport[1:],ebuf,containername)       
     else:
       doparse("/{}/docs/source/operating.rst".format(sname), ["--clientport--;Not Applicable"])
-      dockerrun = """docker run -d --net=host -p {}:{} -p {}:{} -p {}:{} \\
+      dockerrun = """docker run -d -p {}:{} -p {}:{} -p {}:{} \\
           --env TSS=0 \\
           --env SOLUTIONNAME={} \\
           --env SOLUTIONDAG={} \\
@@ -1115,7 +1115,7 @@ def generatedoc(**context):
           --env MQTTPASSWORD='' \\          
           --env AIRFLOWPORT={} \\
           --env READTHEDOCS='<Enter Readthedocs token>' \\{} 
-          {}""".format(solutionexternalport[1:],solutionexternalport[1:],
+          {}:latest""".format(solutionexternalport[1:],solutionexternalport[1:],
                           solutionairflowport[1:],solutionairflowport[1:],solutionvipervizport[1:],solutionvipervizport[1:],
                           sname,sd,solutionexternalport[1:],chipmain,
                           solutionairflowport[1:],solutionvipervizport[1:],
