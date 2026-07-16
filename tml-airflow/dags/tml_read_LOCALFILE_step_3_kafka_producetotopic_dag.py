@@ -172,12 +172,45 @@ def startdirread():
     
   if default_args['docfolder'] != '' and default_args['doctopic'] != '':
     print("INFO startdirread")  
+
     try:  
       t = threading.Thread(name='child procs', target=ingestfiles)
       t.start()
+
+      CONFIG_RULES=default_args['mitrejsonscreenmap']
+      MITRE_MATRIX=default_args['mitrejson']
+      WEIGHTS_PROFILE=default_args['weightsvectorjson']
+      user_folders_raw=default_args['docfolder']
+      update_interval_hours=default_args['update_interval_hours']
+      user_interval=default_args['docingestinterval']
+      KAFKA_TOPIC=default_args['topics']
+      KAFKA_HOST=VIPERHOST
+      KAFKA_PORT=VIPERPORT
+      VIPERTOKEN=VIPERTOKEN
+      args=default_args
+
+      t = threading.Thread(
+        name='child procs2', 
+        target=tsslogging.extractLogEntities, # No parentheses here
+        args=(
+          CONFIG_RULES, 
+          MITRE_MATRIX, 
+          WEIGHTS_PROFILE, 
+          user_folders_raw, 
+          user_interval, 
+          update_interval_hours, 
+          KAFKA_TOPIC, 
+          KAFKA_HOST, 
+          KAFKA_PORT, 
+          VIPERTOKEN
+         )
+       )
+      t.start()
+
+
     except Exception as e:
       print(e)
-  
+      
 def producetokafka(value, tmlid, identifier,producerid,maintopic,substream,args):
  inputbuf=value     
  topicid=int(args['topicid'])
