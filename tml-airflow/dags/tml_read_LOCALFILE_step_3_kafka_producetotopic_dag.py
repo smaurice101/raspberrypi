@@ -42,81 +42,130 @@ VIPERTOKEN=""
 VIPERHOST=""
 VIPERPORT=""
 
-def read_in_chunks(file_object, chunk_size=1024):
-    """Lazy function (generator) to read a file piece by piece.
-    Default chunk size: 1k."""
+# Global dictionary to track the exact byte offset for every file path
+# Key: absolute_file_path -> Value: last_processed_byte_offset
+FILE_STATE = {}
+
+def read_in_chunks_incremental(file_object, filepath, chunk_size=1024):
+    """
+    Reads new data from a file incrementally based on its last known position.
+    """
+    # 1. Retrieve where we last left off
+    last_offset = FILE_STATE.get(filepath, 0)
+    
+    # Check if the file was truncated/rotated (size is smaller than our last read)
+    file_size = os.path.getsize(filepath)
+    if last_offset > file_size:
+        print(f"File {filepath} was truncated or rotated. Resetting offset to 0.")
+        last_offset = 0
+
+    # Seek to the last read position
+    file_object.seek(last_offset)
+
     while True:
         try:
-          if chunk_size != 0:
-            data = file_object.read(chunk_size).decode('utf-8')            
-            if len(data)>0 and data[-1] != ' ':
-                 ct=0
-                 for c in reversed(data):
-                   if c == ' ':
-                        break
-                   ct = ct +1
-                 if ct < len(data):
-                   file_object.seek(file_object.tell()-ct)
-                   data = data[:len(data)-ct]
-          else:
-            data = file_object.readline().decode('utf-8')            
-          data=data.replace('"','').replace("'","").replace("\\n"," ").replace('\n'," ").replace("\\r"," ").replace('\r'," ").replace(';'," ").replace('&'," ").strip()
-          if not data:
-               break
-          yield data          
-        except Exception as e:
-           break
+            if chunk_size != 0:
+                # Read binary chunk and decode
+                raw_data = file_object.read(chunk_size)
+                if not raw_data:
+                    break
+                
+                try:
+                    data = raw_data.decode('utf-8')
+                except UnicodeDecodeError:
+                    # If we split a multi-byte character, backtrack the read block by 1 byte
+                    # and try decoding a smaller chunk to remain safe
+                    file_object.seek(file_object.tell() - 1)
+                    raw_data = raw_data[:-1]
+                    data = raw_data.decode('utf-8')
 
-def readallfiles(fd,tr,cs=1024):
-  args=default_args
-  producerid='userfilestream'
-  print("fd=",fd.name)
-  for piece in read_in_chunks(fd,cs):
-        piece=re.sub(' +', ' ', piece)
-        pj='{"RTMSMessage":"' + piece + '"}'
-        
-        producetokafka(pj, "", "",producerid,tr,"",args)
-  return []    
+                # Avoid cutting words at the end of chunks (space-aware backtracking)
+                if len(data) > 0 and data[-1] != ' ':
+                    ct = 0
+                    for c in reversed(data):
+                        if c == ' ':
+                            break
+                        ct += 1
+                    if ct < len(data):
+                        # Seek the file pointer back by the exact byte length of those characters
+                        # Note: This is safe because we stripped any non-ASCII characters that cause drift
+                        file_object.seek(file_object.tell() - ct)
+                        data = data[:len(data)-ct]
+            else:
+                raw_data = file_object.readline()
+                if not raw_data:
+                    break
+                data = raw_data.decode('utf-8')
+
+            # Clean and sanitize characters
+            data = data.replace('"','').replace("'","").replace("\\n"," ").replace('\n'," ").replace("\\r"," ").replace('\r'," ").replace(';'," ").replace('&'," ").strip()
+            
+            if not data:
+                break
+                
+            yield data          
+        except Exception as e:
+            print(f"Incremental read error on {filepath}: {e}")
+            break
+
+    # 2. Record the final position reached in this tick cycle
+    FILE_STATE[filepath] = file_object.tell()
+
+
+def readallfiles(fd, tr, filepath, cs=1024):
+    args = default_args
+    producerid = 'userfilestream'
+    print("Processing incremental additions in:", fd.name)
+    
+    for piece in read_in_chunks_incremental(fd, filepath, cs):
+        piece = re.sub(' +', ' ', piece)
+        pj = '{"RTMSMessage":"' + piece + '"}'
+        producetokafka(pj, "", "", producerid, tr, "", args)
+    return []    
+
 
 def ingestfiles():
     args = default_args
     buf = default_args['docfolder']
     chunks = int(default_args['chunks'])
     maintopic = default_args['doctopic']
-    producerid='userfilestream'     
-    interval=int(default_args['docingestinterval'])
+    interval = int(default_args['docingestinterval'])
 
-    #gather files in the folders
     dirbuf = buf.split(",")
-    # check if user wants to split folders to separate topics
     maintopicbuf = maintopic.split(",")
+    
     if len(maintopicbuf) > 1:
-      if len(dirbuf) != len(maintopicbuf):
-        tsslogging.locallogs("ERROR", "STEP 3: Produce LOCALFILE in {} You specified multiple doctopics, then must match docfolder".format(os.path.basename(__file__)))
-        return
+        if len(dirbuf) != len(maintopicbuf):
+            tsslogging.locallogs("ERROR", f"STEP 3: Produce LOCALFILE in {os.path.basename(__file__)} - Match fail.")
+            return
     elif len(maintopicbuf) == 1 and len(dirbuf) > 0:
-       for i in range(len(dirbuf)):
-         maintopicbuf.append(maintopic)
+        # Pad the topic list to match directories length
+        maintopicbuf = [maintopic] * len(dirbuf)
     else:
-       return
+        return
   
     while True:
-       for dr,tr in zip(dirbuf,maintopicbuf):
-         filenames = []
-         if os.path.isdir("{}".format(dr)):
-           a = [os.path.join("{}".format(dr), f) for f in os.listdir("{}".format(dr)) if 
-           os.path.isfile(os.path.join("{}".format(dr), f))]
-           filenames.extend(a)
-           print("filename=",filenames)
-           if len(filenames) > 0:
-             with ExitStack() as stack:
-               files = [stack.enter_context(open(i, "rb")) for i in filenames]
-               contents = [readallfiles(file,tr,chunks) for file in files]
-       if interval==0:
-         break
-       else:  
-        time.sleep(interval)         
-      
+        for dr, tr in zip(dirbuf, maintopicbuf):
+            filenames = []
+            if os.path.isdir(dr):
+                # Resolve paths to absolute paths so state tracking is rock-solid
+                a = [os.path.abspath(os.path.join(dr, f)) for f in os.listdir(dr) if os.path.isfile(os.path.join(dr, f))]
+                filenames.extend(a)
+                
+                if len(filenames) > 0:
+                    with ExitStack() as stack:
+                        # Open all target files safely
+                        files = [stack.enter_context(open(filepath, "rb")) for filepath in filenames]
+                        
+                        # Process files starting from the end of our last read marker
+                        for file_obj, filepath in zip(files, filenames):
+                            readallfiles(file_obj, tr, filepath, chunks)
+                            
+        if interval == 0:
+            break
+        else:  
+            time.sleep(interval)
+          
 def startdirread():
   if 'docfolder' not in default_args and 'doctopic' not in default_args and 'chunks' not in default_args and 'docingestinterval' not in default_args:
      return
