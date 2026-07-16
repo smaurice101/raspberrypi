@@ -11,6 +11,14 @@ import time
 import fcntl
 import json
 from pypdf import PdfWriter
+import re
+from typing import Dict, Any, List
+from concurrent.futures import ThreadPoolExecutor
+import math
+import maadstml
+import sys
+from collections import Counter
+import traceback
 
 class LockDirectory(object):
     def __init__(self, directory):
@@ -1701,3 +1709,507 @@ def mergepdf(opath,pdffiles,sname):
             os.remove(pdf)
       except Exception as e:
         pass
+
+############################################# LOG Entity
+
+class UniversalThreatAgent:
+    def __init__(self, patterns_config_path: str, mitre_json_path: str, weights_profile_path: str, baseline_state_path: str = "/rawdata/rtmsbaseline.txt"):
+        self.compiled_rules = {}
+        self.file_registry: Dict[str, int] = {}
+        self.active_locks: Dict[str, Any] = {}
+        
+        self.baseline_state_path = baseline_state_path
+        self.baseline_cache: Dict[str, float] = {}
+        self.last_baseline_time: datetime.datetime = None
+        
+        self.executor = ThreadPoolExecutor(max_workers=4)
+
+        # 1. Load the external threat weights profile configuration
+        if not os.path.exists(weights_profile_path):
+            print(f"[CRITICAL ERROR] Threat weights profile configuration file missing: {weights_profile_path}", file=sys.stderr)
+            sys.exit(1)
+            
+        with open(weights_profile_path, 'r', encoding='utf-8') as f:
+            profile = json.load(f)
+            self.complexity_map = profile.get("attack_complexity_weights", {})
+            self.vulnerability_map = profile.get("entity_vulnerability_weights", {})
+            self.fallbacks = profile.get("fallbacks", {})
+
+        # 2. Load persistent baseline storage history from disk if available to avoid PSI resets
+        baseline_dir = os.path.dirname(self.baseline_state_path)
+        if baseline_dir and not os.path.exists(baseline_dir):
+            try:
+                os.makedirs(baseline_dir, exist_ok=True)
+            except Exception as e:
+                print(f"[WARN] Failed to pre-create directory structure {baseline_dir}: {e}", file=sys.stderr)
+
+        if os.path.exists(self.baseline_state_path):
+            try:
+                with open(self.baseline_state_path, 'r', encoding='utf-8') as f:
+                    state = json.load(f)
+                    self.baseline_cache = state.get("cache", {})
+                    if state.get("last_baseline_time"):
+                        self.last_baseline_time = datetime.datetime.fromisoformat(state["last_baseline_time"])
+                print(f"[INIT] Successfully loaded persistent baseline historical profiles from {self.baseline_state_path}", file=sys.stderr)
+            except Exception as e:
+                print(f"[WARN] Persistent baseline state could not be loaded from {self.baseline_state_path}, initializing cold start: {e}", file=sys.stderr)
+
+        # 3. Load and validate core framework matrix
+        if not os.path.exists(mitre_json_path):
+            print(f"[CRITICAL ERROR] Core mitre.json framework matrix file missing: {mitre_json_path}", file=sys.stderr)
+            sys.exit(1)
+            
+        with open(mitre_json_path, 'r', encoding='utf-8') as f:
+            self.mitre_matrix = json.load(f)
+            
+        # 4. Compile rule configurations from JSON map
+        if os.path.exists(patterns_config_path):
+            with open(patterns_config_path, 'r', encoding='utf-8') as f:
+                rules_data = json.load(f)
+                for alert_name, meta in rules_data.items():
+                    tactic = meta.get("mitre_tactic")
+                    technique = meta.get("mitre_technique")
+                    is_validated = (tactic in self.mitre_matrix and technique in self.mitre_matrix[tactic])
+                    
+                    self.compiled_rules[alert_name] = {
+                        "regex": re.compile(meta["pattern"]),
+                        "mitre_tactic": tactic,
+                        "mitre_technique": technique,
+                        "validated_by_matrix": is_validated
+                    }
+
+    def _get_formatted_date(self) -> str:
+        return datetime.datetime.now(timezone.utc).strftime("%Y.%m.%d")
+
+    def _calculate_dynamic_pattern_score(self, tactic: str, technique: str, entity: str) -> float:
+        tactic_lower = tactic.lower()
+        technique_lower = technique.lower()
+        entity_lower = str(entity).lower()
+
+        a_w = self.fallbacks.get("default_a_w", 5.0)
+        for keyword, weight in self.complexity_map.items():
+            if keyword in tactic_lower or keyword in technique_lower:
+                a_w = weight
+                break 
+
+        e_w = None
+        for keyword, weight in self.vulnerability_map.items():
+            if keyword in entity_lower:
+                e_w = weight
+                break
+
+        if e_w is None:
+            ip_pattern = re.compile(r'\b\d{1,3}(?:\.\d{1,3}){3}\b')
+            if ip_pattern.search(entity):
+                e_w = self.fallbacks.get("network_ip_e_w", 7.5)
+            else:
+                e_w = self.fallbacks.get("default_e_w", 4.5)
+
+        dynamic_score = math.sqrt(a_w * e_w) * 10.0
+        return round(dynamic_score, 2)
+
+    def _build_element(self, file_path: str, line_num: int, event_type: str, entity: str, mitre_meta: Dict[str, Any], attributes: Dict[str, Any]) -> Dict[str, Any]:
+        element = {
+            "date": self._get_formatted_date(),
+            "datetime": datetime.datetime.now(timezone.utc).isoformat(),
+            "log_file": os.path.abspath(file_path),
+            "line_number": line_num,
+            "event_type": event_type,
+            "entity": str(entity) if entity else "unknown_entity",
+            "mitre_classification": mitre_meta
+        }
+        attr_idx = 1
+        for k, v in attributes.items():
+            if k != "entity" and k != "entity_alt" and v is not None:
+                element[f"attr{attr_idx}"] = str(v)
+                attr_idx += 1
+        return element
+
+    def extract_from_json(self, record: Dict[str, Any], file_path: str, line_num: int) -> Dict[str, Any]:
+        keys = list(record.keys())
+        entity_fallbacks = ["src_ip", "client_ip", "source_ip", "username", "user", "process_path", "image", "resource_arn", "device_id", "hostname"]
+        entity_key = next((anchor for anchor in entity_fallbacks if anchor in keys), keys[0] if keys else "unclassified")
+        
+        mitre_meta = {
+            "tactic": "Initial Access", 
+            "technique": "Valid Accounts", 
+            "validated_by_matrix": False
+        }
+        
+        extracted_entity = record.get(entity_key, "unclassified")
+        return self._build_element(file_path, line_num, "native_structured_telemetry", extracted_entity, mitre_meta, record)
+
+    def parse_fallback_text(self, line: str, file_path: str, line_num: int) -> Dict[str, Any]:
+        tokens = line.split()
+        entity = None
+        entity_category = "unclassified"
+        
+        # 1. Advanced Threat Extraction Patterns
+        ip_pattern = re.compile(r'\b\d{1,3}(?:\.\d{1,3}){3}\b')
+        ipv6_pattern = re.compile(r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b')
+        
+        # Filesystem paths, configuration records, binary files, and extensions
+        filesystem_pattern = re.compile(
+            r'(?:[a-zA-Z]:\\(?:[^\\\s<>:"/|?*]+\\)*[^\\\s<>:"/|?*]+|'  # Windows
+            r'/(?:bin|etc|var|usr|opt|tmp|root|home|sys|proc|lib|run|mnt)/[^\s<>:"|?*]+|' # Linux standard trees
+            r'\b[a-zA-Z0-9_\-.]+\.(?:exe|dll|bat|sh|ps1|vbs|py|elf|bin|conf|ini|cfg|log|zip|tar|gz)\b)', # Security sensitive extensions
+            re.IGNORECASE
+        )
+        
+        # Network infrastructure indicators (URLs, Domains, Internal Appliances)
+        url_domain_pattern = re.compile(r'\b(?:https?://)?(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(?::\d+)?(?:/[^\s]*)?\b')
+        router_pattern = re.compile(r'\b(Router|Switch|Firewall|Core-SW|Edge|Gateway|LoadBalancer)-\S+\b', re.IGNORECASE)
+        
+        # --- Sequential Extraction Cascade Execution ---
+        for token in tokens:
+            clean_token = token.strip(":,[]()\"'-_")
+            if not clean_token:
+                continue
+
+            # Level A: IP Network Indicators
+            if ip_pattern.search(clean_token):
+                entity = ip_pattern.search(clean_token).group(0)
+                entity_category = "network_ip"
+                break
+            elif ipv6_pattern.search(clean_token):
+                entity = ipv6_pattern.search(clean_token).group(0)
+                entity_category = "network_ip_v6"
+                break
+
+            # Level B: Filesystem and System Targets
+            elif filesystem_pattern.search(clean_token):
+                entity = clean_token
+                entity_category = "filesystem_resource"
+                break
+
+            # Level C: Network Identifiers and Infrastructure Devices
+            elif url_domain_pattern.search(clean_token):
+                entity = clean_token
+                entity_category = "network_endpoint_domain"
+                break
+            elif router_pattern.match(clean_token):
+                entity = clean_token
+                entity_category = "network_appliance"
+                break
+
+        # Level D: High-Risk Attack Target Accounts (Fallback bucket)
+        if not entity:
+            for token in tokens:
+                clean_token = token.strip(":,[]()\"'-_")
+                if clean_token.lower() in ['root', 'administrator', 'trustedinstaller', 'sshd', 'kubelet', 'system']:
+                    entity = clean_token
+                    entity_category = "privileged_system_context"
+                    break
+
+        # If nothing of threat significance is isolated, return an empty object to drop the telemetry slice
+        if not entity:
+            return {}
+
+        # Dynamically escalate context metadata mapping based on isolated vectors
+        mitre_meta = {
+            "tactic": "Defense Evasion" if entity_category == "filesystem_resource" else "Discovery", 
+            "technique": f"Targeted Resource Asset Isolation ({entity_category})", 
+            "validated_by_matrix": False
+        }
+        
+        attrs = {f"token_{i}": tok for i, tok in enumerate(tokens, start=1) if i <= 8}
+        attrs["extracted_entity_category"] = entity_category
+        
+        return self._build_element(file_path, line_num, f"threat_vector_{entity_category}", entity, mitre_meta, attrs)
+    
+    def parse_line_to_object(self, raw_line: str, file_path: str, line_num: int) -> Dict[str, Any]:
+        cleaned = raw_line.strip()
+        if not cleaned: 
+            return {}
+
+        if cleaned.startswith('{') and cleaned.endswith('}'):
+            try: 
+                return self.extract_from_json(json.loads(cleaned), file_path, line_num)
+            except json.JSONDecodeError: 
+                pass
+
+        for alert_name, rule in self.compiled_rules.items():
+            match = rule["regex"].search(cleaned)
+            if match:
+                if alert_name == "windows_cbs_generic_stream":
+                    return {}
+                
+                match_dict = match.groupdict()
+                extracted_entity = match_dict.get("entity") or match_dict.get("entity_alt")
+                
+                mitre_meta = {
+                    "tactic": rule["mitre_tactic"],
+                    "technique": rule["mitre_technique"],
+                    "validated_by_matrix": rule["validated_by_matrix"]
+                }
+                return self._build_element(file_path, line_num, alert_name, extracted_entity, mitre_meta, match_dict)
+
+        return self.parse_fallback_text(cleaned, file_path, line_num)
+    
+    def scan_file_incremental(self, file_path: str) -> List[Dict[str, Any]]:
+        elements_collected = []
+        last_position = self.file_registry.get(file_path, 0)
+        
+        # 1. Instantiating here locks deduplication to ONLY this file session instance
+        seen_entities_per_file = set()
+        
+        try: 
+            current_size = os.path.getsize(file_path)
+        except FileNotFoundError: 
+            return []
+            
+        if current_size < last_position: 
+            last_position = 0
+        if current_size == last_position: 
+            return [] 
+            
+        f = None
+        try:
+            f = open(file_path, 'r', encoding='utf-8', errors='ignore')
+            fcntl.flock(f.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            
+            line_count = 1
+            if last_position > 0:
+                f.seek(0)
+                for line in f:
+                    if f.tell() > last_position:
+                        break
+                    line_count += 1
+            else:
+                f.seek(0)
+            
+            for line in f:
+                parsed_element = self.parse_line_to_object(line, file_path, line_count)
+                if parsed_element:
+                    entity = parsed_element.get("entity")
+                    
+                    # 2. Check and enforce uniqueness per file boundary
+                    if entity and entity not in seen_entities_per_file:
+                        seen_entities_per_file.add(entity)
+                        elements_collected.append(parsed_element)
+                        
+                line_count += 1
+                
+            self.file_registry[file_path] = f.tell()
+            fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+            f.close()
+            
+        except (IOError, OSError):
+            if f: f.close()
+            return []
+        except Exception as e:
+            print(f"[ERROR] Disk operations exception on {file_path}: {str(e)}", file=sys.stderr)
+            if f:
+                try: f.close()
+                except: pass
+        return elements_collected
+    
+    def stream_chunk_to_kafka(self, chunk_data: list, topic: str, host: str, port: str, token: str, args: Dict):
+        for element in chunk_data:
+            try:
+                payload = json.dumps(element)
+                # Production Producer implementation logic wraps directly here
+                topicid = int(args.get('topicid', 0))
+                delay = int(args.get('delay', 0))
+                enabletls = int(args.get('enabletls', 0))
+                identifier = args.get('identifier', '')
+                try:
+                    result=maadstml.viperproducetotopic(token,host,port,topic,"rtms-stream",enabletls,delay,'','', '',0,payload,"",
+                                                        topicid,identifier)
+                except Exception as e:
+                    print("ERROR:",e)
+     
+            except Exception as e:
+                print(f"[THREAD ERROR] Failed to produce record: {str(e)}", file=sys.stderr)
+
+
+    def calculate_baseline(self, log_data: List[Dict[str, Any]], update_interval_hours: int, field_name: str = "event_type") -> Dict[str, float]:
+        """ Calculates structural baseline drifting profiles securely against division by zero """
+        now = datetime.datetime.now(datetime.timezone.utc)
+        current_values = [item[field_name] for item in log_data if field_name in item]
+        total_count = len(current_values)
+        
+        if total_count == 0:
+            return self.baseline_cache
+            
+        current_counts = Counter(current_values)
+        actual_dist = {key: round(count / total_count, 4) for key, count in current_counts.items()}
+        
+        category_psi_lookup = {}
+        # Calculate live metric variation if reference profiles are active
+        if self.baseline_cache:
+            all_categories = set(self.baseline_cache.keys()).union(set(actual_dist.keys()))
+            for category in all_categories:
+                # Use max() to securely prevent zero denominators if 0 or 0.0 is explicitly saved in the file
+                b = max(float(self.baseline_cache.get(category, 0.0001)), 0.0001)
+                a = max(float(actual_dist.get(category, 0.0001)), 0.0001)
+                
+                # Safe from zero-division and log(0) domain issues
+                category_psi = (a - b) * math.log(a / b)
+                category_psi_lookup[category] = round(category_psi, 4)
+        else:
+            # Initial cold start fallback metric value
+            category_psi_lookup = {cat: 0.2979 for cat in actual_dist.keys()}
+
+        for item in log_data:
+            if field_name in item:
+                item_type = item.get(field_name)
+                item["event_type_PSI"] = category_psi_lookup.get(item_type, 0.2979)
+
+        # Handle chronological time windows and write tracking state directly to disk
+        should_update_cache = (self.last_baseline_time is None)
+        if self.last_baseline_time:
+            hours_elapsed = (now - self.last_baseline_time).total_seconds() / 3600
+            if hours_elapsed >= update_interval_hours:
+                should_update_cache = True
+                
+        if should_update_cache:
+            self.last_baseline_time = now
+            self.baseline_cache = dict(sorted(actual_dist.items(), key=lambda x: x[1], reverse=True))
+            
+            try:
+                state_payload = {
+                    "last_baseline_time": self.last_baseline_time.isoformat(),
+                    "cache": self.baseline_cache
+                }
+                with open(self.baseline_state_path, 'w', encoding='utf-8') as f:
+                    json.dump(state_payload, f, indent=2)
+            except Exception as e:
+                print(f"[ERROR] Failed writing persistent tracking state out to {self.baseline_state_path}: {e}", file=sys.stderr)
+            
+        return self.baseline_cache
+              
+
+    def parallel_stream_to_kafka(self, global_elements: list, topic: str, host: str, port: str, token: str, args: Dict, num_threads: int = 4):
+        total_elements = len(global_elements)
+        if total_elements == 0:
+            return
+        chunk_size = math.ceil(total_elements / num_threads)
+        
+        # USE THE PERSISTENT EXECUTOR: No 'with' block, no automatic shutdown
+        futures = []
+        for i in range(num_threads):
+            start_idx = i * chunk_size
+            end_idx = min(start_idx + chunk_size, total_elements)
+            chunk = global_elements[start_idx:end_idx]
+            if not chunk: continue
+            
+            # Submit to the long-lived pool
+            #future = self.executor.submit(self.stream_chunk_to_kafka, chunk, topic, host, port, token, args)
+#            futures.append(future)
+
+            try:
+                # Try using the executor first
+                future = self.executor.submit(self.stream_chunk_to_kafka, chunk, topic, host, port, token, args)
+                futures.append(future)
+            except RuntimeError as e:
+                if "shutdown" in str(e).lower():
+                    # WORKAROUND: If the executor is shutting down, execute it synchronously right here!
+                    print("[WARN] Executor is shutting down. Falling back to synchronous streaming.", file=sys.stderr)
+                    self.stream_chunk_to_kafka(chunk, topic, host, port, token, args)
+                else:
+                    raise e
+            
+        # Wait for the current batch to finish
+        for future in futures:
+            future.result()
+
+
+    def watch_directories(self, folders: List[str], interval_seconds: int, update_interval_hours: int, topic: str, host: str, port: str, token: str, args: Dict):
+        print(f"[STARTUP] Multi-Entity Agent Monitoring {len(folders)} paths every {interval_seconds}s.", file=sys.stderr)
+        try:
+            while True:
+                global_interval_elements = []
+                for target_folder in folders:
+                    if not os.path.exists(target_folder): 
+                        continue
+                    try:
+                        entries = sorted(
+                            [e for e in os.scandir(target_folder) if e.is_file()],
+                            key=lambda x: x.name
+                        )
+                    except Exception:
+                        continue
+
+                    for entry in entries:
+                        file_elements = self.scan_file_incremental(entry.path)
+                        if file_elements:
+                            global_interval_elements.extend(file_elements)
+                
+                if global_interval_elements:                
+                    self.calculate_baseline(global_interval_elements, update_interval_hours, "event_type")
+                    
+                    raw_scores = []
+                    for item in global_interval_elements:
+                        mitre = item.get("mitre_classification", {})
+                        tactic = mitre.get("tactic", "Unclassified Context")
+                        technique = mitre.get("technique", "Unknown")
+                        entity = item.get("entity", "unknown_entity")
+                        
+                        pattern_score = self._calculate_dynamic_pattern_score(tactic, technique, entity)
+                        item["pattern_score"] = pattern_score
+                        
+                        psi_drift = float(item.get("event_type_PSI", 0.2979))
+                        final_raw = pattern_score * math.exp(psi_drift)
+                        item["raw_rtms_score"] = round(final_raw, 2)
+                        raw_scores.append(final_raw)
+                        
+                    n = len(raw_scores)
+                    mu = sum(raw_scores) / n if n > 0 else 0.0
+                    variance = sum((x - mu) ** 2 for x in raw_scores) / n if n > 0 else 0.0
+                    sigma = math.sqrt(variance)
+                    
+                    for item in global_interval_elements:
+                        raw_rtms = item["raw_rtms_score"]
+                        if sigma == 0:
+                            item["normalized_rtms_score"] = 50.0
+                        else:
+                            z_score = (raw_rtms - mu) / sigma
+                            try:
+                                normalized_score = 100.0 / (1.0 + math.exp(-z_score))
+                            except OverflowError:
+                                normalized_score = 100.0 if z_score > 0 else 0.0
+                            item["normalized_rtms_score"] = round(normalized_score, 2)
+
+                    print(json.dumps(global_interval_elements, indent=2), flush=True)
+                    
+                    self.parallel_stream_to_kafka(
+                        global_elements=global_interval_elements,
+                        topic=topic, host=host, port=port, token=token, args=args, num_threads=4
+                    )
+
+                time.sleep(interval_seconds)
+        except KeyboardInterrupt:
+            print("\n[SHUTDOWN] Exiting monitoring loop.", file=sys.stderr)
+
+def extractLogEntities(CONFIG_RULES, MITRE_MATRIX, WEIGHTS_PROFILE, user_folders_raw, user_interval, update_interval_hours, KAFKA_TOPIC, KAFKA_HOST, KAFKA_PORT, VIPERTOKEN, args):
+   try:
+    agent = UniversalThreatAgent(
+        patterns_config_path=CONFIG_RULES, 
+        mitre_json_path=MITRE_MATRIX, 
+        weights_profile_path=WEIGHTS_PROFILE,
+        baseline_state_path="/rawdata/rtmsbaseline.txt"
+    )
+    userfolders = user_folders_raw.split(",")
+    agent.watch_directories(
+        folders=userfolders, 
+        interval_seconds=user_interval, 
+        update_interval_hours=int(update_interval_hours), 
+        topic=KAFKA_TOPIC, host=KAFKA_HOST, port=KAFKA_PORT, token=VIPERTOKEN, args=args
+    )
+   except Exception:
+    print("--- FATAL ERROR TRACEBACK ---")
+    traceback.print_exc()
+    sys.exit(1)
+
+    
+    #if __name__ == "__main__":
+#    CONFIG_RULES = "mitre-security-mapping.json"
+#    MITRE_MATRIX = "mitre.json"
+#    user_folders_raw = "/mnt/c/maads/tml-airflow/rawdata/mylogs"
+#    target_folders = [f.strip() for f in user_folders_raw.split(",") if f.strip()]
+#    try: user_interval = 4
+#    except ValueError: user_interval = 5
+#    if not target_folders: sys.exit(1)
+#    agent = UniversalThreatAgent(patterns_config_path=CONFIG_RULES, mitre_json_path=MITRE_MATRIX)
+#    agent.watch_directories(folders=target_folders, interval_seconds=user_interval)
