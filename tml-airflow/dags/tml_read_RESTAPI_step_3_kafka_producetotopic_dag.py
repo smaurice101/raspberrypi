@@ -55,7 +55,7 @@ default_args = {
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
   'tss_rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
-  'rest_port' : '',  # <<< *****  replace with port number i.e. this is listening on port 9000     
+  'rest_port' : '9002',  # <<< *****  replace with port number i.e. this is listening on port 9000     
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify              
   "ingestion_settings": {
