@@ -55,9 +55,123 @@ default_args = {
   'topics' : 'iot-raw-data', # *************** This is one of the topic you created in SYSTEM STEP 2
   'identifier' : 'TML solution',  
   'tss_rest_port' : '9001',  # <<< ***** replace replace with port number i.e. this is listening on port 9000 
-  'rest_port' : '9002',  # <<< ***** replace replace with port number i.e. this is listening on port 9000     
+  'rest_port' : '',  # <<< ***** replace replace with port number i.e. this is listening on port 9000     
   'delay' : '7000', # << ******* 7000 millisecond maximum delay for VIPER to wait for Kafka to return confirmation message is received and written to topic
   'topicid' : '-999', # <<< ********* do not modify              
+  "ingestion_settings": {
+    "active_system": "", # You can specify: kafka, rabbitmq, redis, scada, splunk, elasticsearch, clickhouse, influxdb, logstash
+    "polling_interval_seconds": 1.0,
+    "max_batch_size": 10,
+    "strict_json_validation": True
+  },
+  "systems": {
+    "kafka": {
+      "proxy_url": "https://secure-kafka-proxy.local:8443",
+      "consumer_group": "threat_agent_group",
+      "instance_name": "agent_01",
+      "topic_name": "iot-raw-data",               # Added to fix KeyError
+      "output_stream_topic": "iot-raw-data",       # Added for maadstml output routing
+      "rollback_target_offset": -1,                # Matches 'topicid': '-999' fallback rules
+      "payload_key_path": ["value"],
+      "security": {
+        "auth_type": "bearer",
+        "token": "CLOUD_SECRET_TOKEN_ABC123",
+        "verify_ssl": True,
+        "custom_ca_cert_path": "/raspberrypitss/certs/server_ca.crt",
+        "mtls": {
+          "enabled": True,
+          "client_cert_path": "/raspberrypitss/certs/client_agent.crt",
+          "client_key_path": "/raspberrypitss/certs/client_agent.key"
+        }
+      }
+    },
+    "rabbitmq": {
+      "management_url": "http://localhost:15672",
+      "queue_name": "siem_alerts",
+      "virtual_host": "%2F",
+      "payload_key_path": ["payload"],
+      "security": {
+        "auth_type": "basic",
+        "username": "guest",
+        "password": "secure_password_here",
+        "verify_ssl": False
+      }
+    },
+    "redis": {
+      "webdis_url": "http://localhost:7379",
+      "redis_command": "GET",
+      "key_name": "threat_intel_baseline",
+      "security": {
+        "auth_type": "custom_header",
+        "header_name": "X-Webdis-Token",
+        "header_value": "secret-proxy-token-abc123",
+        "verify_ssl": False
+      }
+    },
+    "scada": {
+      "scada_url": "http://scada-gateway.local:8088",
+      "endpoint": "/api/v1/tags/assembly_line_1",
+      "security": {
+        "auth_type": "none",
+        "verify_ssl": False
+      }
+    },
+    "splunk": {
+      "management_url": "https://splunk-server.local:8089",
+      "search_query": "search index=security_alerts sourcetype=json | head 10",
+      "security": {
+        "auth_type": "bearer",
+        "token": "YOUR_SPLUNK_SESSION_OR_HEC_TOKEN",
+        "verify_ssl": True
+      }
+    },
+    "elasticsearch": {
+      "node_url": "https://elasticsearch-node.local:9200",
+      "index_pattern": "security-logs-*",
+      "search_body": {
+        "query": { "match_all": {} },
+        "size": 10
+      },
+      "root_array_path": ["hits", "hits"],
+      "payload_key_path": ["_source"],
+      "security": {
+        "auth_type": "basic",
+        "username": "elastic",
+        "password": "changeme",
+        "verify_ssl": True
+      }
+    },
+    "clickhouse": {
+      "http_url": "https://clickhouse-server.local:8443",
+      "query": "SELECT * FROM security.events ORDER BY timestamp DESC LIMIT 10 FORMAT JSON",
+      "database": "security",
+      "root_array_path": ["data"],
+      "security": {
+        "auth_type": "custom_header",
+        "header_name": "X-ClickHouse-User",
+        "header_value": "analyst_user",
+        "verify_ssl": True
+      }
+    },
+    "influxdb": {
+      "host_url": "https://influxdb.local:8086",
+      "org": "security_operations",
+      "flux_query": "from(bucket: \"threat_metrics\") |> range(start: -5m) |> limit(n: 10)",
+      "security": {
+        "auth_type": "bearer",
+        "token": "YOUR_INFLUXDB_API_TOKEN",
+        "verify_ssl": True
+      }
+    },
+    "logstash": {
+      "http_input_url": "http://logstash.local:8080",
+      "endpoint": "/status",
+      "security": {
+        "auth_type": "none",
+        "verify_ssl": False
+      }
+    }
+  }
 }
 
 ######################################## DO NOT MODIFY BELOW #############################################
@@ -1414,4 +1528,8 @@ if __name__ == '__main__':
          os.environ['VIPERHOST']=VIPERHOST
          os.environ['VIPERPORT']=VIPERPORT
         
-         gettmlsystemsparams()
+         if default_args["ingestion_settings"]["active_system"] != "":
+           tsslogging.startstreamengine(default_args, VIPERHOST, VIPERPORT, VIPERTOKEN)
+         else:
+         # start the FastAPI sever
+           gettmlsystemsparams()
