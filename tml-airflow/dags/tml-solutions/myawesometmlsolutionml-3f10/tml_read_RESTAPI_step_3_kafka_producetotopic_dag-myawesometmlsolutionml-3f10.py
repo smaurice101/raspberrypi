@@ -296,4 +296,8 @@ if __name__ == '__main__':
          os.environ['VIPERHOST']=VIPERHOST
          os.environ['VIPERPORT']=VIPERPORT
         
-         gettmlsystemsparams()
+         if default_args["ingestion_settings"]["active_system"] != "":
+           tsslogging.startstreamengine(default_args, VIPERHOST, VIPERPORT, VIPERTOKEN)
+         else:
+         # start the FastAPI sever
+           gettmlsystemsparams()
