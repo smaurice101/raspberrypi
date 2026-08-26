@@ -67,7 +67,7 @@ default_args = {
   "systems": {
     "kafka": {
       "proxy_url": "https://secure-kafka-proxy.local:8443",
-      "consumer_group": "threat_agent_group",
+      "consumer_group": "kafka_agent_group",
       "instance_name": "agent_01",
       "topic_name": "iot-raw-data",               # Added to fix KeyError
       "output_stream_topic": "iot-raw-data",       # Added for maadstml output routing
@@ -93,7 +93,7 @@ default_args = {
       "security": {
         "auth_type": "basic",
         "username": "guest",
-        "password": "secure_password_here",
+        "password": os.environ.get('RABBITMQPASSWORD', '<Enter API secret>'),
         "verify_ssl": False
       }
     },
@@ -121,7 +121,7 @@ default_args = {
       "search_query": "search index=security_alerts sourcetype=json | head 10",
       "security": {
         "auth_type": "bearer",
-        "token": "YOUR_SPLUNK_SESSION_OR_HEC_TOKEN",
+        "token": os.environ.get('SPLUNKPASSWORD', '<Enter Splunk secret>'),
         "verify_ssl": True
       }
     },
@@ -137,7 +137,7 @@ default_args = {
       "security": {
         "auth_type": "basic",
         "username": "elastic",
-        "password": "changeme",
+        "password": os.environ.get('ELASTICPASSWORD', '<Enter Elastic password>'),
         "verify_ssl": True
       }
     },
@@ -159,7 +159,7 @@ default_args = {
       "flux_query": "from(bucket: \"threat_metrics\") |> range(start: -5m) |> limit(n: 10)",
       "security": {
         "auth_type": "bearer",
-        "token": "YOUR_INFLUXDB_API_TOKEN",
+        "token": os.environ.get('INFLUXTOKEN', '<Enter API token>'),
         "verify_ssl": True
       }
     },
