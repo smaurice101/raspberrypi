@@ -77,11 +77,11 @@ default_args = {
         "auth_type": "bearer",
         "token": "CLOUD_SECRET_TOKEN_ABC123",
         "verify_ssl": True,
-        "custom_ca_cert_path": "/raspberrypitss/certs/server_ca.crt",
+        "custom_ca_cert_path": "/tmux/certs/server_ca.crt",
         "mtls": {
           "enabled": True,
-          "client_cert_path": "/raspberrypitss/certs/client_agent.crt",
-          "client_key_path": "/raspberrypitss/certs/client_agent.key"
+          "client_cert_path": "/tmux/certs/client_agent.crt",
+          "client_key_path": "/tmux/certs/client_agent.key"
         }
       }
     },
