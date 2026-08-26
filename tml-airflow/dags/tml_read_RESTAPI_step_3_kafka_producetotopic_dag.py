@@ -104,7 +104,7 @@ default_args = {
       "security": {
         "auth_type": "custom_header",
         "header_name": "X-Webdis-Token",
-        "header_value": "secret-proxy-token-abc123",
+        "header_value": os.environ.get('REDISPASSWORD', '<Enter API token>'),
         "verify_ssl": False
       }
     },
