@@ -75,7 +75,7 @@ default_args = {
       "payload_key_path": ["value"],
       "security": {
         "auth_type": "bearer",
-        "token": "CLOUD_SECRET_TOKEN_ABC123",
+        "token": os.environ.get('KAFKACLOUDPASSWORD', '<Enter API secret>'),
         "verify_ssl": True,
         "custom_ca_cert_path": "/rawdata/certs/server_ca.crt",
         "mtls": {
