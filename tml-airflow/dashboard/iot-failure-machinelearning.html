@@ -201,7 +201,6 @@ function image(thetype,mess) {
       }
 </style>
 <body style="overflow-x: auto">
-
 <center><a href='http://www.otics.ca/' target=new><img src='./OTICS-New-Logo-Black.png' width=150 height=70></a></center>
 <table style="width: 100%;height: 80px;    background: linear-gradient(135deg,  rgba(102, 255, 217,1) 0%,rgba(0, 128, 255,1) 50%,rgba(0, 128, 255,1) 51%,rgba(0, 255, 128,1) 100%);">
 <tr>
@@ -2687,17 +2686,20 @@ datetime:timestamp,:allrecords,Joinedidentifiers:~oem:n/a~lat:42.58942256332994~
                 curTime = new Date();
 				var eventdata=`${event.data}`;
 			 //  console.log("-------------maindata=",eventdata);
-			
-				var maindata=eventdata.replace(/\\"/g,'"');
+//////////////////////////////////////////////////////////			
+				var maindata=eventdata.replace(/\\"/g,'\"');
 			   maindata=maindata.substr(1, maindata.length-3);
 
-			    //console.log("-------------maindata=",maindata);
+//			    console.log("-------------eventdata=",eventdata);
 
-
+///////////////////////////////////////////////////////////////
 			   
 			   var obj;
 			   try{
-				obj = JSON.parse(maindata);
+		//		obj = JSON.parse(event.data);
+                 var innerJsonString = JSON.parse(event.data); // unwraps the outer string layer
+                  obj = JSON.parse(innerJsonString);   
+                console.log("-----------obj==",obj)
 				}catch(e){
 				   console.log("Json parse issue=",e.message);
 				   return;
