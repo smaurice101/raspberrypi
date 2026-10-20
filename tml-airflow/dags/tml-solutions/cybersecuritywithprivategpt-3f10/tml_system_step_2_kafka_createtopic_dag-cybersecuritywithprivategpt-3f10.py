@@ -43,7 +43,7 @@ def deletetopics(topic):
     buf = "/Kafka/kafka_2.13-3.0.0/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic {} --delete".format(topic)
     
     proc=subprocess.run(buf, shell=True)
-    
+                    
 def setupkafkatopics(**context):
  # Set personal data
 
@@ -70,6 +70,12 @@ def setupkafkatopics(**context):
   # If you are using a reverse proxy to reach VIPER then you can put it here - otherwise if
   # empty then no reverse proxy is being used
   microserviceid=args['microserviceid']
+
+  if 'step2raw_data_topic' in os.environ:
+     args['raw_data_topic']=os.environ['step2raw_data_topic']
+
+  if 'step2preprocess_data_topic' in os.environ:
+     args['preprocess_data_topic']=os.environ['step2preprocess_data_topic']
 
   raw_data_topic=args['raw_data_topic']
   preprocess_data_topic=args['preprocess_data_topic']
@@ -106,34 +112,36 @@ def setupkafkatopics(**context):
 
   topickeys = ['raw_data_topic','preprocess_data_topic','ml_data_topic','prediction_data_topic','pgpt_data_topic'] 
   VIPERHOSTMAIN = "{}{}".format(HTTPADDR,VIPERHOST)    
-
+  ptarr = ""
   for k in topickeys:
     producetotopic=args[k]
     description=args['description']
-
+    if producetotopic != "":
+      ptarr = ptarr + producetotopic.strip() + ","
     topicsarr = producetotopic.split(",")
     for topic in topicsarr:  
-        if topic != '' and "127.0.0.1" in mainbroker:
+        if topic != '' and mainbroker is not None and "127.0.0.1" in mainbroker:
           try:  
             deletetopics(topic)
           except Exception as e:
             print("ERROR: ",e)
             continue 
 
-    if '127.0.0.1' in mainbroker:
+  
+  if mainbroker is not None and '127.0.0.1' in mainbroker:
         replication=1
             
-    for topic in topicsarr:  
-      if topic == '':
-          continue
-      print("Creating topic=",topic)  
-      try:
-        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOSTMAIN,VIPERPORT[1:],topic,companyname,
+    #for topic in topicsarr:  
+  if ptarr != '':          
+     ptarr=ptarr[:-1]
+     print("Creating topic=",ptarr)      
+     try:
+        result=maadstml.vipercreatetopic(VIPERTOKEN,VIPERHOSTMAIN,VIPERPORT[1:],ptarr,companyname,
                                  myname,myemail,mylocation,description,enabletls,
                                  brokerhost,brokerport,numpartitions,replication,
                                  microserviceid='')
-      except Exception as e:
-       tsslogging.locallogs("ERROR", "STEP 2: Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e)) 
+     except Exception as e:
+       tsslogging.locallogs("ERROR", "STEP 2: Cannot create topic {} in {} - {}".format(ptarr,os.path.basename(__file__),e)) 
     
        repo=tsslogging.getrepo()    
        tsslogging.tsslogit("Cannot create topic {} in {} - {}".format(topic,os.path.basename(__file__),e), "ERROR" )                     
