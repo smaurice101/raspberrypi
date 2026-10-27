@@ -3,6 +3,7 @@ cd /d C:\maads
 
 :: --- CONFIGURABLE VARIABLES ---
 set FINNHUBTOKEN=<Enter Finnhub token>
+:: QSTEST = 2 for production, QSTEST=1 for test mode
 set QSTEST=2
 
 echo [1/6] Configuring WSL resources and idle timeout...
