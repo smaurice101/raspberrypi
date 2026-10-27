@@ -5,7 +5,7 @@ cd /d C:\quantstream
 :: --- CONFIGURABLE VARIABLES ---
 :: Get Free Finnhub token from finnhub.io
 set FINNHUBTOKEN=<Enter Finnhub token> 
-:: If QSTEST=2 then production - if QSTEST=1 then test mode
+:: If QSTEST=2 then production (no sending to trades to Interactive broker)- if QSTEST=1 then test mode, if QSTEST=0 (production and Interactive broker)
 set QSTEST=2
 
 echo [1/6] Configuring WSL resources and idle timeout...
