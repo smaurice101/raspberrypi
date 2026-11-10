@@ -2,12 +2,12 @@
 
 :: --- CONFIGURABLE VARIABLES ---
 :: Get Free Finnhub token from finnhub.io
-set FINNHUBTOKEN=<ENTER FINNHUB TOKEN> 
-:: If QSTEST=2 then production - if QSTEST=1 then test mode, QSTEST=0 is production and Interactive broker execution
+set FINNHUBTOKEN=<Enter FINNHUB token> 
+:: If QSTEST=2 then production - if QSTEST=1 then test mode, QSTEST=0 this is Interactive Broker mode
 set QSTEST=2
 
 :: CREATE A LOCAL Path folder on your computer
-set LOCALDIR=<Enter full Linux path to where QuantStream will store its data>
+set LOCALDIR=<Enter local drive using Linux syntax>
 
 echo [1/6] Configuring WSL resources and idle timeout...
 powershell -Command "Set-Content -Path \"$env:USERPROFILE\.wslconfig\" -Value \"[wsl2]`nvmIdleTimeout=-1`nmemory=8GB`nprocessors=4\"; Write-Host '.wslconfig updated successfully.'"
@@ -23,6 +23,9 @@ if errorlevel 1 (
     timeout /t 2 /nobreak >nul
     goto waitloop
 )
+
+echo [4.5/6] Safely pruning dead containers, networks, and build caches...
+wsl docker system prune -f >nul 2>&1
 
 echo [4/6] Cleaning up any old QuantStream containers...
 wsl docker rm -f quantstream-3f10-ml >nul 2>&1
