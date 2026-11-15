@@ -11,7 +11,7 @@ set QSTEST=2
 set LOCALDIR=/mnt/c/maads/tml-airflow/rawdata
 
 :: Demo/TWS: IBKRHOST=host.docker.internal, IBKRPORT=7497, empty IBKRUSERNAME/IBKRPASSWORD
-:: Container IB Gateway: IBKRHOST=127.0.0.1, IBKRPORT=4002 (paper) or 4001 (live), non-empty credentials
+:: Container IB Gateway: IBKRHOST=127.0.0.1, IBKRPORT=4002 (paper) or 4001 (live), MUST enter IBKRUSERNAME/IBKRPASSWORD credentials
 set IBKRHOST=host.docker.internal
 set IBKRPORT=7497
 set IBKRCLIENTID=99
